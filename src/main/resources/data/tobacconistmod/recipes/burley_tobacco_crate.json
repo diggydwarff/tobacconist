@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "tobacconistmod:tobacco_loose_burley"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_burley"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_burley"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_burley"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_burley"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_burley"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_burley"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_burley"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_burley"
+    }
+  ],
+  "result": {
+    "item": "tobacconistmod:burley_tobacco_crate",
+    "count": 1
+  }
+} 

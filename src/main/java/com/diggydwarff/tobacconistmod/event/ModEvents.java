@@ -1,7 +1,6 @@
 package com.diggydwarff.tobacconistmod.event;
 
-import com.diggydwarff.tobacconistmod.items.ModItems;
-import com.diggydwarff.tobacconistmod.villager.ModVillagers;
+import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;

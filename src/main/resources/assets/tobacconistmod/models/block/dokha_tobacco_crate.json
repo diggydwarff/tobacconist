@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "up": "tobacconistmod:block/wild_tobacco_crate_top",
+    "down": "tobacconistmod:block/wild_tobacco_crate_side",
+    "north": "tobacconistmod:block/wild_tobacco_crate_side",
+    "east": "tobacconistmod:block/wild_tobacco_crate_side",
+    "south": "tobacconistmod:block/wild_tobacco_crate_side",
+    "west": "tobacconistmod:block/wild_tobacco_crate_side",
+    "particle": "tobacconistmod:block/wild_tobacco_crate_side"
+  }
+}

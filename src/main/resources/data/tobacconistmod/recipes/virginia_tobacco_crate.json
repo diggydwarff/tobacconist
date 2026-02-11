@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "tobacconistmod:tobacco_loose_virginia"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_virginia"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_virginia"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_virginia"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_virginia"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_virginia"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_virginia"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_virginia"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_virginia"
+    }
+  ],
+  "result": {
+    "item": "tobacconistmod:virginia_tobacco_crate",
+    "count": 1
+  }
+} 

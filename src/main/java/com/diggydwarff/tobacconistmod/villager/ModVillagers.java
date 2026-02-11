@@ -24,10 +24,17 @@ public class ModVillagers {
             () -> new PoiType(ImmutableSet.copyOf(ModBlocks.HOOKAH.get().getStateDefinition().getPossibleStates()),
                     1, 1));
 
-    public static final RegistryObject<VillagerProfession> TOBACCONIST_MASTER = VILLAGER_PROFESSIONS.register("tobacconist_master",
-            () -> new VillagerProfession("tobacconist_master", x -> x.get() == HOOKAH_POI.get(),
-                    x -> x.get() == HOOKAH_POI.get(), ImmutableSet.of(), ImmutableSet.of(),
-                    SoundEvents.VILLAGER_WORK_ARMORER));
+    public static final RegistryObject<VillagerProfession> TOBACCONIST_MASTER =
+            VILLAGER_PROFESSIONS.register("tobacconist_master", () ->
+                    new VillagerProfession(
+                            "tobacconist_master",
+                            holder -> holder.is(HOOKAH_POI.getKey()),
+                            holder -> holder.is(HOOKAH_POI.getKey()),
+                            ImmutableSet.of(),
+                            ImmutableSet.of(),
+                            SoundEvents.VILLAGER_WORK_ARMORER
+                    )
+            );
 
 
     public static void registerPOIs() {

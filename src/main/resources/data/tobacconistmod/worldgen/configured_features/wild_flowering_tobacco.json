@@ -1,6 +1,0 @@
-{
-  "type": "forge:add_features",
-  "biomes": "minecraft:flower_forest",
-  "features": "tobacconist:wild_flowering_tobacco",
-  "step": "vegetal_decoration"
-}

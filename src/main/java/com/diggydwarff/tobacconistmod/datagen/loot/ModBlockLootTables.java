@@ -2,12 +2,11 @@ package com.diggydwarff.tobacconistmod.datagen.loot;
 
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
 import com.diggydwarff.tobacconistmod.block.custom.*;
-import com.diggydwarff.tobacconistmod.items.ModItems;
+import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.registries.RegistryObject;
@@ -21,6 +20,13 @@ public class ModBlockLootTables extends BlockLootSubProvider {
 
     @Override
     protected void generate() {
+
+        this.dropSelf(ModBlocks.SHADE_TOBACCO_CRATE.get());
+        this.dropSelf(ModBlocks.DOKHA_TOBACCO_CRATE.get());
+        this.dropSelf(ModBlocks.ORIENTAL_TOBACCO_CRATE.get());
+        this.dropSelf(ModBlocks.BURLEY_TOBACCO_CRATE.get());
+        this.dropSelf(ModBlocks.VIRGINIA_TOBACCO_CRATE.get());
+        this.dropSelf(ModBlocks.WILD_TOBACCO_CRATE.get());
 
         LootItemCondition.Builder wildBuilder = LootItemBlockStatePropertyCondition
                 .hasBlockStateProperties(ModBlocks.WILD_TOBACCO_CROP.get())

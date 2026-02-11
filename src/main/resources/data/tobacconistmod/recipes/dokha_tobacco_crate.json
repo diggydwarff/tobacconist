@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "tobacconistmod:tobacco_loose_dokha"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_dokha"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_dokha"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_dokha"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_dokha"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_dokha"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_dokha"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_dokha"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_dokha"
+    }
+  ],
+  "result": {
+    "item": "tobacconistmod:dokha_tobacco_crate",
+    "count": 1
+  }
+} 

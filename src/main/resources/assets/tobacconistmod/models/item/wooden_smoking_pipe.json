@@ -1,6 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "tobacconistmod:item/wooden_pipe"
+    "layer0": "tobacconistmod:item/wooden_pipe_wood",
+    "layer1": "tobacconistmod:item/wooden_pipe_details"
   }
 }

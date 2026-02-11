@@ -78,7 +78,7 @@
   "item.tobacconistmod.tobacco_leaf_dokha_dry": "Dokha Tobacco Leaf (Dried)",
   "item.tobacconistmod.tobacco_leaf_shade_dry": "Shade Tobacco Leaf (Dried)",
 
-  "block.tobacconistmod.wild_flowering_tobacco": "Wild Flowering Tobacco",
+  "block.tobacconistmod.wild_flowering_tobacco_block": "Wild Flowering Tobacco",
 
   "item.tobacconistmod.tobacco_seeds_wild": "Wild Tobacco Seeds",
   "item.tobacconistmod.tobacco_seeds_virginia": "Virginia Tobacco Seeds",
@@ -94,9 +94,17 @@
   "block.tobacconistmod.tobacco_crop_dokha": "Dokha Tobacco Crop",
   "block.tobacconistmod.tobacco_crop_shade": "Shade Tobacco Crop",
 
+  "block.tobacconistmod.wild_tobacco_crate": "Wild Tobacco Crate",
+  "block.tobacconistmod.virginia_tobacco_crate": "Virginia Tobacco Crate",
+  "block.tobacconistmod.burley_tobacco_crate": "Burley Tobacco Crate",
+  "block.tobacconistmod.oriental_tobacco_crate": "Oriental Tobacco Crate",
+  "block.tobacconistmod.dokha_tobacco_crate": "Dokha Tobacco Crate",
+  "block.tobacconistmod.shade_tobacco_crate": "Shade Tobacco Crate",
+
   "block.tobacconistmod.hookah_block": "Hookah",
 
   "entity.minecraft.villager.tobacconist_master": "Tobacconsit Master",
+  "entity.minecraft.villager.tobacconistmod.tobacconist_master": "Tobacconist Master",
 
   "effect.tobacconistmod.nicotine": "Nicotine"
 }

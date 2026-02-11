@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "tobacconistmod:tobacco_loose_shade"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_shade"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_shade"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_shade"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_shade"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_shade"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_shade"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_shade"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_shade"
+    }
+  ],
+  "result": {
+    "item": "tobacconistmod:shade_tobacco_crate",
+    "count": 1
+  }
+} 

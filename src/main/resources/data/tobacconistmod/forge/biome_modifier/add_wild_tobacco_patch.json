@@ -1,0 +1,10 @@
+{
+  "type": "forge:add_features",
+  "biomes": [
+    "minecraft:forest",
+    "minecraft:birch_forest",
+    "minecraft:dark_forest"
+  ],
+  "features": "tobacconistmod:wild_tobacco_patch",
+  "step": "vegetal_decoration"
+}

@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "tobacconistmod:tobacco_loose_oriental"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_oriental"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_oriental"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_oriental"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_oriental"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_oriental"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_oriental"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_oriental"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_oriental"
+    }
+  ],
+  "result": {
+    "item": "tobacconistmod:oriental_tobacco_crate",
+    "count": 1
+  }
+} 

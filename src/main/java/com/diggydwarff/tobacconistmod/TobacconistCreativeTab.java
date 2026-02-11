@@ -1,9 +1,6 @@
 package com.diggydwarff.tobacconistmod;
 
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
-import com.diggydwarff.tobacconistmod.items.ModItems;
-import com.diggydwarff.tobacconistmod.items.custom.LooseTobacco;
-import com.diggydwarff.tobacconistmod.items.custom.LooseTobaccoItem;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -12,7 +9,7 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
-import static com.diggydwarff.tobacconistmod.items.ModItems.*;
+import static com.diggydwarff.tobacconistmod.datagen.items.ModItems.*;
 public class TobacconistCreativeTab  {
 
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =
@@ -56,6 +53,13 @@ public class TobacconistCreativeTab  {
                         output.accept(TOBACCO_LOOSE_ORIENTAL.get());
                         output.accept(TOBACCO_LOOSE_DOKHA.get());
                         output.accept(TOBACCO_LOOSE_SHADE.get());
+
+                        output.accept(ModBlocks.WILD_TOBACCO_CRATE.get());
+                        output.accept(ModBlocks.VIRGINIA_TOBACCO_CRATE.get());
+                        output.accept(ModBlocks.BURLEY_TOBACCO_CRATE.get());
+                        output.accept(ModBlocks.ORIENTAL_TOBACCO_CRATE.get());
+                        output.accept(ModBlocks.DOKHA_TOBACCO_CRATE.get());
+                        output.accept(ModBlocks.SHADE_TOBACCO_CRATE.get());
 
                         output.accept(WILD_TOBACCO_SEEDS.get());
                         output.accept(VIRGINIA_TOBACCO_SEEDS.get());

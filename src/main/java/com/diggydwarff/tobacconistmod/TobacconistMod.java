@@ -1,15 +1,15 @@
 package com.diggydwarff.tobacconistmod;
 
 import com.diggydwarff.tobacconistmod.effect.ModEffects;
+import com.diggydwarff.tobacconistmod.recipes.ModRecipeSerializers;
+import com.diggydwarff.tobacconistmod.villager.ModVillagerTrades;
+import com.diggydwarff.tobacconistmod.world.TobaconistBiomeModifier;
 import com.mojang.logging.LogUtils;
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
 import com.diggydwarff.tobacconistmod.block.entity.ModBlockEntities;
-import com.diggydwarff.tobacconistmod.event.ModEvents;
-import com.diggydwarff.tobacconistmod.items.ModItems;
-import com.diggydwarff.tobacconistmod.items.custom.BottledMolassesFlavors;
-import com.diggydwarff.tobacconistmod.items.custom.BottledMolassesItem;
-import com.diggydwarff.tobacconistmod.items.custom.LooseTobacco;
-import com.diggydwarff.tobacconistmod.items.custom.ShishaTobaccoItem;
+import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
+import com.diggydwarff.tobacconistmod.datagen.items.custom.BottledMolassesFlavors;
+import com.diggydwarff.tobacconistmod.datagen.items.custom.LooseTobacco;
 import com.diggydwarff.tobacconistmod.recipes.ModRecipes;
 import com.diggydwarff.tobacconistmod.screen.HookahScreen;
 import com.diggydwarff.tobacconistmod.screen.ModMenuTypes;
@@ -18,17 +18,14 @@ import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -65,7 +62,10 @@ public class TobacconistMod
         ModEffects.register(modEventBus);
         ModBlockEntities.register(modEventBus);
         ModMenuTypes.register(modEventBus);
+        TobaconistBiomeModifier.register(modEventBus);
+        ModRecipeSerializers.SERIALIZERS.register(modEventBus);
 
+        MinecraftForge.EVENT_BUS.register(ModVillagerTrades.class);
         MinecraftForge.EVENT_BUS.register(this);
     }
 
@@ -73,9 +73,6 @@ public class TobacconistMod
     public void register(RegisterEvent event) {
         event.register(ForgeRegistries.Keys.ITEMS,
                 helper -> {
-                    for(LooseTobacco tobaccoBlend : LooseTobacco.values()){
-                        helper.register(new ResourceLocation(MODID, tobaccoBlend.getName()), tobaccoBlend.getItem());
-                    }
                     for(BottledMolassesFlavors molassesFlavor : BottledMolassesFlavors.values()){
                         helper.register(new ResourceLocation(MODID, molassesFlavor.getName()), molassesFlavor.getItem());
                     }

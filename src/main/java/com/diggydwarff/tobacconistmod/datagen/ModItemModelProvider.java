@@ -2,7 +2,6 @@ package com.diggydwarff.tobacconistmod.datagen;
 
 import com.diggydwarff.tobacconistmod.TobacconistMod;
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
-import com.diggydwarff.tobacconistmod.items.ModItems;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;

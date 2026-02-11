@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "tobacconistmod:tobacco_loose_wild"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_wild"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_wild"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_wild"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_wild"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_wild"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_wild"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_wild"
+    },
+    {
+      "item": "tobacconistmod:tobacco_loose_wild"
+    }
+  ],
+  "result": {
+    "item": "tobacconistmod:wild_tobacco_crate",
+    "count": 1
+  }
+} 
