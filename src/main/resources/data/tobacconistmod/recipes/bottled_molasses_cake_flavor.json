@@ -4,14 +4,9 @@
     {
       "item": "tobacconistmod:bottled_molasses_plain"
     },
-    [
-      {
-        "item": "minecraft:cake"
-      },
-      {
-        "item": "farmersdelight:cake_slice"
-      }
-    ]
+    {
+      "item": "minecraft:cake"
+    }
   ],
   "result": {
     "item": "tobacconistmod:bottled_molasses_cake_flavor",

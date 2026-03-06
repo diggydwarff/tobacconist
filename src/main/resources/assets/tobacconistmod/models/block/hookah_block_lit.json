@@ -1,0 +1,6 @@
+{
+  "parent": "tobacconistmod:block/hookah_block",
+  "textures": {
+    "0": "tobacconistmod:block/hookah_block_lit"
+  }
+}

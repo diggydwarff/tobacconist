@@ -1,5 +1,6 @@
 package com.diggydwarff.tobacconistmod.world;
 
+import com.diggydwarff.tobacconistmod.TobacconistMod;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
@@ -28,15 +29,13 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
-@Mod(TobaconistBiomeModifier.MODID)
 public class TobaconistBiomeModifier {
-    public static final String MODID = "tobacconistmod";
     private static final boolean ENABLED = true;
 
     /* Static registry objects */
 
     // Biome Modifier Serializers
-    private static final DeferredRegister<Codec<? extends BiomeModifier>> BIOME_MODIFIER_SERIALIZERS = DeferredRegister.create(ForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, MODID);
+    private static final DeferredRegister<Codec<? extends BiomeModifier>> BIOME_MODIFIER_SERIALIZERS = DeferredRegister.create(ForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, TobacconistMod.MODID);
     private static final RegistryObject<Codec<HerbalistModifier>> MODIFY_BIOMES = BIOME_MODIFIER_SERIALIZERS.register("modify_biomes", () ->
             RecordCodecBuilder.create(builder -> builder.group(
                     Biome.LIST_CODEC.fieldOf("biomes").forGetter(HerbalistModifier::biomes),
@@ -51,10 +50,10 @@ public class TobaconistBiomeModifier {
 
     /* Dynamic registry objects */
 
-    private static final ResourceKey<PlacedFeature> WILD_TOBACCO_PATCH = ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(MODID, "wild_tobacco_patch"));
+    private static final ResourceKey<PlacedFeature> WILD_TOBACCO_PATCH = ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(TobacconistMod.MODID, "wild_tobacco_patch"));
     //private static final ResourceKey<PlacedFeature> DIVINERS_SAGE_PATCH = ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(MODID, "diviners_sage_patch"));
 
-    private static final ResourceKey<BiomeModifier> ADD_WILD_TOBACCO_PATCH = ResourceKey.create(ForgeRegistries.Keys.BIOME_MODIFIERS, new ResourceLocation(MODID, "add_wild_tobacco_patch"));
+    private static final ResourceKey<BiomeModifier> ADD_WILD_TOBACCO_PATCH = ResourceKey.create(ForgeRegistries.Keys.BIOME_MODIFIERS, new ResourceLocation(TobacconistMod.MODID, "add_wild_tobacco_patch"));
     //private static final ResourceKey<BiomeModifier> ADD_DIVINERS_SAGE_PATCH = ResourceKey.create(ForgeRegistries.Keys.BIOME_MODIFIERS, new ResourceLocation(MODID, "add_diviners_sage_patch"));
 
 
@@ -70,13 +69,13 @@ public class TobaconistBiomeModifier {
 
         public BiomeModifiers(PackOutput output, CompletableFuture<HolderLookup.Provider> registries)
         {
-            super(output, registries, BUILDER, Set.of(MODID));
+            super(output, registries, BUILDER, Set.of(TobacconistMod.MODID));
         }
 
         @Override
         public String getName()
         {
-            return "Biome Modifier Registries: " + MODID;
+            return "Biome Modifier Registries: " + TobacconistMod.MODID;
         }
     }
 

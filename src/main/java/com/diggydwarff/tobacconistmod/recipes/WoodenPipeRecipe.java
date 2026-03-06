@@ -49,7 +49,9 @@ public class WoodenPipeRecipe extends CustomRecipe {
 
     @Override
     public ItemStack assemble(CraftingContainer inv, net.minecraft.core.RegistryAccess regs) {
-        ItemStack out = new ItemStack(ModItems.WOODEN_SMOKING_PIPE.get());
+        ItemStack out = new ItemStack(
+                BuiltInRegistries.ITEM.get(new ResourceLocation("tobacconistmod", "wooden_smoking_pipe"))
+        );
 
         // Pick the first plank stack found and store it
         ItemStack plank = ItemStack.EMPTY;

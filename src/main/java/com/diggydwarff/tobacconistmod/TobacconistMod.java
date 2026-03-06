@@ -39,33 +39,30 @@ import org.slf4j.Logger;
 @Mod(TobacconistMod.MODID)
 public class TobacconistMod
 {
-    // Define mod id in a common place for everything to reference
     public static final String MODID = "tobacconistmod";
-    // Directly reference a slf4j logger
-    private static final Logger LOGGER = LogUtils.getLogger();
-
+    public static final Logger LOGGER = LogUtils.getLogger();
     public TobacconistMod()
     {
+        LOGGER.warn("TOBACCONISTMOD LOADED (JAR TEST)");
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-
-        TobacconistCreativeTab.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::register);
 
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
-
-        ModVillagers.register(modEventBus);
         ModRecipes.register(modEventBus);
 
         ModEffects.register(modEventBus);
         ModBlockEntities.register(modEventBus);
         ModMenuTypes.register(modEventBus);
         TobaconistBiomeModifier.register(modEventBus);
+
+        ModVillagers.register(modEventBus);
+        TobacconistCreativeTab.register(modEventBus);
+
         ModRecipeSerializers.SERIALIZERS.register(modEventBus);
 
-        MinecraftForge.EVENT_BUS.register(ModVillagerTrades.class);
         MinecraftForge.EVENT_BUS.register(this);
     }
 
@@ -96,18 +93,16 @@ public class TobacconistMod
     public static class ClientModEvents
     {
         @SubscribeEvent
-        public static void onClientSetup(FMLClientSetupEvent event)
-        {
-            ItemBlockRenderTypes.setRenderLayer(ModBlocks.WILD_TOBACCO_CROP.get(), RenderType.cutout());
-            ItemBlockRenderTypes.setRenderLayer(ModBlocks.VIRGINIA_TOBACCO_CROP.get(), RenderType.cutout());
-            ItemBlockRenderTypes.setRenderLayer(ModBlocks.BURLEY_TOBACCO_CROP.get(), RenderType.cutout());
-            ItemBlockRenderTypes.setRenderLayer(ModBlocks.ORIENTAL_TOBACCO_CROP.get(), RenderType.cutout());
-            ItemBlockRenderTypes.setRenderLayer(ModBlocks.DOKHA_TOBACCO_CROP.get(), RenderType.cutout());
-            ItemBlockRenderTypes.setRenderLayer(ModBlocks.SHADE_TOBACCO_CROP.get(), RenderType.cutout());
+        public static void onClientSetup(FMLClientSetupEvent event) {
+            event.enqueueWork(() -> {
+                var id = new ResourceLocation(TobacconistMod.MODID, "tobacco_crop_wild");
 
-            ItemBlockRenderTypes.setRenderLayer(ModBlocks.HOOKAH.get(), RenderType.translucent());
-
-            MenuScreens.register(ModMenuTypes.HOOKAH_MENU.get(), HookahScreen::new);
+                // only do this if true, otherwise you'll crash again
+                if (ForgeRegistries.BLOCKS.containsKey(id)) {
+                    ItemBlockRenderTypes.setRenderLayer(ModBlocks.WILD_TOBACCO_CROP.get(), RenderType.cutout());
+                }
+            });
         }
+
     }
 }

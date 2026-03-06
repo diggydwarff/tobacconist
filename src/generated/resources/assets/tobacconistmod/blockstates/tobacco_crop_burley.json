@@ -1,28 +1,15 @@
 {
   "variants": {
-    "age=0": {
-      "model": "tobacconistmod:block/tobacco0"
-    },
-    "age=1": {
-      "model": "tobacconistmod:block/tobacco1"
-    },
-    "age=2": {
-      "model": "tobacconistmod:block/tobacco2"
-    },
-    "age=3": {
-      "model": "tobacconistmod:block/tobacco3"
-    },
-    "age=4": {
-      "model": "tobacconistmod:block/tobacco4"
-    },
-    "age=5": {
-      "model": "tobacconistmod:block/tobacco5"
-    },
-    "age=6": {
-      "model": "tobacconistmod:block/tobacco6"
-    },
-    "age=7": {
-      "model": "tobacconistmod:block/tobacco7"
-    }
+    "age=0,half=lower": { "model": "tobacconistmod:block/tobacco0" },
+    "age=1,half=lower": { "model": "tobacconistmod:block/tobacco1" },
+    "age=2,half=lower": { "model": "tobacconistmod:block/tobacco2" },
+    "age=3,half=lower": { "model": "tobacconistmod:block/tobacco3" },
+
+    "age=4,half=upper": { "model": "tobacconistmod:block/tobacco4" },
+    "age=5,half=upper": { "model": "tobacconistmod:block/tobacco5" },
+    "age=6,half=upper": { "model": "tobacconistmod:block/tobacco6" },
+    "age=7,half=upper": { "model": "tobacconistmod:block/tobacco7" },
+
+    "age=7,half=lower": { "model": "tobacconistmod:block/tobacco3" }
   }
 }

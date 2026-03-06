@@ -1,5 +1,6 @@
 package com.diggydwarff.tobacconistmod.block.entity;
 
+import com.diggydwarff.tobacconistmod.block.custom.HookahBlock;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.screen.HookahMenu;
 import net.minecraft.core.BlockPos;
@@ -127,11 +128,13 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, HookahEntity pEntity) {
-        if(level.isClientSide()) {
-            return;
-        }
+        if (level.isClientSide()) return;
 
-        if(hasRecipe(pEntity)) {
+        boolean litNow = false;
+
+        if (hasRecipe(pEntity)) {
+            litNow = true;
+
             ServerLevel serverLevel = (ServerLevel) level;
             serverLevel.sendParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE, pos.getX(), pos.getY()+1, pos.getZ(), 1, 0, 0, 0, 0);
 
@@ -139,18 +142,25 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
             ItemStack itemStack = pEntity.itemHandler.getStackInSlot(1);
             itemStack.setDamageValue(itemStack.getDamageValue()+1);
 
-            if(itemStack.getDamageValue() >= itemStack.getMaxDamage()){
+            if (itemStack.getDamageValue() >= itemStack.getMaxDamage()) {
                 pEntity.itemHandler.extractItem(1, 1, false);
             }
 
             setChanged(level, pos, state);
 
-            if(pEntity.progress >= pEntity.maxProgress) {
+            if (pEntity.progress >= pEntity.maxProgress) {
                 craftItem(pEntity);
             }
         } else {
             pEntity.resetProgress();
             setChanged(level, pos, state);
+        }
+
+        if (state.getBlock() instanceof HookahBlock && state.hasProperty(HookahBlock.LIT)) {
+            boolean current = state.getValue(HookahBlock.LIT);
+            if (current != litNow) {
+                level.setBlock(pos, state.setValue(HookahBlock.LIT, litNow), 3);
+            }
         }
     }
 

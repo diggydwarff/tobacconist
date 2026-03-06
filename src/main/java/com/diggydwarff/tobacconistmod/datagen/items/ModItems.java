@@ -2,6 +2,7 @@ package com.diggydwarff.tobacconistmod.datagen.items;
 
 import com.diggydwarff.tobacconistmod.TobacconistMod;
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
+import com.diggydwarff.tobacconistmod.block.custom.*;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.*;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemNameBlockItem;
@@ -16,7 +17,7 @@ public class ModItems {
     // TOOL ITEMS
     public static final RegistryObject<Item> WOODEN_SMOKING_PIPE = ITEMS.register("wooden_smoking_pipe", () -> new WoodenSmokingPipeItem(new Item.Properties()));
     public static final RegistryObject<Item> GOLD_SMOKING_PIPE = ITEMS.register("gold_smoking_pipe", () -> new Item(new Item.Properties()));
-    public static final RegistryObject<Item> PIPE_TOBACCO = ITEMS.register("pipe_tobacco", () -> new Item(new Item.Properties()));
+    //public static final RegistryObject<Item> PIPE_TOBACCO = ITEMS.register("pipe_tobacco", () -> new Item(new Item.Properties()));
 
     //public static final RegistryObject<Item> TOBACCO_POUCH = ITEMS.register("tobacco_pouch", () -> new TobaccoPouchItem(new Item.Properties()));
 
@@ -68,31 +69,60 @@ public class ModItems {
 
     public static final RegistryObject<Item> TOBACCO_LOOSE_DOKHA =
             ITEMS.register("tobacco_loose_dokha", () -> new LooseTobaccoItem(new Item.Properties(), 20, 20));
-
+ 
     public static final RegistryObject<Item> TOBACCO_LOOSE_SHADE =
             ITEMS.register("tobacco_loose_shade", () -> new LooseTobaccoItem(new Item.Properties(), 20, 10));
 
     public static final RegistryObject<Item> BOTTLED_MOLASSES_PLAIN = ITEMS.register("bottled_molasses_plain", () -> BottledMolassesFlavors.BOTTLED_MOLASSES_PLAIN.getItem());
 
     // TOBACCO SEED ITEMS
-    public static final RegistryObject<Item> WILD_TOBACCO_SEEDS = ITEMS.register("tobacco_seeds_wild",
-            () -> new ItemNameBlockItem(ModBlocks.WILD_TOBACCO_CROP.get(), new Item.Properties()));
+    public static final RegistryObject<Item> WILD_TOBACCO_SEEDS =
+            ITEMS.register("wild_tobacco_seeds",
+                    () -> new TallCropSeedsItem(
+                            ModBlocks.WILD_TOBACCO_CROP.get(),
+                            new Item.Properties(),
+                            WildCropBlock.HALF
+                    ));
 
-    public static final RegistryObject<Item> VIRGINIA_TOBACCO_SEEDS = ITEMS.register("tobacco_seeds_virginia",
-            () -> new ItemNameBlockItem(ModBlocks.VIRGINIA_TOBACCO_CROP.get(), new Item.Properties()));
+    public static final RegistryObject<Item> VIRGINIA_TOBACCO_SEEDS =
+            ITEMS.register("virginia_tobacco_seeds",
+                    () -> new TallCropSeedsItem(
+                            ModBlocks.VIRGINIA_TOBACCO_CROP.get(),
+                            new Item.Properties(),
+                            VirginiaCropBlock.HALF
+                    ));
 
-    public static final RegistryObject<Item> BURLEY_TOBACCO_SEEDS = ITEMS.register("tobacco_seeds_burley",
-            () -> new ItemNameBlockItem(ModBlocks.BURLEY_TOBACCO_CROP.get(), new Item.Properties()));
+    public static final RegistryObject<Item> BURLEY_TOBACCO_SEEDS =
+            ITEMS.register("burley_tobacco_seeds",
+                    () -> new TallCropSeedsItem(
+                            ModBlocks.BURLEY_TOBACCO_CROP.get(),
+                            new Item.Properties(),
+                            BurleyCropBlock.HALF
+                    ));
 
-    public static final RegistryObject<Item> ORIENTAL_TOBACCO_SEEDS = ITEMS.register("tobacco_seeds_oriental",
-            () -> new ItemNameBlockItem(ModBlocks.ORIENTAL_TOBACCO_CROP.get(), new Item.Properties()));
+    public static final RegistryObject<Item> ORIENTAL_TOBACCO_SEEDS =
+            ITEMS.register("oriental_tobacco_seeds",
+                    () -> new TallCropSeedsItem(
+                            ModBlocks.ORIENTAL_TOBACCO_CROP.get(),
+                            new Item.Properties(),
+                            OrientalCropBlock.HALF
+                    ));
 
-    public static final RegistryObject<Item> DOKHA_TOBACCO_SEEDS = ITEMS.register("tobacco_seeds_dokha",
-            () -> new ItemNameBlockItem(ModBlocks.DOKHA_TOBACCO_CROP.get(), new Item.Properties()));
+    public static final RegistryObject<Item> DOKHA_TOBACCO_SEEDS =
+            ITEMS.register("dokha_tobacco_seeds",
+                    () -> new TallCropSeedsItem(
+                            ModBlocks.DOKHA_TOBACCO_CROP.get(),
+                            new Item.Properties(),
+                            DokhaCropBlock.HALF
+                    ));
 
-    public static final RegistryObject<Item> SHADE_TOBACCO_SEEDS = ITEMS.register("tobacco_seeds_shade",
-            () -> new ItemNameBlockItem(ModBlocks.SHADE_TOBACCO_CROP.get(), new Item.Properties()));
-
+    public static final RegistryObject<Item> SHADE_TOBACCO_SEEDS =
+            ITEMS.register("shade_tobacco_seeds",
+                    () -> new TallCropSeedsItem(
+                            ModBlocks.SHADE_TOBACCO_CROP.get(),
+                            new Item.Properties(),
+                            ShadeCropBlock.HALF
+                    ));
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
     }

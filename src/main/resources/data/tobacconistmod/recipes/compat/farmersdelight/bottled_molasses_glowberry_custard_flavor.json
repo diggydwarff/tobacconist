@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "conditions": [
+    { "type": "forge:mod_loaded", "modid": "farmersdelight" }
+  ],
+  "ingredients": [
+    {
+      "item": "tobacconistmod:bottled_molasses_plain"
+    },
+    {
+      "item": "farmersdelight:glow_berry_custard"
+    }
+  ],
+  "result": {
+    "item": "tobacconistmod:bottled_molasses_glowberry_custard_flavor",
+    "count": 1
+  }
+}

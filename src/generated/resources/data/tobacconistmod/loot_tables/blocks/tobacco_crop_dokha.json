@@ -1,39 +1,6 @@
 {
   "type": "minecraft:block",
-  "functions": [
-    {
-      "function": "minecraft:explosion_decay"
-    }
-  ],
   "pools": [
-    {
-      "bonus_rolls": 0.0,
-      "entries": [
-        {
-          "type": "minecraft:alternatives",
-          "children": [
-            {
-              "type": "minecraft:item",
-              "conditions": [
-                {
-                  "block": "tobacconistmod:tobacco_crop_dokha",
-                  "condition": "minecraft:block_state_property",
-                  "properties": {
-                    "age": "7"
-                  }
-                }
-              ],
-              "name": "tobacconistmod:tobacco_leaf_dokha"
-            },
-            {
-              "type": "minecraft:item",
-              "name": "tobacconistmod:tobacco_seeds_dokha"
-            }
-          ]
-        }
-      ],
-      "rolls": 1.0
-    },
     {
       "bonus_rolls": 0.0,
       "conditions": [
@@ -41,7 +8,7 @@
           "block": "tobacconistmod:tobacco_crop_dokha",
           "condition": "minecraft:block_state_property",
           "properties": {
-            "age": "7"
+            "half": "lower"
           }
         }
       ],
@@ -50,16 +17,46 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "enchantment": "minecraft:fortune",
-              "formula": "minecraft:binomial_with_bonus_count",
-              "function": "minecraft:apply_bonus",
-              "parameters": {
-                "extra": 3,
-                "probability": 0.5714286
-              }
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 2.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "tobacconistmod:tobacco_seeds_dokha"
+          "name": "tobacconistmod:dokha_tobacco_seeds"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "block": "tobacconistmod:tobacco_crop_burley",
+          "condition": "minecraft:block_state_property",
+          "properties": {
+            "half": "upper"
+          }
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 4.0,
+                "min": 2.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "tobacconistmod:tobacco_leaf_dokha"
         }
       ],
       "rolls": 1.0

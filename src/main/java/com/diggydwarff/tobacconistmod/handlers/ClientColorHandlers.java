@@ -62,7 +62,7 @@ public class ClientColorHandlers {
 
             return 0xFFFFFF;
 
-        }, ModItems.WOODEN_SMOKING_PIPE.get());
+        }, BuiltInRegistries.ITEM.get(new ResourceLocation("tobacconistmod", "wooden_smoking_pipe")));
     }
 
     private static int clamp(int v) {

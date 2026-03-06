@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "tobacconistmod:item/wild_tobacco_seeds"
+  }
+}

@@ -80,12 +80,12 @@
 
   "block.tobacconistmod.wild_flowering_tobacco_block": "Wild Flowering Tobacco",
 
-  "item.tobacconistmod.tobacco_seeds_wild": "Wild Tobacco Seeds",
-  "item.tobacconistmod.tobacco_seeds_virginia": "Virginia Tobacco Seeds",
-  "item.tobacconistmod.tobacco_seeds_burley": "Burley Tobacco Seeds",
-  "item.tobacconistmod.tobacco_seeds_oriental": "Oriental Tobacco Seeds",
-  "item.tobacconistmod.tobacco_seeds_dokha": "Dokha Tobacco Seeds",
-  "item.tobacconistmod.tobacco_seeds_shade": "Shade Tobacco Seeds",
+  "item.tobacconistmod.wild_tobacco_seeds": "Wild Tobacco Seeds",
+  "item.tobacconistmod.virginia_tobacco_seeds": "Virginia Tobacco Seeds",
+  "item.tobacconistmod.burley_tobacco_seeds": "Burley Tobacco Seeds",
+  "item.tobacconistmod.oriental_tobacco_seeds": "Oriental Tobacco Seeds",
+  "item.tobacconistmod.dokha_tobacco_seeds": "Dokha Tobacco Seeds",
+  "item.tobacconistmod.shade_tobacco_seeds": "Shade Tobacco Seeds",
 
   "block.tobacconistmod.tobacco_crop_wild": "Wild Tobacco Crop",
   "block.tobacconistmod.tobacco_crop_virginia": "Virginia Tobacco Crop",
