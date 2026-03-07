@@ -1,6 +1,7 @@
 package com.diggydwarff.tobacconistmod;
 
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
+import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -20,18 +21,14 @@ public class TobacconistCreativeTab  {
                     .title(Component.translatable("creativetab.tobacconistmod"))
                     .displayItems((displayParameters, output) -> {
 
-                        //output.accept(WOODEN_SMOKING_PIPE.get());
-                        //output.accept(GOLD_SMOKING_PIPE.get());
-                        //output.accept(PIPE_TOBACCO.get());
                         output.accept(ROLLING_PAPER.get());
+                        output.accept(BAMBOO_CHARCOAL.get());
                         output.accept(CIGAR.get());
                         output.accept(CIGARETTE.get());
                         output.accept(HOOKAH_HOSE.get());
                         output.accept(SHISHA_TOBACCO.get());
 
                         output.accept(BOTTLED_MOLASSES_PLAIN.get());
-
-                        output.accept(ModBlocks.WILD_FLOWERING_TOBACCO.get());
 
                         output.accept(WILD_TOBACCO_LEAF.get());
                         output.accept(VIRGINIA_TOBACCO_LEAF.get());
@@ -76,6 +73,14 @@ public class TobacconistCreativeTab  {
                         output.accept(ModBlocks.ORIENTAL_TOBACCO_CROP.get());
                         output.accept(ModBlocks.DOKHA_TOBACCO_CROP.get());
                         output.accept(ModBlocks.SHADE_TOBACCO_CROP.get());
+
+                        output.accept(GOLD_SMOKING_PIPE.get());
+                        output.accept(GEM_ENCRUSTED_SMOKING_PIPE.get());
+                        output.accept(DIAMOND_ENCRUSTED_SMOKING_PIPE.get());
+                        output.accept(LAPIS_ENCRUSTED_SMOKING_PIPE.get());
+                        output.accept(EMERALD_ENCRUSTED_SMOKING_PIPE.get());
+                        output.accept(EMERALD_AZTEC_SMOKING_PIPE.get());
+                        output.accept(NETHERITE_SMOKING_PIPE.get());
 
                     }).build());
 

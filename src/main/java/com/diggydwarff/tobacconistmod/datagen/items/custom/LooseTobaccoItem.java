@@ -16,8 +16,8 @@ public class LooseTobaccoItem extends Item {
     public static final String NBT_TOBACCO = "PackedTobacco";
     public static final String NBT_PUFFS = "PuffsLeft";
 
-    private final int maxPuffs;   // e.g. 20
-    private final int strength;   // if you want it later
+    private final int maxPuffs;
+    private final int strength;
 
     public LooseTobaccoItem(Properties props, int maxPuffs, int strength) {
         super(props);

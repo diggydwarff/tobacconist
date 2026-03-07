@@ -2,6 +2,7 @@ package com.diggydwarff.tobacconistmod.screen;
 
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
 import com.diggydwarff.tobacconistmod.block.entity.HookahEntity;
+import com.diggydwarff.tobacconistmod.util.HookahFuelHelper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
@@ -22,7 +23,7 @@ public class HookahMenu extends AbstractContainerMenu {
     private final ContainerData data;
 
     public HookahMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
-        this(id, inv, inv.player.level().getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(2));
+        this(id, inv, inv.player.level().getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(4));
     }
 
     public HookahMenu(int id, Inventory inv, BlockEntity entity, ContainerData data) {
@@ -36,7 +37,33 @@ public class HookahMenu extends AbstractContainerMenu {
         addPlayerHotbar(inv);
 
         this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler -> {
-            this.addSlot(new SlotItemHandler(handler, 0, 53, 36));
+            this.addSlot(new SlotItemHandler(handler, 0, 53, 36) {
+
+                @Override
+                public boolean mayPlace(ItemStack stack) {
+                    if (!HookahFuelHelper.isFuel(stack)) return false;
+
+                    ItemStack current = getItem();
+
+                    // if burning, only allow stacking same fuel
+                    if (data.get(2) > 0 && !current.isEmpty()) {
+                        return ItemStack.isSameItemSameTags(current, stack);
+                    }
+
+                    return true;
+                }
+
+                @Override
+                public boolean mayPickup(Player player) {
+                    // prevent removing burning fuel
+                    return data.get(2) <= 0;
+                }
+
+                @Override
+                public int getMaxStackSize(ItemStack stack) {
+                    return 64;
+                }
+            });
             this.addSlot(new SlotItemHandler(handler, 1, 86, 15));
             this.addSlot(new SlotItemHandler(handler, 2, 86, 60));
         });
@@ -56,13 +83,33 @@ public class HookahMenu extends AbstractContainerMenu {
         return maxProgress != 0 && progress != 0 ? progress * progressArrowSize / maxProgress : 0;
     }
 
-    // CREDIT GOES TO: diesieben07 | https://github.com/diesieben07/SevenCommons
-    // must assign a slot number to each of the slots used by the GUI.
-    // For this container, we can see both the tile inventory's slots as well as the player inventory slots and the hotbar.
-    // Each time we add a Slot to the container, it automatically increases the slotIndex, which means
-    //  0 - 8 = hotbar slots (which will map to the InventoryPlayer slot numbers 0 - 8)
-    //  9 - 35 = player inventory slots (which map to the InventoryPlayer slot numbers 9 - 35)
-    //  36 - 44 = TileInventory slots, which map to our TileEntity slot numbers 0 - 8)
+    public int getScaledFuelLevel() {
+        int fuelLevel = this.data.get(2);
+        int maxFuelLevel = this.data.get(3);
+        int pixelHeight = 63;
+
+        if (maxFuelLevel == 0 || fuelLevel == 0) {
+            return 0;
+        }
+
+        return fuelLevel * pixelHeight / maxFuelLevel;
+    }
+
+    public boolean isBurning() {
+        return this.data.get(2) > 0;
+    }
+
+    public int getFuelProgressScaled(int pixels) {
+        int fuelTime = this.data.get(2);
+        int maxFuelTime = this.data.get(3);
+
+        if (maxFuelTime <= 0 || fuelTime <= 0) {
+            return 0;
+        }
+
+        return Math.max(1, fuelTime * pixels / maxFuelTime);
+    }
+
     private static final int HOTBAR_SLOT_COUNT = 9;
     private static final int PLAYER_INVENTORY_ROW_COUNT = 3;
     private static final int PLAYER_INVENTORY_COLUMN_COUNT = 9;
@@ -105,6 +152,17 @@ public class HookahMenu extends AbstractContainerMenu {
         }
         sourceSlot.onTake(playerIn, sourceStack);
         return copyOfSourceStack;
+    }
+
+    public int getCookProgressScaled(int pixels) {
+        int progress = this.data.get(0);
+        int maxProgress = this.data.get(1);
+
+        if (maxProgress <= 0 || progress <= 0) {
+            return 0;
+        }
+
+        return progress * pixels / maxProgress;
     }
 
     @Override

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " E ",
+    "EPE",
+    " E "
+  ],
+  "key": {
+    "E": {
+      "item": "minecraft:emerald"
+    },
+    "P": {
+      "item": "tobacconistmod:gold_smoking_pipe"
+    }
+  },
+  "result": {
+    "item": "tobacconistmod:emerald_encrusted_smoking_pipe"
+  }
+}

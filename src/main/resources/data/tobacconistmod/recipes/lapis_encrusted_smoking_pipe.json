@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " L ",
+    "LPL",
+    " L "
+  ],
+  "key": {
+    "L": {
+      "item": "minecraft:lapis_lazuli"
+    },
+    "P": {
+      "item": "tobacconistmod:gold_smoking_pipe"
+    }
+  },
+  "result": {
+    "item": "tobacconistmod:lapis_encrusted_smoking_pipe"
+  }
+}

@@ -3,6 +3,7 @@ package com.diggydwarff.tobacconistmod.block.entity;
 import com.diggydwarff.tobacconistmod.block.custom.HookahBlock;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.screen.HookahMenu;
+import com.diggydwarff.tobacconistmod.util.HookahFuelHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -43,6 +44,8 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
     protected final ContainerData data;
     public int progress = 0;
     private int maxProgress = 5000;
+    private int fuelTime = 0;
+    private int currentFuelMaxTime = 0;
 
     public HookahEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.HOOKAH.get(), pos, state);
@@ -52,6 +55,8 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
                 return switch (index) {
                     case 0 -> HookahEntity.this.progress;
                     case 1 -> HookahEntity.this.maxProgress;
+                    case 2 -> HookahEntity.this.fuelTime;
+                    case 3 -> HookahEntity.this.currentFuelMaxTime;
                     default -> 0;
                 };
             }
@@ -61,12 +66,14 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
                 switch (index) {
                     case 0 -> HookahEntity.this.progress = value;
                     case 1 -> HookahEntity.this.maxProgress = value;
+                    case 2 -> HookahEntity.this.fuelTime = value;
+                    case 3 -> HookahEntity.this.currentFuelMaxTime = value;
                 }
             }
 
             @Override
             public int getCount() {
-                return 2;
+                return 4;
             }
         };
     }
@@ -84,10 +91,9 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
 
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if(cap == ForgeCapabilities.ITEM_HANDLER) {
+        if (cap == ForgeCapabilities.ITEM_HANDLER) {
             return lazyItemHandler.cast();
         }
-
         return super.getCapability(cap, side);
     }
 
@@ -107,7 +113,8 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
     protected void saveAdditional(CompoundTag nbt) {
         nbt.put("inventory", itemHandler.serializeNBT());
         nbt.putInt("hookah.progress", this.progress);
-
+        nbt.putInt("hookah.fuelTime", this.fuelTime);
+        nbt.putInt("hookah.currentFuelMaxTime", this.currentFuelMaxTime);
         super.saveAdditional(nbt);
     }
 
@@ -115,7 +122,9 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
     public void load(CompoundTag nbt) {
         super.load(nbt);
         itemHandler.deserializeNBT(nbt.getCompound("inventory"));
-        progress = nbt.getInt("hookah.progress");
+        this.progress = nbt.getInt("hookah.progress");
+        this.fuelTime = nbt.getInt("hookah.fuelTime");
+        this.currentFuelMaxTime = nbt.getInt("hookah.currentFuelMaxTime");
     }
 
     public void drops() {
@@ -123,7 +132,6 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
         for (int i = 0; i < itemHandler.getSlots(); i++) {
             inventory.setItem(i, itemHandler.getStackInSlot(i));
         }
-
         Containers.dropContents(this.level, this.worldPosition, inventory);
     }
 
@@ -132,17 +140,38 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
 
         boolean litNow = false;
 
-        if (hasRecipe(pEntity)) {
+        // Furnace-style fuel start:
+        // if no active fuel, consume one fuel item now and start burn time
+        if (pEntity.fuelTime <= 0) {
+            ItemStack fuel = pEntity.itemHandler.getStackInSlot(0);
+            float mult = HookahFuelHelper.getMultiplier(fuel);
+
+            if (mult > 0) {
+                pEntity.itemHandler.extractItem(0, 1, false);
+                pEntity.fuelTime = (int) (5000 * mult);
+                pEntity.currentFuelMaxTime = pEntity.fuelTime;
+                pEntity.setChanged();
+            }
+        }
+
+        if (canProcess(pEntity) && pEntity.fuelTime > 0) {
             litNow = true;
 
             ServerLevel serverLevel = (ServerLevel) level;
-            serverLevel.sendParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE, pos.getX(), pos.getY()+1, pos.getZ(), 1, 0, 0, 0, 0);
+            serverLevel.sendParticles(
+                    ParticleTypes.CAMPFIRE_COSY_SMOKE,
+                    pos.getX() + 0.5, pos.getY() + 1.2, pos.getZ() + 0.5,
+                    1, 0, 0, 0, 0
+            );
 
             pEntity.progress++;
-            ItemStack itemStack = pEntity.itemHandler.getStackInSlot(1);
-            itemStack.setDamageValue(itemStack.getDamageValue()+1);
+            pEntity.fuelTime--;
 
-            if (itemStack.getDamageValue() >= itemStack.getMaxDamage()) {
+            // keep old shisha durability damage logic
+            ItemStack shisha = pEntity.itemHandler.getStackInSlot(1);
+            shisha.setDamageValue(shisha.getDamageValue() + 1);
+
+            if (shisha.getDamageValue() >= shisha.getMaxDamage()) {
                 pEntity.itemHandler.extractItem(1, 1, false);
             }
 
@@ -164,40 +193,31 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
         }
     }
 
-
     private void resetProgress() {
         this.progress = 0;
     }
 
     private static void craftItem(HookahEntity pEntity) {
-
-        if(hasRecipe(pEntity)) {
+        if (canProcess(pEntity)) {
             pEntity.itemHandler.extractItem(1, 1, false);
-            pEntity.itemHandler.setStackInSlot(2, new ItemStack(ModItems.SHISHA_TOBACCO.get(),
-                    pEntity.itemHandler.getStackInSlot(2).getCount() + 1));
+
+            pEntity.itemHandler.setStackInSlot(2,
+                    new ItemStack(ModItems.SHISHA_TOBACCO.get(),
+                            pEntity.itemHandler.getStackInSlot(2).getCount() + 1));
 
             pEntity.resetProgress();
         }
     }
 
-    private static boolean hasRecipe(HookahEntity entity) {
-        SimpleContainer inventory = new SimpleContainer(entity.itemHandler.getSlots());
-        for (int i = 0; i < entity.itemHandler.getSlots(); i++) {
-            inventory.setItem(i, entity.itemHandler.getStackInSlot(i));
-        }
+    private static boolean canProcess(HookahEntity entity) {
+        boolean hasShishaInSlot =
+                entity.itemHandler.getStackInSlot(1).getItem() == ModItems.SHISHA_TOBACCO.get();
 
-        boolean hasShishaInSlot = entity.itemHandler.getStackInSlot(1).getItem() == ModItems.SHISHA_TOBACCO.get();
-        boolean hasCoalInSlot = entity.itemHandler.getStackInSlot(0).getItem() == Items.COAL;
-        boolean hasWaterInSlot = entity.itemHandler.getStackInSlot(2).getItem() == Items.POTION;
+        boolean hasWaterInSlot =
+                entity.itemHandler.getStackInSlot(2).is(Items.POTION) &&
+                        entity.itemHandler.getStackInSlot(2).getTag() != null &&
+                        entity.itemHandler.getStackInSlot(2).getTag().getString("Potion").equals("minecraft:water");
 
-        return hasShishaInSlot && hasCoalInSlot && hasWaterInSlot;
-    }
-
-    private static boolean canInsertItemIntoOutputSlot(SimpleContainer inventory, ItemStack stack) {
-        return inventory.getItem(2).getItem() == stack.getItem() || inventory.getItem(2).isEmpty();
-    }
-
-    private static boolean canInsertAmountIntoOutputSlot(SimpleContainer inventory) {
-        return inventory.getItem(2).getMaxStackSize() > inventory.getItem(2).getCount();
+        return hasShishaInSlot && hasWaterInSlot;
     }
 }

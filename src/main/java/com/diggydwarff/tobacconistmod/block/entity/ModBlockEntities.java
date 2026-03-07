@@ -15,7 +15,6 @@ public class ModBlockEntities {
     public static final RegistryObject<BlockEntityType<HookahEntity>> HOOKAH = BLOCK_ENTITIES.register("hookah", () ->
                     BlockEntityType.Builder.of(HookahEntity::new, ModBlocks.HOOKAH.get()).build(null));
 
-
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);
     }

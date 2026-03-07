@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "tobacconistmod:item/wooden_pipe"
+    "layer0": "tobacconistmod:item/gold_smoking_pipe"
   }
 }

@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " D ",
+    "EPR",
+    " L "
+  ],
+  "key": {
+    "D": {
+      "item": "minecraft:diamond"
+    },
+    "L": {
+      "item": "minecraft:lapis_lazuli"
+    },
+    "R": {
+      "item": "minecraft:redstone_dust"
+    },
+    "E": {
+      "item": "minecraft:emerald"
+    },
+    "P": {
+      "item": "tobacconistmod:gold_smoking_pipe"
+    }
+  },
+  "result": {
+    "item": "tobacconistmod:gem_encrusted_smoking_pipe"
+  }
+}

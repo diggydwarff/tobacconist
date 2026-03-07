@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " N ",
+    "NPN",
+    " N "
+  ],
+  "key": {
+    "N": {
+      "item": "minecraft:netherite_ingot"
+    },
+    "P": {
+      "item": "tobacconistmod:gold_smoking_pipe"
+    }
+  },
+  "result": {
+    "item": "tobacconistmod:netherite_smoking_pipe"
+  }
+}

@@ -22,7 +22,6 @@ public class ModRecipes {
     public static final RegistryObject<RecipeSerializer<CigarRecipe>> CIGAR_RECIPE_SERIALIZER =
             SERIALIZERS.register("crafting_special_cigar", () -> CigarRecipe.Serializer.INSTANCE);
 
-
     public static void register(IEventBus eventBus) {
         SERIALIZERS.register(eventBus);
     }

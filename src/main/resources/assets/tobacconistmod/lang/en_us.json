@@ -3,7 +3,15 @@
 
   "item.tobacconistmod.wooden_smoking_pipe": "Wooden Smoking Pipe",
   "item.tobacconistmod.gold_smoking_pipe": "Golden Smoking Pipe",
-  "item.tobacconistmod.rolling_paper": "Rolling Papers",
+  "item.tobacconistmod.gem_encrusted_smoking_pipe": "Gem-Encrusted Smoking Pipe",
+  "item.tobacconistmod.lapis_encrusted_smoking_pipe": "Lapis-Encrusted Smoking Pipe",
+  "item.tobacconistmod.diamond_encrusted_smoking_pipe": "Diamond-Encrusted Smoking Pipe",
+  "item.tobacconistmod.emerald_encrusted_smoking_pipe": "Emerald-Encrusted Smoking Pipe",
+  "item.tobacconistmod.emerald_aztec_smoking_pipe": "Emerald-Aztec Smoking Pipe",
+  "item.tobacconistmod.netherite_smoking_pipe": "Netherite Smoking Pipe",
+
+  "item.tobacconistmod.rolling_paper": "Rolling Paper",
+  "item.tobacconistmod.bamboo_charcoal": "Bamboo Charcoal",
   "item.tobacconistmod.cigar": "Cigar",
   "item.tobacconistmod.cigarette": "Cigarette",
 
