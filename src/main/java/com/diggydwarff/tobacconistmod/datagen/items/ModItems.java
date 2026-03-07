@@ -15,35 +15,35 @@ public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, TobacconistMod.MODID);
 
     // PIPE ITEMS
-    public static final RegistryObject<Item> WOODEN_SMOKING_PIPE = ITEMS.register("wooden_smoking_pipe", () -> new WoodenSmokingPipeItem(new Item.Properties()));
+    public static final RegistryObject<Item> WOODEN_SMOKING_PIPE = ITEMS.register("wooden_smoking_pipe", () -> new WoodenSmokingPipeItem(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> GOLD_SMOKING_PIPE =
             ITEMS.register("gold_smoking_pipe",
-                    () -> new GoldSmokingPipeItem(new Item.Properties()));
+                    () -> new GoldSmokingPipeItem(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> GEM_ENCRUSTED_SMOKING_PIPE =
             ITEMS.register("gem_encrusted_smoking_pipe",
-                    () -> new GemEncrustedSmokingPipeItem(new Item.Properties()));
+                    () -> new GemEncrustedSmokingPipeItem(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> DIAMOND_ENCRUSTED_SMOKING_PIPE =
             ITEMS.register("diamond_encrusted_smoking_pipe",
-                    () -> new DiamondEncrustedSmokingPipeItem(new Item.Properties()));
+                    () -> new DiamondEncrustedSmokingPipeItem(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> LAPIS_ENCRUSTED_SMOKING_PIPE =
             ITEMS.register("lapis_encrusted_smoking_pipe",
-                    () -> new LapisEncrustedSmokingPipeItem(new Item.Properties()));
+                    () -> new LapisEncrustedSmokingPipeItem(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> EMERALD_ENCRUSTED_SMOKING_PIPE =
             ITEMS.register("emerald_encrusted_smoking_pipe",
-                    () -> new EmeraldEncrustedSmokingPipeItem(new Item.Properties()));
+                    () -> new EmeraldEncrustedSmokingPipeItem(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> EMERALD_AZTEC_SMOKING_PIPE =
             ITEMS.register("emerald_aztec_smoking_pipe",
-                    () -> new EmeraldAztecSmokingPipeItem(new Item.Properties()));
+                    () -> new EmeraldAztecSmokingPipeItem(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> NETHERITE_SMOKING_PIPE =
             ITEMS.register("netherite_smoking_pipe",
-                    () -> new NetheriteSmokingPipeItem(new Item.Properties()));
+                    () -> new NetheriteSmokingPipeItem(new Item.Properties().stacksTo(1)));
 
 
     // OTHER ITEMS
