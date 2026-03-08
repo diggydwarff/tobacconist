@@ -22,10 +22,4 @@
 - Hookahs only except water now
 - Hookah fuel is properly consumed
 - Hookah burn duration is stable
-- Hookah fuel texture indicator now worksa
-
-
-TO DO
-
-FINALIZE STATES FOR CURIOS POSITIONS
-FINISH SMOKE PARTICLES WHEN USING CURIOS API SLOT
+- Hookah fuel texture indicator now works

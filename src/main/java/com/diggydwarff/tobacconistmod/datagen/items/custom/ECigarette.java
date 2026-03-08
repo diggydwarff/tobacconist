@@ -22,16 +22,6 @@ public class ECigarette extends SmokingItem {
         super(properties);
     }
 
-    @Override
-    public boolean canEquip(SlotContext context, ItemStack stack) {
-        return false;
-    }
-
-    @Override
-    public boolean canEquipFromUse(SlotContext context, ItemStack stack) {
-        return false;
-    }
-
     // Use the cigarette and puff some smoke!
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {

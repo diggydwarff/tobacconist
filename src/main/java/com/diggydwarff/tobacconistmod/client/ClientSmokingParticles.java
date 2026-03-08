@@ -7,10 +7,10 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import top.theillusivec4.curios.api.CuriosApi;
 
@@ -19,12 +19,11 @@ public class ClientSmokingParticles {
 
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event) {
+        if (!ModList.get().isLoaded("curios")) return;
         if (event.phase != TickEvent.Phase.END) return;
 
         Minecraft mc = Minecraft.getInstance();
         if (mc.level == null || mc.isPaused()) return;
-
-        // every 4 ticks keeps it subtle
         if ((mc.level.getGameTime() % 14) != 0) return;
 
         for (Player player : mc.level.players()) {
@@ -43,38 +42,20 @@ public class ClientSmokingParticles {
     }
 
     private static void spawnMouthSmoke(Minecraft mc, Player player) {
-        // head yaw in radians
         float yaw = player.getYHeadRot() * Mth.DEG_TO_RAD;
 
-        // mouth offset relative to player facing
-        double side = 0.11D;     // corner of mouth
-        double forward = 0.20D;  // slightly out from face
-        double height = 1.52D;   // mouth height
+        double side = 0.11D;
+        double forward = 0.20D;
+        double height = 1.52D;
 
-        double x = player.getX()
-                - Mth.sin(yaw) * forward
-                + Mth.cos(yaw) * side;
-
+        double x = player.getX() - Mth.sin(yaw) * forward + Mth.cos(yaw) * side;
         double y = player.getY() + height;
+        double z = player.getZ() + Mth.cos(yaw) * forward + Mth.sin(yaw) * side;
 
-        double z = player.getZ()
-                + Mth.cos(yaw) * forward
-                + Mth.sin(yaw) * side;
-
-        // very slow drift outward/upward
         double vx = -Mth.sin(yaw) * 0.008D + (mc.level.random.nextDouble() - 0.5D) * 0.003D;
         double vy = 0.012D + mc.level.random.nextDouble() * 0.004D;
         double vz =  Mth.cos(yaw) * 0.008D + (mc.level.random.nextDouble() - 0.5D) * 0.003D;
 
-        /*
-        mc.level.addParticle(
-                ParticleTypes.SMOKE,
-                x, y, z,
-                vx, vy, vz
-        );
-        */
-
-        // occasional softer larger puff
         if (mc.level.random.nextInt(6) == 0) {
             mc.level.addParticle(
                     ParticleTypes.CAMPFIRE_COSY_SMOKE,
