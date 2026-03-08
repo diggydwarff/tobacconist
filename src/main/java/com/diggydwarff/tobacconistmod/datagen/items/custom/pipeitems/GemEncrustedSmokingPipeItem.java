@@ -7,4 +7,5 @@ public class GemEncrustedSmokingPipeItem extends WoodenSmokingPipeItem {
     public GemEncrustedSmokingPipeItem(Properties properties) {
         super(properties);
     }
+
 }

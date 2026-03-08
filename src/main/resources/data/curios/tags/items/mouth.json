@@ -1,0 +1,15 @@
+{
+  "replace": false,
+  "values": [
+    "tobacconistmod:wooden_smoking_pipe",
+    "tobacconistmod:gold_smoking_pipe",
+    "tobacconistmod:gem_encrusted_smoking_pipe",
+    "tobacconistmod:diamond_encrusted_smoking_pipe",
+    "tobacconistmod:lapis_encrusted_smoking_pipe",
+    "tobacconistmod:emerald_encrusted_smoking_pipe",
+    "tobacconistmod:emerald_aztec_smoking_pipe",
+    "tobacconistmod:netherite_smoking_pipe",
+    "tobacconistmod:cigar",
+    "tobacconistmod:cigarette"
+  ]
+}

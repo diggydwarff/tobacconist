@@ -18,7 +18,14 @@
 - Upped pipe uses from 20 to 40 per tobacco
 - Changed duration of normal coal in hookah to be a bit worse
 ##### Fixes:
+- Fixed pipes stacking bug
 - Hookahs only except water now
 - Hookah fuel is properly consumed
 - Hookah burn duration is stable
-- Hookah fuel texture indicator now works
+- Hookah fuel texture indicator now worksa
+
+
+TO DO
+
+FINALIZE STATES FOR CURIOS POSITIONS
+FINISH SMOKE PARTICLES WHEN USING CURIOS API SLOT

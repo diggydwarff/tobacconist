@@ -1,5 +1,6 @@
 package com.diggydwarff.tobacconistmod;
 
+import com.diggydwarff.tobacconistmod.compat.curios.CuriosCompat;
 import com.diggydwarff.tobacconistmod.effect.ModEffects;
 import com.diggydwarff.tobacconistmod.recipes.ModRecipeSerializers;
 import com.diggydwarff.tobacconistmod.villager.ModVillagerTrades;
@@ -26,10 +27,12 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegisterEvent;
@@ -41,29 +44,31 @@ public class TobacconistMod
 {
     public static final String MODID = "tobacconistmod";
     public static final Logger LOGGER = LogUtils.getLogger();
-    public TobacconistMod()
-    {
-        LOGGER.warn("TOBACCONISTMOD LOADED (JAR TEST)");
+    public TobacconistMod() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::register);
+        modEventBus.addListener(this::enqueueIMC); // keep for IMC messages only
 
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
         ModRecipes.register(modEventBus);
-
         ModEffects.register(modEventBus);
         ModBlockEntities.register(modEventBus);
         ModMenuTypes.register(modEventBus);
         TobaconistBiomeModifier.register(modEventBus);
-
         ModVillagers.register(modEventBus);
         TobacconistCreativeTab.register(modEventBus);
-
         ModRecipeSerializers.SERIALIZERS.register(modEventBus);
 
         MinecraftForge.EVENT_BUS.register(this);
+    }
+
+    private void enqueueIMC(final InterModEnqueueEvent event) {
+        if (ModList.get().isLoaded("curios")) {
+            CuriosCompat.init(); // Only called here now
+        }
     }
 
     @SubscribeEvent

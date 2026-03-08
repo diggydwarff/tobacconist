@@ -8,4 +8,5 @@ public class GoldSmokingPipeItem extends WoodenSmokingPipeItem {
     public GoldSmokingPipeItem(Properties properties) {
         super(properties);
     }
+
 }

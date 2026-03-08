@@ -11,6 +11,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import top.theillusivec4.curios.api.SlotContext;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -41,6 +42,10 @@ public class CigarItem extends SmokingItem {
         return InteractionResultHolder.consume(stack);
     }
 
+    @Override
+    public boolean shouldEmitMouthSmoke(ItemStack stack) {
+        return stack.getDamageValue() > 0 && stack.getDamageValue() < stack.getMaxDamage();
+    }
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn){
         CompoundTag compoundtag = stack.getTag();
