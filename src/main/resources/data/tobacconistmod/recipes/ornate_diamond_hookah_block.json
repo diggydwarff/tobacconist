@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "DDD",
+    "DHD",
+    "DDD"
+  ],
+  "key":
+  {
+    "D":
+    {
+      "item": "minecraft:diamond"
+    },
+    "H":
+    {
+      "item": "tobacconistmod:hookah_block"
+    }
+  },
+  "result":
+  {
+    "item": "tobacconistmod:ornate_diamond_hookah_block",
+    "count": 1
+  }
+}

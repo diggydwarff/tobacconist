@@ -21,7 +21,7 @@ import java.util.function.Supplier;
 public class ModBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, TobacconistMod.MODID);
 
-    public static final RegistryObject<Block> HOOKAH = registerBlock("hookah_block",
+    public static final RegistryObject<Block> HOOKAH = registerSingleStackBlock("hookah_block",
             () -> new HookahBlock(BlockBehaviour.Properties.copy(Blocks.STONE)
                     .lightLevel(state -> {
                         if (state.getValue(HookahBlock.GLOWING)) return 12;
@@ -33,7 +33,7 @@ public class ModBlocks {
                     .noOcclusion()
                     .noLootTable()));
 
-    public static final RegistryObject<Block> ORNATE_COPPER_HOOKAH = registerBlock("ornate_copper_hookah_block",
+    public static final RegistryObject<Block> ORNATE_COPPER_HOOKAH = registerSingleStackBlock("ornate_copper_hookah_block",
             () -> new DoubleHookahBlock(
                     BlockBehaviour.Properties.copy(Blocks.COPPER_BLOCK)
                             .lightLevel(state -> state.getValue(DoubleHookahBlock.LIT) ? 6 : 0)
@@ -43,7 +43,7 @@ public class ModBlocks {
                             .noLootTable()
             ));
 
-    public static final RegistryObject<Block> ORNATE_GOLD_HOOKAH = registerBlock("ornate_gold_hookah_block",
+    public static final RegistryObject<Block> ORNATE_GOLD_HOOKAH = registerSingleStackBlock("ornate_gold_hookah_block",
             () -> new DoubleHookahBlock(
                     BlockBehaviour.Properties.copy(Blocks.GOLD_BLOCK)
                             .lightLevel(state -> state.getValue(DoubleHookahBlock.LIT) ? 6 : 0)
@@ -53,7 +53,7 @@ public class ModBlocks {
                             .noLootTable()
             ));
 
-    public static final RegistryObject<Block> ORNATE_DIAMOND_HOOKAH = registerBlock("ornate_diamond_hookah_block",
+    public static final RegistryObject<Block> ORNATE_DIAMOND_HOOKAH = registerSingleStackBlock("ornate_diamond_hookah_block",
             () -> new DoubleHookahBlock(
                     BlockBehaviour.Properties.copy(Blocks.DIAMOND_BLOCK)
                             .lightLevel(state -> state.getValue(DoubleHookahBlock.LIT) ? 6 : 0)
@@ -63,7 +63,7 @@ public class ModBlocks {
                             .noLootTable()
             ));
 
-    public static final RegistryObject<Block> ORNATE_IRON_HOOKAH = registerBlock("ornate_iron_hookah_block",
+    public static final RegistryObject<Block> ORNATE_IRON_HOOKAH = registerSingleStackBlock("ornate_iron_hookah_block",
             () -> new DoubleHookahBlock(
                     BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
                             .lightLevel(state -> state.getValue(DoubleHookahBlock.LIT) ? 6 : 0)
@@ -73,7 +73,7 @@ public class ModBlocks {
                             .noLootTable()
             ));
 
-    public static final RegistryObject<Block> ORNATE_AMETHYST_HOOKAH = registerBlock("ornate_amethyst_hookah_block",
+    public static final RegistryObject<Block> ORNATE_AMETHYST_HOOKAH = registerSingleStackBlock("ornate_amethyst_hookah_block",
             () -> new DoubleHookahBlock(
                     BlockBehaviour.Properties.copy(Blocks.AMETHYST_BLOCK)
                             .lightLevel(state -> state.getValue(DoubleHookahBlock.LIT) ? 6 : 0)
@@ -155,8 +155,18 @@ public class ModBlocks {
         return toReturn;
     }
 
+    private static <T extends Block> RegistryObject<T> registerSingleStackBlock(String name, Supplier<T> block) {
+        RegistryObject<T> toReturn = BLOCKS.register(name, block);
+        registerSingleStackBlockItem(name, toReturn);
+        return toReturn;
+    }
+
     private static <T extends Block> RegistryObject<Item> registerBlockItem(String name, RegistryObject<T> block) {
         return ModItems.ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties()));
+    }
+
+    private static <T extends Block> RegistryObject<Item> registerSingleStackBlockItem(String name, RegistryObject<T> block) {
+        return ModItems.ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties().stacksTo(1)));
     }
 
     public static void register(IEventBus eventBus) {
