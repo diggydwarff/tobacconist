@@ -1,3 +1,9 @@
+## Update 2.3.1
+##### Fixes:
+- Ornate hookah recipes work
+- Fixed iron/copper pipe recipe bug
+- Fixed hookah stacking bug
+
 ## Update 2.3.0
 ##### New Features:
 - NEW! Added additional types of ornate double-high hookahs
