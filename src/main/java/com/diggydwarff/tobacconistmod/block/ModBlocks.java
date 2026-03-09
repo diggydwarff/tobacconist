@@ -32,6 +32,7 @@ public class ModBlocks {
                     .requiresCorrectToolForDrops()
                     .noOcclusion()
                     .noLootTable()));
+
     public static final RegistryObject<Block> ORNATE_COPPER_HOOKAH = registerBlock("ornate_copper_hookah_block",
             () -> new DoubleHookahBlock(
                     BlockBehaviour.Properties.copy(Blocks.COPPER_BLOCK)
@@ -82,6 +83,9 @@ public class ModBlocks {
                             .noLootTable()
             ));
 
+    public static final RegistryObject<Block> TOBACCO_DRYING_RACK = registerBlock("tobacco_drying_rack_block",
+            TobaccoDryingRackBlock::new);
+
     public static final RegistryObject<Block> WILD_FLOWERING_TOBACCO = registerBlock("wild_flowering_tobacco_block",
             () -> new FlowerBlock(() -> MobEffects.CONFUSION, 5,
                     BlockBehaviour.Properties.copy(Blocks.ALLIUM).noOcclusion().noCollission()));
@@ -105,42 +109,42 @@ public class ModBlocks {
 
     public static final RegistryObject<Block> VIRGINIA_TOBACCO_CRATE = registerBlock("virginia_tobacco_crate",
             () -> new Block(BlockBehaviour.Properties.of()
-                    .strength(1.0F)              // lower = faster (try 0.7–1.5)
+                    .strength(1.0F)
                     .sound(SoundType.WOOD)
                     .noOcclusion()
             ));
 
     public static final RegistryObject<Block> BURLEY_TOBACCO_CRATE = registerBlock("burley_tobacco_crate",
             () -> new Block(BlockBehaviour.Properties.of()
-                    .strength(1.0F)              // lower = faster (try 0.7–1.5)
+                    .strength(1.0F)
                     .sound(SoundType.WOOD)
                     .noOcclusion()
             ));
 
     public static final RegistryObject<Block> ORIENTAL_TOBACCO_CRATE = registerBlock("oriental_tobacco_crate",
             () -> new Block(BlockBehaviour.Properties.of()
-                    .strength(1.0F)              // lower = faster (try 0.7–1.5)
+                    .strength(1.0F)
                     .sound(SoundType.WOOD)
                     .noOcclusion()
             ));
 
     public static final RegistryObject<Block> DOKHA_TOBACCO_CRATE = registerBlock("dokha_tobacco_crate",
             () -> new Block(BlockBehaviour.Properties.of()
-                    .strength(1.0F)              // lower = faster (try 0.7–1.5)
+                    .strength(1.0F)
                     .sound(SoundType.WOOD)
                     .noOcclusion()
             ));
 
     public static final RegistryObject<Block> SHADE_TOBACCO_CRATE = registerBlock("shade_tobacco_crate",
             () -> new Block(BlockBehaviour.Properties.of()
-                    .strength(1.0F)              // lower = faster (try 0.7–1.5)
+                    .strength(1.0F)
                     .sound(SoundType.WOOD)
                     .noOcclusion()
             ));
 
     public static final RegistryObject<Block> WILD_TOBACCO_CRATE = registerBlock("wild_tobacco_crate",
             () -> new Block(BlockBehaviour.Properties.of()
-                    .strength(1.0F)              // lower = faster (try 0.7–1.5)
+                    .strength(1.0F)
                     .sound(SoundType.WOOD)
                     .noOcclusion()
             ));

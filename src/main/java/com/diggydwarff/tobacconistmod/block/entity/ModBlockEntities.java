@@ -23,6 +23,13 @@ public class ModBlockEntities {
                     ModBlocks.ORNATE_AMETHYST_HOOKAH.get()
             ).build(null));
 
+    public static final RegistryObject<BlockEntityType<TobaccoDryingRackBlockEntity>> TOBACCO_DRYING_RACK =
+            BLOCK_ENTITIES.register("tobacco_drying_rack", () ->
+                    BlockEntityType.Builder.of(
+                            TobaccoDryingRackBlockEntity::new,
+                            ModBlocks.TOBACCO_DRYING_RACK.get()
+                    ).build(null));
+
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);
     }

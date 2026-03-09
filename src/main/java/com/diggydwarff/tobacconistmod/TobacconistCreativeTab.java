@@ -1,7 +1,6 @@
 package com.diggydwarff.tobacconistmod;
 
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
-import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -11,8 +10,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
 import static com.diggydwarff.tobacconistmod.datagen.items.ModItems.*;
-public class TobacconistCreativeTab  {
 
+public class TobacconistCreativeTab {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, TobacconistMod.MODID);
 
@@ -20,7 +19,6 @@ public class TobacconistCreativeTab  {
             () -> CreativeModeTab.builder().icon(() -> new ItemStack(CIGAR.get()))
                     .title(Component.translatable("creativetab.tobacconistmod"))
                     .displayItems((displayParameters, output) -> {
-
                         output.accept(ROLLING_PAPER.get());
                         output.accept(BAMBOO_CHARCOAL.get());
                         output.accept(CIGAR.get());
@@ -51,6 +49,7 @@ public class TobacconistCreativeTab  {
                         output.accept(TOBACCO_LOOSE_DOKHA.get());
                         output.accept(TOBACCO_LOOSE_SHADE.get());
 
+                        output.accept(ModBlocks.TOBACCO_DRYING_RACK.get());
                         output.accept(ModBlocks.WILD_TOBACCO_CRATE.get());
                         output.accept(ModBlocks.VIRGINIA_TOBACCO_CRATE.get());
                         output.accept(ModBlocks.BURLEY_TOBACCO_CRATE.get());
@@ -65,7 +64,6 @@ public class TobacconistCreativeTab  {
                         output.accept(DOKHA_TOBACCO_SEEDS.get());
                         output.accept(SHADE_TOBACCO_SEEDS.get());
 
-
                         output.accept(ModBlocks.WILD_TOBACCO_CROP.get());
                         output.accept(ModBlocks.VIRGINIA_TOBACCO_CROP.get());
                         output.accept(ModBlocks.BURLEY_TOBACCO_CROP.get());
@@ -74,13 +72,11 @@ public class TobacconistCreativeTab  {
                         output.accept(ModBlocks.SHADE_TOBACCO_CROP.get());
 
                         output.accept(ModBlocks.HOOKAH.get());
-
                         output.accept(ModBlocks.ORNATE_COPPER_HOOKAH.get());
                         output.accept(ModBlocks.ORNATE_IRON_HOOKAH.get());
                         output.accept(ModBlocks.ORNATE_GOLD_HOOKAH.get());
                         output.accept(ModBlocks.ORNATE_DIAMOND_HOOKAH.get());
                         output.accept(ModBlocks.ORNATE_AMETHYST_HOOKAH.get());
-                        output.accept(ModBlocks.ORNATE_IRON_HOOKAH.get());
 
                         output.accept(GOLD_SMOKING_PIPE.get());
                         output.accept(IRON_SMOKING_PIPE.get());
@@ -91,9 +87,7 @@ public class TobacconistCreativeTab  {
                         output.accept(EMERALD_ENCRUSTED_SMOKING_PIPE.get());
                         output.accept(EMERALD_AZTEC_SMOKING_PIPE.get());
                         output.accept(NETHERITE_SMOKING_PIPE.get());
-
                     }).build());
-
 
     public static void register(IEventBus eventBus) {
         CREATIVE_MODE_TABS.register(eventBus);
