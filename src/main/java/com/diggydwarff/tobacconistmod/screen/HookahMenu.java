@@ -1,8 +1,11 @@
 package com.diggydwarff.tobacconistmod.screen;
 
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
+import com.diggydwarff.tobacconistmod.block.custom.DoubleHookahBlock;
+import com.diggydwarff.tobacconistmod.block.custom.HookahBlock;
 import com.diggydwarff.tobacconistmod.block.entity.HookahEntity;
 import com.diggydwarff.tobacconistmod.util.HookahFuelHelper;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
@@ -14,6 +17,7 @@ import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.SlotItemHandler;
 
@@ -167,8 +171,21 @@ public class HookahMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player player) {
-        return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()),
-                player, ModBlocks.HOOKAH.get());
+        if (level == null || blockEntity == null) return false;
+
+        BlockPos pos = blockEntity.getBlockPos();
+        BlockState state = level.getBlockState(pos);
+
+        if (!(state.getBlock() instanceof HookahBlock) &&
+                !(state.getBlock() instanceof DoubleHookahBlock)) {
+            return false;
+        }
+
+        return player.distanceToSqr(
+                pos.getX() + 0.5D,
+                pos.getY() + 0.5D,
+                pos.getZ() + 0.5D
+        ) <= 64.0D;
     }
 
     private void addPlayerInventory(Inventory playerInventory) {

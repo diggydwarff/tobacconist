@@ -4,7 +4,9 @@
   "curios.identifier.mouth": "Mouth",
 
   "item.tobacconistmod.wooden_smoking_pipe": "Wooden Smoking Pipe",
-  "item.tobacconistmod.gold_smoking_pipe": "Golden Smoking Pipe",
+  "item.tobacconistmod.gold_smoking_pipe": "Gold Smoking Pipe",
+  "item.tobacconistmod.copper_smoking_pipe": "Copper Smoking Pipe",
+  "item.tobacconistmod.iron_smoking_pipe": "Iron Smoking Pipe",
   "item.tobacconistmod.gem_encrusted_smoking_pipe": "Gem-Encrusted Smoking Pipe",
   "item.tobacconistmod.lapis_encrusted_smoking_pipe": "Lapis-Encrusted Smoking Pipe",
   "item.tobacconistmod.diamond_encrusted_smoking_pipe": "Diamond-Encrusted Smoking Pipe",
@@ -112,6 +114,12 @@
   "block.tobacconistmod.shade_tobacco_crate": "Shade Tobacco Crate",
 
   "block.tobacconistmod.hookah_block": "Hookah",
+
+  "block.tobacconistmod.ornate_copper_hookah_block": "Ornate Copper Hookah",
+  "block.tobacconistmod.ornate_iron_hookah_block": "Ornate Iron Hookah",
+  "block.tobacconistmod.ornate_gold_hookah_block": "Ornate Gold Hookah",
+  "block.tobacconistmod.ornate_diamond_hookah_block": "Ornate Diamond Hookah",
+  "block.tobacconistmod.ornate_amethyst_hookah_block": "Ornate Amethyst Hookah",
 
   "entity.minecraft.villager.tobacconist_master": "Tobacconsit Master",
   "entity.minecraft.villager.tobacconistmod.tobacconist_master": "Tobacconist Master",

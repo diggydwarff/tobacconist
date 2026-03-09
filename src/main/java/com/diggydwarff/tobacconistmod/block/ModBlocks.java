@@ -22,7 +22,65 @@ public class ModBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, TobacconistMod.MODID);
 
     public static final RegistryObject<Block> HOOKAH = registerBlock("hookah_block",
-            () -> new HookahBlock(BlockBehaviour.Properties.copy(Blocks.STONE).lightLevel(state -> state.getValue(HookahBlock.LIT) ? 6 : 0).strength(6f).requiresCorrectToolForDrops().noOcclusion().noLootTable()));
+            () -> new HookahBlock(BlockBehaviour.Properties.copy(Blocks.STONE)
+                    .lightLevel(state -> {
+                        if (state.getValue(HookahBlock.GLOWING)) return 12;
+                        if (state.getValue(HookahBlock.LIT)) return 6;
+                        return 0;
+                    })
+                    .strength(6f)
+                    .requiresCorrectToolForDrops()
+                    .noOcclusion()
+                    .noLootTable()));
+    public static final RegistryObject<Block> ORNATE_COPPER_HOOKAH = registerBlock("ornate_copper_hookah_block",
+            () -> new DoubleHookahBlock(
+                    BlockBehaviour.Properties.copy(Blocks.COPPER_BLOCK)
+                            .lightLevel(state -> state.getValue(DoubleHookahBlock.LIT) ? 6 : 0)
+                            .strength(6f)
+                            .requiresCorrectToolForDrops()
+                            .noOcclusion()
+                            .noLootTable()
+            ));
+
+    public static final RegistryObject<Block> ORNATE_GOLD_HOOKAH = registerBlock("ornate_gold_hookah_block",
+            () -> new DoubleHookahBlock(
+                    BlockBehaviour.Properties.copy(Blocks.GOLD_BLOCK)
+                            .lightLevel(state -> state.getValue(DoubleHookahBlock.LIT) ? 6 : 0)
+                            .strength(6f)
+                            .requiresCorrectToolForDrops()
+                            .noOcclusion()
+                            .noLootTable()
+            ));
+
+    public static final RegistryObject<Block> ORNATE_DIAMOND_HOOKAH = registerBlock("ornate_diamond_hookah_block",
+            () -> new DoubleHookahBlock(
+                    BlockBehaviour.Properties.copy(Blocks.DIAMOND_BLOCK)
+                            .lightLevel(state -> state.getValue(DoubleHookahBlock.LIT) ? 6 : 0)
+                            .strength(6f)
+                            .requiresCorrectToolForDrops()
+                            .noOcclusion()
+                            .noLootTable()
+            ));
+
+    public static final RegistryObject<Block> ORNATE_IRON_HOOKAH = registerBlock("ornate_iron_hookah_block",
+            () -> new DoubleHookahBlock(
+                    BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
+                            .lightLevel(state -> state.getValue(DoubleHookahBlock.LIT) ? 6 : 0)
+                            .strength(6f)
+                            .requiresCorrectToolForDrops()
+                            .noOcclusion()
+                            .noLootTable()
+            ));
+
+    public static final RegistryObject<Block> ORNATE_AMETHYST_HOOKAH = registerBlock("ornate_amethyst_hookah_block",
+            () -> new DoubleHookahBlock(
+                    BlockBehaviour.Properties.copy(Blocks.AMETHYST_BLOCK)
+                            .lightLevel(state -> state.getValue(DoubleHookahBlock.LIT) ? 6 : 0)
+                            .strength(6f)
+                            .requiresCorrectToolForDrops()
+                            .noOcclusion()
+                            .noLootTable()
+            ));
 
     public static final RegistryObject<Block> WILD_FLOWERING_TOBACCO = registerBlock("wild_flowering_tobacco_block",
             () -> new FlowerBlock(() -> MobEffects.CONFUSION, 5,

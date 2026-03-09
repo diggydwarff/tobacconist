@@ -1,3 +1,14 @@
+## Update 2.3.0
+##### New Features:
+- NEW! Added additional types of ornate double-high hookahs
+    - Ornate Copper hookah
+    - Ornate Iron Hookah
+    - Ornate Gold Hookah
+    - Ornate Diamond Hookah
+    - Ornate Amethyst Hookah
+#### Changes:
+- Base hookah is now colorless and can be dyed with any dye (including glow ink sacs)
+
 ## Update 2.2.0
 ##### New Features:
 - NEW! Curious API Integration!

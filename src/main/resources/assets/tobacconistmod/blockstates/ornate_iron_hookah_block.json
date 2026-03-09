@@ -1,0 +1,23 @@
+{
+  "variants": {
+    "facing=north,half=lower,lit=false": { "model": "tobacconistmod:block/ornate_iron_hookah_block_lower" },
+    "facing=east,half=lower,lit=false":  { "model": "tobacconistmod:block/ornate_iron_hookah_block_lower", "y": 90 },
+    "facing=south,half=lower,lit=false": { "model": "tobacconistmod:block/ornate_iron_hookah_block_lower", "y": 180 },
+    "facing=west,half=lower,lit=false":  { "model": "tobacconistmod:block/ornate_iron_hookah_block_lower", "y": 270 },
+
+    "facing=north,half=upper,lit=false": { "model": "tobacconistmod:block/ornate_iron_hookah_block_upper" },
+    "facing=east,half=upper,lit=false":  { "model": "tobacconistmod:block/ornate_iron_hookah_block_upper", "y": 90 },
+    "facing=south,half=upper,lit=false": { "model": "tobacconistmod:block/ornate_iron_hookah_block_upper", "y": 180 },
+    "facing=west,half=upper,lit=false":  { "model": "tobacconistmod:block/ornate_iron_hookah_block_upper", "y": 270 },
+
+    "facing=north,half=lower,lit=true": { "model": "tobacconistmod:block/ornate_iron_hookah_block_lower_lit" },
+    "facing=east,half=lower,lit=true":  { "model": "tobacconistmod:block/ornate_iron_hookah_block_lower_lit", "y": 90 },
+    "facing=south,half=lower,lit=true": { "model": "tobacconistmod:block/ornate_iron_hookah_block_lower_lit", "y": 180 },
+    "facing=west,half=lower,lit=true":  { "model": "tobacconistmod:block/ornate_iron_hookah_block_lower_lit", "y": 270 },
+
+    "facing=north,half=upper,lit=true": { "model": "tobacconistmod:block/ornate_iron_hookah_block_upper_lit" },
+    "facing=east,half=upper,lit=true":  { "model": "tobacconistmod:block/ornate_iron_hookah_block_upper_lit", "y": 90 },
+    "facing=south,half=upper,lit=true": { "model": "tobacconistmod:block/ornate_iron_hookah_block_upper_lit", "y": 180 },
+    "facing=west,half=upper,lit=true":  { "model": "tobacconistmod:block/ornate_iron_hookah_block_upper_lit", "y": 270 }
+  }
+}

@@ -1,5 +1,6 @@
 package com.diggydwarff.tobacconistmod.block.entity;
 
+import com.diggydwarff.tobacconistmod.block.custom.DoubleHookahBlock;
 import com.diggydwarff.tobacconistmod.block.custom.HookahBlock;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.screen.HookahMenu;
@@ -22,6 +23,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
@@ -158,10 +160,21 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
             litNow = true;
 
             ServerLevel serverLevel = (ServerLevel) level;
+            BlockPos smokePos = pos;
+            BlockState blockState = level.getBlockState(pos);
+
+            if (blockState.getBlock() instanceof DoubleHookahBlock) {
+                smokePos = pos.above(); // move to top block
+            }
+
             serverLevel.sendParticles(
                     ParticleTypes.CAMPFIRE_COSY_SMOKE,
-                    pos.getX() + 0.5, pos.getY() + 1.2, pos.getZ() + 0.5,
-                    1, 0, 0, 0, 0
+                    smokePos.getX() + 0.5,
+                    smokePos.getY() + 0.9,
+                    smokePos.getZ() + 0.5,
+                    1,
+                    0, 0, 0,
+                    0
             );
 
             pEntity.progress++;
@@ -185,10 +198,10 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
             setChanged(level, pos, state);
         }
 
-        if (state.getBlock() instanceof HookahBlock && state.hasProperty(HookahBlock.LIT)) {
-            boolean current = state.getValue(HookahBlock.LIT);
+        if (state.hasProperty(BlockStateProperties.LIT)) {
+            boolean current = state.getValue(BlockStateProperties.LIT);
             if (current != litNow) {
-                level.setBlock(pos, state.setValue(HookahBlock.LIT, litNow), 3);
+                level.setBlock(pos, state.setValue(BlockStateProperties.LIT, litNow), 3);
             }
         }
     }

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " C ",
+    "CPC",
+    " C "
+  ],
+  "key": {
+    "C": {
+      "item": "minecraft:copper_ingot"
+    },
+    "P": {
+      "item": "tobacconistmod:wooden_smoking_pipe"
+    }
+  },
+  "result": {
+    "item": "tobacconistmod:gold_smoking_pipe"
+  }
+}

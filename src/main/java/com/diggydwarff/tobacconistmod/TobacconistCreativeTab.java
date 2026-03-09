@@ -66,7 +66,6 @@ public class TobacconistCreativeTab  {
                         output.accept(SHADE_TOBACCO_SEEDS.get());
 
 
-                        output.accept(ModBlocks.HOOKAH.get());
                         output.accept(ModBlocks.WILD_TOBACCO_CROP.get());
                         output.accept(ModBlocks.VIRGINIA_TOBACCO_CROP.get());
                         output.accept(ModBlocks.BURLEY_TOBACCO_CROP.get());
@@ -74,7 +73,18 @@ public class TobacconistCreativeTab  {
                         output.accept(ModBlocks.DOKHA_TOBACCO_CROP.get());
                         output.accept(ModBlocks.SHADE_TOBACCO_CROP.get());
 
+                        output.accept(ModBlocks.HOOKAH.get());
+
+                        output.accept(ModBlocks.ORNATE_COPPER_HOOKAH.get());
+                        output.accept(ModBlocks.ORNATE_IRON_HOOKAH.get());
+                        output.accept(ModBlocks.ORNATE_GOLD_HOOKAH.get());
+                        output.accept(ModBlocks.ORNATE_DIAMOND_HOOKAH.get());
+                        output.accept(ModBlocks.ORNATE_AMETHYST_HOOKAH.get());
+                        output.accept(ModBlocks.ORNATE_IRON_HOOKAH.get());
+
                         output.accept(GOLD_SMOKING_PIPE.get());
+                        output.accept(IRON_SMOKING_PIPE.get());
+                        output.accept(COPPER_SMOKING_PIPE.get());
                         output.accept(GEM_ENCRUSTED_SMOKING_PIPE.get());
                         output.accept(DIAMOND_ENCRUSTED_SMOKING_PIPE.get());
                         output.accept(LAPIS_ENCRUSTED_SMOKING_PIPE.get());

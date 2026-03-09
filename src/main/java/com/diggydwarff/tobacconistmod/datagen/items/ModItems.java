@@ -21,6 +21,14 @@ public class ModItems {
             ITEMS.register("gold_smoking_pipe",
                     () -> new GoldSmokingPipeItem(new Item.Properties().stacksTo(1)));
 
+    public static final RegistryObject<Item> IRON_SMOKING_PIPE =
+            ITEMS.register("iron_smoking_pipe",
+                    () -> new IronSmokingPipeItem(new Item.Properties().stacksTo(1)));
+
+    public static final RegistryObject<Item> COPPER_SMOKING_PIPE =
+            ITEMS.register("copper_smoking_pipe",
+                    () -> new CopperSmokingPipeItem(new Item.Properties().stacksTo(1)));
+
     public static final RegistryObject<Item> GEM_ENCRUSTED_SMOKING_PIPE =
             ITEMS.register("gem_encrusted_smoking_pipe",
                     () -> new GemEncrustedSmokingPipeItem(new Item.Properties().stacksTo(1)));

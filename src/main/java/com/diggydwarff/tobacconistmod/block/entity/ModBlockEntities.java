@@ -13,7 +13,15 @@ public class ModBlockEntities {
             DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, TobacconistMod.MODID);
 
     public static final RegistryObject<BlockEntityType<HookahEntity>> HOOKAH = BLOCK_ENTITIES.register("hookah", () ->
-                    BlockEntityType.Builder.of(HookahEntity::new, ModBlocks.HOOKAH.get()).build(null));
+            BlockEntityType.Builder.of(
+                    HookahEntity::new,
+                    ModBlocks.HOOKAH.get(),
+                    ModBlocks.ORNATE_COPPER_HOOKAH.get(),
+                    ModBlocks.ORNATE_GOLD_HOOKAH.get(),
+                    ModBlocks.ORNATE_DIAMOND_HOOKAH.get(),
+                    ModBlocks.ORNATE_IRON_HOOKAH.get(),
+                    ModBlocks.ORNATE_AMETHYST_HOOKAH.get()
+            ).build(null));
 
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);
