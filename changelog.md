@@ -1,3 +1,19 @@
+## Update 3.0.0: The Processing Update
+##### New Features:
+- NEW! Growth Quality System
+    - Tobacco varieties now have different growth requirements
+    - New inspection system (shift right click on growing tobacco to inspect it and see its growth quality)
+- NEW! Curing system for raw tobacco leaves
+    - Added drying rack block with support for hoppers
+    - Air, sun, fire, or flue cure your tobacco!
+    - Curing quality also tracked
+- Average-out leaf quality in the crafting grid to consolidate your production!
+- NEW! Added 
+- NEW! Added advancements
+- NEW! Added tobacconist-themed paintings and music discs to the game
+##### Fixes:
+- Refactored tobacco crop logic into a shared base class
+
 ## Update 2.3.1
 ##### Fixes:
 - Ornate hookah recipes work
