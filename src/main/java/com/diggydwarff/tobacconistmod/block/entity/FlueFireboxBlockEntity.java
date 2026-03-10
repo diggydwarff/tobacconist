@@ -22,11 +22,29 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.common.ForgeHooks;
 import org.jetbrains.annotations.Nullable;
 
-public class FlueFireboxBlockEntity extends BaseContainerBlockEntity implements MenuProvider {
+public class FlueFireboxBlockEntity extends BaseContainerBlockEntity implements MenuProvider, net.minecraft.world.WorldlyContainer {
     private NonNullList<ItemStack> items = NonNullList.withSize(1, ItemStack.EMPTY);
 
     private int burnTime = 0;
     private int burnTimeTotal = 0;
+
+    private static final int[] SLOTS_FOR_ALL_SIDES = new int[]{0};
+
+    @Override
+    public int[] getSlotsForFace(net.minecraft.core.Direction side) {
+        return SLOTS_FOR_ALL_SIDES;
+    }
+
+    @Override
+    public boolean canPlaceItemThroughFace(int slot, net.minecraft.world.item.ItemStack stack, @org.jetbrains.annotations.Nullable net.minecraft.core.Direction side) {
+        return slot == 0
+                && net.minecraftforge.common.ForgeHooks.getBurnTime(stack, net.minecraft.world.item.crafting.RecipeType.SMELTING) > 0;
+    }
+
+    @Override
+    public boolean canTakeItemThroughFace(int slot, net.minecraft.world.item.ItemStack stack, net.minecraft.core.Direction side) {
+        return false;
+    }
 
     protected final ContainerData data = new ContainerData() {
         @Override

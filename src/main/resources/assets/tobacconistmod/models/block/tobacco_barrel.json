@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "tobacconistmod:block/tobacco_barrel/tobacco_barrel_side",
+    "north": "tobacconistmod:block/tobacco_barrel/tobacco_barrel_side",
+    "south": "tobacconistmod:block/tobacco_barrel/tobacco_barrel_side",
+    "east":  "tobacconistmod:block/tobacco_barrel/tobacco_barrel_side",
+    "west":  "tobacconistmod:block/tobacco_barrel/tobacco_barrel_side",
+    "up":    "tobacconistmod:block/tobacco_barrel/tobacco_barrel_top",
+    "down":  "tobacconistmod:block/tobacco_barrel/tobacco_barrel_bottom"
+  }
+}

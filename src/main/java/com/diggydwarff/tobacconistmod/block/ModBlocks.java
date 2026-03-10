@@ -149,6 +149,9 @@ public class ModBlocks {
                     .noOcclusion()
             ));
 
+    public static final RegistryObject<Block> TOBACCO_BARREL = registerBlock("tobacco_barrel",
+            () -> new TobaccoBarrelBlock(BlockBehaviour.Properties.copy(Blocks.BARREL)));
+
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);
         registerBlockItem(name, toReturn);

@@ -37,6 +37,13 @@ public class ModBlockEntities {
                             ModBlocks.FLUE_FIREBOX.get()
                     ).build(null));
 
+    public static final RegistryObject<BlockEntityType<TobaccoBarrelBlockEntity>> TOBACCO_BARREL =
+            BLOCK_ENTITIES.register("tobacco_barrel",
+                    () -> BlockEntityType.Builder.of(
+                            TobaccoBarrelBlockEntity::new,
+                            ModBlocks.TOBACCO_BARREL.get()
+                    ).build(null));
+
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);
     }

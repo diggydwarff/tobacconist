@@ -172,9 +172,9 @@ public final class TobaccoCuringHelper {
         CompoundTag tag = stack.getOrCreateTag();
         tag.putString(TAG_CURE_TYPE, cureType);
 
-        int canonical = getCanonicalTierQuality(quality);
-        tag.putInt(TAG_QUALITY, canonical);
-        tag.putString(TAG_QUALITY_TIER, getQualityTierId(canonical));
+        int clamped = clampQuality(quality);
+        tag.putInt(TAG_QUALITY, clamped);
+        tag.putString(TAG_QUALITY_TIER, getQualityTierId(clamped));
     }
 
     public static String getCureType(ItemStack stack) {
@@ -219,13 +219,13 @@ public final class TobaccoCuringHelper {
     public static int buildFinalQuality(ItemStack inputLeaf, String cureType, int interruptionCount) {
         int quality = inputLeaf.hasTag() && inputLeaf.getTag().contains(TAG_GROWTH_QUALITY)
                 ? inputLeaf.getTag().getInt(TAG_GROWTH_QUALITY)
-                : 85;
+                : 60;
 
         quality += switch (cureType) {
-            case CURE_FLUE -> 10;
-            case CURE_SUN -> 8;
-            case CURE_FIRE -> 6;
-            case CURE_AIR -> 4;
+            case CURE_FLUE -> 6;
+            case CURE_SUN -> 5;
+            case CURE_FIRE -> 4;
+            case CURE_AIR -> 3;
             default -> 0;
         };
 

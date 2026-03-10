@@ -21,13 +21,19 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
-public class TobaccoDryingRackBlockEntity extends BlockEntity {
+public class TobaccoDryingRackBlockEntity extends BlockEntity implements net.minecraft.world.WorldlyContainer {
 
     public static final int MAX_LEAVES = 16;
     public static final int AIR_DRY_TIME = 72000;   // ~3 Minecraft days
     public static final int SUN_DRY_TIME = 48000;   // ~2 Minecraft days
     public static final int FIRE_DRY_TIME = 24000;  // ~1 Minecraft day
     public static final int FLUE_DRY_TIME = 36000;  // ~1.5 Minecraft days
+
+
+    private static final int[] SLOTS_FOR_SIDES = new int[]{0};
+    private static final int[] SLOTS_FOR_BOTTOM = new int[]{0};
+    private static final int[] NO_SLOTS = new int[]{};
+
 
     private ItemStack storedLeaf = ItemStack.EMPTY;
     private int dryingProgress = 0;
@@ -110,6 +116,131 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity {
         syncRackState();
         syncToClient();
         return true;
+    }
+
+    @Override
+    public int getContainerSize() {
+        return 1;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return storedLeaf.isEmpty();
+    }
+
+    @Override
+    public net.minecraft.world.item.ItemStack getItem(int slot) {
+        return slot == 0 ? storedLeaf : net.minecraft.world.item.ItemStack.EMPTY;
+    }
+
+    @Override
+    public net.minecraft.world.item.ItemStack removeItem(int slot, int amount) {
+        if (slot != 0 || storedLeaf.isEmpty() || !isFinished()) {
+            return net.minecraft.world.item.ItemStack.EMPTY;
+        }
+
+        net.minecraft.world.item.ItemStack out = storedLeaf.copy();
+        storedLeaf = net.minecraft.world.item.ItemStack.EMPTY;
+
+        setChanged();
+        syncRackState();
+        syncToClient();
+        return out;
+    }
+
+    @Override
+    public net.minecraft.world.item.ItemStack removeItemNoUpdate(int slot) {
+        if (slot != 0 || storedLeaf.isEmpty()) {
+            return net.minecraft.world.item.ItemStack.EMPTY;
+        }
+
+        net.minecraft.world.item.ItemStack out = storedLeaf;
+        storedLeaf = net.minecraft.world.item.ItemStack.EMPTY;
+
+        setChanged();
+        syncRackState();
+        syncToClient();
+        return out;
+    }
+
+    @Override
+    public void setItem(int slot, ItemStack stack) {
+        if (slot != 0) return;
+
+        storedLeaf = stack.copy();
+
+        if (storedLeaf.getCount() > MAX_LEAVES) {
+            storedLeaf.setCount(MAX_LEAVES);
+        }
+
+        setChanged();
+        syncRackState();
+        syncToClient();
+    }
+
+    @Override
+    public int[] getSlotsForFace(net.minecraft.core.Direction side) {
+        if (side == net.minecraft.core.Direction.DOWN) {
+            return SLOTS_FOR_BOTTOM;
+        }
+
+        if (side == net.minecraft.core.Direction.UP) {
+            return NO_SLOTS;
+        }
+
+        return SLOTS_FOR_SIDES;
+    }
+
+    @Override
+    public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @org.jetbrains.annotations.Nullable Direction side) {
+        if (slot != 0) return false;
+        if (side == Direction.UP) return false;
+        if (side == Direction.DOWN) return false;
+
+        if (!isValidLeaf(stack)) return false;
+        if (isFinished()) return false;
+
+        if (storedLeaf.isEmpty()) {
+            return true;
+        }
+
+        if (!ItemStack.isSameItemSameTags(storedLeaf, stack)) {
+            return false;
+        }
+
+        return storedLeaf.getCount() < MAX_LEAVES && !isBatchLocked();
+    }
+
+    @Override
+    public int getMaxStackSize() {
+        return MAX_LEAVES;
+    }
+
+    @Override
+    public boolean canTakeItemThroughFace(int slot, net.minecraft.world.item.ItemStack stack, net.minecraft.core.Direction side) {
+        if (slot != 0) return false;
+        if (side != net.minecraft.core.Direction.DOWN) return false;
+
+        return isFinished();
+    }
+
+    @Override
+    public boolean stillValid(net.minecraft.world.entity.player.Player player) {
+        return level != null
+                && level.getBlockEntity(worldPosition) == this
+                && player.distanceToSqr(
+                worldPosition.getX() + 0.5,
+                worldPosition.getY() + 0.5,
+                worldPosition.getZ() + 0.5
+        ) <= 64.0;
+    }
+
+    @Override
+    public void clearContent() {
+        storedLeaf = net.minecraft.world.item.ItemStack.EMPTY;
+        setChanged();
+        syncRackState();
+        syncToClient();
     }
 
     @Override

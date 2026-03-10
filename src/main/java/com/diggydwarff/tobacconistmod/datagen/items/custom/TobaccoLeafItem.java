@@ -61,6 +61,19 @@ public class TobaccoLeafItem extends Item {
                         "Cure: " + TobaccoCuringHelper.getCureDisplayName(cureType)
                 ).withStyle(ChatFormatting.GRAY));
             }
+
+            if (tag.getBoolean("Fermented")) {
+                tooltip.add(Component.literal("Fermented").withStyle(ChatFormatting.DARK_GREEN));
+            }
+
+            int aged = tag.getInt("AgedStages");
+            if (aged > 0) {
+                tooltip.add(Component.literal("Aged: " + aged).withStyle(ChatFormatting.GOLD));
+            }
+
+            if (tag.getBoolean("Ruined")) {
+                tooltip.add(Component.literal("Ruined").withStyle(ChatFormatting.RED));
+            }
         }
     }
 

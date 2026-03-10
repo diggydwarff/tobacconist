@@ -54,6 +54,7 @@ public class TobacconistCreativeTab {
 
                         output.accept(ModBlocks.TOBACCO_DRYING_RACK.get());
                         output.accept(ModBlocks.FLUE_FIREBOX.get());
+                        output.accept(ModBlocks.TOBACCO_BARREL.get());
 
                         output.accept(ModBlocks.WILD_TOBACCO_CRATE.get());
                         output.accept(ModBlocks.VIRGINIA_TOBACCO_CRATE.get());
