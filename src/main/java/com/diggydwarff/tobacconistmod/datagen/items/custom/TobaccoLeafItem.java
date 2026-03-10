@@ -2,6 +2,7 @@ package com.diggydwarff.tobacconistmod.datagen.items.custom;
 
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import net.minecraft.ChatFormatting;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -18,23 +19,70 @@ public class TobaccoLeafItem extends Item {
 
     @Override
     public Component getName(ItemStack stack) {
-        String cureType = TobaccoCuringHelper.getCureType(stack);
-        int quality = TobaccoCuringHelper.getQuality(stack);
-        String tier = TobaccoCuringHelper.getQualityTier(quality);
-        return Component.literal(tier + " " + TobaccoCuringHelper.getCureDisplayName(cureType) + " ")
-                .append(super.getName(stack));
+        Component baseName = super.getName(stack);
+        CompoundTag tag = stack.getTag();
+
+        if (tag == null) {
+            return baseName;
+        }
+
+        int quality = getDisplayedQuality(stack);
+        if (quality <= 0) {
+            return baseName;
+        }
+
+        String tier = capitalize(TobaccoCuringHelper.getQualityTier(quality));
+        String cureType = tag.getString(TobaccoCuringHelper.TAG_CURE_TYPE);
+
+        if (!cureType.isEmpty()) {
+            return Component.literal(tier + " " + TobaccoCuringHelper.getCureDisplayName(cureType) + " ")
+                    .append(baseName);
+        }
+
+        return Component.literal(tier + " ").append(baseName);
     }
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, level, tooltip, flag);
 
-        String cureType = TobaccoCuringHelper.getCureType(stack);
-        int quality = TobaccoCuringHelper.getQuality(stack);
+        int quality = getDisplayedQuality(stack);
+        if (quality > 0) {
+            tooltip.add(Component.literal(
+                    "Quality: " + quality + " (" + capitalize(TobaccoCuringHelper.getQualityTier(quality)) + ")"
+            ).withStyle(ChatFormatting.GRAY));
+        }
 
-        tooltip.add(Component.literal("Cure: " + TobaccoCuringHelper.getCureDisplayName(cureType))
-                .withStyle(ChatFormatting.GRAY));
-        tooltip.add(Component.literal("Quality: " + quality + " (" + TobaccoCuringHelper.getQualityTier(quality) + ")")
-                .withStyle(ChatFormatting.GRAY));
+        CompoundTag tag = stack.getTag();
+        if (tag != null) {
+            String cureType = tag.getString(TobaccoCuringHelper.TAG_CURE_TYPE);
+            if (!cureType.isEmpty()) {
+                tooltip.add(Component.literal(
+                        "Cure: " + TobaccoCuringHelper.getCureDisplayName(cureType)
+                ).withStyle(ChatFormatting.GRAY));
+            }
+        }
+    }
+
+    private int getDisplayedQuality(ItemStack stack) {
+        CompoundTag tag = stack.getTag();
+        if (tag == null) {
+            return 0;
+        }
+
+        if (tag.contains(TobaccoCuringHelper.TAG_QUALITY)) {
+            return tag.getInt(TobaccoCuringHelper.TAG_QUALITY);
+        }
+
+        if (tag.contains(TobaccoCuringHelper.TAG_GROWTH_QUALITY)) {
+            return tag.getInt(TobaccoCuringHelper.TAG_GROWTH_QUALITY);
+        }
+
+        return 0;
+    }
+
+    private String capitalize(String s) {
+        if (s == null || s.isEmpty()) return s;
+        return Character.toUpperCase(s.charAt(0)) + s.substring(1);
     }
 }

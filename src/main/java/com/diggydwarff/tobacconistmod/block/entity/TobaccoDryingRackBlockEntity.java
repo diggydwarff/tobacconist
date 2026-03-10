@@ -90,6 +90,9 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity {
             interruptionCount = 0;
             usedFireDrying = false;
             lastTickHadValidDrying = false;
+            airTicks = 0;
+            sunTicks = 0;
+            fireTicks = 0;
         } else {
             storedLeaf.grow(1);
         }
@@ -148,6 +151,28 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity {
         return Math.min(100, (dryingProgress * 100) / needed);
     }
 
+    public int getVisualCureStage() {
+        if (!hasLeaves()) {
+            return 0;
+        }
+
+        if (isFinished()) {
+            return 5;
+        }
+
+        int pct = getDryProgressPercent();
+
+        if (pct >= 80) return 4;
+        if (pct >= 60) return 3;
+        if (pct >= 40) return 2;
+        if (pct >= 20) return 1;
+        return 0;
+    }
+
+    private int getRequiredDryingTime() {
+        return usedFireDrying ? FIRE_DRY_TIME : AIR_DRY_TIME;
+    }
+
     public String getRackStatusText() {
         if (!hasLeaves()) {
             return "Empty";
@@ -155,7 +180,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity {
 
         if (isFinished()) {
             String cureType = TobaccoCuringHelper.getCureType(storedLeaf);
-            return "Finished (" + TobaccoCuringHelper.getCureDisplayName(cureType) + ")";
+            return "Finished - " + TobaccoCuringHelper.getCureDisplayName(cureType);
         }
 
         return getCurrentCureMethod() + " - " + getDryProgressPercent() + "%";
@@ -179,17 +204,25 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity {
         }
 
         if (isOverLitCampfire(level, worldPosition)) {
-            return "Fire-Curing";
+            return "Fire-curing (campfire heat)";
+        }
+
+        if (hasDirectSunlight(level, worldPosition)) {
+            return "Sun-curing (direct sunlight)";
         }
 
         if (canAirDry(level, worldPosition)) {
-            if (hasDirectSunlight(level, worldPosition)) {
-                return "Sun-Drying";
+            if (!level.canSeeSky(worldPosition.above())) {
+                return "Air-curing (under cover)";
             }
-            return "Air-Drying";
+            return "Air-curing (open air)";
         }
 
-        return "Paused";
+        if (level.isRainingAt(worldPosition.above())) {
+            return "Paused (rain exposure)";
+        }
+
+        return "Paused (unsuitable conditions)";
     }
 
     public boolean isFinished() {
@@ -208,13 +241,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity {
         }
 
         ItemStack out = storedLeaf.copy();
-        storedLeaf = ItemStack.EMPTY;
-        dryingProgress = 0;
-        sunExposureTicks = 0;
-        interruptionCount = 0;
-        usedFireDrying = false;
-        lastTickHadValidDrying = false;
-
+        clearRack();
         syncRackState();
         syncToClient();
         return out;
@@ -223,15 +250,22 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity {
     public void dropContents(Level level, BlockPos pos) {
         if (!storedLeaf.isEmpty()) {
             Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), storedLeaf);
-            storedLeaf = ItemStack.EMPTY;
-            dryingProgress = 0;
-            sunExposureTicks = 0;
-            interruptionCount = 0;
-            usedFireDrying = false;
-            lastTickHadValidDrying = false;
+            clearRack();
             syncRackState();
             syncToClient();
         }
+    }
+
+    private void clearRack() {
+        storedLeaf = ItemStack.EMPTY;
+        dryingProgress = 0;
+        sunExposureTicks = 0;
+        interruptionCount = 0;
+        usedFireDrying = false;
+        lastTickHadValidDrying = false;
+        airTicks = 0;
+        sunTicks = 0;
+        fireTicks = 0;
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, TobaccoDryingRackBlockEntity rack) {
@@ -268,12 +302,17 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity {
             return;
         }
 
+        if (overCampfire) {
+            rack.usedFireDrying = true;
+        }
+
         rack.dryingProgress++;
 
         if (overCampfire) {
             rack.fireTicks++;
         } else if (inSun) {
             rack.sunTicks++;
+            rack.sunExposureTicks++;
         } else {
             rack.airTicks++;
         }
@@ -282,9 +321,14 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity {
 
         if (rack.dryingProgress >= needed) {
             rack.finishCuring();
+            return;
         }
 
-        rack.syncToClient();
+        if (level.getGameTime() % 20 == 0) {
+            rack.syncToClient();
+        } else {
+            rack.setChanged();
+        }
     }
 
     private void finishCuring() {
@@ -299,7 +343,6 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity {
 
         cured.setCount(storedLeaf.getCount());
 
-        // Determine dominant curing method
         int dominant = Math.max(fireTicks, Math.max(sunTicks, airTicks));
 
         String cureType;
@@ -311,12 +354,10 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity {
             cureType = TobaccoCuringHelper.CURE_AIR;
         }
 
-        // Mixed curing penalty
         int total = fireTicks + sunTicks + airTicks;
         float ratio = total > 0 ? (float) dominant / total : 1f;
 
         int mixPenalty = 0;
-
         if (ratio < 0.9f && ratio >= 0.7f) {
             mixPenalty = 3;
         } else if (ratio < 0.7f && ratio >= 0.5f) {
@@ -332,13 +373,11 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity {
 
         storedLeaf = cured;
 
-        // Reset rack state
         dryingProgress = 0;
         sunExposureTicks = 0;
         interruptionCount = 0;
         lastTickHadValidDrying = false;
         usedFireDrying = false;
-
         airTicks = 0;
         sunTicks = 0;
         fireTicks = 0;
@@ -373,7 +412,9 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity {
     private static boolean isOverLitCampfire(Level level, BlockPos pos) {
         BlockPos below = pos.below();
         BlockState belowState = level.getBlockState(below);
-        return belowState.getBlock() instanceof CampfireBlock && belowState.hasProperty(CampfireBlock.LIT) && belowState.getValue(CampfireBlock.LIT);
+        return belowState.getBlock() instanceof CampfireBlock
+                && belowState.hasProperty(CampfireBlock.LIT)
+                && belowState.getValue(CampfireBlock.LIT);
     }
 
     private static boolean canAirDry(Level level, BlockPos pos) {
@@ -418,6 +459,9 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity {
         tag.putInt("InterruptionCount", interruptionCount);
         tag.putBoolean("LastTickHadValidDrying", lastTickHadValidDrying);
         tag.putBoolean("UsedFireDrying", usedFireDrying);
+        tag.putInt("AirTicks", airTicks);
+        tag.putInt("SunTicks", sunTicks);
+        tag.putInt("FireTicks", fireTicks);
     }
 
     @Override
@@ -435,5 +479,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity {
         interruptionCount = tag.getInt("InterruptionCount");
         lastTickHadValidDrying = tag.getBoolean("LastTickHadValidDrying");
         usedFireDrying = tag.getBoolean("UsedFireDrying");
+        airTicks = tag.getInt("AirTicks");
+        sunTicks = tag.getInt("SunTicks");
+        fireTicks = tag.getInt("FireTicks");
     }
 }

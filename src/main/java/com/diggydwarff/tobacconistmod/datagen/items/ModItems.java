@@ -72,12 +72,12 @@ public class ModItems {
     public static final RegistryObject<Item> SHISHA_TOBACCO = ITEMS.register("shisha_tobacco", () -> new ShishaTobaccoItem(new Item.Properties().durability(5000)));
 
     // TOBACCO LEAF ITEMS (wet)
-    public static final RegistryObject<Item> WILD_TOBACCO_LEAF = ITEMS.register("tobacco_leaf_wild", () -> new Item(new Item.Properties()));
-    public static final RegistryObject<Item> VIRGINIA_TOBACCO_LEAF = ITEMS.register("tobacco_leaf_virginia", () -> new Item(new Item.Properties()));
-    public static final RegistryObject<Item> BURLEY_TOBACCO_LEAF = ITEMS.register("tobacco_leaf_burley", () -> new Item(new Item.Properties()));
-    public static final RegistryObject<Item> ORIENTAL_TOBACCO_LEAF = ITEMS.register("tobacco_leaf_oriental", () -> new Item(new Item.Properties()));
-    public static final RegistryObject<Item> DOKHA_TOBACCO_LEAF = ITEMS.register("tobacco_leaf_dokha", () -> new Item(new Item.Properties()));
-    public static final RegistryObject<Item> SHADE_TOBACCO_LEAF = ITEMS.register("tobacco_leaf_shade", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> WILD_TOBACCO_LEAF = ITEMS.register("tobacco_leaf_wild", () -> new TobaccoLeafItem(new Item.Properties()));
+    public static final RegistryObject<Item> VIRGINIA_TOBACCO_LEAF = ITEMS.register("tobacco_leaf_virginia", () -> new TobaccoLeafItem(new Item.Properties()));
+    public static final RegistryObject<Item> BURLEY_TOBACCO_LEAF = ITEMS.register("tobacco_leaf_burley", () -> new TobaccoLeafItem(new Item.Properties()));
+    public static final RegistryObject<Item> ORIENTAL_TOBACCO_LEAF = ITEMS.register("tobacco_leaf_oriental", () -> new TobaccoLeafItem(new Item.Properties()));
+    public static final RegistryObject<Item> DOKHA_TOBACCO_LEAF = ITEMS.register("tobacco_leaf_dokha", () -> new TobaccoLeafItem(new Item.Properties()));
+    public static final RegistryObject<Item> SHADE_TOBACCO_LEAF = ITEMS.register("tobacco_leaf_shade", () -> new TobaccoLeafItem(new Item.Properties()));
 
 
     // TOBACCO LEAF ITEMS (dry)
