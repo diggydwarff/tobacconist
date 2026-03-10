@@ -83,12 +83,12 @@
   "item.tobacconistmod.tobacco_loose_dokha": "Loose Dokha Tobacco",
   "item.tobacconistmod.tobacco_loose_shade": "Loose Shade Tobacco",
 
-  "item.tobacconistmod.tobacco_leaf_wild_dry": "Wild Tobacco Leaf (Dried)",
-  "item.tobacconistmod.tobacco_leaf_virginia_dry": "Virginia Tobacco Leaf (Dried)",
-  "item.tobacconistmod.tobacco_leaf_burley_dry": "Burley Tobacco Leaf (Dried)",
+  "item.tobacconistmod.tobacco_leaf_wild_dry": "Wild Tobacco Leaf",
+  "item.tobacconistmod.tobacco_leaf_virginia_dry": "Virginia Tobacco Leaf",
+  "item.tobacconistmod.tobacco_leaf_burley_dry": "Burley Tobacco Leaf",
   "item.tobacconistmod.tobacco_leaf_oriental_dry": "Oriental Tobacco Leaf (Dried)",
-  "item.tobacconistmod.tobacco_leaf_dokha_dry": "Dokha Tobacco Leaf (Dried)",
-  "item.tobacconistmod.tobacco_leaf_shade_dry": "Shade Tobacco Leaf (Dried)",
+  "item.tobacconistmod.tobacco_leaf_dokha_dry": "Dokha Tobacco Leaf",
+  "item.tobacconistmod.tobacco_leaf_shade_dry": "Shade Tobacco Leaf",
 
   "block.tobacconistmod.wild_flowering_tobacco_block": "Wild Flowering Tobacco",
 

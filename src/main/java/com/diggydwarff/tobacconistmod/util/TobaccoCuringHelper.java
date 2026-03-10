@@ -153,7 +153,9 @@ public final class TobaccoCuringHelper {
 
     public static String getCutType(ItemStack stack) {
         if (!stack.hasTag()) return "";
-        return stack.getTag().getString(TAG_CUT_TYPE);
+        CompoundTag tag = stack.getTag();
+        if (!tag.contains(TAG_CUT_TYPE)) return "";
+        return tag.getString(TAG_CUT_TYPE);
     }
 
     public static String getCutDisplayName(String cutType) {
@@ -179,11 +181,10 @@ public final class TobaccoCuringHelper {
         if (!stack.hasTag()) return CURE_AIR;
 
         CompoundTag tag = stack.getTag();
+        if (!tag.contains(TAG_CURE_TYPE)) return CURE_AIR;
 
-        if (!tag.contains(TAG_CURE_TYPE))
-            return CURE_AIR;
-
-        return tag.getString(TAG_CURE_TYPE);
+        String cureType = tag.getString(TAG_CURE_TYPE);
+        return cureType == null || cureType.isEmpty() ? CURE_AIR : cureType;
     }
 
     public static int getCanonicalTierQuality(int quality) {
@@ -221,6 +222,7 @@ public final class TobaccoCuringHelper {
                 : 85;
 
         quality += switch (cureType) {
+            case CURE_FLUE -> 10;
             case CURE_SUN -> 8;
             case CURE_FIRE -> 6;
             case CURE_AIR -> 4;
@@ -241,7 +243,7 @@ public final class TobaccoCuringHelper {
         if (clamped <= 49) return "Common";
         if (clamped <= 69) return "Good";
         if (clamped <= 89) return "Fine";
-        return "Premium";
+        return clamped >= 98 ? "Perfect" : "Premium";
     }
 
     public static String getCureDisplayName(String cureType) {
