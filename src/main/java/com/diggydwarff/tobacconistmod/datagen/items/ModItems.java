@@ -53,6 +53,31 @@ public class ModItems {
             ITEMS.register("netherite_smoking_pipe",
                     () -> new NetheriteSmokingPipeItem(new Item.Properties().stacksTo(1)));
 
+    // CHAVETA TOOLS
+    public static final RegistryObject<Item> STONE_CHAVETA =
+            ITEMS.register("stone_chaveta",
+                    () -> new ChavetaItem(new Item.Properties().durability(131)));
+
+    public static final RegistryObject<Item> COPPER_CHAVETA =
+            ITEMS.register("copper_chaveta",
+                    () -> new ChavetaItem(new Item.Properties().durability(180)));
+
+    public static final RegistryObject<Item> IRON_CHAVETA =
+            ITEMS.register("iron_chaveta",
+                    () -> new ChavetaItem(new Item.Properties().durability(250)));
+
+    public static final RegistryObject<Item> GOLD_CHAVETA =
+            ITEMS.register("gold_chaveta",
+                    () -> new ChavetaItem(new Item.Properties().durability(32)));
+
+    public static final RegistryObject<Item> DIAMOND_CHAVETA =
+            ITEMS.register("diamond_chaveta",
+                    () -> new ChavetaItem(new Item.Properties().durability(1561)));
+
+    public static final RegistryObject<Item> NETHERITE_CHAVETA =
+            ITEMS.register("netherite_chaveta",
+                    () -> new ChavetaItem(new Item.Properties().durability(2031)));
+
 
     // OTHER ITEMS
 

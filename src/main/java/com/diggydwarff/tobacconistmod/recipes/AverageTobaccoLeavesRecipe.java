@@ -22,16 +22,18 @@ public class AverageTobaccoLeavesRecipe extends CustomRecipe {
     public boolean matches(CraftingContainer container, Level level) {
         ItemStack first = ItemStack.EMPTY;
         boolean foundAny = false;
-        boolean dry = false;
-        String cureType = "";
-
         int nonEmptyStacks = 0;
+
+        Mode mode = null;
+        String cureType = "";
+        String cutType = "";
 
         for (int i = 0; i < container.getContainerSize(); i++) {
             ItemStack stack = container.getItem(i);
             if (stack.isEmpty()) continue;
 
-            if (!isTobaccoLeaf(stack)) {
+            Mode thisMode = getMode(stack);
+            if (thisMode == null) {
                 return false;
             }
 
@@ -40,56 +42,59 @@ public class AverageTobaccoLeavesRecipe extends CustomRecipe {
             if (!foundAny) {
                 first = stack;
                 foundAny = true;
-                dry = isDryLeaf(stack);
+                mode = thisMode;
 
-                if (dry) {
+                if (mode != Mode.RAW_LEAF) {
                     cureType = TobaccoCuringHelper.getCureType(stack);
                     if (cureType.isEmpty()) return false;
+                }
+
+                if (mode == Mode.LOOSE) {
+                    cutType = TobaccoCuringHelper.getCutType(stack);
+                    if (cutType.isEmpty()) return false;
                 }
             } else {
                 if (!ItemStack.isSameItem(first, stack)) {
                     return false;
                 }
 
-                if (isDryLeaf(stack) != dry) {
+                if (thisMode != mode) {
                     return false;
                 }
 
-                if (dry) {
+                if (mode != Mode.RAW_LEAF) {
                     String otherCure = TobaccoCuringHelper.getCureType(stack);
                     if (!cureType.equals(otherCure)) {
+                        return false;
+                    }
+                }
+
+                if (mode == Mode.LOOSE) {
+                    String otherCut = TobaccoCuringHelper.getCutType(stack);
+                    if (!cutType.equals(otherCut)) {
                         return false;
                     }
                 }
             }
         }
 
-        return foundAny && nonEmptyStacks == 2;
+        return foundAny && nonEmptyStacks >= 2;
     }
 
     @Override
     public NonNullList<ItemStack> getRemainingItems(CraftingContainer container) {
-        NonNullList<ItemStack> remaining = NonNullList.withSize(container.getContainerSize(), ItemStack.EMPTY);
-
-        for (int i = 0; i < container.getContainerSize(); i++) {
-            ItemStack stack = container.getItem(i);
-            if (!stack.isEmpty()) {
-                // remove the entire stack
-                remaining.set(i, ItemStack.EMPTY);
-            }
-        }
-
-        return remaining;
+        return NonNullList.withSize(container.getContainerSize(), ItemStack.EMPTY);
     }
 
     @Override
     public ItemStack assemble(CraftingContainer container, RegistryAccess registryAccess) {
         ItemStack first = ItemStack.EMPTY;
-        boolean dry = false;
+        Mode mode = null;
         String cureType = "";
+        String cutType = "";
 
-        int leavesUsed = 0;
-        int totalQuality = 0;
+        int totalCount = 0;
+        int weightedQuality = 0;
 
         for (int i = 0; i < container.getContainerSize(); i++) {
             ItemStack stack = container.getItem(i);
@@ -97,40 +102,44 @@ public class AverageTobaccoLeavesRecipe extends CustomRecipe {
 
             if (first.isEmpty()) {
                 first = stack.copy();
-                dry = isDryLeaf(stack);
-                if (dry) {
+                mode = getMode(stack);
+
+                if (mode != Mode.RAW_LEAF) {
                     cureType = TobaccoCuringHelper.getCureType(stack);
                 }
-            }
 
-            int quality = 0;
-
-            if (dry) {
-                if (stack.hasTag()) {
-                    quality = stack.getTag().getInt(TobaccoCuringHelper.TAG_QUALITY);
-                }
-            } else {
-                if (stack.hasTag()) {
-                    quality = stack.getTag().getInt(TobaccoCuringHelper.TAG_GROWTH_QUALITY);
+                if (mode == Mode.LOOSE) {
+                    cutType = TobaccoCuringHelper.getCutType(stack);
                 }
             }
 
-            totalQuality += quality;
-            leavesUsed++;
+            int count = stack.getCount();
+            int quality = getStackQuality(stack, mode);
+
+            totalCount += count;
+            weightedQuality += quality * count;
         }
 
-        if (first.isEmpty() || leavesUsed < 2) {
+        if (first.isEmpty() || mode == null || totalCount <= 0) {
             return ItemStack.EMPTY;
         }
 
-        int avgQuality = Math.round((float) totalQuality / leavesUsed);
+        int avgQuality = Math.round((float) weightedQuality / totalCount);
 
-        ItemStack result = new ItemStack(first.getItem(), leavesUsed);
+        ItemStack result = new ItemStack(first.getItem(), totalCount);
 
-        if (dry) {
-            TobaccoCuringHelper.applyCureData(result, cureType, avgQuality);
-        } else {
+        if (mode == Mode.RAW_LEAF) {
             TobaccoGrowthHelper.applyGrowthQuality(result, avgQuality);
+        } else {
+            TobaccoCuringHelper.copyTobaccoProcessingData(first, result);
+            result.getOrCreateTag().putInt(TobaccoCuringHelper.TAG_QUALITY, TobaccoCuringHelper.clampQuality(avgQuality));
+            result.getOrCreateTag().putString(TobaccoCuringHelper.TAG_QUALITY_TIER,
+                    TobaccoCuringHelper.getQualityTierId(avgQuality));
+            result.getOrCreateTag().putString(TobaccoCuringHelper.TAG_CURE_TYPE, cureType);
+
+            if (mode == Mode.LOOSE) {
+                result.getOrCreateTag().putString(TobaccoCuringHelper.TAG_CUT_TYPE, cutType);
+            }
         }
 
         return result;
@@ -146,13 +155,27 @@ public class AverageTobaccoLeavesRecipe extends CustomRecipe {
         return ModRecipes.AVERAGE_TOBACCO_LEAVES_SERIALIZER.get();
     }
 
-    private boolean isTobaccoLeaf(ItemStack stack) {
-        String path = stack.getItem().builtInRegistryHolder().key().location().getPath();
-        return path.startsWith("tobacco_leaf_");
+    private static int getStackQuality(ItemStack stack, Mode mode) {
+        if (mode == Mode.RAW_LEAF) {
+            if (stack.hasTag() && stack.getTag().contains(TobaccoCuringHelper.TAG_GROWTH_QUALITY)) {
+                return TobaccoCuringHelper.clampQuality(stack.getTag().getInt(TobaccoCuringHelper.TAG_GROWTH_QUALITY));
+            }
+            return 50;
+        }
+
+        return TobaccoCuringHelper.getQuality(stack);
     }
 
-    private boolean isDryLeaf(ItemStack stack) {
-        String path = stack.getItem().builtInRegistryHolder().key().location().getPath();
-        return path.endsWith("_dry");
+    private static Mode getMode(ItemStack stack) {
+        if (TobaccoCuringHelper.isRawTobaccoLeaf(stack)) return Mode.RAW_LEAF;
+        if (TobaccoCuringHelper.isDryTobaccoLeaf(stack)) return Mode.DRY_LEAF;
+        if (TobaccoCuringHelper.isLooseTobacco(stack)) return Mode.LOOSE;
+        return null;
+    }
+
+    private enum Mode {
+        RAW_LEAF,
+        DRY_LEAF,
+        LOOSE
     }
 }

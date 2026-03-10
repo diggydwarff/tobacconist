@@ -1,15 +1,20 @@
 package com.diggydwarff.tobacconistmod.datagen.items.custom;
 
-import com.diggydwarff.tobacconistmod.datagen.items.custom.WoodenSmokingPipeItem;
+import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class LooseTobaccoItem extends Item {
 
@@ -26,6 +31,61 @@ public class LooseTobaccoItem extends Item {
     }
 
     @Override
+    public Component getName(ItemStack stack) {
+        Component baseName = super.getName(stack);
+        CompoundTag tag = stack.getTag();
+        if (tag == null) {
+            return baseName;
+        }
+
+        int quality = TobaccoCuringHelper.getQuality(stack);
+        if (quality <= 0) {
+            return baseName;
+        }
+
+        String tier = TobaccoCuringHelper.getQualityTier(quality);
+        String cureType = TobaccoCuringHelper.getCureType(stack);
+        String cutType = TobaccoCuringHelper.getCutType(stack);
+
+        StringBuilder prefix = new StringBuilder(tier);
+
+        if (!cureType.isEmpty()) {
+            prefix.append(" ").append(TobaccoCuringHelper.getCureDisplayName(cureType));
+        }
+        if (!cutType.isEmpty()) {
+            prefix.append(" ").append(TobaccoCuringHelper.getCutDisplayName(cutType));
+        }
+
+        return Component.literal(prefix + " ").append(baseName);
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
+        super.appendHoverText(stack, level, tooltip, flag);
+
+        int quality = TobaccoCuringHelper.getQuality(stack);
+        if (quality > 0) {
+            tooltip.add(Component.literal(
+                    "Quality: " + quality + " (" + TobaccoCuringHelper.getQualityTier(quality) + ")"
+            ).withStyle(ChatFormatting.GRAY));
+        }
+
+        String cureType = TobaccoCuringHelper.getCureType(stack);
+        if (!cureType.isEmpty()) {
+            tooltip.add(Component.literal(
+                    "Cure: " + TobaccoCuringHelper.getCureDisplayName(cureType)
+            ).withStyle(ChatFormatting.GRAY));
+        }
+
+        String cutType = TobaccoCuringHelper.getCutType(stack);
+        if (!cutType.isEmpty()) {
+            tooltip.add(Component.literal(
+                    "Cut: " + TobaccoCuringHelper.getCutDisplayName(cutType)
+            ).withStyle(ChatFormatting.GRAY));
+        }
+    }
+
+    @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         if (hand != InteractionHand.MAIN_HAND) {
             return InteractionResultHolder.pass(player.getItemInHand(hand));
@@ -34,25 +94,27 @@ public class LooseTobaccoItem extends Item {
         ItemStack tobacco = player.getItemInHand(hand);
         ItemStack offhand = player.getOffhandItem();
 
-        // Offhand must be a pipe
         if (!(offhand.getItem() instanceof WoodenSmokingPipeItem)) {
             return InteractionResultHolder.pass(tobacco);
         }
 
-        // Client: make it feel responsive
         if (level.isClientSide()) {
             return InteractionResultHolder.success(tobacco);
         }
 
-        // Server: pack if empty
-        CompoundTag tag = offhand.getOrCreateTag();
-        int puffsLeft = tag.getInt(NBT_PUFFS);
+        CompoundTag pipeTag = offhand.getOrCreateTag();
+        int puffsLeft = pipeTag.getInt(NBT_PUFFS);
         if (puffsLeft > 0) {
-            return InteractionResultHolder.pass(tobacco); // already packed
+            return InteractionResultHolder.pass(tobacco);
         }
 
-        tag.putString(NBT_TOBACCO, BuiltInRegistries.ITEM.getKey(tobacco.getItem()).toString());
-        tag.putInt(NBT_PUFFS, this.maxPuffs);
+        pipeTag.putString(NBT_TOBACCO, BuiltInRegistries.ITEM.getKey(tobacco.getItem()).toString());
+        pipeTag.putInt(NBT_PUFFS, this.maxPuffs);
+
+        CompoundTag tobaccoData = tobacco.getTag();
+        if (tobaccoData != null) {
+            pipeTag.put("PackedTobaccoData", tobaccoData.copy());
+        }
 
         if (!player.getAbilities().instabuild) {
             tobacco.shrink(1);
@@ -61,6 +123,11 @@ public class LooseTobaccoItem extends Item {
         return InteractionResultHolder.sidedSuccess(tobacco, false);
     }
 
-    public int getStrength() { return strength; }
-    public int getMaxPuffs() { return maxPuffs; }
+    public int getStrength() {
+        return strength;
+    }
+
+    public int getMaxPuffs() {
+        return maxPuffs;
+    }
 }

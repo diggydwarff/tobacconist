@@ -1,6 +1,8 @@
 package com.diggydwarff.tobacconistmod.datagen.items.custom;
 
 import com.diggydwarff.tobacconistmod.datagen.items.SmokingItem;
+import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
+import com.diggydwarff.tobacconistmod.util.TobaccoProductQualityHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -11,7 +13,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import top.theillusivec4.curios.api.SlotContext;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -22,7 +23,6 @@ public class CigaretteItem extends SmokingItem {
         super(properties);
     }
 
-    // Use the cigarette and puff some smoke!
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
@@ -48,20 +48,34 @@ public class CigaretteItem extends SmokingItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn){
-        CompoundTag compoundtag = stack.getTag();
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+        CompoundTag tag = stack.getTag();
 
-        if(compoundtag != null){
+        if (tag != null) {
+            String tobacco = tag.getString("tobacco");
 
-            String tobacco = compoundtag.getString("tobacco");
-
-            if(!tobacco.isEmpty()){
-                tooltip.add(Component.literal(tobacco.replace("[","").replace("]","")).withStyle(ChatFormatting.GOLD));
+            if (!tobacco.isEmpty()) {
+                tooltip.add(Component.literal(tobacco.replace("[", "").replace("]", "")).withStyle(ChatFormatting.GOLD));
             } else {
                 tooltip.add(Component.literal("Creative Tobacco").withStyle(ChatFormatting.GOLD));
             }
 
-            super.appendHoverText(stack, worldIn, tooltip, flagIn);
+            int productQuality = TobaccoProductQualityHelper.getStoredProductQuality(stack);
+            if (productQuality >= 0) {
+                tooltip.add(Component.literal("Quality: " + productQuality + "/10").withStyle(ChatFormatting.GRAY));
+            }
+
+            String cutType = tag.getString(TobaccoCuringHelper.TAG_CUT_TYPE);
+            if (!cutType.isEmpty()) {
+                tooltip.add(Component.literal("Cut: " + TobaccoCuringHelper.getCutDisplayName(cutType)).withStyle(ChatFormatting.GRAY));
+            }
+
+            String cureType = tag.getString(TobaccoCuringHelper.TAG_CURE_TYPE);
+            if (!cureType.isEmpty()) {
+                tooltip.add(Component.literal("Cure: " + TobaccoCuringHelper.getCureDisplayName(cureType)).withStyle(ChatFormatting.GRAY));
+            }
         }
-    };
+
+        super.appendHoverText(stack, worldIn, tooltip, flagIn);
+    }
 }

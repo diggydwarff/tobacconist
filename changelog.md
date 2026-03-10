@@ -12,6 +12,8 @@
     - Advancement system with custom tobacco-themed advancements
     - Multiple new paintings inspired by various tobacco cultural around the world
     - New Japanese Kiseru smoking pipes
+##### Fixes:
+- Update hookah item textures to look nicer
 
 ## Update 2.3.1
 ##### Fixes:

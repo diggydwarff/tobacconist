@@ -115,6 +115,13 @@
 
   "block.tobacconistmod.tobacco_drying_rack_block": "Tobacco Drying Rack",
 
+  "item.tobacconistmod.stone_chaveta": "Stone Chaveta",
+  "item.tobacconistmod.copper_chaveta": "Copper Chaveta",
+  "item.tobacconistmod.iron_chaveta": "Iron Chaveta",
+  "item.tobacconistmod.gold_chaveta": "Gold Chaveta",
+  "item.tobacconistmod.diamond_chaveta": "Diamond Chaveta",
+  "item.tobacconistmod.netherite_chaveta": "Netherite Chaveta",
+
   "block.tobacconistmod.hookah_block": "Hookah",
   "block.tobacconistmod.ornate_copper_hookah_block": "Ornate Copper Hookah",
   "block.tobacconistmod.ornate_iron_hookah_block": "Ornate Iron Hookah",

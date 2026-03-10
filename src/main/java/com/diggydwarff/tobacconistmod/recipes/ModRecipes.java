@@ -26,6 +26,10 @@ public class ModRecipes {
             SERIALIZERS.register("average_tobacco_leaves",
                     () -> new SimpleCraftingRecipeSerializer<>(AverageTobaccoLeavesRecipe::new));
 
+    public static final RegistryObject<RecipeSerializer<?>> LOOSE_TOBACCO_CUTTING_SERIALIZER =
+            SERIALIZERS.register("loose_tobacco_cutting",
+                    () -> new SimpleCraftingRecipeSerializer<>(LooseTobaccoCuttingRecipe::new));
+
     public static void register(IEventBus eventBus) {
         SERIALIZERS.register(eventBus);
     }

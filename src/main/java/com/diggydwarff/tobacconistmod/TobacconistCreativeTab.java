@@ -1,6 +1,7 @@
 package com.diggydwarff.tobacconistmod;
 
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
+import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.util.PaintingTabHelper;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -79,6 +80,13 @@ public class TobacconistCreativeTab {
                         output.accept(ModBlocks.ORNATE_GOLD_HOOKAH.get());
                         output.accept(ModBlocks.ORNATE_DIAMOND_HOOKAH.get());
                         output.accept(ModBlocks.ORNATE_AMETHYST_HOOKAH.get());
+
+                        output.accept(STONE_CHAVETA.get());
+                        output.accept(IRON_CHAVETA.get());
+                        output.accept(COPPER_CHAVETA.get());
+                        output.accept(GOLD_CHAVETA.get());
+                        output.accept(DIAMOND_CHAVETA.get());
+                        output.accept(NETHERITE_CHAVETA.get());
 
                         // Add custom paintings as selection options
                         output.accept(PaintingTabHelper.paintingVariant("american_tobacco_fields_small"));
