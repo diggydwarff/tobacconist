@@ -24,10 +24,10 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 public class TobaccoDryingRackBlockEntity extends BlockEntity {
 
     public static final int MAX_LEAVES = 16;
-    public static final int AIR_DRY_TIME = 20 * 60 * 4;    // 4 min
-    public static final int FIRE_DRY_TIME = 20 * 60 * 2;   // 2 min
-    public static final int FLUE_DRY_TIME = 20 * 60 * 3;   // 3 min
-    public static final int SUN_REQUIRED_TICKS = 20 * 60;  // 1 min sunlight exposure
+    public static final int AIR_DRY_TIME = 72000;   // ~3 Minecraft days
+    public static final int SUN_DRY_TIME = 48000;   // ~2 Minecraft days
+    public static final int FIRE_DRY_TIME = 24000;  // ~1 Minecraft day
+    public static final int FLUE_DRY_TIME = 36000;  // ~1.5 Minecraft days
 
     private ItemStack storedLeaf = ItemStack.EMPTY;
     private int dryingProgress = 0;
@@ -153,12 +153,27 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity {
             return 100;
         }
 
-        int needed = getRequiredDryingTime();
+        int dominantTicks = Math.max(
+                Math.max(fireTicks, sunTicks),
+                Math.max(airTicks, flueTicks)
+        );
+
+        int needed;
+        if (dominantTicks == fireTicks) {
+            needed = FIRE_DRY_TIME;
+        } else if (dominantTicks == flueTicks) {
+            needed = FLUE_DRY_TIME;
+        } else if (dominantTicks == sunTicks) {
+            needed = SUN_DRY_TIME;
+        } else {
+            needed = AIR_DRY_TIME;
+        }
+
         if (needed <= 0) {
             return 0;
         }
 
-        return Math.min(100, (dryingProgress * 100) / needed);
+        return Math.min(100, (dominantTicks * 100) / needed);
     }
 
     public int getVisualCureStage() {
@@ -180,11 +195,14 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity {
     }
 
     private int getRequiredDryingTime() {
-        if (usedFireDrying) {
+        if (usedFireDrying && fireTicks >= flueTicks && fireTicks >= sunTicks && fireTicks >= airTicks) {
             return FIRE_DRY_TIME;
         }
-        if (usedFlueDrying) {
+        if (usedFlueDrying && flueTicks >= fireTicks && flueTicks >= sunTicks && flueTicks >= airTicks) {
             return FLUE_DRY_TIME;
+        }
+        if (sunTicks >= fireTicks && sunTicks >= flueTicks && sunTicks >= airTicks) {
+            return SUN_DRY_TIME;
         }
         return AIR_DRY_TIME;
     }
@@ -299,8 +317,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity {
 
         boolean overCampfire = isOverLitCampfire(level, pos);
         boolean flueCure = canFlueCure(level, pos);
-        boolean airDry = canAirDry(level, pos);
         boolean inSun = hasDirectSunlight(level, pos);
+        boolean airDry = canAirDry(level, pos);
 
         BlockState current = level.getBlockState(pos);
         if (current.hasProperty(TobaccoDryingRackBlock.OVER_CAMPFIRE)) {
@@ -315,47 +333,53 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity {
             return;
         }
 
-        boolean validDryingThisTick = overCampfire || flueCure || airDry;
+        boolean validDryingThisTick = false;
+        boolean shouldCountInterruption = false;
 
-        if (!validDryingThisTick && rack.lastTickHadValidDrying) {
+        if (overCampfire) {
+            validDryingThisTick = true;
+            rack.usedFireDrying = true;
+            rack.fireTicks++;
+        } else if (flueCure) {
+            validDryingThisTick = true;
+            rack.usedFlueDrying = true;
+            rack.flueTicks++;
+        } else if (inSun) {
+            validDryingThisTick = true;
+            rack.sunTicks++;
+            rack.sunExposureTicks++;
+        } else if (airDry) {
+            validDryingThisTick = true;
+            rack.airTicks++;
+
+            // Only penalize if daytime sun curing is blocked, not night
+            if (isDaytimeSunBlocked(level, pos)) {
+                shouldCountInterruption = true;
+            }
+        } else {
+            // Only count interruption when conditions are actually bad, not just night pause
+            if (level.isRainingAt(pos.above())) {
+                shouldCountInterruption = true;
+            }
+        }
+
+        if (shouldCountInterruption && rack.lastTickHadValidDrying) {
             rack.interruptionCount++;
             rack.syncToClient();
         }
+
         rack.lastTickHadValidDrying = validDryingThisTick;
 
         if (!validDryingThisTick) {
             return;
         }
 
-        if (overCampfire) {
-            rack.usedFireDrying = true;
-        } else if (flueCure) {
-            rack.usedFlueDrying = true;
-        }
-
         rack.dryingProgress++;
 
-        if (overCampfire) {
-            rack.fireTicks++;
-        } else if (flueCure) {
-            rack.flueTicks++;
-        } else if (inSun) {
-            rack.sunTicks++;
-            rack.sunExposureTicks++;
-        } else {
-            rack.airTicks++;
-        }
-
-        int needed;
-        if (overCampfire) {
-            needed = FIRE_DRY_TIME;
-        } else if (flueCure) {
-            needed = FLUE_DRY_TIME;
-        } else {
-            needed = AIR_DRY_TIME;
-        }
-
-        if (rack.dryingProgress >= needed) {
+        if (rack.fireTicks >= FIRE_DRY_TIME
+                || rack.flueTicks >= FLUE_DRY_TIME
+                || rack.sunTicks >= SUN_DRY_TIME
+                || rack.airTicks >= AIR_DRY_TIME) {
             rack.finishCuring();
             return;
         }
@@ -429,6 +453,11 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity {
         syncToClient();
     }
 
+    private static boolean isStrongSunHours(Level level) {
+        long time = level.getDayTime() % 24000;
+        return time >= 2000 && time <= 10000;
+    }
+
     private void syncRackState() {
         if (level == null) {
             return;
@@ -469,7 +498,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity {
     }
 
     private static boolean hasDirectSunlight(Level level, BlockPos pos) {
-        if (!canAirDry(level, pos)) {
+        if (level.isRainingAt(pos.above())) {
             return false;
         }
 
@@ -477,7 +506,27 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity {
             return false;
         }
 
-        return level.canSeeSky(pos.above()) && level.getBrightness(LightLayer.SKY, pos.above()) >= 14;
+        if (!level.canSeeSky(pos.above())) {
+            return false;
+        }
+
+        return level.getBrightness(LightLayer.SKY, pos.above()) >= 14;
+    }
+
+    private static boolean isDaytimeSunBlocked(Level level, BlockPos pos) {
+        if (!level.isDay()) {
+            return false;
+        }
+
+        if (level.isRainingAt(pos.above())) {
+            return true;
+        }
+
+        if (!level.canSeeSky(pos.above())) {
+            return true;
+        }
+
+        return level.getBrightness(LightLayer.SKY, pos.above()) < 14;
     }
 
     private static boolean canFlueCure(Level level, BlockPos pos) {
