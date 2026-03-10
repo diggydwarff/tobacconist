@@ -1,51 +1,96 @@
 package com.diggydwarff.tobacconistmod.block.custom;
 
-import com.diggydwarff.tobacconistmod.block.entity.ModBlockEntities;
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoDryingRackBlockEntity;
+import com.diggydwarff.tobacconistmod.block.entity.ModBlockEntities;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.BaseEntityBlock;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.CampfireBlock;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
-import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.RenderShape;
-import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
 public class TobaccoDryingRackBlock extends BaseEntityBlock {
-    public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
-    public static final BooleanProperty OVER_CAMPFIRE = BooleanProperty.create("over_campfire");
+
     public static final BooleanProperty HAS_LEAVES = BooleanProperty.create("has_leaves");
+    public static final BooleanProperty OVER_CAMPFIRE = BooleanProperty.create("over_campfire");
+
+    private static final VoxelShape SHAPE = Shapes.or(
+            box(2, 0, 2, 3, 8, 3),
+            box(13, 0, 2, 14, 8, 3),
+            box(2, 0, 13, 3, 8, 14),
+            box(13, 0, 13, 14, 8, 14),
+
+            box(3, 7, 2, 13, 8, 3),
+            box(3, 7, 13, 13, 8, 14),
+            box(2, 7, 3, 3, 8, 13),
+            box(13, 7, 3, 14, 8, 13),
+
+            box(3, 7, 5, 13, 8, 6),
+            box(3, 7, 8, 13, 8, 9),
+            box(3, 7, 11, 13, 8, 12),
+
+            box(3, 2, 2, 13, 3, 3),
+            box(3, 2, 13, 13, 3, 14),
+            box(2, 2, 3, 3, 3, 13),
+            box(13, 2, 3, 14, 3, 13)
+    );
+
+    private static final VoxelShape SHAPE_FIRE = Shapes.or(
+            // posts
+            box(2, 0, 2, 3, 12, 3),
+            box(13, 0, 2, 14, 12, 3),
+            box(2, 0, 13, 3, 12, 14),
+            box(13, 0, 13, 14, 12, 14),
+
+            // top frame
+            box(3, 11, 2, 13, 12, 3),
+            box(3, 11, 13, 13, 12, 14),
+            box(2, 11, 3, 3, 12, 13),
+            box(13, 11, 3, 14, 12, 13),
+
+            // hanging rails
+            box(3, 10, 5, 13, 11, 6),
+            box(3, 10, 8, 13, 11, 9),
+            box(3, 10, 11, 13, 11, 12),
+
+            // lower supports
+            box(3, 2, 2, 13, 3, 3),
+            box(3, 2, 13, 13, 3, 14),
+            box(2, 2, 3, 3, 3, 13),
+            box(13, 2, 3, 14, 3, 13)
+    );
+
+    @Override
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return state.getValue(OVER_CAMPFIRE) ? SHAPE_FIRE : SHAPE;
+    }
 
     public TobaccoDryingRackBlock() {
-        super(BlockBehaviour.Properties.of()
-                .mapColor(MapColor.WOOD)
-                .strength(1.5F)
-                .sound(SoundType.WOOD)
-                .noOcclusion());
-
+        super(Properties.of().strength(1.5F).noOcclusion());
         this.registerDefaultState(this.stateDefinition.any()
-                .setValue(FACING, net.minecraft.core.Direction.NORTH)
-                .setValue(OVER_CAMPFIRE, false)
-                .setValue(HAS_LEAVES, false));
+                .setValue(HAS_LEAVES, false)
+                .setValue(OVER_CAMPFIRE, false));
+    }
+
+    @Override
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return state.getValue(OVER_CAMPFIRE) ? SHAPE_FIRE : SHAPE;
     }
 
     @Override
@@ -54,59 +99,24 @@ public class TobaccoDryingRackBlock extends BaseEntityBlock {
     }
 
     @Override
-    public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
-        Level level = context.getLevel();
-        BlockPos pos = context.getClickedPos();
-        return this.defaultBlockState()
-                .setValue(FACING, context.getHorizontalDirection().getOpposite())
-                .setValue(OVER_CAMPFIRE, isLitCampfire(level, pos.below()))
-                .setValue(HAS_LEAVES, false);
+    public boolean isPathfindable(BlockState state, BlockGetter level, BlockPos pos, net.minecraft.world.level.pathfinder.PathComputationType type) {
+        return false;
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, OVER_CAMPFIRE, HAS_LEAVES);
+    public VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos) {
+        return Shapes.empty();
     }
 
     @Override
-    public BlockState rotate(BlockState state, Rotation rotation) {
-        return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
-    }
-
-    @Override
-    public BlockState mirror(BlockState state, Mirror mirror) {
-        return state.rotate(mirror.getRotation(state.getValue(FACING)));
-    }
-
-    @Override
-    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean movedByPiston) {
-        if (!level.isClientSide) {
-            BlockState newState = state
-                    .setValue(OVER_CAMPFIRE, isLitCampfire(level, pos.below()))
-                    .setValue(HAS_LEAVES, hasLeaves(level, pos));
-
-            if (newState != state) {
-                level.setBlock(pos, newState, 3);
-            }
-        }
-        super.neighborChanged(state, level, pos, neighborBlock, neighborPos, movedByPiston);
-    }
-
-    @Override
-    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving){
-        if (!state.is(newState.getBlock())) {
-            BlockEntity be = level.getBlockEntity(pos);
-            if (be instanceof TobaccoDryingRackBlockEntity rack && rack.hasLeaves()) {
-                Block.popResource(level, pos, rack.removeLeaves());
-            }
-            super.onRemove(state, level, pos, newState, isMoving);
-        }
+    @SuppressWarnings("deprecation")
+    public boolean isCollisionShapeFullBlock(BlockState state, BlockGetter level, BlockPos pos) {
+        return false;
     }
 
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos,
                                  Player player, InteractionHand hand, BlockHitResult hit) {
-
         if (hand != InteractionHand.MAIN_HAND) {
             return InteractionResult.PASS;
         }
@@ -116,30 +126,69 @@ public class TobaccoDryingRackBlock extends BaseEntityBlock {
             return InteractionResult.PASS;
         }
 
+        if (player.isShiftKeyDown()) {
+            if (!level.isClientSide) {
+
+                if (!rack.hasLeaves()) {
+                    player.displayClientMessage(
+                            Component.literal("Rack: Empty"),
+                            true
+                    );
+                } else {
+                    player.displayClientMessage(
+                            Component.literal(
+                                    "Rack: " + rack.getLeafCount() + "/16 | " + rack.getRackStatusText()
+                            ),
+                            true
+                    );
+                }
+            }
+
+            return InteractionResult.sidedSuccess(level.isClientSide);
+        }
+
         ItemStack held = player.getItemInHand(hand);
 
         if (!held.isEmpty()) {
-            if (rack.canAccept(held)) {
-
+            if (rack.isBatchLocked()) {
                 if (!level.isClientSide) {
-                    ItemStack insert = held.copyWithCount(1);
-                    rack.addLeaves(insert);
+                    player.displayClientMessage(
+                            Component.literal("This batch is already drying. Remove it to restart."),
+                            true
+                    );
+                }
+                return InteractionResult.sidedSuccess(level.isClientSide);
+            }
 
-                    if (!player.getAbilities().instabuild) {
+            if (rack.canAccept(held)) {
+                if (!level.isClientSide) {
+                    boolean inserted = rack.addOneLeaf(held);
+                    if (inserted && !player.getAbilities().instabuild) {
                         held.shrink(1);
                     }
                 }
+                return InteractionResult.sidedSuccess(level.isClientSide);
+            }
+        }
 
+        if (!held.isEmpty()) {
+            if (rack.canAccept(held)) {
+                if (!level.isClientSide) {
+                    boolean inserted = rack.addOneLeaf(held);
+                    if (inserted && !player.getAbilities().instabuild) {
+                        held.shrink(1);
+                    }
+                }
                 return InteractionResult.sidedSuccess(level.isClientSide);
             }
         } else {
             if (rack.hasLeaves()) {
-
                 if (!level.isClientSide) {
-                    ItemStack removed = rack.removeLeaves();
-                    player.addItem(removed);
+                    ItemStack removed = rack.removeAllLeaves();
+                    if (!removed.isEmpty() && !player.addItem(removed)) {
+                        player.drop(removed, false);
+                    }
                 }
-
                 return InteractionResult.sidedSuccess(level.isClientSide);
             }
         }
@@ -148,23 +197,31 @@ public class TobaccoDryingRackBlock extends BaseEntityBlock {
     }
 
     @Override
-    public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
+        if (!state.is(newState.getBlock())) {
+            BlockEntity be = level.getBlockEntity(pos);
+            if (be instanceof TobaccoDryingRackBlockEntity rack) {
+                rack.dropContents(level, pos);
+            }
+            super.onRemove(state, level, pos, newState, isMoving);
+        }
+    }
+
+    @Nullable
+    @Override
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new TobaccoDryingRackBlockEntity(pos, state);
     }
 
+    @Nullable
     @Override
-    public <T extends BlockEntity> @Nullable BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
         return level.isClientSide ? null : createTickerHelper(type, ModBlockEntities.TOBACCO_DRYING_RACK.get(),
-                (lvl, blockPos, blockState, be) -> be.serverTick(lvl, blockPos, blockState));
+                TobaccoDryingRackBlockEntity::serverTick);
     }
 
-    private static boolean hasLeaves(Level level, BlockPos pos) {
-        BlockEntity be = level.getBlockEntity(pos);
-        return be instanceof TobaccoDryingRackBlockEntity rack && rack.hasLeaves();
-    }
-
-    private static boolean isLitCampfire(LevelReader level, BlockPos pos) {
-        BlockState below = level.getBlockState(pos);
-        return below.getBlock() instanceof CampfireBlock && below.hasProperty(CampfireBlock.LIT) && below.getValue(CampfireBlock.LIT);
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<net.minecraft.world.level.block.Block, BlockState> builder) {
+        builder.add(HAS_LEAVES, OVER_CAMPFIRE);
     }
 }

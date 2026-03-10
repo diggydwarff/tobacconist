@@ -1,7 +1,9 @@
 {
   "variants": {
-    "": {
-      "model": "tobacconistmod:block/tobacco_drying_rack_block"
-    }
+    "has_leaves=false,over_campfire=false": { "model": "tobacconistmod:block/tobacco_drying_rack_block" },
+    "has_leaves=true,over_campfire=false":  { "model": "tobacconistmod:block/tobacco_drying_rack_block" },
+
+    "has_leaves=false,over_campfire=true":  { "model": "tobacconistmod:block/tobacco_drying_rack_block_fire" },
+    "has_leaves=true,over_campfire=true":   { "model": "tobacconistmod:block/tobacco_drying_rack_block_fire" }
   }
 }
