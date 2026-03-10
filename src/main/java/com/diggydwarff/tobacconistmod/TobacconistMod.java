@@ -1,5 +1,6 @@
 package com.diggydwarff.tobacconistmod;
 
+import com.diggydwarff.tobacconistmod.block.ModPaintings;
 import com.diggydwarff.tobacconistmod.compat.curios.CuriosCompat;
 import com.diggydwarff.tobacconistmod.effect.ModEffects;
 import com.diggydwarff.tobacconistmod.recipes.ModRecipeSerializers;
@@ -59,6 +60,7 @@ public class TobacconistMod
         ModMenuTypes.register(modEventBus);
         TobaconistBiomeModifier.register(modEventBus);
         ModVillagers.register(modEventBus);
+        ModPaintings.PAINTING_VARIANTS.register(modEventBus);
         TobacconistCreativeTab.register(modEventBus);
         ModRecipeSerializers.SERIALIZERS.register(modEventBus);
 

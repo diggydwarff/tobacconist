@@ -1,10 +1,12 @@
 package com.diggydwarff.tobacconistmod;
 
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
+import com.diggydwarff.tobacconistmod.util.PaintingTabHelper;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
@@ -78,6 +80,23 @@ public class TobacconistCreativeTab {
                         output.accept(ModBlocks.ORNATE_DIAMOND_HOOKAH.get());
                         output.accept(ModBlocks.ORNATE_AMETHYST_HOOKAH.get());
 
+                        // Add custom paintings as selection options
+                        output.accept(PaintingTabHelper.paintingVariant("american_tobacco_fields_small"));
+                        output.accept(PaintingTabHelper.paintingVariant("camel_american_cigarette"));
+                        output.accept(PaintingTabHelper.paintingVariant("american_lone_cowboy"));
+                        output.accept(PaintingTabHelper.paintingVariant("american_cigarette"));
+                        output.accept(PaintingTabHelper.paintingVariant("ottoman_hookah"));
+                        output.accept(PaintingTabHelper.paintingVariant("american_cowboy_pair_wide"));
+                        output.accept(PaintingTabHelper.paintingVariant("peace_pipe"));
+                        output.accept(PaintingTabHelper.paintingVariant("japanese_kiseru_wide"));
+                        output.accept(PaintingTabHelper.paintingVariant("american_tobacco_fields_wide"));
+                        output.accept(PaintingTabHelper.paintingVariant("american_tobacco_fields"));
+                        output.accept(PaintingTabHelper.paintingVariant("japanese_kiseru"));
+                        output.accept(PaintingTabHelper.paintingVariant("arabian_nights"));
+                        output.accept(PaintingTabHelper.paintingVariant("american_cowboy_pair"));
+                        output.accept(PaintingTabHelper.paintingVariant("havana_cigar"));
+                        output.accept(PaintingTabHelper.paintingVariant("andean_mapacho"));
+
                         output.accept(GOLD_SMOKING_PIPE.get());
                         output.accept(IRON_SMOKING_PIPE.get());
                         output.accept(COPPER_SMOKING_PIPE.get());
@@ -87,6 +106,7 @@ public class TobacconistCreativeTab {
                         output.accept(EMERALD_ENCRUSTED_SMOKING_PIPE.get());
                         output.accept(EMERALD_AZTEC_SMOKING_PIPE.get());
                         output.accept(NETHERITE_SMOKING_PIPE.get());
+
                     }).build());
 
     public static void register(IEventBus eventBus) {

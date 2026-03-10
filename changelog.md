@@ -7,12 +7,11 @@
     - Added drying rack block with support for hoppers
     - Air, sun, fire, or flue cure your tobacco!
     - Curing quality also tracked
-- Average-out leaf quality in the crafting grid to consolidate your production!
-- NEW! Added 
-- NEW! Added advancements
-- NEW! Added tobacconist-themed paintings and music discs to the game
-##### Fixes:
-- Refactored tobacco crop logic into a shared base class
+    - Average-out leaf quality in the crafting grid to consolidate your production
+- NEW! Decoration and Quality of Life Features
+    - Advancement system with custom tobacco-themed advancements
+    - Multiple new paintings inspired by various tobacco cultural around the world
+    - New Japanese Kiseru smoking pipes
 
 ## Update 2.3.1
 ##### Fixes:

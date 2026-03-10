@@ -125,5 +125,50 @@
   "entity.minecraft.villager.tobacconist_master": "Tobacconsit Master",
   "entity.minecraft.villager.tobacconistmod.tobacconist_master": "Tobacconist Master",
 
-  "effect.tobacconistmod.nicotine": "Nicotine"
+  "effect.tobacconistmod.nicotine": "Nicotine",
+
+  "painting.tobacconistmod.american_tobacco_fields_small.title": "American Tobacco Fields (Small)",
+  "painting.tobacconistmod.american_tobacco_fields_small.author": "Diggydwarff",
+
+  "painting.tobacconistmod.camel_american_cigarette.title": "Camel Cigarette",
+  "painting.tobacconistmod.camel_american_cigarette.author": "Diggydwarff",
+
+  "painting.tobacconistmod.american_lone_cowboy.title": "Lone Cowboy",
+  "painting.tobacconistmod.american_lone_cowboy.author": "Diggydwarff",
+
+  "painting.tobacconistmod.american_cigarette.title": "Classic Tobacco",
+  "painting.tobacconistmod.american_cigarette.author": "Diggydwarff",
+
+  "painting.tobacconistmod.ottoman_hookah.title": "Ottoman Hookah",
+  "painting.tobacconistmod.ottoman_hookah.author": "Diggydwarff",
+
+  "painting.tobacconistmod.american_cowboy_pair_wide.title": "Cowboy Pair (Wide)",
+  "painting.tobacconistmod.american_cowboy_pair_wide.author": "Diggydwarff",
+
+  "painting.tobacconistmod.peace_pipe.title": "Peace Pipe",
+  "painting.tobacconistmod.peace_pipe.author": "Diggydwarff",
+
+  "painting.tobacconistmod.japanese_kiseru_wide.title": "Japenese Kiseru (Wide)",
+  "painting.tobacconistmod.japanese_kiseru_wide.author": "Diggydwarff",
+
+  "painting.tobacconistmod.american_tobacco_fields_wide.title": "American Tobacco Fields (Wide)",
+  "painting.tobacconistmod.american_tobacco_fields_wide.author": "Diggydwarff",
+
+  "painting.tobacconistmod.american_tobacco_fields.title": "American Tobacco Fields",
+  "painting.tobacconistmod.american_tobacco_fields.author": "Diggydwarff",
+
+  "painting.tobacconistmod.japanese_kiseru.title": "Japenese Kiseru",
+  "painting.tobacconistmod.japanese_kiseru.author": "Diggydwarff",
+
+  "painting.tobacconistmod.arabian_nights.title": "Arabian Nights",
+  "painting.tobacconistmod.arabian_nights.author": "Diggydwarff",
+
+  "painting.tobacconistmod.american_cowboy_pair.title": "Cowboy Pair",
+  "painting.tobacconistmod.american_cowboy_pair.author": "Diggydwarff",
+
+  "painting.tobacconistmod.havana_cigar.title": "Havan Cigar",
+  "painting.tobacconistmod.havana_cigar.author": "Diggydwarff",
+
+  "painting.tobacconistmod.andean_mapacho.title": "Andean Mapacho",
+  "painting.tobacconistmod.andean_mapacho.author": "Diggydwarff"
 }
