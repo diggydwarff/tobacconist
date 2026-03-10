@@ -1,5 +1,6 @@
 package com.diggydwarff.tobacconistmod.block.entity;
 
+import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -137,18 +138,7 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
         }
 
         if (overheatTicks >= OVERHEAT_RUIN_TICKS) {
-            CompoundTag tag = storedTobacco.getOrCreateTag();
-
-            if (!tag.getBoolean(TAG_RUINED)) {
-                tag.putBoolean(TAG_RUINED, true);
-
-                int quality = TobaccoCuringHelper.getQuality(storedTobacco);
-                int ruinedQuality = Math.max(0, quality - 25);
-
-                tag.putInt(TobaccoCuringHelper.TAG_QUALITY, ruinedQuality);
-                tag.putString(TobaccoCuringHelper.TAG_QUALITY_TIER,
-                        TobaccoCuringHelper.getQualityTierId(ruinedQuality));
-            }
+            spoilStoredTobacco(25);
         }
     }
 
@@ -232,14 +222,32 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
         double spoilChance = Math.min(0.10, 0.005 * monthIndex);
 
         if (level.random.nextDouble() < spoilChance) {
-            tag.putBoolean(TAG_RUINED, true);
-
-            int q = TobaccoCuringHelper.getQuality(storedTobacco);
-            int ruinedQuality = Math.max(0, q - 15);
-            tag.putInt(TobaccoCuringHelper.TAG_QUALITY, ruinedQuality);
-            tag.putString(TobaccoCuringHelper.TAG_QUALITY_TIER,
-                    TobaccoCuringHelper.getQualityTierId(ruinedQuality));
+            spoilStoredTobacco(15);
         }
+    }
+
+    private void spoilStoredTobacco(int qualityPenalty) {
+        if (storedTobacco.isEmpty()) return;
+
+        int count = storedTobacco.getCount();
+        int q = TobaccoCuringHelper.getQuality(storedTobacco);
+        int ruinedQuality = Math.max(0, q - qualityPenalty);
+
+        ItemStack spoiled = new ItemStack(ModItems.SPOILED_TOBACCO.get(), count);
+
+        if (storedTobacco.hasTag()) {
+            spoiled.setTag(storedTobacco.getTag().copy());
+        }
+
+        CompoundTag tag = spoiled.getOrCreateTag();
+        tag.putBoolean(TAG_RUINED, true);
+        tag.putInt(TobaccoCuringHelper.TAG_QUALITY, ruinedQuality);
+        tag.putString(
+                TobaccoCuringHelper.TAG_QUALITY_TIER,
+                TobaccoCuringHelper.getQualityTierId(ruinedQuality)
+        );
+
+        storedTobacco = spoiled;
     }
 
     public int tryInsertTobacco(ItemStack stack) {
@@ -292,6 +300,7 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
 
     private boolean isValidTobacco(ItemStack stack) {
         if (stack.isEmpty()) return false;
+        if (stack.getItem() == ModItems.SPOILED_TOBACCO.get()) return false;
 
         if (TobaccoCuringHelper.isLooseTobacco(stack)) {
             return true;

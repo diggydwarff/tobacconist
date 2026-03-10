@@ -63,7 +63,7 @@ public class TobaccoLeafItem extends Item {
             }
 
             if (tag.getBoolean("Fermented")) {
-                tooltip.add(Component.literal("Fermented").withStyle(ChatFormatting.DARK_GREEN));
+                tooltip.add(Component.literal("Fermented").withStyle(ChatFormatting.GOLD));
             }
 
             int aged = tag.getInt("AgedStages");
@@ -72,7 +72,7 @@ public class TobaccoLeafItem extends Item {
             }
 
             if (tag.getBoolean("Ruined")) {
-                tooltip.add(Component.literal("Ruined").withStyle(ChatFormatting.RED));
+                tooltip.add(Component.literal("Ruined").withStyle(ChatFormatting.DARK_RED));
             }
         }
     }

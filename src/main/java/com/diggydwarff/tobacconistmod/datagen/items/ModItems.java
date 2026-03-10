@@ -131,6 +131,10 @@ public class ModItems {
     public static final RegistryObject<Item> TOBACCO_LOOSE_SHADE =
             ITEMS.register("tobacco_loose_shade", () -> new LooseTobaccoItem(new Item.Properties(), 40, 10));
 
+    public static final RegistryObject<Item> SPOILED_TOBACCO =
+            ITEMS.register("spoiled_tobacco",
+                    () -> new SpoiledTobaccoItem(new Item.Properties().stacksTo(64)));
+
     public static final RegistryObject<Item> BOTTLED_MOLASSES_PLAIN = ITEMS.register("bottled_molasses_plain", () -> BottledMolassesFlavors.BOTTLED_MOLASSES_PLAIN.getItem());
 
     // TOBACCO SEED ITEMS

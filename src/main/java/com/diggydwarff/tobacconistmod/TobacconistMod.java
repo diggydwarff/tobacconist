@@ -23,6 +23,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.block.ComposterBlock;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
@@ -87,6 +88,10 @@ public class TobacconistMod
     private void commonSetup(final FMLCommonSetupEvent event)
     {
         BrewingRecipeRegistry.addRecipe(Ingredient.of(Items.POTION), Ingredient.of(Items.SUGAR_CANE), new ItemStack(BottledMolassesFlavors.BOTTLED_MOLASSES_PLAIN.getItem()));
+
+        event.enqueueWork(() -> {
+            ComposterBlock.COMPOSTABLES.put(ModItems.SPOILED_TOBACCO.get(), 0.85f);
+        });
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
