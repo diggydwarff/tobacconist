@@ -38,25 +38,13 @@ public class LooseTobaccoItem extends Item {
             return baseName;
         }
 
-        int quality = TobaccoCuringHelper.getQuality(stack);
-        if (quality <= 0) {
+        String cutType = TobaccoCuringHelper.getCutType(stack);
+        if (cutType.isEmpty()) {
             return baseName;
         }
 
-        String tier = TobaccoCuringHelper.getQualityTier(quality);
-        String cureType = TobaccoCuringHelper.getCureType(stack);
-        String cutType = TobaccoCuringHelper.getCutType(stack);
-
-        StringBuilder prefix = new StringBuilder(tier);
-
-        if (!cureType.isEmpty()) {
-            prefix.append(" ").append(TobaccoCuringHelper.getCureDisplayName(cureType));
-        }
-        if (!cutType.isEmpty()) {
-            prefix.append(" ").append(TobaccoCuringHelper.getCutDisplayName(cutType));
-        }
-
-        return Component.literal(prefix + " ").append(baseName);
+        return Component.literal(TobaccoCuringHelper.getCutDisplayName(cutType) + " ")
+                .append(baseName);
     }
 
     @Override

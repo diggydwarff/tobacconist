@@ -505,7 +505,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity {
             return false;
         }
 
-        return countNearbyFlueHeatSources(level, pos) >= 2;
+        return countNearbyFlueHeatSources(level, pos) >= 1;
     }
 
     private static boolean hasClearAirAbove(Level level, BlockPos pos) {
@@ -540,15 +540,16 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity {
                     BlockState state = level.getBlockState(check);
                     Block block = state.getBlock();
 
-                    if (block == Blocks.CAMPFIRE || block == Blocks.SOUL_CAMPFIRE) {
-                        return true;
-                    }
-                    if (block == Blocks.FIRE || block == Blocks.SOUL_FIRE) {
+                    if (block == net.minecraft.world.level.block.Blocks.FIRE
+                            || block == net.minecraft.world.level.block.Blocks.SOUL_FIRE
+                            || block == net.minecraft.world.level.block.Blocks.CAMPFIRE
+                            || block == net.minecraft.world.level.block.Blocks.SOUL_CAMPFIRE) {
                         return true;
                     }
                 }
             }
         }
+
         return false;
     }
 
@@ -578,17 +579,41 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity {
         return count;
     }
 
+    private static boolean isIndirectCampfireHeat(Level level, BlockPos rackPos, BlockPos heatPos) {
+        BlockState state = level.getBlockState(heatPos);
+
+        if (!(state.getBlock() instanceof CampfireBlock)) {
+            return false;
+        }
+
+        if (!state.hasProperty(CampfireBlock.LIT) || !state.getValue(CampfireBlock.LIT)) {
+            return false;
+        }
+
+        int dx = Integer.signum(rackPos.getX() - heatPos.getX());
+        int dz = Integer.signum(rackPos.getZ() - heatPos.getZ());
+
+        if (dx == 0 && dz == 0) {
+            return false;
+        }
+
+        BlockPos between = heatPos.offset(dx, 0, dz);
+        BlockState betweenState = level.getBlockState(between);
+
+        return betweenState.isFaceSturdy(level, between, Direction.UP)
+                || betweenState.isFaceSturdy(level, between, Direction.NORTH)
+                || betweenState.isFaceSturdy(level, between, Direction.SOUTH)
+                || betweenState.isFaceSturdy(level, between, Direction.EAST)
+                || betweenState.isFaceSturdy(level, between, Direction.WEST);
+    }
+
     private static boolean isFlueHeatSource(Level level, BlockPos pos) {
         BlockState state = level.getBlockState(pos);
         Block block = state.getBlock();
 
-        if (block == Blocks.LAVA || block == Blocks.MAGMA_BLOCK) {
-            return true;
-        }
-
-        if (block instanceof AbstractFurnaceBlock) {
-            return state.hasProperty(BlockStateProperties.LIT)
-                    && state.getValue(BlockStateProperties.LIT);
+        if (block == com.diggydwarff.tobacconistmod.block.ModBlocks.FLUE_FIREBOX.get()) {
+            return state.hasProperty(net.minecraft.world.level.block.state.properties.BlockStateProperties.LIT)
+                    && state.getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.LIT);
         }
 
         return false;

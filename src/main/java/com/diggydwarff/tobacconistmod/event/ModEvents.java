@@ -1,6 +1,7 @@
 package com.diggydwarff.tobacconistmod.event;
 
 import com.diggydwarff.tobacconistmod.TobacconistMod;
+import com.diggydwarff.tobacconistmod.screen.FlueFireboxScreen;
 import com.diggydwarff.tobacconistmod.screen.HookahScreen;
 import com.diggydwarff.tobacconistmod.screen.ModMenuTypes;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -15,6 +16,7 @@ public class ModEvents {
     public static void onClientSetup(FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
             MenuScreens.register(ModMenuTypes.HOOKAH_MENU.get(), HookahScreen::new);
+            MenuScreens.register(ModMenuTypes.FLUE_FIREBOX_MENU.get(), FlueFireboxScreen::new);
         });
     }
 }

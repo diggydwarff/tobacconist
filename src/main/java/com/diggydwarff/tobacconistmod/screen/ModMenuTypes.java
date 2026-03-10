@@ -17,6 +17,8 @@ public class ModMenuTypes {
     public static final RegistryObject<MenuType<HookahMenu>> HOOKAH_MENU =
             registerMenuType(HookahMenu::new, "hookah_menu");
 
+    public static final RegistryObject<MenuType<FlueFireboxMenu>> FLUE_FIREBOX_MENU =
+            MENUS.register("flue_firebox_menu", () -> IForgeMenuType.create(FlueFireboxMenu::new));
 
     private static <T extends AbstractContainerMenu> RegistryObject<MenuType<T>> registerMenuType(IContainerFactory<T> factory,
                                                                                                   String name) {
