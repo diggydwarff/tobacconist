@@ -71,8 +71,12 @@ public class AverageLeavesRecipeCategory implements IRecipeCategory<AverageLeave
         slot.draw(guiGraphics, 85, 19);
 
         guiGraphics.drawString(mc.font,
-                Component.literal("Combine 2 matching leaves into 1 averaged leaf"),
+                Component.literal("Combine 2 matching leaves"),
                 4, 4, 0x404040, false);
+
+        guiGraphics.drawString(mc.font,
+                Component.literal("into 1 averaged leaf"),
+                4, 14, 0x404040, false);
 
         guiGraphics.drawString(mc.font,
                 Component.literal("Example: 40 + 80 -> 60"),

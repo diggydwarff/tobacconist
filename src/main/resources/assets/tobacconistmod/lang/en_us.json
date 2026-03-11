@@ -186,5 +186,8 @@
   "painting.tobacconistmod.andean_mapacho.author": "Diggydwarff",
 
   "block.tobacconistmod.flue_firebox": "Flue Firebox",
-  "block.tobacconistmod.tobacco_barrel": "Tobacco Barrel"
+  "block.tobacconistmod.tobacco_barrel": "Tobacco Barrel",
+
+  "tag.item.tobacconistmod.mouth_curios": "Tobacconist Mouth Wearables",
+  "tag.item.curios.mouth": "Mouth Curios"
 }

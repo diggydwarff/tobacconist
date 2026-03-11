@@ -21,6 +21,24 @@ public class TobacconistJeiPlugin implements IModPlugin {
     }
 
     @Override
+    public void registerItemSubtypes(ISubtypeRegistration registration) {
+        registration.registerSubtypeInterpreter(ModItems.TOBACCO_LOOSE_WILD.get(), (stack, context) -> getLooseSubtype(stack));
+        registration.registerSubtypeInterpreter(ModItems.TOBACCO_LOOSE_VIRGINIA.get(), (stack, context) -> getLooseSubtype(stack));
+        registration.registerSubtypeInterpreter(ModItems.TOBACCO_LOOSE_BURLEY.get(), (stack, context) -> getLooseSubtype(stack));
+        registration.registerSubtypeInterpreter(ModItems.TOBACCO_LOOSE_ORIENTAL.get(), (stack, context) -> getLooseSubtype(stack));
+        registration.registerSubtypeInterpreter(ModItems.TOBACCO_LOOSE_DOKHA.get(), (stack, context) -> getLooseSubtype(stack));
+        registration.registerSubtypeInterpreter(ModItems.TOBACCO_LOOSE_SHADE.get(), (stack, context) -> getLooseSubtype(stack));
+    }
+
+    private static String getLooseSubtype(ItemStack stack) {
+        String cutType = TobaccoCuringHelper.getCutType(stack);
+        if (cutType == null || cutType.isBlank()) {
+            cutType = "uncut";
+        }
+        return cutType;
+    }
+
+    @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
         var guiHelper = registration.getJeiHelpers().getGuiHelper();
 
@@ -29,7 +47,8 @@ public class TobacconistJeiPlugin implements IModPlugin {
                 new AverageLeavesRecipeCategory(
                         guiHelper,
                         guiHelper.createDrawableItemStack(new ItemStack(ModItems.VIRGINIA_TOBACCO_LEAF_DRY.get()))
-                )
+                ),
+                new WoodenPipeRecipeCategory(guiHelper)
         );
     }
 
@@ -37,6 +56,7 @@ public class TobacconistJeiPlugin implements IModPlugin {
     public void registerRecipes(IRecipeRegistration registration) {
         registration.addRecipes(LeafCuttingRecipeCategory.TYPE, LeafCuttingJeiRecipe.createAll());
         registration.addRecipes(AverageLeavesRecipeCategory.TYPE, AverageLeavesJeiRecipe.createAll());
+        registration.addRecipes(WoodenPipeRecipeCategory.TYPE, WoodenPipeJeiRecipe.createAll());
     }
 
     @Override
@@ -48,29 +68,4 @@ public class TobacconistJeiPlugin implements IModPlugin {
         registration.addRecipeCatalyst(new ItemStack(ModItems.DIAMOND_CHAVETA.get()), LeafCuttingRecipeCategory.TYPE);
         registration.addRecipeCatalyst(new ItemStack(ModItems.NETHERITE_CHAVETA.get()), LeafCuttingRecipeCategory.TYPE);
     }
-
-    @Override
-    public void registerItemSubtypes(ISubtypeRegistration registration) {
-        registration.registerSubtypeInterpreter(ModItems.TOBACCO_LOOSE_WILD.get(),
-                (stack, context) -> getLooseSubtype(stack));
-        registration.registerSubtypeInterpreter(ModItems.TOBACCO_LOOSE_VIRGINIA.get(),
-                (stack, context) -> getLooseSubtype(stack));
-        registration.registerSubtypeInterpreter(ModItems.TOBACCO_LOOSE_BURLEY.get(),
-                (stack, context) -> getLooseSubtype(stack));
-        registration.registerSubtypeInterpreter(ModItems.TOBACCO_LOOSE_ORIENTAL.get(),
-                (stack, context) -> getLooseSubtype(stack));
-        registration.registerSubtypeInterpreter(ModItems.TOBACCO_LOOSE_DOKHA.get(),
-                (stack, context) -> getLooseSubtype(stack));
-        registration.registerSubtypeInterpreter(ModItems.TOBACCO_LOOSE_SHADE.get(),
-                (stack, context) -> getLooseSubtype(stack));
-    }
-
-    private static String getLooseSubtype(ItemStack stack) {
-        String cutType = TobaccoCuringHelper.getCutType(stack);
-        if (cutType == null || cutType.isBlank()) {
-            cutType = "uncut";
-        }
-        return cutType;
-    }
-
 }

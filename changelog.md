@@ -16,6 +16,16 @@
     - Advancement system with custom tobacco-themed advancements
     - Multiple new paintings inspired by various tobacco cultural around the world
     - New Japanese Kiseru smoking pipes
+- NEW! Additional mod compatibility support
+    - Farmers delight additional support:
+        - Tobacco leaves cut on cutting board = rough cut tobacco
+        - Tobacco leaves may be stored in baskets
+        - Smoking pipe + meal effect
+    - Supplementaries mod support
+        - Store pipes on shelves
+        - Tobacco leaves can hang on ropes
+    - Biomes o' Plenty
+        - Add support for additional biomes
 ##### Changes:
 - Nicotine effect now gives slight mining and movement boosts
 ##### Fixes:
