@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "S S",
+    "S S",
+    "WWW"
+  ],
+  "key": {
+    "S": {
+      "item": "minecraft:stick"
+    },
+    "W": {
+      "item": "minecraft:oak_slab"
+    }
+  },
+  "result": {
+    "item": "tobacconistmod:tobacco_drying_rack_block",
+    "count": 1
+  }
+}

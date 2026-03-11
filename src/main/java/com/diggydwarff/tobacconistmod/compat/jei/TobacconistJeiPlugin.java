@@ -60,7 +60,8 @@ public class TobacconistJeiPlugin implements IModPlugin {
                 new TobaccoBoxFillRecipeCategory(guiHelper),
                 new TobaccoBoxLabelRecipeCategory(guiHelper),
                 new LabelDuplicateRecipeCategory(guiHelper),
-                new TobaccoBarrelRecipeCategory(guiHelper)
+                new TobaccoBarrelRecipeCategory(guiHelper),
+                new DryingRackRecipeCategory(guiHelper)
         );
     }
 
@@ -107,6 +108,19 @@ public class TobacconistJeiPlugin implements IModPlugin {
                 VanillaTypes.ITEM_STACK,
                 Component.literal("Dry leaves can be fermented and aged in a tobacco barrel.")
         );
+
+        registration.addIngredientInfo(
+                java.util.List.of(new ItemStack(ModBlocks.TOBACCO_DRYING_RACK.get().asItem())),
+                mezz.jei.api.constants.VanillaTypes.ITEM_STACK,
+                Component.literal("Used to cure raw tobacco leaves."),
+                Component.literal(""),
+                Component.literal("Air curing: shade or indirect light"),
+                Component.literal("Sun curing: direct sunlight"),
+                Component.literal("Flue curing: hot dry enclosed heat"),
+                Component.literal("Fire curing: smoke and low heat")
+        );
+
+        registration.addRecipes(DryingRackRecipeCategory.TYPE, DryingRackJeiRecipe.createAll());
     }
 
     @Override
@@ -118,6 +132,15 @@ public class TobacconistJeiPlugin implements IModPlugin {
         registration.addRecipeCatalyst(new ItemStack(ModItems.DIAMOND_CHAVETA.get()), LeafCuttingRecipeCategory.TYPE);
         registration.addRecipeCatalyst(new ItemStack(ModItems.NETHERITE_CHAVETA.get()), LeafCuttingRecipeCategory.TYPE);
 
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.TOBACCO_DRYING_RACK.get().asItem()), DryingRackRecipeCategory.TYPE);
+
+        registration.addRecipeCatalyst(new ItemStack(ModItems.WILD_TOBACCO_LEAF.get()), DryingRackRecipeCategory.TYPE);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.VIRGINIA_TOBACCO_LEAF.get()), DryingRackRecipeCategory.TYPE);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.BURLEY_TOBACCO_LEAF.get()), DryingRackRecipeCategory.TYPE);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.ORIENTAL_TOBACCO_LEAF.get()), DryingRackRecipeCategory.TYPE);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.DOKHA_TOBACCO_LEAF.get()), DryingRackRecipeCategory.TYPE);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.SHADE_TOBACCO_LEAF.get()), DryingRackRecipeCategory.TYPE);
+
         registration.addRecipeCatalyst(new ItemStack(ModBlocks.TOBACCO_BARREL.get().asItem()), TobaccoBarrelRecipeCategory.TYPE);
         JeiItemLists.getAllDryLeaves().forEach(stack ->
                 registration.addRecipeCatalyst(stack, TobaccoBarrelRecipeCategory.TYPE)
@@ -126,6 +149,8 @@ public class TobacconistJeiPlugin implements IModPlugin {
         JeiItemLists.getAllSmokingPipes().forEach(pipe ->
                 registration.addRecipeCatalyst(pipe, WoodenPipeFillRecipeCategory.TYPE)
         );
+
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.TOBACCO_DRYING_RACK.get().asItem()), DryingRackRecipeCategory.TYPE);
 
         registration.addRecipeCatalyst(new ItemStack(ModItems.SHISHA_TOBACCO.get()), ShishaMixRecipeCategory.TYPE);
         registration.addRecipeCatalyst(new ItemStack(ModItems.TOBACCO_BOX.get()), TobaccoBoxFillRecipeCategory.TYPE);
