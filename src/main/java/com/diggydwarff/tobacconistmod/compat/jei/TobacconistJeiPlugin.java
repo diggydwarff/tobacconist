@@ -14,6 +14,7 @@ import mezz.jei.api.registration.ISubtypeRegistration;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 import java.util.List;
 
@@ -61,7 +62,9 @@ public class TobacconistJeiPlugin implements IModPlugin {
                 new TobaccoBoxLabelRecipeCategory(guiHelper),
                 new LabelDuplicateRecipeCategory(guiHelper),
                 new TobaccoBarrelRecipeCategory(guiHelper),
-                new DryingRackRecipeCategory(guiHelper)
+                new DryingRackRecipeCategory(guiHelper),
+                new HookahStationRecipeCategory(guiHelper),
+                new HookahUseRecipeCategory(guiHelper)
         );
     }
 
@@ -120,7 +123,23 @@ public class TobacconistJeiPlugin implements IModPlugin {
                 Component.literal("Fire curing: smoke and low heat")
         );
 
+        registration.addIngredientInfo(
+                java.util.List.of(new ItemStack(ModItems.HOOKAH_HOSE.get())),
+                mezz.jei.api.constants.VanillaTypes.ITEM_STACK,
+                Component.literal("Used to smoke from a loaded hookah."),
+                Component.literal(""),
+                Component.literal("How to use:"),
+                Component.literal("- Place and load a hookah with fuel, water, and shisha"),
+                Component.literal("- Keep the hose in your hand"),
+                Component.literal("- Right-click the loaded hookah to smoke"),
+                Component.literal(""),
+                Component.literal("The hookah will consume its contents over time.")
+        );
+
         registration.addRecipes(DryingRackRecipeCategory.TYPE, DryingRackJeiRecipe.createAll());
+
+        registration.addRecipes(HookahStationRecipeCategory.TYPE, HookahStationJeiRecipe.createAll());
+        registration.addRecipes(HookahUseRecipeCategory.TYPE, HookahUseJeiRecipe.createAll());
     }
 
     @Override
@@ -156,6 +175,17 @@ public class TobacconistJeiPlugin implements IModPlugin {
         registration.addRecipeCatalyst(new ItemStack(ModItems.TOBACCO_BOX.get()), TobaccoBoxFillRecipeCategory.TYPE);
         registration.addRecipeCatalyst(new ItemStack(ModItems.TOBACCO_BOX.get()), TobaccoBoxLabelRecipeCategory.TYPE);
         registration.addRecipeCatalyst(new ItemStack(ModItems.TOBACCO_LABEL.get()), LabelDuplicateRecipeCategory.TYPE);
+
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.HOOKAH.get().asItem()), HookahStationRecipeCategory.TYPE);
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.ORNATE_IRON_HOOKAH.get().asItem()), HookahStationRecipeCategory.TYPE);
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.ORNATE_GOLD_HOOKAH.get().asItem()), HookahStationRecipeCategory.TYPE);
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.ORNATE_COPPER_HOOKAH.get().asItem()), HookahStationRecipeCategory.TYPE);
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.ORNATE_AMETHYST_HOOKAH.get().asItem()), HookahStationRecipeCategory.TYPE);
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.ORNATE_DIAMOND_HOOKAH.get().asItem()), HookahStationRecipeCategory.TYPE);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.BAMBOO_CHARCOAL.get().asItem()), HookahStationRecipeCategory.TYPE);
+        registration.addRecipeCatalyst(new ItemStack(Items.COAL).getItem(), HookahStationRecipeCategory.TYPE);
+        registration.addRecipeCatalyst(new ItemStack(Items.CHARCOAL).getItem(), HookahStationRecipeCategory.TYPE);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.SHISHA_TOBACCO.get()), HookahStationRecipeCategory.TYPE);
     }
 
 }
