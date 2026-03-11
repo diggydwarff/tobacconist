@@ -1,11 +1,14 @@
 package com.diggydwarff.tobacconistmod.datagen.items;
 
+import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelBlockEntity;
 import com.diggydwarff.tobacconistmod.effect.ModEffects;
+import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -31,7 +34,7 @@ public abstract class SmokingItem extends Item {
                 && stack.getDamageValue() < stack.getMaxDamage();
     }
 
-    public void triggerSmokingEffectPlayer(Player player, ServerLevel level, int smokelevel) {
+    public void triggerSmokingEffectPlayer(Player player, ServerLevel level, int smokelevel, ItemStack tobaccoStack) {
         Vec3 look = player.getLookAngle();
 
         level.playSound(
@@ -61,6 +64,43 @@ public abstract class SmokingItem extends Item {
                 ModEffects.NICOTINE.get(),
                 500,
                 0,
+                false,
+                false,
+                true
+        ));
+
+        applyQualityHealthBonus(player, tobaccoStack);
+    }
+
+    protected void applyQualityHealthBonus(Player player, ItemStack tobaccoStack) {
+        if (tobaccoStack == null || tobaccoStack.isEmpty()) return;
+
+        int quality = TobaccoCuringHelper.getQuality(tobaccoStack);
+        int agedDays = TobaccoBarrelBlockEntity.getAgedDays(tobaccoStack);
+
+        int duration = 0;
+        int amplifier = 0;
+
+        if (quality >= 98) {
+            duration = 120; // 6 sec
+            amplifier = 1;  // Regen II
+        } else if (quality >= 90) {
+            duration = 100; // 5 sec
+            amplifier = 0;  // Regen I
+        } else if (quality >= 70) {
+            duration = 60;  // 3 sec
+            amplifier = 0;  // Regen I
+        }
+
+        if (duration <= 0) return;
+
+        int ageBonus = Math.min(200, (agedDays / 30) * 20); // +1 sec per 30 days, cap +10 sec
+        duration += ageBonus;
+
+        player.addEffect(new MobEffectInstance(
+                MobEffects.REGENERATION,
+                duration,
+                amplifier,
                 false,
                 false,
                 true
