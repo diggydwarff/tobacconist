@@ -1,5 +1,6 @@
 package com.diggydwarff.tobacconistmod.datagen.items.custom;
 
+import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelBlockEntity;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
@@ -62,16 +63,18 @@ public class TobaccoLeafItem extends Item {
                 ).withStyle(ChatFormatting.GRAY));
             }
 
-            if (tag.getBoolean("Fermented")) {
+            if (TobaccoBarrelBlockEntity.isFermented(stack)) {
                 tooltip.add(Component.literal("Fermented").withStyle(ChatFormatting.GOLD));
             }
 
-            int aged = tag.getInt("AgedStages");
-            if (aged > 0) {
-                tooltip.add(Component.literal("Aged: " + aged).withStyle(ChatFormatting.GOLD));
+            int agedDays = TobaccoBarrelBlockEntity.getAgedDays(stack);
+            if (agedDays > 0) {
+                tooltip.add(Component.literal(
+                        "Age: " + formatAge(agedDays) + " (" + getAgeLabel(agedDays) + ")"
+                ).withStyle(ChatFormatting.GOLD));
             }
 
-            if (tag.getBoolean("Ruined")) {
+            if (TobaccoBarrelBlockEntity.isRuined(stack)) {
                 tooltip.add(Component.literal("Ruined").withStyle(ChatFormatting.DARK_RED));
             }
         }
@@ -92,6 +95,24 @@ public class TobaccoLeafItem extends Item {
         }
 
         return 0;
+    }
+
+    private String formatAge(int agedDays) {
+        int years = agedDays / 365;
+        int days = agedDays % 365;
+
+        if (years > 0) {
+            return years + "y " + days + "d";
+        }
+        return days + "d";
+    }
+
+    private String getAgeLabel(int agedDays) {
+        if (agedDays < 7) return "Fresh";
+        if (agedDays < 30) return "Light Aged";
+        if (agedDays < 90) return "Deep Aged";
+        if (agedDays < 365) return "Vintage";
+        return "Cellared";
     }
 
     private String capitalize(String s) {
