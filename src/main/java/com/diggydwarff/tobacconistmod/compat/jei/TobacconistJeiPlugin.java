@@ -49,7 +49,8 @@ public class TobacconistJeiPlugin implements IModPlugin {
                         guiHelper.createDrawableItemStack(new ItemStack(ModItems.VIRGINIA_TOBACCO_LEAF_DRY.get()))
                 ),
                 new CigaretteRecipeCategory(guiHelper),
-                new CigarRecipeCategory(guiHelper)
+                new CigarRecipeCategory(guiHelper),
+                new WoodenPipeFillRecipeCategory(guiHelper)
         );
     }
 
@@ -60,6 +61,7 @@ public class TobacconistJeiPlugin implements IModPlugin {
         registration.addRecipes(mezz.jei.api.constants.RecipeTypes.CRAFTING, WoodenPipeJeiRecipe.createAll());
         registration.addRecipes(CigaretteRecipeCategory.TYPE, CigaretteJeiRecipe.createAll());
         registration.addRecipes(CigarRecipeCategory.TYPE, CigarJeiRecipe.createAll());
+        registration.addRecipes(WoodenPipeFillRecipeCategory.TYPE, WoodenPipeFillJeiRecipe.createAll());
     }
 
     @Override
@@ -70,5 +72,9 @@ public class TobacconistJeiPlugin implements IModPlugin {
         registration.addRecipeCatalyst(new ItemStack(ModItems.GOLD_CHAVETA.get()), LeafCuttingRecipeCategory.TYPE);
         registration.addRecipeCatalyst(new ItemStack(ModItems.DIAMOND_CHAVETA.get()), LeafCuttingRecipeCategory.TYPE);
         registration.addRecipeCatalyst(new ItemStack(ModItems.NETHERITE_CHAVETA.get()), LeafCuttingRecipeCategory.TYPE);
+
+        JeiItemLists.getAllSmokingPipes().forEach(pipe ->
+                registration.addRecipeCatalyst(pipe, WoodenPipeFillRecipeCategory.TYPE)
+        );
     }
 }

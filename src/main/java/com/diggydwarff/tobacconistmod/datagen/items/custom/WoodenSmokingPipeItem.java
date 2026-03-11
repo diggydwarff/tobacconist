@@ -22,9 +22,9 @@ import java.util.List;
 
 public class WoodenSmokingPipeItem extends SmokingItem {
 
-    private static final String NBT_TOBACCO = "PackedTobacco";
-    private static final String NBT_PUFFS = "PuffsLeft";
-    private static final int MAX_PUFFS = 40;
+    public  static final String NBT_TOBACCO = "PackedTobacco";
+    public static final String NBT_PUFFS = "PuffsLeft";
+    public static final int MAX_PUFFS = 40;
 
     public WoodenSmokingPipeItem(Properties properties) {
         super(properties);

@@ -28,6 +28,7 @@
         - Add support for additional biomes
 ##### Changes:
 - Nicotine effect now gives slight mining and movement boosts
+- Active smoking item in Curios mouth slot can now be smoked by right clicking with empty hand
 ##### Fixes:
 - Update hookah item textures to look nicer
 - Existing recipes and new recipes all work in JEI
