@@ -3,6 +3,7 @@ package com.diggydwarff.tobacconistmod;
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.util.PaintingTabHelper;
+import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -34,26 +35,26 @@ public class TobacconistCreativeTab {
 
                         output.accept(BOTTLED_MOLASSES_PLAIN.get());
 
-                        output.accept(WILD_TOBACCO_LEAF.get());
-                        output.accept(VIRGINIA_TOBACCO_LEAF.get());
-                        output.accept(BURLEY_TOBACCO_LEAF.get());
-                        output.accept(ORIENTAL_TOBACCO_LEAF.get());
-                        output.accept(DOKHA_TOBACCO_LEAF.get());
-                        output.accept(SHADE_TOBACCO_LEAF.get());
+                        output.accept(creativeLeaf(new ItemStack(WILD_TOBACCO_LEAF.get()), false));
+                        output.accept(creativeLeaf(new ItemStack(VIRGINIA_TOBACCO_LEAF.get()), false));
+                        output.accept(creativeLeaf(new ItemStack(BURLEY_TOBACCO_LEAF.get()), false));
+                        output.accept(creativeLeaf(new ItemStack(ORIENTAL_TOBACCO_LEAF.get()), false));
+                        output.accept(creativeLeaf(new ItemStack(DOKHA_TOBACCO_LEAF.get()), false));
+                        output.accept(creativeLeaf(new ItemStack(SHADE_TOBACCO_LEAF.get()), false));
 
-                        output.accept(WILD_TOBACCO_LEAF_DRY.get());
-                        output.accept(VIRGINIA_TOBACCO_LEAF_DRY.get());
-                        output.accept(BURLEY_TOBACCO_LEAF_DRY.get());
-                        output.accept(ORIENTAL_TOBACCO_LEAF_DRY.get());
-                        output.accept(DOKHA_TOBACCO_LEAF_DRY.get());
-                        output.accept(SHADE_TOBACCO_LEAF_DRY.get());
+                        output.accept(creativeLeaf(new ItemStack(WILD_TOBACCO_LEAF_DRY.get()), true));
+                        output.accept(creativeLeaf(new ItemStack(VIRGINIA_TOBACCO_LEAF_DRY.get()), true));
+                        output.accept(creativeLeaf(new ItemStack(BURLEY_TOBACCO_LEAF_DRY.get()), true));
+                        output.accept(creativeLeaf(new ItemStack(ORIENTAL_TOBACCO_LEAF_DRY.get()), true));
+                        output.accept(creativeLeaf(new ItemStack(DOKHA_TOBACCO_LEAF_DRY.get()), true));
+                        output.accept(creativeLeaf(new ItemStack(SHADE_TOBACCO_LEAF_DRY.get()), true));
 
-                        output.accept(TOBACCO_LOOSE_WILD.get());
-                        output.accept(TOBACCO_LOOSE_VIRGINIA.get());
-                        output.accept(TOBACCO_LOOSE_BURLEY.get());
-                        output.accept(TOBACCO_LOOSE_ORIENTAL.get());
-                        output.accept(TOBACCO_LOOSE_DOKHA.get());
-                        output.accept(TOBACCO_LOOSE_SHADE.get());
+                        addLooseVariants(output, new ItemStack(TOBACCO_LOOSE_WILD.get()));
+                        addLooseVariants(output, new ItemStack(TOBACCO_LOOSE_VIRGINIA.get()));
+                        addLooseVariants(output, new ItemStack(TOBACCO_LOOSE_BURLEY.get()));
+                        addLooseVariants(output, new ItemStack(TOBACCO_LOOSE_ORIENTAL.get()));
+                        addLooseVariants(output, new ItemStack(TOBACCO_LOOSE_DOKHA.get()));
+                        addLooseVariants(output, new ItemStack(TOBACCO_LOOSE_SHADE.get()));
 
                         output.accept(ModBlocks.TOBACCO_DRYING_RACK.get());
                         output.accept(ModBlocks.FLUE_FIREBOX.get());
@@ -126,5 +127,18 @@ public class TobacconistCreativeTab {
 
     public static void register(IEventBus eventBus) {
         CREATIVE_MODE_TABS.register(eventBus);
+    }
+
+    private static ItemStack creativeLeaf(ItemStack base, boolean cured) {
+        ItemStack stack = base.copy();
+        TobaccoCuringHelper.applyCreativeLeafDefaults(stack, cured);
+        return stack;
+    }
+
+    private static void addLooseVariants(CreativeModeTab.Output output, ItemStack base) {
+        output.accept(TobaccoCuringHelper.makeCreativeLoose(base, TobaccoCuringHelper.CUT_RIBBON));
+        output.accept(TobaccoCuringHelper.makeCreativeLoose(base, TobaccoCuringHelper.CUT_SHAG));
+        output.accept(TobaccoCuringHelper.makeCreativeLoose(base, TobaccoCuringHelper.CUT_ROUGH));
+        output.accept(TobaccoCuringHelper.makeCreativeLoose(base, TobaccoCuringHelper.CUT_FLAKE));
     }
 }

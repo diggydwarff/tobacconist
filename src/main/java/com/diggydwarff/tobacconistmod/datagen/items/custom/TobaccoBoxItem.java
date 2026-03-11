@@ -140,21 +140,59 @@ public class TobaccoBoxItem extends Item {
 
     private boolean tryInsert(ItemStack box, ItemStack incoming, Player player) {
         if (incoming.isEmpty()) return false;
-        if (!TobaccoBoxHelper.canAccept(box, incoming)) return false;
+        if (!TobaccoBoxHelper.isSupportedContent(incoming)) return false;
 
         ItemStack stored = TobaccoBoxHelper.getStoredItem(box);
         int count = TobaccoBoxHelper.getStoredCount(box);
 
-        ItemStack comparisonBase = stored.isEmpty() ? incoming : stored;
-        int cap = TobaccoBoxHelper.getCapacity(comparisonBase);
-        if (count >= cap) return false;
+        String boxLabel = TobaccoBoxHelper.getLabel(box);
+        String incomingLabel = TobaccoLabelHelper.getProductLabel(incoming);
+
+        // IMPORTANT:
+        // Compare the raw product, not the extracted display label.
+        ItemStack incomingCompare = incoming.copy();
+        incomingCompare.setCount(1);
+        TobaccoLabelHelper.clearProductLabel(incomingCompare);
 
         if (stored.isEmpty()) {
-            TobaccoBoxHelper.setStored(box, incoming, 1);
-        } else {
-            TobaccoBoxHelper.setStored(box, stored, count + 1);
+            int cap = TobaccoBoxHelper.getCapacity(incomingCompare);
+
+            if (count >= cap) return false;
+
+            TobaccoBoxHelper.setStored(box, incomingCompare, 1);
+
+            // Empty box adopts inserted item's label, if any
+            if (!incomingLabel.isEmpty()) {
+                TobaccoBoxHelper.setLabel(box, incomingLabel);
+            }
+
+            incoming.shrink(1);
+            playSound(player);
+            return true;
         }
 
+        // Existing contents must match exactly
+        if (!TobaccoBoxHelper.sameContent(stored, incomingCompare)) {
+            return false;
+        }
+
+        // If box has a label, incoming item must have exact same label
+        if (!boxLabel.isEmpty()) {
+            if (incomingLabel.isEmpty() || !boxLabel.equals(incomingLabel)) {
+                return false;
+            }
+        } else {
+            // If box is unlabeled but somehow already has contents,
+            // only allow unlabeled matching items.
+            if (!incomingLabel.isEmpty()) {
+                return false;
+            }
+        }
+
+        int cap = TobaccoBoxHelper.getCapacity(stored);
+        if (count >= cap) return false;
+
+        TobaccoBoxHelper.setStored(box, stored, count + 1);
         incoming.shrink(1);
         playSound(player);
         return true;
@@ -279,7 +317,7 @@ public class TobaccoBoxItem extends Item {
             tooltip.add(Component.literal("Label: " + label).withStyle(ChatFormatting.YELLOW));
         }
 
-        tooltip.add(Component.literal("Contents: " + TobaccoBoxHelper.getContentPluralName(stored))
+        tooltip.add(Component.literal("Contents: " + TobaccoBoxHelper.getBoxContentsLine(stored))
                 .withStyle(ChatFormatting.GRAY));
 
         String blendLine = TobaccoBoxHelper.getBlendLine(stored);

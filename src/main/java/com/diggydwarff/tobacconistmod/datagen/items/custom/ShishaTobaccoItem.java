@@ -1,9 +1,7 @@
 package com.diggydwarff.tobacconistmod.datagen.items.custom;
 
 import com.diggydwarff.tobacconistmod.datagen.items.SmokingProduct;
-import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
-import com.diggydwarff.tobacconistmod.util.TobaccoLabelHelper;
-import com.diggydwarff.tobacconistmod.util.TobaccoProductQualityHelper;
+import com.diggydwarff.tobacconistmod.util.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -24,60 +22,94 @@ public class ShishaTobaccoItem extends SmokingProduct {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-        CompoundTag tag = stack.getTag();
-
-        if (tag != null) {
-            String tobacco = tag.getString("tobacco");
-            String shishaFlavor1 = tag.getString("flavor1");
-            String shishaFlavor2 = tag.getString("flavor2");
-            String shishaFlavor3 = tag.getString("flavor3");
-
-            String productLabel = com.diggydwarff.tobacconistmod.util.TobaccoLabelHelper.getProductLabel(stack);
-            if (!productLabel.isEmpty()) {
-                tooltip.add(Component.literal("Label: " + productLabel).withStyle(ChatFormatting.YELLOW));
-            }
-
-            if (!tobacco.isEmpty()) {
-                tooltip.add(Component.literal(tobacco.replace("[", "").replace("]", "")).withStyle(ChatFormatting.GOLD));
-            }
-
-            int productQuality = TobaccoProductQualityHelper.getStoredProductQuality(stack);
-            if (productQuality >= 0) {
-                tooltip.add(Component.literal("Quality: " + productQuality + "/10").withStyle(ChatFormatting.GRAY));
-            }
-
-            String cutType = tag.getString(TobaccoCuringHelper.TAG_CUT_TYPE);
-            if (!cutType.isEmpty()) {
-                tooltip.add(Component.literal("Cut: " + TobaccoCuringHelper.getCutDisplayName(cutType)).withStyle(ChatFormatting.GRAY));
-            }
-
-            String cureType = tag.getString(TobaccoCuringHelper.TAG_CURE_TYPE);
-            if (!cureType.isEmpty()) {
-                tooltip.add(Component.literal("Cure: " + TobaccoCuringHelper.getCureDisplayName(cureType)).withStyle(ChatFormatting.GRAY));
-            }
-
-            for (String shishaFlavor : Arrays.asList(shishaFlavor1, shishaFlavor2, shishaFlavor3)) {
-                if (shishaFlavor.contains("Molasses")) {
-                    Pattern r = Pattern.compile("\\(([^)]+)\\)");
-                    Matcher m = r.matcher(shishaFlavor);
-                    if (m.find()) {
-                        String match = m.group(0);
-                        tooltip.add(Component.literal("* " + match).withStyle(ChatFormatting.GOLD));
-                    }
-                }
-            }
-        }
-
-        super.appendHoverText(stack, worldIn, tooltip, flagIn);
-    }
-
-    @Override
     public Component getName(ItemStack stack) {
         String label = TobaccoLabelHelper.getProductLabel(stack);
         if (!label.isEmpty()) {
             return TobaccoLabelHelper.buildNamedProduct(label, "Shisha Tobacco");
         }
         return super.getName(stack);
+    }
+
+    private int getDisplayQuality10(ItemStack stack) {
+        int productQuality = TobaccoProductQualityHelper.getStoredProductQuality(stack);
+        if (productQuality >= 0) {
+            return productQuality;
+        }
+
+        CompoundTag packed = TobaccoTooltipHelper.getPackedTobaccoData(stack);
+        if (packed != null && packed.contains(TobaccoCuringHelper.TAG_QUALITY)) {
+            return Math.max(1, Math.round(packed.getInt(TobaccoCuringHelper.TAG_QUALITY) / 10.0f));
+        }
+
+        CompoundTag tag = stack.getTag();
+        if (tag != null && tag.contains(TobaccoCuringHelper.TAG_QUALITY)) {
+            return Math.max(1, Math.round(tag.getInt(TobaccoCuringHelper.TAG_QUALITY) / 10.0f));
+        }
+
+        return -1;
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+        CompoundTag tag = stack.getTag();
+
+        String label = TobaccoLabelHelper.getProductLabel(stack);
+        if (!label.isEmpty()) {
+            tooltip.add(Component.literal("Label: " + label).withStyle(ChatFormatting.YELLOW));
+        }
+
+        if (tag != null) {
+            String tobacco = tag.getString("tobacco");
+            if (!tobacco.isEmpty()) {
+                String summary = tobacco + TobaccoTooltipHelper.getProcessSuffix(tag);
+                tooltip.add(Component.literal(summary).withStyle(ChatFormatting.GOLD));
+            }
+
+            ItemStack stored = TobaccoBoxHelper.getStoredItem(stack);
+
+            int displayQuality = getDisplayQuality10(stack);
+            if (displayQuality >= 0) {
+                tooltip.add(Component.literal("Quality: " + displayQuality + "/10")
+                        .withStyle(ChatFormatting.GRAY));
+            }
+
+            String cutType = tag.getString(TobaccoProductQualityHelper.TAG_INPUT_CUT_TYPE);
+            if (cutType.isEmpty()) {
+                cutType = tag.getString(TobaccoCuringHelper.TAG_CUT_TYPE);
+            }
+            if (!cutType.isEmpty()) {
+                tooltip.add(Component.literal("Cut: " + TobaccoCuringHelper.getCutDisplayName(cutType)).withStyle(ChatFormatting.GRAY));
+            }
+
+            String cureType = tag.getString(TobaccoProductQualityHelper.TAG_INPUT_CURE_TYPE);
+            if (cureType.isEmpty()) {
+                cureType = tag.getString(TobaccoCuringHelper.TAG_CURE_TYPE);
+            }
+            if (!cureType.isEmpty()) {
+                tooltip.add(Component.literal("Cure: " + TobaccoCuringHelper.getCureDisplayName(cureType)).withStyle(ChatFormatting.GRAY));
+            }
+
+            for (String shishaFlavor : Arrays.asList(
+                    tag.getString("flavor1"),
+                    tag.getString("flavor2"),
+                    tag.getString("flavor3")
+            )) {
+                if (shishaFlavor.contains("Molasses")) {
+                    Pattern r = Pattern.compile("\\(([^)]+)\\)");
+                    Matcher m = r.matcher(shishaFlavor);
+                    if (m.find()) {
+                        tooltip.add(Component.literal("* " + m.group(0)).withStyle(ChatFormatting.GOLD));
+                    }
+                }
+            }
+        }
+
+        super.appendHoverText(stack, worldIn, tooltip, flagIn);
+
+        if (flagIn.isAdvanced()) {
+            tooltip.add(Component.empty());
+            tooltip.add(Component.literal("✿ Fermented").withStyle(ChatFormatting.DARK_GRAY));
+            tooltip.add(Component.literal("ᵐ Months aged, ʸ Years aged").withStyle(ChatFormatting.DARK_GRAY));
+        }
     }
 }

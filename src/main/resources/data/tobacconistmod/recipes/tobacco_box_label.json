@@ -1,3 +1,14 @@
 {
-  "type": "tobacconistmod:crafting_special_tobacco_box_label"
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " P",
+    "P "
+  ],
+  "key": {
+    "P": { "item": "minecraft:paper" }
+  },
+  "result": {
+    "item": "tobacconistmod:label",
+    "count": 2
+  }
 }

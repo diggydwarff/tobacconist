@@ -233,6 +233,41 @@ public final class TobaccoCuringHelper {
         return clampQuality(quality);
     }
 
+    public static void applyCreativeLeafDefaults(ItemStack stack, boolean cured) {
+        CompoundTag tag = stack.getOrCreateTag();
+
+        tag.putInt(TAG_QUALITY, 60);
+        tag.putString(TAG_QUALITY_TIER, getQualityTierId(60));
+
+        if (cured) {
+            tag.putString(TAG_CURE_TYPE, CURE_AIR);
+        } else {
+            tag.remove(TAG_CURE_TYPE);
+        }
+
+        tag.remove(TAG_CUT_TYPE);
+        tag.remove("Fermented");
+        tag.remove("AgedStages");
+        tag.remove("Ruined");
+    }
+
+    public static ItemStack makeCreativeLoose(ItemStack base, String cutType) {
+        ItemStack stack = base.copy();
+        stack.setCount(1);
+
+        CompoundTag tag = stack.getOrCreateTag();
+        tag.putInt(TAG_QUALITY, 60);
+        tag.putString(TAG_QUALITY_TIER, getQualityTierId(60));
+        tag.putString(TAG_CURE_TYPE, CURE_AIR);
+        tag.putString(TAG_CUT_TYPE, cutType);
+
+        tag.remove("Fermented");
+        tag.remove("AgedStages");
+        tag.remove("Ruined");
+
+        return stack;
+    }
+
     public static int clampQuality(int quality) {
         return Math.max(0, Math.min(100, quality));
     }

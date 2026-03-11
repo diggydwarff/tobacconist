@@ -80,6 +80,11 @@ public class CigarRecipe extends CustomRecipe {
         ItemStack returnStack = new ItemStack(newItem, 1);
         CompoundTag tag = new CompoundTag();
 
+        CompoundTag wrapperData = tobaccoLeafStack.getTag();
+        if (wrapperData != null) {
+            tag.put("WrapperLeafData", wrapperData.copy());
+        }
+
         tag.putString("tobacco", TobaccoProductQualityHelper.getShortTobaccoLabel(tobaccoStack));
         tag.putString("wrapper", tobaccoLeafStack.getDisplayName().getString());
 

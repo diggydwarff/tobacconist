@@ -63,8 +63,11 @@ public class TobaccoBoxHelper {
     public static void clearStored(ItemStack box) {
         CompoundTag tag = box.getTag();
         if (tag == null) return;
+
         tag.remove(TAG_STORED);
         tag.remove(TAG_COUNT);
+        tag.remove(TAG_LABEL);
+
         if (tag.isEmpty()) {
             box.setTag(null);
         }
@@ -286,6 +289,76 @@ public class TobaccoBoxHelper {
         }
 
         return out.toString().trim();
+    }
+
+    public static String toSuperscriptNumber(int num) {
+        StringBuilder out = new StringBuilder();
+        for (char c : String.valueOf(num).toCharArray()) {
+            out.append(switch (c) {
+                case '0' -> "⁰";
+                case '1' -> "¹";
+                case '2' -> "²";
+                case '3' -> "³";
+                case '4' -> "⁴";
+                case '5' -> "⁵";
+                case '6' -> "⁶";
+                case '7' -> "⁷";
+                case '8' -> "⁸";
+                case '9' -> "⁹";
+                default -> "";
+            });
+        }
+        return out.toString();
+    }
+
+    public static String getBoxContentsLine(ItemStack stored) {
+        if (stored.isEmpty()) return "Empty";
+
+        CompoundTag tag = stored.getTag();
+        int quality100 = 60;
+
+        CompoundTag packed = TobaccoTooltipHelper.getPackedTobaccoData(stored);
+        if (packed != null && packed.contains(TobaccoCuringHelper.TAG_QUALITY)) {
+            quality100 = packed.getInt(TobaccoCuringHelper.TAG_QUALITY);
+        } else if (tag != null && tag.contains(TobaccoCuringHelper.TAG_QUALITY)) {
+            quality100 = tag.getInt(TobaccoCuringHelper.TAG_QUALITY);
+        }
+
+        String qualityWord = TobaccoTooltipHelper.getQualityWord(quality100);
+        String typeName = getContentPluralName(stored);
+
+        return qualityWord + " " + typeName;
+    }
+
+    public static String getProcessSuffix(boolean fermented, int monthsAged) {
+        StringBuilder out = new StringBuilder();
+
+        if (fermented) {
+            out.append(" ✿");
+        }
+
+        String age = getSuperscriptAge(monthsAged);
+        if (!age.isEmpty()) {
+            out.append(" ").append(age);
+        }
+
+        return out.toString();
+    }
+
+    public static String getSuperscriptAge(int monthsAged) {
+        if (monthsAged <= 0) return "";
+
+        if (monthsAged < 12) {
+            return toSuperscriptNumber(monthsAged) + "ᵐ";
+        }
+
+        if (monthsAged % 12 == 0) {
+            return toSuperscriptNumber(monthsAged / 12) + "ʸ";
+        }
+
+        int years = monthsAged / 12;
+        int months = monthsAged % 12;
+        return toSuperscriptNumber(years) + "ʸ" + toSuperscriptNumber(months) + "ᵐ";
     }
 
     private static String formatTobaccoType(String type) {

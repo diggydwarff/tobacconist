@@ -22,6 +22,17 @@ public class TobaccoLabelHelper {
         stack.getOrCreateTag().putString(TAG_BOX_LABEL, label.trim());
     }
 
+    public static void clearBoxLabel(ItemStack stack) {
+        CompoundTag tag = stack.getTag();
+        if (tag == null) return;
+
+        tag.remove(TAG_BOX_LABEL);
+
+        if (tag.isEmpty()) {
+            stack.setTag(null);
+        }
+    }
+
     public static String getProductLabel(ItemStack stack) {
         CompoundTag tag = stack.getTag();
         if (tag == null) return "";
@@ -31,6 +42,17 @@ public class TobaccoLabelHelper {
     public static void setProductLabel(ItemStack stack, String label) {
         if (label == null || label.isBlank()) return;
         stack.getOrCreateTag().putString(TAG_PRODUCT_LABEL, label.trim());
+    }
+
+    public static void clearProductLabel(ItemStack stack) {
+        CompoundTag tag = stack.getTag();
+        if (tag == null) return;
+
+        tag.remove(TAG_PRODUCT_LABEL);
+
+        if (tag.isEmpty()) {
+            stack.setTag(null);
+        }
     }
 
     public static boolean hasProductLabel(ItemStack stack) {
