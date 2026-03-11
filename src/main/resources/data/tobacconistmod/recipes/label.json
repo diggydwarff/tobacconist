@@ -1,5 +1,6 @@
 {
   "type": "minecraft:shaped",
+  "category": "misc",
   "pattern": [
     " P",
     "P "

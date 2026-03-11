@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:smelting",
-  "ingredient": {
-    "item": "tobacconistmod:tobacco_leaf_burley"
-  },
-  "result": "tobacconistmod:tobacco_leaf_burley_dry",
-  "experience": 0.25,
-  "cookingtime": 30
-}

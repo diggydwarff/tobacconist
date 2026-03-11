@@ -2,19 +2,19 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "pattern": [
-    " C ",
-    "CPC",
-    " C "
+    " CC",
+    " CT",
+    "TC "
   ],
   "key": {
     "C": {
       "item": "minecraft:copper_ingot"
     },
-    "P": {
-      "item": "tobacconistmod:wooden_smoking_pipe"
+    "T": {
+      "item": "minecraft:stick"
     }
   },
   "result": {
-    "item": "tobacconistmod:copper_smoking_pipe"
+    "item": "tobacconistmod:copper_chaveta"
   }
 }

@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:smelting",
-  "ingredient": {
-    "item": "tobacconistmod:tobacco_leaf_shade"
-  },
-  "result": "tobacconistmod:tobacco_leaf_shade_dry",
-  "experience": 0.25,
-  "cookingtime": 30
-}

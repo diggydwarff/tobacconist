@@ -2,19 +2,19 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "pattern": [
-    " D ",
-    "DPD",
-    " D "
+    " DD",
+    " DT",
+    "TD "
   ],
   "key": {
     "D": {
       "item": "minecraft:diamond"
     },
-    "P": {
-      "item": "tobacconistmod:gold_smoking_pipe"
+    "T": {
+      "item": "minecraft:stick"
     }
   },
   "result": {
-    "item": "tobacconistmod:diamond_encrusted_smoking_pipe"
+    "item": "tobacconistmod:diamond_chaveta"
   }
 }

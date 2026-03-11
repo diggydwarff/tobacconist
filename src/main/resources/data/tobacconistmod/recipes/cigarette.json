@@ -1,5 +1,6 @@
 {
   "type": "tobacconistmod:crafting_special_cigarette",
+  "category": "misc",
   "ingredients": [
     {
       "item": "tobacconistmod:rolling_paper"

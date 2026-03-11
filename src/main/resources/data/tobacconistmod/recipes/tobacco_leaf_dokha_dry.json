@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:smelting",
-  "ingredient": {
-    "item": "tobacconistmod:tobacco_leaf_dokha"
-  },
-  "result": "tobacconistmod:tobacco_leaf_dokha_dry",
-  "experience": 0.25,
-  "cookingtime": 30
-}

@@ -2,19 +2,19 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "pattern": [
-    " I ",
-    "IPI",
-    " I "
+    " II",
+    " IT",
+    "TI "
   ],
   "key": {
     "I": {
       "item": "minecraft:iron_ingot"
     },
-    "P": {
-      "item": "tobacconistmod:wooden_smoking_pipe"
+    "T": {
+      "item": "minecraft:stick"
     }
   },
   "result": {
-    "item": "tobacconistmod:iron_smoking_pipe"
+    "item": "tobacconistmod:iron_chaveta"
   }
 }

@@ -1,5 +1,6 @@
 {
   "type": "tobacconistmod:crafting_special_cigar",
+  "category": "misc",
   "ingredients": [
     [
       {
