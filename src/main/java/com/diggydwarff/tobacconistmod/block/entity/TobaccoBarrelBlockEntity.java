@@ -4,8 +4,11 @@ import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
@@ -19,11 +22,12 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
     public static final String TAG_LAST_SPOIL_CHECK_MONTH = "LastSpoilCheckMonth";
     public static final String TAG_RUINED = "Ruined";
 
+    public static final String TAG_LAST_AGE_GAME_TIME = "LastAgeGameTime";
+    public static final String TAG_LAST_FERMENT_GAME_TIME = "LastFermentGameTime";
+
     public static final int MAX_STACK = 16;
 
     private static final int TICKS_PER_DAY = 24000;
-    private static final int TICKS_PER_MONTH = TICKS_PER_DAY * 30;
-
     private static final int FERMENT_TIME = 48000; // 2 in-game days
     private static final int MAX_BARREL_HUMIDITY = 100;
     private static final int MIN_FERMENT_HUMIDITY = 25;
@@ -37,6 +41,9 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
     private int barrelHumidity = 0;
     private int overheatTicks = 0;
 
+    private long lastAgeGameTime = -1L;
+    private long lastFermentGameTime = -1L;
+
     private TobaccoBarrelMode mode = TobaccoBarrelMode.IDLE;
 
     public TobaccoBarrelBlockEntity(BlockPos pos, BlockState state) {
@@ -49,6 +56,8 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
             barrel.processTicks = 0;
             barrel.barrelHumidity = 0;
             barrel.overheatTicks = 0;
+            barrel.lastAgeGameTime = -1L;
+            barrel.lastFermentGameTime = -1L;
             barrel.setChanged();
             return;
         }
@@ -62,6 +71,8 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
         if (isRuined(barrel.storedTobacco)) {
             barrel.mode = TobaccoBarrelMode.IDLE;
             barrel.processTicks = 0;
+            barrel.lastAgeGameTime = -1L;
+            barrel.lastFermentGameTime = -1L;
             barrel.setChanged();
             return;
         }
@@ -70,13 +81,26 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
 
         if (barrel.canFerment(warmth)) {
             newMode = TobaccoBarrelMode.FERMENTING;
-        } else if (barrel.canAge(warmth)) {
+        } else if (barrel.canAge(warmth, humidityEnv)) {
             newMode = TobaccoBarrelMode.AGING;
         }
+
+        long now = level.getDayTime();
 
         if (newMode != barrel.mode) {
             barrel.mode = newMode;
             barrel.processTicks = 0;
+
+            if (newMode == TobaccoBarrelMode.FERMENTING) {
+                barrel.lastAgeGameTime = -1L;
+                barrel.lastFermentGameTime = now;
+            } else if (newMode == TobaccoBarrelMode.AGING) {
+                barrel.lastFermentGameTime = -1L;
+                barrel.lastAgeGameTime = now;
+            } else {
+                barrel.lastAgeGameTime = -1L;
+                barrel.lastFermentGameTime = -1L;
+            }
         }
 
         if (barrel.mode == TobaccoBarrelMode.IDLE) {
@@ -84,17 +108,36 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
             return;
         }
 
-        barrel.processTicks++;
-
         if (barrel.mode == TobaccoBarrelMode.FERMENTING) {
-            if (barrel.processTicks >= FERMENT_TIME) {
+            if (barrel.lastFermentGameTime < 0L) {
+                barrel.lastFermentGameTime = now;
+            }
+
+            long elapsed = now - barrel.lastFermentGameTime;
+            barrel.processTicks = (int) Math.min(elapsed, FERMENT_TIME);
+
+            if (elapsed >= FERMENT_TIME) {
                 barrel.finishFermentation();
+                barrel.lastFermentGameTime = -1L;
+                barrel.processTicks = 0;
+                barrel.mode = TobaccoBarrelMode.IDLE;
             }
         } else if (barrel.mode == TobaccoBarrelMode.AGING) {
-            if (barrel.processTicks >= TICKS_PER_DAY) {
-                barrel.processTicks = 0;
-                barrel.advanceAgingDay();
+            if (barrel.lastAgeGameTime < 0L) {
+                barrel.lastAgeGameTime = now;
             }
+
+            long elapsed = now - barrel.lastAgeGameTime;
+            int daysPassed = (int) (elapsed / TICKS_PER_DAY);
+
+            if (daysPassed > 0) {
+                for (int i = 0; i < daysPassed; i++) {
+                    barrel.advanceAgingDay();
+                }
+                barrel.lastAgeGameTime += (long) daysPassed * TICKS_PER_DAY;
+            }
+
+            barrel.processTicks = (int) (elapsed % TICKS_PER_DAY);
         }
 
         barrel.setChanged();
@@ -108,9 +151,21 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
                 double z = pos.getZ() + 0.5 + (level.random.nextDouble() - 0.5) * 0.25;
 
                 level.addParticle(
-                        net.minecraft.core.particles.ParticleTypes.CAMPFIRE_COSY_SMOKE,
+                        ParticleTypes.CAMPFIRE_COSY_SMOKE,
                         x, y, z,
                         0.0, 0.01, 0.0
+                );
+            }
+
+            if (level.random.nextFloat() < 0.04f) {
+                double x = pos.getX() + 0.5 + (level.random.nextDouble() - 0.5) * 0.30;
+                double y = pos.getY() + 0.82;
+                double z = pos.getZ() + 0.5 + (level.random.nextDouble() - 0.5) * 0.30;
+
+                level.addParticle(
+                        ParticleTypes.SMOKE,
+                        x, y, z,
+                        0.0, 0.005, 0.0
                 );
             }
         }
@@ -150,12 +205,10 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
         return warmth >= 3 && barrelHumidity >= MIN_FERMENT_HUMIDITY;
     }
 
-    private boolean canAge(int warmth) {
+    private boolean canAge(int warmth, int humidity) {
         if (storedTobacco.isEmpty()) return false;
         if (isRuined(storedTobacco)) return false;
         if (level == null) return false;
-
-        int humidity = BarrelEnvironmentHelper.getHumidity(level, worldPosition);
 
         return warmth <= 0
                 && humidity >= 1 && humidity <= 3
@@ -210,7 +263,7 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
         if (level == null) return;
         if (agedDays <= 365) return;
 
-        int monthIndex = (agedDays - 365) / 30;
+        int monthIndex = (agedDays - 366) / 30;
         int lastCheckedMonth = tag.getInt(TAG_LAST_SPOIL_CHECK_MONTH);
 
         if (monthIndex <= lastCheckedMonth) {
@@ -248,6 +301,10 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
         );
 
         storedTobacco = spoiled;
+        mode = TobaccoBarrelMode.IDLE;
+        processTicks = 0;
+        lastAgeGameTime = -1L;
+        lastFermentGameTime = -1L;
     }
 
     public int tryInsertTobacco(ItemStack stack) {
@@ -260,6 +317,9 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
             processTicks = 0;
             overheatTicks = 0;
             mode = TobaccoBarrelMode.IDLE;
+            lastAgeGameTime = -1L;
+            lastFermentGameTime = -1L;
+            playBarrelSound(SoundEvents.BARREL_OPEN);
             setChanged();
             return move;
         }
@@ -275,6 +335,11 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
         int space = MAX_STACK - storedTobacco.getCount();
         int move = Math.min(space, stack.getCount());
         storedTobacco.grow(move);
+        lastAgeGameTime = -1L;
+        lastFermentGameTime = -1L;
+        processTicks = 0;
+        mode = TobaccoBarrelMode.IDLE;
+        playBarrelSound(SoundEvents.BARREL_OPEN);
         setChanged();
         return move;
     }
@@ -294,8 +359,17 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
         barrelHumidity = 0;
         overheatTicks = 0;
         mode = TobaccoBarrelMode.IDLE;
+        lastAgeGameTime = -1L;
+        lastFermentGameTime = -1L;
+        playBarrelSound(SoundEvents.BARREL_CLOSE);
         setChanged();
         return out;
+    }
+
+    private void playBarrelSound(net.minecraft.sounds.SoundEvent soundEvent) {
+        if (level != null && !level.isClientSide) {
+            level.playSound(null, worldPosition, soundEvent, SoundSource.BLOCKS, 0.65F, 1.0F);
+        }
     }
 
     private boolean isValidTobacco(ItemStack stack) {
@@ -330,9 +404,16 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
         String ageLabel = getAgeDisplayLabel(agedDays);
 
         String progressText = "";
+        String progressLabel = "";
 
         if (mode == TobaccoBarrelMode.FERMENTING) {
-            progressText = String.format("%.1f%%", processTicks * 100.0 / FERMENT_TIME);
+            double pct = Math.min(100.0, processTicks * 100.0 / FERMENT_TIME);
+            progressLabel = "Ferment";
+            progressText = String.format("%.1f%%", pct);
+        } else if (mode == TobaccoBarrelMode.AGING) {
+            double pct = Math.min(100.0, processTicks * 100.0 / TICKS_PER_DAY);
+            progressLabel = "Aging";
+            progressText = String.format("%.1f%%", pct);
         }
 
         Component line1 = Component.literal("Tobacco Barrel | Stored: " + itemName + " | Mode: ")
@@ -345,7 +426,7 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
                         " | Light: " + blockLight +
                         " | Cool/Dark: " + coolDark +
                         " | Age: " + years + "y " + remDays + "d (" + ageLabel + ")" +
-                        (progressText.isEmpty() ? "" : " | Ferment: " + progressText)
+                        (progressText.isEmpty() ? "" : " | " + progressLabel + ": " + progressText)
         );
 
         return new Component[]{line1, line2};
@@ -407,6 +488,8 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
         tag.putInt("BarrelHumidity", barrelHumidity);
         tag.putInt("OverheatTicks", overheatTicks);
         tag.putString("Mode", mode.name());
+        tag.putLong(TAG_LAST_AGE_GAME_TIME, lastAgeGameTime);
+        tag.putLong(TAG_LAST_FERMENT_GAME_TIME, lastFermentGameTime);
     }
 
     @Override
@@ -422,6 +505,8 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
         processTicks = tag.getInt("ProcessTicks");
         barrelHumidity = tag.getInt("BarrelHumidity");
         overheatTicks = tag.getInt("OverheatTicks");
+        lastAgeGameTime = tag.contains(TAG_LAST_AGE_GAME_TIME) ? tag.getLong(TAG_LAST_AGE_GAME_TIME) : -1L;
+        lastFermentGameTime = tag.contains(TAG_LAST_FERMENT_GAME_TIME) ? tag.getLong(TAG_LAST_FERMENT_GAME_TIME) : -1L;
 
         try {
             mode = TobaccoBarrelMode.valueOf(tag.getString("Mode"));
