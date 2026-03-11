@@ -1,29 +1,55 @@
-## Update 3.0.0: The Processing Update
-##### New Features:
-- NEW! Growth Quality System
-    - Tobacco varieties now have different growth requirements
-    - New inspection system (shift right click on growing tobacco to inspect it and see its growth quality)
-- NEW! Curing system for raw tobacco leaves
-    - Added drying rack block with support for hoppers
-    - Air, sun, fire, or flue cure your tobacco!
-    - Curing quality also tracked
-    - Average-out leaf quality in the crafting grid to consolidate your production
-- NEW! Fermentation and aging system
-    - Added tobacco barrel block
-    - Manage temperature, humidity, and light levels to properly ferment and age your tobacco
-    - The longer it is aged, the better the quality (up to a point)
-- NEW! Decoration and Quality of Life Features
-    - Advancement system with custom tobacco-themed advancements
-    - Multiple new paintings inspired by various tobacco cultural around the world
-    - New Japanese Kiseru smoking pipes
-    - Added support for Patchouli for a guide book for some basic information
-##### Changes:
-- Nicotine effect now gives slight mining and movement boosts
-- Active smoking item in Curios mouth slot can now be smoked by right clicking with empty hand
-- Molasses flavorings now have 4 uses instead of single use
-##### Fixes:
-- Update hookah item textures to look nicer
-- Existing recipes and new recipes all work in JEI
+## Update 3.0.0 — The Processing Update
+
+### Major Additions
+- **Complete Tobacco Processing System**
+  - Tobacco now follows a full pipeline: **grow → cure → ferment/age → cut → craft**
+  - Final product quality now depends on the entire process
+
+- **Growth Quality System**
+  - Each tobacco variety now has unique growth preferences
+  - Inspect crops with **Shift + Right Click** to view growth quality
+
+- **Curing System**
+  - Added **Drying Rack**
+  - Tobacco leaves can now be **Air, Sun, Fire, or Flue Cured**
+  - Curing quality is tracked and carried forward
+  - Mixed leaves average their quality when crafted together
+
+- **Fermentation & Aging**
+  - Added **Tobacco Barrel**
+  - Manage **temperature, humidity, and light** to ferment tobacco
+  - Aging improves quality over time (up to a limit)
+
+- **Tobacco Cutting**
+  - Added **Chaveta cutting tools** (Stone → Netherite)
+  - Tobacco can now be cut into multiple styles:
+    - Ribbon
+    - Shag
+    - Rough
+    - Flake
+
+### New Content
+- **Drying Rack** block
+- **Tobacco Barrel** block
+- **Chaveta tools**
+- **Loose tobacco variants**
+- **Japanese Kiseru pipes**
+- New **tobacco-themed paintings**
+- New **advancements**
+
+### Integration & Quality of Life
+- **JEI integration** for custom recipes
+- **Curios mouth slot support**
+  - Smoking items equipped in the mouth slot can be used with empty-hand right click
+- **Optional Patchouli guide book support**
+- Molasses flavorings now have **4 uses instead of 1**
+
+### Balance
+- **Nicotine effect** now grants small **mining speed and movement boosts**
+
+### Fixes
+- Improved **hookah textures**
+- Fixed **JEI compatibility for custom recipes**
 
 ----------------------------------------------------------------------------
 
