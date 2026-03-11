@@ -20,6 +20,7 @@
 - Nicotine effect now gives slight mining and movement boosts
 ##### Fixes:
 - Update hookah item textures to look nicer
+- Existing recipes and new recipes all work in JEI
 
 ## Update 2.3.1
 ##### Fixes:

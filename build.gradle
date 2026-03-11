@@ -114,14 +114,24 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
     maven { url = "https://maven.theillusivec4.top/" } // Curios
+    maven {
+        url "https://modmaven.dev"
+    }
 }
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-    // Curios compat
+    // Curios compat API
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:5.9.1+1.20.1:api")
+    // Curios mod for runtime (for testing in dev environment)
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:5.9.1+1.20.1")
+
+    // JEI API dependencies
+    compileOnly fg.deobf("mezz.jei:jei-1.20.1-common-api:15.20.0.107")
+    compileOnly fg.deobf("mezz.jei:jei-1.20.1-forge-api:15.20.0.107")
+    // Full JEI mod for runtime (for testing in dev environment)
+    runtimeOnly fg.deobf("mezz.jei:jei-1.20.1-forge:15.20.0.107")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
