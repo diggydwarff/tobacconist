@@ -1,5 +1,6 @@
 package com.diggydwarff.tobacconistmod.datagen.items.custom;
 
+import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelBlockEntity;
 import com.diggydwarff.tobacconistmod.datagen.items.SmokingItem;
 import com.diggydwarff.tobacconistmod.util.*;
 import net.minecraft.ChatFormatting;
@@ -65,11 +66,17 @@ public class CigaretteItem extends SmokingItem {
             if (!tobacco.isEmpty()) {
                 String summary = getCigaretteSummary(stack, tobacco, tag);
                 tooltip.add(Component.literal(summary).withStyle(ChatFormatting.GOLD));
+                int agedDays = TobaccoBarrelBlockEntity.getAgedDays(stack);
+                if (agedDays > 0) {
+                    tooltip.add(Component.literal(
+                            "Age: " + formatAge(agedDays) + " (" + getAgeLabel(agedDays) + ")"
+                    ).withStyle(ChatFormatting.GOLD));
+                }
+
+                tooltip.add(Component.empty());
             } else {
                 tooltip.add(Component.literal("Creative Tobacco").withStyle(ChatFormatting.GOLD));
             }
-
-            ItemStack stored = TobaccoBoxHelper.getStoredItem(stack);
 
             int displayQuality = getDisplayQuality10(stack);
             if (displayQuality >= 0) {
@@ -82,7 +89,8 @@ public class CigaretteItem extends SmokingItem {
                 cutType = tag.getString(TobaccoCuringHelper.TAG_CUT_TYPE);
             }
             if (!cutType.isEmpty()) {
-                tooltip.add(Component.literal("Cut: " + TobaccoCuringHelper.getCutDisplayName(cutType)).withStyle(ChatFormatting.GRAY));
+                tooltip.add(Component.literal("Cut: " + TobaccoCuringHelper.getCutDisplayName(cutType))
+                        .withStyle(ChatFormatting.GRAY));
             }
 
             String cureType = tag.getString(TobaccoProductQualityHelper.TAG_INPUT_CURE_TYPE);
@@ -90,7 +98,12 @@ public class CigaretteItem extends SmokingItem {
                 cureType = tag.getString(TobaccoCuringHelper.TAG_CURE_TYPE);
             }
             if (!cureType.isEmpty()) {
-                tooltip.add(Component.literal("Cure: " + TobaccoCuringHelper.getCureDisplayName(cureType)).withStyle(ChatFormatting.GRAY));
+                tooltip.add(Component.literal("Cure: " + TobaccoCuringHelper.getCureDisplayName(cureType))
+                        .withStyle(ChatFormatting.GRAY));
+            }
+
+            if (TobaccoBarrelBlockEntity.isRuined(stack)) {
+                tooltip.add(Component.literal("Ruined").withStyle(ChatFormatting.DARK_RED));
             }
         }
 
@@ -144,5 +157,23 @@ public class CigaretteItem extends SmokingItem {
         summary += TobaccoTooltipHelper.getProcessSuffix(tag);
 
         return summary.trim();
+    }
+
+    private String formatAge(int agedDays) {
+        int years = agedDays / 365;
+        int days = agedDays % 365;
+
+        if (years > 0) {
+            return years + "y " + days + "d";
+        }
+        return days + "d";
+    }
+
+    private String getAgeLabel(int agedDays) {
+        if (agedDays < 7) return "Fresh";
+        if (agedDays < 30) return "Light Aged";
+        if (agedDays < 90) return "Deep Aged";
+        if (agedDays < 365) return "Vintage";
+        return "Cellared";
     }
 }

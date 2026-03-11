@@ -1,5 +1,6 @@
 package com.diggydwarff.tobacconistmod.datagen.items.custom;
 
+import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelBlockEntity;
 import com.diggydwarff.tobacconistmod.datagen.items.SmokingItem;
 import com.diggydwarff.tobacconistmod.util.*;
 import net.minecraft.ChatFormatting;
@@ -72,9 +73,14 @@ public class CigarItem extends SmokingItem {
 
             tooltip.add(Component.empty());
             tooltip.add(Component.literal(getCigarSummary(stack)).withStyle(ChatFormatting.GOLD));
-            tooltip.add(Component.empty());
 
-            ItemStack stored = TobaccoBoxHelper.getStoredItem(stack);
+            int agedDays = TobaccoBarrelBlockEntity.getAgedDays(stack);
+            if (agedDays > 0) {
+                tooltip.add(Component.literal(
+                        "Age: " + formatAge(agedDays) + " (" + getAgeLabel(agedDays) + ")"
+                ).withStyle(ChatFormatting.GOLD));
+            }
+            tooltip.add(Component.empty());
 
             int displayQuality = getDisplayQuality10(stack);
             if (displayQuality >= 0) {
@@ -84,6 +90,10 @@ public class CigarItem extends SmokingItem {
 
             tooltip.add(Component.literal("Filler: " + getFillerLine(stack)).withStyle(ChatFormatting.GRAY));
             tooltip.add(Component.literal("Wrapper: " + getWrapperLine(stack)).withStyle(ChatFormatting.GRAY));
+
+            if (TobaccoBarrelBlockEntity.isRuined(stack)) {
+                tooltip.add(Component.literal("Ruined").withStyle(ChatFormatting.DARK_RED));
+            }
         }
 
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
@@ -273,5 +283,23 @@ public class CigarItem extends SmokingItem {
         }
 
         return out.toString().trim();
+    }
+
+    private String formatAge(int agedDays) {
+        int years = agedDays / 365;
+        int days = agedDays % 365;
+
+        if (years > 0) {
+            return years + "y " + days + "d";
+        }
+        return days + "d";
+    }
+
+    private String getAgeLabel(int agedDays) {
+        if (agedDays < 7) return "Fresh";
+        if (agedDays < 30) return "Light Aged";
+        if (agedDays < 90) return "Deep Aged";
+        if (agedDays < 365) return "Vintage";
+        return "Cellared";
     }
 }

@@ -106,6 +106,34 @@ public class CigarRecipe extends CustomRecipe {
         if (tobaccoData != null) {
             tag.put("PackedTobaccoData", tobaccoData.copy());
         }
+        // merge aging data from filler + wrapper
+        CompoundTag fillerTag = tobaccoStack.getTag();
+        CompoundTag wrapperTag = tobaccoLeafStack.getTag();
+
+        int fillerAge = fillerTag != null ? fillerTag.getInt("AgedDays") : 0;
+        int wrapperAge = wrapperTag != null ? wrapperTag.getInt("AgedDays") : 0;
+
+        int finalAge = Math.max(fillerAge, wrapperAge);
+
+        if (finalAge > 0) {
+            tag.putInt("AgedDays", finalAge);
+        }
+
+        boolean fermented =
+                (fillerTag != null && fillerTag.getBoolean("Fermented")) ||
+                        (wrapperTag != null && wrapperTag.getBoolean("Fermented"));
+
+        if (fermented) {
+            tag.putBoolean("Fermented", true);
+        }
+
+        boolean ruined =
+                (fillerTag != null && fillerTag.getBoolean("Ruined")) ||
+                        (wrapperTag != null && wrapperTag.getBoolean("Ruined"));
+
+        if (ruined) {
+            tag.putBoolean("Ruined", true);
+        }
 
         TobaccoProductQualityHelper.applyProductQualityToTag(
                 tag,

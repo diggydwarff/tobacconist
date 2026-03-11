@@ -109,6 +109,21 @@ public class ShishaTobaccoRecipe extends CustomRecipe {
         if (tobaccoData != null) {
             tag.put("PackedTobaccoData", tobaccoData.copy());
         }
+        // copy aging / fermentation
+        if (tobaccoData != null) {
+
+            if (tobaccoData.contains("AgedDays")) {
+                tag.putInt("AgedDays", tobaccoData.getInt("AgedDays"));
+            }
+
+            if (tobaccoData.getBoolean("Fermented")) {
+                tag.putBoolean("Fermented", true);
+            }
+
+            if (tobaccoData.getBoolean("Ruined")) {
+                tag.putBoolean("Ruined", true);
+            }
+        }
 
         TobaccoProductQualityHelper.applyProductQualityToTag(
                 tag,
