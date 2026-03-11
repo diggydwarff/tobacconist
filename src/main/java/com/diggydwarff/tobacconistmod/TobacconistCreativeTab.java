@@ -117,6 +117,7 @@ public class TobacconistCreativeTab {
                         output.accept(EMERALD_ENCRUSTED_SMOKING_PIPE.get());
                         output.accept(EMERALD_AZTEC_SMOKING_PIPE.get());
                         output.accept(NETHERITE_SMOKING_PIPE.get());
+                        output.accept(KISERU_SMOKING_PIPE.get());
 
                     }).build());
 

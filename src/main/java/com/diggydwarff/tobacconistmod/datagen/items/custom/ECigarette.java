@@ -22,39 +22,4 @@ public class ECigarette extends SmokingItem {
         super(properties);
     }
 
-    // Use the cigarette and puff some smoke!
-    @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        if(!level.isClientSide() && hand == InteractionHand.MAIN_HAND) {
-
-            ServerLevel serverLevel = (ServerLevel) level;
-            this.triggerSmokingEffectPlayer(player, serverLevel, 0);
-
-            if(player.getItemInHand(hand).getDamageValue() >= getMaxDamage(player.getItemInHand(hand))){
-                player.getItemInHand(hand).hurtAndBreak(1, player, (myPlayer -> myPlayer.broadcastBreakEvent(myPlayer.getUsedItemHand())));
-            }
-            player.getItemInHand(hand).setDamageValue(player.getItemInHand(hand).getDamageValue() + 1);
-
-        }
-
-        return super.use(level, player, hand);
-    }
-
-    @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn){
-        CompoundTag compoundtag = stack.getTag();
-
-        if(compoundtag != null){
-
-            String tobacco = compoundtag.getString("tobacco");
-
-            if(!tobacco.isEmpty()){
-                tooltip.add(Component.literal(tobacco.replace("[","").replace("]","")).withStyle(ChatFormatting.GOLD));
-            } else {
-                tooltip.add(Component.literal("Creative Tobacco").withStyle(ChatFormatting.GOLD));
-            }
-
-            super.appendHoverText(stack, worldIn, tooltip, flagIn);
-        }
-    };
 }

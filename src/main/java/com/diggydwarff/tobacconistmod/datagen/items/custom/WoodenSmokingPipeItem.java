@@ -116,7 +116,7 @@ public class WoodenSmokingPipeItem extends SmokingItem {
             return InteractionResultHolder.pass(pipe);
         }
 
-        this.triggerSmokingEffectPlayer(player, (ServerLevel) level, 0);
+        this.triggerSmokingEffectPlayer(player, (ServerLevel) level, 0, pipe);
 
         puffs--;
 

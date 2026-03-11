@@ -53,6 +53,11 @@ public class ModItems {
             ITEMS.register("netherite_smoking_pipe",
                     () -> new NetheriteSmokingPipeItem(new Item.Properties().stacksTo(1)));
 
+    public static final RegistryObject<Item> KISERU_SMOKING_PIPE =
+            ITEMS.register("kiseru_smoking_pipe",
+                    () -> new KiseruSmokingPipeItem(new Item.Properties().stacksTo(1)));
+
+
     // CHAVETA TOOLS
     public static final RegistryObject<Item> STONE_CHAVETA =
             ITEMS.register("stone_chaveta",

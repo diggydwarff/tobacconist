@@ -8,13 +8,16 @@
     - Air, sun, fire, or flue cure your tobacco!
     - Curing quality also tracked
     - Average-out leaf quality in the crafting grid to consolidate your production
-- NEW! Fermenation and aging system
+- NEW! Fermentation and aging system
     - Added tobacco barrel block
-    - Manage temperature, humiditiy, and light levels to properly ferment and age your tobacco
+    - Manage temperature, humidity, and light levels to properly ferment and age your tobacco
+    - The longer it is aged, the better the quality (up to a point)
 - NEW! Decoration and Quality of Life Features
     - Advancement system with custom tobacco-themed advancements
     - Multiple new paintings inspired by various tobacco cultural around the world
     - New Japanese Kiseru smoking pipes
+##### Changes:
+- Nicotine effect now gives slight mining and movement boosts
 ##### Fixes:
 - Update hookah item textures to look nicer
 
