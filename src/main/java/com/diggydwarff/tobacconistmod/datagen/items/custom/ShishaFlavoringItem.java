@@ -17,4 +17,14 @@ public class ShishaFlavoringItem extends Item {
         super(p_41383_);
     }
 
+    @Override
+    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
+        super.appendHoverText(stack, level, tooltip, flag);
+
+        if (stack.isDamageableItem()) {
+            int usesLeft = stack.getMaxDamage() - stack.getDamageValue();
+            tooltip.add(Component.literal("Uses Left: " + usesLeft + "/4").withStyle(ChatFormatting.GRAY));
+        }
+    }
+
 }

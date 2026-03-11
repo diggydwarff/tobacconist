@@ -62,7 +62,7 @@ public enum BottledMolassesFlavors {
     private final Item item;
 
     BottledMolassesFlavors(String name){
-        this.item = new ShishaFlavoringItem(new Item.Properties());
+        this.item = new ShishaFlavoringItem(new Item.Properties().stacksTo(1).durability(4));
     }
 
     public String getName() {

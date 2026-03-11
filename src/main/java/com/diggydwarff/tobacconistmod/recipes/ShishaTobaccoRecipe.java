@@ -136,8 +136,43 @@ public class ShishaTobaccoRecipe extends CustomRecipe {
     }
 
     @Override
+    public boolean isSpecial() {
+        return true;
+    }
+
+    @Override
     public boolean canCraftInDimensions(int width, int height) {
         return width * height >= 2;
+    }
+
+    @Override
+    public NonNullList<ItemStack> getRemainingItems(CraftingContainer craftingContainer) {
+        NonNullList<ItemStack> remains = NonNullList.withSize(craftingContainer.getContainerSize(), ItemStack.EMPTY);
+
+        for (int i = 0; i < craftingContainer.getContainerSize(); ++i) {
+            ItemStack stack = craftingContainer.getItem(i);
+
+            if (stack.isEmpty()) {
+                continue;
+            }
+
+            if (stack.getItem() instanceof ShishaFlavoringItem) {
+                ItemStack bottle = stack.copy();
+                bottle.setCount(1);
+
+                if (bottle.isDamageableItem()) {
+                    bottle.setDamageValue(bottle.getDamageValue() + 1);
+
+                    if (bottle.getDamageValue() < bottle.getMaxDamage()) {
+                        remains.set(i, bottle);
+                    } else {
+                        remains.set(i, ItemStack.EMPTY);
+                    }
+                }
+            }
+        }
+
+        return remains;
     }
 
     @Override

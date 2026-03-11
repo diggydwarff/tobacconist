@@ -16,22 +16,15 @@
     - Advancement system with custom tobacco-themed advancements
     - Multiple new paintings inspired by various tobacco cultural around the world
     - New Japanese Kiseru smoking pipes
-- NEW! Additional mod compatibility support
-    - Farmers delight additional support:
-        - Tobacco leaves cut on cutting board = rough cut tobacco
-        - Tobacco leaves may be stored in baskets
-        - Smoking pipe + meal effect
-    - Supplementaries mod support
-        - Store pipes on shelves
-        - Tobacco leaves can hang on ropes
-    - Biomes o' Plenty
-        - Add support for additional biomes
 ##### Changes:
 - Nicotine effect now gives slight mining and movement boosts
 - Active smoking item in Curios mouth slot can now be smoked by right clicking with empty hand
+- Molasses flavorings now have 4 uses instead of single use
 ##### Fixes:
 - Update hookah item textures to look nicer
 - Existing recipes and new recipes all work in JEI
+
+----------------------------------------------------------------------------
 
 ## Update 2.3.1
 ##### Fixes:
@@ -49,6 +42,8 @@
     - Ornate Amethyst Hookah
 #### Changes:
 - Base hookah is now colorless and can be dyed with any dye (including glow ink sacs)
+
+----------------------------------------------------------------------------
 
 ## Update 2.2.0
 ##### New Features:
