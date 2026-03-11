@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:block/orientable",
   "textures": {
-    "top": "tobacconistmod:block/flue_firebox/flue_firebox_top",
+    "top": "tobacconistmod:block/flue_firebox/flue_firebox_top_on",
     "side": "tobacconistmod:block/flue_firebox/flue_firebox_side",
     "front": "tobacconistmod:block/flue_firebox/flue_firebox_front_on"
   }

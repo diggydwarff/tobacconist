@@ -115,4 +115,15 @@ public final class JeiItemLists {
         );
         return stack;
     }
+
+    public static List<ItemStack> getAllDryLeaves() {
+        return List.of(
+                new ItemStack(ModItems.WILD_TOBACCO_LEAF_DRY.get()),
+                new ItemStack(ModItems.VIRGINIA_TOBACCO_LEAF_DRY.get()),
+                new ItemStack(ModItems.BURLEY_TOBACCO_LEAF_DRY.get()),
+                new ItemStack(ModItems.ORIENTAL_TOBACCO_LEAF_DRY.get()),
+                new ItemStack(ModItems.DOKHA_TOBACCO_LEAF_DRY.get()),
+                new ItemStack(ModItems.SHADE_TOBACCO_LEAF_DRY.get())
+        );
+    }
 }
