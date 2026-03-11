@@ -50,7 +50,11 @@ public class TobacconistJeiPlugin implements IModPlugin {
                 ),
                 new CigaretteRecipeCategory(guiHelper),
                 new CigarRecipeCategory(guiHelper),
-                new WoodenPipeFillRecipeCategory(guiHelper)
+                new WoodenPipeFillRecipeCategory(guiHelper),
+                new ShishaMixRecipeCategory(guiHelper),
+                new TobaccoBoxFillRecipeCategory(guiHelper),
+                new TobaccoBoxLabelRecipeCategory(guiHelper),
+                new LabelDuplicateRecipeCategory(guiHelper)
         );
     }
 
@@ -62,6 +66,11 @@ public class TobacconistJeiPlugin implements IModPlugin {
         registration.addRecipes(CigaretteRecipeCategory.TYPE, CigaretteJeiRecipe.createAll());
         registration.addRecipes(CigarRecipeCategory.TYPE, CigarJeiRecipe.createAll());
         registration.addRecipes(WoodenPipeFillRecipeCategory.TYPE, WoodenPipeFillJeiRecipe.createAll());
+
+        registration.addRecipes(ShishaMixRecipeCategory.TYPE, ShishaMixJeiRecipe.createAll());
+        registration.addRecipes(TobaccoBoxFillRecipeCategory.TYPE, TobaccoBoxFillJeiRecipe.createAll());
+        registration.addRecipes(TobaccoBoxLabelRecipeCategory.TYPE, TobaccoBoxLabelJeiRecipe.createAll());
+        registration.addRecipes(LabelDuplicateRecipeCategory.TYPE, LabelDuplicateJeiRecipe.createAll());
     }
 
     @Override
@@ -76,5 +85,10 @@ public class TobacconistJeiPlugin implements IModPlugin {
         JeiItemLists.getAllSmokingPipes().forEach(pipe ->
                 registration.addRecipeCatalyst(pipe, WoodenPipeFillRecipeCategory.TYPE)
         );
+
+        registration.addRecipeCatalyst(new ItemStack(ModItems.SHISHA_TOBACCO.get()), ShishaMixRecipeCategory.TYPE);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.TOBACCO_BOX.get()), TobaccoBoxFillRecipeCategory.TYPE);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.TOBACCO_BOX.get()), TobaccoBoxLabelRecipeCategory.TYPE);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.TOBACCO_LABEL.get()), LabelDuplicateRecipeCategory.TYPE);
     }
 }

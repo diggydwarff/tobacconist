@@ -2,7 +2,6 @@ package com.diggydwarff.tobacconistmod.compat.jei;
 
 import com.diggydwarff.tobacconistmod.TobacconistMod;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
-import com.diggydwarff.tobacconistmod.recipes.WoodenPipeRecipe;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
@@ -17,29 +16,29 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
-public class WoodenPipeFillRecipeCategory implements IRecipeCategory<WoodenPipeFillJeiRecipe> {
+public class LabelDuplicateRecipeCategory implements IRecipeCategory<LabelDuplicateJeiRecipe> {
 
-    public static final RecipeType<WoodenPipeFillJeiRecipe> TYPE =
-            new RecipeType<>(new ResourceLocation(TobacconistMod.MODID, "wooden_pipe_fill"), WoodenPipeFillJeiRecipe.class);
+    public static final RecipeType<LabelDuplicateJeiRecipe> TYPE =
+            new RecipeType<>(new ResourceLocation(TobacconistMod.MODID, "label_duplicate"), LabelDuplicateJeiRecipe.class);
 
     private final IDrawable background;
     private final IDrawable icon;
     private final IDrawable slot;
 
-    public WoodenPipeFillRecipeCategory(IGuiHelper guiHelper) {
-        this.background = guiHelper.createBlankDrawable(116, 60);
-        this.icon = guiHelper.createDrawableItemStack(makeWoodPipe("minecraft:birch_planks"));
+    public LabelDuplicateRecipeCategory(IGuiHelper guiHelper) {
+        this.background = guiHelper.createBlankDrawable(120, 58);
+        this.icon = guiHelper.createDrawableItemStack(new ItemStack(ModItems.TOBACCO_LABEL.get()));
         this.slot = guiHelper.getSlotDrawable();
     }
 
     @Override
-    public RecipeType<WoodenPipeFillJeiRecipe> getRecipeType() {
+    public RecipeType<LabelDuplicateJeiRecipe> getRecipeType() {
         return TYPE;
     }
 
     @Override
     public Component getTitle() {
-        return Component.literal("Fill Wooden Pipe");
+        return Component.literal("Label Duplication");
     }
 
     @Override
@@ -53,19 +52,19 @@ public class WoodenPipeFillRecipeCategory implements IRecipeCategory<WoodenPipeF
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, WoodenPipeFillJeiRecipe recipe, IFocusGroup focuses) {
+    public void setRecipe(IRecipeLayoutBuilder builder, LabelDuplicateJeiRecipe recipe, IFocusGroup focuses) {
         builder.addSlot(RecipeIngredientRole.INPUT, 10, 20)
-                .addItemStacks(recipe.tobaccos());
+                .addItemStack(recipe.namedLabel());
 
         builder.addSlot(RecipeIngredientRole.INPUT, 32, 20)
-                .addItemStacks(recipe.emptyPipes());
+                .addItemStack(recipe.blankLabel());
 
         builder.addSlot(RecipeIngredientRole.OUTPUT, 86, 20)
-                .addItemStacks(recipe.filledPipes());
+                .addItemStack(recipe.output());
     }
 
     @Override
-    public void draw(WoodenPipeFillJeiRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics,
+    public void draw(LabelDuplicateJeiRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics,
                      double mouseX, double mouseY) {
         Minecraft mc = Minecraft.getInstance();
 
@@ -73,23 +72,6 @@ public class WoodenPipeFillRecipeCategory implements IRecipeCategory<WoodenPipeF
         slot.draw(guiGraphics, 31, 19);
         slot.draw(guiGraphics, 85, 19);
 
-        guiGraphics.drawString(mc.font,
-                Component.literal("Tobacco + pipe"),
-                4, 4, 0x404040, false);
-
-        guiGraphics.drawString(mc.font,
-                Component.literal("Offhand use"),
-                4, 44, 0x808080, false);
-    }
-
-    private static ItemStack makeWoodPipe(String plankId) {
-        ItemStack pipe = new ItemStack(ModItems.WOODEN_SMOKING_PIPE.get());
-
-        pipe.getOrCreateTag().putString(
-                WoodenPipeRecipe.NBT_WOOD_PLANK,
-                plankId
-        );
-
-        return pipe;
+        guiGraphics.drawString(mc.font, "Named label + blank label", 4, 4, 0x404040, false);
     }
 }
