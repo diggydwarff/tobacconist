@@ -1,0 +1,20 @@
+{
+  "name": "Finished Products",
+  "icon": "tobacconistmod:cigarette",
+  "category": "tobacconistmod:crafting",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Once tobacco has been grown, cured, and processed, it can be turned into a wide range of finished smoking products. Each one emphasizes different parts of the craft and may favor different leaf styles."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Pipes often work well with ribbon, rough, or flake cuts and reward slower-burning blends. Cigarettes usually favor more refined and consistent cuts. Cigars rely heavily on structure, with wrapper, binder, and filler all playing distinct roles. Hookah mixtures commonly depend on flavored molasses and properly prepared tobacco."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "No single leaf or curing method is best for every product. A strong cigar filler and a bright cigarette blend should not feel identical. The point of the full tobacco system is that preparation choices matter."
+    }
+  ]
+}

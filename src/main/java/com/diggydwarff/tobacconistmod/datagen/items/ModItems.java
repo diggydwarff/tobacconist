@@ -14,6 +14,11 @@ import net.minecraftforge.registries.RegistryObject;
 public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, TobacconistMod.MODID);
 
+    // Tobacco Guide Item
+    public static final RegistryObject<Item> TOBACCO_GUIDE =
+            ITEMS.register("tobacco_guide",
+                    () -> new Item(new Item.Properties().stacksTo(1)));
+
     // PIPE ITEMS
     public static final RegistryObject<Item> WOODEN_SMOKING_PIPE = ITEMS.register("wooden_smoking_pipe", () -> new WoodenSmokingPipeItem(new Item.Properties().stacksTo(1)));
 

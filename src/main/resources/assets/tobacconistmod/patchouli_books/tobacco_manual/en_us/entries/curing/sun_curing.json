@@ -1,0 +1,24 @@
+{
+  "name": "Sun Curing",
+  "icon": "tobacconistmod:sun_cured_tobacco_leaf",
+  "category": "tobacconistmod:curing",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Sun curing relies on natural sunlight rather than indoor shelter. Leaves are exposed to direct sun over time and dry in a brighter, more exposed environment. This method is especially associated with smaller-leaf and aromatic tobaccos."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "In practice, sun curing requires access to sufficient sunlight for the proper portion of the curing period. Consistent exposure matters. Tobacco that only catches brief or partial sun may cure unevenly or produce weaker results than a leaf that spends its curing life fully exposed."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Sun-cured leaf is often lighter, more aromatic, and suitable for blends that value fragrance and character over sheer body. If a curing system tracks exposure quality, strong and consistent sunlight should matter more than a last-minute burst of light."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Use sun curing when you want a more delicate or aromatic leaf profile. It rewards good outdoor conditions and punishes inconsistency more than simpler methods do."
+    }
+  ]
+}

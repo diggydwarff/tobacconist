@@ -1,0 +1,10 @@
+{
+  "name": "The Tobacconist's Manual",
+  "landing_text": "This manual covers the full tobacconist's craft: growing tobacco, curing leaves, fermenting and aging them, cutting them for use, and crafting finished smoking products.$(br2)Good tobacco is not made in one step. It is grown well, cured correctly, handled carefully, and processed with skill.",
+  "version": 1,
+  "subtitle": "Growing, Curing, Aging, and Crafting",
+  "creative_tab": "tobacconistmod:tobacconist_tab",
+  "model": "patchouli:book_green",
+  "show_progress": false,
+  "use_resource_pack": true
+}

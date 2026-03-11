@@ -114,13 +114,15 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
     maven { url = "https://maven.theillusivec4.top/" } // Curios
-    maven {
-        url "https://modmaven.dev"
-    }
+    maven { url 'https://maven.blamejared.com' } // Patchouli
+    maven { url "https://modmaven.dev" } // JEI
 }
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+
+    // Patchouli
+    implementation fg.deobf("vazkii.patchouli:Patchouli:1.20.1-84-FORGE")
 
     // Curios compat API
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:5.9.1+1.20.1:api")

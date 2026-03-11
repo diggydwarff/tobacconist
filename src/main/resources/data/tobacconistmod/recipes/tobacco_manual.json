@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " T ",
+    " B ",
+    "   "
+  ],
+  "key": {
+    "T": {
+      "item": "tobacconistmod:wooden_smoking_pipe"
+    },
+    "B": {
+      "item": "minecraft:book"
+    }
+  },
+  "result": {
+    "item": "patchouli:guide_book",
+    "nbt": "{patchouli:book:\"tobacconistmod:tobacco_manual\"}"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "Air Curing",
+  "icon": "tobacconistmod:air_cured_tobacco_leaf",
+  "category": "tobacconistmod:curing",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Air curing is one of the oldest and most traditional methods of preparing tobacco. Fresh leaves are hung in a sheltered, ventilated place and allowed to dry slowly over time. This method is associated with gentler drying and a more natural leaf character."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "In this mod, air curing generally means placing tobacco leaves on a drying rack in normal sheltered conditions, away from strong direct heat and away from constant open sunlight. The process favors patience over speed."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Air-cured leaf usually develops a subdued aroma and a less sugary character than some heated methods. It is often suitable for pipe blends, cigar filler, and more traditional tobacco preparation. If interrupted too often or handled poorly, it may produce lower-quality leaf."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Air curing is usually the safest baseline method. It may not always be the fastest route, but it is dependable, realistic, and useful for many downstream recipes."
+    }
+  ]
+}

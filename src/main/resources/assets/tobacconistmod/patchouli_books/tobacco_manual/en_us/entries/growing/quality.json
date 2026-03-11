@@ -1,0 +1,20 @@
+{
+  "name": "Leaf Quality",
+  "icon": "tobacconistmod:burley_tobacco_leaf",
+  "category": "tobacconistmod:growing",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Leaf quality is the foundation of the entire tobacco system. A high-quality leaf responds better to curing, ages more gracefully, and produces better finished products. Low-quality leaf can still be used, but the result is often harsher and less rewarding."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Quality can be influenced by the environment in which the crop is grown. Variety preference, biome, light, and other growth conditions may all matter depending on the systems enabled in the mod."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Think of quality as cumulative. Good growth, good curing, and good handling work together. Sloppy work early in the process limits what later steps can achieve."
+    }
+  ]
+}

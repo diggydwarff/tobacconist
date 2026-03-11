@@ -1,0 +1,24 @@
+{
+  "name": "Barrel Basics",
+  "icon": "tobacconistmod:tobacco_barrel",
+  "category": "tobacconistmod:fermenting",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Once tobacco has been cured, it can be improved further through fermentation and aging. In this stage, the leaf is no longer fresh, but it is still changing. Harsh compounds can soften, aromas can deepen, and the tobacco can become rounder and more finished."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Your tobacco barrel represents a controlled environment for storing leaf after curing. Depending on the system you have built, the barrel may track temperature, humidity, time, and tobacco quantity. These factors determine whether the leaf simply rests, ages gently, or actively ferments."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Fermentation is not the same as curing. Curing removes moisture and transforms fresh leaf into usable tobacco. Fermentation happens afterward and refines what was already cured. Poorly cured tobacco usually remains poor, even after long storage."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Barrels reward patience and consistency. Moderate, stable conditions are usually better than extremes. Too much heat or humidity may damage the leaf, while too little may prevent meaningful progress."
+    }
+  ]
+}

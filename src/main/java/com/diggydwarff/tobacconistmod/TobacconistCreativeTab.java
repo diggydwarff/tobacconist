@@ -8,13 +8,17 @@ import com.diggydwarff.tobacconistmod.util.PaintingTabHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Comparator;
@@ -37,6 +41,12 @@ public class TobacconistCreativeTab {
                         output.accept(CIGARETTE.get());
                         output.accept(HOOKAH_HOSE.get());
                         output.accept(SHISHA_TOBACCO.get());
+
+                        // Make guide book if patchouli present
+                        ItemStack guide = makeGuideBook();
+                        if (!guide.isEmpty()) {
+                            output.accept(guide);
+                        }
 
                         output.accept(TOBACCO_BOX.get());
                         output.accept(TOBACCO_LABEL.get());
@@ -181,5 +191,25 @@ public class TobacconistCreativeTab {
                 BuiltInRegistries.ITEM.getKey(plankItem).toString()
         );
         return pipe;
+    }
+
+    private static ItemStack makeGuideBook() {
+
+        if (!ModList.get().isLoaded("patchouli")) {
+            return ItemStack.EMPTY;
+        }
+
+        Item patchouliBook = ForgeRegistries.ITEMS.getValue(
+                new ResourceLocation("patchouli", "guide_book")
+        );
+
+        if (patchouliBook == null) {
+            return ItemStack.EMPTY;
+        }
+
+        ItemStack book = new ItemStack(patchouliBook);
+        book.getOrCreateTag().putString("patchouli:book", "tobacconistmod:tobacco_manual");
+
+        return book;
     }
 }

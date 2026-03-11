@@ -16,6 +16,7 @@
     - Advancement system with custom tobacco-themed advancements
     - Multiple new paintings inspired by various tobacco cultural around the world
     - New Japanese Kiseru smoking pipes
+    - Added support for Patchouli for a guide book for some basic information
 ##### Changes:
 - Nicotine effect now gives slight mining and movement boosts
 - Active smoking item in Curios mouth slot can now be smoked by right clicking with empty hand
