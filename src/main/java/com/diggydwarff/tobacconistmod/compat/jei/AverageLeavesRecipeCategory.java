@@ -24,7 +24,7 @@ public class AverageLeavesRecipeCategory implements IRecipeCategory<AverageLeave
     private final IDrawable slot;
 
     public AverageLeavesRecipeCategory(IGuiHelper guiHelper, IDrawable icon) {
-        this.background = guiHelper.createBlankDrawable(116, 60);
+        this.background = guiHelper.createBlankDrawable(116, 72);
         this.icon = icon;
         this.slot = guiHelper.getSlotDrawable();
     }
@@ -51,13 +51,13 @@ public class AverageLeavesRecipeCategory implements IRecipeCategory<AverageLeave
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, AverageLeavesJeiRecipe recipe, IFocusGroup focuses) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 10, 20)
+        builder.addSlot(RecipeIngredientRole.INPUT, 10, 30)
                 .addItemStack(recipe.inputA());
 
-        builder.addSlot(RecipeIngredientRole.INPUT, 32, 20)
+        builder.addSlot(RecipeIngredientRole.INPUT, 32, 30)
                 .addItemStack(recipe.inputB());
 
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 86, 20)
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 86, 30)
                 .addItemStack(recipe.output());
     }
 
@@ -66,20 +66,20 @@ public class AverageLeavesRecipeCategory implements IRecipeCategory<AverageLeave
                      double mouseX, double mouseY) {
         Minecraft mc = Minecraft.getInstance();
 
-        slot.draw(guiGraphics, 9, 19);
-        slot.draw(guiGraphics, 31, 19);
-        slot.draw(guiGraphics, 85, 19);
+        slot.draw(guiGraphics, 9, 29);
+        slot.draw(guiGraphics, 31, 29);
+        slot.draw(guiGraphics, 85, 29);
 
         guiGraphics.drawString(mc.font,
-                Component.literal("Combine 2 matching leaves"),
+                Component.literal("Match 2 leaves"),
                 4, 4, 0x404040, false);
 
         guiGraphics.drawString(mc.font,
-                Component.literal("into 1 averaged leaf"),
+                Component.literal("Average quality"),
                 4, 14, 0x404040, false);
 
         guiGraphics.drawString(mc.font,
-                Component.literal("Example: 40 + 80 -> 60"),
-                4, 46, 0x808080, false);
+                Component.literal("Ex: 40 + 80 -> 60"),
+                4, 56, 0x808080, false);
     }
 }

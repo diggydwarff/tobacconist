@@ -48,7 +48,8 @@ public class TobacconistJeiPlugin implements IModPlugin {
                         guiHelper,
                         guiHelper.createDrawableItemStack(new ItemStack(ModItems.VIRGINIA_TOBACCO_LEAF_DRY.get()))
                 ),
-                new WoodenPipeRecipeCategory(guiHelper)
+                new CigaretteRecipeCategory(guiHelper),
+                new CigarRecipeCategory(guiHelper)
         );
     }
 
@@ -56,7 +57,9 @@ public class TobacconistJeiPlugin implements IModPlugin {
     public void registerRecipes(IRecipeRegistration registration) {
         registration.addRecipes(LeafCuttingRecipeCategory.TYPE, LeafCuttingJeiRecipe.createAll());
         registration.addRecipes(AverageLeavesRecipeCategory.TYPE, AverageLeavesJeiRecipe.createAll());
-        registration.addRecipes(WoodenPipeRecipeCategory.TYPE, WoodenPipeJeiRecipe.createAll());
+        registration.addRecipes(mezz.jei.api.constants.RecipeTypes.CRAFTING, WoodenPipeJeiRecipe.createAll());
+        registration.addRecipes(CigaretteRecipeCategory.TYPE, CigaretteJeiRecipe.createAll());
+        registration.addRecipes(CigarRecipeCategory.TYPE, CigarJeiRecipe.createAll());
     }
 
     @Override
