@@ -2,16 +2,24 @@ package com.diggydwarff.tobacconistmod;
 
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
+import com.diggydwarff.tobacconistmod.datagen.items.custom.ShishaFlavoringItem;
+import com.diggydwarff.tobacconistmod.recipes.WoodenPipeRecipe;
 import com.diggydwarff.tobacconistmod.util.PaintingTabHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
+
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.StreamSupport;
 
 import static com.diggydwarff.tobacconistmod.datagen.items.ModItems.*;
 
@@ -32,8 +40,6 @@ public class TobacconistCreativeTab {
 
                         output.accept(TOBACCO_BOX.get());
                         output.accept(TOBACCO_LABEL.get());
-
-                        output.accept(BOTTLED_MOLASSES_PLAIN.get());
 
                         output.accept(creativeLeaf(new ItemStack(WILD_TOBACCO_LEAF.get()), false));
                         output.accept(creativeLeaf(new ItemStack(VIRGINIA_TOBACCO_LEAF.get()), false));
@@ -95,7 +101,28 @@ public class TobacconistCreativeTab {
                         output.accept(DIAMOND_CHAVETA.get());
                         output.accept(NETHERITE_CHAVETA.get());
 
-                        // Add custom paintings as selection options
+                        output.accept(makePipe(Items.OAK_PLANKS));
+                        output.accept(makePipe(Items.SPRUCE_PLANKS));
+                        output.accept(makePipe(Items.BIRCH_PLANKS));
+                        output.accept(makePipe(Items.JUNGLE_PLANKS));
+                        output.accept(makePipe(Items.ACACIA_PLANKS));
+                        output.accept(makePipe(Items.DARK_OAK_PLANKS));
+                        output.accept(makePipe(Items.MANGROVE_PLANKS));
+                        output.accept(makePipe(Items.CHERRY_PLANKS));
+                        output.accept(makePipe(Items.BAMBOO_PLANKS));
+                        output.accept(makePipe(Items.CRIMSON_PLANKS));
+                        output.accept(makePipe(Items.WARPED_PLANKS));
+                        output.accept(GOLD_SMOKING_PIPE.get());
+                        output.accept(IRON_SMOKING_PIPE.get());
+                        output.accept(COPPER_SMOKING_PIPE.get());
+                        output.accept(GEM_ENCRUSTED_SMOKING_PIPE.get());
+                        output.accept(DIAMOND_ENCRUSTED_SMOKING_PIPE.get());
+                        output.accept(LAPIS_ENCRUSTED_SMOKING_PIPE.get());
+                        output.accept(EMERALD_ENCRUSTED_SMOKING_PIPE.get());
+                        output.accept(EMERALD_AZTEC_SMOKING_PIPE.get());
+                        output.accept(NETHERITE_SMOKING_PIPE.get());
+                        output.accept(KISERU_SMOKING_PIPE.get());
+
                         output.accept(PaintingTabHelper.paintingVariant("american_tobacco_fields_small"));
                         output.accept(PaintingTabHelper.paintingVariant("camel_american_cigarette"));
                         output.accept(PaintingTabHelper.paintingVariant("american_lone_cowboy"));
@@ -112,16 +139,8 @@ public class TobacconistCreativeTab {
                         output.accept(PaintingTabHelper.paintingVariant("havana_cigar"));
                         output.accept(PaintingTabHelper.paintingVariant("andean_mapacho"));
 
-                        output.accept(GOLD_SMOKING_PIPE.get());
-                        output.accept(IRON_SMOKING_PIPE.get());
-                        output.accept(COPPER_SMOKING_PIPE.get());
-                        output.accept(GEM_ENCRUSTED_SMOKING_PIPE.get());
-                        output.accept(DIAMOND_ENCRUSTED_SMOKING_PIPE.get());
-                        output.accept(LAPIS_ENCRUSTED_SMOKING_PIPE.get());
-                        output.accept(EMERALD_ENCRUSTED_SMOKING_PIPE.get());
-                        output.accept(EMERALD_AZTEC_SMOKING_PIPE.get());
-                        output.accept(NETHERITE_SMOKING_PIPE.get());
-                        output.accept(KISERU_SMOKING_PIPE.get());
+                        output.accept(BOTTLED_MOLASSES_PLAIN.get());
+                        addAllMolassesFlavorings(output);
 
                     }).build());
 
@@ -140,5 +159,27 @@ public class TobacconistCreativeTab {
         output.accept(TobaccoCuringHelper.makeCreativeLoose(base, TobaccoCuringHelper.CUT_SHAG));
         output.accept(TobaccoCuringHelper.makeCreativeLoose(base, TobaccoCuringHelper.CUT_ROUGH));
         output.accept(TobaccoCuringHelper.makeCreativeLoose(base, TobaccoCuringHelper.CUT_FLAKE));
+    }
+
+    private static void addAllMolassesFlavorings(CreativeModeTab.Output output) {
+        List<Item> flavorings = StreamSupport.stream(BuiltInRegistries.ITEM.spliterator(), false)
+                .filter(item -> item instanceof ShishaFlavoringItem)
+                .sorted(Comparator.comparing(item ->
+                        BuiltInRegistries.ITEM.getKey(item).toString()
+                ))
+                .toList();
+
+        for (Item item : flavorings) {
+            output.accept(item);
+        }
+    }
+
+    private static ItemStack makePipe(Item plankItem) {
+        ItemStack pipe = new ItemStack(ModItems.WOODEN_SMOKING_PIPE.get());
+        pipe.getOrCreateTag().putString(
+                WoodenPipeRecipe.NBT_WOOD_PLANK,
+                BuiltInRegistries.ITEM.getKey(plankItem).toString()
+        );
+        return pipe;
     }
 }
