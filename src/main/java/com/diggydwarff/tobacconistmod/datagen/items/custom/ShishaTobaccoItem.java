@@ -2,6 +2,7 @@ package com.diggydwarff.tobacconistmod.datagen.items.custom;
 
 import com.diggydwarff.tobacconistmod.datagen.items.SmokingProduct;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
+import com.diggydwarff.tobacconistmod.util.TobaccoLabelHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoProductQualityHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
@@ -31,6 +32,11 @@ public class ShishaTobaccoItem extends SmokingProduct {
             String shishaFlavor1 = tag.getString("flavor1");
             String shishaFlavor2 = tag.getString("flavor2");
             String shishaFlavor3 = tag.getString("flavor3");
+
+            String productLabel = com.diggydwarff.tobacconistmod.util.TobaccoLabelHelper.getProductLabel(stack);
+            if (!productLabel.isEmpty()) {
+                tooltip.add(Component.literal("Label: " + productLabel).withStyle(ChatFormatting.YELLOW));
+            }
 
             if (!tobacco.isEmpty()) {
                 tooltip.add(Component.literal(tobacco.replace("[", "").replace("]", "")).withStyle(ChatFormatting.GOLD));
@@ -64,5 +70,14 @@ public class ShishaTobaccoItem extends SmokingProduct {
         }
 
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
+    }
+
+    @Override
+    public Component getName(ItemStack stack) {
+        String label = TobaccoLabelHelper.getProductLabel(stack);
+        if (!label.isEmpty()) {
+            return TobaccoLabelHelper.buildNamedProduct(label, "Shisha Tobacco");
+        }
+        return super.getName(stack);
     }
 }

@@ -190,6 +190,13 @@ public class ModItems {
                             new Item.Properties(),
                             ShadeCropBlock.HALF
                     ));
+
+    public static final RegistryObject<Item> TOBACCO_BOX =
+            ITEMS.register("tobacco_box", () -> new TobaccoBoxItem(new Item.Properties().stacksTo(1)));
+
+    public static final RegistryObject<Item> TOBACCO_LABEL =
+            ITEMS.register("tobacco_label", () -> new LabelItem(new Item.Properties()));
+
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
     }

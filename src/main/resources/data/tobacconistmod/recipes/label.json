@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:shaped",
+  "pattern": [
+    " P",
+    "P "
+  ],
+  "key": {
+    "P": { "item": "minecraft:paper" }
+  },
+  "result": {
+    "item": "tobacconistmod:label",
+    "count": 2
+  }
+}

@@ -1,6 +1,7 @@
 package com.diggydwarff.tobacconistmod.datagen.items.custom;
 
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
+import com.diggydwarff.tobacconistmod.util.TobaccoLabelHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -32,8 +33,16 @@ public class LooseTobaccoItem extends Item {
 
     @Override
     public Component getName(ItemStack stack) {
-        Component baseName = super.getName(stack);
         CompoundTag tag = stack.getTag();
+        String label = TobaccoLabelHelper.getProductLabel(stack);
+
+        Component baseName;
+        if (!label.isEmpty()) {
+            baseName = TobaccoLabelHelper.buildNamedProduct(label, "Loose Tobacco");
+        } else {
+            baseName = super.getName(stack);
+        }
+
         if (tag == null) {
             return baseName;
         }
@@ -50,6 +59,11 @@ public class LooseTobaccoItem extends Item {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, level, tooltip, flag);
+
+        String productLabel = com.diggydwarff.tobacconistmod.util.TobaccoLabelHelper.getProductLabel(stack);
+        if (!productLabel.isEmpty()) {
+            tooltip.add(Component.literal("Label: " + productLabel).withStyle(ChatFormatting.YELLOW));
+        }
 
         int quality = TobaccoCuringHelper.getQuality(stack);
         if (quality > 0) {
@@ -75,7 +89,7 @@ public class LooseTobaccoItem extends Item {
         CompoundTag tag = stack.getTag();
         if (tag != null) {
             if (tag.getBoolean("Fermented")) {
-                tooltip.add(Component.literal("Fermented").withStyle(ChatFormatting.DARK_GREEN));
+                tooltip.add(Component.literal("Fermented").withStyle(ChatFormatting.GOLD));
             }
 
             int aged = tag.getInt("AgedStages");

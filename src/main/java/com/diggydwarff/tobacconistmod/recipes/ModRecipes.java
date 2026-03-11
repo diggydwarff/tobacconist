@@ -30,6 +30,15 @@ public class ModRecipes {
             SERIALIZERS.register("loose_tobacco_cutting",
                     () -> new SimpleCraftingRecipeSerializer<>(LooseTobaccoCuttingRecipe::new));
 
+    public static final RegistryObject<RecipeSerializer<TobaccoBoxFillRecipe>> TOBACCO_BOX_FILL_RECIPE_SERIALIZER =
+            SERIALIZERS.register("crafting_special_tobacco_box_fill", () -> TobaccoBoxFillRecipe.Serializer.INSTANCE);
+
+    public static final RegistryObject<RecipeSerializer<TobaccoBoxLabelRecipe>> TOBACCO_BOX_LABEL_RECIPE_SERIALIZER =
+            SERIALIZERS.register("crafting_special_tobacco_box_label", () -> TobaccoBoxLabelRecipe.Serializer.INSTANCE);
+
+    public static final RegistryObject<RecipeSerializer<LabelDuplicateRecipe>> LABEL_DUPLICATE_RECIPE_SERIALIZER =
+            SERIALIZERS.register("crafting_special_label_duplicate", () -> LabelDuplicateRecipe.Serializer.INSTANCE);
+
     public static void register(IEventBus eventBus) {
         SERIALIZERS.register(eventBus);
     }

@@ -2,6 +2,7 @@ package com.diggydwarff.tobacconistmod.datagen.items.custom;
 
 import com.diggydwarff.tobacconistmod.datagen.items.SmokingItem;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
+import com.diggydwarff.tobacconistmod.util.TobaccoLabelHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoProductQualityHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
@@ -43,6 +44,15 @@ public class CigaretteItem extends SmokingItem {
     }
 
     @Override
+    public Component getName(ItemStack stack) {
+        String label = TobaccoLabelHelper.getProductLabel(stack);
+        if (!label.isEmpty()) {
+            return TobaccoLabelHelper.buildNamedProduct(label, "Cigarette");
+        }
+        return super.getName(stack);
+    }
+
+    @Override
     public boolean shouldEmitMouthSmoke(ItemStack stack) {
         return stack.getDamageValue() > 0 && stack.getDamageValue() < stack.getMaxDamage();
     }
@@ -53,6 +63,11 @@ public class CigaretteItem extends SmokingItem {
 
         if (tag != null) {
             String tobacco = tag.getString("tobacco");
+
+            String productLabel = com.diggydwarff.tobacconistmod.util.TobaccoLabelHelper.getProductLabel(stack);
+            if (!productLabel.isEmpty()) {
+                tooltip.add(Component.literal("Label: " + productLabel).withStyle(ChatFormatting.YELLOW));
+            }
 
             if (!tobacco.isEmpty()) {
                 tooltip.add(Component.literal(tobacco.replace("[", "").replace("]", "")).withStyle(ChatFormatting.GOLD));

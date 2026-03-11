@@ -29,6 +29,9 @@ public class TobacconistCreativeTab {
                         output.accept(HOOKAH_HOSE.get());
                         output.accept(SHISHA_TOBACCO.get());
 
+                        output.accept(TOBACCO_BOX.get());
+                        output.accept(TOBACCO_LABEL.get());
+
                         output.accept(BOTTLED_MOLASSES_PLAIN.get());
 
                         output.accept(WILD_TOBACCO_LEAF.get());
