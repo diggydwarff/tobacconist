@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "tobacconistmod:bottled_molasses_plain"
+    },
+    {
+      "item": "minecraft:pumpkin"
+    }
+  ],
+  "result": {
+    "item": "tobacconistmod:bottled_molasses_pumpkin_flavor",
+    "count": 1
+  }
+}

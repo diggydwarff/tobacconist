@@ -25,11 +25,15 @@ public enum BottledMolassesFlavors {
     BOTTLED_MOLASSES_BERRY_FLAVOR("[Bottle of Molasses (Berry Flavored)]"),
     BOTTLED_MOLASSES_CHORUS_FRUIT_FLAVOR("[Bottle of Molasses (Chorus Fruit Flavored)]"),
 
+    // OTHER VANILLA FLAVORS
     BOTTLED_MOLASSES_HONEY_FLAVOR("[Bottle of Molasses (Honey Flavored)]"),
     BOTTLED_MOLASSES_CAKE_FLAVOR("[Bottle of Molasses (Cake Flavored)]"),
     BOTTLED_MOLASSES_COOKIES_FLAVOR("[Bottle of Molasses (Cookies Flavored)]"),
     BOTTLED_MOLASSES_CREAM_FLAVOR("[Bottle of Molasses (Cream Flavored)]"),
     BOTTLED_MOLASSES_COCOA_FLAVOR("[Bottle of Molasses (Cocoa Flavored)]"),
+    BOTTLED_MOLASSES_PUMPKIN_FLAVOR("[Bottle of Molasses (Pumpkin Flavored)]"),
+    BOTTLED_MOLASSES_SUGAR_FLAVOR("[Bottle of Molasses (Sugar Flavored)]"),
+    BOTTLED_MOLASSES_CARROT_FLAVOR("[Bottle of Molasses (Carrot Flavored)]"),
 
     // FARMERS DELIGHT FLAVORS
     BOTTLED_MOLASSES_APPLEPIE_FLAVOR("[Bottle of Molasses (Apple Pie Flavored)]"),
