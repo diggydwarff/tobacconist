@@ -9,7 +9,7 @@
     "P": { "item": "minecraft:paper" }
   },
   "result": {
-    "item": "tobacconistmod:label",
+    "item": "tobacconistmod:tobacco_label",
     "count": 2
   }
 }

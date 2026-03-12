@@ -93,8 +93,8 @@ public class AverageTobaccoLeavesRecipe extends CustomRecipe {
         String cureType = "";
         String cutType = "";
 
-        int totalCount = 0;
-        int weightedQuality = 0;
+        int usedItems = 0;
+        int totalQuality = 0;
 
         for (int i = 0; i < container.getContainerSize(); i++) {
             ItemStack stack = container.getItem(i);
@@ -113,32 +113,41 @@ public class AverageTobaccoLeavesRecipe extends CustomRecipe {
                 }
             }
 
-            int count = stack.getCount();
             int quality = getStackQuality(stack, mode);
-
-            totalCount += count;
-            weightedQuality += quality * count;
+            usedItems++;
+            totalQuality += quality;
         }
 
-        if (first.isEmpty() || mode == null || totalCount <= 0) {
+        if (first.isEmpty() || mode == null || usedItems <= 0) {
             return ItemStack.EMPTY;
         }
 
-        int avgQuality = Math.round((float) weightedQuality / totalCount);
+        int avgQuality = Math.round((float) totalQuality / usedItems);
 
-        ItemStack result = new ItemStack(first.getItem(), totalCount);
+        ItemStack result = new ItemStack(first.getItem(), usedItems);
 
         if (mode == Mode.RAW_LEAF) {
             TobaccoGrowthHelper.applyGrowthQuality(result, avgQuality);
         } else {
             TobaccoCuringHelper.copyTobaccoProcessingData(first, result);
-            result.getOrCreateTag().putInt(TobaccoCuringHelper.TAG_QUALITY, TobaccoCuringHelper.clampQuality(avgQuality));
-            result.getOrCreateTag().putString(TobaccoCuringHelper.TAG_QUALITY_TIER,
-                    TobaccoCuringHelper.getQualityTierId(avgQuality));
-            result.getOrCreateTag().putString(TobaccoCuringHelper.TAG_CURE_TYPE, cureType);
+            result.getOrCreateTag().putInt(
+                    TobaccoCuringHelper.TAG_QUALITY,
+                    TobaccoCuringHelper.clampQuality(avgQuality)
+            );
+            result.getOrCreateTag().putString(
+                    TobaccoCuringHelper.TAG_QUALITY_TIER,
+                    TobaccoCuringHelper.getQualityTierId(avgQuality)
+            );
+            result.getOrCreateTag().putString(
+                    TobaccoCuringHelper.TAG_CURE_TYPE,
+                    cureType
+            );
 
             if (mode == Mode.LOOSE) {
-                result.getOrCreateTag().putString(TobaccoCuringHelper.TAG_CUT_TYPE, cutType);
+                result.getOrCreateTag().putString(
+                        TobaccoCuringHelper.TAG_CUT_TYPE,
+                        cutType
+                );
             }
         }
 
