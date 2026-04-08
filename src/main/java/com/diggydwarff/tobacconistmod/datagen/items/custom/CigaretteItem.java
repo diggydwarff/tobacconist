@@ -17,6 +17,9 @@ import net.minecraft.world.level.Level;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import static com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper.TAG_GROWTH_QUALITY;
+import static com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper.TAG_QUALITY;
+
 public class CigaretteItem extends SmokingItem {
 
     public CigaretteItem(Properties properties) {
@@ -84,19 +87,17 @@ public class CigaretteItem extends SmokingItem {
                         .withStyle(ChatFormatting.GRAY));
             }
 
-            String cutType = tag.getString(TobaccoProductQualityHelper.TAG_INPUT_CUT_TYPE);
-            if (cutType.isEmpty()) {
-                cutType = tag.getString(TobaccoCuringHelper.TAG_CUT_TYPE);
-            }
+            ItemStack temp = new ItemStack(stack.getItem());
+            temp.setTag(tag.copy());
+            TobaccoCuringHelper.ensureDefaultTobaccoData(temp);
+
+            String cutType = TobaccoCuringHelper.getCutType(temp);
             if (!cutType.isEmpty()) {
                 tooltip.add(Component.literal("Cut: " + TobaccoCuringHelper.getCutDisplayName(cutType))
                         .withStyle(ChatFormatting.GRAY));
             }
 
-            String cureType = tag.getString(TobaccoProductQualityHelper.TAG_INPUT_CURE_TYPE);
-            if (cureType.isEmpty()) {
-                cureType = tag.getString(TobaccoCuringHelper.TAG_CURE_TYPE);
-            }
+            String cureType = TobaccoCuringHelper.getCureType(temp);
             if (!cureType.isEmpty()) {
                 tooltip.add(Component.literal("Cure: " + TobaccoCuringHelper.getCureDisplayName(cureType))
                         .withStyle(ChatFormatting.GRAY));
@@ -123,24 +124,34 @@ public class CigaretteItem extends SmokingItem {
         }
 
         CompoundTag packed = TobaccoTooltipHelper.getPackedTobaccoData(stack);
-        if (packed != null && packed.contains(TobaccoCuringHelper.TAG_QUALITY)) {
-            return Math.max(1, Math.round(packed.getInt(TobaccoCuringHelper.TAG_QUALITY) / 10.0f));
+        if (packed != null) {
+            int quality = packed.contains(TAG_QUALITY)
+                    ? packed.getInt(TAG_QUALITY)
+                    : packed.contains(TAG_GROWTH_QUALITY)
+                    ? packed.getInt(TAG_GROWTH_QUALITY)
+                    : 60;
+
+            return Math.max(1, Math.round(quality / 10.0f));
         }
 
         CompoundTag tag = stack.getTag();
-        if (tag != null && tag.contains(TobaccoCuringHelper.TAG_QUALITY)) {
-            return Math.max(1, Math.round(tag.getInt(TobaccoCuringHelper.TAG_QUALITY) / 10.0f));
+        if (tag != null && tag.contains(TAG_QUALITY)) {
+            return Math.max(1, Math.round(tag.getInt(TAG_QUALITY) / 10.0f));
         }
 
-        return -1;
+        return 6;
     }
 
     private String getCigaretteSummary(ItemStack stack, String tobacco, CompoundTag tag) {
         int quality100 = 60;
 
         CompoundTag packed = TobaccoTooltipHelper.getPackedTobaccoData(stack);
-        if (packed != null && packed.contains(TobaccoCuringHelper.TAG_QUALITY)) {
-            quality100 = packed.getInt(TobaccoCuringHelper.TAG_QUALITY);
+        if (packed != null) {
+            quality100 = packed.contains(TAG_QUALITY)
+                    ? packed.getInt(TAG_QUALITY)
+                    : packed.contains(TAG_GROWTH_QUALITY)
+                    ? packed.getInt(TAG_GROWTH_QUALITY)
+                    : 60;
         }
 
         String qualityWord = TobaccoTooltipHelper.getQualityWord(quality100);

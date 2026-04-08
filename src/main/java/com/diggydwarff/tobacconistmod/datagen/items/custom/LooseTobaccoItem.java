@@ -35,6 +35,8 @@ public class LooseTobaccoItem extends Item {
 
     @Override
     public Component getName(ItemStack stack) {
+        TobaccoCuringHelper.ensureDefaultTobaccoData(stack);
+
         CompoundTag tag = stack.getTag();
         String label = TobaccoLabelHelper.getProductLabel(stack);
 
@@ -60,6 +62,7 @@ public class LooseTobaccoItem extends Item {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
+        TobaccoCuringHelper.ensureDefaultTobaccoData(stack);
         super.appendHoverText(stack, level, tooltip, flag);
 
         String productLabel = TobaccoLabelHelper.getProductLabel(stack);

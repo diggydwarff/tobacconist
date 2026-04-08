@@ -110,7 +110,11 @@ public class CigarItem extends SmokingItem {
     private String getFillerLine(ItemStack stack) {
         CompoundTag packed = TobaccoTooltipHelper.getPackedTobaccoData(stack);
         if (packed == null) {
-            return "Unknown";
+            // build default legacy filler
+            return "Standard Air-Cured Ribbon Cut " +
+                    TobaccoTooltipHelper.cleanTobaccoName(
+                            TobaccoTooltipHelper.getPackedLeafName(stack)
+                    );
         }
 
         int quality100 = packed.contains(TobaccoCuringHelper.TAG_QUALITY)
@@ -119,13 +123,11 @@ public class CigarItem extends SmokingItem {
 
         String qualityWord = TobaccoTooltipHelper.getQualityWord(quality100);
 
-        String cureType = packed.contains(TobaccoCuringHelper.TAG_CURE_TYPE)
-                ? packed.getString(TobaccoCuringHelper.TAG_CURE_TYPE)
-                : "";
+        ItemStack temp = new ItemStack(stack.getItem());
+        temp.setTag(packed.copy());
 
-        String cutType = packed.contains(TobaccoCuringHelper.TAG_CUT_TYPE)
-                ? packed.getString(TobaccoCuringHelper.TAG_CUT_TYPE)
-                : "";
+        String cureType = TobaccoCuringHelper.getCureType(temp);
+        String cutType = TobaccoCuringHelper.getCutType(temp);
 
         String cureWord = TobaccoCuringHelper.getCureDisplayName(cureType);
         String cutWord = TobaccoCuringHelper.getCutDisplayName(cutType);
@@ -177,8 +179,14 @@ public class CigarItem extends SmokingItem {
         }
 
         CompoundTag packed = TobaccoTooltipHelper.getPackedTobaccoData(stack);
-        if (packed != null && packed.contains(TobaccoCuringHelper.TAG_QUALITY)) {
-            return Math.max(1, Math.round(packed.getInt(TobaccoCuringHelper.TAG_QUALITY) / 10.0f));
+        if (packed != null) {
+            int quality = packed.contains(TobaccoCuringHelper.TAG_QUALITY)
+                    ? packed.getInt(TobaccoCuringHelper.TAG_QUALITY)
+                    : packed.contains(TobaccoCuringHelper.TAG_GROWTH_QUALITY)
+                    ? packed.getInt(TobaccoCuringHelper.TAG_GROWTH_QUALITY)
+                    : 60;
+
+            return Math.max(1, Math.round(quality / 10.0f));
         }
 
         CompoundTag tag = stack.getTag();
@@ -186,7 +194,7 @@ public class CigarItem extends SmokingItem {
             return Math.max(1, Math.round(tag.getInt(TobaccoCuringHelper.TAG_QUALITY) / 10.0f));
         }
 
-        return -1;
+        return 6;
     }
 
     private String getCigarSummary(ItemStack stack) {

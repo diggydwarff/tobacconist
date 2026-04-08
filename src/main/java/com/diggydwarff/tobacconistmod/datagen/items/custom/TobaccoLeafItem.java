@@ -20,20 +20,12 @@ public class TobaccoLeafItem extends Item {
 
     @Override
     public Component getName(ItemStack stack) {
+        TobaccoCuringHelper.ensureDefaultTobaccoData(stack);
         Component baseName = super.getName(stack);
-        CompoundTag tag = stack.getTag();
 
-        if (tag == null) {
-            return baseName;
-        }
-
-        int quality = getDisplayedQuality(stack);
-        if (quality <= 0) {
-            return baseName;
-        }
-
+        int quality = TobaccoCuringHelper.getQuality(stack);
         String tier = capitalize(TobaccoCuringHelper.getQualityTier(quality));
-        String cureType = tag.getString(TobaccoCuringHelper.TAG_CURE_TYPE);
+        String cureType = TobaccoCuringHelper.getCureType(stack);
 
         if (!cureType.isEmpty()) {
             return Component.literal(tier + " " + TobaccoCuringHelper.getCureDisplayName(cureType) + " ")
@@ -45,56 +37,35 @@ public class TobaccoLeafItem extends Item {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
+        TobaccoCuringHelper.ensureDefaultTobaccoData(stack);
         super.appendHoverText(stack, level, tooltip, flag);
 
-        int quality = getDisplayedQuality(stack);
-        if (quality > 0) {
+        int quality = TobaccoCuringHelper.getQuality(stack);
+        tooltip.add(Component.literal(
+                "Quality: " + quality + " (" + capitalize(TobaccoCuringHelper.getQualityTier(quality)) + ")"
+        ).withStyle(ChatFormatting.GRAY));
+
+        String cureType = TobaccoCuringHelper.getCureType(stack);
+        if (!cureType.isEmpty()) {
             tooltip.add(Component.literal(
-                    "Quality: " + quality + " (" + capitalize(TobaccoCuringHelper.getQualityTier(quality)) + ")"
+                    "Cure: " + TobaccoCuringHelper.getCureDisplayName(cureType)
             ).withStyle(ChatFormatting.GRAY));
         }
 
-        CompoundTag tag = stack.getTag();
-        if (tag != null) {
-            String cureType = tag.getString(TobaccoCuringHelper.TAG_CURE_TYPE);
-            if (!cureType.isEmpty()) {
-                tooltip.add(Component.literal(
-                        "Cure: " + TobaccoCuringHelper.getCureDisplayName(cureType)
-                ).withStyle(ChatFormatting.GRAY));
-            }
-
-            if (TobaccoBarrelBlockEntity.isFermented(stack)) {
-                tooltip.add(Component.literal("Fermented").withStyle(ChatFormatting.GOLD));
-            }
-
-            int agedDays = TobaccoBarrelBlockEntity.getAgedDays(stack);
-            if (agedDays > 0) {
-                tooltip.add(Component.literal(
-                        "Age: " + formatAge(agedDays) + " (" + getAgeLabel(agedDays) + ")"
-                ).withStyle(ChatFormatting.GOLD));
-            }
-
-            if (TobaccoBarrelBlockEntity.isRuined(stack)) {
-                tooltip.add(Component.literal("Ruined").withStyle(ChatFormatting.DARK_RED));
-            }
-        }
-    }
-
-    private int getDisplayedQuality(ItemStack stack) {
-        CompoundTag tag = stack.getTag();
-        if (tag == null) {
-            return 0;
+        if (TobaccoBarrelBlockEntity.isFermented(stack)) {
+            tooltip.add(Component.literal("Fermented").withStyle(ChatFormatting.GOLD));
         }
 
-        if (tag.contains(TobaccoCuringHelper.TAG_QUALITY)) {
-            return tag.getInt(TobaccoCuringHelper.TAG_QUALITY);
+        int agedDays = TobaccoBarrelBlockEntity.getAgedDays(stack);
+        if (agedDays > 0) {
+            tooltip.add(Component.literal(
+                    "Age: " + formatAge(agedDays) + " (" + getAgeLabel(agedDays) + ")"
+            ).withStyle(ChatFormatting.GOLD));
         }
 
-        if (tag.contains(TobaccoCuringHelper.TAG_GROWTH_QUALITY)) {
-            return tag.getInt(TobaccoCuringHelper.TAG_GROWTH_QUALITY);
+        if (TobaccoBarrelBlockEntity.isRuined(stack)) {
+            tooltip.add(Component.literal("Ruined").withStyle(ChatFormatting.DARK_RED));
         }
-
-        return 0;
     }
 
     private String formatAge(int agedDays) {

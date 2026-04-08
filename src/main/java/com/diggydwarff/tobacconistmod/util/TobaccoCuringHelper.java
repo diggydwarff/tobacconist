@@ -152,10 +152,23 @@ public final class TobaccoCuringHelper {
     }
 
     public static String getCutType(ItemStack stack) {
-        if (!stack.hasTag()) return "";
+        if (stack.isEmpty()) return "";
+
+        if (!stack.hasTag()) {
+            return isLooseTobacco(stack) ? CUT_RIBBON : "";
+        }
+
         CompoundTag tag = stack.getTag();
-        if (!tag.contains(TAG_CUT_TYPE)) return "";
-        return tag.getString(TAG_CUT_TYPE);
+        if (!tag.contains(TAG_CUT_TYPE)) {
+            return isLooseTobacco(stack) ? CUT_RIBBON : "";
+        }
+
+        String cutType = tag.getString(TAG_CUT_TYPE);
+        if (cutType == null || cutType.isEmpty()) {
+            return isLooseTobacco(stack) ? CUT_RIBBON : "";
+        }
+
+        return cutType;
     }
 
     public static String getCutDisplayName(String cutType) {
@@ -168,6 +181,26 @@ public final class TobaccoCuringHelper {
         };
     }
 
+    public static String getCureType(ItemStack stack) {
+        if (stack.isEmpty()) return "";
+
+        if (!stack.hasTag()) {
+            return isDryTobaccoLeaf(stack) || isLooseTobacco(stack) ? CURE_AIR : "";
+        }
+
+        CompoundTag tag = stack.getTag();
+        if (!tag.contains(TAG_CURE_TYPE)) {
+            return isDryTobaccoLeaf(stack) || isLooseTobacco(stack) ? CURE_AIR : "";
+        }
+
+        String cureType = tag.getString(TAG_CURE_TYPE);
+        if (cureType == null || cureType.isEmpty()) {
+            return isDryTobaccoLeaf(stack) || isLooseTobacco(stack) ? CURE_AIR : "";
+        }
+
+        return cureType;
+    }
+
     public static void applyCureData(ItemStack stack, String cureType, int quality) {
         CompoundTag tag = stack.getOrCreateTag();
         tag.putString(TAG_CURE_TYPE, cureType);
@@ -177,14 +210,25 @@ public final class TobaccoCuringHelper {
         tag.putString(TAG_QUALITY_TIER, getQualityTierId(clamped));
     }
 
-    public static String getCureType(ItemStack stack) {
-        if (!stack.hasTag()) return CURE_AIR;
+    public static void ensureDefaultLeafData(ItemStack stack) {
+        if (stack.isEmpty()) return;
+        if (!isRawTobaccoLeaf(stack) && !isDryTobaccoLeaf(stack) && !isLooseTobacco(stack)) return;
 
-        CompoundTag tag = stack.getTag();
-        if (!tag.contains(TAG_CURE_TYPE)) return CURE_AIR;
+        CompoundTag tag = stack.getOrCreateTag();
 
-        String cureType = tag.getString(TAG_CURE_TYPE);
-        return cureType == null || cureType.isEmpty() ? CURE_AIR : cureType;
+        if (!tag.contains(TAG_QUALITY) && !tag.contains(TAG_GROWTH_QUALITY)) {
+            tag.putInt(TAG_QUALITY, 60);
+        }
+
+        if (!tag.contains(TAG_QUALITY_TIER)) {
+            tag.putString(TAG_QUALITY_TIER, getQualityTierId(getQuality(stack)));
+        }
+
+        if (isDryTobaccoLeaf(stack) || isLooseTobacco(stack)) {
+            if (!tag.contains(TAG_CURE_TYPE) || tag.getString(TAG_CURE_TYPE).isEmpty()) {
+                tag.putString(TAG_CURE_TYPE, CURE_AIR);
+            }
+        }
     }
 
     public static int getCanonicalTierQuality(int quality) {
@@ -288,5 +332,32 @@ public final class TobaccoCuringHelper {
             case CURE_FLUE -> "Flue-Cured";
             default -> "Air-Cured";
         };
+    }
+
+    public static void ensureDefaultTobaccoData(ItemStack stack) {
+        if (stack.isEmpty()) return;
+        if (!isRawTobaccoLeaf(stack) && !isDryTobaccoLeaf(stack) && !isLooseTobacco(stack)) return;
+
+        CompoundTag tag = stack.getOrCreateTag();
+
+        if (!tag.contains(TAG_QUALITY) && !tag.contains(TAG_GROWTH_QUALITY)) {
+            tag.putInt(TAG_QUALITY, 60);
+        }
+
+        if (!tag.contains(TAG_QUALITY_TIER) || tag.getString(TAG_QUALITY_TIER).isEmpty()) {
+            tag.putString(TAG_QUALITY_TIER, getQualityTierId(getQuality(stack)));
+        }
+
+        if (isDryTobaccoLeaf(stack) || isLooseTobacco(stack)) {
+            if (!tag.contains(TAG_CURE_TYPE) || tag.getString(TAG_CURE_TYPE).isEmpty()) {
+                tag.putString(TAG_CURE_TYPE, CURE_AIR);
+            }
+        }
+
+        if (isLooseTobacco(stack)) {
+            if (!tag.contains(TAG_CUT_TYPE) || tag.getString(TAG_CUT_TYPE).isEmpty()) {
+                tag.putString(TAG_CUT_TYPE, CUT_RIBBON);
+            }
+        }
     }
 }

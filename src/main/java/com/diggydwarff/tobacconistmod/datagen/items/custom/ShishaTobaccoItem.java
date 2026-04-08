@@ -38,8 +38,14 @@ public class ShishaTobaccoItem extends SmokingProduct {
         }
 
         CompoundTag packed = TobaccoTooltipHelper.getPackedTobaccoData(stack);
-        if (packed != null && packed.contains(TobaccoCuringHelper.TAG_QUALITY)) {
-            return Math.max(1, Math.round(packed.getInt(TobaccoCuringHelper.TAG_QUALITY) / 10.0f));
+        if (packed != null) {
+            int quality = packed.contains(TobaccoCuringHelper.TAG_QUALITY)
+                    ? packed.getInt(TobaccoCuringHelper.TAG_QUALITY)
+                    : packed.contains(TobaccoCuringHelper.TAG_GROWTH_QUALITY)
+                    ? packed.getInt(TobaccoCuringHelper.TAG_GROWTH_QUALITY)
+                    : 60;
+
+            return Math.max(1, Math.round(quality / 10.0f));
         }
 
         CompoundTag tag = stack.getTag();
@@ -47,7 +53,7 @@ public class ShishaTobaccoItem extends SmokingProduct {
             return Math.max(1, Math.round(tag.getInt(TobaccoCuringHelper.TAG_QUALITY) / 10.0f));
         }
 
-        return -1;
+        return 6;
     }
 
     @Override
@@ -60,7 +66,7 @@ public class ShishaTobaccoItem extends SmokingProduct {
         }
 
         if (tag != null) {
-            String tobacco = tag.getString("tobacco");
+            String tobacco = TobaccoTooltipHelper.cleanTobaccoName(tag.getString("tobacco"));
             if (!tobacco.isEmpty()) {
                 String summary = tobacco + TobaccoTooltipHelper.getProcessSuffix(tag);
                 tooltip.add(Component.literal(summary).withStyle(ChatFormatting.GOLD));
@@ -80,19 +86,34 @@ public class ShishaTobaccoItem extends SmokingProduct {
                         .withStyle(ChatFormatting.GRAY));
             }
 
-            String cutType = tag.getString(TobaccoProductQualityHelper.TAG_INPUT_CUT_TYPE);
-            if (cutType.isEmpty()) {
-                cutType = tag.getString(TobaccoCuringHelper.TAG_CUT_TYPE);
+            CompoundTag normalized = tag.copy();
+
+            if (!normalized.contains(TobaccoProductQualityHelper.TAG_INPUT_CUT_TYPE)
+                    && !normalized.contains(TobaccoCuringHelper.TAG_CUT_TYPE)) {
+                normalized.putString(TobaccoCuringHelper.TAG_CUT_TYPE, TobaccoCuringHelper.CUT_RIBBON);
             }
+
+            if (!normalized.contains(TobaccoProductQualityHelper.TAG_INPUT_CURE_TYPE)
+                    && !normalized.contains(TobaccoCuringHelper.TAG_CURE_TYPE)) {
+                normalized.putString(TobaccoCuringHelper.TAG_CURE_TYPE, TobaccoCuringHelper.CURE_AIR);
+            }
+
+            ItemStack temp = new ItemStack(stack.getItem());
+            temp.setTag(normalized);
+
+            String cutType = normalized.contains(TobaccoProductQualityHelper.TAG_INPUT_CUT_TYPE)
+                    ? normalized.getString(TobaccoProductQualityHelper.TAG_INPUT_CUT_TYPE)
+                    : TobaccoCuringHelper.getCutType(temp);
+
             if (!cutType.isEmpty()) {
                 tooltip.add(Component.literal("Cut: " + TobaccoCuringHelper.getCutDisplayName(cutType))
                         .withStyle(ChatFormatting.GRAY));
             }
 
-            String cureType = tag.getString(TobaccoProductQualityHelper.TAG_INPUT_CURE_TYPE);
-            if (cureType.isEmpty()) {
-                cureType = tag.getString(TobaccoCuringHelper.TAG_CURE_TYPE);
-            }
+            String cureType = normalized.contains(TobaccoProductQualityHelper.TAG_INPUT_CURE_TYPE)
+                    ? normalized.getString(TobaccoProductQualityHelper.TAG_INPUT_CURE_TYPE)
+                    : TobaccoCuringHelper.getCureType(temp);
+
             if (!cureType.isEmpty()) {
                 tooltip.add(Component.literal("Cure: " + TobaccoCuringHelper.getCureDisplayName(cureType))
                         .withStyle(ChatFormatting.GRAY));
