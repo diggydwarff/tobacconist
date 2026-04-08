@@ -15,6 +15,8 @@ import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
+import java.util.List;
+
 public class TobaccoBarrelBlockEntity extends BlockEntity {
 
     public static final String TAG_FERMENTED = "Fermented";
@@ -513,5 +515,83 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
         } catch (Exception ignored) {
             mode = TobaccoBarrelMode.IDLE;
         }
+    }
+
+    public List<Component> getFullDebugLines() {
+        String itemName = storedTobacco.isEmpty()
+                ? "Empty"
+                : storedTobacco.getHoverName().getString() + " x" + storedTobacco.getCount();
+
+        int warmth = level != null ? BarrelEnvironmentHelper.getWarmth(level, worldPosition) : 0;
+        int humidity = level != null ? BarrelEnvironmentHelper.getHumidity(level, worldPosition) : 0;
+        int blockLight = level != null ? level.getBrightness(LightLayer.BLOCK, worldPosition.above()) : 0;
+        boolean coolDark = level != null && BarrelEnvironmentHelper.isCoolDarkStorage(level, worldPosition);
+
+        int agedDays = getAgedDays(storedTobacco);
+        int years = agedDays / 365;
+        int remDays = agedDays % 365;
+
+        String progress = "None";
+
+        if (mode == TobaccoBarrelMode.FERMENTING) {
+            double pct = Math.min(100.0, processTicks * 100.0 / FERMENT_TIME);
+            progress = "Ferment: " + String.format("%.1f%%", pct);
+        } else if (mode == TobaccoBarrelMode.AGING) {
+            double pct = Math.min(100.0, processTicks * 100.0 / TICKS_PER_DAY);
+            progress = "Aging: " + String.format("%.1f%%", pct);
+        }
+
+        return List.of(
+                Component.literal("=== Tobacco Barrel Debug ===").withStyle(ChatFormatting.GOLD),
+                Component.literal("Stored: " + itemName),
+                Component.literal("Mode: " + getModeDisplayName()),
+
+                Component.literal("Warmth: " + warmth),
+                Component.literal("Humidity: " + humidity),
+                Component.literal("Barrel Humidity: " + barrelHumidity),
+
+                Component.literal("Light: " + blockLight),
+                Component.literal("Cool/Dark: " + coolDark),
+
+                Component.literal("Age: " + years + "y " + remDays + "d"),
+                Component.literal(progress),
+
+                Component.literal("Overheat Ticks: " + overheatTicks),
+                Component.literal("Ruined: " + isRuined(storedTobacco)),
+                Component.literal("Fermented: " + isFermented(storedTobacco))
+        );
+    }
+
+    public void forceFinishFermentation() {
+        if (storedTobacco.isEmpty()) return;
+        if (isRuined(storedTobacco)) return;
+        if (isFermented(storedTobacco)) return;
+
+        finishFermentation();
+        processTicks = 0;
+        mode = TobaccoBarrelMode.IDLE;
+        lastFermentGameTime = -1L;
+        setChanged();
+    }
+
+    public void addAgedDays(int days) {
+        if (storedTobacco.isEmpty()) return;
+        if (days <= 0) return;
+
+        for (int i = 0; i < days; i++) {
+            advanceAgingDay();
+        }
+
+        processTicks = 0;
+        mode = TobaccoBarrelMode.IDLE;
+        lastAgeGameTime = -1L;
+        setChanged();
+    }
+
+    public void forceRuin() {
+        if (storedTobacco.isEmpty()) return;
+
+        spoilStoredTobacco(25);
+        setChanged();
     }
 }

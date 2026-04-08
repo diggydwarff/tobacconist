@@ -4,10 +4,12 @@ import com.diggydwarff.tobacconistmod.block.ModBlocks;
 import com.diggydwarff.tobacconistmod.block.custom.TobaccoDryingRackBlock;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
@@ -20,6 +22,8 @@ import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+
+import java.util.List;
 
 public class TobaccoDryingRackBlockEntity extends BlockEntity implements net.minecraft.world.WorldlyContainer {
 
@@ -848,5 +852,36 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements net.min
         sunTicks = tag.getInt("SunTicks");
         fireTicks = tag.getInt("FireTicks");
         flueTicks = tag.getInt("FlueTicks");
+    }
+
+    public List<Component> getFullDebugLines() {
+        String itemName = storedLeaf.isEmpty()
+                ? "Empty"
+                : storedLeaf.getHoverName().getString() + " x" + storedLeaf.getCount();
+
+        int light = level != null ? level.getBrightness(LightLayer.SKY, worldPosition.above()) : 0;
+        boolean raining = level != null && level.isRainingAt(worldPosition.above());
+
+        return List.of(
+                Component.literal("=== Drying Rack Debug ===").withStyle(ChatFormatting.GOLD),
+                Component.literal("Stored: " + itemName),
+
+                Component.literal("Method: " + getCurrentCureMethod()),
+                Component.literal("Progress: " + getDryProgressPercent() + "%"),
+
+                Component.literal("Air Ticks: " + airTicks),
+                Component.literal("Sun Ticks: " + sunTicks),
+                Component.literal("Fire Ticks: " + fireTicks),
+                Component.literal("Flue Ticks: " + flueTicks),
+
+                Component.literal("Interruptions: " + interruptionCount),
+                Component.literal("Sun Exposure: " + sunExposureTicks),
+
+                Component.literal("Light: " + light),
+                Component.literal("Raining: " + raining),
+
+                Component.literal("Finished: " + isFinished()),
+                Component.literal("Batch Locked: " + isBatchLocked())
+        );
     }
 }

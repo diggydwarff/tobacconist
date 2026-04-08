@@ -1,6 +1,7 @@
 package com.diggydwarff.tobacconistmod;
 
 import com.diggydwarff.tobacconistmod.block.ModPaintings;
+import com.diggydwarff.tobacconistmod.command.TobacconistCommands;
 import com.diggydwarff.tobacconistmod.compat.curios.CuriosCompat;
 import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
 import com.diggydwarff.tobacconistmod.effect.ModEffects;
@@ -28,6 +29,7 @@ import net.minecraft.world.level.block.ComposterBlock;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
@@ -122,5 +124,10 @@ public class TobacconistMod
             });
         }
 
+    }
+
+    @SubscribeEvent
+    public void onRegisterCommands(RegisterCommandsEvent event) {
+        TobacconistCommands.register(event.getDispatcher());
     }
 }
