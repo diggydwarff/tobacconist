@@ -32,7 +32,7 @@ public class TobacconistConfig {
             builder.push("curios");
             particleDensity = builder
                     .comment("Chance divisor for Curios mouth smoke. Lower = more smoke.")
-                    .defineInRange("particleDensity", 6, 1, 40);
+                    .defineInRange("particleDensity", 6, 1, 24);
             builder.pop();
         }
     }
@@ -45,6 +45,7 @@ public class TobacconistConfig {
 
             additionalEffects = builder
                     .comment("Additional effects applied when smoking. Format: effect_id,duration,amplifier")
+                    .comment("additionalEffects = [\"minecraft:luck,200,0\", \"minecraft:speed,100,0\"]")
                     .defineListAllowEmpty(
                             List.of("additionalEffects"),
                             List.of(),
