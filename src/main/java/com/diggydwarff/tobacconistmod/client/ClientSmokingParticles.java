@@ -1,6 +1,7 @@
 package com.diggydwarff.tobacconistmod.client;
 
 import com.diggydwarff.tobacconistmod.TobacconistMod;
+import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
 import com.diggydwarff.tobacconistmod.datagen.items.SmokingItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.ParticleTypes;
@@ -24,7 +25,7 @@ public class ClientSmokingParticles {
 
         Minecraft mc = Minecraft.getInstance();
         if (mc.level == null || mc.isPaused()) return;
-        if ((mc.level.getGameTime() % 14) != 0) return;
+        if ((mc.level.getGameTime() % 10) != 0) return;
 
         for (Player player : mc.level.players()) {
             CuriosApi.getCuriosInventory(player).ifPresent(inv -> {
@@ -56,7 +57,8 @@ public class ClientSmokingParticles {
         double vy = 0.012D + mc.level.random.nextDouble() * 0.004D;
         double vz =  Mth.cos(yaw) * 0.008D + (mc.level.random.nextDouble() - 0.5D) * 0.003D;
 
-        if (mc.level.random.nextInt(6) == 0) {
+        int density = Math.max(1, TobacconistConfig.CLIENT.particleDensity.get());
+        if (mc.level.random.nextInt(density) == 0) {
             mc.level.addParticle(
                     ParticleTypes.CAMPFIRE_COSY_SMOKE,
                     x, y + 0.01D, z,

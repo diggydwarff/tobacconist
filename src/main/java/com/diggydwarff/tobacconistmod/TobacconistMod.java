@@ -2,6 +2,7 @@ package com.diggydwarff.tobacconistmod;
 
 import com.diggydwarff.tobacconistmod.block.ModPaintings;
 import com.diggydwarff.tobacconistmod.compat.curios.CuriosCompat;
+import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
 import com.diggydwarff.tobacconistmod.effect.ModEffects;
 import com.diggydwarff.tobacconistmod.recipes.ModRecipeSerializers;
 import com.diggydwarff.tobacconistmod.villager.ModVillagerTrades;
@@ -30,7 +31,9 @@ import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
@@ -64,6 +67,9 @@ public class TobacconistMod
         ModPaintings.PAINTING_VARIANTS.register(modEventBus);
         TobacconistCreativeTab.register(modEventBus);
         ModRecipeSerializers.SERIALIZERS.register(modEventBus);
+
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, TobacconistConfig.CLIENT_SPEC);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, TobacconistConfig.COMMON_SPEC);
 
         MinecraftForge.EVENT_BUS.register(this);
     }

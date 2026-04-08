@@ -1,12 +1,16 @@
 package com.diggydwarff.tobacconistmod.datagen.items;
 
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelBlockEntity;
+import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
 import com.diggydwarff.tobacconistmod.effect.ModEffects;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
@@ -70,6 +74,34 @@ public abstract class SmokingItem extends Item {
         ));
 
         applyQualityHealthBonus(player, tobaccoStack);
+        applyConfiguredAdditionalEffects(player);
+    }
+
+    protected void applyConfiguredAdditionalEffects(Player player) {
+        for (String entry : TobacconistConfig.COMMON.additionalEffects.get()) {
+            try {
+                String[] parts = entry.split(",");
+                if (parts.length < 3) continue;
+
+                String effectId = parts[0].trim();
+                int duration = Integer.parseInt(parts[1].trim());
+                int amplifier = Integer.parseInt(parts[2].trim());
+
+                MobEffect effect = BuiltInRegistries.MOB_EFFECT.get(new ResourceLocation(effectId));
+                if (effect == null) continue;
+
+                player.addEffect(new MobEffectInstance(
+                        effect,
+                        duration,
+                        amplifier,
+                        false,
+                        false,
+                        true
+                ));
+            } catch (Exception ignored) {
+                // ignore bad config entries
+            }
+        }
     }
 
     protected void applyQualityHealthBonus(Player player, ItemStack tobaccoStack) {
