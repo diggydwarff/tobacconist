@@ -1,24 +1,20 @@
 {
   "name": "Air Curing",
-  "icon": "tobacconistmod:air_cured_tobacco_leaf",
+  "icon": "tobacconistmod:tobacco_drying_rack",
   "category": "tobacconistmod:curing",
   "sortnum": 0,
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Air curing is one of the oldest and most traditional methods of preparing tobacco. Fresh leaves are hung in a sheltered, ventilated place and allowed to dry slowly over time. This method is associated with gentler drying and a more natural leaf character."
+      "text": "$(thing)Air curing$() is the slow, steady way to dry leaf. Requirements:$(br2)- No rain$(br)- Enough skylight$(br)- Time"
     },
     {
       "type": "patchouli:text",
-      "text": "In this mod, air curing generally means placing tobacco leaves on a drying rack in normal sheltered conditions, away from strong direct heat and away from constant open sunlight. The process favors patience over speed."
+      "text": "Air curing takes about $(item)3 Minecraft days$(). It can work in open air or under cover, as long as the rack has suitable conditions."
     },
     {
       "type": "patchouli:text",
-      "text": "Air-cured leaf usually develops a subdued aroma and a less sugary character than some heated methods. It is often suitable for pipe blends, cigar filler, and more traditional tobacco preparation. If interrupted too often or handled poorly, it may produce lower-quality leaf."
-    },
-    {
-      "type": "patchouli:text",
-      "text": "Air curing is usually the safest baseline method. It may not always be the fastest route, but it is dependable, realistic, and useful for many downstream recipes."
+      "text": "Air curing is slower than other methods, but it is stable and reliable. Covered racks are safer than leaving leaf exposed to the sky."
     }
   ]
 }

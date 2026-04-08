@@ -1,20 +1,20 @@
 {
-  "name": "Aging Tobacco",
+  "name": "Fermenting & Aging",
   "icon": "minecraft:clock",
   "category": "tobacconistmod:fermenting",
   "sortnum": 1,
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Aging is the slow refinement of cured tobacco over time. Unlike active fermentation, aging is usually gentler. It allows aromas to settle, harsh notes to fade, and the leaf to become more balanced."
+      "text": "$(thing)Fermentation$() needs enough warmth and enough barrel humidity. It takes about $(item)2 Minecraft days$(). When it finishes, the tobacco becomes fermented and gains quality."
     },
     {
       "type": "patchouli:text",
-      "text": "Good aging conditions should be stable and moderate. Extreme heat, excessive moisture, or constant disturbance can ruin tobacco that would otherwise improve slowly. Aging should reward patience rather than force."
+      "text": "$(thing)Aging$() needs cool, dark storage with moderate humidity. It is slower and gentler than fermentation, but it can steadily improve decent tobacco over time."
     },
     {
       "type": "patchouli:text",
-      "text": "In gameplay terms, aging is a strong way to add value to already decent tobacco. It should not instantly rescue bad leaf, but it can turn competent leaf into something much more refined."
+      "text": "Too much heat can spoil a batch. Extremely old tobacco can also go bad. Good barrel work rewards patience and stable conditions, not extremes."
     }
   ]
 }

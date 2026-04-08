@@ -6,19 +6,15 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "A chaveta is the tool used to cut processed tobacco into usable forms. Once tobacco has been cured, and optionally fermented or aged, it can be cut for different finished products."
+      "text": "A $(thing)Chaveta$() is used to process cured tobacco into loose tobacco cuts. Good cured leaf makes better loose tobacco. Poor cured leaf makes poor loose tobacco."
     },
     {
       "type": "patchouli:text",
-      "text": "The position of the chaveta in a crafting recipe can determine the resulting cut. This lets one tool create multiple tobacco textures and product types without adding unnecessary item clutter."
+      "text": "Processing keeps important tobacco data such as quality, cure type, and later processing information."
     },
     {
       "type": "patchouli:text",
-      "text": "Typical cuts include ribbon cut, rough cut, flake cut, and fine cut. Different cuts may be used in pipe blends, cigarettes, cigars, or hookah preparations. A coarse cut may burn slower, while a finer cut may pack more easily or mix more smoothly."
-    },
-    {
-      "type": "patchouli:text",
-      "text": "A good cutting system should make processed tobacco feel versatile. The same leaf can become very different products depending on how it is cut, blended, and prepared."
+      "text": "Different cuts suit different products. The same leaf can become very different tobacco depending on how it is cut and prepared."
     }
   ]
 }

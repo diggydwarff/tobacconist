@@ -6,19 +6,15 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Fire curing exposes tobacco to smoke and heat from smoldering fires over an extended period. This creates a darker, heavier, and more assertive character than other curing methods."
+      "text": "$(thing)Fire curing$() uses direct smoke and heat. Requirement: place the drying rack directly over a $(item)lit campfire$()."
     },
     {
       "type": "patchouli:text",
-      "text": "If implemented, fire curing should feel like the boldest and most aggressive curing style. The reward is rich, smoky tobacco with a strong presence. The risk is overexposure, harshness, and quality loss if the leaf is mishandled."
+      "text": "Fire curing takes about $(item)1 Minecraft day$(). It is the fastest curing method."
     },
     {
       "type": "patchouli:text",
-      "text": "Fire-cured leaf works well in strong pipe tobaccos, darker blends, and specialty products where body and aroma matter more than sweetness. It should not behave like a universal best option."
-    },
-    {
-      "type": "patchouli:text",
-      "text": "A good fire cure should demand fuel, time, and control. It should produce distinct results that justify the extra effort."
+      "text": "It is bold, hot, and simple to set up. It is also less gentle than slower methods, so consistency still matters."
     }
   ]
 }

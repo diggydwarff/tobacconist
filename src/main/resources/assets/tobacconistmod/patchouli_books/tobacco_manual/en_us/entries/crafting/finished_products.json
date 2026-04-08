@@ -6,15 +6,15 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Once tobacco has been grown, cured, and processed, it can be turned into a wide range of finished smoking products. Each one emphasizes different parts of the craft and may favor different leaf styles."
+      "text": "Loose tobacco can be turned into finished products such as cigarettes, cigars, and shisha tobacco."
     },
     {
       "type": "patchouli:text",
-      "text": "Pipes often work well with ribbon, rough, or flake cuts and reward slower-burning blends. Cigarettes usually favor more refined and consistent cuts. Cigars rely heavily on structure, with wrapper, binder, and filler all playing distinct roles. Hookah mixtures commonly depend on flavored molasses and properly prepared tobacco."
+      "text": "Finished products inherit the quality of the tobacco used to make them. Cure type, cut, fermentation, and aging can all matter."
     },
     {
       "type": "patchouli:text",
-      "text": "No single leaf or curing method is best for every product. A strong cigar filler and a bright cigarette blend should not feel identical. The point of the full tobacco system is that preparation choices matter."
+      "text": "Start with good leaf if you want high-end results. No later step completely fixes bad tobacco."
     }
   ]
 }

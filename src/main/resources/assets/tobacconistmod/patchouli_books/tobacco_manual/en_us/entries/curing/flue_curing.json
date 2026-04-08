@@ -1,24 +1,20 @@
 {
   "name": "Flue Curing",
-  "icon": "minecraft:furnace",
+  "icon": "tobacconistmod:flue_firebox",
   "category": "tobacconistmod:curing",
   "sortnum": 2,
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Flue curing uses controlled heat rather than open smoke. The idea is to dry the leaf with warmth while avoiding direct smoke contact. This method is strongly associated with brighter, sweeter, and more refined tobacco styles."
+      "text": "$(thing)Flue curing$() uses controlled indoor heat instead of direct smoke. Requirements:$(br2)- No direct sky access$(br)- A roof overhead$(br)- Clear air above the rack$(br)- A nearby lit $(item)Flue Firebox$()$(br)- No smoke contamination nearby"
     },
     {
       "type": "patchouli:text",
-      "text": "If your modpack or future versions of the mod support heat-based curing, flue curing should be treated as a carefully managed process. Too little heat may slow the cure or leave the leaf under-processed. Too much heat may damage the tobacco and lower quality."
+      "text": "Flue curing takes about $(item)1.5 Minecraft days$(). It is faster than air curing and cleaner than fire curing."
     },
     {
       "type": "patchouli:text",
-      "text": "Flue-cured leaf is often valuable in cigarettes and brighter blends because it can preserve sugars and produce a smoother, lighter smoke. It is less rustic than fire curing and more controlled than open-air methods."
-    },
-    {
-      "type": "patchouli:text",
-      "text": "When adding or tuning flue curing mechanics, focus on stable heat, steady progress, and clear penalties for overheating. It should feel precise rather than crude."
+      "text": "A proper flue-curing barn gives good control over the result and keeps leaf out of open weather."
     }
   ]
 }

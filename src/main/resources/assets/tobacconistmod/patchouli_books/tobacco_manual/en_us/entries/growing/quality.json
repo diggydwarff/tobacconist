@@ -6,15 +6,15 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Leaf quality is the foundation of the entire tobacco system. A high-quality leaf responds better to curing, ages more gracefully, and produces better finished products. Low-quality leaf can still be used, but the result is often harsher and less rewarding."
+      "text": "Crop conditions can be $(bad)Poor$(), $(item)OK$(), or $(2)Ideal$(). Tobacco responds to light, temperature, rain exposure, and general environment."
     },
     {
       "type": "patchouli:text",
-      "text": "Quality can be influenced by the environment in which the crop is grown. Variety preference, biome, light, and other growth conditions may all matter depending on the systems enabled in the mod."
+      "text": "General advice:$(br2)- Strong sunlight is good$(br)- Warm conditions are usually better than cold$(br)- Too much rain hurts quality$(br)- Stable outdoor growth is usually better than cramped indoor growth"
     },
     {
       "type": "patchouli:text",
-      "text": "Think of quality as cumulative. Good growth, good curing, and good handling work together. Sloppy work early in the process limits what later steps can achieve."
+      "text": "Use $(thing)/tobacconist debug$() while looking at a tobacco crop to see what is helping or hurting it."
     }
   ]
 }

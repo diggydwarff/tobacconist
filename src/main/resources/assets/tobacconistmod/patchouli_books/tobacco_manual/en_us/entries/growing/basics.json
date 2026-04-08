@@ -6,19 +6,15 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Tobacco begins as a field crop, and the quality of the final leaf starts here. The conditions in which a plant grows affect not only yield, but also color, aroma, body, burn quality, and how well the leaf responds to later curing and fermentation."
+      "text": "Tobacco quality starts in the field. Every plant builds a hidden quality value while it grows. Curing, fermenting, aging, and finished products all build on that starting leaf quality."
     },
     {
       "type": "patchouli:text",
-      "text": "In general, tobacco should be planted on prepared farmland and kept healthy through its full growth cycle. Better growing conditions produce better leaves. Poor growing conditions may still produce harvestable plants, but the resulting tobacco will usually be harsher and less refined."
+      "text": "For best results:$(br2)- Let plants fully mature before harvesting$(br)- Give them strong light$(br)- Avoid bad weather and poor environments$(br)- Use $(thing)/tobacconist debug$() while looking at a crop if you are unsure."
     },
     {
       "type": "patchouli:text",
-      "text": "Different varieties may prefer different environments. Some thrive in warmer and brighter conditions, while others perform better in more temperate climates. The biome, available light, and the consistency of the growing environment can all influence final quality."
-    },
-    {
-      "type": "patchouli:text",
-      "text": "A plant harvested at full maturity should produce the best possible leaf for its conditions. If quality systems are enabled, remember that curing does not magically fix badly grown tobacco. It can shape the leaf, but it does not erase weak cultivation."
+      "text": "Good processing helps good leaf. It does not magically fix bad leaf. Sloppy growing limits everything that comes after."
     }
   ]
 }
