@@ -47,6 +47,10 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements net.min
     private boolean usedFireDrying = false;
     private boolean usedFlueDrying = false;
 
+    private int directRainExposureTicks = 0;
+
+    private int wetDamagePenalty = 0;
+
     private int airTicks = 0;
     private int sunTicks = 0;
     private int fireTicks = 0;
@@ -109,6 +113,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements net.min
             usedFireDrying = false;
             usedFlueDrying = false;
             lastTickHadValidDrying = false;
+            directRainExposureTicks = 0;
+            wetDamagePenalty = 0;
             airTicks = 0;
             sunTicks = 0;
             fireTicks = 0;
@@ -439,6 +445,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements net.min
         usedFireDrying = false;
         usedFlueDrying = false;
         lastTickHadValidDrying = false;
+        directRainExposureTicks = 0;
+        wetDamagePenalty = 0;
         airTicks = 0;
         sunTicks = 0;
         fireTicks = 0;
@@ -466,6 +474,23 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements net.min
         if (!rack.hasLeaves()) {
             rack.lastTickHadValidDrying = false;
             return;
+        }
+
+        boolean directRain = level.isRainingAt(pos.above()) && level.canSeeSky(pos.above());
+
+        if (directRain) {
+            rack.directRainExposureTicks++;
+
+            if (rack.directRainExposureTicks % 200 == 0) {
+                rack.wetDamagePenalty++;
+            }
+
+            if (rack.directRainExposureTicks >= 1200) {
+                rack.ruinFromRain();
+                return;
+            }
+        } else {
+            rack.directRainExposureTicks = Math.max(0, rack.directRainExposureTicks - 5);
         }
 
         boolean validDryingThisTick = false;
@@ -568,6 +593,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements net.min
 
         int quality = TobaccoCuringHelper.buildFinalQuality(storedLeaf, cureType, interruptionCount);
         quality -= mixPenalty;
+        quality -= wetDamagePenalty;
+        quality = TobaccoCuringHelper.clampQuality(quality);
 
         TobaccoCuringHelper.applyCureData(cured, cureType, quality);
 
@@ -579,6 +606,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements net.min
         lastTickHadValidDrying = false;
         usedFireDrying = false;
         usedFlueDrying = false;
+        directRainExposureTicks = 0;
+        wetDamagePenalty = 0;
         airTicks = 0;
         sunTicks = 0;
         fireTicks = 0;
@@ -826,6 +855,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements net.min
         tag.putBoolean("LastTickHadValidDrying", lastTickHadValidDrying);
         tag.putBoolean("UsedFireDrying", usedFireDrying);
         tag.putBoolean("UsedFlueDrying", usedFlueDrying);
+        tag.putInt("DirectRainExposureTicks", directRainExposureTicks);
+        tag.putInt("WetDamagePenalty", wetDamagePenalty);
         tag.putInt("AirTicks", airTicks);
         tag.putInt("SunTicks", sunTicks);
         tag.putInt("FireTicks", fireTicks);
@@ -848,6 +879,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements net.min
         lastTickHadValidDrying = tag.getBoolean("LastTickHadValidDrying");
         usedFireDrying = tag.getBoolean("UsedFireDrying");
         usedFlueDrying = tag.getBoolean("UsedFlueDrying");
+        directRainExposureTicks = tag.getInt("DirectRainExposureTicks");
+        wetDamagePenalty = tag.getInt("WetDamagePenalty");
         airTicks = tag.getInt("AirTicks");
         sunTicks = tag.getInt("SunTicks");
         fireTicks = tag.getInt("FireTicks");
@@ -874,6 +907,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements net.min
                 Component.literal("Fire Ticks: " + fireTicks),
                 Component.literal("Flue Ticks: " + flueTicks),
 
+                Component.literal("Direct Rain Exposure: " + directRainExposureTicks),
+                Component.literal("Wet Damage Penalty: " + wetDamagePenalty),
                 Component.literal("Interruptions: " + interruptionCount),
                 Component.literal("Sun Exposure: " + sunExposureTicks),
 
@@ -883,5 +918,45 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements net.min
                 Component.literal("Finished: " + isFinished()),
                 Component.literal("Batch Locked: " + isBatchLocked())
         );
+    }
+
+    private void ruinFromRain() {
+        if (storedLeaf.isEmpty()) {
+            return;
+        }
+
+        ItemStack ruined = new ItemStack(ModItems.SPOILED_TOBACCO.get(), storedLeaf.getCount());
+
+        if (storedLeaf.hasTag()) {
+            ruined.setTag(storedLeaf.getTag().copy());
+        }
+
+        CompoundTag tag = ruined.getOrCreateTag();
+        tag.putBoolean("Ruined", true);
+
+        int quality = TobaccoCuringHelper.getQuality(storedLeaf);
+        int ruinedQuality = Math.max(0, quality - 20);
+
+        tag.putInt(TobaccoCuringHelper.TAG_QUALITY, ruinedQuality);
+        tag.putString(TobaccoCuringHelper.TAG_QUALITY_TIER,
+                TobaccoCuringHelper.getQualityTierId(ruinedQuality));
+
+        storedLeaf = ruined;
+
+        dryingProgress = 0;
+        sunExposureTicks = 0;
+        interruptionCount = 0;
+        lastTickHadValidDrying = false;
+        usedFireDrying = false;
+        usedFlueDrying = false;
+        airTicks = 0;
+        sunTicks = 0;
+        fireTicks = 0;
+        flueTicks = 0;
+        directRainExposureTicks = 0;
+        wetDamagePenalty = 0;
+
+        syncRackState();
+        syncToClient();
     }
 }
