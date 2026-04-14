@@ -38,6 +38,17 @@ public class TobacconistCommands {
                                                 ))))
                                 .then(Commands.literal("ruin")
                                         .executes(ctx -> forceBarrelRuin(ctx.getSource()))))
+                        .then(Commands.literal("rack")
+                                .then(Commands.literal("finish")
+                                        .executes(ctx -> forceRackFinish(ctx.getSource())))
+                                .then(Commands.literal("addtime")
+                                        .then(Commands.argument("ticks", IntegerArgumentType.integer(1))
+                                                .executes(ctx -> forceRackAddTime(
+                                                        ctx.getSource(),
+                                                        IntegerArgumentType.getInteger(ctx, "ticks")
+                                                ))))
+                                .then(Commands.literal("status")
+                                        .executes(ctx -> rackStatus(ctx.getSource()))))
         );
     }
 
@@ -122,6 +133,73 @@ public class TobacconistCommands {
         return 1;
     }
 
+    private static int forceRackFinish(CommandSourceStack source) throws CommandSyntaxException {
+        ServerPlayer player = source.getPlayerOrException();
+        TobaccoDryingRackBlockEntity rack = getLookedAtRack(player);
+
+        if (rack == null) {
+            source.sendFailure(Component.literal("No tobacco drying rack in sight."));
+            return 0;
+        }
+
+        if (!rack.hasLeaves()) {
+            source.sendFailure(Component.literal("That drying rack is empty."));
+            return 0;
+        }
+
+        if (rack.isFinished()) {
+            source.sendFailure(Component.literal("That drying rack is already finished."));
+            return 0;
+        }
+
+        rack.debugFinishNow();
+        source.sendSuccess(() -> Component.literal("Forced rack curing to finish."), false);
+        return 1;
+    }
+
+    private static int forceRackAddTime(CommandSourceStack source, int ticks) throws CommandSyntaxException {
+        ServerPlayer player = source.getPlayerOrException();
+        TobaccoDryingRackBlockEntity rack = getLookedAtRack(player);
+
+        if (rack == null) {
+            source.sendFailure(Component.literal("No tobacco drying rack in sight."));
+            return 0;
+        }
+
+        if (!rack.hasLeaves()) {
+            source.sendFailure(Component.literal("That drying rack is empty."));
+            return 0;
+        }
+
+        if (rack.isFinished()) {
+            source.sendFailure(Component.literal("That drying rack is already finished."));
+            return 0;
+        }
+
+        int before = rack.getDryProgressPercent();
+        rack.debugAddTime(ticks);
+        int after = rack.getDryProgressPercent();
+
+        source.sendSuccess(() -> Component.literal(
+                "Added " + ticks + " ticks to drying rack (" + before + "% -> " + after + "%)."
+        ), false);
+        return 1;
+    }
+
+    private static int rackStatus(CommandSourceStack source) throws CommandSyntaxException {
+        ServerPlayer player = source.getPlayerOrException();
+        TobaccoDryingRackBlockEntity rack = getLookedAtRack(player);
+
+        if (rack == null) {
+            source.sendFailure(Component.literal("No tobacco drying rack in sight."));
+            return 0;
+        }
+
+        source.sendSuccess(() -> Component.literal("Rack: " + rack.getRackStatusText()), false);
+        source.sendSuccess(() -> Component.literal("Progress: " + rack.getDryProgressPercent() + "%"), false);
+        return 1;
+    }
+
     @Nullable
     private static TobaccoBarrelBlockEntity getLookedAtBarrel(ServerPlayer player) {
         HitResult hit = player.pick(5.0D, 0.0F, false);
@@ -131,5 +209,16 @@ public class TobacconistCommands {
 
         BlockEntity be = player.level().getBlockEntity(blockHit.getBlockPos());
         return be instanceof TobaccoBarrelBlockEntity barrel ? barrel : null;
+    }
+
+    @Nullable
+    private static TobaccoDryingRackBlockEntity getLookedAtRack(ServerPlayer player) {
+        HitResult hit = player.pick(5.0D, 0.0F, false);
+        if (!(hit instanceof BlockHitResult blockHit)) {
+            return null;
+        }
+
+        BlockEntity be = player.level().getBlockEntity(blockHit.getBlockPos());
+        return be instanceof TobaccoDryingRackBlockEntity rack ? rack : null;
     }
 }

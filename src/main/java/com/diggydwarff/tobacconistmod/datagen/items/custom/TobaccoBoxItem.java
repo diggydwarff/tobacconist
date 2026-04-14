@@ -5,7 +5,6 @@ import com.diggydwarff.tobacconistmod.util.TobaccoLabelHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -37,6 +36,9 @@ public class TobaccoBoxItem extends Item {
         String label = TobaccoBoxHelper.getLabel(stack);
 
         if (stored.isEmpty()) {
+            if (!label.isEmpty()) {
+                return Component.literal(label + " Tobacco Box");
+            }
             return Component.translatable("item.tobacconistmod.tobacco_box");
         }
 
@@ -148,8 +150,6 @@ public class TobaccoBoxItem extends Item {
         String boxLabel = TobaccoBoxHelper.getLabel(box);
         String incomingLabel = TobaccoLabelHelper.getProductLabel(incoming);
 
-        // IMPORTANT:
-        // Compare the raw product, not the extracted display label.
         ItemStack incomingCompare = incoming.copy();
         incomingCompare.setCount(1);
         TobaccoLabelHelper.clearProductLabel(incomingCompare);
@@ -161,7 +161,6 @@ public class TobaccoBoxItem extends Item {
 
             TobaccoBoxHelper.setStored(box, incomingCompare, 1);
 
-            // Empty box adopts inserted item's label, if any
             if (!incomingLabel.isEmpty()) {
                 TobaccoBoxHelper.setLabel(box, incomingLabel);
             }
@@ -171,19 +170,15 @@ public class TobaccoBoxItem extends Item {
             return true;
         }
 
-        // Existing contents must match exactly
         if (!TobaccoBoxHelper.sameContent(stored, incomingCompare)) {
             return false;
         }
 
-        // If box has a label, incoming item must have exact same label
         if (!boxLabel.isEmpty()) {
             if (incomingLabel.isEmpty() || !boxLabel.equals(incomingLabel)) {
                 return false;
             }
         } else {
-            // If box is unlabeled but somehow already has contents,
-            // only allow unlabeled matching items.
             if (!incomingLabel.isEmpty()) {
                 return false;
             }
@@ -199,7 +194,6 @@ public class TobaccoBoxItem extends Item {
     }
 
     private ItemStack tryExtract(ItemStack box, Player player) {
-
         ItemStack stored = TobaccoBoxHelper.getStoredItem(box);
         int count = TobaccoBoxHelper.getStoredCount(box);
 
@@ -207,12 +201,10 @@ public class TobaccoBoxItem extends Item {
             return ItemStack.EMPTY;
         }
 
-        ItemStack storedPrototype = stored;
-
-        ItemStack out = storedPrototype.copy();
+        ItemStack out = stored.copy();
         out.setCount(1);
 
-        String label = TobaccoLabelHelper.getBoxLabel(box);
+        String label = TobaccoBoxHelper.getLabel(box);
         if (!label.isEmpty()) {
             TobaccoLabelHelper.setProductLabel(out, label);
         }
@@ -231,90 +223,21 @@ public class TobaccoBoxItem extends Item {
         player.level().playSound(null, player.blockPosition(), SoundEvents.BUNDLE_INSERT, SoundSource.PLAYERS, 0.8f, 1.0f);
     }
 
-    public static String getBlendLine(ItemStack stored) {
-        if (stored.isEmpty()) return "";
-
-        CompoundTag tag = stored.getTag();
-        if (tag == null) return "";
-
-        int quality = tag.contains("Quality") ? tag.getInt("Quality") : -1;
-
-        String cure = formatCureType(tag.getString("CureType"));
-        String cut = formatCutType(tag.getString("CutType"));
-        String tobacco = formatTobaccoType(tag.getString("TobaccoType"));
-
-        StringBuilder out = new StringBuilder();
-
-        if (quality >= 0) {
-            out.append(quality).append("/10");
-        }
-
-        if (!cure.isEmpty()) {
-            if (!out.isEmpty()) out.append(" ");
-            out.append(cure);
-        }
-
-        if (!cut.isEmpty()) {
-            if (!out.isEmpty()) out.append(" ");
-            out.append(cut);
-        }
-
-        if (!tobacco.isEmpty()) {
-            if (!out.isEmpty()) out.append(" ");
-            out.append(tobacco);
-        }
-
-        return out.toString();
-    }
-
-    private static String formatTobaccoType(String type) {
-        return switch (type) {
-            case "wild" -> "Wild";
-            case "virginia" -> "Virginia";
-            case "burley" -> "Burley";
-            case "oriental" -> "Oriental";
-            case "dokha" -> "Dokha";
-            case "shade" -> "Shade";
-            default -> "";
-        };
-    }
-
-    private static String formatCutType(String type) {
-        return switch (type) {
-            case "ribbon" -> "Ribbon Cut";
-            case "shag" -> "Shag Cut";
-            case "fine" -> "Fine Cut";
-            case "flake" -> "Flake Cut";
-            case "plug" -> "Plug Cut";
-            default -> "";
-        };
-    }
-
-    private static String formatCureType(String type) {
-        return switch (type) {
-            case "air_cured" -> "Air-Cured";
-            case "fire_cured" -> "Fire-Cured";
-            case "flue_cured" -> "Flue-Cured";
-            case "sun_cured" -> "Sun-Cured";
-            default -> "";
-        };
-    }
-
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
         ItemStack stored = TobaccoBoxHelper.getStoredItem(stack);
         int count = TobaccoBoxHelper.getStoredCount(stack);
         String label = TobaccoBoxHelper.getLabel(stack);
 
+        if (!label.isEmpty()) {
+            tooltip.add(Component.literal("Label: " + label).withStyle(ChatFormatting.YELLOW));
+        }
+
         if (stored.isEmpty()) {
             tooltip.add(Component.literal("Empty").withStyle(ChatFormatting.GRAY));
             tooltip.add(Component.literal("Holds cigars, cigarettes, loose tobacco, or shisha")
                     .withStyle(ChatFormatting.DARK_GRAY));
             return;
-        }
-
-        if (!label.isEmpty()) {
-            tooltip.add(Component.literal("Label: " + label).withStyle(ChatFormatting.YELLOW));
         }
 
         tooltip.add(Component.literal("Contents: " + TobaccoBoxHelper.getBoxContentsLine(stored))

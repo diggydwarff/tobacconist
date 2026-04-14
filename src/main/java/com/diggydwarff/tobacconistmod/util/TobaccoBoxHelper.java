@@ -192,13 +192,12 @@ public class TobaccoBoxHelper {
         }
 
         // These keys are examples. Replace with your real stored keys/helper calls.
-        String tobaccoType = tag.getString("TobaccoType");
         String cutType = tag.getString("CutType");
         String cureType = tag.getString("CureType");
         int quality = tag.contains("Quality") ? tag.getInt("Quality") : -1;
 
         String qualityWord = getQualityWord(quality);
-        String tobaccoWord = formatTobaccoType(tobaccoType);
+        String tobaccoWord = resolveTobaccoTypeDisplay(stack);
         String cutWord = formatCutType(cutType);
         String cureWord = formatCureType(cureType);
 
@@ -237,58 +236,104 @@ public class TobaccoBoxHelper {
     }
 
     public static String getBlendLine(ItemStack stored) {
-
         if (stored.isEmpty()) return "";
 
-        CompoundTag tag = stored.getTag();
-        if (tag == null) return "";
+        int quality100 = TobaccoCuringHelper.getQuality(stored);
+        int quality10 = quality100 >= 0 ? Math.max(1, Math.round(quality100 / 10.0f)) : -1;
 
-        int quality = tag.contains("Quality") ? tag.getInt("Quality") : -1;
-        int quality10 = Math.round(quality / 10f);
-
-        String cut = tag.getString("CutType");
-
-        // Pull the actual tobacco stack stored inside the cigarette
-        ItemStack tobaccoStack = ItemStack.EMPTY;
-
-        if (tag.contains("TobaccoStack")) {
-            tobaccoStack = ItemStack.of(tag.getCompound("TobaccoStack"));
-        }
-
-        String cure = "";
-        String leafType = "";
-
-        if (!tobaccoStack.isEmpty()) {
-            cure = TobaccoCuringHelper.getCureDisplayName(
-                    TobaccoCuringHelper.getCureType(tobaccoStack)
-            );
-
-            leafType = tobaccoStack.getHoverName().getString()
-                    .replace(" Loose Tobacco", "")
-                    .replace(" Tobacco", "");
-        }
-
-        String cutDisplay = TobaccoCuringHelper.getCutDisplayName(cut);
+        String cut = TobaccoCuringHelper.getCutDisplayName(TobaccoCuringHelper.getCutType(stored));
+        String cure = TobaccoCuringHelper.getCureDisplayName(TobaccoCuringHelper.getCureType(stored));
+        String tobaccoType = resolveTobaccoTypeDisplay(stored);
 
         StringBuilder out = new StringBuilder();
 
-        if (quality >= 0) {
-            out.append(quality10).append("/10 ");
+        if (quality10 >= 0) {
+            out.append(quality10).append("/10");
+        }
+
+        if (!cut.isEmpty() && !cut.equals("Uncut")) {
+            if (!out.isEmpty()) out.append(" ");
+            out.append(cut);
         }
 
         if (!cure.isEmpty()) {
-            out.append(cure).append(" ");
+            if (!out.isEmpty()) out.append(" ");
+            out.append(cure);
         }
 
-        if (!cutDisplay.isEmpty()) {
-            out.append(cutDisplay).append(" ");
+        if (!tobaccoType.isEmpty()) {
+            if (!out.isEmpty()) out.append(" ");
+            out.append(tobaccoType);
         }
 
-        if (!leafType.isEmpty()) {
-            out.append(leafType);
+        return out.toString();
+    }
+
+    private static String resolveTobaccoTypeDisplay(ItemStack stack) {
+        String raw = resolveTobaccoTypeId(stack);
+        return formatTobaccoType(raw);
+    }
+
+    private static String resolveTobaccoTypeId(ItemStack stack) {
+        if (stack.isEmpty()) return "";
+
+        CompoundTag tag = stack.getTag();
+
+        if (tag != null) {
+            String direct = normalizeTobaccoType(tag.getString("TobaccoType"));
+            if (!direct.isEmpty()) return direct;
+
+            if (tag.contains("PackedTobaccoData")) {
+                CompoundTag packed = tag.getCompound("PackedTobaccoData");
+                String packedType = normalizeTobaccoType(packed.getString("TobaccoType"));
+                if (!packedType.isEmpty()) return packedType;
+            }
+
+            if (tag.contains("TobaccoStack")) {
+                ItemStack nested = ItemStack.of(tag.getCompound("TobaccoStack"));
+                String nestedType = resolveTobaccoTypeId(nested);
+                if (!nestedType.isEmpty()) return nestedType;
+            }
+
+            String tobaccoLabel = normalizeTobaccoType(tag.getString("tobacco"));
+            if (!tobaccoLabel.isEmpty()) return tobaccoLabel;
         }
 
-        return out.toString().trim();
+        if (stack.is(ModItems.TOBACCO_LOOSE_WILD.get()) || stack.is(ModItems.WILD_TOBACCO_LEAF.get()) || stack.is(ModItems.WILD_TOBACCO_LEAF_DRY.get())) {
+            return "wild";
+        }
+        if (stack.is(ModItems.TOBACCO_LOOSE_VIRGINIA.get()) || stack.is(ModItems.VIRGINIA_TOBACCO_LEAF.get()) || stack.is(ModItems.VIRGINIA_TOBACCO_LEAF_DRY.get())) {
+            return "virginia";
+        }
+        if (stack.is(ModItems.TOBACCO_LOOSE_BURLEY.get()) || stack.is(ModItems.BURLEY_TOBACCO_LEAF.get()) || stack.is(ModItems.BURLEY_TOBACCO_LEAF_DRY.get())) {
+            return "burley";
+        }
+        if (stack.is(ModItems.TOBACCO_LOOSE_ORIENTAL.get()) || stack.is(ModItems.ORIENTAL_TOBACCO_LEAF.get()) || stack.is(ModItems.ORIENTAL_TOBACCO_LEAF_DRY.get())) {
+            return "oriental";
+        }
+        if (stack.is(ModItems.TOBACCO_LOOSE_DOKHA.get()) || stack.is(ModItems.DOKHA_TOBACCO_LEAF.get()) || stack.is(ModItems.DOKHA_TOBACCO_LEAF_DRY.get())) {
+            return "dokha";
+        }
+        if (stack.is(ModItems.TOBACCO_LOOSE_SHADE.get()) || stack.is(ModItems.SHADE_TOBACCO_LEAF.get()) || stack.is(ModItems.SHADE_TOBACCO_LEAF_DRY.get())) {
+            return "shade";
+        }
+
+        return "";
+    }
+
+    private static String normalizeTobaccoType(String value) {
+        if (value == null || value.isBlank()) return "";
+
+        String s = value.toLowerCase();
+
+        if (s.contains("virginia")) return "virginia";
+        if (s.contains("burley")) return "burley";
+        if (s.contains("oriental")) return "oriental";
+        if (s.contains("dokha")) return "dokha";
+        if (s.contains("shade")) return "shade";
+        if (s.contains("wild")) return "wild";
+
+        return "";
     }
 
     public static String toSuperscriptNumber(int num) {

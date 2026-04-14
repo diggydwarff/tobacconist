@@ -12,32 +12,32 @@ import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.Containers;
+import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
-import net.minecraft.world.level.block.AbstractFurnaceBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class TobaccoDryingRackBlockEntity extends BlockEntity implements net.minecraft.world.WorldlyContainer {
+public class TobaccoDryingRackBlockEntity extends BlockEntity implements WorldlyContainer {
 
     public static final int MAX_LEAVES = 16;
-    public static final int AIR_DRY_TIME = 72000;   // ~3 Minecraft days
-    public static final int SUN_DRY_TIME = 48000;   // ~2 Minecraft days
-    public static final int FIRE_DRY_TIME = 24000;  // ~1 Minecraft day
-    public static final int FLUE_DRY_TIME = 36000;  // ~1.5 Minecraft days
 
+    public static final int AIR_DRY_TIME = 72000;         // ~3 Minecraft days
+    public static final int SUN_DRY_TIME = 48000;         // ~2 Minecraft days (open sky)
+    public static final int GLASS_SUN_DRY_TIME = 54000;   // slightly slower / worse than open-sky sun cure
+    public static final int FIRE_DRY_TIME = 24000;        // ~1 Minecraft day
+    public static final int FLUE_DRY_TIME = 36000;        // ~1.5 Minecraft days
 
     private static final int[] SLOTS_FOR_SIDES = new int[]{0};
     private static final int[] SLOTS_FOR_BOTTOM = new int[]{0};
     private static final int[] NO_SLOTS = new int[]{};
-
 
     private ItemStack storedLeaf = ItemStack.EMPTY;
     private int dryingProgress = 0;
@@ -48,7 +48,6 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements net.min
     private boolean usedFlueDrying = false;
 
     private int directRainExposureTicks = 0;
-
     private int wetDamagePenalty = 0;
 
     private int airTicks = 0;
@@ -139,18 +138,18 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements net.min
     }
 
     @Override
-    public net.minecraft.world.item.ItemStack getItem(int slot) {
-        return slot == 0 ? storedLeaf : net.minecraft.world.item.ItemStack.EMPTY;
+    public ItemStack getItem(int slot) {
+        return slot == 0 ? storedLeaf : ItemStack.EMPTY;
     }
 
     @Override
-    public net.minecraft.world.item.ItemStack removeItem(int slot, int amount) {
+    public ItemStack removeItem(int slot, int amount) {
         if (slot != 0 || storedLeaf.isEmpty() || !isFinished()) {
-            return net.minecraft.world.item.ItemStack.EMPTY;
+            return ItemStack.EMPTY;
         }
 
-        net.minecraft.world.item.ItemStack out = storedLeaf.copy();
-        storedLeaf = net.minecraft.world.item.ItemStack.EMPTY;
+        ItemStack out = storedLeaf.copy();
+        storedLeaf = ItemStack.EMPTY;
 
         setChanged();
         syncRackState();
@@ -159,13 +158,13 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements net.min
     }
 
     @Override
-    public net.minecraft.world.item.ItemStack removeItemNoUpdate(int slot) {
+    public ItemStack removeItemNoUpdate(int slot) {
         if (slot != 0 || storedLeaf.isEmpty()) {
-            return net.minecraft.world.item.ItemStack.EMPTY;
+            return ItemStack.EMPTY;
         }
 
-        net.minecraft.world.item.ItemStack out = storedLeaf;
-        storedLeaf = net.minecraft.world.item.ItemStack.EMPTY;
+        ItemStack out = storedLeaf;
+        storedLeaf = ItemStack.EMPTY;
 
         setChanged();
         syncRackState();
@@ -189,12 +188,12 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements net.min
     }
 
     @Override
-    public int[] getSlotsForFace(net.minecraft.core.Direction side) {
-        if (side == net.minecraft.core.Direction.DOWN) {
+    public int[] getSlotsForFace(Direction side) {
+        if (side == Direction.DOWN) {
             return SLOTS_FOR_BOTTOM;
         }
 
-        if (side == net.minecraft.core.Direction.UP) {
+        if (side == Direction.UP) {
             return NO_SLOTS;
         }
 
@@ -202,7 +201,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements net.min
     }
 
     @Override
-    public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @org.jetbrains.annotations.Nullable Direction side) {
+    public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction side) {
         if (slot != 0) return false;
         if (side == Direction.UP) return false;
         if (side == Direction.DOWN) return false;
@@ -227,9 +226,9 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements net.min
     }
 
     @Override
-    public boolean canTakeItemThroughFace(int slot, net.minecraft.world.item.ItemStack stack, net.minecraft.core.Direction side) {
+    public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction side) {
         if (slot != 0) return false;
-        if (side != net.minecraft.core.Direction.DOWN) return false;
+        if (side != Direction.DOWN) return false;
 
         return isFinished();
     }
@@ -247,7 +246,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements net.min
 
     @Override
     public void clearContent() {
-        storedLeaf = net.minecraft.world.item.ItemStack.EMPTY;
+        storedLeaf = ItemStack.EMPTY;
         setChanged();
         syncRackState();
         syncToClient();
@@ -305,7 +304,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements net.min
         } else if (dominantTicks == flueTicks) {
             needed = FLUE_DRY_TIME;
         } else if (dominantTicks == sunTicks) {
-            needed = SUN_DRY_TIME;
+            needed = isCurrentlyGlassSunCuring() ? GLASS_SUN_DRY_TIME : SUN_DRY_TIME;
         } else {
             needed = AIR_DRY_TIME;
         }
@@ -343,7 +342,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements net.min
             return FLUE_DRY_TIME;
         }
         if (sunTicks >= fireTicks && sunTicks >= flueTicks && sunTicks >= airTicks) {
-            return SUN_DRY_TIME;
+            return isCurrentlyGlassSunCuring() ? GLASS_SUN_DRY_TIME : SUN_DRY_TIME;
         }
         return AIR_DRY_TIME;
     }
@@ -389,7 +388,9 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements net.min
         }
 
         if (hasDirectSunlight(level, worldPosition)) {
-            return "Sun-curing (direct sunlight)";
+            return isGlassSunCure(level, worldPosition)
+                    ? "Sun-curing (glass shelter)"
+                    : "Sun-curing (direct sunlight)";
         }
 
         if (canAirDry(level, worldPosition)) {
@@ -508,16 +509,19 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements net.min
             validDryingThisTick = true;
             rack.sunTicks++;
             rack.sunExposureTicks++;
+
+            if (isGlassSunCure(level, pos) && rack.sunTicks > SUN_DRY_TIME) {
+                // No-op: just keeps sun curing on the normal counter.
+                // The slower requirement is enforced by GLASS_SUN_DRY_TIME.
+            }
         } else if (airDry) {
             validDryingThisTick = true;
             rack.airTicks++;
 
-            // Only penalize if daytime sun curing is blocked, not night
             if (isDaytimeSunBlocked(level, pos)) {
                 shouldCountInterruption = true;
             }
         } else {
-            // Only count interruption when conditions are actually bad, not just night pause
             if (level.isRainingAt(pos.above())) {
                 shouldCountInterruption = true;
             }
@@ -536,9 +540,11 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements net.min
 
         rack.dryingProgress++;
 
+        int requiredSunTime = isGlassSunCure(level, pos) ? GLASS_SUN_DRY_TIME : SUN_DRY_TIME;
+
         if (rack.fireTicks >= FIRE_DRY_TIME
                 || rack.flueTicks >= FLUE_DRY_TIME
-                || rack.sunTicks >= SUN_DRY_TIME
+                || rack.sunTicks >= requiredSunTime
                 || rack.airTicks >= AIR_DRY_TIME) {
             rack.finishCuring();
             return;
@@ -549,6 +555,70 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements net.min
         } else {
             rack.setChanged();
         }
+    }
+
+    public void debugAddTime(int ticks) {
+        if (ticks <= 0 || !hasLeaves() || isFinished()) {
+            return;
+        }
+
+        if (level == null || level.isClientSide) {
+            return;
+        }
+
+        boolean overCampfire = isOverLitCampfire(level, worldPosition);
+        boolean flueCure = canFlueCure(level, worldPosition);
+        boolean inSun = hasDirectSunlight(level, worldPosition);
+        boolean airDry = canAirDry(level, worldPosition);
+
+        if (overCampfire) {
+            usedFireDrying = true;
+            fireTicks += ticks;
+        } else if (flueCure) {
+            usedFlueDrying = true;
+            flueTicks += ticks;
+        } else if (inSun) {
+            sunTicks += ticks;
+            sunExposureTicks += ticks;
+        } else if (airDry) {
+            airTicks += ticks;
+        }
+
+        dryingProgress += ticks;
+
+        int requiredSunTime = isGlassSunCure(level, worldPosition) ? GLASS_SUN_DRY_TIME : SUN_DRY_TIME;
+
+        if (fireTicks >= FIRE_DRY_TIME
+                || flueTicks >= FLUE_DRY_TIME
+                || sunTicks >= requiredSunTime
+                || airTicks >= AIR_DRY_TIME) {
+            finishCuring();
+            return;
+        }
+
+        syncToClient();
+    }
+
+    public void debugFinishNow() {
+        if (!hasLeaves() || isFinished() || level == null || level.isClientSide) {
+            return;
+        }
+
+        if (isOverLitCampfire(level, worldPosition)) {
+            usedFireDrying = true;
+            fireTicks = FIRE_DRY_TIME;
+        } else if (canFlueCure(level, worldPosition)) {
+            usedFlueDrying = true;
+            flueTicks = FLUE_DRY_TIME;
+        } else if (hasDirectSunlight(level, worldPosition)) {
+            int requiredSunTime = isGlassSunCure(level, worldPosition) ? GLASS_SUN_DRY_TIME : SUN_DRY_TIME;
+            sunTicks = requiredSunTime;
+            sunExposureTicks = requiredSunTime;
+        } else {
+            airTicks = AIR_DRY_TIME;
+        }
+
+        finishCuring();
     }
 
     private void finishCuring() {
@@ -617,11 +687,6 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements net.min
         syncToClient();
     }
 
-    private static boolean isStrongSunHours(Level level) {
-        long time = level.getDayTime() % 24000;
-        return time >= 2000 && time <= 10000;
-    }
-
     private void syncRackState() {
         if (level == null) {
             return;
@@ -662,7 +727,9 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements net.min
     }
 
     private static boolean hasDirectSunlight(Level level, BlockPos pos) {
-        if (level.isRainingAt(pos.above())) {
+        BlockPos abovePos = pos.above();
+
+        if (level.isRainingAt(abovePos) && level.canSeeSky(abovePos)) {
             return false;
         }
 
@@ -670,11 +737,15 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements net.min
             return false;
         }
 
-        if (!level.canSeeSky(pos.above())) {
+        if (level.getBrightness(LightLayer.SKY, abovePos) < 14) {
             return false;
         }
 
-        return level.getBrightness(LightLayer.SKY, pos.above()) >= 14;
+        if (!isOpenAirSunStructure(level, pos)) {
+            return false;
+        }
+
+        return level.canSeeSky(abovePos) || isGlassRoof(level.getBlockState(abovePos));
     }
 
     private static boolean isDaytimeSunBlocked(Level level, BlockPos pos) {
@@ -686,11 +757,11 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements net.min
             return true;
         }
 
-        if (!level.canSeeSky(pos.above())) {
+        if (!hasDirectSunlight(level, pos) && canAirDry(level, pos)) {
             return true;
         }
 
-        return level.getBrightness(LightLayer.SKY, pos.above()) < 14;
+        return false;
     }
 
     private static boolean canFlueCure(Level level, BlockPos pos) {
@@ -753,10 +824,10 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements net.min
                     BlockState state = level.getBlockState(check);
                     Block block = state.getBlock();
 
-                    if (block == net.minecraft.world.level.block.Blocks.FIRE
-                            || block == net.minecraft.world.level.block.Blocks.SOUL_FIRE
-                            || block == net.minecraft.world.level.block.Blocks.CAMPFIRE
-                            || block == net.minecraft.world.level.block.Blocks.SOUL_CAMPFIRE) {
+                    if (block == Blocks.FIRE
+                            || block == Blocks.SOUL_FIRE
+                            || block == Blocks.CAMPFIRE
+                            || block == Blocks.SOUL_CAMPFIRE) {
                         return true;
                     }
                 }
@@ -792,44 +863,78 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements net.min
         return count;
     }
 
-    private static boolean isIndirectCampfireHeat(Level level, BlockPos rackPos, BlockPos heatPos) {
-        BlockState state = level.getBlockState(heatPos);
-
-        if (!(state.getBlock() instanceof CampfireBlock)) {
-            return false;
-        }
-
-        if (!state.hasProperty(CampfireBlock.LIT) || !state.getValue(CampfireBlock.LIT)) {
-            return false;
-        }
-
-        int dx = Integer.signum(rackPos.getX() - heatPos.getX());
-        int dz = Integer.signum(rackPos.getZ() - heatPos.getZ());
-
-        if (dx == 0 && dz == 0) {
-            return false;
-        }
-
-        BlockPos between = heatPos.offset(dx, 0, dz);
-        BlockState betweenState = level.getBlockState(between);
-
-        return betweenState.isFaceSturdy(level, between, Direction.UP)
-                || betweenState.isFaceSturdy(level, between, Direction.NORTH)
-                || betweenState.isFaceSturdy(level, between, Direction.SOUTH)
-                || betweenState.isFaceSturdy(level, between, Direction.EAST)
-                || betweenState.isFaceSturdy(level, between, Direction.WEST);
-    }
-
     private static boolean isFlueHeatSource(Level level, BlockPos pos) {
         BlockState state = level.getBlockState(pos);
         Block block = state.getBlock();
 
-        if (block == com.diggydwarff.tobacconistmod.block.ModBlocks.FLUE_FIREBOX.get()) {
+        if (block == ModBlocks.FLUE_FIREBOX.get()) {
             return state.hasProperty(net.minecraft.world.level.block.state.properties.BlockStateProperties.LIT)
                     && state.getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.LIT);
         }
 
         return false;
+    }
+
+    private static boolean isGlassRoof(BlockState state) {
+        return state.is(Blocks.GLASS)
+                || state.is(Blocks.GLASS_PANE)
+                || state.is(Blocks.WHITE_STAINED_GLASS)
+                || state.is(Blocks.ORANGE_STAINED_GLASS)
+                || state.is(Blocks.MAGENTA_STAINED_GLASS)
+                || state.is(Blocks.LIGHT_BLUE_STAINED_GLASS)
+                || state.is(Blocks.YELLOW_STAINED_GLASS)
+                || state.is(Blocks.LIME_STAINED_GLASS)
+                || state.is(Blocks.PINK_STAINED_GLASS)
+                || state.is(Blocks.GRAY_STAINED_GLASS)
+                || state.is(Blocks.LIGHT_GRAY_STAINED_GLASS)
+                || state.is(Blocks.CYAN_STAINED_GLASS)
+                || state.is(Blocks.PURPLE_STAINED_GLASS)
+                || state.is(Blocks.BLUE_STAINED_GLASS)
+                || state.is(Blocks.BROWN_STAINED_GLASS)
+                || state.is(Blocks.GREEN_STAINED_GLASS)
+                || state.is(Blocks.RED_STAINED_GLASS)
+                || state.is(Blocks.BLACK_STAINED_GLASS)
+                || state.is(Blocks.WHITE_STAINED_GLASS_PANE)
+                || state.is(Blocks.ORANGE_STAINED_GLASS_PANE)
+                || state.is(Blocks.MAGENTA_STAINED_GLASS_PANE)
+                || state.is(Blocks.LIGHT_BLUE_STAINED_GLASS_PANE)
+                || state.is(Blocks.YELLOW_STAINED_GLASS_PANE)
+                || state.is(Blocks.LIME_STAINED_GLASS_PANE)
+                || state.is(Blocks.PINK_STAINED_GLASS_PANE)
+                || state.is(Blocks.GRAY_STAINED_GLASS_PANE)
+                || state.is(Blocks.LIGHT_GRAY_STAINED_GLASS_PANE)
+                || state.is(Blocks.CYAN_STAINED_GLASS_PANE)
+                || state.is(Blocks.PURPLE_STAINED_GLASS_PANE)
+                || state.is(Blocks.BLUE_STAINED_GLASS_PANE)
+                || state.is(Blocks.BROWN_STAINED_GLASS_PANE)
+                || state.is(Blocks.GREEN_STAINED_GLASS_PANE)
+                || state.is(Blocks.RED_STAINED_GLASS_PANE)
+                || state.is(Blocks.BLACK_STAINED_GLASS_PANE);
+    }
+
+    private static boolean isOpenAirSunStructure(Level level, BlockPos pos) {
+        int openSides = 0;
+
+        if (isOpenSide(level, pos.north())) openSides++;
+        if (isOpenSide(level, pos.south())) openSides++;
+        if (isOpenSide(level, pos.east())) openSides++;
+        if (isOpenSide(level, pos.west())) openSides++;
+
+        return openSides >= 2;
+    }
+
+    private static boolean isOpenSide(Level level, BlockPos pos) {
+        BlockState state = level.getBlockState(pos);
+        return state.isAir();
+    }
+
+    private static boolean isGlassSunCure(Level level, BlockPos pos) {
+        BlockPos abovePos = pos.above();
+        return !level.canSeeSky(abovePos) && isGlassRoof(level.getBlockState(abovePos)) && isOpenAirSunStructure(level, pos);
+    }
+
+    private boolean isCurrentlyGlassSunCuring() {
+        return level != null && hasLeaves() && isGlassSunCure(level, worldPosition);
     }
 
     private boolean isValidLeaf(ItemStack stack) {
@@ -894,6 +999,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements net.min
 
         int light = level != null ? level.getBrightness(LightLayer.SKY, worldPosition.above()) : 0;
         boolean raining = level != null && level.isRainingAt(worldPosition.above());
+        boolean glassSun = level != null && isGlassSunCure(level, worldPosition);
+        boolean openAirSun = level != null && isOpenAirSunStructure(level, worldPosition);
 
         return List.of(
                 Component.literal("=== Drying Rack Debug ===").withStyle(ChatFormatting.GOLD),
@@ -914,6 +1021,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements net.min
 
                 Component.literal("Light: " + light),
                 Component.literal("Raining: " + raining),
+                Component.literal("Glass Sun Cure: " + glassSun),
+                Component.literal("Open-Air Sun Structure: " + openAirSun),
 
                 Component.literal("Finished: " + isFinished()),
                 Component.literal("Batch Locked: " + isBatchLocked())

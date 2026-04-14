@@ -5,6 +5,7 @@ import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.LooseTobaccoItem;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.ShishaFlavoringItem;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
+import com.diggydwarff.tobacconistmod.util.TobaccoDataHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoProductQualityHelper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -84,34 +85,17 @@ public class ShishaTobaccoRecipe extends CustomRecipe {
 
         Item newItem = ModItems.SHISHA_TOBACCO.get();
         ItemStack returnStack = new ItemStack(newItem, 1);
-        CompoundTag tag = new CompoundTag();
+        CompoundTag tag = returnStack.getOrCreateTag();
 
         tag.putString("tobacco", TobaccoProductQualityHelper.getShortTobaccoLabel(tobaccoStack));
         tag.putString("flavor1", flavorStack1.getDisplayName().getString());
         tag.putString("flavor2", flavorStack2.isEmpty() ? "" : flavorStack2.getDisplayName().getString());
         tag.putString("flavor3", flavorStack3.isEmpty() ? "" : flavorStack3.getDisplayName().getString());
 
-        String cutType = TobaccoCuringHelper.getCutType(tobaccoStack);
-        if (!cutType.isEmpty()) {
-            tag.putString(TobaccoCuringHelper.TAG_CUT_TYPE, cutType);
-        }
-
-        String cureType = TobaccoCuringHelper.getCureType(tobaccoStack);
-        if (!cureType.isEmpty()) {
-            tag.putString(TobaccoCuringHelper.TAG_CURE_TYPE, cureType);
-        }
-
-        int quality = TobaccoCuringHelper.getQuality(tobaccoStack);
-        tag.putInt(TobaccoCuringHelper.TAG_QUALITY, quality);
-        tag.putString(TobaccoCuringHelper.TAG_QUALITY_TIER, TobaccoCuringHelper.getQualityTierId(quality));
+        TobaccoDataHelper.applyTobaccoMetadata(returnStack, tobaccoStack);
 
         CompoundTag tobaccoData = tobaccoStack.getTag();
         if (tobaccoData != null) {
-            tag.put("PackedTobaccoData", tobaccoData.copy());
-        }
-        // copy aging / fermentation
-        if (tobaccoData != null) {
-
             if (tobaccoData.contains("AgedDays")) {
                 tag.putInt("AgedDays", tobaccoData.getInt("AgedDays"));
             }
@@ -131,7 +115,6 @@ public class ShishaTobaccoRecipe extends CustomRecipe {
                 TobaccoProductQualityHelper.getShishaQuality(tobaccoStack)
         );
 
-        returnStack.setTag(tag);
         return returnStack;
     }
 

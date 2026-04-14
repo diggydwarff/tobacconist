@@ -5,6 +5,7 @@ import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.LooseTobaccoItem;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.RollingPaperItem;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
+import com.diggydwarff.tobacconistmod.util.TobaccoDataHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoProductQualityHelper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -57,69 +58,41 @@ public class CigaretteRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer craftingContainer, RegistryAccess registryAccess) {
+    public ItemStack assemble(CraftingContainer container, RegistryAccess registryAccess) {
+        ItemStack paperStack = ItemStack.EMPTY;
         ItemStack tobaccoStack = ItemStack.EMPTY;
 
-        for (int i = 0; i < craftingContainer.getContainerSize(); ++i) {
-            ItemStack itemstack = craftingContainer.getItem(i);
-            if (!itemstack.isEmpty() && itemstack.getItem() instanceof LooseTobaccoItem) {
-                tobaccoStack = itemstack;
-                break;
+        for (int i = 0; i < container.getContainerSize(); i++) {
+            ItemStack stack = container.getItem(i);
+            if (stack.isEmpty()) continue;
+
+            if (stack.is(ModItems.ROLLING_PAPER.get())) {
+                paperStack = stack;
+            } else if (TobaccoCuringHelper.isLooseTobacco(stack)) {
+                tobaccoStack = stack;
             }
         }
 
-        if (tobaccoStack.isEmpty()) {
+        if (paperStack.isEmpty() || tobaccoStack.isEmpty()) {
             return ItemStack.EMPTY;
         }
 
-        Item newItem = ModItems.CIGARETTE.get();
-        ItemStack returnStack = new ItemStack(newItem, 1);
-        CompoundTag tag = new CompoundTag();
+        ItemStack result = new ItemStack(ModItems.CIGARETTE.get());
 
+        CompoundTag tag = result.getOrCreateTag();
         tag.putString("tobacco", TobaccoProductQualityHelper.getShortTobaccoLabel(tobaccoStack));
 
-        String cutType = TobaccoCuringHelper.getCutType(tobaccoStack);
-        if (!cutType.isEmpty()) {
-            tag.putString(TobaccoCuringHelper.TAG_CUT_TYPE, cutType);
-        }
-
-        String cureType = TobaccoCuringHelper.getCureType(tobaccoStack);
-        if (!cureType.isEmpty()) {
-            tag.putString(TobaccoCuringHelper.TAG_CURE_TYPE, cureType);
-        }
+        TobaccoDataHelper.applyTobaccoMetadata(result, tobaccoStack);
 
         int quality = TobaccoCuringHelper.getQuality(tobaccoStack);
-        tag.putInt(TobaccoCuringHelper.TAG_QUALITY, quality);
-        tag.putString(TobaccoCuringHelper.TAG_QUALITY_TIER, TobaccoCuringHelper.getQualityTierId(quality));
+        tag.putInt("InputTobaccoQuality", quality);
+        tag.putString("InputCutType", TobaccoCuringHelper.getCutType(tobaccoStack));
+        tag.putString("InputCureType", TobaccoCuringHelper.getCureType(tobaccoStack));
 
-        CompoundTag tobaccoData = tobaccoStack.getTag();
-        if (tobaccoData != null) {
-            tag.put("PackedTobaccoData", tobaccoData.copy());
-        }
-        // copy aging / fermentation
-        if (tobaccoData != null) {
+        int productQuality = Math.max(1, Math.round(quality / 10.0f));
+        tag.putInt("ProductQuality", productQuality);
 
-            if (tobaccoData.contains("AgedDays")) {
-                tag.putInt("AgedDays", tobaccoData.getInt("AgedDays"));
-            }
-
-            if (tobaccoData.getBoolean("Fermented")) {
-                tag.putBoolean("Fermented", true);
-            }
-
-            if (tobaccoData.getBoolean("Ruined")) {
-                tag.putBoolean("Ruined", true);
-            }
-        }
-
-        TobaccoProductQualityHelper.applyProductQualityToTag(
-                tag,
-                tobaccoStack,
-                TobaccoProductQualityHelper.getCigaretteQuality(tobaccoStack)
-        );
-
-        returnStack.setTag(tag);
-        return returnStack;
+        return result;
     }
 
     @Override

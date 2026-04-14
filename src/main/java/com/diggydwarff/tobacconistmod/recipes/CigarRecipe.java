@@ -5,6 +5,7 @@ import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.LooseTobaccoItem;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.TobaccoLeafItem;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
+import com.diggydwarff.tobacconistmod.util.TobaccoDataHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoProductQualityHelper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -76,9 +77,8 @@ public class CigarRecipe extends CustomRecipe {
             return ItemStack.EMPTY;
         }
 
-        Item newItem = ModItems.CIGAR.get();
-        ItemStack returnStack = new ItemStack(newItem, 1);
-        CompoundTag tag = new CompoundTag();
+        ItemStack returnStack = new ItemStack(ModItems.CIGAR.get(), 1);
+        CompoundTag tag = returnStack.getOrCreateTag();
 
         CompoundTag wrapperData = tobaccoLeafStack.getTag();
         if (wrapperData != null) {
@@ -88,31 +88,13 @@ public class CigarRecipe extends CustomRecipe {
         tag.putString("tobacco", TobaccoProductQualityHelper.getShortTobaccoLabel(tobaccoStack));
         tag.putString("wrapper", tobaccoLeafStack.getDisplayName().getString());
 
-        String cutType = TobaccoCuringHelper.getCutType(tobaccoStack);
-        if (!cutType.isEmpty()) {
-            tag.putString(TobaccoCuringHelper.TAG_CUT_TYPE, cutType);
-        }
+        TobaccoDataHelper.applyTobaccoMetadata(returnStack, tobaccoStack);
 
-        String cureType = TobaccoCuringHelper.getCureType(tobaccoStack);
-        if (!cureType.isEmpty()) {
-            tag.putString(TobaccoCuringHelper.TAG_CURE_TYPE, cureType);
-        }
-
-        int quality = TobaccoCuringHelper.getQuality(tobaccoStack);
-        tag.putInt(TobaccoCuringHelper.TAG_QUALITY, quality);
-        tag.putString(TobaccoCuringHelper.TAG_QUALITY_TIER, TobaccoCuringHelper.getQualityTierId(quality));
-
-        CompoundTag tobaccoData = tobaccoStack.getTag();
-        if (tobaccoData != null) {
-            tag.put("PackedTobaccoData", tobaccoData.copy());
-        }
-        // merge aging data from filler + wrapper
         CompoundTag fillerTag = tobaccoStack.getTag();
         CompoundTag wrapperTag = tobaccoLeafStack.getTag();
 
         int fillerAge = fillerTag != null ? fillerTag.getInt("AgedDays") : 0;
         int wrapperAge = wrapperTag != null ? wrapperTag.getInt("AgedDays") : 0;
-
         int finalAge = Math.max(fillerAge, wrapperAge);
 
         if (finalAge > 0) {
@@ -141,7 +123,6 @@ public class CigarRecipe extends CustomRecipe {
                 TobaccoProductQualityHelper.getCigarQuality(tobaccoStack)
         );
 
-        returnStack.setTag(tag);
         return returnStack;
     }
 
