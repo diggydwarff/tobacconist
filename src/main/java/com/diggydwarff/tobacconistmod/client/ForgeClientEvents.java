@@ -18,6 +18,8 @@ public class ForgeClientEvents {
 
     @SubscribeEvent
     public static void onKeyInput(InputEvent.Key event) {
+      if (!ModList.get().isLoaded("curios")) return;
+
       if (ClientSetup.USE_AS_CURIO.consumeClick()) {
         Player player = Minecraft.getInstance().player;
         if (player == null) return;
