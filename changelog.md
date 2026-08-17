@@ -1,4 +1,89 @@
-## Update 3.0.0 — The Processing Update
+## Update 3.1.0 - The Refinement Update
+
+### Major Changes
+- Updated Tobacconist to **Minecraft 1.21.1**
+- Migrated from **Forge to NeoForge**
+- Preserved existing item and block registry IDs where possible for world compatibility
+
+### New Features
+- Added **Tobacconist's Spectacles**
+  - Inspect tobacco crops and processing blocks in-world
+  - View crop growth, growing conditions, potential quality, curing progress, barrel status, aging/fermentation information, and more
+  - Can be worn in the **Curios Eyes slot**
+  - Falls back to the vanilla **Head slot** when Curios is not installed
+
+- Added **Mouth Slot Smoking Hotkey**
+  - Smoke pipes, cigars, and cigarettes directly while equipped in the Curios Mouth slot
+  - Added action-bar feedback for empty, invalid, or exhausted smoking items
+
+- Added a new **Tobacconist advancement tree**
+  - A New Leaf
+  - Homegrown
+  - Cured to Perfection
+  - A Cut Above
+  - Tobacconist's Eye
+  - Roll Your Own
+  - Fine Taste
+  - Cloud Culture
+  - Master Tobacconist
+
+- Completely expanded **The Tobacconist's Manual**
+  - Updated to accurately document the current mod
+  - Covers growing, curing, cutting, fermentation, aging, quality, smoking, hookahs, automation, Spectacles, compatibility, and more
+  - Added normal crafting recipes and JEI visibility for the Manual
+
+### Configuration
+- Added option to **disable the Tobacco Quality System**
+  - Processing mechanics remain available when quality is disabled
+  - Existing quality data is preserved if the system is re-enabled
+
+- Added option to **disable Nicotine effects**
+
+### Quality of Life
+- Improved Curios integration while keeping **Curios fully optional**
+- Improved Spectacles rendering and positioning
+- Spectacles now use the same forehead appearance whether equipped through Curios or the vanilla Head slot
+- Improved crop inspection so **environmental conditions are evaluated separately from crop maturity**
+- Added improved processing information for Drying Racks and Tobacco Barrels
+- Improved hopper and automation support
+- Removed misleading/outdated tooltips and debug instructions
+- Cleaned up the Tobacconist creative tab
+- Restored the Moroccan Hookah painting to normal painting selection
+
+### Gameplay & Balance
+- Cigarettes now correctly use the intended tobacco cut-quality system
+  - **Shag** is best for cigarettes
+  - **Flake** is best for cigars
+  - **Rough** is best for shisha
+
+- Added a short server-side cooldown to Mouth-slot smoking to prevent packet/effect spam
+- Improved smoke particle behavior when manually smoking
+
+### Fixes
+- Fixed several tobacco crop loot tables incorrectly checking Burley crop states
+- Fixed duplicate seed drops from tall tobacco crops
+- Fixed several incorrect block hardness and tool requirements
+- Fixed Drying Racks allowing hoppers to extract an entire batch when only one item was requested
+- Fixed Hookah slots accepting invalid items
+- Fixed incorrect Hookah processing logic involving the water slot
+- Fixed Hookah smoke-position calculations
+- Fixed Tobacco Barrel client synchronization
+- Fixed Tobacco Box quality grades using outdated quality thresholds
+- Fixed wooden pipe colors rendering incorrectly after the 1.21 rendering changes
+- Fixed Tobacconist's Spectacles rendering twice when equipped in the vanilla Head slot
+- Fixed Moroccan Hookah painting data and placement
+- Fixed and cleaned up several recipes, models, loot tables, tags, and obsolete resources
+
+### Compatibility
+- Improved **JEI 1.21.1 compatibility**
+- Improved **Patchouli 1.21.1 integration**
+- Improved **Curios 1.21.1 integration**
+- Hardened optional Curios support so Tobacconist can run without Curios installed
+- Maintained optional Farmer's Delight and Fruits Delight integration
+
+-----------------
+
+## Update 3.0.0 - The Processing Update
 
 ### Major Additions
 - **Complete Tobacco Processing System**

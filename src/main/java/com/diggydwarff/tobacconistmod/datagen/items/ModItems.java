@@ -18,7 +18,7 @@ public class ModItems {
     // Tobacco Guide Item
     public static final Supplier<Item> TOBACCO_GUIDE =
             ITEMS.register("tobacco_guide",
-                    () -> new Item(new Item.Properties().stacksTo(1)));
+                    () -> new TobaccoGuideItem(new Item.Properties().stacksTo(1)));
 
     public static final Supplier<Item> TOBACCONISTS_SPECTACLES =
             ITEMS.register("tobacconists_spectacles",

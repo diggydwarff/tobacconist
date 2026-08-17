@@ -10,5 +10,7 @@
   "show_progress": false,
   "show_toasts": false,
   "text_overflow_mode": "resize",
-  "use_resource_pack": true
+  "use_resource_pack": true,
+  "dont_generate_book": true,
+  "custom_book_item": "tobacconistmod:tobacco_guide"
 }
