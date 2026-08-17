@@ -1,0 +1,37 @@
+{
+  "parent": "tobacconistmod:tobacconist/a_cut_above",
+  "display": {
+    "icon": {
+      "id": "tobacconistmod:cigar",
+      "count": 1
+    },
+    "title": {
+      "translate": "advancement.tobacconistmod.fine_taste"
+    },
+    "description": {
+      "translate": "advancement.tobacconistmod.fine_taste.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "obtain": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tobacconistmod:cigar"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "obtain"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

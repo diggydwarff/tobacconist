@@ -1,0 +1,92 @@
+{
+  "display": {
+    "icon": {
+      "id": "tobacconistmod:wild_tobacco_seeds",
+      "count": 1
+    },
+    "title": {
+      "translate": "advancement.tobacconistmod.root"
+    },
+    "description": {
+      "translate": "advancement.tobacconistmod.root.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false,
+    "background": "minecraft:textures/block/dark_oak_planks.png"
+  },
+  "criteria": {
+    "wild_seed": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tobacconistmod:wild_tobacco_seeds"
+          }
+        ]
+      }
+    },
+    "virginia_seed": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tobacconistmod:virginia_tobacco_seeds"
+          }
+        ]
+      }
+    },
+    "burley_seed": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tobacconistmod:burley_tobacco_seeds"
+          }
+        ]
+      }
+    },
+    "oriental_seed": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tobacconistmod:oriental_tobacco_seeds"
+          }
+        ]
+      }
+    },
+    "dokha_seed": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tobacconistmod:dokha_tobacco_seeds"
+          }
+        ]
+      }
+    },
+    "shade_seed": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tobacconistmod:shade_tobacco_seeds"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "wild_seed",
+      "virginia_seed",
+      "burley_seed",
+      "oriental_seed",
+      "dokha_seed",
+      "shade_seed"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

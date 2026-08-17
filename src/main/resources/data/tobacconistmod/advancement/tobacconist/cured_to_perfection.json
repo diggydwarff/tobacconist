@@ -1,0 +1,92 @@
+{
+  "parent": "tobacconistmod:tobacconist/first_harvest",
+  "display": {
+    "icon": {
+      "id": "tobacconistmod:tobacco_leaf_virginia_dry",
+      "count": 1
+    },
+    "title": {
+      "translate": "advancement.tobacconistmod.cured_to_perfection"
+    },
+    "description": {
+      "translate": "advancement.tobacconistmod.cured_to_perfection.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "item_0": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tobacconistmod:tobacco_leaf_wild_dry"
+          }
+        ]
+      }
+    },
+    "item_1": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tobacconistmod:tobacco_leaf_virginia_dry"
+          }
+        ]
+      }
+    },
+    "item_2": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tobacconistmod:tobacco_leaf_burley_dry"
+          }
+        ]
+      }
+    },
+    "item_3": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tobacconistmod:tobacco_leaf_oriental_dry"
+          }
+        ]
+      }
+    },
+    "item_4": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tobacconistmod:tobacco_leaf_dokha_dry"
+          }
+        ]
+      }
+    },
+    "item_5": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tobacconistmod:tobacco_leaf_shade_dry"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "item_0",
+      "item_1",
+      "item_2",
+      "item_3",
+      "item_4",
+      "item_5"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

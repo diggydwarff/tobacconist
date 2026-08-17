@@ -1,0 +1,102 @@
+{
+  "parent": "tobacconistmod:tobacconist/a_cut_above",
+  "display": {
+    "icon": {
+      "id": "tobacconistmod:tobacco_guide",
+      "count": 1
+    },
+    "title": {
+      "translate": "advancement.tobacconistmod.master_tobacconist"
+    },
+    "description": {
+      "translate": "advancement.tobacconistmod.master_tobacconist.desc"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "spectacles": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tobacconistmod:tobacconists_spectacles"
+          }
+        ]
+      }
+    },
+    "pipe": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tobacconistmod:wooden_smoking_pipe"
+          }
+        ]
+      }
+    },
+    "cigarette": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tobacconistmod:cigarette"
+          }
+        ]
+      }
+    },
+    "cigar": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tobacconistmod:cigar"
+          }
+        ]
+      }
+    },
+    "shisha": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tobacconistmod:shisha_tobacco"
+          }
+        ]
+      }
+    },
+    "barrel": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tobacconistmod:tobacco_barrel"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "spectacles"
+    ],
+    [
+      "pipe"
+    ],
+    [
+      "cigarette"
+    ],
+    [
+      "cigar"
+    ],
+    [
+      "shisha"
+    ],
+    [
+      "barrel"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

@@ -1,0 +1,37 @@
+{
+  "parent": "tobacconistmod:tobacconist/a_cut_above",
+  "display": {
+    "icon": {
+      "id": "tobacconistmod:shisha_tobacco",
+      "count": 1
+    },
+    "title": {
+      "translate": "advancement.tobacconistmod.cloud_culture"
+    },
+    "description": {
+      "translate": "advancement.tobacconistmod.cloud_culture.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "obtain": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tobacconistmod:shisha_tobacco"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "obtain"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

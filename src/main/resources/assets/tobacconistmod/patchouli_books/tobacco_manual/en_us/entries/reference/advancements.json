@@ -1,0 +1,27 @@
+{
+  "name": "Advancements",
+  "icon": "tobacconistmod:tobacco_guide",
+  "category": "tobacconistmod:reference",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Tobacconist includes a small advancement tree as optional milestones. Advancements do not unlock mechanics and are not required for progression; they simply mark important steps through the craft."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Core Progression",
+      "text": "$(thing)A New Leaf$() — obtain any tobacco seed.$(br)$(thing)Homegrown$() — obtain a fresh tobacco leaf.$(br)$(thing)Cured to Perfection$() — obtain a cured leaf.$(br)$(thing)A Cut Above$() — obtain loose cut tobacco."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Specialties",
+      "text": "$(thing)Tobacconist’s Eye$() — obtain the Spectacles.$(br)$(thing)Roll Your Own$() — make a cigarette.$(br)$(thing)Fine Taste$() — make a cigar.$(br)$(thing)Cloud Culture$() — prepare shisha tobacco."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Master Tobacconist",
+      "text": "The final goal remembers your progress over time. Obtain Tobacconist’s Spectacles, a wooden smoking pipe, a cigarette, a cigar, shisha tobacco, and a Tobacco Barrel. You do $(bold)not$() need to carry all six at once."
+    }
+  ]
+}
