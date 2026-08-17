@@ -1,5 +1,7 @@
 package com.diggydwarff.tobacconistmod.compat.jei;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import net.minecraft.world.item.Item;
@@ -63,8 +65,8 @@ public record DryingRackJeiRecipe(
 
     private static ItemStack makeRawLeaf(Item rawLeafItem) {
         ItemStack stack = new ItemStack(rawLeafItem);
-        stack.getOrCreateTag().putInt(TobaccoCuringHelper.TAG_QUALITY, 60);
-        stack.getOrCreateTag().putString(
+        LegacyItemTags.getOrCreateTag(stack).putInt(TobaccoCuringHelper.TAG_QUALITY, 60);
+        LegacyItemTags.getOrCreateTag(stack).putString(
                 TobaccoCuringHelper.TAG_QUALITY_TIER,
                 TobaccoCuringHelper.getQualityTierId(60)
         );

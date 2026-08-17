@@ -19,7 +19,7 @@ import net.minecraft.world.item.ItemStack;
 public class CigarRecipeCategory implements IRecipeCategory<CigarJeiRecipe> {
 
     public static final RecipeType<CigarJeiRecipe> TYPE =
-            new RecipeType<>(new ResourceLocation(TobacconistMod.MODID, "cigar_rolling"), CigarJeiRecipe.class);
+            new RecipeType<>(ResourceLocation.fromNamespaceAndPath(TobacconistMod.MODID, "cigar_rolling"), CigarJeiRecipe.class);
 
     private final IDrawable background;
     private final IDrawable icon;

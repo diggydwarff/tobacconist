@@ -8,11 +8,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.generators.BlockStateProvider;
-import net.minecraftforge.client.model.generators.ConfiguredModel;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
+import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
+import java.util.function.Supplier;
 import java.util.function.Function;
 
 public class ModBlockStateProvider extends BlockStateProvider {
@@ -46,34 +47,34 @@ public class ModBlockStateProvider extends BlockStateProvider {
         switch (type) {
             case "wild":
                 models[0] = new ConfiguredModel(models().crop(modelName + state.getValue(((WildCropBlock) block).getAgeProperty()),
-                        new ResourceLocation(TobacconistMod.MODID, "block/tobacco/" + textureName + state.getValue(((WildCropBlock) block).getAgeProperty()))).renderType("cutout"));
+                        ResourceLocation.fromNamespaceAndPath(TobacconistMod.MODID, "block/tobacco/" + textureName + state.getValue(((WildCropBlock) block).getAgeProperty()))).renderType("cutout"));
                 break;
             case "virginia":
                 models[0] = new ConfiguredModel(models().crop(modelName + state.getValue(((VirginiaCropBlock) block).getAgeProperty()),
-                        new ResourceLocation(TobacconistMod.MODID, "block/tobacco/" + textureName + state.getValue(((VirginiaCropBlock) block).getAgeProperty()))).renderType("cutout"));
+                        ResourceLocation.fromNamespaceAndPath(TobacconistMod.MODID, "block/tobacco/" + textureName + state.getValue(((VirginiaCropBlock) block).getAgeProperty()))).renderType("cutout"));
                 break;
             case "shade":
                 models[0] = new ConfiguredModel(models().crop(modelName + state.getValue(((ShadeCropBlock) block).getAgeProperty()),
-                        new ResourceLocation(TobacconistMod.MODID, "block/tobacco/" + textureName + state.getValue(((ShadeCropBlock) block).getAgeProperty()))).renderType("cutout"));
+                        ResourceLocation.fromNamespaceAndPath(TobacconistMod.MODID, "block/tobacco/" + textureName + state.getValue(((ShadeCropBlock) block).getAgeProperty()))).renderType("cutout"));
                 break;
             case "burley":
                 models[0] = new ConfiguredModel(models().crop(modelName + state.getValue(((BurleyCropBlock) block).getAgeProperty()),
-                        new ResourceLocation(TobacconistMod.MODID, "block/tobacco/" + textureName + state.getValue(((BurleyCropBlock) block).getAgeProperty()))).renderType("cutout"));
+                        ResourceLocation.fromNamespaceAndPath(TobacconistMod.MODID, "block/tobacco/" + textureName + state.getValue(((BurleyCropBlock) block).getAgeProperty()))).renderType("cutout"));
                 break;
             case "dokha":
                 models[0] = new ConfiguredModel(models().crop(modelName + state.getValue(((DokhaCropBlock) block).getAgeProperty()),
-                        new ResourceLocation(TobacconistMod.MODID, "block/tobacco/" + textureName + state.getValue(((DokhaCropBlock) block).getAgeProperty()))).renderType("cutout"));
+                        ResourceLocation.fromNamespaceAndPath(TobacconistMod.MODID, "block/tobacco/" + textureName + state.getValue(((DokhaCropBlock) block).getAgeProperty()))).renderType("cutout"));
                 break;
             case "oriental":
                 models[0] = new ConfiguredModel(models().crop(modelName + state.getValue(((OrientalCropBlock) block).getAgeProperty()),
-                        new ResourceLocation(TobacconistMod.MODID, "block/tobacco/" + textureName + state.getValue(((OrientalCropBlock) block).getAgeProperty()))).renderType("cutout"));
+                        ResourceLocation.fromNamespaceAndPath(TobacconistMod.MODID, "block/tobacco/" + textureName + state.getValue(((OrientalCropBlock) block).getAgeProperty()))).renderType("cutout"));
                 break;
         }
 
         return models;
     }
 
-    private void blockWithItem(RegistryObject<Block> blockRegistryObject) {
+    private void blockWithItem(Supplier<Block> blockRegistryObject) {
         simpleBlockWithItem(blockRegistryObject.get(), cubeAll(blockRegistryObject.get()));
     }
 

@@ -2,7 +2,7 @@ package com.diggydwarff.tobacconistmod.screen;
 
 import com.diggydwarff.tobacconistmod.block.entity.FlueFireboxBlockEntity;
 import com.diggydwarff.tobacconistmod.block.entity.ModBlockEntities;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -10,14 +10,13 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraftforge.common.ForgeHooks;
 import org.jetbrains.annotations.NotNull;
 
 public class FlueFireboxMenu extends AbstractContainerMenu {
     private final Container container;
     private final ContainerData data;
 
-    public FlueFireboxMenu(int windowId, Inventory playerInventory, FriendlyByteBuf buf) {
+    public FlueFireboxMenu(int windowId, Inventory playerInventory, RegistryFriendlyByteBuf buf) {
         this(windowId, playerInventory, getBlockEntityContainer(playerInventory, buf), new SimpleContainerData(2));
     }
 
@@ -35,7 +34,7 @@ public class FlueFireboxMenu extends AbstractContainerMenu {
         this.addSlot(new Slot(container, 0, 80, 53) {
             @Override
             public boolean mayPlace(@NotNull ItemStack stack) {
-                return ForgeHooks.getBurnTime(stack, RecipeType.SMELTING) > 0;
+                return stack.getBurnTime(RecipeType.SMELTING) > 0;
             }
         });
 
@@ -46,7 +45,7 @@ public class FlueFireboxMenu extends AbstractContainerMenu {
         addDataSlots(data);
     }
 
-    private static Container getBlockEntityContainer(Inventory playerInventory, FriendlyByteBuf buf) {
+    private static Container getBlockEntityContainer(Inventory playerInventory, RegistryFriendlyByteBuf buf) {
         var pos = buf.readBlockPos();
         if (playerInventory.player.level().getBlockEntity(pos) instanceof FlueFireboxBlockEntity be) {
             return be;
@@ -86,7 +85,7 @@ public class FlueFireboxMenu extends AbstractContainerMenu {
                     return ItemStack.EMPTY;
                 }
             } else {
-                if (ForgeHooks.getBurnTime(stack, RecipeType.SMELTING) > 0) {
+                if (stack.getBurnTime(RecipeType.SMELTING) > 0) {
                     if (!this.moveItemStackTo(stack, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }

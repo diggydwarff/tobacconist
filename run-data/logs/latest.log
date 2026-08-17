@@ -1,0 +1,31 @@
+[11Feb2026 21:06:03.391] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgedatauserdev, --assetIndex, 5, --assetsDir, C:\Users\griff\.gradle\caches\forge_gradle\assets, --gameDir, ., --fml.forgeVersion, 47.3.5, --fml.mcVersion, 1.20.1, --fml.forgeGroup, net.minecraftforge, --fml.mcpVersion, 20230612.114412, --mod, tobacconistmod, --all, --output, E:\Minecraft Files\Mods\tobacconist\src\generated\resources, --existing, E:\Minecraft Files\Mods\tobacconist\src\main\resources]
+[11Feb2026 21:06:03.397] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 10.0.9+10.0.9+main.dcd20f30 starting: java version 17.0.3.1 by Oracle Corporation; OS Windows 11 arch amd64 version 10.0
+[11Feb2026 21:06:03.546] [main/INFO] [net.minecraftforge.fml.loading.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forgedatauserdev
+[11Feb2026 21:06:03.614] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.5 Source=union:/C:/Users/griff/.gradle/caches/modules-2/files-2.1/org.spongepowered/mixin/0.8.5/9d1c0c3a304ae6697ecd477218fa61b850bf57fc/mixin-0.8.5.jar%23128!/ Service=ModLauncher Env=CLIENT
+[11Feb2026 21:06:03.938] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\griff\.gradle\caches\modules-2\files-2.1\net.minecraftforge\javafmllanguage\1.20.1-47.3.5\4c589c051ef533f8898fb5d83514d4186faa0eeb\javafmllanguage-1.20.1-47.3.5.jar is missing mods.toml file
+[11Feb2026 21:06:03.943] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\griff\.gradle\caches\modules-2\files-2.1\net.minecraftforge\lowcodelanguage\1.20.1-47.3.5\8251eee89645828a05f3b04f5df8945baa0743c4\lowcodelanguage-1.20.1-47.3.5.jar is missing mods.toml file
+[11Feb2026 21:06:03.948] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\griff\.gradle\caches\modules-2\files-2.1\net.minecraftforge\mclanguage\1.20.1-47.3.5\53971d6fe08ae7ce74a72fa7d14a82de70a8bd1\mclanguage-1.20.1-47.3.5.jar is missing mods.toml file
+[11Feb2026 21:06:03.953] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\griff\.gradle\caches\modules-2\files-2.1\net.minecraftforge\fmlcore\1.20.1-47.3.5\cc377ceca3274bd1e429c0da17f73720ce29a4d6\fmlcore-1.20.1-47.3.5.jar is missing mods.toml file
+[11Feb2026 21:06:04.018] [main/INFO] [net.minecraftforge.fml.loading.moddiscovery.JarInJarDependencyLocator/]: No dependencies to load found. Skipping!
+[11Feb2026 21:06:05.357] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgedatauserdev' with arguments [--gameDir, ., --assetsDir, C:\Users\griff\.gradle\caches\forge_gradle\assets, --assetIndex, 5, --mod, tobacconistmod, --all, --output, E:\Minecraft Files\Mods\tobacconist\src\generated\resources, --existing, E:\Minecraft Files\Mods\tobacconist\src\main\resources]
+[11Feb2026 21:06:05.966] [main/INFO] [net.minecraftforge.data.loading.DatagenModLoader/]: Initializing Data Gatherer for mods [tobacconistmod]
+[11Feb2026 21:06:10.047] [modloading-worker-0/WARN] [com.diggydwarff.tobacconistmod.TobacconistMod/]: TOBACCONISTMOD LOADED (JAR TEST)
+[11Feb2026 21:06:10.082] [modloading-worker-0/INFO] [net.minecraftforge.common.ForgeMod/FORGEMOD]: Forge mod loading, version 47.3.5, for MC 1.20.1 with MCP 20230612.114412
+[11Feb2026 21:06:10.089] [modloading-worker-0/INFO] [net.minecraftforge.common.MinecraftForge/FORGE]: MinecraftForge v47.3.5 Initialized
+[11Feb2026 21:06:10.438] [main/WARN] [net.minecraftforge.registries.ForgeRegistry/REGISTRIES]: Registry minecraft:item: The object bottled_molasses_plain has been registered twice for the same name tobacconistmod:bottled_molasses_plain.
+[11Feb2026 21:06:10.633] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/C:/Users/griff/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.3.5_mapped_official_1.20.1/forge-1.20.1-47.3.5_mapped_official_1.20.1-recomp.jar%23191!/assets/.mcassetsroot' uses unexpected schema
+[11Feb2026 21:06:10.634] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/C:/Users/griff/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.3.5_mapped_official_1.20.1/forge-1.20.1-47.3.5_mapped_official_1.20.1-recomp.jar%23191!/data/.mcassetsroot' uses unexpected schema
+[11Feb2026 21:06:10.824] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Recipes
+[11Feb2026 21:06:10.828] [main/INFO] [net.minecraft.data.DataGenerator/]: Recipes finished after 3 ms
+[11Feb2026 21:06:10.828] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Loot Tables
+[11Feb2026 21:06:10.912] [main/INFO] [net.minecraft.data.DataGenerator/]: Loot Tables finished after 84 ms
+[11Feb2026 21:06:10.913] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Block States: tobacconistmod
+[11Feb2026 21:06:11.133] [main/INFO] [net.minecraft.data.DataGenerator/]: Block States: tobacconistmod finished after 219 ms
+[11Feb2026 21:06:11.133] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Item Models: tobacconistmod
+[11Feb2026 21:06:11.134] [main/INFO] [net.minecraft.data.DataGenerator/]: Item Models: tobacconistmod finished after 1 ms
+[11Feb2026 21:06:11.134] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Tags for minecraft:block mod id tobacconistmod
+[11Feb2026 21:06:11.140] [main/INFO] [net.minecraft.data.DataGenerator/]: Tags for minecraft:block mod id tobacconistmod finished after 5 ms
+[11Feb2026 21:06:11.140] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Tags for minecraft:item mod id tobacconistmod
+[11Feb2026 21:06:11.141] [main/INFO] [net.minecraft.data.DataGenerator/]: Tags for minecraft:item mod id tobacconistmod finished after 1 ms
+[11Feb2026 21:06:11.141] [main/INFO] [net.minecraft.data.DataGenerator/]: All providers took: 317 ms
+[11Feb2026 21:06:11.148] [main/INFO] [net.minecraft.data.HashCache/]: Caching: total files: 30, old count: 31, new count: 31, removed stale: 0, written: 6

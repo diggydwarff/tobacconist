@@ -10,7 +10,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
@@ -65,7 +64,7 @@ public abstract class SmokingItem extends Item {
         }
 
         player.addEffect(new MobEffectInstance(
-                ModEffects.NICOTINE.get(),
+                ModEffects.NICOTINE,
                 500,
                 0,
                 false,
@@ -87,11 +86,11 @@ public abstract class SmokingItem extends Item {
                 int duration = Integer.parseInt(parts[1].trim());
                 int amplifier = Integer.parseInt(parts[2].trim());
 
-                MobEffect effect = BuiltInRegistries.MOB_EFFECT.get(new ResourceLocation(effectId));
-                if (effect == null) continue;
+                var effect = BuiltInRegistries.MOB_EFFECT.getHolder(ResourceLocation.parse(effectId));
+                if (effect.isEmpty()) continue;
 
                 player.addEffect(new MobEffectInstance(
-                        effect,
+                        effect.get(),
                         duration,
                         amplifier,
                         false,

@@ -1,5 +1,7 @@
 package com.diggydwarff.tobacconistmod.datagen.items.custom;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.datagen.items.SmokingItem;
 import com.diggydwarff.tobacconistmod.recipes.WoodenPipeRecipe;
@@ -45,11 +47,11 @@ public class WoodenSmokingPipeItem extends SmokingItem {
 
     @Override
     public Component getName(ItemStack stack) {
-        var tag = stack.getTag();
+        var tag = LegacyItemTags.getTag(stack);
 
         if (tag != null && tag.contains(WoodenPipeRecipe.NBT_WOOD_PLANK)) {
             String idString = tag.getString(WoodenPipeRecipe.NBT_WOOD_PLANK);
-            ResourceLocation id = new ResourceLocation(idString);
+            ResourceLocation id = ResourceLocation.parse(idString);
 
             var item = BuiltInRegistries.ITEM.get(id);
             ItemStack plankStack = new ItemStack(item);
@@ -66,7 +68,7 @@ public class WoodenSmokingPipeItem extends SmokingItem {
 
     @Override
     public boolean shouldEmitMouthSmoke(ItemStack stack) {
-        CompoundTag tag = stack.getTag();
+        CompoundTag tag = LegacyItemTags.getTag(stack);
         if (tag == null || !tag.contains("PuffsLeft")) {
             return false;
         }
@@ -76,18 +78,18 @@ public class WoodenSmokingPipeItem extends SmokingItem {
     }
 
     private boolean isPacked(ItemStack pipe) {
-        var tag = pipe.getTag();
+        var tag = LegacyItemTags.getTag(pipe);
         return tag != null && tag.contains(NBT_TOBACCO) && tag.getInt(NBT_PUFFS) > 0;
     }
 
     private void pack(ItemStack pipe, ItemStack tobacco) {
-        pipe.getOrCreateTag().putString(NBT_TOBACCO,
+        LegacyItemTags.getOrCreateTag(pipe).putString(NBT_TOBACCO,
                 BuiltInRegistries.ITEM.getKey(tobacco.getItem()).toString());
-        pipe.getOrCreateTag().putInt(NBT_PUFFS, MAX_PUFFS);
+        LegacyItemTags.getOrCreateTag(pipe).putInt(NBT_PUFFS, MAX_PUFFS);
     }
 
     private void unpack(ItemStack pipe) {
-        var tag = pipe.getOrCreateTag();
+        var tag = LegacyItemTags.getOrCreateTag(pipe);
         tag.remove(NBT_TOBACCO);
         tag.remove(NBT_PUFFS);
     }
@@ -109,7 +111,7 @@ public class WoodenSmokingPipeItem extends SmokingItem {
             return InteractionResultHolder.consume(pipe); // prevents swing
         }
 
-        CompoundTag tag = pipe.getTag();
+        CompoundTag tag = LegacyItemTags.getTag(pipe);
         int puffs = (tag == null) ? 0 : tag.getInt("PuffsLeft");
 
         if (puffs <= 0) {
@@ -121,10 +123,10 @@ public class WoodenSmokingPipeItem extends SmokingItem {
         puffs--;
 
         if (puffs <= 0) {
-            pipe.getOrCreateTag().remove("PuffsLeft");
-            pipe.getOrCreateTag().remove("PackedTobacco");
+            LegacyItemTags.getOrCreateTag(pipe).remove("PuffsLeft");
+            LegacyItemTags.getOrCreateTag(pipe).remove("PackedTobacco");
         } else {
-            pipe.getOrCreateTag().putInt("PuffsLeft", puffs);
+            LegacyItemTags.getOrCreateTag(pipe).putInt("PuffsLeft", puffs);
         }
 
         return InteractionResultHolder.consume(pipe);
@@ -139,7 +141,7 @@ public class WoodenSmokingPipeItem extends SmokingItem {
     @Override
     public int getBarWidth(ItemStack stack) {
         if (!isPacked(stack)) return 0;
-        int puffs = stack.getOrCreateTag().getInt(NBT_PUFFS);
+        int puffs = LegacyItemTags.getOrCreateTag(stack).getInt(NBT_PUFFS);
         return Math.round(13.0F * (puffs / (float) MAX_PUFFS));
     }
 
@@ -149,15 +151,15 @@ public class WoodenSmokingPipeItem extends SmokingItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-        CompoundTag tag = stack.getTag();
+    public void appendHoverText(ItemStack stack, Item.TooltipContext level, List<Component> tooltip, TooltipFlag flag) {
+        CompoundTag tag = LegacyItemTags.getTag(stack);
 
         if (tag != null && tag.contains("PuffsLeft")) {
             tooltip.add(Component.literal("Puffs left: " + tag.getInt("PuffsLeft")));
             if (tag.contains("PackedTobacco")) {
                 String id = tag.getString("PackedTobacco");
 
-                Item packedItem = BuiltInRegistries.ITEM.get(new ResourceLocation(id));
+                Item packedItem = BuiltInRegistries.ITEM.get(ResourceLocation.parse(id));
                 ItemStack packedStack = new ItemStack(packedItem);
 
                 tooltip.add(Component.literal("Packed: ")

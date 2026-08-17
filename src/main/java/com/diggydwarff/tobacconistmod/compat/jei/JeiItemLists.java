@@ -1,5 +1,7 @@
 package com.diggydwarff.tobacconistmod.compat.jei;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.LabelItem;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.ShishaFlavoringItem;
@@ -92,24 +94,24 @@ public final class JeiItemLists {
 
     private static ItemStack makeCigarette() {
         ItemStack stack = new ItemStack(ModItems.CIGARETTE.get());
-        stack.getOrCreateTag().putString("tobacco", "Virginia");
-        stack.getOrCreateTag().putInt(TobaccoCuringHelper.TAG_QUALITY, 60);
+        LegacyItemTags.getOrCreateTag(stack).putString("tobacco", "Virginia");
+        LegacyItemTags.getOrCreateTag(stack).putInt(TobaccoCuringHelper.TAG_QUALITY, 60);
         return stack;
     }
 
     private static ItemStack makeCigar() {
         ItemStack stack = new ItemStack(ModItems.CIGAR.get());
-        stack.getOrCreateTag().putString("tobacco", "Burley");
-        stack.getOrCreateTag().putInt(TobaccoCuringHelper.TAG_QUALITY, 60);
+        LegacyItemTags.getOrCreateTag(stack).putString("tobacco", "Burley");
+        LegacyItemTags.getOrCreateTag(stack).putInt(TobaccoCuringHelper.TAG_QUALITY, 60);
         return stack;
     }
 
     private static ItemStack makeShisha() {
         ItemStack stack = new ItemStack(ModItems.SHISHA_TOBACCO.get());
-        stack.getOrCreateTag().putString("tobacco", "Oriental");
-        stack.getOrCreateTag().putString("flavor1", "Molasses");
-        stack.getOrCreateTag().putInt(TobaccoCuringHelper.TAG_QUALITY, 60);
-        stack.getOrCreateTag().putString(
+        LegacyItemTags.getOrCreateTag(stack).putString("tobacco", "Oriental");
+        LegacyItemTags.getOrCreateTag(stack).putString("flavor1", "Molasses");
+        LegacyItemTags.getOrCreateTag(stack).putInt(TobaccoCuringHelper.TAG_QUALITY, 60);
+        LegacyItemTags.getOrCreateTag(stack).putString(
                 TobaccoCuringHelper.TAG_QUALITY_TIER,
                 TobaccoCuringHelper.getQualityTierId(60)
         );

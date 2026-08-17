@@ -2,20 +2,20 @@ package com.diggydwarff.tobacconistmod.event;
 
 import com.diggydwarff.tobacconistmod.effect.ModEffects;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 
-@Mod.EventBusSubscriber(modid = "tobacconistmod")
+@EventBusSubscriber(modid = "tobacconistmod")
 public class ModPlayerEvents {
 
     @SubscribeEvent
     public static void onBreakSpeed(PlayerEvent.BreakSpeed event) {
-        if (!event.getEntity().hasEffect(ModEffects.NICOTINE.get())) {
+        if (!event.getEntity().hasEffect(ModEffects.NICOTINE)) {
             return;
         }
 
-        MobEffectInstance effect = event.getEntity().getEffect(ModEffects.NICOTINE.get());
+        MobEffectInstance effect = event.getEntity().getEffect(ModEffects.NICOTINE);
         int amplifier = effect != null ? effect.getAmplifier() : 0;
 
         float multiplier;

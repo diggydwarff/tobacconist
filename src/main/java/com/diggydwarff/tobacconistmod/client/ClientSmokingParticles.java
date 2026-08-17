@@ -8,20 +8,19 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.common.EventBusSubscriber;
 import top.theillusivec4.curios.api.CuriosApi;
 
-@Mod.EventBusSubscriber(modid = TobacconistMod.MODID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = TobacconistMod.MODID, value = Dist.CLIENT)
 public class ClientSmokingParticles {
 
     @SubscribeEvent
-    public static void onClientTick(TickEvent.ClientTickEvent event) {
+    public static void onClientTick(ClientTickEvent.Post event) {
         if (!ModList.get().isLoaded("curios")) return;
-        if (event.phase != TickEvent.Phase.END) return;
 
         Minecraft mc = Minecraft.getInstance();
         if (mc.level == null || mc.isPaused()) return;

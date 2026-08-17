@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " G ",
+    "GPG",
+    " G "
+  ],
+  "key": {
+    "G": {
+      "item": "minecraft:gold_ingot"
+    },
+    "P": {
+      "item": "tobacconistmod:wooden_smoking_pipe"
+    }
+  },
+  "result": {
+    "id": "tobacconistmod:gold_smoking_pipe"
+  }
+}

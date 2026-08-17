@@ -1,5 +1,7 @@
 package com.diggydwarff.tobacconistmod.recipes;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import com.diggydwarff.tobacconistmod.TobacconistMod;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.LooseTobaccoItem;
@@ -10,36 +12,27 @@ import com.diggydwarff.tobacconistmod.util.TobaccoProductQualityHelper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 
 public class ShishaTobaccoRecipe extends CustomRecipe {
-
-    private final ResourceLocation id;
-    private final ItemStack output;
-    private final NonNullList<Ingredient> recipeItems;
-
-    public ShishaTobaccoRecipe(ResourceLocation id, ItemStack output, NonNullList<Ingredient> recipeItems) {
-        super(id, CraftingBookCategory.MISC);
-        this.id = id;
-        this.output = output;
-        this.recipeItems = recipeItems;
+    public ShishaTobaccoRecipe(CraftingBookCategory category) {
+        super(category);
     }
 
     @Override
-    public boolean matches(CraftingContainer craftingContainer, Level level) {
+    public boolean matches(CraftingInput craftingContainer, Level level) {
         ItemStack tobaccoStack = ItemStack.EMPTY;
         int flavorCount = 0;
 
-        for (int i = 0; i < craftingContainer.getContainerSize(); ++i) {
+        for (int i = 0; i < craftingContainer.size(); ++i) {
             ItemStack itemstack = craftingContainer.getItem(i);
             if (itemstack.isEmpty()) continue;
 
@@ -58,13 +51,13 @@ public class ShishaTobaccoRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer craftingContainer, RegistryAccess registryAccess) {
+    public ItemStack assemble(CraftingInput craftingContainer, HolderLookup.Provider registries) {
         ItemStack tobaccoStack = ItemStack.EMPTY;
         ItemStack flavorStack1 = ItemStack.EMPTY;
         ItemStack flavorStack2 = ItemStack.EMPTY;
         ItemStack flavorStack3 = ItemStack.EMPTY;
 
-        for (int i = 0; i < craftingContainer.getContainerSize(); ++i) {
+        for (int i = 0; i < craftingContainer.size(); ++i) {
             ItemStack itemstack = craftingContainer.getItem(i);
             if (itemstack.isEmpty()) continue;
 
@@ -85,7 +78,7 @@ public class ShishaTobaccoRecipe extends CustomRecipe {
 
         Item newItem = ModItems.SHISHA_TOBACCO.get();
         ItemStack returnStack = new ItemStack(newItem, 1);
-        CompoundTag tag = returnStack.getOrCreateTag();
+        CompoundTag tag = LegacyItemTags.getOrCreateTag(returnStack);
 
         tag.putString("tobacco", TobaccoProductQualityHelper.getShortTobaccoLabel(tobaccoStack));
         tag.putString("flavor1", flavorStack1.getDisplayName().getString());
@@ -94,7 +87,7 @@ public class ShishaTobaccoRecipe extends CustomRecipe {
 
         TobaccoDataHelper.applyTobaccoMetadata(returnStack, tobaccoStack);
 
-        CompoundTag tobaccoData = tobaccoStack.getTag();
+        CompoundTag tobaccoData = LegacyItemTags.getTag(tobaccoStack);
         if (tobaccoData != null) {
             if (tobaccoData.contains("AgedDays")) {
                 tag.putInt("AgedDays", tobaccoData.getInt("AgedDays"));
@@ -129,10 +122,10 @@ public class ShishaTobaccoRecipe extends CustomRecipe {
     }
 
     @Override
-    public NonNullList<ItemStack> getRemainingItems(CraftingContainer craftingContainer) {
-        NonNullList<ItemStack> remains = NonNullList.withSize(craftingContainer.getContainerSize(), ItemStack.EMPTY);
+    public NonNullList<ItemStack> getRemainingItems(CraftingInput craftingContainer) {
+        NonNullList<ItemStack> remains = NonNullList.withSize(craftingContainer.size(), ItemStack.EMPTY);
 
-        for (int i = 0; i < craftingContainer.getContainerSize(); ++i) {
+        for (int i = 0; i < craftingContainer.size(); ++i) {
             ItemStack stack = craftingContainer.getItem(i);
 
             if (stack.isEmpty()) {
@@ -163,45 +156,7 @@ public class ShishaTobaccoRecipe extends CustomRecipe {
         return ModRecipes.SHISHA_TOBACCO_RECIPE_SERIALIZER.get();
     }
 
-    public static class Type implements RecipeType<ShishaTobaccoRecipe> {
-        private Type() {}
-        public static final Type INSTANCE = new Type();
-        public static final String ID = "crafting_special_shishatobacco";
-    }
 
-    public static class Serializer implements RecipeSerializer<ShishaTobaccoRecipe> {
-        public static final Serializer INSTANCE = new Serializer();
-        public static final ResourceLocation ID =
-                new ResourceLocation(TobacconistMod.MODID, "crafting_special_shishatobacco");
 
-        @Override
-        public ShishaTobaccoRecipe fromJson(ResourceLocation id, JsonObject json) {
-            ItemStack output = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "output"));
-            JsonArray ingredients = GsonHelper.getAsJsonArray(json, "ingredients");
-            NonNullList<Ingredient> inputs = NonNullList.withSize(1, Ingredient.EMPTY);
-            for (int i = 0; i < inputs.size(); i++) {
-                inputs.set(i, Ingredient.fromJson(ingredients.get(i)));
-            }
-            return new ShishaTobaccoRecipe(id, output, inputs);
-        }
 
-        @Override
-        public ShishaTobaccoRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buf) {
-            NonNullList<Ingredient> inputs = NonNullList.withSize(buf.readInt(), Ingredient.EMPTY);
-            for (int i = 0; i < inputs.size(); i++) {
-                inputs.set(i, Ingredient.fromNetwork(buf));
-            }
-            ItemStack output = buf.readItem();
-            return new ShishaTobaccoRecipe(id, output, inputs);
-        }
-
-        @Override
-        public void toNetwork(FriendlyByteBuf buf, ShishaTobaccoRecipe recipe) {
-            buf.writeInt(recipe.getIngredients().size());
-            for (Ingredient ing : recipe.getIngredients()) {
-                ing.toNetwork(buf);
-            }
-            buf.writeItemStack(recipe.getResultItem(null), false);
-        }
-    }
 }

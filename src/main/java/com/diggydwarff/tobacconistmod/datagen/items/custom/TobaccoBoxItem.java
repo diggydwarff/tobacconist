@@ -1,5 +1,7 @@
 package com.diggydwarff.tobacconistmod.datagen.items.custom;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import com.diggydwarff.tobacconistmod.util.TobaccoBoxHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoLabelHelper;
 import net.minecraft.ChatFormatting;
@@ -58,9 +60,9 @@ public class TobaccoBoxItem extends Item {
         if (level.isClientSide) return;
         if (!(entity instanceof Player player)) return;
 
-        int cooldown = stack.getOrCreateTag().getInt(TAG_USE_COOLDOWN);
+        int cooldown = LegacyItemTags.getOrCreateTag(stack).getInt(TAG_USE_COOLDOWN);
         if (cooldown > 0) {
-            stack.getOrCreateTag().putInt(TAG_USE_COOLDOWN, cooldown - 1);
+            LegacyItemTags.getOrCreateTag(stack).putInt(TAG_USE_COOLDOWN, cooldown - 1);
         }
 
         ItemStack offhand = player.getOffhandItem();
@@ -69,12 +71,12 @@ public class TobaccoBoxItem extends Item {
         if (offhand != stack) return;
         if (!mainhand.isEmpty()) return;
         if (!player.swinging && !player.isUsingItem()) return;
-        if (stack.getOrCreateTag().getInt(TAG_USE_COOLDOWN) > 0) return;
+        if (LegacyItemTags.getOrCreateTag(stack).getInt(TAG_USE_COOLDOWN) > 0) return;
 
         ItemStack extracted = tryExtract(stack, player);
         if (!extracted.isEmpty()) {
             player.setItemInHand(InteractionHand.MAIN_HAND, extracted);
-            stack.getOrCreateTag().putInt(TAG_USE_COOLDOWN, 6);
+            LegacyItemTags.getOrCreateTag(stack).putInt(TAG_USE_COOLDOWN, 6);
         }
     }
 
@@ -224,7 +226,7 @@ public class TobaccoBoxItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext level, List<Component> tooltip, TooltipFlag flag) {
         ItemStack stored = TobaccoBoxHelper.getStoredItem(stack);
         int count = TobaccoBoxHelper.getStoredCount(stack);
         String label = TobaccoBoxHelper.getLabel(stack);

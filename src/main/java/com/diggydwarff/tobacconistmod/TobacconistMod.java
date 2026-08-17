@@ -1,62 +1,43 @@
 package com.diggydwarff.tobacconistmod;
 
-import com.diggydwarff.tobacconistmod.block.ModPaintings;
-import com.diggydwarff.tobacconistmod.command.TobacconistCommands;
-import com.diggydwarff.tobacconistmod.compat.curios.CuriosCompat;
-import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
-import com.diggydwarff.tobacconistmod.effect.ModEffects;
-import com.diggydwarff.tobacconistmod.recipes.ModRecipeSerializers;
-import com.diggydwarff.tobacconistmod.villager.ModVillagerTrades;
-import com.diggydwarff.tobacconistmod.world.TobaconistBiomeModifier;
-import com.mojang.logging.LogUtils;
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
 import com.diggydwarff.tobacconistmod.block.entity.ModBlockEntities;
+import com.diggydwarff.tobacconistmod.command.TobacconistCommands;
+import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.BottledMolassesFlavors;
-import com.diggydwarff.tobacconistmod.datagen.items.custom.LooseTobacco;
+import com.diggydwarff.tobacconistmod.effect.ModEffects;
+import com.diggydwarff.tobacconistmod.recipes.ModRecipeSerializers;
 import com.diggydwarff.tobacconistmod.recipes.ModRecipes;
-import com.diggydwarff.tobacconistmod.screen.HookahScreen;
 import com.diggydwarff.tobacconistmod.screen.ModMenuTypes;
 import com.diggydwarff.tobacconistmod.villager.ModVillagers;
-import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
+import com.mojang.logging.LogUtils;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.block.ComposterBlock;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
-import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.event.server.ServerStartingEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegisterEvent;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent;
+import net.neoforged.neoforge.registries.RegisterEvent;
 import org.slf4j.Logger;
 
-// The value here should match an entry in the META-INF/mods.toml file
 @Mod(TobacconistMod.MODID)
-public class TobacconistMod
-{
+public class TobacconistMod {
     public static final String MODID = "tobacconistmod";
     public static final Logger LOGGER = LogUtils.getLogger();
-    public TobacconistMod() {
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        modEventBus.addListener(this::commonSetup);
-        modEventBus.addListener(this::register);
-        modEventBus.addListener(this::enqueueIMC); // keep for IMC messages only
+    public TobacconistMod(IEventBus modEventBus, ModContainer modContainer) {
+        modEventBus.addListener(this::registerDynamicItems);
+        modEventBus.addListener(this::registerCapabilities);
 
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
@@ -64,66 +45,41 @@ public class TobacconistMod
         ModEffects.register(modEventBus);
         ModBlockEntities.register(modEventBus);
         ModMenuTypes.register(modEventBus);
-        TobaconistBiomeModifier.register(modEventBus);
         ModVillagers.register(modEventBus);
-        ModPaintings.PAINTING_VARIANTS.register(modEventBus);
         TobacconistCreativeTab.register(modEventBus);
         ModRecipeSerializers.SERIALIZERS.register(modEventBus);
 
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, TobacconistConfig.CLIENT_SPEC);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, TobacconistConfig.COMMON_SPEC);
+        modContainer.registerConfig(ModConfig.Type.CLIENT, TobacconistConfig.CLIENT_SPEC);
+        modContainer.registerConfig(ModConfig.Type.COMMON, TobacconistConfig.COMMON_SPEC);
 
-        MinecraftForge.EVENT_BUS.register(this);
+        NeoForge.EVENT_BUS.register(this);
     }
 
-    private void enqueueIMC(final InterModEnqueueEvent event) {
-        if (ModList.get().isLoaded("curios")) {
-            CuriosCompat.init(); // Only called here now
-        }
-    }
-
-    @SubscribeEvent
-    public void register(RegisterEvent event) {
-        event.register(ForgeRegistries.Keys.ITEMS,
-                helper -> {
-                    for(BottledMolassesFlavors molassesFlavor : BottledMolassesFlavors.values()){
-                        helper.register(new ResourceLocation(MODID, molassesFlavor.getName()), molassesFlavor.getItem());
-                    }
-                }
-        );
-    }
-
-    private void commonSetup(final FMLCommonSetupEvent event)
-    {
-        BrewingRecipeRegistry.addRecipe(Ingredient.of(Items.POTION), Ingredient.of(Items.SUGAR_CANE), new ItemStack(BottledMolassesFlavors.BOTTLED_MOLASSES_PLAIN.getItem()));
-
-        event.enqueueWork(() -> {
-            ComposterBlock.COMPOSTABLES.put(ModItems.SPOILED_TOBACCO.get(), 0.85f);
+    private void registerDynamicItems(RegisterEvent event) {
+        event.register(Registries.ITEM, helper -> {
+            for (BottledMolassesFlavors flavor : BottledMolassesFlavors.values()) {
+                // Plain molasses is already registered through ModItems.
+                if (flavor == BottledMolassesFlavors.BOTTLED_MOLASSES_PLAIN) continue;
+                helper.register(ResourceLocation.fromNamespaceAndPath(MODID, flavor.getName()), flavor.getItem());
+            }
         });
     }
 
-    // You can use SubscribeEvent and let the Event Bus discover methods to call
-    @SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event)
-    {
-
+    private void registerCapabilities(RegisterCapabilitiesEvent event) {
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
+                ModBlockEntities.HOOKAH.get(),
+                (hookah, side) -> hookah.getItemHandler()
+        );
     }
-    // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
-    @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-    public static class ClientModEvents
-    {
-        @SubscribeEvent
-        public static void onClientSetup(FMLClientSetupEvent event) {
-            event.enqueueWork(() -> {
-                var id = new ResourceLocation(TobacconistMod.MODID, "tobacco_crop_wild");
 
-                // only do this if true, otherwise you'll crash again
-                if (ForgeRegistries.BLOCKS.containsKey(id)) {
-                    ItemBlockRenderTypes.setRenderLayer(ModBlocks.WILD_TOBACCO_CROP.get(), RenderType.cutout());
-                }
-            });
-        }
-
+    @SubscribeEvent
+    public void registerBrewingRecipes(RegisterBrewingRecipesEvent event) {
+        event.getBuilder().addRecipe(
+                Ingredient.of(Items.POTION),
+                Ingredient.of(Items.SUGAR_CANE),
+                new ItemStack(BottledMolassesFlavors.BOTTLED_MOLASSES_PLAIN.getItem())
+        );
     }
 
     @SubscribeEvent

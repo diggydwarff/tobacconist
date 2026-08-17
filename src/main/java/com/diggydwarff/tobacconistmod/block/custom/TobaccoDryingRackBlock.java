@@ -1,5 +1,6 @@
 package com.diggydwarff.tobacconistmod.block.custom;
 
+import com.mojang.serialization.MapCodec;
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoDryingRackBlockEntity;
 import com.diggydwarff.tobacconistmod.block.entity.ModBlockEntities;
 import net.minecraft.core.BlockPos;
@@ -7,6 +8,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -81,8 +83,13 @@ public class TobaccoDryingRackBlock extends BaseEntityBlock {
         return state.getValue(OVER_CAMPFIRE) ? SHAPE_FIRE : SHAPE;
     }
 
-    public TobaccoDryingRackBlock() {
-        super(Properties.of().strength(1.5F).noOcclusion());
+    @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return simpleCodec(TobaccoDryingRackBlock::new);
+    }
+
+    public TobaccoDryingRackBlock(Properties properties) {
+        super(properties);
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(HAS_LEAVES, false)
                 .setValue(OVER_CAMPFIRE, false));
@@ -99,7 +106,7 @@ public class TobaccoDryingRackBlock extends BaseEntityBlock {
     }
 
     @Override
-    public boolean isPathfindable(BlockState state, BlockGetter level, BlockPos pos, net.minecraft.world.level.pathfinder.PathComputationType type) {
+    protected boolean isPathfindable(BlockState state, net.minecraft.world.level.pathfinder.PathComputationType type) {
         return false;
     }
 
@@ -115,7 +122,17 @@ public class TobaccoDryingRackBlock extends BaseEntityBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos,
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        InteractionResult result = handleUse(state, level, pos, player, hand, hit);
+        return result.consumesAction() ? ItemInteractionResult.sidedSuccess(level.isClientSide) : ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+    }
+
+    @Override
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
+        return handleUse(state, level, pos, player, InteractionHand.MAIN_HAND, hit);
+    }
+
+    private InteractionResult handleUse(BlockState state, Level level, BlockPos pos,
                                  Player player, InteractionHand hand, BlockHitResult hit) {
         if (hand != InteractionHand.MAIN_HAND) {
             return InteractionResult.PASS;

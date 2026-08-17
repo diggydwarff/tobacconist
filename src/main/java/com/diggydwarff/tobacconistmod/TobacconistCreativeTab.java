@@ -1,5 +1,7 @@
 package com.diggydwarff.tobacconistmod;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.ShishaFlavoringItem;
@@ -15,12 +17,11 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
+import java.util.function.Supplier;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.StreamSupport;
@@ -31,7 +32,7 @@ public class TobacconistCreativeTab {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, TobacconistMod.MODID);
 
-    public static final RegistryObject<CreativeModeTab> COURSE_TAB = CREATIVE_MODE_TABS.register("tobacconistmod",
+    public static final Supplier<CreativeModeTab> COURSE_TAB = CREATIVE_MODE_TABS.register("tobacconistmod",
             () -> CreativeModeTab.builder().icon(() -> new ItemStack(CIGAR.get()))
                     .title(Component.translatable("creativetab.tobacconistmod"))
                     .displayItems((displayParameters, output) -> {
@@ -41,12 +42,6 @@ public class TobacconistCreativeTab {
                         output.accept(CIGARETTE.get());
                         output.accept(HOOKAH_HOSE.get());
                         output.accept(SHISHA_TOBACCO.get());
-
-                        // Make guide book if patchouli present
-                        ItemStack guide = makeGuideBook();
-                        if (!guide.isEmpty()) {
-                            output.accept(guide);
-                        }
 
                         output.accept(TOBACCO_BOX.get());
                         output.accept(TOBACCO_LABEL.get());
@@ -186,30 +181,11 @@ public class TobacconistCreativeTab {
 
     private static ItemStack makePipe(Item plankItem) {
         ItemStack pipe = new ItemStack(ModItems.WOODEN_SMOKING_PIPE.get());
-        pipe.getOrCreateTag().putString(
+        LegacyItemTags.getOrCreateTag(pipe).putString(
                 WoodenPipeRecipe.NBT_WOOD_PLANK,
                 BuiltInRegistries.ITEM.getKey(plankItem).toString()
         );
         return pipe;
     }
 
-    private static ItemStack makeGuideBook() {
-
-        if (!ModList.get().isLoaded("patchouli")) {
-            return ItemStack.EMPTY;
-        }
-
-        Item patchouliBook = ForgeRegistries.ITEMS.getValue(
-                new ResourceLocation("patchouli", "guide_book")
-        );
-
-        if (patchouliBook == null) {
-            return ItemStack.EMPTY;
-        }
-
-        ItemStack book = new ItemStack(patchouliBook);
-        book.getOrCreateTag().putString("patchouli:book", "tobacconistmod:tobacco_manual");
-
-        return book;
-    }
 }

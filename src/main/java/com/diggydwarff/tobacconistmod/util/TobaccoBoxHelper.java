@@ -1,6 +1,10 @@
 package com.diggydwarff.tobacconistmod.util;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
@@ -34,34 +38,88 @@ public class TobaccoBoxHelper {
     }
 
     public static boolean hasStoredItem(ItemStack box) {
-        CompoundTag tag = box.getTag();
+        CompoundTag tag = LegacyItemTags.getTag(box);
         return tag != null && tag.contains(TAG_STORED);
     }
 
     public static ItemStack getStoredItem(ItemStack box) {
-        CompoundTag tag = box.getTag();
+        CompoundTag tag = LegacyItemTags.getTag(box);
         if (tag == null || !tag.contains(TAG_STORED)) {
             return ItemStack.EMPTY;
         }
-        return ItemStack.of(tag.getCompound(TAG_STORED));
+        return readStoredStack(tag.getCompound(TAG_STORED));
     }
 
     public static int getStoredCount(ItemStack box) {
-        CompoundTag tag = box.getTag();
+        CompoundTag tag = LegacyItemTags.getTag(box);
         return tag == null ? 0 : tag.getInt(TAG_COUNT);
     }
 
     public static void setStored(ItemStack box, ItemStack content, int count) {
-        CompoundTag tag = box.getOrCreateTag();
+        CompoundTag tag = LegacyItemTags.getOrCreateTag(box);
         ItemStack copy = content.copy();
         copy.setCount(1);
         clearCustomProductName(copy);
-        tag.put(TAG_STORED, copy.save(new CompoundTag()));
+        tag.put(TAG_STORED, writeStoredStack(copy));
         tag.putInt(TAG_COUNT, count);
     }
 
+    /**
+     * The 1.21 ItemStack NBT codec requires registry access. Tobacco boxes are item-only
+     * helpers with no Level/RegistryAccess parameter, so persist the small subset this mod
+     * actually needs: registry id, damage and custom tobacco data. The reader also accepts
+     * the old 1.20.1 ItemStack compound layout for world upgrade compatibility.
+     */
+    private static CompoundTag writeStoredStack(ItemStack stack) {
+        CompoundTag stored = new CompoundTag();
+        ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
+        stored.putString("id", id.toString());
+        if (stack.getDamageValue() > 0) {
+            stored.putInt("Damage", stack.getDamageValue());
+        }
+        CompoundTag custom = LegacyItemTags.getTag(stack);
+        if (custom != null && !custom.isEmpty()) {
+            stored.put("CustomData", custom.copy());
+        }
+        return stored;
+    }
+
+    private static ItemStack readStoredStack(CompoundTag stored) {
+        if (!stored.contains("id")) return ItemStack.EMPTY;
+
+        ResourceLocation id = ResourceLocation.tryParse(stored.getString("id"));
+        if (id == null) return ItemStack.EMPTY;
+
+        Item item = BuiltInRegistries.ITEM.get(id);
+        if (item == null || item == net.minecraft.world.item.Items.AIR) return ItemStack.EMPTY;
+
+        ItemStack result = new ItemStack(item);
+
+        // New 1.21 helper layout.
+        if (stored.contains("CustomData")) {
+            LegacyItemTags.setTag(result, stored.getCompound("CustomData").copy());
+        }
+
+        // Old 1.20.1 ItemStack layout: {id, Count, tag:{...}}.
+        if (stored.contains("tag")) {
+            CompoundTag legacy = stored.getCompound("tag").copy();
+            if (legacy.contains("Damage")) {
+                result.setDamageValue(legacy.getInt("Damage"));
+                legacy.remove("Damage");
+            }
+            if (!legacy.isEmpty()) {
+                LegacyItemTags.setTag(result, legacy);
+            }
+        }
+
+        if (stored.contains("Damage")) {
+            result.setDamageValue(stored.getInt("Damage"));
+        }
+        return result;
+    }
+
     public static void clearStored(ItemStack box) {
-        CompoundTag tag = box.getTag();
+        CompoundTag tag = LegacyItemTags.getTag(box);
         if (tag == null) return;
 
         tag.remove(TAG_STORED);
@@ -69,18 +127,18 @@ public class TobaccoBoxHelper {
         tag.remove(TAG_LABEL);
 
         if (tag.isEmpty()) {
-            box.setTag(null);
+            LegacyItemTags.setTag(box, null);
         }
     }
 
     public static String getLabel(ItemStack stack) {
-        CompoundTag tag = stack.getTag();
+        CompoundTag tag = LegacyItemTags.getTag(stack);
         return tag == null ? "" : tag.getString(TAG_LABEL);
     }
 
     public static void setLabel(ItemStack stack, String label) {
         if (label == null || label.isBlank()) return;
-        stack.getOrCreateTag().putString(TAG_LABEL, label.trim());
+        LegacyItemTags.getOrCreateTag(stack).putString(TAG_LABEL, label.trim());
     }
 
     public static boolean canAccept(ItemStack box, ItemStack incoming) {
@@ -100,11 +158,11 @@ public class TobaccoBoxHelper {
         clearCustomProductName(aCopy);
         clearCustomProductName(bCopy);
 
-        return ItemStack.isSameItemSameTags(aCopy, bCopy);
+        return ItemStack.isSameItemSameComponents(aCopy, bCopy);
     }
 
     public static void clearCustomProductName(ItemStack stack) {
-        CompoundTag tag = stack.getTag();
+        CompoundTag tag = LegacyItemTags.getTag(stack);
         if (tag == null) return;
 
         tag.remove(TAG_PRODUCT_LABEL);
@@ -120,7 +178,7 @@ public class TobaccoBoxHelper {
         }
 
         if (tag.isEmpty()) {
-            stack.setTag(null);
+            LegacyItemTags.setTag(stack, null);
         }
     }
 
@@ -133,7 +191,7 @@ public class TobaccoBoxHelper {
 
         String label = getLabel(box);
         if (!label.isEmpty()) {
-            out.getOrCreateTag().putString(TAG_PRODUCT_LABEL, label);
+            LegacyItemTags.getOrCreateTag(out).putString(TAG_PRODUCT_LABEL, label);
         }
 
         return out;
@@ -180,7 +238,7 @@ public class TobaccoBoxHelper {
     }
 
     private static String getProductDescriptor(ItemStack stack) {
-        CompoundTag tag = stack.getTag();
+        CompoundTag tag = LegacyItemTags.getTag(stack);
         if (tag == null) return "";
 
         StringBuilder out = new StringBuilder();
@@ -277,7 +335,7 @@ public class TobaccoBoxHelper {
     private static String resolveTobaccoTypeId(ItemStack stack) {
         if (stack.isEmpty()) return "";
 
-        CompoundTag tag = stack.getTag();
+        CompoundTag tag = LegacyItemTags.getTag(stack);
 
         if (tag != null) {
             String direct = normalizeTobaccoType(tag.getString("TobaccoType"));
@@ -290,9 +348,14 @@ public class TobaccoBoxHelper {
             }
 
             if (tag.contains("TobaccoStack")) {
-                ItemStack nested = ItemStack.of(tag.getCompound("TobaccoStack"));
-                String nestedType = resolveTobaccoTypeId(nested);
+                CompoundTag nestedStack = tag.getCompound("TobaccoStack");
+                CompoundTag nestedTag = nestedStack.contains("tag") ? nestedStack.getCompound("tag") : nestedStack;
+                String nestedType = normalizeTobaccoType(nestedTag.getString("TobaccoType"));
                 if (!nestedType.isEmpty()) return nestedType;
+                if (nestedTag.contains("PackedTobaccoData")) {
+                    String packedType = normalizeTobaccoType(nestedTag.getCompound("PackedTobaccoData").getString("TobaccoType"));
+                    if (!packedType.isEmpty()) return packedType;
+                }
             }
 
             String tobaccoLabel = normalizeTobaccoType(tag.getString("tobacco"));
@@ -359,7 +422,7 @@ public class TobaccoBoxHelper {
     public static String getBoxContentsLine(ItemStack stored) {
         if (stored.isEmpty()) return "Empty";
 
-        CompoundTag tag = stored.getTag();
+        CompoundTag tag = LegacyItemTags.getTag(stored);
         int quality100 = 60;
 
         CompoundTag packed = TobaccoTooltipHelper.getPackedTobaccoData(stored);

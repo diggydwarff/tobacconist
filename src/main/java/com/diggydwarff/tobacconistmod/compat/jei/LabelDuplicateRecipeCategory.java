@@ -19,7 +19,7 @@ import net.minecraft.world.item.ItemStack;
 public class LabelDuplicateRecipeCategory implements IRecipeCategory<LabelDuplicateJeiRecipe> {
 
     public static final RecipeType<LabelDuplicateJeiRecipe> TYPE =
-            new RecipeType<>(new ResourceLocation(TobacconistMod.MODID, "label_duplicate"), LabelDuplicateJeiRecipe.class);
+            new RecipeType<>(ResourceLocation.fromNamespaceAndPath(TobacconistMod.MODID, "label_duplicate"), LabelDuplicateJeiRecipe.class);
 
     private final IDrawable background;
     private final IDrawable icon;

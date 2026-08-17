@@ -11,7 +11,7 @@ import net.minecraft.world.entity.player.Inventory;
 
 public class HookahScreen extends AbstractContainerScreen<HookahMenu> {
     private static final ResourceLocation TEXTURE =
-            new ResourceLocation(TobacconistMod.MODID, "textures/gui/hookah_gui.png");
+            ResourceLocation.fromNamespaceAndPath(TobacconistMod.MODID, "textures/gui/hookah_gui.png");
 
     public HookahScreen(HookahMenu menu, Inventory inventory, Component component) {
         super(menu, inventory, component);
@@ -60,7 +60,7 @@ public class HookahScreen extends AbstractContainerScreen<HookahMenu> {
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
-        renderBackground(guiGraphics);
+        renderBackground(guiGraphics, mouseX, mouseY, delta);
         super.render(guiGraphics, mouseX, mouseY, delta);
         renderTooltip(guiGraphics, mouseX, mouseY);
     }

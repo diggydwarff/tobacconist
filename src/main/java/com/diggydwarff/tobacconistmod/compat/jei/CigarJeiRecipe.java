@@ -1,5 +1,7 @@
 package com.diggydwarff.tobacconistmod.compat.jei;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoProductQualityHelper;
@@ -30,10 +32,10 @@ public record CigarJeiRecipe(
 
     private static void add(List<CigarJeiRecipe> recipes, Item looseItem, Item leafItem) {
         ItemStack tobacco = new ItemStack(looseItem);
-        tobacco.getOrCreateTag().putInt(TobaccoCuringHelper.TAG_QUALITY, 60);
-        tobacco.getOrCreateTag().putString(TobaccoCuringHelper.TAG_QUALITY_TIER, TobaccoCuringHelper.getQualityTierId(60));
+        LegacyItemTags.getOrCreateTag(tobacco).putInt(TobaccoCuringHelper.TAG_QUALITY, 60);
+        LegacyItemTags.getOrCreateTag(tobacco).putString(TobaccoCuringHelper.TAG_QUALITY_TIER, TobaccoCuringHelper.getQualityTierId(60));
         TobaccoCuringHelper.setCutType(tobacco, TobaccoCuringHelper.CUT_RIBBON);
-        tobacco.getOrCreateTag().putString(TobaccoCuringHelper.TAG_CURE_TYPE, TobaccoCuringHelper.CURE_AIR);
+        LegacyItemTags.getOrCreateTag(tobacco).putString(TobaccoCuringHelper.TAG_CURE_TYPE, TobaccoCuringHelper.CURE_AIR);
 
         ItemStack wrapperLeaf = new ItemStack(leafItem);
         TobaccoCuringHelper.applyCreativeLeafDefaults(wrapperLeaf, true);
@@ -41,7 +43,7 @@ public record CigarJeiRecipe(
         ItemStack output = new ItemStack(ModItems.CIGAR.get());
         CompoundTag tag = new CompoundTag();
 
-        CompoundTag wrapperData = wrapperLeaf.getTag();
+        CompoundTag wrapperData = LegacyItemTags.getTag(wrapperLeaf);
         if (wrapperData != null) {
             tag.put("WrapperLeafData", wrapperData.copy());
         }
@@ -63,7 +65,7 @@ public record CigarJeiRecipe(
         tag.putInt(TobaccoCuringHelper.TAG_QUALITY, quality);
         tag.putString(TobaccoCuringHelper.TAG_QUALITY_TIER, TobaccoCuringHelper.getQualityTierId(quality));
 
-        CompoundTag tobaccoData = tobacco.getTag();
+        CompoundTag tobaccoData = LegacyItemTags.getTag(tobacco);
         if (tobaccoData != null) {
             tag.put("PackedTobaccoData", tobaccoData.copy());
         }
@@ -74,7 +76,7 @@ public record CigarJeiRecipe(
                 TobaccoProductQualityHelper.getCigarQuality(tobacco)
         );
 
-        output.setTag(tag);
+        LegacyItemTags.setTag(output, tag);
 
         recipes.add(new CigarJeiRecipe(tobacco, wrapperLeaf, output));
     }

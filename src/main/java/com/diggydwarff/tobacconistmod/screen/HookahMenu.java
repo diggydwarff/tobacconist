@@ -1,57 +1,68 @@
 package com.diggydwarff.tobacconistmod.screen;
 
-import com.diggydwarff.tobacconistmod.block.ModBlocks;
 import com.diggydwarff.tobacconistmod.block.custom.DoubleHookahBlock;
 import com.diggydwarff.tobacconistmod.block.custom.HookahBlock;
 import com.diggydwarff.tobacconistmod.block.entity.HookahEntity;
 import com.diggydwarff.tobacconistmod.util.HookahFuelHelper;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.item.ItemStack;
-
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.*;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.items.SlotItemHandler;
+import net.neoforged.neoforge.items.SlotItemHandler;
 
 public class HookahMenu extends AbstractContainerMenu {
     public final HookahEntity blockEntity;
     private final Level level;
     private final ContainerData data;
 
-    public HookahMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
+    private static final int HOTBAR_SLOT_COUNT = 9;
+    private static final int PLAYER_INVENTORY_ROW_COUNT = 3;
+    private static final int PLAYER_INVENTORY_COLUMN_COUNT = 9;
+    private static final int PLAYER_INVENTORY_SLOT_COUNT = PLAYER_INVENTORY_COLUMN_COUNT * PLAYER_INVENTORY_ROW_COUNT;
+    private static final int VANILLA_SLOT_COUNT = HOTBAR_SLOT_COUNT + PLAYER_INVENTORY_SLOT_COUNT;
+    private static final int VANILLA_FIRST_SLOT_INDEX = 0;
+    private static final int TE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
+    private static final int TE_INVENTORY_SLOT_COUNT = 3;
+
+    public HookahMenu(int id, Inventory inv, RegistryFriendlyByteBuf extraData) {
         this(id, inv, inv.player.level().getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(4));
     }
 
     public HookahMenu(int id, Inventory inv, BlockEntity entity, ContainerData data) {
         super(ModMenuTypes.HOOKAH_MENU.get(), id);
         checkContainerSize(inv, 3);
-        blockEntity = (HookahEntity) entity;
+
+        this.blockEntity = (HookahEntity) entity;
         this.level = inv.player.level();
         this.data = data;
 
         addPlayerInventory(inv);
         addPlayerHotbar(inv);
 
-        this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler -> {
+        var handler = this.blockEntity.getItemHandler();
+        {
+            // Fuel slot
             this.addSlot(new SlotItemHandler(handler, 0, 53, 36) {
-
                 @Override
                 public boolean mayPlace(ItemStack stack) {
-                    if (!HookahFuelHelper.isFuel(stack)) return false;
+                    if (!HookahFuelHelper.isFuel(stack)) {
+                        return false;
+                    }
 
                     ItemStack current = getItem();
 
-                    // if burning, only allow stacking same fuel
+                    // If already burning and fuel slot has something in it,
+                    // only allow stacking the same fuel type.
                     if (data.get(2) > 0 && !current.isEmpty()) {
-                        return ItemStack.isSameItemSameTags(current, stack);
+                        return ItemStack.isSameItemSameComponents(current, stack);
                     }
 
                     return true;
@@ -59,8 +70,10 @@ public class HookahMenu extends AbstractContainerMenu {
 
                 @Override
                 public boolean mayPickup(Player player) {
-                    // prevent removing burning fuel
-                    return data.get(2) <= 0;
+                    // Important:
+                    // The burning fuel is already consumed into fuelTime by HookahEntity.tick().
+                    // So whatever remains in slot 0 is spare fuel and should be removable.
+                    return true;
                 }
 
                 @Override
@@ -68,9 +81,13 @@ public class HookahMenu extends AbstractContainerMenu {
                     return 64;
                 }
             });
+
+            // Shisha slot
             this.addSlot(new SlotItemHandler(handler, 1, 86, 15));
+
+            // Water slot
             this.addSlot(new SlotItemHandler(handler, 2, 86, 60));
-        });
+        }
 
         addDataSlots(data);
     }
@@ -81,9 +98,8 @@ public class HookahMenu extends AbstractContainerMenu {
 
     public int getScaledProgress() {
         int progress = this.data.get(0);
-        int maxProgress = this.data.get(1);  // Max Progress
-        int progressArrowSize = 26; // This is the height in pixels of your arrow
-
+        int maxProgress = this.data.get(1);
+        int progressArrowSize = 26;
         return maxProgress != 0 && progress != 0 ? progress * progressArrowSize / maxProgress : 0;
     }
 
@@ -114,46 +130,46 @@ public class HookahMenu extends AbstractContainerMenu {
         return Math.max(1, fuelTime * pixels / maxFuelTime);
     }
 
-    private static final int HOTBAR_SLOT_COUNT = 9;
-    private static final int PLAYER_INVENTORY_ROW_COUNT = 3;
-    private static final int PLAYER_INVENTORY_COLUMN_COUNT = 9;
-    private static final int PLAYER_INVENTORY_SLOT_COUNT = PLAYER_INVENTORY_COLUMN_COUNT * PLAYER_INVENTORY_ROW_COUNT;
-    private static final int VANILLA_SLOT_COUNT = HOTBAR_SLOT_COUNT + PLAYER_INVENTORY_SLOT_COUNT;
-    private static final int VANILLA_FIRST_SLOT_INDEX = 0;
-    private static final int TE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
-
-    // THIS YOU HAVE TO DEFINE!
-    private static final int TE_INVENTORY_SLOT_COUNT = 3;  // must be the number of slots you have!
-
     @Override
     public ItemStack quickMoveStack(Player playerIn, int index) {
         Slot sourceSlot = slots.get(index);
-        if (sourceSlot == null || !sourceSlot.hasItem()) return ItemStack.EMPTY;  //EMPTY_ITEM
+        if (sourceSlot == null || !sourceSlot.hasItem()) {
+            return ItemStack.EMPTY;
+        }
+
         ItemStack sourceStack = sourceSlot.getItem();
         ItemStack copyOfSourceStack = sourceStack.copy();
 
-        // Check if the slot clicked is one of the vanilla container slots
+        // Player inventory -> TE
         if (index < VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT) {
-            // This is a vanilla container slot so merge the stack into the tile inventory
-            if (!moveItemStackTo(sourceStack, TE_INVENTORY_FIRST_SLOT_INDEX, TE_INVENTORY_FIRST_SLOT_INDEX
-                    + TE_INVENTORY_SLOT_COUNT, false)) {
-                return ItemStack.EMPTY;  // EMPTY_ITEM
+            // Try fuel first
+            if (HookahFuelHelper.isFuel(sourceStack)) {
+                if (!moveItemStackTo(sourceStack, TE_INVENTORY_FIRST_SLOT_INDEX, TE_INVENTORY_FIRST_SLOT_INDEX + 1, false)) {
+                    return ItemStack.EMPTY;
+                }
+            } else {
+                // Otherwise fall back to TE slots
+                if (!moveItemStackTo(sourceStack, TE_INVENTORY_FIRST_SLOT_INDEX + 1,
+                        TE_INVENTORY_FIRST_SLOT_INDEX + TE_INVENTORY_SLOT_COUNT, false)) {
+                    return ItemStack.EMPTY;
+                }
             }
-        } else if (index < TE_INVENTORY_FIRST_SLOT_INDEX + TE_INVENTORY_SLOT_COUNT) {
-            // This is a TE slot so merge the stack into the players inventory
+        }
+        // TE -> player inventory
+        else if (index < TE_INVENTORY_FIRST_SLOT_INDEX + TE_INVENTORY_SLOT_COUNT) {
             if (!moveItemStackTo(sourceStack, VANILLA_FIRST_SLOT_INDEX, VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT, false)) {
                 return ItemStack.EMPTY;
             }
         } else {
-            System.out.println("Invalid slotIndex:" + index);
             return ItemStack.EMPTY;
         }
-        // If stack size == 0 (the entire stack was moved) set slot contents to null
+
         if (sourceStack.getCount() == 0) {
             sourceSlot.set(ItemStack.EMPTY);
         } else {
             sourceSlot.setChanged();
         }
+
         sourceSlot.onTake(playerIn, sourceStack);
         return copyOfSourceStack;
     }
@@ -189,17 +205,16 @@ public class HookahMenu extends AbstractContainerMenu {
     }
 
     private void addPlayerInventory(Inventory playerInventory) {
-        for (int i = 0; i < 3; ++i) {
-            for (int l = 0; l < 9; ++l) {
-                this.addSlot(new Slot(playerInventory, l + i * 9 + 9, 8 + l * 18, 86 + i * 18));
+        for (int row = 0; row < 3; ++row) {
+            for (int col = 0; col < 9; ++col) {
+                this.addSlot(new Slot(playerInventory, col + row * 9 + 9, 8 + col * 18, 86 + row * 18));
             }
         }
     }
 
     private void addPlayerHotbar(Inventory playerInventory) {
-        for (int i = 0; i < 9; ++i) {
-            this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 144));
+        for (int col = 0; col < 9; ++col) {
+            this.addSlot(new Slot(playerInventory, col, 8 + col * 18, 144));
         }
     }
-
 }

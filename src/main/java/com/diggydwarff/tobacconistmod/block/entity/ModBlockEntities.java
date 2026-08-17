@@ -1,18 +1,19 @@
 package com.diggydwarff.tobacconistmod.block.entity;
 
+import java.util.function.Supplier;
 import com.diggydwarff.tobacconistmod.TobacconistMod;
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 public class ModBlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES =
-            DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, TobacconistMod.MODID);
+            DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, TobacconistMod.MODID);
 
-    public static final RegistryObject<BlockEntityType<HookahEntity>> HOOKAH = BLOCK_ENTITIES.register("hookah", () ->
+    public static final Supplier<BlockEntityType<HookahEntity>> HOOKAH = BLOCK_ENTITIES.register("hookah", () ->
             BlockEntityType.Builder.of(
                     HookahEntity::new,
                     ModBlocks.HOOKAH.get(),
@@ -23,21 +24,21 @@ public class ModBlockEntities {
                     ModBlocks.ORNATE_AMETHYST_HOOKAH.get()
             ).build(null));
 
-    public static final RegistryObject<BlockEntityType<TobaccoDryingRackBlockEntity>> TOBACCO_DRYING_RACK =
+    public static final Supplier<BlockEntityType<TobaccoDryingRackBlockEntity>> TOBACCO_DRYING_RACK =
             BLOCK_ENTITIES.register("tobacco_drying_rack", () ->
                     BlockEntityType.Builder.of(
                             TobaccoDryingRackBlockEntity::new,
                             ModBlocks.TOBACCO_DRYING_RACK.get()
                     ).build(null));
 
-    public static final RegistryObject<BlockEntityType<FlueFireboxBlockEntity>> FLUE_FIREBOX =
+    public static final Supplier<BlockEntityType<FlueFireboxBlockEntity>> FLUE_FIREBOX =
             BLOCK_ENTITIES.register("flue_firebox",
                     () -> BlockEntityType.Builder.of(
                             FlueFireboxBlockEntity::new,
                             ModBlocks.FLUE_FIREBOX.get()
                     ).build(null));
 
-    public static final RegistryObject<BlockEntityType<TobaccoBarrelBlockEntity>> TOBACCO_BARREL =
+    public static final Supplier<BlockEntityType<TobaccoBarrelBlockEntity>> TOBACCO_BARREL =
             BLOCK_ENTITIES.register("tobacco_barrel",
                     () -> BlockEntityType.Builder.of(
                             TobaccoBarrelBlockEntity::new,

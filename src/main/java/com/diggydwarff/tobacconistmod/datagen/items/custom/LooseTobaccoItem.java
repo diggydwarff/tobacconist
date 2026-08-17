@@ -1,5 +1,7 @@
 package com.diggydwarff.tobacconistmod.datagen.items.custom;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelBlockEntity;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoLabelHelper;
@@ -13,7 +15,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,9 +36,7 @@ public class LooseTobaccoItem extends Item {
 
     @Override
     public Component getName(ItemStack stack) {
-        TobaccoCuringHelper.ensureDefaultTobaccoData(stack);
-
-        CompoundTag tag = stack.getTag();
+        CompoundTag tag = LegacyItemTags.getTag(stack);
         String label = TobaccoLabelHelper.getProductLabel(stack);
 
         Component baseName;
@@ -61,8 +60,7 @@ public class LooseTobaccoItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-        TobaccoCuringHelper.ensureDefaultTobaccoData(stack);
+    public void appendHoverText(ItemStack stack, Item.TooltipContext level, List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, level, tooltip, flag);
 
         String productLabel = TobaccoLabelHelper.getProductLabel(stack);
@@ -73,7 +71,7 @@ public class LooseTobaccoItem extends Item {
         int quality = TobaccoCuringHelper.getQuality(stack);
         if (quality > 0) {
             tooltip.add(Component.literal(
-                    "Quality: " + quality + " (" + capitalize(TobaccoCuringHelper.getQualityTier(quality)) + ")"
+                    "Quality: " + quality + " (" + TobaccoCuringHelper.getQualityTier(quality) + ")"
             ).withStyle(ChatFormatting.GRAY));
         }
 
@@ -124,7 +122,7 @@ public class LooseTobaccoItem extends Item {
             return InteractionResultHolder.success(tobacco);
         }
 
-        CompoundTag pipeTag = offhand.getOrCreateTag();
+        CompoundTag pipeTag = LegacyItemTags.getOrCreateTag(offhand);
         int puffsLeft = pipeTag.getInt(NBT_PUFFS);
         if (puffsLeft > 0) {
             return InteractionResultHolder.pass(tobacco);
@@ -133,7 +131,7 @@ public class LooseTobaccoItem extends Item {
         pipeTag.putString(NBT_TOBACCO, BuiltInRegistries.ITEM.getKey(tobacco.getItem()).toString());
         pipeTag.putInt(NBT_PUFFS, this.maxPuffs);
 
-        CompoundTag tobaccoData = tobacco.getTag();
+        CompoundTag tobaccoData = LegacyItemTags.getTag(tobacco);
         if (tobaccoData != null) {
             pipeTag.put("PackedTobaccoData", tobaccoData.copy());
         }
@@ -169,10 +167,5 @@ public class LooseTobaccoItem extends Item {
         if (agedDays < 90) return "Deep Aged";
         if (agedDays < 365) return "Vintage";
         return "Cellared";
-    }
-
-    private String capitalize(String s) {
-        if (s == null || s.isEmpty()) return s;
-        return Character.toUpperCase(s.charAt(0)) + s.substring(1);
     }
 }

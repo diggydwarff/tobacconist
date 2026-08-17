@@ -19,10 +19,10 @@ import net.minecraft.world.item.ItemStack;
 public class HookahStationRecipeCategory implements IRecipeCategory<HookahStationJeiRecipe> {
 
     public static final RecipeType<HookahStationJeiRecipe> TYPE =
-            new RecipeType<>(new ResourceLocation(TobacconistMod.MODID, "hookah_station"), HookahStationJeiRecipe.class);
+            new RecipeType<>(ResourceLocation.fromNamespaceAndPath(TobacconistMod.MODID, "hookah_station"), HookahStationJeiRecipe.class);
 
     private static final ResourceLocation TEXTURE =
-            new ResourceLocation(TobacconistMod.MODID, "textures/gui/hookah_gui.png");
+            ResourceLocation.fromNamespaceAndPath(TobacconistMod.MODID, "textures/gui/hookah_gui.png");
 
     private final IDrawable background;
     private final IDrawable icon;

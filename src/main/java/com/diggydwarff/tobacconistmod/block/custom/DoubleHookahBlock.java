@@ -1,5 +1,6 @@
 package com.diggydwarff.tobacconistmod.block.custom;
 
+import com.mojang.serialization.MapCodec;
 import com.diggydwarff.tobacconistmod.block.entity.HookahEntity;
 import com.diggydwarff.tobacconistmod.block.entity.ModBlockEntities;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.HookahHoseItem;
@@ -11,6 +12,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -34,7 +36,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
@@ -46,6 +47,11 @@ public class DoubleHookahBlock extends BaseEntityBlock {
 
     private static final VoxelShape LOWER_SHAPE = Block.box(0, 0, 0, 16, 16, 16);
     private static final VoxelShape UPPER_SHAPE = Block.box(0, 0, 0, 16, 16, 16);
+
+    @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return simpleCodec(DoubleHookahBlock::new);
+    }
 
     public DoubleHookahBlock(Properties properties) {
         super(properties);
@@ -164,7 +170,7 @@ public class DoubleHookahBlock extends BaseEntityBlock {
     }
 
     @Override
-    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+    public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         DoubleBlockHalf half = state.getValue(HALF);
         BlockPos otherPos = half == DoubleBlockHalf.LOWER ? pos.above() : pos.below();
         BlockState otherState = level.getBlockState(otherPos);
@@ -174,7 +180,7 @@ public class DoubleHookahBlock extends BaseEntityBlock {
             level.levelEvent(player, 2001, otherPos, Block.getId(otherState));
         }
 
-        super.playerWillDestroy(level, pos, state, player);
+        return super.playerWillDestroy(level, pos, state, player);
     }
 
     @Override
@@ -210,7 +216,17 @@ public class DoubleHookahBlock extends BaseEntityBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos,
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        InteractionResult result = handleUse(state, level, pos, player, hand, hit);
+        return result.consumesAction() ? ItemInteractionResult.sidedSuccess(level.isClientSide) : ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+    }
+
+    @Override
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
+        return handleUse(state, level, pos, player, InteractionHand.MAIN_HAND, hit);
+    }
+
+    private InteractionResult handleUse(BlockState state, Level level, BlockPos pos,
                                  Player player, InteractionHand hand, BlockHitResult hit) {
 
         BlockPos entityPos = getEntityPos(state, pos);
@@ -254,7 +270,7 @@ public class DoubleHookahBlock extends BaseEntityBlock {
             }
 
             if (entity instanceof HookahEntity) {
-                NetworkHooks.openScreen((ServerPlayer) player, (HookahEntity) entity, entityPos);
+                ((ServerPlayer) player).openMenu((HookahEntity) entity, buf -> buf.writeBlockPos(entityPos));
             } else {
                 throw new IllegalStateException("Our Container provider is missing!");
             }

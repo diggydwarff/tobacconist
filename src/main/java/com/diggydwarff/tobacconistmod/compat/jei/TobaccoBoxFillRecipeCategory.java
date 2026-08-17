@@ -19,7 +19,7 @@ import net.minecraft.world.item.ItemStack;
 public class TobaccoBoxFillRecipeCategory implements IRecipeCategory<TobaccoBoxFillJeiRecipe> {
 
     public static final RecipeType<TobaccoBoxFillJeiRecipe> TYPE =
-            new RecipeType<>(new ResourceLocation(TobacconistMod.MODID, "tobacco_box_fill"), TobaccoBoxFillJeiRecipe.class);
+            new RecipeType<>(ResourceLocation.fromNamespaceAndPath(TobacconistMod.MODID, "tobacco_box_fill"), TobaccoBoxFillJeiRecipe.class);
 
     private final IDrawable background;
     private final IDrawable icon;

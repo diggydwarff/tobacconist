@@ -1,5 +1,7 @@
 package com.diggydwarff.tobacconistmod.compat.jei;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import net.minecraft.world.item.Item;
@@ -44,14 +46,14 @@ public record AverageLeavesJeiRecipe(
         TobaccoCuringHelper.applyCreativeLeafDefaults(b, true);
         TobaccoCuringHelper.applyCreativeLeafDefaults(out, true);
 
-        a.getOrCreateTag().putInt(TobaccoCuringHelper.TAG_QUALITY, 40);
-        a.getOrCreateTag().putString(TobaccoCuringHelper.TAG_QUALITY_TIER, TobaccoCuringHelper.getQualityTierId(40));
+        LegacyItemTags.getOrCreateTag(a).putInt(TobaccoCuringHelper.TAG_QUALITY, 40);
+        LegacyItemTags.getOrCreateTag(a).putString(TobaccoCuringHelper.TAG_QUALITY_TIER, TobaccoCuringHelper.getQualityTierId(40));
 
-        b.getOrCreateTag().putInt(TobaccoCuringHelper.TAG_QUALITY, 80);
-        b.getOrCreateTag().putString(TobaccoCuringHelper.TAG_QUALITY_TIER, TobaccoCuringHelper.getQualityTierId(80));
+        LegacyItemTags.getOrCreateTag(b).putInt(TobaccoCuringHelper.TAG_QUALITY, 80);
+        LegacyItemTags.getOrCreateTag(b).putString(TobaccoCuringHelper.TAG_QUALITY_TIER, TobaccoCuringHelper.getQualityTierId(80));
 
-        out.getOrCreateTag().putInt(TobaccoCuringHelper.TAG_QUALITY, 60);
-        out.getOrCreateTag().putString(TobaccoCuringHelper.TAG_QUALITY_TIER, TobaccoCuringHelper.getQualityTierId(60));
+        LegacyItemTags.getOrCreateTag(out).putInt(TobaccoCuringHelper.TAG_QUALITY, 60);
+        LegacyItemTags.getOrCreateTag(out).putString(TobaccoCuringHelper.TAG_QUALITY_TIER, TobaccoCuringHelper.getQualityTierId(60));
 
         recipes.add(new AverageLeavesJeiRecipe(a, b, out));
     }

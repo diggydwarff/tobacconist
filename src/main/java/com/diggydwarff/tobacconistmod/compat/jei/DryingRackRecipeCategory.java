@@ -19,7 +19,7 @@ import net.minecraft.world.item.ItemStack;
 public class DryingRackRecipeCategory implements IRecipeCategory<DryingRackJeiRecipe> {
 
     public static final RecipeType<DryingRackJeiRecipe> TYPE =
-            new RecipeType<>(new ResourceLocation(TobacconistMod.MODID, "drying_rack"), DryingRackJeiRecipe.class);
+            new RecipeType<>(ResourceLocation.fromNamespaceAndPath(TobacconistMod.MODID, "drying_rack"), DryingRackJeiRecipe.class);
 
     private final IDrawable background;
     private final IDrawable icon;

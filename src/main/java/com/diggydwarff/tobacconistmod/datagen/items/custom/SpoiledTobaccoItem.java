@@ -17,7 +17,7 @@ public class SpoiledTobaccoItem extends Item {
 
     @Override
     public void appendHoverText(ItemStack stack,
-                                @Nullable Level level,
+                                Item.TooltipContext level,
                                 List<Component> tooltip,
                                 TooltipFlag flag) {
 

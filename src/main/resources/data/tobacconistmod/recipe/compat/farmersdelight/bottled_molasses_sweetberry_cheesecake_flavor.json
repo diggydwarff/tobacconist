@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "tobacconistmod:bottled_molasses_plain"
+    },
+    {
+      "item": "farmersdelight:sweet_berry_cheesecake_slice"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "tobacconistmod:bottled_molasses_sweetberry_cheesecake_flavor"
+  },
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "farmersdelight"
+    }
+  ]
+}

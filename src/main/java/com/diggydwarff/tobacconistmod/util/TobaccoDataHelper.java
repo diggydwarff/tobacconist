@@ -1,5 +1,7 @@
 package com.diggydwarff.tobacconistmod.util;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 
@@ -8,8 +10,8 @@ public class TobaccoDataHelper {
     public static void applyTobaccoMetadata(ItemStack result, ItemStack source) {
         if (result.isEmpty() || source.isEmpty()) return;
 
-        CompoundTag resultTag = result.getOrCreateTag();
-        CompoundTag sourceTag = source.getTag();
+        CompoundTag resultTag = LegacyItemTags.getOrCreateTag(result);
+        CompoundTag sourceTag = LegacyItemTags.getTag(source);
 
         if (sourceTag == null) return;
 

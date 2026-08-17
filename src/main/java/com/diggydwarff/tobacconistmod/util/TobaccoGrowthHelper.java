@@ -1,5 +1,7 @@
 package com.diggydwarff.tobacconistmod.util;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
@@ -7,7 +9,7 @@ import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraftforge.common.Tags;
+import net.neoforged.neoforge.common.Tags;
 
 public final class TobaccoGrowthHelper {
 
@@ -30,21 +32,36 @@ public final class TobaccoGrowthHelper {
     private TobaccoGrowthHelper() {}
 
     public static void applyGrowthQuality(ItemStack stack, int quality) {
-        CompoundTag tag = stack.getOrCreateTag();
-        int clamped = TobaccoCuringHelper.clampQuality(quality);
+        CompoundTag tag = LegacyItemTags.getOrCreateTag(stack);
+        int clamped = Math.max(0, Math.min(70, quality));
+
         tag.putInt(TobaccoCuringHelper.TAG_GROWTH_QUALITY, clamped);
-        tag.putString(TobaccoCuringHelper.TAG_QUALITY_TIER, TobaccoCuringHelper.getQualityTierId(clamped));
+
+        // Raw leaf should not carry final cured product fields.
+        tag.remove(TobaccoCuringHelper.TAG_QUALITY);
+        tag.remove(TobaccoCuringHelper.TAG_QUALITY_TIER);
+        tag.remove(TobaccoCuringHelper.TAG_CURE_TYPE);
     }
 
-    public static int calculateGrowthQuality(Level level, BlockPos pos, Variety variety, int effectiveAge, int maxAge) {
-        int score = 50;
+    public static int calculateGrowthQuality(Level level, BlockPos pos, Variety variety, int age, int maxAge) {
+        int biome = biomeScore(level, pos, variety);
+        int light = lightScore(level, pos, variety);
+        int temp = temperatureScore(level, pos, variety);
+        int harvest = harvestTimingScore(age, maxAge);
 
-        score += biomeScore(level, pos, variety);
-        score += lightScore(level, pos, variety);
-        score += temperatureScore(level, pos, variety);
-        score += harvestTimingScore(effectiveAge, maxAge);
+        // Rebalanced so ideal conditions no longer auto-cap to 70.
+        // Perfect raw should usually land in the low/mid 60s, with RNG able to push a few into upper 60s.
+        int base =
+                28
+                        + (biome / 2)              // +10 at best
+                        + ((light * 3) / 5)        // +6 at best
+                        + ((temp * 3) / 5)         // +6 at best
+                        + ((harvest * 3) / 4);     // +6 at best
 
-        return TobaccoCuringHelper.clampQuality(score);
+        int rng = level.getRandom().nextInt(11); // 0–10
+
+        int quality = base + rng;
+        return Math.max(0, Math.min(70, quality));
     }
 
     public static String getInspectionMessage(Level level, BlockPos pos, Variety variety, int effectiveAge, int maxAge) {
@@ -53,18 +70,25 @@ public final class TobaccoGrowthHelper {
         int temp = temperatureScore(level, pos, variety);
         int harvest = harvestTimingScore(effectiveAge, maxAge);
 
-        int total = TobaccoCuringHelper.clampQuality(50 + biome + light + temp + harvest);
+        int total =
+                28
+                        + (biome / 2)
+                        + ((light * 3) / 5)
+                        + ((temp * 3) / 5)
+                        + ((harvest * 3) / 4);
+
+        total = Math.max(0, Math.min(70, total));
 
         Factor bestFactor = getBestFactor(biome, light, temp, harvest);
         Factor worstFactor = getWorstFactor(biome, light, temp, harvest);
 
-        if (total >= 85) {
+        if (total >= 58) {
             return strongPositiveMessage(level, variety, bestFactor, effectiveAge, maxAge);
-        } else if (total >= 70) {
+        } else if (total >= 46) {
             return mildPositiveMessage(level, variety, bestFactor, effectiveAge, maxAge);
-        } else if (total >= 55) {
+        } else if (total >= 32) {
             return neutralMessage(level, variety, bestFactor, worstFactor, effectiveAge, maxAge);
-        } else if (total >= 40) {
+        } else if (total >= 18) {
             return mildNegativeMessage(level, variety, worstFactor, effectiveAge, maxAge);
         } else {
             return strongNegativeMessage(level, variety, worstFactor, effectiveAge, maxAge);
@@ -346,9 +370,9 @@ public final class TobaccoGrowthHelper {
     }
 
     private static int harvestTimingScore(int age, int maxAge) {
-        if (age >= maxAge) return 12;
-        if (age >= maxAge - 1) return -5;
-        return -15;
+        if (age >= maxAge) return 8;
+        if (age >= maxAge - 1) return -3;
+        return -12;
     }
 
     private static int rangeScore(int value, int idealMin, int idealMax, int acceptableMin, int acceptableMax) {
@@ -380,8 +404,8 @@ public final class TobaccoGrowthHelper {
 
     public static String getHarvestStatus(int age, int maxAge) {
         int score = harvestTimingScore(age, maxAge);
-        if (score >= 12) return "Ready";
-        if (score >= -5) return "Nearly Ready";
+        if (score >= 8) return "Ready";
+        if (score >= -3) return "Nearly Ready";
         return "Too Early";
     }
 }

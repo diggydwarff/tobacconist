@@ -1,5 +1,7 @@
 package com.diggydwarff.tobacconistmod.util;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 
@@ -63,8 +65,8 @@ public final class TobaccoProductQualityHelper {
     }
 
     public static int getStoredProductQuality(ItemStack stack) {
-        if (!stack.hasTag()) return -1;
-        CompoundTag tag = stack.getTag();
+        if (!LegacyItemTags.hasTag(stack)) return -1;
+        CompoundTag tag = LegacyItemTags.getTag(stack);
         if (!tag.contains(TAG_PRODUCT_QUALITY)) return -1;
         return clampTen(tag.getInt(TAG_PRODUCT_QUALITY));
     }
