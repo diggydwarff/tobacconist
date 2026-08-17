@@ -9,7 +9,7 @@ import net.neoforged.fml.ModList;
 
 /**
  * Loader-safe lookup for the Tobacconist's Spectacles.
- * Curios is optional: vanilla HEAD is always supported, Curios eyes is checked only when present.
+ * Curios is optional: vanilla HEAD is always supported, Curios head is checked only when present.
  */
 public final class SpectaclesEquipmentHelper {
     private SpectaclesEquipmentHelper() {}

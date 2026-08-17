@@ -80,7 +80,7 @@ public class ShishaMixRecipeCategory implements IRecipeCategory<ShishaMixJeiReci
         slot.draw(guiGraphics, 75, 21);
         slot.draw(guiGraphics, 125, 21);
 
-        guiGraphics.drawString(mc.font, "Loose tobacco + 0-3 flavors", 4, 4, 0x404040, false);
-        guiGraphics.drawString(mc.font, "Extra flavor slots optional", 4, 52, 0x808080, false);
+        guiGraphics.drawString(mc.font, "Tobacco/Shisha + 1-3 flavors", 4, 4, 0x404040, false);
+        guiGraphics.drawString(mc.font, "Unused Shisha can be flavored up to 3", 4, 52, 0x808080, false);
     }
 }

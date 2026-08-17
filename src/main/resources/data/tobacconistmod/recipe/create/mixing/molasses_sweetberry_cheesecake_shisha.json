@@ -1,0 +1,24 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "type": "tobacconistmod:create_tobacco_mixing",
+  "ingredients": [
+    {
+      "tag": "tobacconistmod:loose_tobacco"
+    },
+    {
+      "type": "neoforge:single",
+      "amount": 250,
+      "fluid": "tobacconistmod:molasses_sweetberry_cheesecake"
+    }
+  ],
+  "results": [
+    {
+      "id": "tobacconistmod:shisha_tobacco"
+    }
+  ]
+}

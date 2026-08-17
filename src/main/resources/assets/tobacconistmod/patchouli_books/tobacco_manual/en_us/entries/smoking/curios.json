@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "$(thing)Curios is optional.$() Tobacconist works without it. If Curios is installed, the mod adds a Mouth slot for smoking items and an Eyes slot for the Spectacles."
+      "text": "$(thing)Curios is optional.$() Tobacconist works without it. If Curios is installed, the mod adds a Mouth slot for smoking items. The Spectacles use the standard Curios Head slot."
     },
     {
       "type": "patchouli:text",

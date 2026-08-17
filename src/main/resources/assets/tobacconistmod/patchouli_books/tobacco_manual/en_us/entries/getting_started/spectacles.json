@@ -16,7 +16,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "$(thing)Without Curios:$() equip the Spectacles in the vanilla head slot. $(br2)$(thing)With Curios:$() you may use the Curios Eyes slot instead, keeping your helmet slot free. The same forehead visual and the same inspection overlay are used either way.",
+      "text": "$(thing)Without Curios:$() equip the Spectacles in the vanilla head slot. $(br2)$(thing)With Curios:$() you may use the Curios Head slot instead, keeping your helmet slot free. The same forehead visual and the same inspection overlay are used either way.",
       "title": "How to Wear Them"
     },
     {

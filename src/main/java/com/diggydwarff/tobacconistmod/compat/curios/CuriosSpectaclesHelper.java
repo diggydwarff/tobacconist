@@ -11,11 +11,11 @@ public final class CuriosSpectaclesHelper {
 
     public static ItemStack findWorn(Player player) {
         return CuriosApi.getCuriosInventory(player).map(inventory -> {
-            var eyes = inventory.getCurios().get("eyes");
-            if (eyes == null || eyes.getStacks().getSlots() <= 0) return ItemStack.EMPTY;
+            var head = inventory.getCurios().get("head");
+            if (head == null || head.getStacks().getSlots() <= 0) return ItemStack.EMPTY;
 
-            for (int i = 0; i < eyes.getStacks().getSlots(); i++) {
-                ItemStack stack = eyes.getStacks().getStackInSlot(i);
+            for (int i = 0; i < head.getStacks().getSlots(); i++) {
+                ItemStack stack = head.getStacks().getStackInSlot(i);
                 if (stack.is(ModItems.TOBACCONISTS_SPECTACLES.get())) return stack;
             }
             return ItemStack.EMPTY;

@@ -12,7 +12,7 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
-/** Renders the spectacles in the same forehead position for both vanilla HEAD and Curios Eyes equipment. */
+/** Renders the spectacles in the same forehead position for both vanilla HEAD and Curios Head equipment. */
 public class SpectaclesRenderLayer extends RenderLayer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> {
     private final ItemRenderer itemRenderer;
 

@@ -22,7 +22,7 @@ public class ClientEvents {
         for (PlayerSkin.Model skin : event.getSkins()) {
             PlayerRenderer renderer = event.getSkin(skin);
             if (renderer != null) {
-                // Spectacles work with or without Curios (Curios Eyes or vanilla helmet slot).
+                // Spectacles work with or without Curios (Curios Head or vanilla helmet slot).
                 renderer.addLayer(new SpectaclesRenderLayer(renderer, Minecraft.getInstance().getItemRenderer()));
 
                 // Mouth-slot rendering only exists when Curios supplies that slot.

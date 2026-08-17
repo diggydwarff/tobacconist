@@ -63,10 +63,20 @@ public enum BottledMolassesFlavors {
     BOTTLED_MOLASSES_KIWI_FLAVOR("[Bottle of Molasses (Kiwi Flavored)]"),
     BOTTLED_MOLASSES_DURIAN_FLAVOR("[Bottle of Molasses (Durian Flavored)]");
 
-    private final Item item;
+    /**
+     * Lazily created during the ITEM registration event.
+     *
+     * <p>The enum is also used as pure flavor metadata by the molasses fluid registry, which is
+     * initialized before the item registry opens. Constructing Item instances from the enum
+     * constructor therefore causes "Registry is already frozen" on NeoForge 1.21.1. Keep the
+     * enum safe to initialize at any time and only create the actual bottle item when registration
+     * asks for it.</p>
+     */
+    private Item item;
+    private final String bottleDisplayName;
 
     BottledMolassesFlavors(String name){
-        this.item = new ShishaFlavoringItem(new Item.Properties().stacksTo(1).durability(4));
+        this.bottleDisplayName = stripBrackets(name);
     }
 
     public String getName() {
@@ -74,11 +84,61 @@ public enum BottledMolassesFlavors {
     }
 
     public Item getItem(){
+        if (item == null) {
+            item = new ShishaFlavoringItem(new Item.Properties().stacksTo(1).durability(4));
+        }
         return item;
     }
 
     public ItemStack getStack(){
-        return new ItemStack(this.item);
+        return new ItemStack(getItem());
+    }
+
+    /** Stable registry path for this molasses flavor's real fluid. */
+    public String getFluidName() {
+        String path = getName();
+        if (path.startsWith("bottled_")) {
+            path = path.substring("bottled_".length());
+        }
+        if (path.endsWith("_flavor")) {
+            path = path.substring(0, path.length() - "_flavor".length());
+        }
+        return path;
+    }
+
+    /** English display label stored by the existing Shisha metadata format. */
+    public String getShishaFlavorTag() {
+        return bottleDisplayName;
+    }
+
+    public String getFluidDisplayName() {
+        int open = bottleDisplayName.indexOf('(');
+        int close = bottleDisplayName.lastIndexOf(')');
+        if (open < 0 || close <= open) {
+            return "Molasses";
+        }
+
+        String flavor = bottleDisplayName.substring(open + 1, close);
+        if (flavor.endsWith(" Flavored")) {
+            flavor = flavor.substring(0, flavor.length() - " Flavored".length());
+        }
+        return flavor + " Molasses";
+    }
+
+    public static BottledMolassesFlavors fromItem(Item item) {
+        for (BottledMolassesFlavors flavor : values()) {
+            if (flavor.item == item) {
+                return flavor;
+            }
+        }
+        return null;
+    }
+
+    private static String stripBrackets(String value) {
+        if (value.length() >= 2 && value.charAt(0) == '[' && value.charAt(value.length() - 1) == ']') {
+            return value.substring(1, value.length() - 1);
+        }
+        return value;
     }
 
 

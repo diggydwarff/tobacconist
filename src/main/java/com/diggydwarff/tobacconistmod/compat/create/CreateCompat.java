@@ -18,6 +18,8 @@ public final class CreateCompat {
             "com.diggydwarff.tobacconistmod.compat.create.CreateDeployerCompat";
     private static final String PRESS_COMPAT_CLASS =
             "com.diggydwarff.tobacconistmod.compat.create.CreatePressCompat";
+    private static final String MIXER_COMPAT_CLASS =
+            "com.diggydwarff.tobacconistmod.compat.create.CreateMixerCompat";
 
     private CreateCompat() {}
 
@@ -33,6 +35,7 @@ public final class CreateCompat {
 
         registerCreateIntegration(DEPLOYER_COMPAT_CLASS);
         registerCreateIntegration(PRESS_COMPAT_CLASS, modEventBus);
+        registerCreateIntegration(MIXER_COMPAT_CLASS, modEventBus);
         TobacconistMod.LOGGER.info("Create detected; Tobacconist Create compatibility enabled.");
     }
 

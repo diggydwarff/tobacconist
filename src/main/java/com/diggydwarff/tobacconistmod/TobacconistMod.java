@@ -5,9 +5,13 @@ import com.diggydwarff.tobacconistmod.block.entity.ModBlockEntities;
 import com.diggydwarff.tobacconistmod.command.TobacconistCommands;
 import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
 import com.diggydwarff.tobacconistmod.compat.create.CreateCompat;
+import com.diggydwarff.tobacconistmod.compat.curios.CuriosCompat;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.BottledMolassesFlavors;
 import com.diggydwarff.tobacconistmod.effect.ModEffects;
+import com.diggydwarff.tobacconistmod.fluid.ModMolassesFluids;
+import com.diggydwarff.tobacconistmod.fluid.GlassBottleMolassesFluidHandler;
+import com.diggydwarff.tobacconistmod.fluid.MolassesBottleFluidHandler;
 import com.diggydwarff.tobacconistmod.recipes.ModRecipeSerializers;
 import com.diggydwarff.tobacconistmod.recipes.ModRecipes;
 import com.diggydwarff.tobacconistmod.screen.ModMenuTypes;
@@ -40,9 +44,11 @@ public class TobacconistMod {
         modEventBus.addListener(this::registerDynamicItems);
         modEventBus.addListener(this::registerCapabilities);
 
+        ModMolassesFluids.register(modEventBus);
         CreateCompat.init(modEventBus);
 
         ModItems.register(modEventBus);
+        CuriosCompat.init(modEventBus);
         ModBlocks.register(modEventBus);
         ModRecipes.register(modEventBus);
         ModEffects.register(modEventBus);
@@ -74,6 +80,22 @@ public class TobacconistMod {
                 Capabilities.ItemHandler.BLOCK,
                 ModBlockEntities.HOOKAH.get(),
                 (hookah, side) -> hookah.getItemHandler()
+        );
+
+        for (BottledMolassesFlavors flavor : BottledMolassesFlavors.values()) {
+            event.registerItem(
+                    Capabilities.FluidHandler.ITEM,
+                    (stack, context) -> new MolassesBottleFluidHandler(stack, flavor),
+                    flavor.getItem()
+            );
+        }
+
+        // Empty molasses bottles collapse to vanilla glass bottles. Register a generic molasses
+        // fill handler so Create Spouts and other NeoForge fluid handlers can refill them.
+        event.registerItem(
+                Capabilities.FluidHandler.ITEM,
+                (stack, context) -> new GlassBottleMolassesFluidHandler(stack),
+                Items.GLASS_BOTTLE
         );
     }
 

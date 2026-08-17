@@ -16,7 +16,7 @@ import net.neoforged.fml.ModList;
 import java.util.List;
 
 /**
- * Inspection spectacles. Curios integration is optional; vanilla HEAD equipment is the fallback.
+ * Inspection spectacles. Curios integration is optional; the standard Curios head slot is preferred and vanilla HEAD equipment remains the fallback.
  */
 public class TobacconistsSpectaclesItem extends Item implements Equipable {
     public TobacconistsSpectaclesItem(Properties properties) {
@@ -37,7 +37,7 @@ public class TobacconistsSpectaclesItem extends Item implements Equipable {
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, context, tooltip, flag);
         if (ModList.get().isLoaded("curios")) {
-            tooltip.add(Component.literal("Wear in the Curios Eyes slot or helmet slot").withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.literal("Wear in the Curios Head slot or helmet slot").withStyle(ChatFormatting.GRAY));
         } else {
             tooltip.add(Component.literal("Wear in the helmet slot").withStyle(ChatFormatting.GRAY));
         }

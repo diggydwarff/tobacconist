@@ -18,8 +18,12 @@ public record ShishaMixJeiRecipe(
         LegacyItemTags.getOrCreateTag(output).putString("flavor1", "Molasses");
         LegacyItemTags.getOrCreateTag(output).putInt("Quality", 60);
 
+        java.util.ArrayList<ItemStack> sources = new java.util.ArrayList<>(JeiItemLists.getAllLooseTobaccos());
+        ItemStack remixable = output.copy();
+        sources.add(remixable);
+
         return List.of(new ShishaMixJeiRecipe(
-                JeiItemLists.getAllLooseTobaccos(),
+                List.copyOf(sources),
                 JeiItemLists.getAllShishaFlavorings(),
                 output
         ));
