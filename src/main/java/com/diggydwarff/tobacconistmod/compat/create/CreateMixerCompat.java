@@ -24,10 +24,22 @@ public final class CreateMixerCompat {
                     () -> new StandardProcessingRecipe.Serializer<>(CreateTobaccoMixingRecipe::new)
             );
 
+    public static final Supplier<RecipeSerializer<CreateTobaccoHomogenizingRecipe>> TOBACCO_HOMOGENIZING =
+            SERIALIZERS.register(
+                    "create_tobacco_homogenizing",
+                    () -> new StandardProcessingRecipe.Serializer<>(CreateTobaccoHomogenizingRecipe::new)
+            );
+
     public static final Supplier<IngredientType<CreateTobaccoCaptureIngredient>> TOBACCO_CAPTURE =
             INGREDIENT_TYPES.register(
                     "tobacco_mixing_capture",
                     () -> new IngredientType<>(CreateTobaccoCaptureIngredient.CODEC)
+            );
+
+    public static final Supplier<IngredientType<CreateTobaccoHomogenizingIngredient>> TOBACCO_HOMOGENIZING_CAPTURE =
+            INGREDIENT_TYPES.register(
+                    "tobacco_homogenizing_capture",
+                    () -> new IngredientType<>(CreateTobaccoHomogenizingIngredient.CODEC)
             );
 
     private CreateMixerCompat() {}
@@ -35,6 +47,6 @@ public final class CreateMixerCompat {
     public static void register(IEventBus modEventBus) {
         SERIALIZERS.register(modEventBus);
         INGREDIENT_TYPES.register(modEventBus);
-        TobacconistMod.LOGGER.info("Create Mechanical Mixer + molasses Shisha integration enabled.");
+        TobacconistMod.LOGGER.info("Create Mechanical Mixer Shisha + tobacco homogenizing integration enabled.");
     }
 }

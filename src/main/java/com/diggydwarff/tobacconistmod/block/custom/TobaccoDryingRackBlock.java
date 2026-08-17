@@ -33,49 +33,57 @@ public class TobaccoDryingRackBlock extends BaseEntityBlock {
     public static final BooleanProperty OVER_CAMPFIRE = BooleanProperty.create("over_campfire");
 
     private static final VoxelShape SHAPE = Shapes.or(
-            box(2, 0, 2, 3, 8, 3),
-            box(13, 0, 2, 14, 8, 3),
-            box(2, 0, 13, 3, 8, 14),
-            box(13, 0, 13, 14, 8, 14),
+            // chunky corner feet + posts
+            box(1.5, 0, 1.5, 4.5, 1, 4.5),
+            box(11.5, 0, 1.5, 14.5, 1, 4.5),
+            box(1.5, 0, 11.5, 4.5, 1, 14.5),
+            box(11.5, 0, 11.5, 14.5, 1, 14.5),
+            box(2, 1, 2, 4, 8.5, 4),
+            box(12, 1, 2, 14, 8.5, 4),
+            box(2, 1, 12, 4, 8.5, 14),
+            box(12, 1, 12, 14, 8.5, 14),
 
-            box(3, 7, 2, 13, 8, 3),
-            box(3, 7, 13, 13, 8, 14),
-            box(2, 7, 3, 3, 8, 13),
-            box(13, 7, 3, 14, 8, 13),
+            // upper frame
+            box(4, 6.5, 2, 12, 8, 4),
+            box(4, 6.5, 12, 12, 8, 14),
+            box(2, 6.5, 4, 4, 8, 12),
+            box(12, 6.5, 4, 14, 8, 12),
 
-            box(3, 7, 5, 13, 8, 6),
-            box(3, 7, 8, 13, 8, 9),
-            box(3, 7, 11, 13, 8, 12),
+            // drying slats
+            box(4, 6.75, 5, 12, 7.5, 6.5),
+            box(4, 6.75, 7.25, 12, 7.5, 8.75),
+            box(4, 6.75, 9.5, 12, 7.5, 11),
 
-            box(3, 2, 2, 13, 3, 3),
-            box(3, 2, 13, 13, 3, 14),
-            box(2, 2, 3, 3, 3, 13),
-            box(13, 2, 3, 14, 3, 13)
+            // lower braces
+            box(4, 2, 2.5, 12, 3.5, 3.5),
+            box(4, 2, 12.5, 12, 3.5, 13.5),
+            box(2.5, 2, 4, 3.5, 3.5, 12),
+            box(12.5, 2, 4, 13.5, 3.5, 12)
     );
 
     private static final VoxelShape SHAPE_FIRE = Shapes.or(
-            // posts
-            box(2, 0, 2, 3, 12, 3),
-            box(13, 0, 2, 14, 12, 3),
-            box(2, 0, 13, 3, 12, 14),
-            box(13, 0, 13, 14, 12, 14),
+            // tall posts; renderer continues these downward into the campfire block below
+            box(2, 0, 2, 4, 12.5, 4),
+            box(12, 0, 2, 14, 12.5, 4),
+            box(2, 0, 12, 4, 12.5, 14),
+            box(12, 0, 12, 14, 12.5, 14),
 
-            // top frame
-            box(3, 11, 2, 13, 12, 3),
-            box(3, 11, 13, 13, 12, 14),
-            box(2, 11, 3, 3, 12, 13),
-            box(13, 11, 3, 14, 12, 13),
+            // upper frame
+            box(4, 10.5, 2, 12, 12, 4),
+            box(4, 10.5, 12, 12, 12, 14),
+            box(2, 10.5, 4, 4, 12, 12),
+            box(12, 10.5, 4, 14, 12, 12),
 
-            // hanging rails
-            box(3, 10, 5, 13, 11, 6),
-            box(3, 10, 8, 13, 11, 9),
-            box(3, 10, 11, 13, 11, 12),
+            // hanging slats
+            box(4, 9.75, 5, 12, 10.5, 6.5),
+            box(4, 9.75, 7.25, 12, 10.5, 8.75),
+            box(4, 9.75, 9.5, 12, 10.5, 11),
 
-            // lower supports
-            box(3, 2, 2, 13, 3, 3),
-            box(3, 2, 13, 13, 3, 14),
-            box(2, 2, 3, 3, 3, 13),
-            box(13, 2, 3, 14, 3, 13)
+            // lower braces
+            box(4, 2, 2.5, 12, 3.5, 3.5),
+            box(4, 2, 12.5, 12, 3.5, 13.5),
+            box(2.5, 2, 4, 3.5, 3.5, 12),
+            box(12.5, 2, 4, 13.5, 3.5, 12)
     );
 
     @Override

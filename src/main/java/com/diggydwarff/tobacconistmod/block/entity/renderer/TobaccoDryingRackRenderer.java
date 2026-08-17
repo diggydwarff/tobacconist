@@ -64,10 +64,13 @@ public class TobaccoDryingRackRenderer implements BlockEntityRenderer<TobaccoDry
             poseStack.pushPose();
             poseStack.translate(0.0F, -1.0F, 0.0F);
 
-            renderBox(poseStack, consumer, 2F / 16F, 2F / 16F, 2F / 16F, 3F / 16F, 16F / 16F, 3F / 16F, packedLight);
-            renderBox(poseStack, consumer, 13F / 16F, 2F / 16F, 2F / 16F, 14F / 16F, 16F / 16F, 3F / 16F, packedLight);
-            renderBox(poseStack, consumer, 2F / 16F, 2F / 16F, 13F / 16F, 3F / 16F, 16F / 16F, 14F / 16F, packedLight);
-            renderBox(poseStack, consumer, 13F / 16F, 2F / 16F, 13F / 16F, 14F / 16F, 16F / 16F, 14F / 16F, packedLight);
+            // Continue the chunky 2x2 posts down into the campfire block. Stop just short of
+            // the rack block boundary so the extension never z-fights the model's bottom faces.
+            float extensionTop = 15.95F / 16F;
+            renderBox(poseStack, consumer, 2F / 16F, 2F / 16F, 2F / 16F, 4F / 16F, extensionTop, 4F / 16F, packedLight);
+            renderBox(poseStack, consumer, 12F / 16F, 2F / 16F, 2F / 16F, 14F / 16F, extensionTop, 4F / 16F, packedLight);
+            renderBox(poseStack, consumer, 2F / 16F, 2F / 16F, 12F / 16F, 4F / 16F, extensionTop, 14F / 16F, packedLight);
+            renderBox(poseStack, consumer, 12F / 16F, 2F / 16F, 12F / 16F, 14F / 16F, extensionTop, 14F / 16F, packedLight);
 
             poseStack.popPose();
         }
@@ -84,10 +87,13 @@ public class TobaccoDryingRackRenderer implements BlockEntityRenderer<TobaccoDry
         float b = Mth.lerp(progress, baseColor[2], curedColor[2]);
 
         int cols = 4;
-        float startX = 0.22F;
-        float startZ = 0.22F;
-        float spacing = 0.18F;
-        float y = fireRack ? 0.76F : 0.51F;
+        // Keep the 4x4 leaf display fully inside the rack opening.
+        float startX = 0.31F;
+        float startZ = 0.31F;
+        float spacing = 0.125F;
+        // Keep leaves clearly above the wooden slats; the old ~0.01 block separation on the
+        // normal rack could depth-fight at distance and make the top flicker in and out.
+        float y = fireRack ? 0.69F : 0.55F;
 
         for (int i = 0; i < count; i++) {
             int row = i / cols;
@@ -104,25 +110,21 @@ public class TobaccoDryingRackRenderer implements BlockEntityRenderer<TobaccoDry
     }
 
     private void renderLeafQuad(PoseStack poseStack, VertexConsumer consumer, int light, float r, float g, float b) {
-        float minX = -0.075F;
-        float maxX =  0.075F;
-        float minY = -0.11F;
-        float maxY =  0.11F;
+        // Slightly smaller leaves keep the grid clear of the surrounding frame.
+        float minX = -0.055F;
+        float maxX =  0.055F;
+        float minY = -0.075F;
+        float maxY =  0.075F;
         float z = 0.0F;
 
         PoseStack.Pose pose = poseStack.last();
 
-        // front
+        // entityCutoutNoCull makes this single quad visible from both sides.
+        // Drawing a second coplanar back face caused the old movement shimmer/z-fighting.
         vertex(consumer, pose, minX, minY, z, 0F, 1F, 0F, 0F, 1F, light, r, g, b, 1F);
         vertex(consumer, pose, maxX, minY, z, 1F, 1F, 0F, 0F, 1F, light, r, g, b, 1F);
         vertex(consumer, pose, maxX, maxY, z, 1F, 0F, 0F, 0F, 1F, light, r, g, b, 1F);
         vertex(consumer, pose, minX, maxY, z, 0F, 0F, 0F, 0F, 1F, light, r, g, b, 1F);
-
-        // back
-        vertex(consumer, pose, minX, maxY, z, 0F, 0F, 0F, 0F, -1F, light, r, g, b, 1F);
-        vertex(consumer, pose, maxX, maxY, z, 1F, 0F, 0F, 0F, -1F, light, r, g, b, 1F);
-        vertex(consumer, pose, maxX, minY, z, 1F, 1F, 0F, 0F, -1F, light, r, g, b, 1F);
-        vertex(consumer, pose, minX, minY, z, 0F, 1F, 0F, 0F, -1F, light, r, g, b, 1F);
     }
 
     private float[] getBaseLeafColor(ItemStack stack) {

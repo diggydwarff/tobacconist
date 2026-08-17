@@ -287,4 +287,103 @@ public final class TobaccoProcessingHelper {
 
         return recutLooseTobacco(stack, TobaccoCuringHelper.CUT_FLAKE);
     }
+    /**
+     * Returns whether two tobacco leaves can be mechanically homogenized into a single quality.
+     * Raw leaves are averaged by GrowthQuality before curing; cured leaves are averaged by their
+     * final Quality. Both inputs must be the same leaf item and the same processing state apart
+     * from the quality fields being averaged. Different quality values are required so Create's
+     * Basin matcher selects two distinct quality stacks instead of consuming twice from one stack.
+     */
+    public static boolean canMechanicallyHomogenizeLeaves(ItemStack first, ItemStack second) {
+        boolean rawPair = TobaccoCuringHelper.isRawTobaccoLeaf(first)
+                && TobaccoCuringHelper.isRawTobaccoLeaf(second);
+        boolean curedPair = TobaccoCuringHelper.isDryTobaccoLeaf(first)
+                && TobaccoCuringHelper.isDryTobaccoLeaf(second);
+
+        if ((!rawPair && !curedPair) || !ItemStack.isSameItem(first, second)) {
+            return false;
+        }
+
+        if (getHomogenizingQuality(first) == getHomogenizingQuality(second)) {
+            return false;
+        }
+
+        return ItemStack.isSameItemSameComponents(
+                normalizeLeafForHomogenizing(first),
+                normalizeLeafForHomogenizing(second)
+        );
+    }
+
+    /**
+     * Averages one leaf from each compatible quality stack and returns two identical leaves.
+     * Raw leaves keep the result as GrowthQuality so they can be standardized before curing.
+     * Cured leaves keep their existing cure/processing metadata and receive the averaged final
+     * Quality. Integer half-points are rounded down deliberately so automation never creates
+     * quality through rounding.
+     */
+    public static ItemStack mechanicallyHomogenizeLeafPair(ItemStack first, ItemStack second) {
+        if (!canMechanicallyHomogenizeLeaves(first, second)) {
+            return ItemStack.EMPTY;
+        }
+
+        int averagedQuality = (getHomogenizingQuality(first) + getHomogenizingQuality(second)) / 2;
+
+        ItemStack result = first.copy();
+        result.setCount(2);
+
+        if (TobaccoCuringHelper.isRawTobaccoLeaf(result)) {
+            TobaccoGrowthHelper.applyGrowthQuality(result, averagedQuality);
+            // A raw leaf should never inherit a processing-only cut field from malformed legacy data.
+            LegacyItemTags.getOrCreateTag(result).remove(TobaccoCuringHelper.TAG_CUT_TYPE);
+            return result;
+        }
+
+        TobaccoCuringHelper.copyTobaccoProcessingData(first, result);
+
+        CompoundTag tag = LegacyItemTags.getOrCreateTag(result);
+        int clamped = TobaccoCuringHelper.clampQuality(averagedQuality);
+        tag.putInt(TobaccoCuringHelper.TAG_QUALITY, clamped);
+        tag.putString(TobaccoCuringHelper.TAG_QUALITY_TIER,
+                TobaccoCuringHelper.getQualityTierId(clamped));
+        tag.remove(TobaccoCuringHelper.TAG_GROWTH_QUALITY);
+        return result;
+    }
+
+    private static int getHomogenizingQuality(ItemStack stack) {
+        if (TobaccoCuringHelper.isRawTobaccoLeaf(stack)) {
+            CompoundTag tag = LegacyItemTags.getTag(stack);
+            if (tag != null && tag.contains(TobaccoCuringHelper.TAG_GROWTH_QUALITY)) {
+                return Math.max(0, Math.min(70,
+                        tag.getInt(TobaccoCuringHelper.TAG_GROWTH_QUALITY)));
+            }
+            return 50;
+        }
+        return TobaccoCuringHelper.getQuality(stack);
+    }
+
+    private static ItemStack normalizeLeafForHomogenizing(ItemStack stack) {
+        ItemStack normalized = stack.copy();
+        normalized.setCount(1);
+
+        CompoundTag tag = LegacyItemTags.hasTag(normalized)
+                ? LegacyItemTags.getTag(normalized).copy()
+                : new CompoundTag();
+
+        if (TobaccoCuringHelper.isRawTobaccoLeaf(normalized)) {
+            tag.remove(TobaccoCuringHelper.TAG_GROWTH_QUALITY);
+            // These are not meaningful on raw leaves and should not prevent legacy stacks mixing.
+            tag.remove(TobaccoCuringHelper.TAG_QUALITY);
+            tag.remove(TobaccoCuringHelper.TAG_QUALITY_TIER);
+            tag.remove(TobaccoCuringHelper.TAG_CURE_TYPE);
+            tag.remove(TobaccoCuringHelper.TAG_CUT_TYPE);
+        } else {
+            tag.remove(TobaccoCuringHelper.TAG_QUALITY);
+            tag.remove(TobaccoCuringHelper.TAG_QUALITY_TIER);
+            tag.remove(TobaccoCuringHelper.TAG_GROWTH_QUALITY);
+        }
+
+        LegacyItemTags.setTag(normalized, tag);
+        return normalized;
+    }
+
 }

@@ -27,6 +27,10 @@ public final class CreateCompat {
             "com.diggydwarff.tobacconistmod.compat.create.CreateMixerCompat";
     private static final String FAN_CURING_COMPAT_CLASS =
             "com.diggydwarff.tobacconistmod.compat.create.CreateFanCuringCompat";
+    private static final String DISPLAY_LINK_COMPAT_CLASS =
+            "com.diggydwarff.tobacconistmod.compat.create.CreateDisplayLinkCompat";
+    private static final String ITEM_ATTRIBUTE_COMPAT_CLASS =
+            "com.diggydwarff.tobacconistmod.compat.create.CreateItemAttributeCompat";
 
     private static BiFunction<Level, BlockPos, FanCuringAssist> fanCuringResolver =
             (level, pos) -> FanCuringAssist.NONE;
@@ -47,6 +51,8 @@ public final class CreateCompat {
         registerCreateIntegration(PRESS_COMPAT_CLASS, modEventBus);
         registerCreateIntegration(MIXER_COMPAT_CLASS, modEventBus);
         registerCreateIntegration(FAN_CURING_COMPAT_CLASS);
+        registerCreateIntegration(DISPLAY_LINK_COMPAT_CLASS, modEventBus);
+        registerCreateIntegration(ITEM_ATTRIBUTE_COMPAT_CLASS, modEventBus);
         TobacconistMod.LOGGER.info("Create detected; Tobacconist Create compatibility enabled.");
     }
 

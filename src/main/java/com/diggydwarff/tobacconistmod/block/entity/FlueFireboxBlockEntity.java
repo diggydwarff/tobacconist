@@ -4,6 +4,7 @@ import com.diggydwarff.tobacconistmod.screen.FlueFireboxMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
@@ -20,6 +21,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.neoforged.neoforge.items.IItemHandler;
 import org.jetbrains.annotations.Nullable;
 
 public class FlueFireboxBlockEntity extends BaseContainerBlockEntity implements MenuProvider, net.minecraft.world.WorldlyContainer {
@@ -27,6 +29,7 @@ public class FlueFireboxBlockEntity extends BaseContainerBlockEntity implements 
 
     private int burnTime = 0;
     private int burnTimeTotal = 0;
+    private final IItemHandler itemHandler = new FlueFireboxItemHandler(this);
 
     private static final int[] SLOTS_FOR_ALL_SIDES = new int[]{0};
 
@@ -108,6 +111,18 @@ public class FlueFireboxBlockEntity extends BaseContainerBlockEntity implements 
 
     public boolean isLit() {
         return burnTime > 0;
+    }
+
+    public IItemHandler getItemHandler(@Nullable Direction side) {
+        return itemHandler;
+    }
+
+    public int getBurnTime() {
+        return burnTime;
+    }
+
+    public int getBurnTimeTotal() {
+        return burnTimeTotal;
     }
 
     @Override

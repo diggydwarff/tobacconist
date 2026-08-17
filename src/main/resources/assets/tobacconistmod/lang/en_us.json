@@ -218,5 +218,15 @@
   "fluid_type.tobacconistmod.molasses_bayberry": "Bayberry Molasses",
   "fluid_type.tobacconistmod.molasses_fig": "Fig Molasses",
   "fluid_type.tobacconistmod.molasses_kiwi": "Kiwi Molasses",
-  "fluid_type.tobacconistmod.molasses_durian": "Durian Molasses"
+  "fluid_type.tobacconistmod.molasses_durian": "Durian Molasses",
+  "tobacconistmod.display_source.drying_rack_status": "Drying Rack Status",
+  "tobacconistmod.display_source.drying_rack_progress": "Drying Progress",
+  "tobacconistmod.display_source.drying_rack_leaf_count": "Drying Rack Leaf Count",
+  "tobacconistmod.display_source.tobacco_barrel_status": "Tobacco Barrel Status",
+  "tobacconistmod.display_source.tobacco_barrel_progress": "Barrel Process Progress",
+  "tobacconistmod.display_source.tobacco_barrel_humidity": "Barrel Humidity",
+  "tobacconistmod.display_source.tobacco_barrel_age": "Tobacco Age",
+  "tobacconistmod.display_source.flue_firebox_status": "Flue Firebox Status",
+  "tobacconistmod.display_source.flue_firebox_fuel": "Flue Firebox Fuel",
+  "tobacconistmod.display_source.hookah_status": "Hookah Status"
 }

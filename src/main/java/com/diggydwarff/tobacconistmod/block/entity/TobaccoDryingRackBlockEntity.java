@@ -11,6 +11,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Direction;
+import net.neoforged.neoforge.items.IItemHandler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
@@ -27,6 +28,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.EnumMap;
 import java.util.List;
 
 public class TobaccoDryingRackBlockEntity extends BlockEntity implements WorldlyContainer {
@@ -70,8 +72,19 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
     private int createFanAssistRefresh = 0;
     private CreateCompat.FanCuringAssist cachedCreateFanAssist = CreateCompat.FanCuringAssist.NONE;
 
+    private final EnumMap<Direction, IItemHandler> sidedItemHandlers = new EnumMap<>(Direction.class);
+    private final IItemHandler unsidedItemHandler;
+
     public TobaccoDryingRackBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.TOBACCO_DRYING_RACK.get(), pos, state);
+        for (Direction direction : Direction.values()) {
+            sidedItemHandlers.put(direction, new DryingRackItemHandler(this, direction));
+        }
+        unsidedItemHandler = new DryingRackItemHandler(this, null);
+    }
+
+    public IItemHandler getItemHandler(@Nullable Direction side) {
+        return side == null ? unsidedItemHandler : sidedItemHandlers.get(side);
     }
 
     public ItemStack getStoredLeaf() {
@@ -766,6 +779,10 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         quality = TobaccoCuringHelper.clampQuality(Math.min(100, quality));
 
         TobaccoCuringHelper.applyCureData(cured, cureType, quality);
+        // GrowthQuality is only an intermediate crop-stage value. Once final cured quality has
+        // been calculated, keeping it would fragment otherwise-identical cured leaves into
+        // separate stacks and make Create batch homogenizing needlessly awkward.
+        LegacyItemTags.getOrCreateTag(cured).remove(TobaccoCuringHelper.TAG_GROWTH_QUALITY);
 
         storedLeaf = cured;
 

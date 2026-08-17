@@ -82,6 +82,24 @@ public class TobacconistMod {
                 (hookah, side) -> hookah.getItemHandler()
         );
 
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
+                ModBlockEntities.TOBACCO_DRYING_RACK.get(),
+                (rack, side) -> rack.getItemHandler(side)
+        );
+
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
+                ModBlockEntities.TOBACCO_BARREL.get(),
+                (barrel, side) -> barrel.getItemHandler(side)
+        );
+
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
+                ModBlockEntities.FLUE_FIREBOX.get(),
+                (firebox, side) -> firebox.getItemHandler(side)
+        );
+
         for (BottledMolassesFlavors flavor : BottledMolassesFlavors.values()) {
             event.registerItem(
                     Capabilities.FluidHandler.ITEM,

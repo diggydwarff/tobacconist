@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    "tobacconistmod:tobacco_leaf_wild",
+    "tobacconistmod:tobacco_leaf_virginia",
+    "tobacconistmod:tobacco_leaf_burley",
+    "tobacconistmod:tobacco_leaf_oriental",
+    "tobacconistmod:tobacco_leaf_dokha",
+    "tobacconistmod:tobacco_leaf_shade",
+    "tobacconistmod:tobacco_leaf_wild_dry",
+    "tobacconistmod:tobacco_leaf_virginia_dry",
+    "tobacconistmod:tobacco_leaf_burley_dry",
+    "tobacconistmod:tobacco_leaf_oriental_dry",
+    "tobacconistmod:tobacco_leaf_dokha_dry",
+    "tobacconistmod:tobacco_leaf_shade_dry"
+  ]
+}

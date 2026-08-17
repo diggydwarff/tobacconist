@@ -7,6 +7,7 @@ import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -19,6 +20,8 @@ import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.items.IItemHandler;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -52,9 +55,14 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
     private long lastFermentGameTime = -1L;
 
     private TobaccoBarrelMode mode = TobaccoBarrelMode.IDLE;
+    private final IItemHandler itemHandler = new TobaccoBarrelItemHandler(this);
 
     public TobaccoBarrelBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.TOBACCO_BARREL.get(), pos, state);
+    }
+
+    public IItemHandler getItemHandler(@Nullable Direction side) {
+        return itemHandler;
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, TobaccoBarrelBlockEntity barrel) {
@@ -319,40 +327,80 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
     }
 
     public int tryInsertTobacco(ItemStack stack) {
-        if (stack.isEmpty()) return 0;
-        if (!isValidTobacco(stack)) return 0;
+        return insertTobacco(stack, true);
+    }
+
+    public int tryInsertTobaccoAutomated(ItemStack stack) {
+        return insertTobacco(stack, false);
+    }
+
+    public int getInsertableAmount(ItemStack stack) {
+        if (stack.isEmpty() || !isValidTobacco(stack)) return 0;
 
         if (storedTobacco.isEmpty()) {
-            int move = Math.min(stack.getCount(), MAX_STACK);
-            storedTobacco = stack.copyWithCount(move);
-            processTicks = 0;
-            overheatTicks = 0;
-            mode = TobaccoBarrelMode.IDLE;
-            lastAgeGameTime = -1L;
-            lastFermentGameTime = -1L;
-            playBarrelSound(SoundEvents.BARREL_OPEN);
-            setChanged();
-            return move;
+            return Math.min(stack.getCount(), MAX_STACK);
         }
 
         if (!ItemStack.isSameItemSameComponents(storedTobacco, stack)) {
             return 0;
         }
 
-        if (storedTobacco.getCount() >= MAX_STACK) {
-            return 0;
+        return Math.min(stack.getCount(), Math.max(0, MAX_STACK - storedTobacco.getCount()));
+    }
+
+    private int insertTobacco(ItemStack stack, boolean playSound) {
+        int move = getInsertableAmount(stack);
+        if (move <= 0) return 0;
+
+        if (storedTobacco.isEmpty()) {
+            storedTobacco = stack.copyWithCount(move);
+            processTicks = 0;
+            overheatTicks = 0;
+            mode = TobaccoBarrelMode.IDLE;
+            lastAgeGameTime = -1L;
+            lastFermentGameTime = -1L;
+        } else {
+            storedTobacco.grow(move);
+            lastAgeGameTime = -1L;
+            lastFermentGameTime = -1L;
+            processTicks = 0;
+            mode = TobaccoBarrelMode.IDLE;
         }
 
-        int space = MAX_STACK - storedTobacco.getCount();
-        int move = Math.min(space, stack.getCount());
-        storedTobacco.grow(move);
-        lastAgeGameTime = -1L;
-        lastFermentGameTime = -1L;
+        if (playSound) {
+            playBarrelSound(SoundEvents.BARREL_OPEN);
+        }
+        setChanged();
+        syncToClient();
+        return move;
+    }
+
+    public ItemStack extractTobaccoAutomated(int amount, boolean simulate) {
+        if (amount <= 0 || storedTobacco.isEmpty()) {
+            return ItemStack.EMPTY;
+        }
+
+        int move = Math.min(amount, storedTobacco.getCount());
+        if (simulate) {
+            return storedTobacco.copyWithCount(move);
+        }
+
+        ItemStack out = storedTobacco.split(move);
+        if (storedTobacco.isEmpty()) {
+            storedTobacco = ItemStack.EMPTY;
+            barrelHumidity = 0;
+            overheatTicks = 0;
+        }
+
+        // Disturbing a batch discards only its partial current-cycle progress. Metadata already
+        // earned by fermentation/aging remains on both the extracted and remaining stacks.
         processTicks = 0;
         mode = TobaccoBarrelMode.IDLE;
-        playBarrelSound(SoundEvents.BARREL_OPEN);
+        lastAgeGameTime = -1L;
+        lastFermentGameTime = -1L;
         setChanged();
-        return move;
+        syncToClient();
+        return out;
     }
 
     public ItemStack getStoredTobaccoCopy() {
