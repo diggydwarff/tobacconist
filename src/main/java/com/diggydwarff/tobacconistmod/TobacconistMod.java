@@ -4,6 +4,7 @@ import com.diggydwarff.tobacconistmod.block.ModBlocks;
 import com.diggydwarff.tobacconistmod.block.entity.ModBlockEntities;
 import com.diggydwarff.tobacconistmod.command.TobacconistCommands;
 import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
+import com.diggydwarff.tobacconistmod.compat.create.CreateCompat;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.BottledMolassesFlavors;
 import com.diggydwarff.tobacconistmod.effect.ModEffects;
@@ -38,6 +39,8 @@ public class TobacconistMod {
     public TobacconistMod(IEventBus modEventBus, ModContainer modContainer) {
         modEventBus.addListener(this::registerDynamicItems);
         modEventBus.addListener(this::registerCapabilities);
+
+        CreateCompat.init();
 
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);

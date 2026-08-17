@@ -1,6 +1,7 @@
 package com.diggydwarff.tobacconistmod.recipes;
 
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
+import com.diggydwarff.tobacconistmod.util.TobaccoProcessingHelper;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceLocation;
@@ -72,14 +73,7 @@ public class LooseTobaccoCuttingRecipe extends CustomRecipe {
         }
 
         ItemStack leaf = container.getItem(leafSlot);
-        ItemStack result = TobaccoCuringHelper.getLooseTobaccoForDryLeaf(leaf, 3);
-        if (result.isEmpty()) {
-            return ItemStack.EMPTY;
-        }
-
-        TobaccoCuringHelper.copyTobaccoProcessingData(leaf, result);
-        TobaccoCuringHelper.setCutType(result, cutType);
-        return result;
+        return TobaccoProcessingHelper.cutDryLeaf(leaf, cutType, 3);
     }
 
     @Override

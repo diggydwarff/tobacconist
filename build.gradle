@@ -16,6 +16,12 @@ repositories {
     maven { url = 'https://maven.neoforged.net/releases' }
     maven { url = 'https://maven.blamejared.com' }
     maven { url = 'https://maven.theillusivec4.top/' }
+
+    // Create 6.0.10 development dependencies.
+    // Per Create's official NeoForge 1.21.1 addon setup, use the slim Create
+    // artifact non-transitively and resolve only its required dev libraries.
+    maven { url = 'https://maven.createmod.net' } // Create, Ponder, Flywheel
+    maven { url = 'https://maven.ithundxr.dev/snapshots' } // Registrate
 }
 
 runs {
@@ -46,6 +52,25 @@ dependencies {
 
     compileOnly "vazkii.patchouli:Patchouli:${patchouli_version}:api"
     localRuntime "vazkii.patchouli:Patchouli:${patchouli_version}"
+
+    // Create is optional for production, but when enabled in the dev runtime it must use
+    // Create's documented development dependency layout so NeoForge actually loads it.
+    def createRuntimeEnabled = providers.gradleProperty('create_runtime_enabled')
+        .orElse('false').get().toBoolean()
+
+    if (createRuntimeEnabled) {
+        implementation("com.simibubi.create:create-1.21.1:${create_version}:slim") { transitive = false }
+        implementation "net.createmod.ponder:ponder-neoforge:${ponder_version}+mc1.21.1"
+        compileOnly "dev.engine-room.flywheel:flywheel-neoforge-api-1.21.1:${flywheel_version}"
+        runtimeOnly "dev.engine-room.flywheel:flywheel-neoforge-1.21.1:${flywheel_version}"
+        implementation "com.tterrag.registrate:Registrate:${registrate_version}"
+    } else {
+        // Keep Create APIs available to compile compatibility code without loading Create.
+        compileOnly("com.simibubi.create:create-1.21.1:${create_version}:slim") { transitive = false }
+        compileOnly "net.createmod.ponder:ponder-neoforge:${ponder_version}+mc1.21.1"
+        compileOnly "dev.engine-room.flywheel:flywheel-neoforge-api-1.21.1:${flywheel_version}"
+        compileOnly "com.tterrag.registrate:Registrate:${registrate_version}"
+    }
 }
 
 tasks.withType(ProcessResources).configureEach {

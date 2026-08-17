@@ -43,3 +43,10 @@ type="optional"
 versionRange="[1.21.1,)"
 ordering="NONE"
 side="BOTH"
+
+[[dependencies.${mod_id}]]
+modId="create"
+type="optional"
+versionRange="[6.0.10,6.1.0)"
+ordering="AFTER"
+side="BOTH"
