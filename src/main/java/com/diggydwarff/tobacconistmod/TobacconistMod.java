@@ -18,6 +18,7 @@ import com.diggydwarff.tobacconistmod.recipes.ModRecipes;
 import com.diggydwarff.tobacconistmod.screen.HookahScreen;
 import com.diggydwarff.tobacconistmod.screen.ModMenuTypes;
 import com.diggydwarff.tobacconistmod.villager.ModVillagers;
+import com.diggydwarff.tobacconistmod.client.PacketHandler;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
@@ -69,6 +70,7 @@ public class TobacconistMod
         ModPaintings.PAINTING_VARIANTS.register(modEventBus);
         TobacconistCreativeTab.register(modEventBus);
         ModRecipeSerializers.SERIALIZERS.register(modEventBus);
+        PacketHandler.register();
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, TobacconistConfig.CLIENT_SPEC);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, TobacconistConfig.COMMON_SPEC);

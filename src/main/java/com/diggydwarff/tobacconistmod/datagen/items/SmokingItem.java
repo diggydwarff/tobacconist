@@ -8,6 +8,8 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffect;
@@ -16,9 +18,11 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Random;
+import java.util.function.Consumer;
 
 public abstract class SmokingItem extends Item {
 
@@ -30,6 +34,10 @@ public abstract class SmokingItem extends Item {
 
     public void setTooltip(String tooltip) {
         this.tooltip = tooltip;
+    }
+
+    public InteractionResultHolder<ItemStack> performSmoke(Level level, Player player, ItemStack stack, Consumer<LivingEntity> onBreak) {
+      throw new UnsupportedOperationException("Unimplemented `performSmoke` method for this item!");
     }
 
     public boolean shouldEmitMouthSmoke(ItemStack stack) {

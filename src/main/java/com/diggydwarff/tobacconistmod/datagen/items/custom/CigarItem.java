@@ -10,12 +10,14 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class CigarItem extends SmokingItem {
 
@@ -31,10 +33,15 @@ public class CigarItem extends SmokingItem {
             return InteractionResultHolder.consume(stack);
         }
 
+        return performSmoke(level, player, stack, p -> p.broadcastBreakEvent(hand));
+    }
+
+    @Override
+    public InteractionResultHolder<ItemStack> performSmoke(Level level, Player player, ItemStack stack, Consumer<LivingEntity> onBreak) {
         this.triggerSmokingEffectPlayer(player, (ServerLevel) level, 0, stack);
 
         if (stack.getDamageValue() >= stack.getMaxDamage() - 1) {
-            stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(hand));
+            stack.hurtAndBreak(1, player, onBreak);
         } else {
             stack.setDamageValue(stack.getDamageValue() + 1);
         }
