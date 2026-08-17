@@ -26,6 +26,8 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
+import java.util.List;
+
 public abstract class AbstractTallTobaccoCropBlock extends CropBlock {
 
     public static final int FIRST_STAGE_MAX_AGE = 3;
@@ -112,6 +114,29 @@ public abstract class AbstractTallTobaccoCropBlock extends CropBlock {
         ItemStack stack = new ItemStack(getLeafItem(), count);
         TobaccoGrowthHelper.applyGrowthQuality(stack, quality);
         return stack;
+    }
+
+    /**
+     * Builds the same mature-plant harvest that a player gets for taking the upper leaves,
+     * but without spawning anything into the world. Automation integrations can route the
+     * returned stacks into their own inventories while keeping Tobacconist's quality roll.
+     */
+    public List<ItemStack> getAutomationHarvestDrops(Level level, BlockPos basePos) {
+        BlockState baseState = level.getBlockState(basePos);
+        if (!baseState.is(this) || baseState.getValue(HALF) != DoubleBlockHalf.LOWER) {
+            return List.of();
+        }
+
+        BlockState upperState = level.getBlockState(basePos.above());
+        if (!upperState.is(this)
+                || upperState.getValue(HALF) != DoubleBlockHalf.UPPER
+                || getEffectiveAge(level, basePos, baseState) < getMaxAge()) {
+            return List.of();
+        }
+
+        ItemStack leaves = makeLeafStackWithQuality(level, basePos, getLeafDropCount(level));
+        ItemStack seeds = new ItemStack(getBaseSeedId(), getSeedDropCount(level));
+        return List.of(leaves, seeds);
     }
 
     @Override

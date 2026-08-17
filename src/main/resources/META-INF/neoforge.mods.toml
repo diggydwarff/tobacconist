@@ -2,6 +2,10 @@ modLoader="javafml"
 loaderVersion="${loader_version_range}"
 license="${mod_license}"
 
+[[mixins]]
+config="tobacconistmod.create.mixins.json"
+requiredMods=["create"]
+
 [[mods]]
 modId="${mod_id}"
 version="${mod_version}"
