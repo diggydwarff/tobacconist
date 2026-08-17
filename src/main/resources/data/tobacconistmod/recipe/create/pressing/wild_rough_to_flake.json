@@ -1,0 +1,19 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "type": "tobacconistmod:create_tobacco_pressing",
+  "ingredients": [
+    {
+      "item": "tobacconistmod:tobacco_loose_wild"
+    }
+  ],
+  "results": [
+    {
+      "id": "tobacconistmod:tobacco_loose_wild"
+    }
+  ]
+}

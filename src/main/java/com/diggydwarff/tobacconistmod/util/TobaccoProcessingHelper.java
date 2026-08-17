@@ -94,4 +94,27 @@ public final class TobaccoProcessingHelper {
 
         return recutLooseTobacco(stack, nextCut);
     }
+
+    /**
+     * Returns whether this loose tobacco is eligible for the Create Mechanical Press branch.
+     * Rough tobacco is the intentional branch point: Chaveta cutting can continue toward Ribbon
+     * and Shag, while pressing Rough tobacco produces Flake.
+     */
+    public static boolean canMechanicallyPressToFlake(ItemStack stack) {
+        return TobaccoCuringHelper.isLooseTobacco(stack)
+                && TobaccoCuringHelper.CUT_ROUGH.equals(TobaccoCuringHelper.getCutType(stack));
+    }
+
+    /**
+     * Presses one Rough loose-tobacco item into one Flake item without changing its tobacco data.
+     * Create's recipe application handles stack quantities by applying this one-item result once
+     * per processed input item.
+     */
+    public static ItemStack mechanicallyPressOne(ItemStack stack) {
+        if (!canMechanicallyPressToFlake(stack)) {
+            return ItemStack.EMPTY;
+        }
+
+        return recutLooseTobacco(stack, TobaccoCuringHelper.CUT_FLAKE);
+    }
 }

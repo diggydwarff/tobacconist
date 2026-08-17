@@ -40,7 +40,7 @@ public class TobacconistMod {
         modEventBus.addListener(this::registerDynamicItems);
         modEventBus.addListener(this::registerCapabilities);
 
-        CreateCompat.init();
+        CreateCompat.init(modEventBus);
 
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
