@@ -235,38 +235,33 @@ public class DoubleHookahBlock extends BaseEntityBlock {
         if (!level.isClientSide()) {
             BlockEntity entity = level.getBlockEntity(entityPos);
 
-            try {
-                boolean isSmoking = ((HookahEntity) blockEntity).progress > 0;
-                if (isSmoking) {
-                    for (ItemStack stack : player.getHandSlots()) {
-                        if (stack.getItem() instanceof HookahHoseItem) {
-                            Vec3 look = player.getLookAngle();
-                            Vec3 eyePos = new Vec3(player.getX(), player.getY() + 1.4, player.getZ());
+            if (blockEntity instanceof HookahEntity hookah && hookah.progress > 0) {
+                for (ItemStack stack : player.getHandSlots()) {
+                    if (stack.getItem() instanceof HookahHoseItem) {
+                        Vec3 look = player.getLookAngle()
+                                .multiply(0.3D, 0.3D, 0.3D)
+                                .multiply(0.066D, 0.066D, 0.066D);
 
-                            look = look.multiply(0.3D, 0.3D, 0.3D);
-                            eyePos = eyePos.add(look);
-                            look = look.multiply(0.066D, 0.066D, 0.066D);
-
-                            Random rand = new Random();
-                            for (int i = 0; i < 5; ++i) {
-                                Vec3 newVec = new Vec3(rand.nextDouble() - 0.5D, rand.nextDouble() - 0.5D, rand.nextDouble() - 0.5D);
-                                newVec = newVec.multiply(0.01D, 0.01D, 0.01D);
-                                Vec3 mergeVec = look.add(newVec);
-                                ServerLevel sLevel = (ServerLevel) level;
-                                sLevel.sendParticles(
-                                        ParticleTypes.CAMPFIRE_COSY_SMOKE,
-                                        player.getX() + mergeVec.x,
-                                        player.getY() + 1.4 + mergeVec.y,
-                                        player.getZ() + mergeVec.z,
-                                        1, 0, 0, 0, 0
-                                );
-                            }
-
-                            return InteractionResult.sidedSuccess(level.isClientSide());
+                        Random rand = new Random();
+                        for (int i = 0; i < 5; ++i) {
+                            Vec3 newVec = new Vec3(
+                                    rand.nextDouble() - 0.5D,
+                                    rand.nextDouble() - 0.5D,
+                                    rand.nextDouble() - 0.5D
+                            ).multiply(0.01D, 0.01D, 0.01D);
+                            Vec3 mergeVec = look.add(newVec);
+                            ((ServerLevel) level).sendParticles(
+                                    ParticleTypes.CAMPFIRE_COSY_SMOKE,
+                                    player.getX() + mergeVec.x,
+                                    player.getY() + 1.4 + mergeVec.y,
+                                    player.getZ() + mergeVec.z,
+                                    1, 0, 0, 0, 0
+                            );
                         }
+
+                        return InteractionResult.sidedSuccess(false);
                     }
                 }
-            } catch (Exception ignored) {
             }
 
             if (entity instanceof HookahEntity) {

@@ -37,6 +37,16 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
 
     private final ItemStackHandler itemHandler = new ItemStackHandler(3) {
         @Override
+        public boolean isItemValid(int slot, ItemStack stack) {
+            return switch (slot) {
+                case 0 -> HookahFuelHelper.isFuel(stack);
+                case 1 -> stack.is(ModItems.SHISHA_TOBACCO.get());
+                case 2 -> isWaterPotion(stack);
+                default -> false;
+            };
+        }
+
+        @Override
         protected void onContentsChanged(int slot) {
             setChanged();
         }
@@ -176,7 +186,10 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
             setChanged(level, pos, state);
 
             if (pEntity.progress >= pEntity.maxProgress) {
-                craftItem(pEntity);
+                // The shisha durability is the actual consumption timer. At this point
+                // the spent shisha stack has already been removed above; there is no
+                // crafted output to move into another slot.
+                pEntity.resetProgress();
             }
         } else {
             pEntity.resetProgress();
@@ -195,26 +208,14 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
         this.progress = 0;
     }
 
-    private static void craftItem(HookahEntity pEntity) {
-        if (canProcess(pEntity)) {
-            pEntity.itemHandler.extractItem(1, 1, false);
-
-            pEntity.itemHandler.setStackInSlot(2,
-                    new ItemStack(ModItems.SHISHA_TOBACCO.get(),
-                            pEntity.itemHandler.getStackInSlot(2).getCount() + 1));
-
-            pEntity.resetProgress();
-        }
+    private static boolean isWaterPotion(ItemStack stack) {
+        PotionContents potionContents = stack.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);
+        return stack.is(Items.POTION) && potionContents.is(Potions.WATER);
     }
 
     private static boolean canProcess(HookahEntity entity) {
-        boolean hasShishaInSlot =
-                entity.itemHandler.getStackInSlot(1).getItem() == ModItems.SHISHA_TOBACCO.get();
-
-        ItemStack waterStack = entity.itemHandler.getStackInSlot(2);
-        PotionContents potionContents = waterStack.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);
-        boolean hasWaterInSlot = waterStack.is(Items.POTION) && potionContents.is(Potions.WATER);
-
+        boolean hasShishaInSlot = entity.itemHandler.getStackInSlot(1).is(ModItems.SHISHA_TOBACCO.get());
+        boolean hasWaterInSlot = isWaterPotion(entity.itemHandler.getStackInSlot(2));
         return hasShishaInSlot && hasWaterInSlot;
     }
 }

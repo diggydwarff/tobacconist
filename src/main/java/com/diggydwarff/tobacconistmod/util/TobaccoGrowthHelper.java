@@ -51,6 +51,20 @@ public final class TobaccoGrowthHelper {
     }
 
     /**
+     * Scores only the growing environment (biome, light, temperature), deliberately
+     * excluding crop age/harvest timing. This is used by the spectacles so a healthy
+     * young crop is not described as having poor conditions merely because it is young.
+     * Typical range is roughly -20 to +22.
+     */
+    public static int calculateEnvironmentConditionScore(Level level, BlockPos pos, Variety variety) {
+        int biome = biomeScore(level, pos, variety);
+        int light = lightScore(level, pos, variety);
+        int temp = temperatureScore(level, pos, variety);
+
+        return (biome / 2) + ((light * 3) / 5) + ((temp * 3) / 5);
+    }
+
+    /**
      * Deterministic quality before the 0-10 harvest roll. Useful for inspection UI.
      */
     public static int calculateGrowthPotential(Level level, BlockPos pos, Variety variety, int age, int maxAge) {

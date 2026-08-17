@@ -4,6 +4,7 @@ import com.diggydwarff.tobacconistmod.TobacconistMod;
 import com.diggydwarff.tobacconistmod.network.SmokeMouthItemPayload;
 import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.ModList;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
@@ -17,6 +18,12 @@ public final class ClientKeyInput {
     public static void onClientTick(ClientTickEvent.Post event) {
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.player == null || minecraft.level == null) return;
+
+        // Keep Curios-linked classes out of automatic event subscription so Curios
+        // can remain a genuinely optional dependency.
+        if (ModList.get().isLoaded("curios")) {
+            ClientSmokingParticles.tick(minecraft);
+        }
 
         while (ClientKeyMappings.SMOKE_MOUTH_ITEM.consumeClick()) {
             PacketDistributor.sendToServer(SmokeMouthItemPayload.INSTANCE);

@@ -70,18 +70,20 @@ public abstract class SmokingItem extends Item {
                     player.getX() + mergeVec.x,
                     player.getY() + 1.4 + mergeVec.y,
                     player.getZ() + mergeVec.z,
-                    smokelevel, 0, 0, 0, 0
+                    Math.max(1, smokelevel), 0, 0, 0, 0
             );
         }
 
-        player.addEffect(new MobEffectInstance(
-                ModEffects.NICOTINE,
-                500,
-                0,
-                false,
-                false,
-                true
-        ));
+        if (TobacconistConfig.areNicotineEffectsEnabled()) {
+            player.addEffect(new MobEffectInstance(
+                    ModEffects.NICOTINE,
+                    500,
+                    0,
+                    false,
+                    false,
+                    true
+            ));
+        }
 
         applyQualityHealthBonus(player, tobaccoStack);
         applyConfiguredAdditionalEffects(player);

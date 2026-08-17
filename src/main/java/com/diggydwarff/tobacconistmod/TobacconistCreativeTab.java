@@ -86,13 +86,6 @@ public class TobacconistCreativeTab {
                         output.accept(DOKHA_TOBACCO_SEEDS.get());
                         output.accept(SHADE_TOBACCO_SEEDS.get());
 
-                        output.accept(ModBlocks.WILD_TOBACCO_CROP.get());
-                        output.accept(ModBlocks.VIRGINIA_TOBACCO_CROP.get());
-                        output.accept(ModBlocks.BURLEY_TOBACCO_CROP.get());
-                        output.accept(ModBlocks.ORIENTAL_TOBACCO_CROP.get());
-                        output.accept(ModBlocks.DOKHA_TOBACCO_CROP.get());
-                        output.accept(ModBlocks.SHADE_TOBACCO_CROP.get());
-
                         output.accept(ModBlocks.HOOKAH.get());
                         output.accept(ModBlocks.ORNATE_COPPER_HOOKAH.get());
                         output.accept(ModBlocks.ORNATE_IRON_HOOKAH.get());
@@ -134,6 +127,7 @@ public class TobacconistCreativeTab {
                         output.accept(PaintingTabHelper.paintingVariant("american_lone_cowboy"));
                         output.accept(PaintingTabHelper.paintingVariant("american_cigarette"));
                         output.accept(PaintingTabHelper.paintingVariant("ottoman_hookah"));
+                        output.accept(PaintingTabHelper.paintingVariant("morrocan_hookah"));
                         output.accept(PaintingTabHelper.paintingVariant("american_cowboy_pair_wide"));
                         output.accept(PaintingTabHelper.paintingVariant("peace_pipe"));
                         output.accept(PaintingTabHelper.paintingVariant("japanese_kiseru_wide"));

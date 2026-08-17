@@ -184,11 +184,11 @@ public abstract class AbstractTallTobaccoCropBlock extends CropBlock {
 
         if (upperState.is(this) && upperState.getValue(HALF) == DoubleBlockHalf.UPPER) {
             if (!player.isCreative()) {
+                // The lower-half loot table already supplies the seed drop.
+                // Only drop the upper leaves manually here so breaking the lower half
+                // does not duplicate seeds.
                 int leaves = getLeafDropCount(level);
-                int seeds = getSeedDropCount(level);
-
                 popResource(level, upperPos, makeLeafStackWithQuality(level, pos, leaves));
-                popResource(level, upperPos, new ItemStack(getBaseSeedId(), seeds));
             }
 
             level.setBlock(upperPos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);

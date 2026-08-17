@@ -286,13 +286,8 @@ public class TobaccoBoxHelper {
     }
 
     private static String getQualityWord(int quality) {
-        if (!TobacconistConfig.isQualitySystemEnabled()) return "";
-        if (quality < 0) return "";
-        if (quality >= 9) return "Premium";
-        if (quality >= 7) return "Fine";
-        if (quality >= 5) return "Standard";
-        if (quality >= 3) return "Harsh";
-        return "Low-Grade";
+        if (!TobacconistConfig.isQualitySystemEnabled() || quality < 0) return "";
+        return TobaccoTooltipHelper.getQualityWord(quality);
     }
 
     public static String getBlendLine(ItemStack stored) {

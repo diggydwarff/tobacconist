@@ -147,12 +147,14 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
 
     @Override
     public ItemStack removeItem(int slot, int amount) {
-        if (slot != 0 || storedLeaf.isEmpty() || !isFinished()) {
+        if (slot != 0 || amount <= 0 || storedLeaf.isEmpty() || !isFinished()) {
             return ItemStack.EMPTY;
         }
 
-        ItemStack out = storedLeaf.copy();
-        storedLeaf = ItemStack.EMPTY;
+        ItemStack out = storedLeaf.split(amount);
+        if (storedLeaf.isEmpty()) {
+            storedLeaf = ItemStack.EMPTY;
+        }
 
         setChanged();
         syncRackState();

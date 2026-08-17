@@ -12,7 +12,7 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
-/** Renders the spectacles over the player's eyes for both vanilla HEAD and Curios Eyes equipment. */
+/** Renders the spectacles in the same forehead position for both vanilla HEAD and Curios Eyes equipment. */
 public class SpectaclesRenderLayer extends RenderLayer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> {
     private final ItemRenderer itemRenderer;
 
@@ -43,6 +43,8 @@ public class SpectaclesRenderLayer extends RenderLayer<AbstractClientPlayer, Pla
         poseStack.pushPose();
         this.getParentModel().head.translateAndRotate(poseStack);
 
+        // Tuned to sit on the forehead more like Engineer's Goggles.
+        // If we want to fine-tune later, these three values are the only ones to touch.
         poseStack.translate(0.0F, -0.40F, -0.255F);
         poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
         poseStack.scale(0.52F, 0.52F, 0.52F);

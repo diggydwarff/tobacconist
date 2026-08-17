@@ -67,10 +67,13 @@ public final class TobaccoInspectionOverlay {
             int potential = TobaccoGrowthHelper.calculateGrowthPotential(
                     minecraft.level, basePos, crop.getInspectionVariety(), age, maxAge
             );
+            int environment = TobaccoGrowthHelper.calculateEnvironmentConditionScore(
+                    minecraft.level, basePos, crop.getInspectionVariety()
+            );
 
             List<Line> lines = new ArrayList<>();
             lines.add(new Line("Growth: " + pct + "%", age >= maxAge ? GOOD : TEXT));
-            lines.add(new Line("Conditions: " + conditionName(potential), conditionColor(potential)));
+            lines.add(new Line("Conditions: " + conditionName(environment), conditionColor(environment)));
             if (TobacconistConfig.isQualitySystemEnabled()) {
                 int maxPotential = Math.min(70, potential + 10);
                 lines.add(new Line("Potential quality: " + potential + "-" + maxPotential, MUTED));
@@ -193,17 +196,17 @@ public final class TobaccoInspectionOverlay {
         }
     }
 
-    private static String conditionName(int potential) {
-        if (potential >= 50) return "Excellent";
-        if (potential >= 40) return "Good";
-        if (potential >= 28) return "Fair";
+    private static String conditionName(int environmentScore) {
+        if (environmentScore >= 18) return "Excellent";
+        if (environmentScore >= 10) return "Good";
+        if (environmentScore >= 0) return "Fair";
         return "Poor";
     }
 
-    private static int conditionColor(int potential) {
-        if (potential >= 50) return GOOD;
-        if (potential >= 40) return 0xFFC5E88A;
-        if (potential >= 28) return WARN;
+    private static int conditionColor(int environmentScore) {
+        if (environmentScore >= 18) return GOOD;
+        if (environmentScore >= 10) return 0xFFC5E88A;
+        if (environmentScore >= 0) return WARN;
         return BAD;
     }
 

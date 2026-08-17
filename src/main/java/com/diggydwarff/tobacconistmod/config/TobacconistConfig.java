@@ -42,6 +42,14 @@ public class TobacconistConfig {
         }
     }
 
+    public static boolean areNicotineEffectsEnabled() {
+        try {
+            return SERVER.enableNicotineEffects.get();
+        } catch (IllegalStateException ignored) {
+            return true;
+        }
+    }
+
     public static class Client {
         public final ModConfigSpec.IntValue particleDensity;
 
@@ -56,6 +64,7 @@ public class TobacconistConfig {
 
     public static class Server {
         public final ModConfigSpec.BooleanValue enableQualitySystem;
+        public final ModConfigSpec.BooleanValue enableNicotineEffects;
 
         public Server(ModConfigSpec.Builder builder) {
             builder.push("gameplay");
@@ -63,6 +72,11 @@ public class TobacconistConfig {
                     .comment("Enable the tobacco quality system: quality scores/tiers and quality-based smoking bonuses.")
                     .comment("When false, quality is hidden and ignored for gameplay, but existing quality data is preserved so it can be turned back on later.")
                     .define("enableQualitySystem", true);
+
+            enableNicotineEffects = builder
+                    .comment("Apply Tobacconist's nicotine status effect when tobacco is smoked.")
+                    .comment("Disabling this does not disable configured additional smoking effects.")
+                    .define("enableNicotineEffects", true);
             builder.pop();
         }
     }

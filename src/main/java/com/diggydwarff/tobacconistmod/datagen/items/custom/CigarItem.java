@@ -126,8 +126,6 @@ public class CigarItem extends SmokingItem {
             tooltip.add(Component.empty());
             tooltip.add(Component.literal("✿ Fermented").withStyle(ChatFormatting.DARK_GRAY));
             tooltip.add(Component.literal("ᵐ Months aged, ʸ Years aged").withStyle(ChatFormatting.DARK_GRAY));
-            tooltip.add(Component.literal("Wrapper aging/fermentation unavailable until wrapper NBT is stored on cigar recipes.")
-                    .withStyle(ChatFormatting.DARK_GRAY));
         }
     }
 
