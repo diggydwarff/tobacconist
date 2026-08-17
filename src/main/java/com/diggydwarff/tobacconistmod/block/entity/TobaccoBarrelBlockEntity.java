@@ -10,11 +10,13 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -64,6 +66,7 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
             barrel.lastAgeGameTime = -1L;
             barrel.lastFermentGameTime = -1L;
             barrel.setChanged();
+            if (level.getGameTime() % 20 == 0) barrel.syncToClient();
             return;
         }
 
@@ -79,6 +82,7 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
             barrel.lastAgeGameTime = -1L;
             barrel.lastFermentGameTime = -1L;
             barrel.setChanged();
+            if (level.getGameTime() % 20 == 0) barrel.syncToClient();
             return;
         }
 
@@ -110,6 +114,7 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
 
         if (barrel.mode == TobaccoBarrelMode.IDLE) {
             barrel.setChanged();
+            if (level.getGameTime() % 20 == 0) barrel.syncToClient();
             return;
         }
 
@@ -146,6 +151,7 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
         }
 
         barrel.setChanged();
+        if (level.getGameTime() % 20 == 0) barrel.syncToClient();
     }
 
     public static void clientTick(Level level, BlockPos pos, BlockState state, TobaccoBarrelBlockEntity barrel) {
@@ -479,6 +485,37 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
 
     public static boolean isRuined(ItemStack stack) {
         return LegacyItemTags.hasTag(stack) && LegacyItemTags.getTag(stack).getBoolean(TAG_RUINED);
+    }
+
+    public int getProcessProgressPercent() {
+        return switch (mode) {
+            case FERMENTING -> Math.min(100, (processTicks * 100) / FERMENT_TIME);
+            case AGING -> Math.min(100, (processTicks * 100) / TICKS_PER_DAY);
+            default -> 0;
+        };
+    }
+
+    public String getModeNameForInspection() {
+        return getModeDisplayName();
+    }
+
+    @Override
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+        CompoundTag tag = new CompoundTag();
+        saveAdditional(tag, registries);
+        return tag;
+    }
+
+    @Override
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
+    }
+
+    private void syncToClient() {
+        setChanged();
+        if (level != null && !level.isClientSide) {
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
+        }
     }
 
     @Override

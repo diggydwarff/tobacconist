@@ -43,6 +43,10 @@ public abstract class AbstractTallTobaccoCropBlock extends CropBlock {
 
     protected abstract TobaccoGrowthHelper.Variety getVariety();
 
+    public TobaccoGrowthHelper.Variety getInspectionVariety() {
+        return getVariety();
+    }
+
     protected abstract Item getLeafItem();
 
     @Override
@@ -56,7 +60,7 @@ public abstract class AbstractTallTobaccoCropBlock extends CropBlock {
         return 1 + level.random.nextInt(2); // 1-2
     }
 
-    protected String getDisplayName() {
+    public String getDisplayName() {
         String raw = getVariety().name().toLowerCase();
         return Character.toUpperCase(raw.charAt(0)) + raw.substring(1) + " Tobacco";
     }
@@ -80,7 +84,7 @@ public abstract class AbstractTallTobaccoCropBlock extends CropBlock {
         return getStateForAge(age).setValue(HALF, DoubleBlockHalf.UPPER);
     }
 
-    protected int getEffectiveAge(LevelReader level, BlockPos pos, BlockState state) {
+    public int getEffectiveAge(LevelReader level, BlockPos pos, BlockState state) {
         if (state.getValue(HALF) == DoubleBlockHalf.UPPER) {
             return getAge(state);
         }

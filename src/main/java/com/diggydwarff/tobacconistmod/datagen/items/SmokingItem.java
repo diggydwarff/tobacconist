@@ -115,6 +115,7 @@ public abstract class SmokingItem extends Item {
     }
 
     protected void applyQualityHealthBonus(Player player, ItemStack tobaccoStack) {
+        if (!TobacconistConfig.isQualitySystemEnabled()) return;
         if (tobaccoStack == null || tobaccoStack.isEmpty()) return;
 
         int quality = TobaccoCuringHelper.getQuality(tobaccoStack);

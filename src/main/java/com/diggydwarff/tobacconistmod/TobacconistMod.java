@@ -51,6 +51,7 @@ public class TobacconistMod {
 
         modContainer.registerConfig(ModConfig.Type.CLIENT, TobacconistConfig.CLIENT_SPEC);
         modContainer.registerConfig(ModConfig.Type.COMMON, TobacconistConfig.COMMON_SPEC);
+        modContainer.registerConfig(ModConfig.Type.SERVER, TobacconistConfig.SERVER_SPEC);
 
         NeoForge.EVENT_BUS.register(this);
     }

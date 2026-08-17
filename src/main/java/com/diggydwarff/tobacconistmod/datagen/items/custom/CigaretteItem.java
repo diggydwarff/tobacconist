@@ -3,6 +3,7 @@ package com.diggydwarff.tobacconistmod.datagen.items.custom;
 import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
 
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelBlockEntity;
+import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
 import com.diggydwarff.tobacconistmod.datagen.items.SmokingItem;
 import com.diggydwarff.tobacconistmod.util.*;
 import net.minecraft.ChatFormatting;
@@ -102,10 +103,12 @@ public class CigaretteItem extends SmokingItem {
                 tooltip.add(Component.literal("Creative Tobacco").withStyle(ChatFormatting.GOLD));
             }
 
-            int displayQuality = getDisplayQuality10(stack);
-            if (displayQuality >= 0) {
-                tooltip.add(Component.literal("Quality: " + displayQuality + "/10")
-                        .withStyle(ChatFormatting.GRAY));
+            if (TobacconistConfig.isQualitySystemEnabled()) {
+                int displayQuality = getDisplayQuality10(stack);
+                if (displayQuality >= 0) {
+                    tooltip.add(Component.literal("Quality: " + displayQuality + "/10")
+                            .withStyle(ChatFormatting.GRAY));
+                }
             }
 
             ItemStack temp = new ItemStack(stack.getItem());

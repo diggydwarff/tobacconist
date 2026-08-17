@@ -3,6 +3,7 @@ package com.diggydwarff.tobacconistmod.datagen.items.custom;
 import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
 
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelBlockEntity;
+import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
 import com.diggydwarff.tobacconistmod.datagen.items.SmokingItem;
 import com.diggydwarff.tobacconistmod.util.*;
 import net.minecraft.ChatFormatting;
@@ -103,10 +104,12 @@ public class CigarItem extends SmokingItem {
             }
             tooltip.add(Component.empty());
 
-            int displayQuality = getDisplayQuality10(stack);
-            if (displayQuality >= 0) {
-                tooltip.add(Component.literal("Quality: " + displayQuality + "/10")
-                        .withStyle(ChatFormatting.GRAY));
+            if (TobacconistConfig.isQualitySystemEnabled()) {
+                int displayQuality = getDisplayQuality10(stack);
+                if (displayQuality >= 0) {
+                    tooltip.add(Component.literal("Quality: " + displayQuality + "/10")
+                            .withStyle(ChatFormatting.GRAY));
+                }
             }
 
             tooltip.add(Component.literal("Filler: " + getFillerLine(stack)).withStyle(ChatFormatting.GRAY));
@@ -132,10 +135,12 @@ public class CigarItem extends SmokingItem {
         CompoundTag packed = TobaccoTooltipHelper.getPackedTobaccoData(stack);
         if (packed == null) {
             // build default legacy filler
-            return "Standard Air-Cured Ribbon Cut " +
-                    TobaccoTooltipHelper.cleanTobaccoName(
-                            TobaccoTooltipHelper.getPackedLeafName(stack)
-                    );
+            String prefix = TobacconistConfig.isQualitySystemEnabled()
+                    ? "Standard Air-Cured Ribbon Cut "
+                    : "Air-Cured Ribbon Cut ";
+            return prefix + TobaccoTooltipHelper.cleanTobaccoName(
+                    TobaccoTooltipHelper.getPackedLeafName(stack)
+            );
         }
 
         int quality100 = packed.contains(TobaccoCuringHelper.TAG_QUALITY)
@@ -175,7 +180,9 @@ public class CigarItem extends SmokingItem {
                 .trim();
 
         StringBuilder out = new StringBuilder();
-        out.append(qualityWord);
+        if (!qualityWord.isEmpty()) {
+            out.append(qualityWord);
+        }
 
         if (!cureWord.isEmpty()) {
             out.append(" ").append(cureWord);
@@ -299,7 +306,9 @@ public class CigarItem extends SmokingItem {
         String cureWord = TobaccoCuringHelper.getCureDisplayName(cureType);
 
         StringBuilder out = new StringBuilder();
-        out.append(qualityWord);
+        if (!qualityWord.isEmpty()) {
+            out.append(qualityWord);
+        }
 
         if (!cureWord.isEmpty()) {
             out.append(" ").append(cureWord);

@@ -1,5 +1,6 @@
 package com.diggydwarff.tobacconistmod.util;
 
+import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
 import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
 
 import net.minecraft.nbt.CompoundTag;
@@ -26,6 +27,12 @@ public final class TobaccoProductQualityHelper {
     }
 
     public static String getShortTobaccoLabel(ItemStack tobaccoStack) {
+        if (!TobacconistConfig.isQualitySystemEnabled()) {
+            return tobaccoStack.getHoverName().getString()
+                    .replaceFirst("^(Premium|Fine|Standard|Harsh|Poor|Low-Grade)\\s+", "")
+                    .trim();
+        }
+
         String qualityTier = TobaccoCuringHelper.getQualityTier(TobaccoCuringHelper.getQuality(tobaccoStack));
         String baseName = tobaccoStack.getItem().getDescription().getString();
 

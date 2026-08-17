@@ -44,24 +44,29 @@ public final class TobaccoGrowthHelper {
     }
 
     public static int calculateGrowthQuality(Level level, BlockPos pos, Variety variety, int age, int maxAge) {
+        int base = calculateGrowthPotential(level, pos, variety, age, maxAge);
+        int rng = level.getRandom().nextInt(11); // 0–10
+        int quality = base + rng;
+        return Math.max(0, Math.min(70, quality));
+    }
+
+    /**
+     * Deterministic quality before the 0-10 harvest roll. Useful for inspection UI.
+     */
+    public static int calculateGrowthPotential(Level level, BlockPos pos, Variety variety, int age, int maxAge) {
         int biome = biomeScore(level, pos, variety);
         int light = lightScore(level, pos, variety);
         int temp = temperatureScore(level, pos, variety);
         int harvest = harvestTimingScore(age, maxAge);
 
-        // Rebalanced so ideal conditions no longer auto-cap to 70.
-        // Perfect raw should usually land in the low/mid 60s, with RNG able to push a few into upper 60s.
         int base =
                 28
-                        + (biome / 2)              // +10 at best
-                        + ((light * 3) / 5)        // +6 at best
-                        + ((temp * 3) / 5)         // +6 at best
-                        + ((harvest * 3) / 4);     // +6 at best
+                        + (biome / 2)
+                        + ((light * 3) / 5)
+                        + ((temp * 3) / 5)
+                        + ((harvest * 3) / 4);
 
-        int rng = level.getRandom().nextInt(11); // 0–10
-
-        int quality = base + rng;
-        return Math.max(0, Math.min(70, quality));
+        return Math.max(0, Math.min(70, base));
     }
 
     public static String getInspectionMessage(Level level, BlockPos pos, Variety variety, int effectiveAge, int maxAge) {

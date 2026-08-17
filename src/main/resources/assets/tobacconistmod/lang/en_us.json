@@ -156,5 +156,8 @@
   "tag.item.tobacconistmod.mouth_curios": "Tobacconist Mouth Wearables",
   "tag.item.curios.mouth": "Mouth Curios",
   "key.categories.tobacconistmod": "Tobacconist",
-  "key.tobacconistmod.smoke_mouth_item": "Smoke Mouth Item"
+  "key.tobacconistmod.smoke_mouth_item": "Smoke Mouth Item",
+  "item.tobacconistmod.tobacconists_spectacles": "Tobacconist's Spectacles",
+  "tag.item.tobacconistmod.eyes_curios": "Tobacconist Eye Wearables",
+  "tag.item.curios.eyes": "Eye Curios"
 }

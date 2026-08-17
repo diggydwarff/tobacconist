@@ -20,6 +20,10 @@ public class ModItems {
             ITEMS.register("tobacco_guide",
                     () -> new Item(new Item.Properties().stacksTo(1)));
 
+    public static final Supplier<Item> TOBACCONISTS_SPECTACLES =
+            ITEMS.register("tobacconists_spectacles",
+                    () -> new TobacconistsSpectaclesItem(new Item.Properties().stacksTo(1)));
+
     // PIPE ITEMS
     public static final Supplier<Item> WOODEN_SMOKING_PIPE = ITEMS.register("wooden_smoking_pipe", () -> new WoodenSmokingPipeItem(new Item.Properties().stacksTo(1)));
 

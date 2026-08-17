@@ -307,6 +307,13 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         return Math.min(100, (dominantTicks * 100) / needed);
     }
 
+    public int getEstimatedTicksRemaining() {
+        if (!hasLeaves() || isFinished()) return 0;
+        int pct = getDryProgressPercent();
+        int required = getRequiredDryingTime();
+        return Math.max(0, (int) Math.ceil(required * ((100.0 - pct) / 100.0)));
+    }
+
     public int getVisualCureStage() {
         if (!hasLeaves()) {
             return 0;

@@ -36,6 +36,7 @@ public class TobacconistCreativeTab {
             () -> CreativeModeTab.builder().icon(() -> new ItemStack(CIGAR.get()))
                     .title(Component.translatable("creativetab.tobacconistmod"))
                     .displayItems((displayParameters, output) -> {
+                        output.accept(TOBACCONISTS_SPECTACLES.get());
                         output.accept(ROLLING_PAPER.get());
                         output.accept(BAMBOO_CHARCOAL.get());
                         output.accept(CIGAR.get());
