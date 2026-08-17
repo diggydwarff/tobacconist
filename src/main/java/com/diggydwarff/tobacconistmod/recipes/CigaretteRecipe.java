@@ -77,13 +77,14 @@ public class CigaretteRecipe extends CustomRecipe {
 
         TobaccoDataHelper.applyTobaccoMetadata(result, tobaccoStack);
 
-        int quality = TobaccoCuringHelper.getQuality(tobaccoStack);
-        tag.putInt("InputTobaccoQuality", quality);
-        tag.putString("InputCutType", TobaccoCuringHelper.getCutType(tobaccoStack));
-        tag.putString("InputCureType", TobaccoCuringHelper.getCureType(tobaccoStack));
-
-        int productQuality = Math.max(1, Math.round(quality / 10.0f));
-        tag.putInt("ProductQuality", productQuality);
+        // Use the same product-quality scoring path as cigars and shisha.
+        // This makes the existing cut preferences meaningful for cigarettes too
+        // (Shag best, then Ribbon, with Rough/Flake penalized).
+        TobaccoProductQualityHelper.applyProductQualityToTag(
+                tag,
+                tobaccoStack,
+                TobaccoProductQualityHelper.getCigaretteQuality(tobaccoStack)
+        );
 
         return result;
     }

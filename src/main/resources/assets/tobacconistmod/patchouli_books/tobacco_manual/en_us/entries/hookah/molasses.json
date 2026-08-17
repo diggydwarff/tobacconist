@@ -1,0 +1,31 @@
+{
+  "name": "Making Molasses",
+  "icon": "tobacconistmod:bottled_molasses_plain",
+  "category": "tobacconistmod:hookah",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "tobacconistmod:bottled_molasses_plain",
+      "text": "Plain molasses is the base for every flavored shisha bottle. It is made through the Brewing Stand rather than the crafting table."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Put a $(item)Potion bottle$() into a Brewing Stand and use $(item)Sugar Cane$() as the brewing ingredient. A plain Water Bottle works because it is the vanilla Potion item with water contents. The result is a Bottle of Molasses.",
+      "title": "Brewing Plain Molasses"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Most flavors are then simple shapeless crafting: $(thing)1 Bottle of Molasses + the listed food/ingredient$() → 1 flavored molasses bottle. Flavor bottles have $(item)4 uses$() when mixed into shisha.",
+      "title": "Flavoring"
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "tobacconistmod:hookah/vanilla_flavors",
+        "tobacconistmod:hookah/shisha"
+      ],
+      "title": "Related Chapters"
+    }
+  ]
+}

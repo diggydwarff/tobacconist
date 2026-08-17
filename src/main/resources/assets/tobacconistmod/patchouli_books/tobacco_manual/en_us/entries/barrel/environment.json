@@ -1,0 +1,41 @@
+{
+  "name": "Barrel Environment",
+  "icon": "tobacconistmod:flue_firebox",
+  "category": "tobacconistmod:barrel",
+  "sortnum": 3,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Barrels calculate two environmental values: $(thing)Warmth$() and $(thing)Humidity$(). The Spectacles display both. You can manipulate them with biome choice, sunlight, heat sources, water, darkness, and ice."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Warmth sources include hot biomes, direct bright sun, lit Flue Fireboxes, and lit campfires. Each nearby lit Flue Firebox is especially strong. Blue Ice, Packed Ice, Ice, and Snow Blocks can reduce warmth. Cool/dark storage also subtracts warmth.",
+      "title": "Changing Warmth"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Humidity comes from biome precipitation, current rain, nearby water/water cauldrons, and cool/dark storage. Hot desert-like biomes reduce biome humidity. Water within roughly 2 blocks horizontally is the easiest local way to raise it.",
+      "title": "Changing Humidity"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "For $(thing)fermentation$(), aim for Warmth ≥3 and give the internal Barrel Humidity time to reach 25. For $(thing)aging$(), aim for Warmth ≤0, environmental Humidity 1–3, no sky access, and block light ≤7.",
+      "title": "Targets"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(bad)Overheating:$() Warmth 7 or higher starts an overheat counter. If it remains that hot for $(bad)6,000 ticks$()—5 real minutes—the batch is ruined and loses 25 quality. Cooling the barrel makes the counter decay.",
+      "title": "Overheat Warning"
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "tobacconistmod:getting_started/spectacles",
+        "tobacconistmod:barrel/fermentation",
+        "tobacconistmod:barrel/aging"
+      ],
+      "title": "Related Chapters"
+    }
+  ]
+}

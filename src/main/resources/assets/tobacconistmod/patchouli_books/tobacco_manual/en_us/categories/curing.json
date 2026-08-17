@@ -1,6 +1,6 @@
 {
-  "name": "Curing Methods",
-  "description": "Fresh leaf must be cured before it can be processed, fermented, or used in blends.",
-  "icon": "tobacconistmod:tobacco_drying_rack",
-  "sortnum": 1
+  "name": "Curing Tobacco",
+  "description": "Use the Drying Rack for air, sun, fire, or flue curing and protect the batch from interruptions and rain.",
+  "icon": "tobacconistmod:tobacco_drying_rack_block",
+  "sortnum": 2
 }

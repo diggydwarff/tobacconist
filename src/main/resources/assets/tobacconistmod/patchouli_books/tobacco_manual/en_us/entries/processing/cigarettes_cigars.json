@@ -1,0 +1,41 @@
+{
+  "name": "Cigarettes & Cigars",
+  "icon": "tobacconistmod:cigarette",
+  "category": "tobacconistmod:processing",
+  "sortnum": 3,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "$(thing)Cigarette:$() craft exactly 1 loose tobacco with 1 Rolling Paper anywhere in the crafting grid. No other ingredients may be present. The result carries the tobacco's processing metadata and a product-quality score based on tobacco quality and cut."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:rolling_paper",
+      "title": "Rolling Paper",
+      "text": "One Paper makes 3 Rolling Papers."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "For cigarettes, $(thing)Shag$() is the ideal cut. Ribbon is a good second choice. Rough and Flake are heavily penalized and cap the final cigarette quality at 6/10 and 5/10 respectively.",
+      "title": "Cigarette Cut"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(thing)Cigar:$() craft exactly 1 loose tobacco with 1 Tobacco Leaf. The loose tobacco is the filler and determines the filler product score; the leaf is recorded as the wrapper. The cigar preserves aging/fermentation information from its ingredients.",
+      "title": "Cigar Recipe"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "For cigars, $(thing)Flake$() is ideal. Rough is the strong second choice. Ribbon caps at 7/10 and Shag at 4/10. A cigar lasts $(item)100 puffs$(); a cigarette lasts $(item)15 puffs$().",
+      "title": "Cigar Cut & Puffs"
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "tobacconistmod:smoking/smoking_basics",
+        "tobacconistmod:storage/tobacco_box"
+      ],
+      "title": "Related Chapters"
+    }
+  ]
+}

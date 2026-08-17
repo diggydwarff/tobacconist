@@ -1,0 +1,35 @@
+{
+  "name": "Mixing Shisha",
+  "icon": "tobacconistmod:shisha_tobacco",
+  "category": "tobacconistmod:hookah",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Craft shisha from exactly $(item)1 loose tobacco$() plus $(item)1 to 3 flavored molasses bottles$(). The ingredients may be placed anywhere in the crafting grid; no unrelated items may be present."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Each flavor bottle is reusable for $(item)4 shisha crafts$(). Every craft damages each flavor bottle used by one step. When its fourth use is consumed, that bottle disappears.",
+      "title": "Reusable Flavor Bottles"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "For shisha, $(thing)Rough Cut$() is ideal. Ribbon is the second-best choice. Flake is workable but capped lower, and Shag is strongly penalized. The finished shisha keeps the tobacco's aging, fermentation, and ruined state.",
+      "title": "Best Cut"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Using 2 or 3 flavor bottles records a multi-flavor blend on the shisha. The hookah does not require a particular flavor; any shisha item produced by this recipe can be loaded into its shisha slot.",
+      "title": "Blends"
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "tobacconistmod:hookah/hookah_setup",
+        "tobacconistmod:processing/cutting"
+      ],
+      "title": "Related Chapters"
+    }
+  ]
+}

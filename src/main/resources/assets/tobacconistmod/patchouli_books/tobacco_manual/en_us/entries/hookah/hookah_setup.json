@@ -1,0 +1,41 @@
+{
+  "name": "Using a Hookah",
+  "icon": "tobacconistmod:hookah_block",
+  "category": "tobacconistmod:hookah",
+  "sortnum": 3,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "A working hookah needs $(item)fuel$(), $(item)Shisha Tobacco$(), and a vanilla $(item)Water Potion/Water Bottle$() in its three GUI slots. Slot validation prevents unrelated items from being inserted."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:hookah_block",
+      "recipe2": "tobacconistmod:hookah_hose",
+      "title": "Hookah & Hose"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Hookah slots:$(br2)$(thing)Left/fuel:$() Bamboo Charcoal, Charcoal, or Coal$(br)$(thing)Shisha:$() Shisha Tobacco only$(br)$(thing)Water:$() a vanilla Potion item containing Water$(br2)The water bottle is not consumed by the current hookah process.",
+      "title": "Loading"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "When all requirements are present and fuel time remains, the hookah lights and the shisha's durability begins to drain. While the hookah is active, hold a $(item)Hookah Hose$() in either hand and right-click the hookah to draw smoke.",
+      "title": "Smoking the Hookah"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Hookah-hose draws currently provide the hookah smoke interaction itself; they do not run the same nicotine/quality-effect routine as smoking a cigar, cigarette, or packed pipe. This is normal for the current hookah implementation.",
+      "title": "Effect Difference"
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "tobacconistmod:hookah/hookah_fuels",
+        "tobacconistmod:hookah/ornate_hookahs"
+      ],
+      "title": "Related Chapters"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "name": "Virginia & Burley",
+  "icon": "tobacconistmod:virginia_tobacco_seeds",
+  "category": "tobacconistmod:growing",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "$(thing)Virginia Tobacco$() prefers open, warm country. $(br2)$(item)Best biomes:$() Plains or Savanna$(br)$(item)Acceptable biome:$() Forest$(br)$(item)Poor:$() Desert or Badlands$(br2)$(item)Ideal light:$() 13–15$(br)$(item)Acceptable light:$() 12–15$(br)$(item)Ideal temperature:$() 0.80–1.20$(br)$(item)Acceptable:$() 0.65–1.35"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(thing)Burley Tobacco$() prefers milder plains and forests. $(br2)$(item)Best biomes:$() Plains or Forest$(br)$(item)Acceptable biome:$() Jungle$(br)$(item)Poor:$() Desert or Badlands$(br2)$(item)Ideal light:$() 12–15$(br)$(item)Acceptable light:$() 11–15$(br)$(item)Ideal temperature:$() 0.60–0.95$(br)$(item)Acceptable:$() 0.45–1.10",
+      "title": "Burley Tobacco"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Biome temperature is the biome's base temperature value, not the day's weather. You normally do not need to memorize it: the Spectacles turn biome, light, and temperature into a single Conditions rating while you stand at the crop.",
+      "title": "Using the Numbers"
+    }
+  ]
+}

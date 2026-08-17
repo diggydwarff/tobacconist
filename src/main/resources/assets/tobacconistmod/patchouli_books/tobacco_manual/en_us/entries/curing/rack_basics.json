@@ -1,0 +1,43 @@
+{
+  "name": "Drying Rack Basics",
+  "icon": "tobacconistmod:tobacco_drying_rack_block",
+  "category": "tobacconistmod:curing",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The $(thing)Tobacco Drying Rack$() turns raw leaf into cured leaf. A rack holds up to $(item)16$() identical raw leaves. Leaves in one rack must be the same item with the same components/quality data."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:tobacco_drying_rack",
+      "title": "Tobacco Drying Rack",
+      "text": "Craft the rack before choosing a curing environment."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Right-click the rack with raw tobacco to add one leaf. Empty-hand right-click removes the batch. Sneak-right-click reports the rack status. Once curing reaches $(item)10%$(), the batch locks and no more leaves may be added until it is removed or finished.",
+      "title": "Loading the Rack"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The rack automatically chooses the strongest valid method each tick in this order: $(thing)Fire → Flue → Sun → Air$(). You do not select a mode in a menu; the structure and environment select it for you.",
+      "title": "Automatic Method"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Hoppers can automate racks. Insert raw leaves from a horizontal side. The top and bottom cannot insert. A hopper underneath can extract only after curing is complete.",
+      "title": "Automation"
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "tobacconistmod:curing/air_curing",
+        "tobacconistmod:curing/sun_curing",
+        "tobacconistmod:curing/fire_curing",
+        "tobacconistmod:curing/flue_curing"
+      ],
+      "title": "Related Chapters"
+    }
+  ]
+}

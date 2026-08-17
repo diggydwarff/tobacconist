@@ -1,0 +1,36 @@
+{
+  "name": "Farmer's Delight Flavors",
+  "icon": "tobacconistmod:bottled_molasses_applepie_flavor",
+  "category": "tobacconistmod:hookah",
+  "sortnum": 6,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "When Farmer's Delight is installed, additional dessert ingredients can flavor plain molasses. These entries appear only while Farmer's Delight is loaded."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:compat/farmersdelight/bottled_molasses_applepie_flavor",
+      "recipe2": "tobacconistmod:compat/farmersdelight/bottled_molasses_sweetberry_cheesecake_flavor",
+      "title": "Apple Pie & Cheesecake"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:compat/farmersdelight/bottled_molasses_chocolatepie_flavor",
+      "recipe2": "tobacconistmod:compat/farmersdelight/bottled_molasses_sweetberry_cookie_flavor",
+      "title": "Chocolate Pie & Berry Cookie"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:compat/farmersdelight/bottled_molasses_honeycookie_flavor",
+      "recipe2": "tobacconistmod:compat/farmersdelight/bottled_molasses_melonpopsicle_flavor",
+      "title": "Honey Cookie & Melon Popsicle"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:compat/farmersdelight/bottled_molasses_glowberry_custard_flavor",
+      "title": "Glow Berry Custard"
+    }
+  ],
+  "flag": "mod:farmersdelight"
+}

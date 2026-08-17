@@ -1,0 +1,72 @@
+{
+  "name": "Smoking Pipes",
+  "icon": "tobacconistmod:wooden_smoking_pipe",
+  "category": "tobacconistmod:smoking",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The basic $(thing)Wooden Smoking Pipe$() is a custom 3\u00d73 recipe. Use any two Planks and two Sticks in this exact pattern:$(br2)$(item)__P$()$(br)$(item)_PS$()$(br)$(item)S__$()$(br2)P = any Plank, S = Stick, _ = empty. The pipe remembers the first plank type and uses it in the pipe's name/appearance."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "To pack a pipe, hold an $(thing)empty pipe in your offhand$() and $(thing)loose tobacco in your main hand$(), then right-click with the tobacco. One loose tobacco is consumed and the pipe receives $(item)40 puffs$().",
+      "title": "Packing"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Right-click a packed pipe to take one puff. When its 40 puffs are exhausted, the pipe becomes empty and can be packed again. The durability-style bar and tooltip show how much tobacco remains.",
+      "title": "Smoking"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:copper_smoking_pipe",
+      "recipe2": "tobacconistmod:iron_smoking_pipe",
+      "title": "Copper & Iron Pipes"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:gold_smoking_pipe",
+      "recipe2": "tobacconistmod:gem_encrusted_smoking_pipe",
+      "title": "Gold & Gem Pipes"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:diamond_encrusted_smoking_pipe",
+      "recipe2": "tobacconistmod:lapis_encrusted_smoking_pipe",
+      "title": "Encrusted Pipes I"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:emerald_encrusted_smoking_pipe",
+      "recipe2": "tobacconistmod:emerald_aztec_smoking_pipe",
+      "title": "Encrusted Pipes II"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:netherite_smoking_pipe",
+      "recipe2": "tobacconistmod:kiseru_smoking_pipe",
+      "title": "Netherite & Kiseru"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The decorative pipe variants use the same packing/smoking behavior as the wooden pipe unless their tooltip says otherwise. Loose tobacco processing data is copied into the packed pipe so quality/aging bonuses can still be evaluated when smoked.",
+      "title": "Shared Behavior"
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "tobacconistmod:smoking/smoking_basics"
+      ],
+      "title": "Related Chapters"
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "tobacconistmod:smoking/curios"
+      ],
+      "title": "Curios Smoking",
+      "flag": "mod:curios"
+    }
+  ]
+}

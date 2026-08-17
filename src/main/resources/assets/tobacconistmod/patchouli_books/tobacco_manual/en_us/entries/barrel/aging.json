@@ -1,0 +1,35 @@
+{
+  "name": "Aging Tobacco",
+  "icon": "minecraft:clock",
+  "category": "tobacconistmod:barrel",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Aging needs $(item)Warmth 0 or lower$(), environmental $(item)Humidity 1–3$(), and $(thing)cool/dark storage$(): the block above the barrel must not see the sky and block light above the barrel must be 7 or less."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Every $(item)24,000 ticks$() of uninterrupted aging conditions counts as 1 aged day. The tooltip labels are: under 7 days Fresh, under 30 Light Aged, under 90 Deep Aged, under 365 Vintage, and 365+ Cellared.",
+      "title": "Aging Time"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Quality gains slow over time:$(br2)Days 1–7: +1 every 3 days$(br)Days 8–30: +1 every 7 days$(br)Days 31–90: +1 every 15 days$(br)Days 91–365: +1 every 30 days$(br2)Quality can rise as high as 120.",
+      "title": "Quality Schedule"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "After day 365 there are no further aging-quality gains. The barrel begins periodic spoil checks instead. The chance grows with extreme age, up to a 10% monthly check. Very old tobacco is therefore a prestige/risk choice, not free infinite quality.",
+      "title": "Extreme Age"
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "tobacconistmod:barrel/environment",
+        "tobacconistmod:smoking/smoking_basics"
+      ],
+      "title": "Related Chapters"
+    }
+  ]
+}

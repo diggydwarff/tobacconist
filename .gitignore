@@ -23,3 +23,5 @@ run
 
 # Files from Forge MDK
 forge*changelog.txt
+/PORTING_NOTES.md
+/PRE_RELEASE_AUDIT.md

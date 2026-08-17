@@ -1,20 +1,29 @@
 {
   "name": "Sun Curing",
-  "icon": "tobacconistmod:tobacco_drying_rack",
+  "icon": "minecraft:sunflower",
   "category": "tobacconistmod:curing",
-  "sortnum": 1,
+  "sortnum": 2,
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "$(thing)Sun curing$() needs:$(br2)- Daytime$(br)- Direct sky access$(br)- Strong skylight$(br)- No rain"
+      "text": "$(thing)Sun curing$() requires daytime, sky light of at least $(item)14$() above the rack, no direct rain, and an open structure with at least $(item)2 horizontal sides$() next to the rack made of air."
     },
     {
       "type": "patchouli:text",
-      "text": "Sun curing takes about $(item)2 Minecraft days$(). It is faster than air curing, but riskier."
+      "text": "With direct sky access, sun curing takes $(item)48,000 ticks$(), about $(item)2 Minecraft days$(). A glass or stained-glass block/pane immediately above the rack may replace direct sky access, but that covered-glass method takes $(item)54,000 ticks$() (2.25 days).",
+      "title": "Direct vs. Glass Sun"
     },
     {
       "type": "patchouli:text",
-      "text": "If the sky becomes blocked or the weather turns bad, the batch can lose quality. Open racks are powerful but exposed."
+      "text": "At night, with weak skylight, or when the structure becomes too enclosed, sun curing pauses or another valid method takes over. Rain exposure is especially dangerous because it damages quality and can eventually spoil the batch.",
+      "title": "Weather"
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "tobacconistmod:curing/curing_quality"
+      ],
+      "title": "Related Chapters"
     }
   ]
 }

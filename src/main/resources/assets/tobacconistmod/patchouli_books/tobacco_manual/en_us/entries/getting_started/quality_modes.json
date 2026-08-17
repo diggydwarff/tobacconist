@@ -1,0 +1,36 @@
+{
+  "name": "Quality or Simple Mode",
+  "icon": "tobacconistmod:tobacco_leaf_burley",
+  "category": "tobacconistmod:getting_started",
+  "sortnum": 3,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Servers can run Tobacconist with the full $(thing)quality system$() or with quality gameplay disabled. The processing chain still works in either mode: growing, curing, cutting, fermentation, aging, pipes, cigars, cigarettes, shisha, and hookahs remain available."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "With quality enabled, leaves and processed tobacco carry scores and tiers. Growing conditions, curing discipline, cut choice, fermentation, and aging can affect the final result. High-quality smoked tobacco can also grant a short Regeneration bonus.",
+      "title": "Quality Enabled"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "With quality disabled, quality scores and tiers are hidden and quality-based smoking bonuses are ignored. Existing quality data is preserved underneath so a server can re-enable the system later without wiping old batches.",
+      "title": "Quality Disabled"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Because preserved quality is still part of an item's hidden data, two otherwise identical tobacco stacks may occasionally refuse to merge in Simple Mode if they were produced with different hidden histories. This is intentional preservation rather than data loss.",
+      "title": "Stacking Note"
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "tobacconistmod:growing/quality",
+        "tobacconistmod:curing/curing_quality",
+        "tobacconistmod:reference/configuration"
+      ],
+      "title": "Related Chapters"
+    }
+  ]
+}
