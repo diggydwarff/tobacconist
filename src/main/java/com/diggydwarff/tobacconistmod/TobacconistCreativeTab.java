@@ -16,9 +16,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Comparator;
@@ -41,12 +39,8 @@ public class TobacconistCreativeTab {
                         output.accept(CIGARETTE.get());
                         output.accept(HOOKAH_HOSE.get());
                         output.accept(SHISHA_TOBACCO.get());
-
-                        // Make guide book if patchouli present
-                        ItemStack guide = makeGuideBook();
-                        if (!guide.isEmpty()) {
-                            output.accept(guide);
-                        }
+                        output.accept(TOBACCO_GUIDE.get());
+                        output.accept(TOBACCONISTS_SPECTACLES.get());
 
                         output.accept(TOBACCO_BOX.get());
                         output.accept(TOBACCO_LABEL.get());
@@ -90,12 +84,6 @@ public class TobacconistCreativeTab {
                         output.accept(DOKHA_TOBACCO_SEEDS.get());
                         output.accept(SHADE_TOBACCO_SEEDS.get());
 
-                        output.accept(ModBlocks.WILD_TOBACCO_CROP.get());
-                        output.accept(ModBlocks.VIRGINIA_TOBACCO_CROP.get());
-                        output.accept(ModBlocks.BURLEY_TOBACCO_CROP.get());
-                        output.accept(ModBlocks.ORIENTAL_TOBACCO_CROP.get());
-                        output.accept(ModBlocks.DOKHA_TOBACCO_CROP.get());
-                        output.accept(ModBlocks.SHADE_TOBACCO_CROP.get());
 
                         output.accept(ModBlocks.HOOKAH.get());
                         output.accept(ModBlocks.ORNATE_COPPER_HOOKAH.get());
@@ -138,6 +126,7 @@ public class TobacconistCreativeTab {
                         output.accept(PaintingTabHelper.paintingVariant("american_lone_cowboy"));
                         output.accept(PaintingTabHelper.paintingVariant("american_cigarette"));
                         output.accept(PaintingTabHelper.paintingVariant("ottoman_hookah"));
+                        output.accept(PaintingTabHelper.paintingVariant("morrocan_hookah"));
                         output.accept(PaintingTabHelper.paintingVariant("american_cowboy_pair_wide"));
                         output.accept(PaintingTabHelper.paintingVariant("peace_pipe"));
                         output.accept(PaintingTabHelper.paintingVariant("japanese_kiseru_wide"));
@@ -193,23 +182,4 @@ public class TobacconistCreativeTab {
         return pipe;
     }
 
-    private static ItemStack makeGuideBook() {
-
-        if (!ModList.get().isLoaded("patchouli")) {
-            return ItemStack.EMPTY;
-        }
-
-        Item patchouliBook = ForgeRegistries.ITEMS.getValue(
-                new ResourceLocation("patchouli", "guide_book")
-        );
-
-        if (patchouliBook == null) {
-            return ItemStack.EMPTY;
-        }
-
-        ItemStack book = new ItemStack(patchouliBook);
-        book.getOrCreateTag().putString("patchouli:book", "tobacconistmod:tobacco_manual");
-
-        return book;
-    }
 }

@@ -35,7 +35,7 @@
       "bonus_rolls": 0.0,
       "conditions": [
         {
-          "block": "tobacconistmod:tobacco_crop_burley",
+          "block": "tobacconistmod:tobacco_crop_oriental",
           "condition": "minecraft:block_state_property",
           "properties": {
             "half": "upper"

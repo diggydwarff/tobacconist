@@ -1,6 +1,7 @@
 package com.diggydwarff.tobacconistmod.datagen.items.custom;
 
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelBlockEntity;
+import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
 import com.diggydwarff.tobacconistmod.datagen.items.SmokingItem;
 import com.diggydwarff.tobacconistmod.util.*;
 import net.minecraft.ChatFormatting;
@@ -10,14 +11,12 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class CigarItem extends SmokingItem {
 
@@ -33,20 +32,31 @@ public class CigarItem extends SmokingItem {
             return InteractionResultHolder.consume(stack);
         }
 
-        return performSmoke(level, player, stack, p -> p.broadcastBreakEvent(hand));
-    }
-
-    @Override
-    public InteractionResultHolder<ItemStack> performSmoke(Level level, Player player, ItemStack stack, Consumer<LivingEntity> onBreak) {
         this.triggerSmokingEffectPlayer(player, (ServerLevel) level, 0, stack);
 
         if (stack.getDamageValue() >= stack.getMaxDamage() - 1) {
-            stack.hurtAndBreak(1, player, onBreak);
+            stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(hand));
         } else {
             stack.setDamageValue(stack.getDamageValue() + 1);
         }
 
         return InteractionResultHolder.consume(stack);
+    }
+
+    @Override
+    public boolean smokeFromMouthSlot(Player player, ServerLevel level, ItemStack stack) {
+        if (stack.isEmpty() || !stack.isDamageableItem() || stack.getDamageValue() >= stack.getMaxDamage()) {
+            return false;
+        }
+
+        this.triggerSmokingEffectPlayer(player, level, 0, stack);
+        int nextDamage = stack.getDamageValue() + 1;
+        if (nextDamage >= stack.getMaxDamage()) {
+            stack.shrink(1);
+        } else {
+            stack.setDamageValue(nextDamage);
+        }
+        return true;
     }
 
     @Override
@@ -89,10 +99,12 @@ public class CigarItem extends SmokingItem {
             }
             tooltip.add(Component.empty());
 
-            int displayQuality = getDisplayQuality10(stack);
-            if (displayQuality >= 0) {
-                tooltip.add(Component.literal("Quality: " + displayQuality + "/10")
-                        .withStyle(ChatFormatting.GRAY));
+            if (TobacconistConfig.isQualitySystemEnabled()) {
+                int displayQuality = getDisplayQuality10(stack);
+                if (displayQuality >= 0) {
+                    tooltip.add(Component.literal("Quality: " + displayQuality + "/10")
+                            .withStyle(ChatFormatting.GRAY));
+                }
             }
 
             tooltip.add(Component.literal("Filler: " + getFillerLine(stack)).withStyle(ChatFormatting.GRAY));
@@ -109,8 +121,6 @@ public class CigarItem extends SmokingItem {
             tooltip.add(Component.empty());
             tooltip.add(Component.literal("✿ Fermented").withStyle(ChatFormatting.DARK_GRAY));
             tooltip.add(Component.literal("ᵐ Months aged, ʸ Years aged").withStyle(ChatFormatting.DARK_GRAY));
-            tooltip.add(Component.literal("Wrapper aging/fermentation unavailable until wrapper NBT is stored on cigar recipes.")
-                    .withStyle(ChatFormatting.DARK_GRAY));
         }
     }
 
@@ -118,10 +128,12 @@ public class CigarItem extends SmokingItem {
         CompoundTag packed = TobaccoTooltipHelper.getPackedTobaccoData(stack);
         if (packed == null) {
             // build default legacy filler
-            return "Standard Air-Cured Ribbon Cut " +
-                    TobaccoTooltipHelper.cleanTobaccoName(
-                            TobaccoTooltipHelper.getPackedLeafName(stack)
-                    );
+            String prefix = TobacconistConfig.isQualitySystemEnabled()
+                    ? "Standard Air-Cured Ribbon Cut "
+                    : "Air-Cured Ribbon Cut ";
+            return prefix + TobaccoTooltipHelper.cleanTobaccoName(
+                    TobaccoTooltipHelper.getPackedLeafName(stack)
+            );
         }
 
         int quality100 = packed.contains(TobaccoCuringHelper.TAG_QUALITY)
@@ -161,7 +173,9 @@ public class CigarItem extends SmokingItem {
                 .trim();
 
         StringBuilder out = new StringBuilder();
-        out.append(qualityWord);
+        if (!qualityWord.isEmpty()) {
+            out.append(qualityWord);
+        }
 
         if (!cureWord.isEmpty()) {
             out.append(" ").append(cureWord);
@@ -285,7 +299,9 @@ public class CigarItem extends SmokingItem {
         String cureWord = TobaccoCuringHelper.getCureDisplayName(cureType);
 
         StringBuilder out = new StringBuilder();
-        out.append(qualityWord);
+        if (!qualityWord.isEmpty()) {
+            out.append(qualityWord);
+        }
 
         if (!cureWord.isEmpty()) {
             out.append(" ").append(cureWord);

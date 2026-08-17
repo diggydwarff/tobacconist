@@ -1,0 +1,40 @@
+{
+  "name": "Labels & Brands",
+  "icon": "tobacconistmod:tobacco_label",
+  "category": "tobacconistmod:storage",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Labels let you give a Tobacco Box—and products drawn from it—a custom brand name. First craft blank Labels, then rename one in an Anvil to the name you want."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:tobacco_label",
+      "title": "Blank Labels",
+      "text": "Two Paper arranged diagonally make 2 Labels."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Craft a $(thing)Tobacco Box + named Label$() to apply that label to the box. A labeled box will only accept incoming products whose product label matches the box; an unlabeled product cannot be mixed into a labeled batch.",
+      "title": "Applying a Label"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "When an item is extracted from a labeled box, the product inherits the box label. This lets a box act like branded packaging for cigars, cigarettes, shisha, or loose tobacco.",
+      "title": "Branded Products"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "To duplicate a named label, craft exactly $(item)1 named Label + 1 blank Label$(). The result is two copies carrying the same name. This is a special recipe, so the layout is shapeless.",
+      "title": "Duplicating Labels"
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "tobacconistmod:storage/tobacco_box"
+      ],
+      "title": "Related Chapters"
+    }
+  ]
+}

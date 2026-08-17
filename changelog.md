@@ -1,3 +1,38 @@
+## Update 3.1.0 — The Refinement Update (1.20.1 Forge Backport)
+
+This release backports the gameplay features, fixes, and content from the 1.21.1 NeoForge 3.1.0 release while retaining the Minecraft 1.20.1 Forge implementation.
+
+### New Features
+- Added **Tobacconist's Spectacles** with crop/processing inspection, Curios Eyes support, and vanilla Head-slot fallback.
+- Added **Mouth Slot Smoking Hotkey** for equipped pipes, cigars, and cigarettes.
+- Added the nine-step **Tobacconist advancement tree**.
+- Expanded **The Tobacconist's Manual** and added normal crafting recipes/JEI visibility.
+
+### Configuration
+- Added server option to disable the **Tobacco Quality System** while preserving stored quality data.
+- Added server option to disable **Nicotine effects**.
+
+### Quality of Life / Balance
+- Improved optional Curios support, Spectacles rendering, crop/environment inspection, Drying Rack and Barrel status information, hopper automation, creative-tab organization, and smoke particles.
+- Product cut quality now prefers **Shag for cigarettes**, **Flake for cigars**, and **Rough for shisha**.
+- Added a short server-side cooldown to mouth-slot smoking.
+
+### Fixes
+- Fixed incorrect crop loot predicates and duplicate tall-crop seed drops.
+- Fixed several block hardness/tool requirements.
+- Fixed Drying Rack partial extraction behavior.
+- Fixed Hookah slot validation, water-slot processing, and smoke-position calculations.
+- Fixed Tobacco Barrel client synchronization.
+- Fixed Tobacco Box quality thresholds.
+- Restored the Moroccan Hookah painting to normal painting selection.
+- Cleaned recipes, models, loot tables, tags, and obsolete resources.
+- Fixed a wild-tobacco configured-feature namespace typo, missing lit Flue Firebox top texture, Flue Firebox fuel loss on break, and duplicate plain-molasses registration.
+
+### 1.20.1-specific note
+- The 1.21-only wooden-pipe ARGB tint fix is not used on 1.20.1; the existing 1.20.1 RGB tint path is retained.
+
+----------------------------------------------------------------------------
+
 ## Update 3.0.0 — The Processing Update
 
 ### Major Additions

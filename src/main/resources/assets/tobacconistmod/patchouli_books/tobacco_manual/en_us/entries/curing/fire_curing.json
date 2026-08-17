@@ -6,15 +6,24 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "$(thing)Fire curing$() uses direct smoke and heat. Requirement: place the drying rack directly over a $(item)lit campfire$()."
+      "text": "$(thing)Fire curing$() is activated by placing the Drying Rack directly above a $(item)lit Campfire$(). The rack detects campfire blocks, including the soul-campfire form."
     },
     {
       "type": "patchouli:text",
-      "text": "Fire curing takes about $(item)1 Minecraft day$(). It is the fastest curing method."
+      "text": "Fire curing takes $(item)24,000 ticks$(), about $(item)1 Minecraft day$(), making it the fastest curing method. Because Fire has highest method priority, a lit campfire directly below the rack overrides flue, sun, and air conditions.",
+      "title": "Time and Priority"
     },
     {
       "type": "patchouli:text",
-      "text": "It is bold, hot, and simple to set up. It is also less gentle than slower methods, so consistency still matters."
+      "text": "If you want a clean single-method cure, do not light the campfire partway through some other cure. Method switching can reduce final quality even if the batch eventually finishes successfully.",
+      "title": "Consistency"
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "tobacconistmod:curing/curing_quality"
+      ],
+      "title": "Related Chapters"
     }
   ]
 }

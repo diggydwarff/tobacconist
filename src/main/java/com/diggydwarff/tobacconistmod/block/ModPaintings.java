@@ -73,4 +73,7 @@ public class ModPaintings {
 
     public static final RegistryObject<PaintingVariant> ANDEAN_MAPACHO =
             PAINTING_VARIANTS.register("andean_mapacho", () -> new PaintingVariant(64, 48));
+
+    public static final RegistryObject<PaintingVariant> MORROCAN_HOOKAH =
+            PAINTING_VARIANTS.register("morrocan_hookah", () -> new PaintingVariant(64, 48));
 }

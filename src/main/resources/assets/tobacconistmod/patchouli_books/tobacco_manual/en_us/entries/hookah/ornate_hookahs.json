@@ -1,0 +1,34 @@
+{
+  "name": "Ornate Hookahs",
+  "icon": "tobacconistmod:ornate_gold_hookah_block",
+  "category": "tobacconistmod:hookah",
+  "sortnum": 5,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Ornate hookahs are two-block-tall decorative versions of the hookah. They use the same HookahEntity inventory, fuel rules, shisha rules, water requirement, and hose interaction as the basic hookah."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:ornate_copper_hookah_block",
+      "recipe2": "tobacconistmod:ornate_iron_hookah_block",
+      "title": "Copper & Iron Ornate Hookahs"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:ornate_gold_hookah_block",
+      "recipe2": "tobacconistmod:ornate_diamond_hookah_block",
+      "title": "Gold & Diamond Ornate Hookahs"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:ornate_amethyst_hookah_block",
+      "title": "Amethyst Ornate Hookah"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The basic single-block Hookah has an extra cosmetic feature: right-click it with any Dye to change its color, or with a Glow Ink Sac to enable its glowing state. Those cosmetic state controls belong to the basic Hookah block, not the ornate two-block variants.",
+      "title": "Basic Hookah Decoration"
+    }
+  ]
+}

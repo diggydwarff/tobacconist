@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "tobacconist_manual",
+  "ingredients": [
+    {
+      "item": "minecraft:book"
+    },
+    {
+      "item": "tobacconistmod:wild_tobacco_seeds"
+    }
+  ],
+  "result": {
+    "item": "tobacconistmod:tobacco_guide",
+    "count": 1
+  }
+}

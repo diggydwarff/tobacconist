@@ -22,65 +22,64 @@ public class ModBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, TobacconistMod.MODID);
 
     public static final RegistryObject<Block> HOOKAH = registerSingleStackBlock("hookah_block",
-            () -> new HookahBlock(BlockBehaviour.Properties.copy(Blocks.STONE)
+            () -> new HookahBlock(BlockBehaviour.Properties.of()
                     .lightLevel(state -> {
                         if (state.getValue(HookahBlock.GLOWING)) return 12;
                         if (state.getValue(HookahBlock.LIT)) return 6;
                         return 0;
                     })
-                    .strength(6f)
-                    .requiresCorrectToolForDrops()
-                    .noOcclusion()
-                    .noLootTable()));
+                    .strength(0.8F)
+                    .sound(SoundType.METAL)
+                    .noOcclusion()));
 
     public static final RegistryObject<Block> ORNATE_COPPER_HOOKAH = registerSingleStackBlock("ornate_copper_hookah_block",
             () -> new DoubleHookahBlock(
-                    BlockBehaviour.Properties.copy(Blocks.COPPER_BLOCK)
+                    BlockBehaviour.Properties.of()
+                            .strength(0.8F)
+                            .sound(SoundType.METAL)
                             .lightLevel(state -> state.getValue(DoubleHookahBlock.LIT) ? 6 : 0)
-                            .strength(6f)
-                            .requiresCorrectToolForDrops()
+
                             .noOcclusion()
-                            .noLootTable()
             ));
 
     public static final RegistryObject<Block> ORNATE_GOLD_HOOKAH = registerSingleStackBlock("ornate_gold_hookah_block",
             () -> new DoubleHookahBlock(
-                    BlockBehaviour.Properties.copy(Blocks.GOLD_BLOCK)
+                    BlockBehaviour.Properties.of()
+                            .strength(0.8F)
+                            .sound(SoundType.METAL)
                             .lightLevel(state -> state.getValue(DoubleHookahBlock.LIT) ? 6 : 0)
-                            .strength(6f)
-                            .requiresCorrectToolForDrops()
+
                             .noOcclusion()
-                            .noLootTable()
             ));
 
     public static final RegistryObject<Block> ORNATE_DIAMOND_HOOKAH = registerSingleStackBlock("ornate_diamond_hookah_block",
             () -> new DoubleHookahBlock(
-                    BlockBehaviour.Properties.copy(Blocks.DIAMOND_BLOCK)
+                    BlockBehaviour.Properties.of()
+                            .strength(0.8F)
+                            .sound(SoundType.METAL)
                             .lightLevel(state -> state.getValue(DoubleHookahBlock.LIT) ? 6 : 0)
-                            .strength(6f)
-                            .requiresCorrectToolForDrops()
+
                             .noOcclusion()
-                            .noLootTable()
             ));
 
     public static final RegistryObject<Block> ORNATE_IRON_HOOKAH = registerSingleStackBlock("ornate_iron_hookah_block",
             () -> new DoubleHookahBlock(
-                    BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
+                    BlockBehaviour.Properties.of()
+                            .strength(0.8F)
+                            .sound(SoundType.METAL)
                             .lightLevel(state -> state.getValue(DoubleHookahBlock.LIT) ? 6 : 0)
-                            .strength(6f)
-                            .requiresCorrectToolForDrops()
+
                             .noOcclusion()
-                            .noLootTable()
             ));
 
     public static final RegistryObject<Block> ORNATE_AMETHYST_HOOKAH = registerSingleStackBlock("ornate_amethyst_hookah_block",
             () -> new DoubleHookahBlock(
-                    BlockBehaviour.Properties.copy(Blocks.AMETHYST_BLOCK)
+                    BlockBehaviour.Properties.of()
+                            .strength(0.8F)
+                            .sound(SoundType.METAL)
                             .lightLevel(state -> state.getValue(DoubleHookahBlock.LIT) ? 6 : 0)
-                            .strength(6f)
-                            .requiresCorrectToolForDrops()
+
                             .noOcclusion()
-                            .noLootTable()
             ));
 
     public static final RegistryObject<Block> TOBACCO_DRYING_RACK = registerBlock("tobacco_drying_rack_block",
@@ -150,7 +149,7 @@ public class ModBlocks {
             ));
 
     public static final RegistryObject<Block> TOBACCO_BARREL = registerBlock("tobacco_barrel",
-            () -> new TobaccoBarrelBlock(BlockBehaviour.Properties.copy(Blocks.BARREL)));
+            () -> new TobaccoBarrelBlock(BlockBehaviour.Properties.of().strength(1.2F).sound(SoundType.WOOD)));
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);
@@ -175,8 +174,8 @@ public class ModBlocks {
     public static final RegistryObject<Block> FLUE_FIREBOX = registerBlock("flue_firebox",
             () -> new FlueFireboxBlock(net.minecraft.world.level.block.state.BlockBehaviour.Properties
                     .of()
-                    .strength(3.5F)
-                    .requiresCorrectToolForDrops()
+                    .strength(1.5F)
+                    .sound(SoundType.STONE)
                     .lightLevel(state -> state.getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.LIT) ? 13 : 0)));
 
     public static void register(IEventBus eventBus) {

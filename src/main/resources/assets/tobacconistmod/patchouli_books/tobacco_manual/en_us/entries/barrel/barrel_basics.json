@@ -1,0 +1,41 @@
+{
+  "name": "Tobacco Barrel",
+  "icon": "tobacconistmod:tobacco_barrel",
+  "category": "tobacconistmod:barrel",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The $(thing)Tobacco Barrel$() performs both fermentation and aging. It accepts $(item)loose tobacco$() or $(item)cured tobacco leaf$(). Fresh raw leaf and Spoiled Tobacco are rejected."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:tobacco_barrel",
+      "title": "Tobacco Barrel"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "A barrel holds up to $(item)16$() items. Additional tobacco must be exactly compatible with the existing stored stack, including its components/processing data. Adding more tobacco to a batch resets its current fermentation or aging progress.",
+      "title": "Batch Rules"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Right-click with valid tobacco to insert as much as the barrel can accept. Right-click with an empty hand to remove the entire stored batch. Sneak-right-click prints detailed status. Spectacles provide a more compact live overlay.",
+      "title": "Interaction"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The barrel automatically chooses a mode from its environment. Fermentation takes priority when its requirements are met. Otherwise the barrel ages if aging conditions are valid. If neither set of conditions is valid, the barrel remains Idle.",
+      "title": "Automatic Modes"
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "tobacconistmod:barrel/fermentation",
+        "tobacconistmod:barrel/aging",
+        "tobacconistmod:barrel/environment"
+      ],
+      "title": "Related Chapters"
+    }
+  ]
+}

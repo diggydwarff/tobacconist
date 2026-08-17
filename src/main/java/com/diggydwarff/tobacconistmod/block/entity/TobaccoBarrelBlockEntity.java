@@ -6,12 +6,15 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -61,6 +64,7 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
             barrel.lastAgeGameTime = -1L;
             barrel.lastFermentGameTime = -1L;
             barrel.setChanged();
+            if (level.getGameTime() % 20 == 0) barrel.syncToClient();
             return;
         }
 
@@ -76,6 +80,7 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
             barrel.lastAgeGameTime = -1L;
             barrel.lastFermentGameTime = -1L;
             barrel.setChanged();
+            if (level.getGameTime() % 20 == 0) barrel.syncToClient();
             return;
         }
 
@@ -107,6 +112,7 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
 
         if (barrel.mode == TobaccoBarrelMode.IDLE) {
             barrel.setChanged();
+            if (level.getGameTime() % 20 == 0) barrel.syncToClient();
             return;
         }
 
@@ -143,6 +149,7 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
         }
 
         barrel.setChanged();
+        if (level.getGameTime() % 20 == 0) barrel.syncToClient();
     }
 
     public static void clientTick(Level level, BlockPos pos, BlockState state, TobaccoBarrelBlockEntity barrel) {
@@ -224,7 +231,7 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
         tag.putBoolean(TAG_FERMENTED, true);
 
         int q = TobaccoCuringHelper.getQuality(storedTobacco);
-        int newQ = Math.min(100, q + 7);
+        int newQ = Math.min(120, q + 7);
 
         tag.putInt(TobaccoCuringHelper.TAG_QUALITY, newQ);
         tag.putString(TobaccoCuringHelper.TAG_QUALITY_TIER, TobaccoCuringHelper.getQualityTierId(newQ));
@@ -255,7 +262,7 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
         }
 
         if (bonus > 0) {
-            int newQ = Math.min(100, q + bonus);
+            int newQ = Math.min(120, q + bonus);
             tag.putInt(TobaccoCuringHelper.TAG_QUALITY, newQ);
             tag.putString(TobaccoCuringHelper.TAG_QUALITY_TIER, TobaccoCuringHelper.getQualityTierId(newQ));
         }
@@ -476,6 +483,49 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
 
     public static boolean isRuined(ItemStack stack) {
         return stack.hasTag() && stack.getTag().getBoolean(TAG_RUINED);
+    }
+
+    public int getProcessProgressPercent() {
+        return switch (mode) {
+            case FERMENTING -> Math.min(100, (processTicks * 100) / FERMENT_TIME);
+            case AGING -> Math.min(100, (processTicks * 100) / TICKS_PER_DAY);
+            default -> 0;
+        };
+    }
+
+    public String getModeNameForInspection() {
+        return getModeDisplayName();
+    }
+
+    @Override
+    public CompoundTag getUpdateTag() {
+        CompoundTag tag = new CompoundTag();
+        saveAdditional(tag);
+        return tag;
+    }
+
+    @Override
+    public void handleUpdateTag(CompoundTag tag) {
+        load(tag);
+    }
+
+    @Override
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
+    }
+
+    @Override
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
+        if (pkt.getTag() != null) {
+            load(pkt.getTag());
+        }
+    }
+
+    private void syncToClient() {
+        setChanged();
+        if (level != null && !level.isClientSide) {
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
+        }
     }
 
     @Override

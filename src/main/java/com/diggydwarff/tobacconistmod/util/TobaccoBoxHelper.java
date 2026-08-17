@@ -1,6 +1,7 @@
 package com.diggydwarff.tobacconistmod.util;
 
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
+import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
@@ -227,12 +228,8 @@ public class TobaccoBoxHelper {
     }
 
     private static String getQualityWord(int quality) {
-        if (quality < 0) return "";
-        if (quality >= 9) return "Premium";
-        if (quality >= 7) return "Fine";
-        if (quality >= 5) return "Standard";
-        if (quality >= 3) return "Harsh";
-        return "Low-Grade";
+        if (!TobacconistConfig.isQualitySystemEnabled() || quality < 0) return "";
+        return TobaccoTooltipHelper.getQualityWord(quality);
     }
 
     public static String getBlendLine(ItemStack stored) {
@@ -247,7 +244,7 @@ public class TobaccoBoxHelper {
 
         StringBuilder out = new StringBuilder();
 
-        if (quality10 >= 0) {
+        if (TobacconistConfig.isQualitySystemEnabled() && quality10 >= 0) {
             out.append(quality10).append("/10");
         }
 
@@ -372,7 +369,7 @@ public class TobaccoBoxHelper {
         String qualityWord = TobaccoTooltipHelper.getQualityWord(quality100);
         String typeName = getContentPluralName(stored);
 
-        return qualityWord + " " + typeName;
+        return (qualityWord + " " + typeName).trim();
     }
 
     public static String getProcessSuffix(boolean fermented, int monthsAged) {

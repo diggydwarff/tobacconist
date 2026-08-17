@@ -1,0 +1,40 @@
+{
+  "name": "Curing Quality",
+  "icon": "tobacconistmod:tobacco_leaf_virginia_dry",
+  "category": "tobacconistmod:curing",
+  "sortnum": 5,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "When quality is enabled, curing combines the leaf's Growth Quality with the cure method, environmental consistency, interruptions, mixed-method penalties, wet damage, and a small random bonus. Finished curing is normally capped at $(item)100$() quality."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Processed-tobacco tiers are:$(br2)$(bad)0–30 Poor$()$(br)31–60 Common$(br)61–80 Good$(br)81–89 Excellent$(br)$(2)90–100 Perfect$()$(br)$(2)101–120 Exceptional$()$(br2)Exceptional scores are reached later through fermentation/aging; the curing step itself caps at 100.",
+      "title": "Quality Tiers"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "If a valid cure stops after previously running, the rack records an interruption. Switching between cure methods can also create a mixed-method batch. Small amounts of mixing are less severe than a batch split heavily between methods.",
+      "title": "Interruptions & Mixing"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Direct rain is dangerous. Every 200 ticks of direct rain exposure adds wet damage. At $(bad)1,200 ticks$() of continuous direct rain—about $(bad)60 seconds$()—the batch is ruined into Spoiled Tobacco. Once sheltered, the rain-exposure counter recovers gradually.",
+      "title": "Rain Damage"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "For high-end tobacco, load the rack before it reaches 10%, keep one cure method valid from start to finish, and keep the batch dry. Spectacles make it easy to catch a paused rack before an interruption becomes a long one.",
+      "title": "Best Practice"
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "tobacconistmod:processing/cutting",
+        "tobacconistmod:barrel/barrel_basics"
+      ],
+      "title": "Related Chapters"
+    }
+  ]
+}

@@ -17,7 +17,11 @@ public class ModItems {
     // Tobacco Guide Item
     public static final RegistryObject<Item> TOBACCO_GUIDE =
             ITEMS.register("tobacco_guide",
-                    () -> new Item(new Item.Properties().stacksTo(1)));
+                    () -> new TobaccoGuideItem(new Item.Properties().stacksTo(1)));
+
+    public static final RegistryObject<Item> TOBACCONISTS_SPECTACLES =
+            ITEMS.register("tobacconists_spectacles",
+                    () -> new TobacconistsSpectaclesItem(new Item.Properties().stacksTo(1)));
 
     // PIPE ITEMS
     public static final RegistryObject<Item> WOODEN_SMOKING_PIPE = ITEMS.register("wooden_smoking_pipe", () -> new WoodenSmokingPipeItem(new Item.Properties().stacksTo(1)));

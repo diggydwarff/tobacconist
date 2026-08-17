@@ -1,6 +1,5 @@
 package com.diggydwarff.tobacconistmod.client;
 
-import com.diggydwarff.tobacconistmod.TobacconistMod;
 import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
 import com.diggydwarff.tobacconistmod.datagen.items.SmokingItem;
 import net.minecraft.client.Minecraft;
@@ -8,22 +7,11 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.common.Mod;
 import top.theillusivec4.curios.api.CuriosApi;
 
-@Mod.EventBusSubscriber(modid = TobacconistMod.MODID, value = Dist.CLIENT)
 public class ClientSmokingParticles {
 
-    @SubscribeEvent
-    public static void onClientTick(TickEvent.ClientTickEvent event) {
-        if (!ModList.get().isLoaded("curios")) return;
-        if (event.phase != TickEvent.Phase.END) return;
-
-        Minecraft mc = Minecraft.getInstance();
+    public static void tick(Minecraft mc) {
         if (mc.level == null || mc.isPaused()) return;
         if ((mc.level.getGameTime() % 10) != 0) return;
 

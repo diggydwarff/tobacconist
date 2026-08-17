@@ -1,0 +1,27 @@
+{
+  "name": "Hookah Fuels",
+  "icon": "tobacconistmod:bamboo_charcoal",
+  "category": "tobacconistmod:hookah",
+  "sortnum": 4,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The hookah accepts three fuel types with very different burn reserves:$(br2)$(2)Bamboo Charcoal:$() 25,000 active ticks$(br)$(item)Charcoal:$() 12,500 active ticks$(br)$(bad)Coal:$() 2,500 active ticks$(br2)Fuel time only counts down while the hookah can actively process shisha and water."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Make $(thing)Bamboo Charcoal$() by smelting or blasting Bamboo. It is the intended long-burning hookah fuel and lasts ten times as long as Coal in the hookah.",
+      "title": "Bamboo Charcoal"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "One fresh Shisha Tobacco item has $(item)5,000 processing durability$(), equal to about $(item)4 minutes 10 seconds$() of continuous active use. The shisha is consumed when that timer is exhausted.",
+      "title": "Shisha Duration"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "If the hookah will not light, verify all three contents: valid fuel, Shisha Tobacco, and a Water Potion. Also remember that an already-started fuel reserve can remain stored while the hookah is missing shisha or water.",
+      "title": "Troubleshooting"
+    }
+  ]
+}

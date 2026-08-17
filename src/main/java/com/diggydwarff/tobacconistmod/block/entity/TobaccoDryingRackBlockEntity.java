@@ -144,12 +144,14 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
 
     @Override
     public ItemStack removeItem(int slot, int amount) {
-        if (slot != 0 || storedLeaf.isEmpty() || !isFinished()) {
+        if (slot != 0 || amount <= 0 || storedLeaf.isEmpty() || !isFinished()) {
             return ItemStack.EMPTY;
         }
 
-        ItemStack out = storedLeaf.copy();
-        storedLeaf = ItemStack.EMPTY;
+        ItemStack out = storedLeaf.split(amount);
+        if (storedLeaf.isEmpty()) {
+            storedLeaf = ItemStack.EMPTY;
+        }
 
         setChanged();
         syncRackState();
@@ -314,6 +316,13 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         }
 
         return Math.min(100, (dominantTicks * 100) / needed);
+    }
+
+    public int getEstimatedTicksRemaining() {
+        if (!hasLeaves() || isFinished()) return 0;
+        int pct = getDryProgressPercent();
+        int required = getRequiredDryingTime();
+        return Math.max(0, (int) Math.ceil(required * ((100.0 - pct) / 100.0)));
     }
 
     public int getVisualCureStage() {
@@ -495,7 +504,6 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         }
 
         boolean validDryingThisTick = false;
-        boolean shouldCountInterruption = false;
 
         if (overCampfire) {
             validDryingThisTick = true;
@@ -509,25 +517,12 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             validDryingThisTick = true;
             rack.sunTicks++;
             rack.sunExposureTicks++;
-
-            if (isGlassSunCure(level, pos) && rack.sunTicks > SUN_DRY_TIME) {
-                // No-op: just keeps sun curing on the normal counter.
-                // The slower requirement is enforced by GLASS_SUN_DRY_TIME.
-            }
         } else if (airDry) {
             validDryingThisTick = true;
             rack.airTicks++;
-
-            if (isDaytimeSunBlocked(level, pos)) {
-                shouldCountInterruption = true;
-            }
-        } else {
-            if (level.isRainingAt(pos.above())) {
-                shouldCountInterruption = true;
-            }
         }
 
-        if (shouldCountInterruption && rack.lastTickHadValidDrying) {
+        if (rack.lastTickHadValidDrying && !validDryingThisTick) {
             rack.interruptionCount++;
             rack.syncToClient();
         }
@@ -661,10 +656,33 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             mixPenalty = 12;
         }
 
-        int quality = TobaccoCuringHelper.buildFinalQuality(storedLeaf, cureType, interruptionCount);
-        quality -= mixPenalty;
-        quality -= wetDamagePenalty;
-        quality = TobaccoCuringHelper.clampQuality(quality);
+        CompoundTag sourceTag = storedLeaf.getOrCreateTag();
+        int growth = sourceTag.contains(TobaccoCuringHelper.TAG_GROWTH_QUALITY)
+                ? sourceTag.getInt(TobaccoCuringHelper.TAG_GROWTH_QUALITY)
+                : 50;
+
+        int methodsUsed = 0;
+        if (fireTicks > 0) methodsUsed++;
+        if (flueTicks > 0) methodsUsed++;
+        if (sunTicks > 0) methodsUsed++;
+        if (airTicks > 0) methodsUsed++;
+
+        boolean mixedMethods = methodsUsed > 1;
+        boolean properEnvironment = interruptionCount == 0 && wetDamagePenalty == 0;
+        int rng = level != null ? level.random.nextInt(11) : 0;
+
+        int quality = TobaccoCuringHelper.buildFinalQuality(
+                growth,
+                cureType,
+                interruptionCount,
+                mixedMethods,
+                properEnvironment,
+                rng
+        );
+
+        quality -= Math.min(15, mixPenalty);
+        quality -= Math.min(20, wetDamagePenalty);
+        quality = TobaccoCuringHelper.clampQuality(Math.min(100, quality));
 
         TobaccoCuringHelper.applyCureData(cured, cureType, quality);
 

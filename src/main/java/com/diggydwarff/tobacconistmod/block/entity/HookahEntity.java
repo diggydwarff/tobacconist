@@ -20,6 +20,8 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -35,6 +37,16 @@ import org.jetbrains.annotations.Nullable;
 public class HookahEntity extends BlockEntity implements MenuProvider {
 
     private final ItemStackHandler itemHandler = new ItemStackHandler(3) {
+        @Override
+        public boolean isItemValid(int slot, ItemStack stack) {
+            return switch (slot) {
+                case 0 -> HookahFuelHelper.isFuel(stack);
+                case 1 -> stack.is(ModItems.SHISHA_TOBACCO.get());
+                case 2 -> isWaterPotion(stack);
+                default -> false;
+            };
+        }
+
         @Override
         protected void onContentsChanged(int slot) {
             setChanged();
@@ -181,17 +193,20 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
             pEntity.fuelTime--;
 
             // keep old shisha durability damage logic
-            ItemStack shisha = pEntity.itemHandler.getStackInSlot(1);
+            ItemStack shisha = pEntity.itemHandler.getStackInSlot(1).copy();
             shisha.setDamageValue(shisha.getDamageValue() + 1);
 
             if (shisha.getDamageValue() >= shisha.getMaxDamage()) {
                 pEntity.itemHandler.extractItem(1, 1, false);
+            } else {
+                pEntity.itemHandler.setStackInSlot(1, shisha);
             }
 
             setChanged(level, pos, state);
 
             if (pEntity.progress >= pEntity.maxProgress) {
-                craftItem(pEntity);
+                // Shisha durability is the consumption timer; water is a required catalyst, not an output slot.
+                pEntity.resetProgress();
             }
         } else {
             pEntity.resetProgress();
@@ -210,27 +225,13 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
         this.progress = 0;
     }
 
-    private static void craftItem(HookahEntity pEntity) {
-        if (canProcess(pEntity)) {
-            pEntity.itemHandler.extractItem(1, 1, false);
-
-            pEntity.itemHandler.setStackInSlot(2,
-                    new ItemStack(ModItems.SHISHA_TOBACCO.get(),
-                            pEntity.itemHandler.getStackInSlot(2).getCount() + 1));
-
-            pEntity.resetProgress();
-        }
+    private static boolean isWaterPotion(ItemStack stack) {
+        return stack.is(Items.POTION) && PotionUtils.getPotion(stack) == Potions.WATER;
     }
 
     private static boolean canProcess(HookahEntity entity) {
-        boolean hasShishaInSlot =
-                entity.itemHandler.getStackInSlot(1).getItem() == ModItems.SHISHA_TOBACCO.get();
-
-        boolean hasWaterInSlot =
-                entity.itemHandler.getStackInSlot(2).is(Items.POTION) &&
-                        entity.itemHandler.getStackInSlot(2).getTag() != null &&
-                        entity.itemHandler.getStackInSlot(2).getTag().getString("Potion").equals("minecraft:water");
-
+        boolean hasShishaInSlot = entity.itemHandler.getStackInSlot(1).is(ModItems.SHISHA_TOBACCO.get());
+        boolean hasWaterInSlot = isWaterPotion(entity.itemHandler.getStackInSlot(2));
         return hasShishaInSlot && hasWaterInSlot;
     }
 }

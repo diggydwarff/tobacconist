@@ -1,0 +1,40 @@
+{
+  "name": "Tobacco Boxes",
+  "icon": "tobacconistmod:tobacco_box",
+  "category": "tobacconistmod:storage",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "A $(thing)Tobacco Box$() stores one exact type/batch of finished or loose tobacco while preserving its metadata. Supported contents are Cigars, Cigarettes, Shisha Tobacco, and all six Loose Tobacco varieties."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:tobacco_box",
+      "title": "Tobacco Box"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Capacity depends on content:$(br2)$(item)Cigars:$() 8$(br)$(item)Cigarettes:$() 12$(br)$(item)Shisha Tobacco:$() 16$(br)$(item)Loose Tobacco:$() 16",
+      "title": "Capacities"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "To insert, hold the box in one hand and a supported product in the other, then use the box; or right-click items onto the box inside an inventory. The first item defines what exact batch the box accepts. Later contents must match its stored components/processing data.",
+      "title": "Inserting"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Sneak-right-click the box to extract one item into your inventory. In an inventory, right-clicking the box onto an empty slot also extracts one. If the box is in your offhand and your main hand is empty, using/swinging can draw one item into the main hand.",
+      "title": "Extracting"
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "tobacconistmod:storage/labels",
+        "tobacconistmod:processing/averaging"
+      ],
+      "title": "Related Chapters"
+    }
+  ]
+}

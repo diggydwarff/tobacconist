@@ -1,20 +1,35 @@
 {
-  "name": "Leaf Quality",
-  "icon": "tobacconistmod:burley_tobacco_leaf",
+  "name": "Growth Quality",
+  "icon": "tobacconistmod:tobacco_leaf_burley",
   "category": "tobacconistmod:growing",
-  "sortnum": 1,
+  "sortnum": 4,
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Crop conditions can be $(bad)Poor$(), $(item)OK$(), or $(2)Ideal$(). Tobacco responds to light, temperature, rain exposure, and general environment."
+      "text": "When quality is enabled, harvested raw leaf receives a $(thing)Growth Quality$() score from 0–70. Biome, light, temperature, and harvest timing contribute to the result, followed by a small random harvest roll. The Spectacles show the deterministic potential as a range before harvest."
     },
     {
       "type": "patchouli:text",
-      "text": "General advice:$(br2)- Strong sunlight is good$(br)- Warm conditions are usually better than cold$(br)- Too much rain hurts quality$(br)- Stable outdoor growth is usually better than cramped indoor growth"
+      "text": "Raw-leaf tiers use the 0–70 scale:$(br2)$(bad)0–15 Poor$()$(br)16–30 Common$(br)31–45 Good$(br)46–59 Excellent$(br)$(2)60–70 Perfect$()",
+      "title": "Raw Leaf Tiers"
     },
     {
       "type": "patchouli:text",
-      "text": "Use $(thing)/tobacconist debug$() while looking at a tobacco crop to see what is helping or hurting it."
+      "text": "The Spectacles' environmental Conditions rating ignores age: $(2)Excellent$() at 18+, $(2)Good$() at 10–17, $(item)Fair$() at 0–9, and $(bad)Poor$() below 0. This tells you whether the farm site is good, not whether the crop is ready.",
+      "title": "Conditions Rating"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Harvest timing is separate and important. Stage 7 receives the best timing score. Stage 6 is noticeably worse. Stages 0–5 receive a strong penalty. Curing can improve good leaf, but it cannot fully undo a premature harvest.",
+      "title": "Harvest Timing"
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "tobacconistmod:curing/curing_quality",
+        "tobacconistmod:getting_started/quality_modes"
+      ],
+      "title": "Related Chapters"
     }
   ]
 }

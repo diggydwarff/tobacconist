@@ -1,0 +1,16 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "tobacconistmod:item/tobacconists_spectacles"
+  },
+  "display": {
+    "fixed": {
+      "rotation": [0, 0, 0],
+      "translation": [0, 0, 0],
+      "scale": [1, 1, 1]
+    },
+    "head": {
+      "scale": [0, 0, 0]
+    }
+  }
+}

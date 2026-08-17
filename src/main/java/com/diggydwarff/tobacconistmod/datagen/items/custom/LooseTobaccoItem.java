@@ -1,6 +1,7 @@
 package com.diggydwarff.tobacconistmod.datagen.items.custom;
 
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelBlockEntity;
+import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoLabelHelper;
 import net.minecraft.ChatFormatting;
@@ -70,11 +71,13 @@ public class LooseTobaccoItem extends Item {
             tooltip.add(Component.literal("Label: " + productLabel).withStyle(ChatFormatting.YELLOW));
         }
 
-        int quality = TobaccoCuringHelper.getQuality(stack);
-        if (quality > 0) {
-            tooltip.add(Component.literal(
-                    "Quality: " + quality + " (" + capitalize(TobaccoCuringHelper.getQualityTier(quality)) + ")"
-            ).withStyle(ChatFormatting.GRAY));
+        if (TobacconistConfig.isQualitySystemEnabled()) {
+            int quality = TobaccoCuringHelper.getQuality(stack);
+            if (quality > 0) {
+                tooltip.add(Component.literal(
+                        "Quality: " + quality + " (" + capitalize(TobaccoCuringHelper.getQualityTier(quality)) + ")"
+                ).withStyle(ChatFormatting.GRAY));
+            }
         }
 
         String cureType = TobaccoCuringHelper.getCureType(stack);

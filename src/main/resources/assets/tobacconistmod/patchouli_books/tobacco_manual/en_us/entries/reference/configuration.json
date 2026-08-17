@@ -1,0 +1,32 @@
+{
+  "name": "Configuration",
+  "icon": "tobacconistmod:tobacco_guide",
+  "category": "tobacconistmod:reference",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Tobacconist has client, common, and server configuration. Most players never need to edit them, but server owners can simplify quality gameplay or disable the custom Nicotine effect."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(thing)Server — enableQualitySystem$()$(br)Default: true. Hides/ignores quality scoring and quality-based smoking bonuses when false while preserving existing quality data.$(br2)$(thing)Server — enableNicotineEffects$()$(br)Default: true. Controls only Tobacconist's Nicotine status effect.",
+      "title": "Gameplay Toggles"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(thing)Common — additionalEffects$()$(br)Adds configurable effects when smoking. Each entry uses: $(item)effect_id,duration_ticks,amplifier$(). Example: minecraft:luck,200,0.$(br2)These effects are independent from the Nicotine toggle.",
+      "title": "Additional Effects"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(thing)Client — particleDensity$()$(br)Default: 6, range 1–24. This is the chance divisor for ambient Curios Mouth-slot smoke; lower values mean more frequent smoke particles.",
+      "title": "Client Particles"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Server configs are world/server-side settings; common and client configs live with the normal Forge configuration files. Exact filenames are generated from the mod ID and config type by Forge.",
+      "title": "Where Settings Live"
+    }
+  ]
+}

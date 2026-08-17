@@ -1,0 +1,54 @@
+{
+  "name": "The Complete Workflow",
+  "icon": "tobacconistmod:tobacco_guide",
+  "category": "tobacconistmod:getting_started",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Tobacconist is a chain of crafts rather than a single recipe. The normal path is: $(item)seed → mature plant → raw leaf → cured leaf → cut tobacco → optional barrel work → finished product$(). Each stage preserves information from the stage before it."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(thing)1. Find seeds.$() Wild tobacco grows naturally in Forest, Birch Forest, and Dark Forest. A Tobacconist Master villager can also sell every tobacco seed variety for emeralds.",
+      "title": "1 — Seeds"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(thing)2. Grow and harvest.$() Plant seeds on farmland. Tobacco has 8 growth stages (0–7) and becomes two blocks tall after the early stages. Let it fully mature before harvesting if quality matters.",
+      "title": "2 — Grow"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(thing)3. Cure the leaf.$() Put matching raw leaves on a Tobacco Drying Rack. Air, sun, fire, and flue curing each need different surroundings and take different amounts of time.",
+      "title": "3 — Cure"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(thing)4. Cut the cured leaf.$() Craft one cured leaf beside a Chaveta. The Chaveta's position determines Ribbon, Shag, Rough, or Flake cut. One leaf produces 3 loose tobacco.",
+      "title": "4 — Cut"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(thing)5. Refine or craft.$() Loose tobacco can go into a pipe, become a cigarette, become cigar filler, or be mixed with flavored molasses into shisha. Cured or loose tobacco can also be fermented or aged in a Tobacco Barrel.",
+      "title": "5 — Finish"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(thing)6. Inspect as you work.$() Wear Tobacconist's Spectacles. Looking at crops, drying racks, and barrels shows the information you normally need. Sneak-right-clicking crops, racks, and barrels also gives basic status without the Spectacles.",
+      "title": "6 — Inspect"
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "tobacconistmod:getting_started/seeds_and_villager",
+        "tobacconistmod:getting_started/spectacles",
+        "tobacconistmod:growing/basics",
+        "tobacconistmod:curing/rack_basics"
+      ],
+      "title": "Related Chapters",
+      "text": "Start with these chapters if this is your first crop."
+    }
+  ],
+  "priority": true
+}

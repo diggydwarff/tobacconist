@@ -1,0 +1,41 @@
+{
+  "name": "Chavetas",
+  "icon": "tobacconistmod:stone_chaveta",
+  "category": "tobacconistmod:processing",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "A $(thing)Chaveta$() is the cutting tool used beside cured tobacco leaf in a crafting grid. The tool survives the recipe and takes durability damage. Better materials mainly give you more uses; the cut type is controlled by placement, not by tool tier."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:stone_chaveta",
+      "recipe2": "tobacconistmod:copper_chaveta",
+      "title": "Stone & Copper Chavetas"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:iron_chaveta",
+      "recipe2": "tobacconistmod:gold_chaveta",
+      "title": "Iron & Gold Chavetas"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:diamond_chaveta",
+      "title": "Diamond Chaveta"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Durability:$(br2)Stone: 131$(br)Copper: 180$(br)Iron: 250$(br)Gold: 32$(br)Diamond: 1,561$(br)Netherite: 2,031$(br2)Upgrade a Diamond Chaveta to Netherite with the normal Netherite Upgrade smithing template and a Netherite Ingot.",
+      "title": "Durability"
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "tobacconistmod:processing/cutting"
+      ],
+      "title": "Related Chapters"
+    }
+  ]
+}

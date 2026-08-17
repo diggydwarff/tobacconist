@@ -1,0 +1,103 @@
+{
+  "parent": "tobacconistmod:tobacconist/root",
+  "display": {
+    "icon": {
+      "item": "tobacconistmod:tobacco_leaf_wild"
+    },
+    "title": {
+      "translate": "advancement.tobacconistmod.first_harvest"
+    },
+    "description": {
+      "translate": "advancement.tobacconistmod.first_harvest.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "item_0": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "tobacconistmod:tobacco_leaf_wild"
+            ]
+          }
+        ]
+      }
+    },
+    "item_1": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "tobacconistmod:tobacco_leaf_virginia"
+            ]
+          }
+        ]
+      }
+    },
+    "item_2": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "tobacconistmod:tobacco_leaf_burley"
+            ]
+          }
+        ]
+      }
+    },
+    "item_3": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "tobacconistmod:tobacco_leaf_oriental"
+            ]
+          }
+        ]
+      }
+    },
+    "item_4": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "tobacconistmod:tobacco_leaf_dokha"
+            ]
+          }
+        ]
+      }
+    },
+    "item_5": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "tobacconistmod:tobacco_leaf_shade"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "item_0",
+      "item_1",
+      "item_2",
+      "item_3",
+      "item_4",
+      "item_5"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

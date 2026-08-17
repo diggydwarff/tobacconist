@@ -1,6 +1,6 @@
 {
   "name": "Growing Tobacco",
-  "description": "Grow healthy plants, harvest mature leaf, and learn what makes a crop poor, ok, or ideal.",
+  "description": "Plant, inspect, and harvest all six tobacco varieties under the conditions each one prefers.",
   "icon": "tobacconistmod:virginia_tobacco_seeds",
-  "sortnum": 0
+  "sortnum": 1
 }

@@ -1,0 +1,40 @@
+{
+  "name": "Smoking Effects",
+  "icon": "tobacconistmod:cigar",
+  "category": "tobacconistmod:smoking",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Right-click a packed pipe, cigar, or cigarette to smoke one puff. Smoking produces smoke/sound and, when enabled by the server, applies Tobacconist's $(thing)Nicotine$() effect for $(item)500 ticks$() (25 seconds)."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Puff counts:$(br2)$(item)Cigarette:$() 15$(br)$(item)Cigar:$() 100$(br)$(item)Packed pipe:$() 40$(br2)Cigars and cigarettes use item damage as the puff counter; packed pipes use their own stored Puffs Left value.",
+      "title": "Puff Counts"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "With the quality system enabled, sufficiently high-quality tobacco grants short Regeneration:$(br2)Quality 70–89: Regen I for 3s$(br)Quality 90–97: Regen I for 5s$(br)Quality 98+: Regen II for 6s",
+      "title": "Quality Bonus"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Aging extends that Regeneration duration by $(item)+1 second per 30 aged days$(), capped at +10 seconds. This bonus only matters when the smoked tobacco already qualifies for a quality Regeneration tier.",
+      "title": "Aging Bonus"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Server configuration can disable the Nicotine status effect without disabling smoking itself. Administrators may also define additional status effects; those are independent from the quality bonus and from the Nicotine toggle.",
+      "title": "Server Rules"
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "tobacconistmod:getting_started/quality_modes",
+        "tobacconistmod:reference/configuration"
+      ],
+      "title": "Related Chapters"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "name": "Cutting Tobacco",
+  "icon": "tobacconistmod:tobacco_loose_virginia",
+  "category": "tobacconistmod:processing",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Cutting uses exactly $(item)1 cured leaf$() and $(item)1 Chaveta$() placed orthogonally beside each other in a crafting grid. One cured leaf becomes $(item)3 loose tobacco$(). The Chaveta's location relative to the leaf determines the cut."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Relative to the $(item)leaf$():$(br2)$(thing)Chaveta above$() → Shag Cut$(br)$(thing)Chaveta left$() → Ribbon Cut$(br)$(thing)Chaveta right$() → Rough Cut$(br)$(thing)Chaveta below$() → Flake Cut$(br2)Diagonal placement does not work.",
+      "title": "Cut Layout"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Cuts matter to finished-product quality:$(br2)$(thing)Cigarette:$() Shag best, Ribbon second$(br)$(thing)Cigar:$() Flake best, Rough second$(br)$(thing)Shisha:$() Rough best, Ribbon second$(br2)Poor matches can cap a product well below 10/10 even when the tobacco itself is excellent.",
+      "title": "Best Uses"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Exact product caps by cut:$(br2)Cigarette — Shag 10, Ribbon 9, Rough 6, Flake 5$(br)Cigar — Flake 10, Rough 9, Ribbon 7, Shag 4$(br)Shisha — Rough 10, Ribbon 8, Flake 7, Shag 4",
+      "title": "Quality Caps"
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "tobacconistmod:processing/cigarettes_cigars",
+        "tobacconistmod:hookah/shisha",
+        "tobacconistmod:smoking/pipes"
+      ],
+      "title": "Related Chapters"
+    }
+  ]
+}

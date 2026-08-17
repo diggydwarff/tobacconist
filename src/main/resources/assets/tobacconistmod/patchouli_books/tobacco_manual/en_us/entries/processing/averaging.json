@@ -1,0 +1,27 @@
+{
+  "name": "Averaging Tobacco",
+  "icon": "tobacconistmod:tobacco_leaf_wild_dry",
+  "category": "tobacconistmod:processing",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The crafting grid can $(thing)average$() two or more compatible tobacco stacks/items. This is useful when the same tobacco has different quality values and will not stack naturally."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "All inputs must be the same tobacco item and processing mode. Raw leaf can only average with the same raw leaf. Cured leaf must also have the same cure type. Loose tobacco must have both the same cure and the same cut.",
+      "title": "Compatibility Rules"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The result's quality is the arithmetic average of the participating crafting-grid slots, rounded to the nearest whole number. The output count equals the number of occupied tobacco slots. The recipe does not change the cure or cut of a compatible batch.",
+      "title": "Result"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "This is the safe way to consolidate batches when quality metadata prevents ordinary stacking. Do not use tobacco crates as a quality-compression system; crates are not part of the recommended quality workflow.",
+      "title": "Quality-Safe Consolidation"
+    }
+  ]
+}

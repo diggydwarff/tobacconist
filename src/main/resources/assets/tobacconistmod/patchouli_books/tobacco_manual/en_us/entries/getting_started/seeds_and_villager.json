@@ -1,0 +1,32 @@
+{
+  "name": "Finding Seeds",
+  "icon": "tobacconistmod:wild_tobacco_seeds",
+  "category": "tobacconistmod:getting_started",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "tobacconistmod:wild_tobacco_seeds",
+      "text": "$(thing)Wild Tobacco$() is the natural starting point. Flowering wild tobacco can appear in Forest, Birch Forest, and Dark Forest. Breaking it can provide wild leaf and seeds."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The other varieties are most reliably obtained from a $(thing)Tobacconist Master$() villager. A Hookah is that profession's workstation. Place a Hookah where an unemployed villager can claim it, just as you would place a normal villager workstation.",
+      "title": "Tobacconist Master"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "At novice level, the Tobacconist Master can offer $(item)Wild, Virginia, Burley, Oriental, Dokha, and Shade seeds$(). Each seed trade costs 1 Emerald; availability is still subject to the villager's normal trade list and stock.",
+      "title": "Seed Trades"
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "tobacconistmod:growing/virginia_burley",
+        "tobacconistmod:growing/oriental_dokha",
+        "tobacconistmod:growing/shade_wild"
+      ],
+      "title": "Related Chapters"
+    }
+  ]
+}

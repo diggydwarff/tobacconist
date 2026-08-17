@@ -1,5 +1,6 @@
 package com.diggydwarff.tobacconistmod.util;
 
+import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 
@@ -44,6 +45,7 @@ public class TobaccoTooltipHelper {
     }
 
     public static String getQualityWord(int quality100) {
+        if (!TobacconistConfig.isQualitySystemEnabled()) return "";
         if (quality100 >= 90) return "Premium";
         if (quality100 >= 75) return "Fine";
         if (quality100 >= 50) return "Standard";
@@ -52,13 +54,18 @@ public class TobaccoTooltipHelper {
     }
 
     public static String cleanTobaccoName(String name) {
-        return name.replace(" Loose Tobacco", "")
+        String cleaned = name.replace(" Loose Tobacco", "")
                 .replace(" Tobacco Leaf Wrapper", "")
                 .replace(" Tobacco Leaf", "")
                 .replace(" Tobacco", "")
                 .replace("[", "")
                 .replace("]", "")
                 .trim();
+
+        if (!TobacconistConfig.isQualitySystemEnabled()) {
+            cleaned = cleaned.replaceFirst("^(Premium|Fine|Standard|Harsh|Poor|Low-Grade)\\s+", "").trim();
+        }
+        return cleaned;
     }
 
     public static boolean isFermented(CompoundTag tag) {

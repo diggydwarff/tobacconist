@@ -1,20 +1,35 @@
 {
   "name": "Growing Basics",
-  "icon": "tobacconistmod:virginia_tobacco_leaf",
+  "icon": "tobacconistmod:tobacco_leaf_virginia",
   "category": "tobacconistmod:growing",
   "sortnum": 0,
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Tobacco quality starts in the field. Every plant builds a hidden quality value while it grows. Curing, fermenting, aging, and finished products all build on that starting leaf quality."
+      "text": "All six cultivated tobacco varieties use the same basic crop rules. Plant tobacco seeds on $(item)farmland$(). Natural growth requires local raw brightness of at least $(item)9$(). Bonemeal can advance the lower half of a plant until the crop is mature."
     },
     {
       "type": "patchouli:text",
-      "text": "For best results:$(br2)- Let plants fully mature before harvesting$(br)- Give them strong light$(br)- Avoid bad weather and poor environments$(br)- Use $(thing)/tobacconist debug$() while looking at a crop if you are unsure."
+      "text": "Tobacco has stages $(item)0 through 7$(). Stages 0\u20133 occupy one block. From stage 4 onward the plant becomes two blocks tall, with the upper half carrying the later growth stage. Stage 7 is fully mature.",
+      "title": "Growth Stages"
     },
     {
       "type": "patchouli:text",
-      "text": "Good processing helps good leaf. It does not magically fix bad leaf. Sloppy growing limits everything that comes after."
+      "text": "Breaking mature tall tobacco yields raw leaves and seeds. Harvest timing matters to growth quality: fully mature is best, one stage early is penalized, and earlier harvesting is heavily penalized. If quality matters, wait for Stage 7.",
+      "title": "Harvesting"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Sneak-right-click a growing tobacco plant for a short qualitative message even without Spectacles. For exact growth percentage, environment rating, and potential-quality range, wear Tobacconist's Spectacles.",
+      "title": "Inspection"
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "tobacconistmod:growing/quality",
+        "tobacconistmod:getting_started/spectacles"
+      ],
+      "title": "Related Chapters"
     }
   ]
 }

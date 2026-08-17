@@ -13,6 +13,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -82,7 +83,7 @@ public class TobaccoDryingRackBlock extends BaseEntityBlock {
     }
 
     public TobaccoDryingRackBlock() {
-        super(Properties.of().strength(1.5F).noOcclusion());
+        super(Properties.of().strength(0.8F).sound(SoundType.WOOD).noOcclusion());
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(HAS_LEAVES, false)
                 .setValue(OVER_CAMPFIRE, false));

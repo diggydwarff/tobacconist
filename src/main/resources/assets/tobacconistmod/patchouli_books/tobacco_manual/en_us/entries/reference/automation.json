@@ -1,0 +1,27 @@
+{
+  "name": "Automation",
+  "icon": "minecraft:hopper",
+  "category": "tobacconistmod:reference",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The $(thing)Drying Rack$() has explicit hopper rules. Horizontal sides can insert valid raw leaves. The top and bottom cannot insert. The bottom can extract only when the batch has completely finished curing."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Rack automation still obeys batch rules: leaves must match the stored leaf's exact item/components, the rack holds at most 16, and insertion is blocked once progress reaches 10%. A hopper pulling from the bottom extracts only the requested amount rather than vacuuming the entire batch.",
+      "title": "Drying Rack"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The $(thing)Hookah$() exposes its three-slot item handler to Forge automation. Automated insertion is still validated per slot: fuel in slot 0, Shisha Tobacco in slot 1, and a Water Potion in slot 2.",
+      "title": "Hookah"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The $(thing)Tobacco Barrel$() is intentionally interaction-driven rather than exposing a general item-handler capability. Insert and remove its batch by right-clicking the block.",
+      "title": "Barrel"
+    }
+  ]
+}

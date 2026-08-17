@@ -1,0 +1,27 @@
+{
+  "name": "Optional Mods",
+  "icon": "tobacconistmod:tobacco_guide",
+  "category": "tobacconistmod:reference",
+  "sortnum": 3,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "$(thing)Patchouli$() is optional and supplies this in-game manual. Tobacconist's gameplay itself is not meant to require Patchouli. The manual recipe and contents are conditionally loaded when Patchouli is present."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(thing)Curios$() is optional. With it installed, you gain the Eyes and Mouth accessory slots. Without it, Spectacles use the vanilla head slot and smoking still works through ordinary right-click use.",
+      "title": "Curios"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(thing)JEI$() is optional. It provides recipe browsing and Tobacconist custom recipe categories, but every gameplay workflow needed to use the mod is described in this manual so JEI is not required as documentation.",
+      "title": "JEI"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(thing)Farmer's Delight$() and $(thing)Fruits Delight$() add extra flavored-molasses recipes when installed. Their dedicated flavor entries appear in the Shisha & Hookahs category only when the matching mod is loaded.",
+      "title": "Food Mod Integrations"
+    }
+  ]
+}

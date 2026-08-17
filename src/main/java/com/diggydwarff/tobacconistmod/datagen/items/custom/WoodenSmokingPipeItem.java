@@ -12,15 +12,12 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerLevel;
-import top.theillusivec4.curios.api.SlotContext;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class WoodenSmokingPipeItem extends SmokingItem {
 
@@ -64,6 +61,25 @@ public class WoodenSmokingPipeItem extends SmokingItem {
         }
 
         return super.getName(stack);
+    }
+
+    @Override
+    public boolean smokeFromMouthSlot(Player player, ServerLevel level, ItemStack stack) {
+        CompoundTag tag = stack.getTag();
+        int puffs = tag == null ? 0 : tag.getInt(NBT_PUFFS);
+        if (puffs <= 0) return false;
+
+        this.triggerSmokingEffectPlayer(player, level, 0, stack);
+        puffs--;
+        CompoundTag mutable = stack.getOrCreateTag();
+        if (puffs <= 0) {
+            mutable.remove(NBT_PUFFS);
+            mutable.remove(NBT_TOBACCO);
+            mutable.remove("PackedTobaccoData");
+        } else {
+            mutable.putInt(NBT_PUFFS, puffs);
+        }
+        return true;
     }
 
     @Override
@@ -111,11 +127,6 @@ public class WoodenSmokingPipeItem extends SmokingItem {
             return InteractionResultHolder.consume(pipe); // prevents swing
         }
 
-        return performSmoke(level, player, pipe, p -> p.broadcastBreakEvent(hand));
-    }
-
-    @Override
-    public InteractionResultHolder<ItemStack> performSmoke(Level level, Player player, ItemStack pipe, Consumer<LivingEntity> onBreak) {
         CompoundTag tag = pipe.getTag();
         int puffs = (tag == null) ? 0 : tag.getInt("PuffsLeft");
 

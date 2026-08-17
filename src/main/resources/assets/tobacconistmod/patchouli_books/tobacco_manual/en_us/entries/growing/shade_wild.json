@@ -1,0 +1,22 @@
+{
+  "name": "Shade & Wild",
+  "icon": "tobacconistmod:shade_tobacco_seeds",
+  "category": "tobacconistmod:growing",
+  "sortnum": 3,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "$(thing)Shade Tobacco$() is the exception to the 'more sun is always better' rule. $(br2)$(item)Best biome:$() Jungle$(br)$(item)Acceptable biome:$() Forest$(br)$(item)Poor:$() Desert, Badlands, or Savanna$(br2)$(item)Ideal light:$() 9–12$(br)$(item)Acceptable light:$() 8–13$(br)$(item)Ideal temperature:$() 0.90–1.20$(br)$(item)Acceptable:$() 0.75–1.35"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(thing)Wild Tobacco$() is intentionally flexible. Most biomes are favorable; Desert and Badlands are only mildly unfavorable. $(br2)$(item)Ideal light:$() 11–15$(br)$(item)Acceptable light:$() 9–15$(br)$(item)Ideal temperature:$() 0.50–1.50$(br)$(item)Acceptable:$() 0.20–2.00",
+      "title": "Wild Tobacco"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Shade tobacco can show Good conditions in a forest even at light 13. That is expected: light 13 is still within Shade's acceptable range. Conditions report the farm environment, while maturity is shown separately through Growth and Potential Quality.",
+      "title": "Shade Example"
+    }
+  ]
+}

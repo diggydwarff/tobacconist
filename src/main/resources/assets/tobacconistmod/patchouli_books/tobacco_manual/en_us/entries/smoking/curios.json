@@ -1,0 +1,36 @@
+{
+  "name": "Curios Mouth Slot",
+  "icon": "tobacconistmod:cigarette",
+  "category": "tobacconistmod:smoking",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "$(thing)Curios is optional.$() Tobacconist works without it. If Curios is installed, the mod adds a Mouth slot for smoking items and an Eyes slot for the Spectacles."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Put a cigarette, cigar, or packed pipe in the Curios $(thing)Mouth$() slot and press the Tobacconist keybind $(item)Take a Puff (Mouth Slot)$(). Its default key is $(item)H$(). The server enforces a short 8-tick cooldown against packet/key spam.",
+      "title": "Mouth Smoking"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "A partially smoked item in the Mouth slot can emit occasional ambient smoke. If the H key does nothing, check that Curios is installed, a supported smokable item is actually in the Mouth slot, and the item still has puffs remaining.",
+      "title": "Ambient Smoke"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Without Curios, simply keep using the normal right-click smoking controls. Spectacles also continue to work without Curios by using the vanilla head slot.",
+      "title": "Without Curios"
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "tobacconistmod:getting_started/spectacles",
+        "tobacconistmod:smoking/smoking_basics"
+      ],
+      "title": "Related Chapters"
+    }
+  ],
+  "flag": "mod:curios"
+}

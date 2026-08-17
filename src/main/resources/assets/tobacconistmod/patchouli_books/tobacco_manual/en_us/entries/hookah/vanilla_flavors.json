@@ -1,0 +1,66 @@
+{
+  "name": "Vanilla Molasses Flavors",
+  "icon": "tobacconistmod:bottled_molasses_apple_flavor",
+  "category": "tobacconistmod:hookah",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "These are the built-in vanilla flavored molasses recipes. Each is shapeless and starts with one Bottle of Molasses. The recipe pages below show the exact additional ingredient(s)."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:bottled_molasses_apple_flavor",
+      "recipe2": "tobacconistmod:bottled_molasses_two_apples_flavor",
+      "title": "Apple & Double Apple"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:bottled_molasses_goldenapple_flavor",
+      "recipe2": "tobacconistmod:bottled_molasses_two_goldenapples_flavor",
+      "title": "Golden Apple Flavors"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:bottled_molasses_royalapple_flavor",
+      "recipe2": "tobacconistmod:bottled_molasses_two_royalapples_flavor",
+      "title": "Royal Apple Flavors"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:bottled_molasses_melon_flavor",
+      "recipe2": "tobacconistmod:bottled_molasses_berry_flavor",
+      "title": "Melon & Berry"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:bottled_molasses_glowberry_flavor",
+      "recipe2": "tobacconistmod:bottled_molasses_chorus_fruit_flavor",
+      "title": "Glow Berry & Chorus"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:bottled_molasses_honey_flavor",
+      "recipe2": "tobacconistmod:bottled_molasses_cake_flavor",
+      "title": "Honey & Cake"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:bottled_molasses_cookies_flavor",
+      "recipe2": "tobacconistmod:bottled_molasses_cream_flavor",
+      "title": "Cookies & Cream"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:bottled_molasses_cocoa_flavor",
+      "recipe2": "tobacconistmod:bottled_molasses_pumpkin_flavor",
+      "title": "Cocoa & Pumpkin"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:bottled_molasses_sugar_flavor",
+      "recipe2": "tobacconistmod:bottled_molasses_carrot_flavor",
+      "title": "Sugar & Carrot"
+    }
+  ]
+}

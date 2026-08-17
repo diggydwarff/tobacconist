@@ -59,8 +59,8 @@ public class HookahMenu extends AbstractContainerMenu {
 
                 @Override
                 public boolean mayPickup(Player player) {
-                    // prevent removing burning fuel
-                    return data.get(2) <= 0;
+                    // Burning fuel is consumed into fuelTime; anything left here is spare fuel.
+                    return true;
                 }
 
                 @Override
@@ -145,7 +145,6 @@ public class HookahMenu extends AbstractContainerMenu {
                 return ItemStack.EMPTY;
             }
         } else {
-            System.out.println("Invalid slotIndex:" + index);
             return ItemStack.EMPTY;
         }
         // If stack size == 0 (the entire stack was moved) set slot contents to null

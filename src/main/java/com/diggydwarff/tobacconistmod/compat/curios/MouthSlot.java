@@ -15,5 +15,13 @@ public class MouthSlot {
                         .priority(10)
                         .build()
         );
+        InterModComms.sendTo(
+                CuriosApi.MODID,
+                SlotTypeMessage.REGISTER_TYPE,
+                () -> new SlotTypeMessage.Builder("eyes")
+                        .size(1)
+                        .priority(11)
+                        .build()
+        );
     }
 }

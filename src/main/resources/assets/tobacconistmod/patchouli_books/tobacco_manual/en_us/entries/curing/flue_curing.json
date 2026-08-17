@@ -2,19 +2,40 @@
   "name": "Flue Curing",
   "icon": "tobacconistmod:flue_firebox",
   "category": "tobacconistmod:curing",
-  "sortnum": 2,
+  "sortnum": 4,
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "$(thing)Flue curing$() uses controlled indoor heat instead of direct smoke. Requirements:$(br2)- No direct sky access$(br)- A roof overhead$(br)- Clear air above the rack$(br)- A nearby lit $(item)Flue Firebox$()$(br)- No smoke contamination nearby"
+      "text": "$(thing)Flue curing$() uses controlled heat without putting the rack directly over smoke. It takes $(item)36,000 ticks$(), about $(item)1.5 Minecraft days$()."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:flue_firebox",
+      "title": "Flue Firebox",
+      "text": "A lit Flue Firebox supplies the heat source used by nearby racks."
     },
     {
       "type": "patchouli:text",
-      "text": "Flue curing takes about $(item)1.5 Minecraft days$(). It is faster than air curing and cleaner than fire curing."
+      "text": "A flue rack must:$(br2)- not be rained on$(br)- have no direct sky access$(br)- have 2 air blocks immediately above it$(br)- have a sturdy roof underside 3–5 blocks above$(br)- have no nearby fire/campfire contamination$(br)- have at least 1 lit Flue Firebox nearby",
+      "title": "Rack Requirements"
     },
     {
       "type": "patchouli:text",
-      "text": "A proper flue-curing barn gives good control over the result and keeps leaf out of open weather."
+      "text": "The Firebox must be at the rack's Y level or one block lower, and within horizontal Manhattan distance $(item)3$(). In simple terms, count north/south/east/west steps from rack to firebox; the total must be 3 or less.",
+      "title": "Firebox Range"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Any normal fire, soul fire, campfire, or soul campfire within the 3×3×3 area centered around the rack blocks flue curing. This is intentional: flue curing is meant to be heated without direct smoke contamination.",
+      "title": "No Smoke Contamination"
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "tobacconistmod:curing/curing_quality",
+        "tobacconistmod:barrel/environment"
+      ],
+      "title": "Related Chapters"
     }
   ]
 }

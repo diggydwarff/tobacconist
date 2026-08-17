@@ -1,0 +1,37 @@
+{
+  "name": "Troubleshooting",
+  "icon": "minecraft:writable_book",
+  "category": "tobacconistmod:reference",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "$(thing)Crop will not grow:$() make sure it is planted on farmland and has raw brightness 9 or higher. If it grows but quality is poor, use Spectacles and compare the variety's biome/light/temperature preferences."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(thing)Drying Rack says Processing Paused:$() none of the four curing methods is currently valid. Check rain first, then the requirements of the cure you intended. Sneak-right-click the rack or wear Spectacles to confirm its current method/status.",
+      "title": "Rack Paused"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(thing)Barrel stays Idle:$() fermentation needs Warmth ≥3 plus internal Barrel Humidity ≥25; aging needs Warmth ≤0, environmental Humidity 1–3, no sky, and block light ≤7. Adding tobacco resets current progress.",
+      "title": "Barrel Idle"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(thing)Hookah will not light:$() load valid fuel, Shisha Tobacco, and a Water Potion. If you want to smoke from it, also hold a Hookah Hose. Fuel is not the same as shisha durability; both must remain available.",
+      "title": "Hookah"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(thing)Two tobacco stacks will not merge:$() their hidden quality/cure/cut/aging/label components may differ. Use the averaging recipe for compatible raw/cured/loose tobacco, or keep distinct batches in Tobacco Boxes.",
+      "title": "Stacking"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(thing)Spectacles show nothing:$() equip them in the vanilla head slot, or in Curios Eyes if Curios is installed, then look directly at a tobacco crop, Drying Rack, or Tobacco Barrel with no other GUI open.",
+      "title": "Spectacles"
+    }
+  ]
+}

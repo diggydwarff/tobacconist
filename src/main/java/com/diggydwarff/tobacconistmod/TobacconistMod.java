@@ -15,10 +15,10 @@ import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.BottledMolassesFlavors;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.LooseTobacco;
 import com.diggydwarff.tobacconistmod.recipes.ModRecipes;
+import com.diggydwarff.tobacconistmod.network.TobacconistNetwork;
 import com.diggydwarff.tobacconistmod.screen.HookahScreen;
 import com.diggydwarff.tobacconistmod.screen.ModMenuTypes;
 import com.diggydwarff.tobacconistmod.villager.ModVillagers;
-import com.diggydwarff.tobacconistmod.client.PacketHandler;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
@@ -70,10 +70,11 @@ public class TobacconistMod
         ModPaintings.PAINTING_VARIANTS.register(modEventBus);
         TobacconistCreativeTab.register(modEventBus);
         ModRecipeSerializers.SERIALIZERS.register(modEventBus);
-        PacketHandler.register();
+        TobacconistNetwork.register();
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, TobacconistConfig.CLIENT_SPEC);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, TobacconistConfig.COMMON_SPEC);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, TobacconistConfig.SERVER_SPEC);
 
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -88,7 +89,9 @@ public class TobacconistMod
     public void register(RegisterEvent event) {
         event.register(ForgeRegistries.Keys.ITEMS,
                 helper -> {
-                    for(BottledMolassesFlavors molassesFlavor : BottledMolassesFlavors.values()){
+                    for (BottledMolassesFlavors molassesFlavor : BottledMolassesFlavors.values()) {
+                        // Plain molasses is already registered through ModItems.
+                        if (molassesFlavor == BottledMolassesFlavors.BOTTLED_MOLASSES_PLAIN) continue;
                         helper.register(new ResourceLocation(MODID, molassesFlavor.getName()), molassesFlavor.getItem());
                     }
                 }

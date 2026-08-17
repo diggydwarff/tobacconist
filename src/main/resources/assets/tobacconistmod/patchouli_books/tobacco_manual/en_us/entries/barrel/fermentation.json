@@ -1,0 +1,35 @@
+{
+  "name": "Fermentation",
+  "icon": "tobacconistmod:tobacco_barrel",
+  "category": "tobacconistmod:barrel",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Fermentation requires a barrel $(item)Warmth of at least 3$() and an internal $(item)Barrel Humidity of at least 25$(). The tobacco must not already be fermented or ruined."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Once the barrel enters Fermenting mode, it needs $(item)48,000 ticks$(), about $(item)2 Minecraft days$(), under continuously valid fermentation conditions. If conditions force a mode change, the fermentation progress resets.",
+      "title": "Time"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Successful fermentation marks the tobacco $(thing)Fermented$() and adds $(item)+7 quality$(), with quality allowed to rise as high as 120. Fermentation happens only once per tobacco batch.",
+      "title": "Result"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Barrel Humidity is an internal reservoir that builds over time. Warm, humid surroundings fill it more quickly. The Spectacles show the environmental warmth/humidity; sneak-right-clicking the barrel also reports Barrel Humidity itself.",
+      "title": "Humidity Charge"
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "tobacconistmod:barrel/environment",
+        "tobacconistmod:barrel/aging"
+      ],
+      "title": "Related Chapters"
+    }
+  ]
+}

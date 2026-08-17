@@ -84,13 +84,11 @@ public class CigaretteRecipe extends CustomRecipe {
 
         TobaccoDataHelper.applyTobaccoMetadata(result, tobaccoStack);
 
-        int quality = TobaccoCuringHelper.getQuality(tobaccoStack);
-        tag.putInt("InputTobaccoQuality", quality);
-        tag.putString("InputCutType", TobaccoCuringHelper.getCutType(tobaccoStack));
-        tag.putString("InputCureType", TobaccoCuringHelper.getCureType(tobaccoStack));
-
-        int productQuality = Math.max(1, Math.round(quality / 10.0f));
-        tag.putInt("ProductQuality", productQuality);
+        TobaccoProductQualityHelper.applyProductQualityToTag(
+                tag,
+                tobaccoStack,
+                TobaccoProductQualityHelper.getCigaretteQuality(tobaccoStack)
+        );
 
         return result;
     }

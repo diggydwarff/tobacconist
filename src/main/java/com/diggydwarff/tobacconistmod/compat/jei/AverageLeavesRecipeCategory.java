@@ -1,6 +1,7 @@
 package com.diggydwarff.tobacconistmod.compat.jei;
 
 import com.diggydwarff.tobacconistmod.TobacconistMod;
+import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
@@ -36,7 +37,9 @@ public class AverageLeavesRecipeCategory implements IRecipeCategory<AverageLeave
 
     @Override
     public Component getTitle() {
-        return Component.literal("Average Tobacco Leaves");
+        return Component.literal(TobacconistConfig.isQualitySystemEnabled()
+                ? "Average Tobacco Leaves"
+                : "Combine Tobacco Leaves");
     }
 
     @Override
@@ -74,12 +77,18 @@ public class AverageLeavesRecipeCategory implements IRecipeCategory<AverageLeave
                 Component.literal("Match 2 leaves"),
                 4, 4, 0x404040, false);
 
-        guiGraphics.drawString(mc.font,
-                Component.literal("Average quality"),
-                4, 14, 0x404040, false);
+        if (TobacconistConfig.isQualitySystemEnabled()) {
+            guiGraphics.drawString(mc.font,
+                    Component.literal("Average quality"),
+                    4, 14, 0x404040, false);
 
-        guiGraphics.drawString(mc.font,
-                Component.literal("Ex: 40 + 80 -> 60"),
-                4, 56, 0x808080, false);
+            guiGraphics.drawString(mc.font,
+                    Component.literal("Ex: 40 + 80 -> 60"),
+                    4, 56, 0x808080, false);
+        } else {
+            guiGraphics.drawString(mc.font,
+                    Component.literal("Combine matching leaves"),
+                    4, 14, 0x404040, false);
+        }
     }
 }

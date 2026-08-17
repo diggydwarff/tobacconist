@@ -1,20 +1,29 @@
 {
   "name": "Air Curing",
-  "icon": "tobacconistmod:tobacco_drying_rack",
+  "icon": "tobacconistmod:tobacco_drying_rack_block",
   "category": "tobacconistmod:curing",
-  "sortnum": 0,
+  "sortnum": 1,
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "$(thing)Air curing$() is the slow, steady way to dry leaf. Requirements:$(br2)- No rain$(br)- Enough skylight$(br)- Time"
+      "text": "$(thing)Air curing$() is the slowest and simplest method. The rack must not be getting rained on, and sky light at the block above the rack must be at least $(item)8$()."
     },
     {
       "type": "patchouli:text",
-      "text": "Air curing takes about $(item)3 Minecraft days$(). It can work in open air or under cover, as long as the rack has suitable conditions."
+      "text": "Air curing requires $(item)72,000 ticks$(), or about $(item)3 Minecraft days$() of valid air-curing time. The timer only advances while the requirements remain valid.",
+      "title": "Time"
     },
     {
       "type": "patchouli:text",
-      "text": "Air curing is slower than other methods, but it is stable and reliable. Covered racks are safer than leaving leaf exposed to the sky."
+      "text": "Covered outdoor racks are useful because air curing does not require direct sky access. Just make sure the cover does not reduce sky light below 8. If another curing method becomes valid, the rack can switch methods and the final batch may count as mixed.",
+      "title": "Practical Setup"
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "tobacconistmod:curing/curing_quality"
+      ],
+      "title": "Related Chapters"
     }
   ]
 }
