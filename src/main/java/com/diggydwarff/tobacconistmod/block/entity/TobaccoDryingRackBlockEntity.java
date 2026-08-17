@@ -4,6 +4,7 @@ import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
 
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
 import com.diggydwarff.tobacconistmod.block.custom.TobaccoDryingRackBlock;
+import com.diggydwarff.tobacconistmod.compat.create.CreateCompat;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import net.minecraft.ChatFormatting;
@@ -38,6 +39,12 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
     public static final int FIRE_DRY_TIME = 24000;
     public static final int FLUE_DRY_TIME = 36000;
 
+    // Create fan assistance accelerates the existing rack timers; it never converts leaves by
+    // itself. Plain airflow is a strong air-cure boost, while catalyst-heated air is faster.
+    private static final int CREATE_FAN_AIR_TICK_RATE = 4;
+    private static final int CREATE_FAN_HEATED_TICK_RATE = 6;
+    private static final int CREATE_FAN_ASSIST_REFRESH_TICKS = 10;
+
     private static final int[] SLOTS_FOR_SIDES = new int[]{0};
     private static final int[] SLOTS_FOR_BOTTOM = new int[]{0};
     private static final int[] NO_SLOTS = new int[]{};
@@ -57,6 +64,11 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
     private int sunTicks = 0;
     private int fireTicks = 0;
     private int flueTicks = 0;
+
+    // Runtime-only Create environment cache. There is no need to persist this; the fan resolver
+    // re-evaluates the actual airflow after load and whenever the short cache expires.
+    private int createFanAssistRefresh = 0;
+    private CreateCompat.FanCuringAssist cachedCreateFanAssist = CreateCompat.FanCuringAssist.NONE;
 
     public TobaccoDryingRackBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.TOBACCO_DRYING_RACK.get(), pos, state);
@@ -313,7 +325,10 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         if (!hasLeaves() || isFinished()) return 0;
         int pct = getDryProgressPercent();
         int required = getRequiredDryingTime();
-        return Math.max(0, (int) Math.ceil(required * ((100.0 - pct) / 100.0)));
+        int remainingCureTicks = Math.max(0,
+                (int) Math.ceil(required * ((100.0 - pct) / 100.0)));
+        int tickRate = getCurrentDryingTickRate();
+        return Math.max(0, (int) Math.ceil((double) remainingCureTicks / tickRate));
     }
 
     public int getVisualCureStage() {
@@ -347,6 +362,34 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         return AIR_DRY_TIME;
     }
 
+    private int getCurrentDryingTickRate() {
+        if (level == null) {
+            return 1;
+        }
+
+        boolean directRain = level.isRainingAt(worldPosition.above())
+                && level.canSeeSky(worldPosition.above());
+        if (directRain) {
+            return 1;
+        }
+
+        CreateCompat.FanCuringAssist fanAssist = getCreateFanAssist();
+        if (fanAssist == CreateCompat.FanCuringAssist.FIRE) {
+            return CREATE_FAN_HEATED_TICK_RATE;
+        }
+        if (fanAssist == CreateCompat.FanCuringAssist.FLUE
+                && !isOverLitCampfire(level, worldPosition)) {
+            return CREATE_FAN_HEATED_TICK_RATE;
+        }
+        if (fanAssist == CreateCompat.FanCuringAssist.AIR
+                && !isOverLitCampfire(level, worldPosition)
+                && !canFlueCure(level, worldPosition)
+                && !hasDirectSunlight(level, worldPosition)) {
+            return CREATE_FAN_AIR_TICK_RATE;
+        }
+        return 1;
+    }
+
     public String getRackStatusText() {
         if (!hasLeaves()) {
             return "Empty";
@@ -365,9 +408,14 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             return false;
         }
 
+        CreateCompat.FanCuringAssist fanAssist = getCreateFanAssist();
+        boolean directRain = level.isRainingAt(worldPosition.above()) && level.canSeeSky(worldPosition.above());
+
         return isOverLitCampfire(level, worldPosition)
                 || canFlueCure(level, worldPosition)
-                || canAirDry(level, worldPosition);
+                || hasDirectSunlight(level, worldPosition)
+                || canAirDry(level, worldPosition)
+                || (!directRain && fanAssist != CreateCompat.FanCuringAssist.NONE);
     }
 
     public String getCurrentCureMethod() {
@@ -379,12 +427,21 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             return TobaccoCuringHelper.getCureDisplayName(TobaccoCuringHelper.getCureType(storedLeaf));
         }
 
-        if (isOverLitCampfire(level, worldPosition)) {
-            return "Fire-curing (campfire heat)";
+        boolean directRain = level.isRainingAt(worldPosition.above()) && level.canSeeSky(worldPosition.above());
+        CreateCompat.FanCuringAssist fanAssist = directRain
+                ? CreateCompat.FanCuringAssist.NONE
+                : getCreateFanAssist();
+
+        if (isOverLitCampfire(level, worldPosition) || fanAssist == CreateCompat.FanCuringAssist.FIRE) {
+            return fanAssist == CreateCompat.FanCuringAssist.FIRE
+                    ? "Fire-curing (Create smoke airflow)"
+                    : "Fire-curing (campfire heat)";
         }
 
-        if (canFlueCure(level, worldPosition)) {
-            return "Flue-curing (indirect barn heat)";
+        if (canFlueCure(level, worldPosition) || fanAssist == CreateCompat.FanCuringAssist.FLUE) {
+            return fanAssist == CreateCompat.FanCuringAssist.FLUE
+                    ? "Flue-curing (Create heated airflow)"
+                    : "Flue-curing (indirect barn heat)";
         }
 
         if (hasDirectSunlight(level, worldPosition)) {
@@ -393,14 +450,17 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
                     : "Sun-curing (direct sunlight)";
         }
 
-        if (canAirDry(level, worldPosition)) {
+        if (canAirDry(level, worldPosition) || fanAssist == CreateCompat.FanCuringAssist.AIR) {
+            if (fanAssist == CreateCompat.FanCuringAssist.AIR) {
+                return "Air-curing (Create fan-assisted)";
+            }
             if (!level.canSeeSky(worldPosition.above())) {
                 return "Air-curing (under cover)";
             }
             return "Air-curing (open air)";
         }
 
-        if (level.isRainingAt(worldPosition.above())) {
+        if (directRain) {
             return "Paused (rain exposure)";
         }
 
@@ -452,6 +512,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         sunTicks = 0;
         fireTicks = 0;
         flueTicks = 0;
+        createFanAssistRefresh = 0;
+        cachedCreateFanAssist = CreateCompat.FanCuringAssist.NONE;
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, TobaccoDryingRackBlockEntity rack) {
@@ -494,23 +556,40 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             rack.directRainExposureTicks = Math.max(0, rack.directRainExposureTicks - 5);
         }
 
-        boolean validDryingThisTick = false;
+        CreateCompat.FanCuringAssist fanAssist = directRain
+                ? CreateCompat.FanCuringAssist.NONE
+                : rack.getCreateFanAssist();
 
-        if (overCampfire) {
+        boolean validDryingThisTick = false;
+        int progressTicks = 0;
+
+        // Keep Tobacconist's cure-method precedence. Create airflow supplies/accelerates the
+        // matching environment, but sunlight remains its own unaccelerated curing path.
+        if (overCampfire || fanAssist == CreateCompat.FanCuringAssist.FIRE) {
             validDryingThisTick = true;
             rack.usedFireDrying = true;
-            rack.fireTicks++;
-        } else if (flueCure) {
+            progressTicks = fanAssist == CreateCompat.FanCuringAssist.FIRE
+                    ? CREATE_FAN_HEATED_TICK_RATE
+                    : 1;
+            rack.fireTicks += progressTicks;
+        } else if (flueCure || fanAssist == CreateCompat.FanCuringAssist.FLUE) {
             validDryingThisTick = true;
             rack.usedFlueDrying = true;
-            rack.flueTicks++;
+            progressTicks = fanAssist == CreateCompat.FanCuringAssist.FLUE
+                    ? CREATE_FAN_HEATED_TICK_RATE
+                    : 1;
+            rack.flueTicks += progressTicks;
         } else if (inSun) {
             validDryingThisTick = true;
+            progressTicks = 1;
             rack.sunTicks++;
             rack.sunExposureTicks++;
-        } else if (airDry) {
+        } else if (airDry || fanAssist == CreateCompat.FanCuringAssist.AIR) {
             validDryingThisTick = true;
-            rack.airTicks++;
+            progressTicks = fanAssist == CreateCompat.FanCuringAssist.AIR
+                    ? CREATE_FAN_AIR_TICK_RATE
+                    : 1;
+            rack.airTicks += progressTicks;
         }
 
         if (rack.lastTickHadValidDrying && !validDryingThisTick) {
@@ -524,7 +603,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             return;
         }
 
-        rack.dryingProgress++;
+        rack.dryingProgress += progressTicks;
 
         int requiredSunTime = isGlassSunCure(level, pos) ? GLASS_SUN_DRY_TIME : SUN_DRY_TIME;
 
@@ -556,17 +635,22 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         boolean flueCure = canFlueCure(level, worldPosition);
         boolean inSun = hasDirectSunlight(level, worldPosition);
         boolean airDry = canAirDry(level, worldPosition);
+        boolean directRain = level.isRainingAt(worldPosition.above())
+                && level.canSeeSky(worldPosition.above());
+        CreateCompat.FanCuringAssist fanAssist = directRain
+                ? CreateCompat.FanCuringAssist.NONE
+                : getCreateFanAssist();
 
-        if (overCampfire) {
+        if (overCampfire || fanAssist == CreateCompat.FanCuringAssist.FIRE) {
             usedFireDrying = true;
             fireTicks += ticks;
-        } else if (flueCure) {
+        } else if (flueCure || fanAssist == CreateCompat.FanCuringAssist.FLUE) {
             usedFlueDrying = true;
             flueTicks += ticks;
         } else if (inSun) {
             sunTicks += ticks;
             sunExposureTicks += ticks;
-        } else if (airDry) {
+        } else if (airDry || fanAssist == CreateCompat.FanCuringAssist.AIR) {
             airTicks += ticks;
         }
 
@@ -590,10 +674,16 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             return;
         }
 
-        if (isOverLitCampfire(level, worldPosition)) {
+        boolean directRain = level.isRainingAt(worldPosition.above())
+                && level.canSeeSky(worldPosition.above());
+        CreateCompat.FanCuringAssist fanAssist = directRain
+                ? CreateCompat.FanCuringAssist.NONE
+                : getCreateFanAssist();
+
+        if (isOverLitCampfire(level, worldPosition) || fanAssist == CreateCompat.FanCuringAssist.FIRE) {
             usedFireDrying = true;
             fireTicks = FIRE_DRY_TIME;
-        } else if (canFlueCure(level, worldPosition)) {
+        } else if (canFlueCure(level, worldPosition) || fanAssist == CreateCompat.FanCuringAssist.FLUE) {
             usedFlueDrying = true;
             flueTicks = FLUE_DRY_TIME;
         } else if (hasDirectSunlight(level, worldPosition)) {
@@ -717,6 +807,19 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
 
     public boolean isBatchLocked() {
         return !storedLeaf.isEmpty() && !isFinished() && getDryProgressPercent() >= 10;
+    }
+
+    private CreateCompat.FanCuringAssist getCreateFanAssist() {
+        if (level == null) {
+            return CreateCompat.FanCuringAssist.NONE;
+        }
+
+        if (createFanAssistRefresh-- <= 0) {
+            cachedCreateFanAssist = CreateCompat.getFanCuringAssist(level, worldPosition);
+            createFanAssistRefresh = CREATE_FAN_ASSIST_REFRESH_TICKS;
+        }
+
+        return cachedCreateFanAssist;
     }
 
     private static boolean isOverLitCampfire(Level level, BlockPos pos) {

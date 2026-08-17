@@ -1,8 +1,13 @@
 package com.diggydwarff.tobacconistmod.compat.create;
 
 import com.diggydwarff.tobacconistmod.TobacconistMod;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModList;
+
+import java.util.Objects;
+import java.util.function.BiFunction;
 
 /**
  * Loader-safe entry point for all Create integration.
@@ -20,6 +25,11 @@ public final class CreateCompat {
             "com.diggydwarff.tobacconistmod.compat.create.CreatePressCompat";
     private static final String MIXER_COMPAT_CLASS =
             "com.diggydwarff.tobacconistmod.compat.create.CreateMixerCompat";
+    private static final String FAN_CURING_COMPAT_CLASS =
+            "com.diggydwarff.tobacconistmod.compat.create.CreateFanCuringCompat";
+
+    private static BiFunction<Level, BlockPos, FanCuringAssist> fanCuringResolver =
+            (level, pos) -> FanCuringAssist.NONE;
 
     private CreateCompat() {}
 
@@ -36,7 +46,41 @@ public final class CreateCompat {
         registerCreateIntegration(DEPLOYER_COMPAT_CLASS);
         registerCreateIntegration(PRESS_COMPAT_CLASS, modEventBus);
         registerCreateIntegration(MIXER_COMPAT_CLASS, modEventBus);
+        registerCreateIntegration(FAN_CURING_COMPAT_CLASS);
         TobacconistMod.LOGGER.info("Create detected; Tobacconist Create compatibility enabled.");
+    }
+
+    /**
+     * Loader-safe description of Create airflow reaching a Tobacconist Drying Rack.
+     * No Create classes appear in this API, so common Tobacconist code can call it safely when
+     * Create is absent.
+     */
+    public enum FanCuringAssist {
+        NONE(0),
+        AIR(1),
+        FLUE(2),
+        FIRE(3);
+
+        private final int priority;
+
+        FanCuringAssist(int priority) {
+            this.priority = priority;
+        }
+
+        public int priority() {
+            return priority;
+        }
+    }
+
+    public static FanCuringAssist getFanCuringAssist(Level level, BlockPos pos) {
+        if (level == null || pos == null) {
+            return FanCuringAssist.NONE;
+        }
+        return fanCuringResolver.apply(level, pos);
+    }
+
+    static void installFanCuringResolver(BiFunction<Level, BlockPos, FanCuringAssist> resolver) {
+        fanCuringResolver = Objects.requireNonNull(resolver);
     }
 
     private static void registerCreateIntegration(String className, IEventBus modEventBus) {
