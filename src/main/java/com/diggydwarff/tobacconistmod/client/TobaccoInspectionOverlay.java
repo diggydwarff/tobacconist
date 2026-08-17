@@ -5,7 +5,7 @@ import com.diggydwarff.tobacconistmod.block.entity.BarrelEnvironmentHelper;
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelBlockEntity;
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelMode;
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoDryingRackBlockEntity;
-import com.diggydwarff.tobacconistmod.compat.curios.CuriosSpectaclesHelper;
+import com.diggydwarff.tobacconistmod.compat.SpectaclesEquipmentHelper;
 import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
 import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
@@ -22,7 +22,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.neoforged.fml.ModList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,8 +42,7 @@ public final class TobaccoInspectionOverlay {
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.player == null || minecraft.level == null) return;
         if (minecraft.screen != null) return;
-        if (!ModList.get().isLoaded("curios")) return;
-        if (!CuriosSpectaclesHelper.isWearing(minecraft.player)) return;
+        if (!SpectaclesEquipmentHelper.isWearing(minecraft.player)) return;
 
         HitResult hit = minecraft.hitResult;
         if (!(hit instanceof BlockHitResult blockHit) || hit.getType() != HitResult.Type.BLOCK) return;
