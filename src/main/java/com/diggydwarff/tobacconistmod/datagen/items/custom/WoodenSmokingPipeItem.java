@@ -67,6 +67,25 @@ public class WoodenSmokingPipeItem extends SmokingItem {
     }
 
     @Override
+    public boolean smokeFromMouthSlot(Player player, ServerLevel level, ItemStack stack) {
+        CompoundTag tag = LegacyItemTags.getTag(stack);
+        int puffs = tag == null ? 0 : tag.getInt(NBT_PUFFS);
+        if (puffs <= 0) return false;
+
+        this.triggerSmokingEffectPlayer(player, level, 0, stack);
+
+        puffs--;
+        CompoundTag mutableTag = LegacyItemTags.getOrCreateTag(stack);
+        if (puffs <= 0) {
+            mutableTag.remove(NBT_PUFFS);
+            mutableTag.remove(NBT_TOBACCO);
+        } else {
+            mutableTag.putInt(NBT_PUFFS, puffs);
+        }
+        return true;
+    }
+
+    @Override
     public boolean shouldEmitMouthSmoke(ItemStack stack) {
         CompoundTag tag = LegacyItemTags.getTag(stack);
         if (tag == null || !tag.contains("PuffsLeft")) {

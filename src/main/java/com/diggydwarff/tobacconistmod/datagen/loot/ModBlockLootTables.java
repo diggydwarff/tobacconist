@@ -29,6 +29,18 @@ public class ModBlockLootTables extends BlockLootSubProvider {
     @Override
     protected void generate() {
 
+        // Utility/placeable blocks should drop themselves. Their block entities
+        // handle dropping any stored contents separately.
+        this.dropSelf(ModBlocks.HOOKAH.get());
+        this.dropSelf(ModBlocks.ORNATE_COPPER_HOOKAH.get());
+        this.dropSelf(ModBlocks.ORNATE_GOLD_HOOKAH.get());
+        this.dropSelf(ModBlocks.ORNATE_DIAMOND_HOOKAH.get());
+        this.dropSelf(ModBlocks.ORNATE_IRON_HOOKAH.get());
+        this.dropSelf(ModBlocks.ORNATE_AMETHYST_HOOKAH.get());
+        this.dropSelf(ModBlocks.TOBACCO_DRYING_RACK.get());
+        this.dropSelf(ModBlocks.TOBACCO_BARREL.get());
+        this.dropSelf(ModBlocks.FLUE_FIREBOX.get());
+
         this.add(ModBlocks.SHADE_TOBACCO_CRATE.get(), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
                 .add(LootItem.lootTableItem(ModItems.TOBACCO_LOOSE_SHADE.get()).apply(SetItemCountFunction.setCount(ConstantValue.exactly(9.0f))))));
         this.add(ModBlocks.DOKHA_TOBACCO_CRATE.get(), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))

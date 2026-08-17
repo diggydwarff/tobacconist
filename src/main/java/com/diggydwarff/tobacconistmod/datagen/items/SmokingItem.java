@@ -37,6 +37,17 @@ public abstract class SmokingItem extends Item {
                 && stack.getDamageValue() < stack.getMaxDamage();
     }
 
+    /**
+     * Server-side action used when the player explicitly smokes this item while it is
+     * equipped in the Curios mouth slot. Subclasses override this when they need to
+     * consume durability/puffs.
+     */
+    public boolean smokeFromMouthSlot(Player player, ServerLevel level, ItemStack stack) {
+        if (stack.isEmpty()) return false;
+        triggerSmokingEffectPlayer(player, level, 0, stack);
+        return true;
+    }
+
     public void triggerSmokingEffectPlayer(Player player, ServerLevel level, int smokelevel, ItemStack tobaccoStack) {
         Vec3 look = player.getLookAngle();
 

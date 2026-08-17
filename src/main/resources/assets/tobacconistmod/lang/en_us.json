@@ -1,10 +1,7 @@
 {
   "creativetab.tobacconistmod": "Tobacconist Mod",
-
   "curios.identifier.mouth": "Mouth",
-
   "item.tobacconistmod.tobacco_guide": "Tobacconist's Guide",
-
   "item.tobacconistmod.wooden_smoking_pipe": "Wooden Smoking Pipe",
   "item.tobacconistmod.gold_smoking_pipe": "Gold Smoking Pipe",
   "item.tobacconistmod.copper_smoking_pipe": "Copper Smoking Pipe",
@@ -16,12 +13,10 @@
   "item.tobacconistmod.emerald_aztec_smoking_pipe": "Emerald-Aztec Smoking Pipe",
   "item.tobacconistmod.netherite_smoking_pipe": "Netherite Smoking Pipe",
   "item.tobacconistmod.kiseru_smoking_pipe": "Kiseru Smoking Pipe",
-
   "item.tobacconistmod.rolling_paper": "Rolling Paper",
   "item.tobacconistmod.bamboo_charcoal": "Bamboo Charcoal",
   "item.tobacconistmod.cigar": "Cigar",
   "item.tobacconistmod.cigarette": "Cigarette",
-
   "item.tobacconistmod.bottled_molasses_plain": "Bottle of Molasses",
   "item.tobacconistmod.bottled_molasses_apple_flavor": "Bottle of Molasses (Apple Flavored)",
   "item.tobacconistmod.bottled_molasses_two_apples_flavor": "Bottle of Molasses (Double Apple Flavored)",
@@ -41,7 +36,6 @@
   "item.tobacconistmod.bottled_molasses_pumpkin_flavor": "Bottle of Molasses (Pumpkin Flavored)",
   "item.tobacconistmod.bottled_molasses_sugar_flavor": "Bottle of Molasses (Sugar Flavored)",
   "item.tobacconistmod.bottled_molasses_carrot_flavor": "Bottle of Molasses (Carrot Flavored)",
-
   "item.tobacconistmod.bottled_molasses_lemon_flavor": "Bottle of Molasses (Lemon Flavored)",
   "item.tobacconistmod.bottled_molasses_orange_flavor": "Bottle of Molasses (Orange Flavored)",
   "item.tobacconistmod.bottled_molasses_peach_flavor": "Bottle of Molasses (Peach Flavored)",
@@ -59,7 +53,6 @@
   "item.tobacconistmod.bottled_molasses_fig_flavor": "Bottle of Molasses (Fig Flavored)",
   "item.tobacconistmod.bottled_molasses_kiwi_flavor": "Bottle of Molasses (Kiwi Flavored)",
   "item.tobacconistmod.bottled_molasses_durian_flavor": "Bottle of Molasses (Durian Flavored)",
-
   "item.tobacconistmod.bottled_molasses_applepie_flavor": "Bottle of Molasses (Apple Pie Flavored)",
   "item.tobacconistmod.bottled_molasses_sweetberry_cheesecake_flavor": "Bottle of Molasses (Sweet Berry Cheesecake Flavored)",
   "item.tobacconistmod.bottled_molasses_chocolatepie_flavor": "Bottle of Molasses (Chocolate Pie Flavored)",
@@ -68,132 +61,100 @@
   "item.tobacconistmod.bottled_molasses_melonpopsicle_flavor": "Bottle of Molasses (Melon Ice Flavored)",
   "item.tobacconistmod.bottled_molasses_glowberry_custard_flavor": "Bottle of Molasses (Glowberry Custard Flavored)",
   "item.tobacconistmod.bottled_molasses_sweetberry_flavor": "Bottle of Molasses (Sweetberry Flavored)",
-
   "item.tobacconistmod.tobacco_box": "Tobacco Box",
   "item.tobacconistmod.tobacco_label": "Label",
-
   "item.tobacconistmod.shisha_tobacco": "Shisha Tobacco",
-  "item.tobacconistmod.rolling_paper": "Rolling Paper",
-
   "item.tobacconistmod.hookah_hose": "Hookah Hose",
   "item.tobacconistmod.upgraded_hookah_hose": "Upgraded Hookah Hose",
   "item.tobacconistmod.deluxe_hookah_hose": "Deluxe Hookah Hose",
-
   "item.tobacconistmod.tobacco_leaf_wild": "Wild Tobacco Leaf",
   "item.tobacconistmod.tobacco_leaf_virginia": "Virginia Tobacco Leaf",
   "item.tobacconistmod.tobacco_leaf_burley": "Burley Tobacco Leaf",
   "item.tobacconistmod.tobacco_leaf_oriental": "Oriental Tobacco Leaf",
   "item.tobacconistmod.tobacco_leaf_dokha": "Dokha Tobacco Leaf",
   "item.tobacconistmod.tobacco_leaf_shade": "Shade Tobacco Leaf",
-
   "item.tobacconistmod.tobacco_loose_wild": "Loose Wild Tobacco",
   "item.tobacconistmod.tobacco_loose_virginia": "Loose Virginia Tobacco",
   "item.tobacconistmod.tobacco_loose_burley": "Loose Burley Tobacco",
   "item.tobacconistmod.tobacco_loose_oriental": "Loose Oriental Tobacco",
   "item.tobacconistmod.tobacco_loose_dokha": "Loose Dokha Tobacco",
   "item.tobacconistmod.tobacco_loose_shade": "Loose Shade Tobacco",
-
   "item.tobacconistmod.spoiled_tobacco": "Spoiled Tobacco",
-
   "item.tobacconistmod.tobacco_leaf_wild_dry": "Wild Tobacco Leaf",
   "item.tobacconistmod.tobacco_leaf_virginia_dry": "Virginia Tobacco Leaf",
   "item.tobacconistmod.tobacco_leaf_burley_dry": "Burley Tobacco Leaf",
   "item.tobacconistmod.tobacco_leaf_oriental_dry": "Oriental Tobacco Leaf",
   "item.tobacconistmod.tobacco_leaf_dokha_dry": "Dokha Tobacco Leaf",
   "item.tobacconistmod.tobacco_leaf_shade_dry": "Shade Tobacco Leaf",
-
   "block.tobacconistmod.wild_flowering_tobacco_block": "Wild Flowering Tobacco",
-
   "item.tobacconistmod.wild_tobacco_seeds": "Wild Tobacco Seeds",
   "item.tobacconistmod.virginia_tobacco_seeds": "Virginia Tobacco Seeds",
   "item.tobacconistmod.burley_tobacco_seeds": "Burley Tobacco Seeds",
   "item.tobacconistmod.oriental_tobacco_seeds": "Oriental Tobacco Seeds",
   "item.tobacconistmod.dokha_tobacco_seeds": "Dokha Tobacco Seeds",
   "item.tobacconistmod.shade_tobacco_seeds": "Shade Tobacco Seeds",
-
   "block.tobacconistmod.tobacco_crop_wild": "Wild Tobacco Crop",
   "block.tobacconistmod.tobacco_crop_virginia": "Virginia Tobacco Crop",
   "block.tobacconistmod.tobacco_crop_burley": "Burley Tobacco Crop",
   "block.tobacconistmod.tobacco_crop_oriental": "Oriental Tobacco Crop",
   "block.tobacconistmod.tobacco_crop_dokha": "Dokha Tobacco Crop",
   "block.tobacconistmod.tobacco_crop_shade": "Shade Tobacco Crop",
-
   "block.tobacconistmod.wild_tobacco_crate": "Wild Tobacco Crate",
   "block.tobacconistmod.virginia_tobacco_crate": "Virginia Tobacco Crate",
   "block.tobacconistmod.burley_tobacco_crate": "Burley Tobacco Crate",
   "block.tobacconistmod.oriental_tobacco_crate": "Oriental Tobacco Crate",
   "block.tobacconistmod.dokha_tobacco_crate": "Dokha Tobacco Crate",
   "block.tobacconistmod.shade_tobacco_crate": "Shade Tobacco Crate",
-
   "block.tobacconistmod.tobacco_drying_rack_block": "Tobacco Drying Rack",
-
   "item.tobacconistmod.stone_chaveta": "Stone Chaveta",
   "item.tobacconistmod.copper_chaveta": "Copper Chaveta",
   "item.tobacconistmod.iron_chaveta": "Iron Chaveta",
   "item.tobacconistmod.gold_chaveta": "Gold Chaveta",
   "item.tobacconistmod.diamond_chaveta": "Diamond Chaveta",
   "item.tobacconistmod.netherite_chaveta": "Netherite Chaveta",
-
   "block.tobacconistmod.hookah_block": "Hookah",
   "block.tobacconistmod.ornate_copper_hookah_block": "Ornate Copper Hookah",
   "block.tobacconistmod.ornate_iron_hookah_block": "Ornate Iron Hookah",
   "block.tobacconistmod.ornate_gold_hookah_block": "Ornate Gold Hookah",
   "block.tobacconistmod.ornate_diamond_hookah_block": "Ornate Diamond Hookah",
   "block.tobacconistmod.ornate_amethyst_hookah_block": "Ornate Amethyst Hookah",
-
   "entity.minecraft.villager.tobacconist_master": "Tobacconsit Master",
   "entity.minecraft.villager.tobacconistmod.tobacconist_master": "Tobacconist Master",
-
   "effect.tobacconistmod.nicotine": "Nicotine",
-
   "painting.tobacconistmod.american_tobacco_fields_small.title": "American Tobacco Fields (Small)",
   "painting.tobacconistmod.american_tobacco_fields_small.author": "Diggydwarff",
-
   "painting.tobacconistmod.camel_american_cigarette.title": "Camel Cigarette",
   "painting.tobacconistmod.camel_american_cigarette.author": "Diggydwarff",
-
   "painting.tobacconistmod.american_lone_cowboy.title": "Lone Cowboy",
   "painting.tobacconistmod.american_lone_cowboy.author": "Diggydwarff",
-
   "painting.tobacconistmod.american_cigarette.title": "Classic Tobacco",
   "painting.tobacconistmod.american_cigarette.author": "Diggydwarff",
-
   "painting.tobacconistmod.ottoman_hookah.title": "Ottoman Hookah",
   "painting.tobacconistmod.ottoman_hookah.author": "Diggydwarff",
-
   "painting.tobacconistmod.american_cowboy_pair_wide.title": "Cowboy Pair (Wide)",
   "painting.tobacconistmod.american_cowboy_pair_wide.author": "Diggydwarff",
-
   "painting.tobacconistmod.peace_pipe.title": "Peace Pipe",
   "painting.tobacconistmod.peace_pipe.author": "Diggydwarff",
-
   "painting.tobacconistmod.japanese_kiseru_wide.title": "Japenese Kiseru (Wide)",
   "painting.tobacconistmod.japanese_kiseru_wide.author": "Diggydwarff",
-
   "painting.tobacconistmod.american_tobacco_fields_wide.title": "American Tobacco Fields (Wide)",
   "painting.tobacconistmod.american_tobacco_fields_wide.author": "Diggydwarff",
-
   "painting.tobacconistmod.american_tobacco_fields.title": "American Tobacco Fields",
   "painting.tobacconistmod.american_tobacco_fields.author": "Diggydwarff",
-
   "painting.tobacconistmod.japanese_kiseru.title": "Japenese Kiseru",
   "painting.tobacconistmod.japanese_kiseru.author": "Diggydwarff",
-
   "painting.tobacconistmod.arabian_nights.title": "Arabian Nights",
   "painting.tobacconistmod.arabian_nights.author": "Diggydwarff",
-
   "painting.tobacconistmod.american_cowboy_pair.title": "Cowboy Pair",
   "painting.tobacconistmod.american_cowboy_pair.author": "Diggydwarff",
-
   "painting.tobacconistmod.havana_cigar.title": "Havan Cigar",
   "painting.tobacconistmod.havana_cigar.author": "Diggydwarff",
-
   "painting.tobacconistmod.andean_mapacho.title": "Andean Mapacho",
   "painting.tobacconistmod.andean_mapacho.author": "Diggydwarff",
-
   "block.tobacconistmod.flue_firebox": "Flue Firebox",
   "block.tobacconistmod.tobacco_barrel": "Tobacco Barrel",
-
   "tag.item.tobacconistmod.mouth_curios": "Tobacconist Mouth Wearables",
-  "tag.item.curios.mouth": "Mouth Curios"
+  "tag.item.curios.mouth": "Mouth Curios",
+  "key.categories.tobacconistmod": "Tobacconist",
+  "key.tobacconistmod.smoke_mouth_item": "Smoke Mouth Item"
 }

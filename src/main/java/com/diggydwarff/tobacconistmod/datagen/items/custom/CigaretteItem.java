@@ -50,6 +50,23 @@ public class CigaretteItem extends SmokingItem {
     }
 
     @Override
+    public boolean smokeFromMouthSlot(Player player, ServerLevel level, ItemStack stack) {
+        if (stack.isEmpty() || !stack.isDamageableItem() || stack.getDamageValue() >= stack.getMaxDamage()) {
+            return false;
+        }
+
+        this.triggerSmokingEffectPlayer(player, level, 0, stack);
+
+        int nextDamage = stack.getDamageValue() + 1;
+        if (nextDamage >= stack.getMaxDamage()) {
+            stack.shrink(1);
+        } else {
+            stack.setDamageValue(nextDamage);
+        }
+        return true;
+    }
+
+    @Override
     public boolean shouldEmitMouthSmoke(ItemStack stack) {
         return stack.getDamageValue() > 0 && stack.getDamageValue() < stack.getMaxDamage();
     }
