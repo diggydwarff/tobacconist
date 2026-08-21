@@ -1,25 +1,27 @@
 package com.diggydwarff.tobacconistmod.recipes;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoGrowthHelper;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 
 public class AverageTobaccoLeavesRecipe extends CustomRecipe {
 
-    public AverageTobaccoLeavesRecipe(ResourceLocation id, CraftingBookCategory category) {
-        super(id, category);
+    public AverageTobaccoLeavesRecipe(CraftingBookCategory category) {
+        super(category);
     }
 
     @Override
-    public boolean matches(CraftingContainer container, Level level) {
+    public boolean matches(CraftingInput container, Level level) {
         ItemStack first = ItemStack.EMPTY;
         boolean foundAny = false;
         int nonEmptyStacks = 0;
@@ -28,7 +30,7 @@ public class AverageTobaccoLeavesRecipe extends CustomRecipe {
         String cureType = "";
         String cutType = "";
 
-        for (int i = 0; i < container.getContainerSize(); i++) {
+        for (int i = 0; i < container.size(); i++) {
             ItemStack stack = container.getItem(i);
             if (stack.isEmpty()) continue;
 
@@ -82,12 +84,12 @@ public class AverageTobaccoLeavesRecipe extends CustomRecipe {
     }
 
     @Override
-    public NonNullList<ItemStack> getRemainingItems(CraftingContainer container) {
-        return NonNullList.withSize(container.getContainerSize(), ItemStack.EMPTY);
+    public NonNullList<ItemStack> getRemainingItems(CraftingInput container) {
+        return NonNullList.withSize(container.size(), ItemStack.EMPTY);
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer container, RegistryAccess registryAccess) {
+    public ItemStack assemble(CraftingInput container, HolderLookup.Provider registries) {
         ItemStack first = ItemStack.EMPTY;
         Mode mode = null;
         String cureType = "";
@@ -96,7 +98,7 @@ public class AverageTobaccoLeavesRecipe extends CustomRecipe {
         int usedItems = 0;
         int totalQuality = 0;
 
-        for (int i = 0; i < container.getContainerSize(); i++) {
+        for (int i = 0; i < container.size(); i++) {
             ItemStack stack = container.getItem(i);
             if (stack.isEmpty()) continue;
 
@@ -130,21 +132,21 @@ public class AverageTobaccoLeavesRecipe extends CustomRecipe {
             TobaccoGrowthHelper.applyGrowthQuality(result, avgQuality);
         } else {
             TobaccoCuringHelper.copyTobaccoProcessingData(first, result);
-            result.getOrCreateTag().putInt(
+            LegacyItemTags.getOrCreateTag(result).putInt(
                     TobaccoCuringHelper.TAG_QUALITY,
                     TobaccoCuringHelper.clampQuality(avgQuality)
             );
-            result.getOrCreateTag().putString(
+            LegacyItemTags.getOrCreateTag(result).putString(
                     TobaccoCuringHelper.TAG_QUALITY_TIER,
                     TobaccoCuringHelper.getQualityTierId(avgQuality)
             );
-            result.getOrCreateTag().putString(
+            LegacyItemTags.getOrCreateTag(result).putString(
                     TobaccoCuringHelper.TAG_CURE_TYPE,
                     cureType
             );
 
             if (mode == Mode.LOOSE) {
-                result.getOrCreateTag().putString(
+                LegacyItemTags.getOrCreateTag(result).putString(
                         TobaccoCuringHelper.TAG_CUT_TYPE,
                         cutType
                 );
@@ -166,8 +168,8 @@ public class AverageTobaccoLeavesRecipe extends CustomRecipe {
 
     private static int getStackQuality(ItemStack stack, Mode mode) {
         if (mode == Mode.RAW_LEAF) {
-            if (stack.hasTag() && stack.getTag().contains(TobaccoCuringHelper.TAG_GROWTH_QUALITY)) {
-                return TobaccoCuringHelper.clampQuality(stack.getTag().getInt(TobaccoCuringHelper.TAG_GROWTH_QUALITY));
+            if (LegacyItemTags.hasTag(stack) && LegacyItemTags.getTag(stack).contains(TobaccoCuringHelper.TAG_GROWTH_QUALITY)) {
+                return TobaccoCuringHelper.clampQuality(LegacyItemTags.getTag(stack).getInt(TobaccoCuringHelper.TAG_GROWTH_QUALITY));
             }
             return 50;
         }

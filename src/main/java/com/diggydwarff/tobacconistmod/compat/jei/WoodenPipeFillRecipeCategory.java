@@ -1,5 +1,7 @@
 package com.diggydwarff.tobacconistmod.compat.jei;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import com.diggydwarff.tobacconistmod.TobacconistMod;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.recipes.WoodenPipeRecipe;
@@ -20,7 +22,7 @@ import net.minecraft.world.item.ItemStack;
 public class WoodenPipeFillRecipeCategory implements IRecipeCategory<WoodenPipeFillJeiRecipe> {
 
     public static final RecipeType<WoodenPipeFillJeiRecipe> TYPE =
-            new RecipeType<>(new ResourceLocation(TobacconistMod.MODID, "wooden_pipe_fill"), WoodenPipeFillJeiRecipe.class);
+            new RecipeType<>(ResourceLocation.fromNamespaceAndPath(TobacconistMod.MODID, "wooden_pipe_fill"), WoodenPipeFillJeiRecipe.class);
 
     private final IDrawable background;
     private final IDrawable icon;
@@ -85,7 +87,7 @@ public class WoodenPipeFillRecipeCategory implements IRecipeCategory<WoodenPipeF
     private static ItemStack makeWoodPipe(String plankId) {
         ItemStack pipe = new ItemStack(ModItems.WOODEN_SMOKING_PIPE.get());
 
-        pipe.getOrCreateTag().putString(
+        LegacyItemTags.getOrCreateTag(pipe).putString(
                 WoodenPipeRecipe.NBT_WOOD_PLANK,
                 plankId
         );

@@ -1,6 +1,7 @@
 package com.diggydwarff.tobacconistmod.util;
 
-import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 
@@ -45,7 +46,6 @@ public class TobaccoTooltipHelper {
     }
 
     public static String getQualityWord(int quality100) {
-        if (!TobacconistConfig.isQualitySystemEnabled()) return "";
         if (quality100 >= 90) return "Premium";
         if (quality100 >= 75) return "Fine";
         if (quality100 >= 50) return "Standard";
@@ -54,18 +54,13 @@ public class TobaccoTooltipHelper {
     }
 
     public static String cleanTobaccoName(String name) {
-        String cleaned = name.replace(" Loose Tobacco", "")
+        return name.replace(" Loose Tobacco", "")
                 .replace(" Tobacco Leaf Wrapper", "")
                 .replace(" Tobacco Leaf", "")
                 .replace(" Tobacco", "")
                 .replace("[", "")
                 .replace("]", "")
                 .trim();
-
-        if (!TobacconistConfig.isQualitySystemEnabled()) {
-            cleaned = cleaned.replaceFirst("^(Premium|Fine|Standard|Harsh|Poor|Low-Grade)\\s+", "").trim();
-        }
-        return cleaned;
     }
 
     public static boolean isFermented(CompoundTag tag) {
@@ -97,7 +92,7 @@ public class TobaccoTooltipHelper {
     }
 
     public static CompoundTag getPackedTobaccoData(ItemStack stack) {
-        CompoundTag tag = stack.getTag();
+        CompoundTag tag = LegacyItemTags.getTag(stack);
         if (tag == null || !tag.contains("PackedTobaccoData")) {
             return null;
         }
@@ -108,7 +103,7 @@ public class TobaccoTooltipHelper {
         CompoundTag packed = getPackedTobaccoData(stack);
         if (packed == null) return "";
 
-        String name = stack.getTag() != null ? stack.getTag().getString("tobacco") : "";
+        String name = LegacyItemTags.getTag(stack) != null ? LegacyItemTags.getTag(stack).getString("tobacco") : "";
         if (name.isEmpty()) return "";
 
         String qualityWord = getQualityWord(

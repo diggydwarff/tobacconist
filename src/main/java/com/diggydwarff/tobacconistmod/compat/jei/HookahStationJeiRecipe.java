@@ -1,5 +1,7 @@
 package com.diggydwarff.tobacconistmod.compat.jei;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import net.minecraft.world.item.ItemStack;
@@ -50,7 +52,7 @@ public record HookahStationJeiRecipe(
 
     private static ItemStack makeLoaded(net.minecraft.world.item.Item item) {
         ItemStack stack = new ItemStack(item);
-        stack.getOrCreateTag().putBoolean("Loaded", true);
+        LegacyItemTags.getOrCreateTag(stack).putBoolean("Loaded", true);
         return stack;
     }
 }

@@ -1,6 +1,6 @@
 package com.diggydwarff.tobacconistmod.compat.curios;
 
-import net.minecraftforge.fml.ModList;
+import net.neoforged.fml.ModList;
 
 public class CuriosCompat {
 

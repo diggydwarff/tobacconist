@@ -14,35 +14,33 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
 
 public class TobaccoDryingRackRenderer implements BlockEntityRenderer<TobaccoDryingRackBlockEntity> {
 
     private static final ResourceLocation RACK_TEXTURE =
-            new ResourceLocation("tobacconistmod", "textures/block/tobacco_drying_rack_block.png");
+            ResourceLocation.fromNamespaceAndPath("tobacconistmod", "textures/block/tobacco_drying_rack_block.png");
 
     private ResourceLocation getLeafTexture(ItemStack stack) {
         if (stack.is(ModItems.SHADE_TOBACCO_LEAF.get())) {
-            return new ResourceLocation("tobacconistmod", "textures/item/tobacco_leaf_shade.png");
+            return ResourceLocation.fromNamespaceAndPath("tobacconistmod", "textures/item/tobacco_leaf_shade.png");
         }
         if (stack.is(ModItems.VIRGINIA_TOBACCO_LEAF.get())) {
-            return new ResourceLocation("tobacconistmod", "textures/item/tobacco_leaf_virginia.png");
+            return ResourceLocation.fromNamespaceAndPath("tobacconistmod", "textures/item/tobacco_leaf_virginia.png");
         }
         if (stack.is(ModItems.BURLEY_TOBACCO_LEAF.get())) {
-            return new ResourceLocation("tobacconistmod", "textures/item/tobacco_leaf_burley.png");
+            return ResourceLocation.fromNamespaceAndPath("tobacconistmod", "textures/item/tobacco_leaf_burley.png");
         }
         if (stack.is(ModItems.ORIENTAL_TOBACCO_LEAF.get())) {
-            return new ResourceLocation("tobacconistmod", "textures/item/tobacco_leaf_oriental.png");
+            return ResourceLocation.fromNamespaceAndPath("tobacconistmod", "textures/item/tobacco_leaf_oriental.png");
         }
         if (stack.is(ModItems.DOKHA_TOBACCO_LEAF.get())) {
-            return new ResourceLocation("tobacconistmod", "textures/item/tobacco_leaf_dokha.png");
+            return ResourceLocation.fromNamespaceAndPath("tobacconistmod", "textures/item/tobacco_leaf_dokha.png");
         }
         if (stack.is(ModItems.WILD_TOBACCO_LEAF.get())) {
-            return new ResourceLocation("tobacconistmod", "textures/item/tobacco_leaf_wild.png");
+            return ResourceLocation.fromNamespaceAndPath("tobacconistmod", "textures/item/tobacco_leaf_wild.png");
         }
 
-        return new ResourceLocation("tobacconistmod", "textures/item/tobacco_leaf_burley.png");
+        return ResourceLocation.fromNamespaceAndPath("tobacconistmod", "textures/item/tobacco_leaf_burley.png");
     }
     public TobaccoDryingRackRenderer(BlockEntityRendererProvider.Context context) {
     }
@@ -112,20 +110,19 @@ public class TobaccoDryingRackRenderer implements BlockEntityRenderer<TobaccoDry
         float maxY =  0.11F;
         float z = 0.0F;
 
-        Matrix4f pose = poseStack.last().pose();
-        Matrix3f normal = poseStack.last().normal();
+        PoseStack.Pose pose = poseStack.last();
 
         // front
-        vertex(consumer, pose, normal, minX, minY, z, 0F, 1F, 0F, 0F, 1F, light, r, g, b, 1F);
-        vertex(consumer, pose, normal, maxX, minY, z, 1F, 1F, 0F, 0F, 1F, light, r, g, b, 1F);
-        vertex(consumer, pose, normal, maxX, maxY, z, 1F, 0F, 0F, 0F, 1F, light, r, g, b, 1F);
-        vertex(consumer, pose, normal, minX, maxY, z, 0F, 0F, 0F, 0F, 1F, light, r, g, b, 1F);
+        vertex(consumer, pose, minX, minY, z, 0F, 1F, 0F, 0F, 1F, light, r, g, b, 1F);
+        vertex(consumer, pose, maxX, minY, z, 1F, 1F, 0F, 0F, 1F, light, r, g, b, 1F);
+        vertex(consumer, pose, maxX, maxY, z, 1F, 0F, 0F, 0F, 1F, light, r, g, b, 1F);
+        vertex(consumer, pose, minX, maxY, z, 0F, 0F, 0F, 0F, 1F, light, r, g, b, 1F);
 
         // back
-        vertex(consumer, pose, normal, minX, maxY, z, 0F, 0F, 0F, 0F, -1F, light, r, g, b, 1F);
-        vertex(consumer, pose, normal, maxX, maxY, z, 1F, 0F, 0F, 0F, -1F, light, r, g, b, 1F);
-        vertex(consumer, pose, normal, maxX, minY, z, 1F, 1F, 0F, 0F, -1F, light, r, g, b, 1F);
-        vertex(consumer, pose, normal, minX, minY, z, 0F, 1F, 0F, 0F, -1F, light, r, g, b, 1F);
+        vertex(consumer, pose, minX, maxY, z, 0F, 0F, 0F, 0F, -1F, light, r, g, b, 1F);
+        vertex(consumer, pose, maxX, maxY, z, 1F, 0F, 0F, 0F, -1F, light, r, g, b, 1F);
+        vertex(consumer, pose, maxX, minY, z, 1F, 1F, 0F, 0F, -1F, light, r, g, b, 1F);
+        vertex(consumer, pose, minX, minY, z, 0F, 1F, 0F, 0F, -1F, light, r, g, b, 1F);
     }
 
     private float[] getBaseLeafColor(ItemStack stack) {
@@ -185,53 +182,51 @@ public class TobaccoDryingRackRenderer implements BlockEntityRenderer<TobaccoDry
                            float maxX, float maxY, float maxZ,
                            int light) {
 
-        Matrix4f pose = poseStack.last().pose();
-        Matrix3f normal = poseStack.last().normal();
+        PoseStack.Pose pose = poseStack.last();
 
-        vertex(consumer, pose, normal, minX, minY, minZ, 0, 0, 0, 0, -1, light, 1, 1, 1, 1);
-        vertex(consumer, pose, normal, maxX, minY, minZ, 1, 0, 0, 0, -1, light, 1, 1, 1, 1);
-        vertex(consumer, pose, normal, maxX, maxY, minZ, 1, 1, 0, 0, -1, light, 1, 1, 1, 1);
-        vertex(consumer, pose, normal, minX, maxY, minZ, 0, 1, 0, 0, -1, light, 1, 1, 1, 1);
+        vertex(consumer, pose, minX, minY, minZ, 0, 0, 0, 0, -1, light, 1, 1, 1, 1);
+        vertex(consumer, pose, maxX, minY, minZ, 1, 0, 0, 0, -1, light, 1, 1, 1, 1);
+        vertex(consumer, pose, maxX, maxY, minZ, 1, 1, 0, 0, -1, light, 1, 1, 1, 1);
+        vertex(consumer, pose, minX, maxY, minZ, 0, 1, 0, 0, -1, light, 1, 1, 1, 1);
 
-        vertex(consumer, pose, normal, minX, minY, maxZ, 0, 0, 0, 0, 1, light, 1, 1, 1, 1);
-        vertex(consumer, pose, normal, minX, maxY, maxZ, 0, 1, 0, 0, 1, light, 1, 1, 1, 1);
-        vertex(consumer, pose, normal, maxX, maxY, maxZ, 1, 1, 0, 0, 1, light, 1, 1, 1, 1);
-        vertex(consumer, pose, normal, maxX, minY, maxZ, 1, 0, 0, 0, 1, light, 1, 1, 1, 1);
+        vertex(consumer, pose, minX, minY, maxZ, 0, 0, 0, 0, 1, light, 1, 1, 1, 1);
+        vertex(consumer, pose, minX, maxY, maxZ, 0, 1, 0, 0, 1, light, 1, 1, 1, 1);
+        vertex(consumer, pose, maxX, maxY, maxZ, 1, 1, 0, 0, 1, light, 1, 1, 1, 1);
+        vertex(consumer, pose, maxX, minY, maxZ, 1, 0, 0, 0, 1, light, 1, 1, 1, 1);
 
-        vertex(consumer, pose, normal, minX, minY, minZ, 0, 0, -1, 0, 0, light, 1, 1, 1, 1);
-        vertex(consumer, pose, normal, minX, maxY, minZ, 0, 1, -1, 0, 0, light, 1, 1, 1, 1);
-        vertex(consumer, pose, normal, minX, maxY, maxZ, 1, 1, -1, 0, 0, light, 1, 1, 1, 1);
-        vertex(consumer, pose, normal, minX, minY, maxZ, 1, 0, -1, 0, 0, light, 1, 1, 1, 1);
+        vertex(consumer, pose, minX, minY, minZ, 0, 0, -1, 0, 0, light, 1, 1, 1, 1);
+        vertex(consumer, pose, minX, maxY, minZ, 0, 1, -1, 0, 0, light, 1, 1, 1, 1);
+        vertex(consumer, pose, minX, maxY, maxZ, 1, 1, -1, 0, 0, light, 1, 1, 1, 1);
+        vertex(consumer, pose, minX, minY, maxZ, 1, 0, -1, 0, 0, light, 1, 1, 1, 1);
 
-        vertex(consumer, pose, normal, maxX, minY, minZ, 0, 0, 1, 0, 0, light, 1, 1, 1, 1);
-        vertex(consumer, pose, normal, maxX, minY, maxZ, 1, 0, 1, 0, 0, light, 1, 1, 1, 1);
-        vertex(consumer, pose, normal, maxX, maxY, maxZ, 1, 1, 1, 0, 0, light, 1, 1, 1, 1);
-        vertex(consumer, pose, normal, maxX, maxY, minZ, 0, 1, 1, 0, 0, light, 1, 1, 1, 1);
+        vertex(consumer, pose, maxX, minY, minZ, 0, 0, 1, 0, 0, light, 1, 1, 1, 1);
+        vertex(consumer, pose, maxX, minY, maxZ, 1, 0, 1, 0, 0, light, 1, 1, 1, 1);
+        vertex(consumer, pose, maxX, maxY, maxZ, 1, 1, 1, 0, 0, light, 1, 1, 1, 1);
+        vertex(consumer, pose, maxX, maxY, minZ, 0, 1, 1, 0, 0, light, 1, 1, 1, 1);
 
-        vertex(consumer, pose, normal, minX, minY, minZ, 0, 0, 0, -1, 0, light, 1, 1, 1, 1);
-        vertex(consumer, pose, normal, minX, minY, maxZ, 0, 1, 0, -1, 0, light, 1, 1, 1, 1);
-        vertex(consumer, pose, normal, maxX, minY, maxZ, 1, 1, 0, -1, 0, light, 1, 1, 1, 1);
-        vertex(consumer, pose, normal, maxX, minY, minZ, 1, 0, 0, -1, 0, light, 1, 1, 1, 1);
+        vertex(consumer, pose, minX, minY, minZ, 0, 0, 0, -1, 0, light, 1, 1, 1, 1);
+        vertex(consumer, pose, minX, minY, maxZ, 0, 1, 0, -1, 0, light, 1, 1, 1, 1);
+        vertex(consumer, pose, maxX, minY, maxZ, 1, 1, 0, -1, 0, light, 1, 1, 1, 1);
+        vertex(consumer, pose, maxX, minY, minZ, 1, 0, 0, -1, 0, light, 1, 1, 1, 1);
 
-        vertex(consumer, pose, normal, minX, maxY, minZ, 0, 0, 0, 1, 0, light, 1, 1, 1, 1);
-        vertex(consumer, pose, normal, maxX, maxY, minZ, 1, 0, 0, 1, 0, light, 1, 1, 1, 1);
-        vertex(consumer, pose, normal, maxX, maxY, maxZ, 1, 1, 0, 1, 0, light, 1, 1, 1, 1);
-        vertex(consumer, pose, normal, minX, maxY, maxZ, 0, 1, 0, 1, 0, light, 1, 1, 1, 1);
+        vertex(consumer, pose, minX, maxY, minZ, 0, 0, 0, 1, 0, light, 1, 1, 1, 1);
+        vertex(consumer, pose, maxX, maxY, minZ, 1, 0, 0, 1, 0, light, 1, 1, 1, 1);
+        vertex(consumer, pose, maxX, maxY, maxZ, 1, 1, 0, 1, 0, light, 1, 1, 1, 1);
+        vertex(consumer, pose, minX, maxY, maxZ, 0, 1, 0, 1, 0, light, 1, 1, 1, 1);
     }
 
-    private void vertex(VertexConsumer consumer, Matrix4f pose, Matrix3f normal,
+    private void vertex(VertexConsumer consumer, PoseStack.Pose pose,
                         float x, float y, float z,
                         float u, float v,
                         float nx, float ny, float nz,
                         int light,
                         float r, float g, float b, float a) {
 
-        consumer.vertex(pose, x, y, z)
-                .color(r, g, b, a)
-                .uv(u, v)
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(light)
-                .normal(normal, nx, ny, nz)
-                .endVertex();
+        consumer.addVertex(pose, x, y, z)
+                .setColor(r, g, b, a)
+                .setUv(u, v)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(light)
+                .setNormal(pose, nx, ny, nz);
     }
 }

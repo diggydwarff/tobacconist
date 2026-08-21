@@ -1,12 +1,17 @@
 package com.diggydwarff.tobacconistmod.block.entity;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import com.diggydwarff.tobacconistmod.block.custom.DoubleHookahBlock;
 import com.diggydwarff.tobacconistmod.block.custom.HookahBlock;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.screen.HookahMenu;
 import com.diggydwarff.tobacconistmod.util.HookahFuelHelper;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -20,40 +25,22 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.PotionUtils;
-import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
-import org.jetbrains.annotations.NotNull;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
 
 public class HookahEntity extends BlockEntity implements MenuProvider {
 
     private final ItemStackHandler itemHandler = new ItemStackHandler(3) {
         @Override
-        public boolean isItemValid(int slot, ItemStack stack) {
-            return switch (slot) {
-                case 0 -> HookahFuelHelper.isFuel(stack);
-                case 1 -> stack.is(ModItems.SHISHA_TOBACCO.get());
-                case 2 -> isWaterPotion(stack);
-                default -> false;
-            };
-        }
-
-        @Override
         protected void onContentsChanged(int slot) {
             setChanged();
         }
     };
-
-    private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
 
     protected final ContainerData data;
     public int progress = 0;
@@ -103,39 +90,23 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
         return new HookahMenu(id, inventory, this, this.data);
     }
 
-    @Override
-    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (cap == ForgeCapabilities.ITEM_HANDLER) {
-            return lazyItemHandler.cast();
-        }
-        return super.getCapability(cap, side);
+    public IItemHandler getItemHandler() {
+        return itemHandler;
     }
 
     @Override
-    public void onLoad() {
-        super.onLoad();
-        lazyItemHandler = LazyOptional.of(() -> itemHandler);
-    }
-
-    @Override
-    public void invalidateCaps() {
-        super.invalidateCaps();
-        lazyItemHandler.invalidate();
-    }
-
-    @Override
-    protected void saveAdditional(CompoundTag nbt) {
-        nbt.put("inventory", itemHandler.serializeNBT());
+    protected void saveAdditional(CompoundTag nbt, HolderLookup.Provider registries) {
+        nbt.put("inventory", itemHandler.serializeNBT(registries));
         nbt.putInt("hookah.progress", this.progress);
         nbt.putInt("hookah.fuelTime", this.fuelTime);
         nbt.putInt("hookah.currentFuelMaxTime", this.currentFuelMaxTime);
-        super.saveAdditional(nbt);
+        super.saveAdditional(nbt, registries);
     }
 
     @Override
-    public void load(CompoundTag nbt) {
-        super.load(nbt);
-        itemHandler.deserializeNBT(nbt.getCompound("inventory"));
+    protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider registries) {
+        super.loadAdditional(nbt, registries);
+        itemHandler.deserializeNBT(registries, nbt.getCompound("inventory"));
         this.progress = nbt.getInt("hookah.progress");
         this.fuelTime = nbt.getInt("hookah.fuelTime");
         this.currentFuelMaxTime = nbt.getInt("hookah.currentFuelMaxTime");
@@ -205,8 +176,7 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
             setChanged(level, pos, state);
 
             if (pEntity.progress >= pEntity.maxProgress) {
-                // Shisha durability is the consumption timer; water is a required catalyst, not an output slot.
-                pEntity.resetProgress();
+                craftItem(pEntity);
             }
         } else {
             pEntity.resetProgress();
@@ -225,13 +195,26 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
         this.progress = 0;
     }
 
-    private static boolean isWaterPotion(ItemStack stack) {
-        return stack.is(Items.POTION) && PotionUtils.getPotion(stack) == Potions.WATER;
+    private static void craftItem(HookahEntity pEntity) {
+        if (canProcess(pEntity)) {
+            pEntity.itemHandler.extractItem(1, 1, false);
+
+            pEntity.itemHandler.setStackInSlot(2,
+                    new ItemStack(ModItems.SHISHA_TOBACCO.get(),
+                            pEntity.itemHandler.getStackInSlot(2).getCount() + 1));
+
+            pEntity.resetProgress();
+        }
     }
 
     private static boolean canProcess(HookahEntity entity) {
-        boolean hasShishaInSlot = entity.itemHandler.getStackInSlot(1).is(ModItems.SHISHA_TOBACCO.get());
-        boolean hasWaterInSlot = isWaterPotion(entity.itemHandler.getStackInSlot(2));
+        boolean hasShishaInSlot =
+                entity.itemHandler.getStackInSlot(1).getItem() == ModItems.SHISHA_TOBACCO.get();
+
+        ItemStack waterStack = entity.itemHandler.getStackInSlot(2);
+        PotionContents potionContents = waterStack.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);
+        boolean hasWaterInSlot = waterStack.is(Items.POTION) && potionContents.is(Potions.WATER);
+
         return hasShishaInSlot && hasWaterInSlot;
     }
 }

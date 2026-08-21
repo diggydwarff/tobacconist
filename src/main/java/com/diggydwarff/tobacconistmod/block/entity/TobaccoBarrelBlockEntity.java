@@ -1,9 +1,12 @@
 package com.diggydwarff.tobacconistmod.block.entity;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
@@ -33,7 +36,7 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
     public static final int MAX_STACK = 16;
 
     private static final int TICKS_PER_DAY = 24000;
-    private static final int FERMENT_TIME = 48000; // 2 in-game days
+    private static final int FERMENT_TIME = 48000;
     private static final int MAX_BARREL_HUMIDITY = 100;
     private static final int MIN_FERMENT_HUMIDITY = 25;
 
@@ -227,7 +230,7 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
     private void finishFermentation() {
         processTicks = 0;
 
-        CompoundTag tag = storedTobacco.getOrCreateTag();
+        CompoundTag tag = LegacyItemTags.getOrCreateTag(storedTobacco);
         tag.putBoolean(TAG_FERMENTED, true);
 
         int q = TobaccoCuringHelper.getQuality(storedTobacco);
@@ -238,7 +241,7 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
     }
 
     private void advanceAgingDay() {
-        CompoundTag tag = storedTobacco.getOrCreateTag();
+        CompoundTag tag = LegacyItemTags.getOrCreateTag(storedTobacco);
 
         int agedDays = tag.getInt(TAG_AGED_DAYS) + 1;
         tag.putInt(TAG_AGED_DAYS, agedDays);
@@ -297,11 +300,11 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
 
         ItemStack spoiled = new ItemStack(ModItems.SPOILED_TOBACCO.get(), count);
 
-        if (storedTobacco.hasTag()) {
-            spoiled.setTag(storedTobacco.getTag().copy());
+        if (LegacyItemTags.hasTag(storedTobacco)) {
+            LegacyItemTags.setTag(spoiled, LegacyItemTags.getTag(storedTobacco).copy());
         }
 
-        CompoundTag tag = spoiled.getOrCreateTag();
+        CompoundTag tag = LegacyItemTags.getOrCreateTag(spoiled);
         tag.putBoolean(TAG_RUINED, true);
         tag.putInt(TobaccoCuringHelper.TAG_QUALITY, ruinedQuality);
         tag.putString(
@@ -333,7 +336,7 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
             return move;
         }
 
-        if (!ItemStack.isSameItemSameTags(storedTobacco, stack)) {
+        if (!ItemStack.isSameItemSameComponents(storedTobacco, stack)) {
             return 0;
         }
 
@@ -390,7 +393,7 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
         }
 
         if (stack.getItem() instanceof com.diggydwarff.tobacconistmod.datagen.items.custom.TobaccoLeafItem) {
-            return stack.hasTag() && stack.getTag().contains(TobaccoCuringHelper.TAG_CURE_TYPE);
+            return LegacyItemTags.hasTag(stack) && LegacyItemTags.getTag(stack).contains(TobaccoCuringHelper.TAG_CURE_TYPE);
         }
 
         return false;
@@ -474,15 +477,15 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
     }
 
     public static boolean isFermented(ItemStack stack) {
-        return stack.hasTag() && stack.getTag().getBoolean(TAG_FERMENTED);
+        return LegacyItemTags.hasTag(stack) && LegacyItemTags.getTag(stack).getBoolean(TAG_FERMENTED);
     }
 
     public static int getAgedDays(ItemStack stack) {
-        return stack.hasTag() ? stack.getTag().getInt(TAG_AGED_DAYS) : 0;
+        return LegacyItemTags.hasTag(stack) ? LegacyItemTags.getTag(stack).getInt(TAG_AGED_DAYS) : 0;
     }
 
     public static boolean isRuined(ItemStack stack) {
-        return stack.hasTag() && stack.getTag().getBoolean(TAG_RUINED);
+        return LegacyItemTags.hasTag(stack) && LegacyItemTags.getTag(stack).getBoolean(TAG_RUINED);
     }
 
     public int getProcessProgressPercent() {
@@ -529,11 +532,11 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag) {
-        super.saveAdditional(tag);
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.saveAdditional(tag, registries);
 
         if (!storedTobacco.isEmpty()) {
-            tag.put("StoredTobacco", storedTobacco.save(new CompoundTag()));
+            tag.put("StoredTobacco", storedTobacco.save(registries, new CompoundTag()));
         }
 
         tag.putInt("ProcessTicks", processTicks);
@@ -545,11 +548,11 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
     }
 
     @Override
-    public void load(CompoundTag tag) {
-        super.load(tag);
+    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.loadAdditional(tag, registries);
 
         if (tag.contains("StoredTobacco")) {
-            storedTobacco = ItemStack.of(tag.getCompound("StoredTobacco"));
+            storedTobacco = ItemStack.parseOptional(registries, tag.getCompound("StoredTobacco"));
         } else {
             storedTobacco = ItemStack.EMPTY;
         }

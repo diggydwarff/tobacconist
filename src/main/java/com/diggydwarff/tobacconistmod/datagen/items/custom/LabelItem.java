@@ -1,6 +1,9 @@
 package com.diggydwarff.tobacconistmod.datagen.items.custom;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
@@ -26,11 +29,11 @@ public class LabelItem extends Item {
     }
 
     public static String getLabelName(ItemStack stack) {
-        CompoundTag tag = stack.getTag();
+        CompoundTag tag = LegacyItemTags.getTag(stack);
         if (tag != null && tag.contains(TAG_LABEL_NAME)) {
             return tag.getString(TAG_LABEL_NAME);
         }
-        if (stack.hasCustomHoverName()) {
+        if (stack.has(DataComponents.CUSTOM_NAME)) {
             return stack.getHoverName().getString();
         }
         return "";
@@ -38,29 +41,29 @@ public class LabelItem extends Item {
 
     public static void normalizeLabel(ItemStack stack) {
 
-        if (!stack.hasCustomHoverName()) return;
+        if (!stack.has(DataComponents.CUSTOM_NAME)) return;
 
         String name = stack.getHoverName().getString();
 
         // store our clean label
-        stack.getOrCreateTag().putString(TAG_LABEL_NAME, name);
+        LegacyItemTags.getOrCreateTag(stack).putString(TAG_LABEL_NAME, name);
 
         // remove the italic vanilla name
-        stack.resetHoverName();
+        stack.remove(DataComponents.CUSTOM_NAME);
     }
 
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
         if (level.isClientSide) return;
 
-        if (stack.hasCustomHoverName()) {
+        if (stack.has(DataComponents.CUSTOM_NAME)) {
             normalizeLabel(stack);
         }
     }
 
     public static void setLabelName(ItemStack stack, String name) {
         if (name == null || name.isBlank()) return;
-        stack.getOrCreateTag().putString(TAG_LABEL_NAME, name.trim());
+        LegacyItemTags.getOrCreateTag(stack).putString(TAG_LABEL_NAME, name.trim());
     }
 
     @Override
@@ -74,7 +77,7 @@ public class LabelItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext level, List<Component> tooltip, TooltipFlag flag) {
         String name = getLabelName(stack);
         if (!name.isEmpty()) {
             tooltip.add(Component.literal(name).withStyle(ChatFormatting.GOLD));

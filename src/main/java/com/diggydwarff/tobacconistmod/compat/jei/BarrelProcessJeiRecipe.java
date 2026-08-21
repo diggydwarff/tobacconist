@@ -1,5 +1,7 @@
 package com.diggydwarff.tobacconistmod.compat.jei;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelBlockEntity;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
@@ -56,11 +58,11 @@ public record BarrelProcessJeiRecipe(
 
     private static ItemStack makeFermentedLeaf(Item item) {
         ItemStack stack = makeDryLeaf(item);
-        stack.getOrCreateTag().putBoolean(TobaccoBarrelBlockEntity.TAG_FERMENTED, true);
+        LegacyItemTags.getOrCreateTag(stack).putBoolean(TobaccoBarrelBlockEntity.TAG_FERMENTED, true);
 
         int newQ = 67;
-        stack.getOrCreateTag().putInt(TobaccoCuringHelper.TAG_QUALITY, newQ);
-        stack.getOrCreateTag().putString(
+        LegacyItemTags.getOrCreateTag(stack).putInt(TobaccoCuringHelper.TAG_QUALITY, newQ);
+        LegacyItemTags.getOrCreateTag(stack).putString(
                 TobaccoCuringHelper.TAG_QUALITY_TIER,
                 TobaccoCuringHelper.getQualityTierId(newQ)
         );
@@ -70,11 +72,11 @@ public record BarrelProcessJeiRecipe(
 
     private static ItemStack makeAgedLeaf(Item item, int agedDays) {
         ItemStack stack = makeFermentedLeaf(item);
-        stack.getOrCreateTag().putInt(TobaccoBarrelBlockEntity.TAG_AGED_DAYS, agedDays);
+        LegacyItemTags.getOrCreateTag(stack).putInt(TobaccoBarrelBlockEntity.TAG_AGED_DAYS, agedDays);
 
         int newQ = 72;
-        stack.getOrCreateTag().putInt(TobaccoCuringHelper.TAG_QUALITY, newQ);
-        stack.getOrCreateTag().putString(
+        LegacyItemTags.getOrCreateTag(stack).putInt(TobaccoCuringHelper.TAG_QUALITY, newQ);
+        LegacyItemTags.getOrCreateTag(stack).putString(
                 TobaccoCuringHelper.TAG_QUALITY_TIER,
                 TobaccoCuringHelper.getQualityTierId(newQ)
         );

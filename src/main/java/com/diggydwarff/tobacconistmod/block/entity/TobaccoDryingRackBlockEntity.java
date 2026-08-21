@@ -1,11 +1,14 @@
 package com.diggydwarff.tobacconistmod.block.entity;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
 import com.diggydwarff.tobacconistmod.block.custom.TobaccoDryingRackBlock;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
@@ -29,11 +32,11 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
 
     public static final int MAX_LEAVES = 16;
 
-    public static final int AIR_DRY_TIME = 72000;         // ~3 Minecraft days
-    public static final int SUN_DRY_TIME = 48000;         // ~2 Minecraft days (open sky)
-    public static final int GLASS_SUN_DRY_TIME = 54000;   // slightly slower / worse than open-sky sun cure
-    public static final int FIRE_DRY_TIME = 24000;        // ~1 Minecraft day
-    public static final int FLUE_DRY_TIME = 36000;        // ~1.5 Minecraft days
+    public static final int AIR_DRY_TIME = 72000;
+    public static final int SUN_DRY_TIME = 48000;
+    public static final int GLASS_SUN_DRY_TIME = 54000;
+    public static final int FIRE_DRY_TIME = 24000;
+    public static final int FLUE_DRY_TIME = 36000;
 
     private static final int[] SLOTS_FOR_SIDES = new int[]{0};
     private static final int[] SLOTS_FOR_BOTTOM = new int[]{0};
@@ -88,7 +91,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             return true;
         }
 
-        if (!ItemStack.isSameItemSameTags(storedLeaf, stack)) {
+        if (!ItemStack.isSameItemSameComponents(storedLeaf, stack)) {
             return false;
         }
 
@@ -144,14 +147,12 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
 
     @Override
     public ItemStack removeItem(int slot, int amount) {
-        if (slot != 0 || amount <= 0 || storedLeaf.isEmpty() || !isFinished()) {
+        if (slot != 0 || storedLeaf.isEmpty() || !isFinished()) {
             return ItemStack.EMPTY;
         }
 
-        ItemStack out = storedLeaf.split(amount);
-        if (storedLeaf.isEmpty()) {
-            storedLeaf = ItemStack.EMPTY;
-        }
+        ItemStack out = storedLeaf.copy();
+        storedLeaf = ItemStack.EMPTY;
 
         setChanged();
         syncRackState();
@@ -215,7 +216,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             return true;
         }
 
-        if (!ItemStack.isSameItemSameTags(storedLeaf, stack)) {
+        if (!ItemStack.isSameItemSameComponents(storedLeaf, stack)) {
             return false;
         }
 
@@ -255,27 +256,15 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
     }
 
     @Override
-    public CompoundTag getUpdateTag() {
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         CompoundTag tag = new CompoundTag();
-        saveAdditional(tag);
+        saveAdditional(tag, registries);
         return tag;
-    }
-
-    @Override
-    public void handleUpdateTag(CompoundTag tag) {
-        load(tag);
     }
 
     @Override
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
         return ClientboundBlockEntityDataPacket.create(this);
-    }
-
-    @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
-        if (pkt.getTag() != null) {
-            load(pkt.getTag());
-        }
     }
 
     private void syncToClient() {
@@ -316,13 +305,6 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         }
 
         return Math.min(100, (dominantTicks * 100) / needed);
-    }
-
-    public int getEstimatedTicksRemaining() {
-        if (!hasLeaves() || isFinished()) return 0;
-        int pct = getDryProgressPercent();
-        int required = getRequiredDryingTime();
-        return Math.max(0, (int) Math.ceil(required * ((100.0 - pct) / 100.0)));
     }
 
     public int getVisualCureStage() {
@@ -421,9 +403,9 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             return false;
         }
 
-        return storedLeaf.hasTag()
-                && storedLeaf.getTag() != null
-                && storedLeaf.getTag().contains(TobaccoCuringHelper.TAG_CURE_TYPE);
+        return LegacyItemTags.hasTag(storedLeaf)
+                && LegacyItemTags.getTag(storedLeaf) != null
+                && LegacyItemTags.getTag(storedLeaf).contains(TobaccoCuringHelper.TAG_CURE_TYPE);
     }
 
     public ItemStack removeAllLeaves() {
@@ -656,7 +638,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             mixPenalty = 12;
         }
 
-        CompoundTag sourceTag = storedLeaf.getOrCreateTag();
+        CompoundTag sourceTag = LegacyItemTags.getOrCreateTag(storedLeaf);
         int growth = sourceTag.contains(TobaccoCuringHelper.TAG_GROWTH_QUALITY)
                 ? sourceTag.getInt(TobaccoCuringHelper.TAG_GROWTH_QUALITY)
                 : 50;
@@ -764,22 +746,6 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         }
 
         return level.canSeeSky(abovePos) || isGlassRoof(level.getBlockState(abovePos));
-    }
-
-    private static boolean isDaytimeSunBlocked(Level level, BlockPos pos) {
-        if (!level.isDay()) {
-            return false;
-        }
-
-        if (level.isRainingAt(pos.above())) {
-            return true;
-        }
-
-        if (!hasDirectSunlight(level, pos) && canAirDry(level, pos)) {
-            return true;
-        }
-
-        return false;
     }
 
     private static boolean canFlueCure(Level level, BlockPos pos) {
@@ -965,11 +931,11 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag) {
-        super.saveAdditional(tag);
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.saveAdditional(tag, registries);
 
         if (!storedLeaf.isEmpty()) {
-            tag.put("StoredLeaf", storedLeaf.save(new CompoundTag()));
+            tag.put("StoredLeaf", storedLeaf.save(registries, new CompoundTag()));
         }
 
         tag.putInt("DryingProgress", dryingProgress);
@@ -987,11 +953,11 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
     }
 
     @Override
-    public void load(CompoundTag tag) {
-        super.load(tag);
+    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.loadAdditional(tag, registries);
 
         if (tag.contains("StoredLeaf")) {
-            storedLeaf = ItemStack.of(tag.getCompound("StoredLeaf"));
+            storedLeaf = ItemStack.parseOptional(registries, tag.getCompound("StoredLeaf"));
         } else {
             storedLeaf = ItemStack.EMPTY;
         }
@@ -1054,11 +1020,11 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
 
         ItemStack ruined = new ItemStack(ModItems.SPOILED_TOBACCO.get(), storedLeaf.getCount());
 
-        if (storedLeaf.hasTag()) {
-            ruined.setTag(storedLeaf.getTag().copy());
+        if (LegacyItemTags.hasTag(storedLeaf)) {
+            LegacyItemTags.setTag(ruined, LegacyItemTags.getTag(storedLeaf).copy());
         }
 
-        CompoundTag tag = ruined.getOrCreateTag();
+        CompoundTag tag = LegacyItemTags.getOrCreateTag(ruined);
         tag.putBoolean("Ruined", true);
 
         int quality = TobaccoCuringHelper.getQuality(storedLeaf);

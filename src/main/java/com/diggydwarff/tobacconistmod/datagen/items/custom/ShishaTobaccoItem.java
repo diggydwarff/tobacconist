@@ -1,5 +1,7 @@
 package com.diggydwarff.tobacconistmod.datagen.items.custom;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelBlockEntity;
 import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
 import com.diggydwarff.tobacconistmod.datagen.items.SmokingProduct;
@@ -7,6 +9,7 @@ import com.diggydwarff.tobacconistmod.util.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
@@ -49,7 +52,7 @@ public class ShishaTobaccoItem extends SmokingProduct {
             return Math.max(1, Math.round(quality / 10.0f));
         }
 
-        CompoundTag tag = stack.getTag();
+        CompoundTag tag = LegacyItemTags.getTag(stack);
         if (tag != null && tag.contains(TobaccoCuringHelper.TAG_QUALITY)) {
             return Math.max(1, Math.round(tag.getInt(TobaccoCuringHelper.TAG_QUALITY) / 10.0f));
         }
@@ -58,8 +61,8 @@ public class ShishaTobaccoItem extends SmokingProduct {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-        CompoundTag tag = stack.getTag();
+    public void appendHoverText(ItemStack stack, Item.TooltipContext worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+        CompoundTag tag = LegacyItemTags.getTag(stack);
 
         String label = TobaccoLabelHelper.getProductLabel(stack);
         if (!label.isEmpty()) {
@@ -102,7 +105,7 @@ public class ShishaTobaccoItem extends SmokingProduct {
             }
 
             ItemStack temp = new ItemStack(stack.getItem());
-            temp.setTag(normalized);
+            LegacyItemTags.setTag(temp, normalized);
 
             String cutType = normalized.contains(TobaccoProductQualityHelper.TAG_INPUT_CUT_TYPE)
                     ? normalized.getString(TobaccoProductQualityHelper.TAG_INPUT_CUT_TYPE)

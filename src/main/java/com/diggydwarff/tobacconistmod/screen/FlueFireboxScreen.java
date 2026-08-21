@@ -10,7 +10,7 @@ import net.minecraft.world.entity.player.Inventory;
 
 public class FlueFireboxScreen extends AbstractContainerScreen<FlueFireboxMenu> {
     private static final ResourceLocation TEXTURE =
-            new ResourceLocation(TobacconistMod.MODID, "textures/gui/flue_firebox_gui.png");
+            ResourceLocation.fromNamespaceAndPath(TobacconistMod.MODID, "textures/gui/flue_firebox_gui.png");
 
     public FlueFireboxScreen(FlueFireboxMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
@@ -40,7 +40,7 @@ public class FlueFireboxScreen extends AbstractContainerScreen<FlueFireboxMenu> 
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        this.renderBackground(guiGraphics);
+        this.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
         super.render(guiGraphics, mouseX, mouseY, partialTick);
         this.renderTooltip(guiGraphics, mouseX, mouseY);
     }

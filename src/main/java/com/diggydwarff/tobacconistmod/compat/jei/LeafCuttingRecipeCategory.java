@@ -22,7 +22,7 @@ import java.util.List;
 public class LeafCuttingRecipeCategory implements IRecipeCategory<LeafCuttingJeiRecipe> {
 
     public static final RecipeType<LeafCuttingJeiRecipe> TYPE =
-            new RecipeType<>(new ResourceLocation(TobacconistMod.MODID, "leaf_cutting"), LeafCuttingJeiRecipe.class);
+            new RecipeType<>(ResourceLocation.fromNamespaceAndPath(TobacconistMod.MODID, "leaf_cutting"), LeafCuttingJeiRecipe.class);
 
     private static final List<ItemStack> CHAVETAS = List.of(
             new ItemStack(ModItems.STONE_CHAVETA.get()),

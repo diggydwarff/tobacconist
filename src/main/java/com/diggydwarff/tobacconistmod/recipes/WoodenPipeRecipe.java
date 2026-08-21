@@ -1,32 +1,35 @@
 package com.diggydwarff.tobacconistmod.recipes;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.Tags;
+import net.neoforged.neoforge.common.Tags;
 
 public class WoodenPipeRecipe extends CustomRecipe {
 
     public static final String NBT_WOOD_PLANK = "WoodPlank";
 
-    public WoodenPipeRecipe(ResourceLocation id, CraftingBookCategory cat) {
-        super(id, cat);
+    public WoodenPipeRecipe(CraftingBookCategory category) {
+        super(category);
     }
 
     @Override
-    public boolean matches(CraftingContainer inv, Level level) {
-        if (inv.getWidth() != 3 || inv.getHeight() != 3) return false;
+    public boolean matches(CraftingInput inv, Level level) {
+        if (inv.width() != 3 || inv.height() != 3) return false;
 
-        int w = inv.getWidth();
+        int w = inv.width();
 
         ItemStack p1 = inv.getItem(2 + 0 * w); // (2,0)
         ItemStack p2 = inv.getItem(1 + 1 * w); // (1,1)
@@ -38,7 +41,7 @@ public class WoodenPipeRecipe extends CustomRecipe {
         if (!s1.is(net.minecraft.world.item.Items.STICK)) return false;
         if (!s2.is(net.minecraft.world.item.Items.STICK)) return false;
 
-        for (int i = 0; i < inv.getContainerSize(); i++) {
+        for (int i = 0; i < inv.size(); i++) {
             if (i == (2 + 0 * w) || i == (1 + 1 * w) || i == (2 + 1 * w) || i == (0 + 2 * w)) continue;
             if (!inv.getItem(i).isEmpty()) return false;
         }
@@ -48,9 +51,9 @@ public class WoodenPipeRecipe extends CustomRecipe {
 
 
     @Override
-    public ItemStack assemble(CraftingContainer inv, net.minecraft.core.RegistryAccess regs) {
+    public ItemStack assemble(CraftingInput inv, HolderLookup.Provider registries) {
         ItemStack out = new ItemStack(
-                BuiltInRegistries.ITEM.get(new ResourceLocation("tobacconistmod", "wooden_smoking_pipe"))
+                BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath("tobacconistmod", "wooden_smoking_pipe"))
         );
 
         // Pick the first plank stack found and store it
@@ -61,7 +64,7 @@ public class WoodenPipeRecipe extends CustomRecipe {
         }
 
         if (!plank.isEmpty()) {
-            CompoundTag tag = out.getOrCreateTag();
+            CompoundTag tag = LegacyItemTags.getOrCreateTag(out);
             ResourceLocation plankId = BuiltInRegistries.ITEM.getKey(plank.getItem());
             tag.putString(NBT_WOOD_PLANK, plankId.toString());
         }
@@ -79,20 +82,5 @@ public class WoodenPipeRecipe extends CustomRecipe {
         return ModRecipeSerializers.WOODEN_PIPE.get();
     }
 
-    public static class Serializer implements RecipeSerializer<WoodenPipeRecipe> {
-        @Override
-        public WoodenPipeRecipe fromJson(ResourceLocation id, com.google.gson.JsonObject json) {
-            return new WoodenPipeRecipe(id, CraftingBookCategory.MISC);
-        }
 
-        @Override
-        public WoodenPipeRecipe fromNetwork(ResourceLocation id, net.minecraft.network.FriendlyByteBuf buf) {
-            return new WoodenPipeRecipe(id, CraftingBookCategory.MISC);
-        }
-
-        @Override
-        public void toNetwork(net.minecraft.network.FriendlyByteBuf buf, WoodenPipeRecipe recipe) {
-            // no extra data
-        }
-    }
 }

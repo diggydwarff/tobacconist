@@ -19,7 +19,7 @@ import net.minecraft.world.item.ItemStack;
 public class ShishaMixRecipeCategory implements IRecipeCategory<ShishaMixJeiRecipe> {
 
     public static final RecipeType<ShishaMixJeiRecipe> TYPE =
-            new RecipeType<>(new ResourceLocation(TobacconistMod.MODID, "shisha_mix"), ShishaMixJeiRecipe.class);
+            new RecipeType<>(ResourceLocation.fromNamespaceAndPath(TobacconistMod.MODID, "shisha_mix"), ShishaMixJeiRecipe.class);
 
     private final IDrawable background;
     private final IDrawable icon;

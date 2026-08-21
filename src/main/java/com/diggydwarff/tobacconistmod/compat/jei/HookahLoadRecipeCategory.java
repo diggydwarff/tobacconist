@@ -19,7 +19,7 @@ import net.minecraft.world.item.ItemStack;
 public class HookahLoadRecipeCategory implements IRecipeCategory<HookahLoadJeiRecipe> {
 
     public static final RecipeType<HookahLoadJeiRecipe> TYPE =
-            new RecipeType<>(new ResourceLocation(TobacconistMod.MODID, "hookah_load"), HookahLoadJeiRecipe.class);
+            new RecipeType<>(ResourceLocation.fromNamespaceAndPath(TobacconistMod.MODID, "hookah_load"), HookahLoadJeiRecipe.class);
 
     private final IDrawable background;
     private final IDrawable icon;

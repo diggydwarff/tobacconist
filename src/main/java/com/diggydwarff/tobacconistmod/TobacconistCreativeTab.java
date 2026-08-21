@@ -1,5 +1,7 @@
 package com.diggydwarff.tobacconistmod;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.ShishaFlavoringItem;
@@ -15,10 +17,11 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
+import java.util.function.Supplier;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.StreamSupport;
@@ -29,7 +32,7 @@ public class TobacconistCreativeTab {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, TobacconistMod.MODID);
 
-    public static final RegistryObject<CreativeModeTab> COURSE_TAB = CREATIVE_MODE_TABS.register("tobacconistmod",
+    public static final Supplier<CreativeModeTab> COURSE_TAB = CREATIVE_MODE_TABS.register("tobacconistmod",
             () -> CreativeModeTab.builder().icon(() -> new ItemStack(CIGAR.get()))
                     .title(Component.translatable("creativetab.tobacconistmod"))
                     .displayItems((displayParameters, output) -> {
@@ -39,8 +42,6 @@ public class TobacconistCreativeTab {
                         output.accept(CIGARETTE.get());
                         output.accept(HOOKAH_HOSE.get());
                         output.accept(SHISHA_TOBACCO.get());
-                        output.accept(TOBACCO_GUIDE.get());
-                        output.accept(TOBACCONISTS_SPECTACLES.get());
 
                         output.accept(TOBACCO_BOX.get());
                         output.accept(TOBACCO_LABEL.get());
@@ -84,6 +85,12 @@ public class TobacconistCreativeTab {
                         output.accept(DOKHA_TOBACCO_SEEDS.get());
                         output.accept(SHADE_TOBACCO_SEEDS.get());
 
+                        output.accept(ModBlocks.WILD_TOBACCO_CROP.get());
+                        output.accept(ModBlocks.VIRGINIA_TOBACCO_CROP.get());
+                        output.accept(ModBlocks.BURLEY_TOBACCO_CROP.get());
+                        output.accept(ModBlocks.ORIENTAL_TOBACCO_CROP.get());
+                        output.accept(ModBlocks.DOKHA_TOBACCO_CROP.get());
+                        output.accept(ModBlocks.SHADE_TOBACCO_CROP.get());
 
                         output.accept(ModBlocks.HOOKAH.get());
                         output.accept(ModBlocks.ORNATE_COPPER_HOOKAH.get());
@@ -126,7 +133,6 @@ public class TobacconistCreativeTab {
                         output.accept(PaintingTabHelper.paintingVariant("american_lone_cowboy"));
                         output.accept(PaintingTabHelper.paintingVariant("american_cigarette"));
                         output.accept(PaintingTabHelper.paintingVariant("ottoman_hookah"));
-                        output.accept(PaintingTabHelper.paintingVariant("morrocan_hookah"));
                         output.accept(PaintingTabHelper.paintingVariant("american_cowboy_pair_wide"));
                         output.accept(PaintingTabHelper.paintingVariant("peace_pipe"));
                         output.accept(PaintingTabHelper.paintingVariant("japanese_kiseru_wide"));
@@ -175,7 +181,7 @@ public class TobacconistCreativeTab {
 
     private static ItemStack makePipe(Item plankItem) {
         ItemStack pipe = new ItemStack(ModItems.WOODEN_SMOKING_PIPE.get());
-        pipe.getOrCreateTag().putString(
+        LegacyItemTags.getOrCreateTag(pipe).putString(
                 WoodenPipeRecipe.NBT_WOOD_PLANK,
                 BuiltInRegistries.ITEM.getKey(plankItem).toString()
         );

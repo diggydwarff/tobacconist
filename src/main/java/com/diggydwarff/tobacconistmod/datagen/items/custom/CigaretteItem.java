@@ -1,7 +1,8 @@
 package com.diggydwarff.tobacconistmod.datagen.items.custom;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelBlockEntity;
-import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
 import com.diggydwarff.tobacconistmod.datagen.items.SmokingItem;
 import com.diggydwarff.tobacconistmod.util.*;
 import net.minecraft.ChatFormatting;
@@ -10,7 +11,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
@@ -38,7 +41,7 @@ public class CigaretteItem extends SmokingItem {
         this.triggerSmokingEffectPlayer(player, (ServerLevel) level, 0, stack);
 
         if (stack.getDamageValue() >= stack.getMaxDamage() - 1) {
-            stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(hand));
+            stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
         } else {
             stack.setDamageValue(stack.getDamageValue() + 1);
         }
@@ -53,6 +56,7 @@ public class CigaretteItem extends SmokingItem {
         }
 
         this.triggerSmokingEffectPlayer(player, level, 0, stack);
+
         int nextDamage = stack.getDamageValue() + 1;
         if (nextDamage >= stack.getMaxDamage()) {
             stack.shrink(1);
@@ -77,8 +81,8 @@ public class CigaretteItem extends SmokingItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-        CompoundTag tag = stack.getTag();
+    public void appendHoverText(ItemStack stack, Item.TooltipContext worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+        CompoundTag tag = LegacyItemTags.getTag(stack);
 
         if (tag != null) {
             String tobacco = tag.getString("tobacco");
@@ -98,16 +102,14 @@ public class CigaretteItem extends SmokingItem {
                 tooltip.add(Component.literal("Creative Tobacco").withStyle(ChatFormatting.GOLD));
             }
 
-            if (TobacconistConfig.isQualitySystemEnabled()) {
-                int displayQuality = getDisplayQuality10(stack);
-                if (displayQuality >= 0) {
-                    tooltip.add(Component.literal("Quality: " + displayQuality + "/10")
-                            .withStyle(ChatFormatting.GRAY));
-                }
+            int displayQuality = getDisplayQuality10(stack);
+            if (displayQuality >= 0) {
+                tooltip.add(Component.literal("Quality: " + displayQuality + "/10")
+                        .withStyle(ChatFormatting.GRAY));
             }
 
             ItemStack temp = new ItemStack(stack.getItem());
-            temp.setTag(tag.copy());
+            LegacyItemTags.setTag(temp, tag.copy());
             TobaccoCuringHelper.ensureDefaultTobaccoData(temp);
 
             String cutType = TobaccoCuringHelper.getCutType(temp);
@@ -153,7 +155,7 @@ public class CigaretteItem extends SmokingItem {
             return Math.max(1, Math.round(quality / 10.0f));
         }
 
-        CompoundTag tag = stack.getTag();
+        CompoundTag tag = LegacyItemTags.getTag(stack);
         if (tag != null && tag.contains(TAG_QUALITY)) {
             return Math.max(1, Math.round(tag.getInt(TAG_QUALITY) / 10.0f));
         }

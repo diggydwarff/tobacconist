@@ -3,12 +3,12 @@ package com.diggydwarff.tobacconistmod.block;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoGrowthHelper;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -25,7 +25,6 @@ import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.common.IPlantable;
 
 public abstract class AbstractTallTobaccoCropBlock extends CropBlock {
 
@@ -121,7 +120,7 @@ public abstract class AbstractTallTobaccoCropBlock extends CropBlock {
         if (level.getRawBrightness(pos, 0) < 9) return;
 
         int currentAge = getEffectiveAge(level, pos, state);
-        float speed = getGrowthSpeed(this, level, pos);
+        float speed = getGrowthSpeed(state, level, pos);
 
         if (random.nextInt((int) (25.0F / speed) + 1) != 0) return;
 
@@ -142,11 +141,6 @@ public abstract class AbstractTallTobaccoCropBlock extends CropBlock {
     }
 
     @Override
-    public boolean canSustainPlant(BlockState state, BlockGetter world, BlockPos pos, Direction facing, IPlantable plantable) {
-        return super.mayPlaceOn(state, world, pos);
-    }
-
-    @Override
     protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos) {
         return state.is(Blocks.FARMLAND);
     }
@@ -164,10 +158,9 @@ public abstract class AbstractTallTobaccoCropBlock extends CropBlock {
     }
 
     @Override
-    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+    public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         if (level.isClientSide) {
-            super.playerWillDestroy(level, pos, state, player);
-            return;
+            return super.playerWillDestroy(level, pos, state, player);
         }
 
         DoubleBlockHalf half = state.getValue(HALF);
@@ -183,7 +176,7 @@ public abstract class AbstractTallTobaccoCropBlock extends CropBlock {
             }
 
             level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
-            return;
+            return state;
         }
 
         BlockPos upperPos = pos.above();
@@ -199,11 +192,11 @@ public abstract class AbstractTallTobaccoCropBlock extends CropBlock {
             level.setBlock(upperPos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
         }
 
-        super.playerWillDestroy(level, pos, state, player);
+        return super.playerWillDestroy(level, pos, state, player);
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state, boolean isClient) {
+    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state) {
         if (state.getValue(HALF) == DoubleBlockHalf.UPPER) return false;
         return getEffectiveAge(level, pos, state) < getMaxAge();
     }
@@ -266,9 +259,19 @@ public abstract class AbstractTallTobaccoCropBlock extends CropBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        InteractionResult result = handleUse(state, level, pos, player, hand, hit);
+        return result.consumesAction() ? ItemInteractionResult.sidedSuccess(level.isClientSide) : ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+    }
+
+    @Override
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
+        return handleUse(state, level, pos, player, InteractionHand.MAIN_HAND, hit);
+    }
+
+    private InteractionResult handleUse(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (!player.isShiftKeyDown()) {
-            return super.use(state, level, pos, player, hand, hit);
+            return InteractionResult.PASS;
         }
 
         if (level.isClientSide) {

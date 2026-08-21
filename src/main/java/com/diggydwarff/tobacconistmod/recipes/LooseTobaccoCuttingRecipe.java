@@ -2,33 +2,33 @@ package com.diggydwarff.tobacconistmod.recipes;
 
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 
 public class LooseTobaccoCuttingRecipe extends CustomRecipe {
 
-    public LooseTobaccoCuttingRecipe(ResourceLocation id, CraftingBookCategory category) {
-        super(id, category);
+    public LooseTobaccoCuttingRecipe(CraftingBookCategory category) {
+        super(category);
     }
 
     @Override
-    public boolean matches(CraftingContainer container, Level level) {
+    public boolean matches(CraftingInput container, Level level) {
         return !assemble(container, level.registryAccess()).isEmpty();
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer container, RegistryAccess registryAccess) {
+    public ItemStack assemble(CraftingInput container, HolderLookup.Provider registries) {
         int leafSlot = -1;
         int chavetaSlot = -1;
         int nonEmpty = 0;
 
-        for (int i = 0; i < container.getContainerSize(); i++) {
+        for (int i = 0; i < container.size(); i++) {
             ItemStack stack = container.getItem(i);
             if (stack.isEmpty()) continue;
 
@@ -49,7 +49,7 @@ public class LooseTobaccoCuttingRecipe extends CustomRecipe {
             return ItemStack.EMPTY;
         }
 
-        int width = container.getWidth();
+        int width = container.width();
         int leafX = leafSlot % width;
         int leafY = leafSlot / width;
         int chavetaX = chavetaSlot % width;
@@ -83,8 +83,8 @@ public class LooseTobaccoCuttingRecipe extends CustomRecipe {
     }
 
     @Override
-    public NonNullList<ItemStack> getRemainingItems(CraftingContainer container) {
-        NonNullList<ItemStack> remaining = NonNullList.withSize(container.getContainerSize(), ItemStack.EMPTY);
+    public NonNullList<ItemStack> getRemainingItems(CraftingInput container) {
+        NonNullList<ItemStack> remaining = NonNullList.withSize(container.size(), ItemStack.EMPTY);
 
         for (int i = 0; i < remaining.size(); i++) {
             ItemStack stack = container.getItem(i);

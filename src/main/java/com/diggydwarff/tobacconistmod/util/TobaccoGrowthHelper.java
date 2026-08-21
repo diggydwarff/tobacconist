@@ -1,5 +1,7 @@
 package com.diggydwarff.tobacconistmod.util;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
@@ -7,7 +9,7 @@ import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraftforge.common.Tags;
+import net.neoforged.neoforge.common.Tags;
 
 public final class TobaccoGrowthHelper {
 
@@ -30,7 +32,7 @@ public final class TobaccoGrowthHelper {
     private TobaccoGrowthHelper() {}
 
     public static void applyGrowthQuality(ItemStack stack, int quality) {
-        CompoundTag tag = stack.getOrCreateTag();
+        CompoundTag tag = LegacyItemTags.getOrCreateTag(stack);
         int clamped = Math.max(0, Math.min(70, quality));
 
         tag.putInt(TobaccoCuringHelper.TAG_GROWTH_QUALITY, clamped);
@@ -42,43 +44,24 @@ public final class TobaccoGrowthHelper {
     }
 
     public static int calculateGrowthQuality(Level level, BlockPos pos, Variety variety, int age, int maxAge) {
-        int base = calculateGrowthPotential(level, pos, variety, age, maxAge);
-        int rng = level.random.nextInt(11); // 0–10
-        int quality = base + rng;
-        return Math.max(0, Math.min(70, quality));
-    }
-
-    /**
-     * Scores only the growing environment (biome, light, temperature), deliberately
-     * excluding crop age/harvest timing. This is used by the spectacles so a healthy
-     * young crop is not described as having poor conditions merely because it is young.
-     * Typical range is roughly -20 to +22.
-     */
-    public static int calculateEnvironmentConditionScore(Level level, BlockPos pos, Variety variety) {
-        int biome = biomeScore(level, pos, variety);
-        int light = lightScore(level, pos, variety);
-        int temp = temperatureScore(level, pos, variety);
-
-        return (biome / 2) + ((light * 3) / 5) + ((temp * 3) / 5);
-    }
-
-    /**
-     * Deterministic quality before the 0-10 harvest roll. Useful for inspection UI.
-     */
-    public static int calculateGrowthPotential(Level level, BlockPos pos, Variety variety, int age, int maxAge) {
         int biome = biomeScore(level, pos, variety);
         int light = lightScore(level, pos, variety);
         int temp = temperatureScore(level, pos, variety);
         int harvest = harvestTimingScore(age, maxAge);
 
+        // Rebalanced so ideal conditions no longer auto-cap to 70.
+        // Perfect raw should usually land in the low/mid 60s, with RNG able to push a few into upper 60s.
         int base =
                 28
-                        + (biome / 2)
-                        + ((light * 3) / 5)
-                        + ((temp * 3) / 5)
-                        + ((harvest * 3) / 4);
+                        + (biome / 2)              // +10 at best
+                        + ((light * 3) / 5)        // +6 at best
+                        + ((temp * 3) / 5)         // +6 at best
+                        + ((harvest * 3) / 4);     // +6 at best
 
-        return Math.max(0, Math.min(70, base));
+        int rng = level.getRandom().nextInt(11); // 0–10
+
+        int quality = base + rng;
+        return Math.max(0, Math.min(70, quality));
     }
 
     public static String getInspectionMessage(Level level, BlockPos pos, Variety variety, int effectiveAge, int maxAge) {

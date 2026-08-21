@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " * ",
+    " / ",
+    "/$/"
+  ],
+  "key": {
+    "/": {
+      "item": "minecraft:glass"
+    },
+    "*": {
+      "item": "minecraft:brick"
+    },
+    "$": {
+      "item": "minecraft:diamond"
+    }
+  },
+  "result": {
+    "count": 1,
+    "id": "tobacconistmod:hookah_block"
+  }
+}

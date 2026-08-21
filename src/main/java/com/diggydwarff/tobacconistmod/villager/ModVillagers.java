@@ -1,5 +1,6 @@
 package com.diggydwarff.tobacconistmod.villager;
 
+import java.util.function.Supplier;
 import com.google.common.collect.ImmutableSet;
 import com.diggydwarff.tobacconistmod.TobacconistMod;
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
@@ -9,27 +10,27 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.entity.npc.VillagerProfession;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.util.ObfuscationReflectionHelper;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 import net.minecraft.world.entity.ai.village.poi.PoiTypes;
 
 public class ModVillagers {
     public static final DeferredRegister<PoiType> POI_TYPES =
-            DeferredRegister.create(ForgeRegistries.POI_TYPES, TobacconistMod.MODID);
+            DeferredRegister.create(BuiltInRegistries.POINT_OF_INTEREST_TYPE, TobacconistMod.MODID);
     public static final DeferredRegister<VillagerProfession> VILLAGER_PROFESSIONS =
-            DeferredRegister.create(ForgeRegistries.VILLAGER_PROFESSIONS, TobacconistMod.MODID);
+            DeferredRegister.create(BuiltInRegistries.VILLAGER_PROFESSION, TobacconistMod.MODID);
 
-    public static final RegistryObject<PoiType> HOOKAH_POI =
+    public static final Supplier<PoiType> HOOKAH_POI =
             POI_TYPES.register("hookah_poi", () -> new PoiType(
                     ImmutableSet.copyOf(ModBlocks.HOOKAH.get().getStateDefinition().getPossibleStates()),
                     1, 1
             ));
 
-    public static final RegistryObject<VillagerProfession> TOBACCONIST_MASTER =
+    public static final Supplier<VillagerProfession> TOBACCONIST_MASTER =
             VILLAGER_PROFESSIONS.register("tobacconist_master", () -> new VillagerProfession(
                     "tobacconist_master",
                     poiHolder -> poiHolder.value() == HOOKAH_POI.get(),

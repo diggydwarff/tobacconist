@@ -1,0 +1,23 @@
+{
+  "type": "patchouli:shaped_book_recipe",
+  "pattern": [
+    " T ",
+    " B ",
+    "   "
+  ],
+  "key": {
+    "T": {
+      "item": "tobacconistmod:wooden_smoking_pipe"
+    },
+    "B": {
+      "item": "minecraft:book"
+    }
+  },
+  "book": "tobacconistmod:tobacco_manual",
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "patchouli"
+    }
+  ]
+}

@@ -10,7 +10,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
@@ -38,7 +37,11 @@ public abstract class SmokingItem extends Item {
                 && stack.getDamageValue() < stack.getMaxDamage();
     }
 
-    /** Server-side action used by the Curios mouth-slot smoking hotkey. */
+    /**
+     * Server-side action used when the player explicitly smokes this item while it is
+     * equipped in the Curios mouth slot. Subclasses override this when they need to
+     * consume durability/puffs.
+     */
     public boolean smokeFromMouthSlot(Player player, ServerLevel level, ItemStack stack) {
         if (stack.isEmpty()) return false;
         triggerSmokingEffectPlayer(player, level, 0, stack);
@@ -67,20 +70,18 @@ public abstract class SmokingItem extends Item {
                     player.getX() + mergeVec.x,
                     player.getY() + 1.4 + mergeVec.y,
                     player.getZ() + mergeVec.z,
-                    Math.max(1, smokelevel), 0, 0, 0, 0
+                    smokelevel, 0, 0, 0, 0
             );
         }
 
-        if (TobacconistConfig.areNicotineEffectsEnabled()) {
-            player.addEffect(new MobEffectInstance(
-                    ModEffects.NICOTINE.get(),
-                    500,
-                    0,
-                    false,
-                    false,
-                    true
-            ));
-        }
+        player.addEffect(new MobEffectInstance(
+                ModEffects.NICOTINE,
+                500,
+                0,
+                false,
+                false,
+                true
+        ));
 
         applyQualityHealthBonus(player, tobaccoStack);
         applyConfiguredAdditionalEffects(player);
@@ -96,11 +97,11 @@ public abstract class SmokingItem extends Item {
                 int duration = Integer.parseInt(parts[1].trim());
                 int amplifier = Integer.parseInt(parts[2].trim());
 
-                MobEffect effect = BuiltInRegistries.MOB_EFFECT.get(new ResourceLocation(effectId));
-                if (effect == null) continue;
+                var effect = BuiltInRegistries.MOB_EFFECT.getHolder(ResourceLocation.parse(effectId));
+                if (effect.isEmpty()) continue;
 
                 player.addEffect(new MobEffectInstance(
-                        effect,
+                        effect.get(),
                         duration,
                         amplifier,
                         false,
@@ -114,7 +115,6 @@ public abstract class SmokingItem extends Item {
     }
 
     protected void applyQualityHealthBonus(Player player, ItemStack tobaccoStack) {
-        if (!TobacconistConfig.isQualitySystemEnabled()) return;
         if (tobaccoStack == null || tobaccoStack.isEmpty()) return;
 
         int quality = TobaccoCuringHelper.getQuality(tobaccoStack);

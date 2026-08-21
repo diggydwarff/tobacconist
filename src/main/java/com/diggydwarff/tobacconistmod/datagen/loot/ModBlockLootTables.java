@@ -4,6 +4,7 @@ import com.diggydwarff.tobacconistmod.block.ModBlocks;
 import com.diggydwarff.tobacconistmod.block.custom.*;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
@@ -16,18 +17,20 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePrope
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 import java.util.Set;
 
 public class ModBlockLootTables extends BlockLootSubProvider {
-    public ModBlockLootTables() {
-        super(Set.of(), FeatureFlags.REGISTRY.allFlags());
+    public ModBlockLootTables(HolderLookup.Provider registries) {
+        super(Set.of(), FeatureFlags.REGISTRY.allFlags(), registries);
     }
 
     @Override
     protected void generate() {
 
+        // Utility/placeable blocks should drop themselves. Their block entities
+        // handle dropping any stored contents separately.
         this.dropSelf(ModBlocks.HOOKAH.get());
         this.dropSelf(ModBlocks.ORNATE_COPPER_HOOKAH.get());
         this.dropSelf(ModBlocks.ORNATE_GOLD_HOOKAH.get());
@@ -136,18 +139,16 @@ public class ModBlockLootTables extends BlockLootSubProvider {
                         // LOWER seeds
                         .withPool(LootPool.lootPool()
                                 .setRolls(ConstantValue.exactly(1))
-                                .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(ModBlocks.WILD_TOBACCO_CROP.get())
+                                .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(ModBlocks.BURLEY_TOBACCO_CROP.get())
                                         .setProperties(StatePropertiesPredicate.Builder.properties()
-                                                .hasProperty(WildCropBlock.HALF, DoubleBlockHalf.LOWER)))
+                                                .hasProperty(BurleyCropBlock.HALF, DoubleBlockHalf.LOWER)))
                                 .add(LootItem.lootTableItem(ModItems.WILD_TOBACCO_SEEDS.get())
                                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0f, 2.0f)))))
 
                         // UPPER leaves (no age gate)
                         .withPool(LootPool.lootPool()
                                 .setRolls(ConstantValue.exactly(1))
-                                .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(ModBlocks.WILD_TOBACCO_CROP.get())
-                                        .setProperties(StatePropertiesPredicate.Builder.properties()
-                                                .hasProperty(WildCropBlock.HALF, DoubleBlockHalf.UPPER)))
+                                .when(burleyUpperOnly)
                                 .add(LootItem.lootTableItem(ModItems.WILD_TOBACCO_LEAF.get())
                                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0f, 4.0f)))))
         );
@@ -157,16 +158,16 @@ public class ModBlockLootTables extends BlockLootSubProvider {
                         // LOWER seeds
                         .withPool(LootPool.lootPool()
                                 .setRolls(ConstantValue.exactly(1))
-                                .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(ModBlocks.VIRGINIA_TOBACCO_CROP.get())
+                                .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(ModBlocks.BURLEY_TOBACCO_CROP.get())
                                         .setProperties(StatePropertiesPredicate.Builder.properties()
-                                                .hasProperty(VirginiaCropBlock.HALF, DoubleBlockHalf.LOWER)))
+                                                .hasProperty(BurleyCropBlock.HALF, DoubleBlockHalf.LOWER)))
                                 .add(LootItem.lootTableItem(ModItems.VIRGINIA_TOBACCO_SEEDS.get())
                                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0f, 2.0f)))))
 
                         // UPPER leaves (no age gate)
                         .withPool(LootPool.lootPool()
                                 .setRolls(ConstantValue.exactly(1))
-                                .when(virginiaUpperOnly)
+                                .when(burleyUpperOnly)
                                 .add(LootItem.lootTableItem(ModItems.VIRGINIA_TOBACCO_LEAF.get())
                                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0f, 4.0f)))))
         );
@@ -197,14 +198,14 @@ public class ModBlockLootTables extends BlockLootSubProvider {
                                 .setRolls(ConstantValue.exactly(1))
                                 .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(ModBlocks.DOKHA_TOBACCO_CROP.get())
                                         .setProperties(StatePropertiesPredicate.Builder.properties()
-                                                .hasProperty(DokhaCropBlock.HALF, DoubleBlockHalf.LOWER)))
+                                                .hasProperty(BurleyCropBlock.HALF, DoubleBlockHalf.LOWER)))
                                 .add(LootItem.lootTableItem(ModItems.DOKHA_TOBACCO_SEEDS.get())
                                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0f, 2.0f)))))
 
                         // UPPER leaves (no age gate)
                         .withPool(LootPool.lootPool()
                                 .setRolls(ConstantValue.exactly(1))
-                                .when(dokhaUpperOnly)
+                                .when(burleyUpperOnly)
                                 .add(LootItem.lootTableItem(ModItems.DOKHA_TOBACCO_LEAF.get())
                                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0f, 4.0f)))))
         );
@@ -216,14 +217,14 @@ public class ModBlockLootTables extends BlockLootSubProvider {
                                 .setRolls(ConstantValue.exactly(1))
                                 .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(ModBlocks.ORIENTAL_TOBACCO_CROP.get())
                                         .setProperties(StatePropertiesPredicate.Builder.properties()
-                                                .hasProperty(OrientalCropBlock.HALF, DoubleBlockHalf.LOWER)))
+                                                .hasProperty(BurleyCropBlock.HALF, DoubleBlockHalf.LOWER)))
                                 .add(LootItem.lootTableItem(ModItems.ORIENTAL_TOBACCO_SEEDS.get())
                                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0f, 2.0f)))))
 
                         // UPPER leaves (no age gate)
                         .withPool(LootPool.lootPool()
                                 .setRolls(ConstantValue.exactly(1))
-                                .when(orientalUpperOnly)
+                                .when(burleyUpperOnly)
                                 .add(LootItem.lootTableItem(ModItems.ORIENTAL_TOBACCO_LEAF.get())
                                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0f, 4.0f)))))
         );
@@ -235,14 +236,14 @@ public class ModBlockLootTables extends BlockLootSubProvider {
                                 .setRolls(ConstantValue.exactly(1))
                                 .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(ModBlocks.SHADE_TOBACCO_CROP.get())
                                         .setProperties(StatePropertiesPredicate.Builder.properties()
-                                                .hasProperty(ShadeCropBlock.HALF, DoubleBlockHalf.LOWER)))
+                                                .hasProperty(BurleyCropBlock.HALF, DoubleBlockHalf.LOWER)))
                                 .add(LootItem.lootTableItem(ModItems.SHADE_TOBACCO_SEEDS.get())
                                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0f, 2.0f)))))
 
                         // UPPER leaves (no age gate)
                         .withPool(LootPool.lootPool()
                                 .setRolls(ConstantValue.exactly(1))
-                                .when(shadeUpperOnly)
+                                .when(burleyUpperOnly)
                                 .add(LootItem.lootTableItem(ModItems.SHADE_TOBACCO_LEAF.get())
                                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0f, 4.0f)))))
         );
@@ -257,6 +258,6 @@ public class ModBlockLootTables extends BlockLootSubProvider {
 
     @Override
     protected Iterable<Block> getKnownBlocks() {
-        return ModBlocks.BLOCKS.getEntries().stream().map(RegistryObject::get)::iterator;
+        return ModBlocks.BLOCKS.getEntries().stream().map(holder -> (Block) holder.get())::iterator;
     }
 }

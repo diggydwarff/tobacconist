@@ -1,5 +1,7 @@
 package com.diggydwarff.tobacconistmod.compat.jei;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import net.minecraft.world.item.ItemStack;
@@ -23,7 +25,7 @@ public record HookahLoadJeiRecipe(
         ItemStack heat = new ItemStack(Items.COAL);
 
         ItemStack loaded = new ItemStack(ModBlocks.HOOKAH.get().asItem());
-        loaded.getOrCreateTag().putBoolean("Loaded", true);
+        LegacyItemTags.getOrCreateTag(loaded).putBoolean("Loaded", true);
 
         return List.of(
                 new HookahLoadJeiRecipe(

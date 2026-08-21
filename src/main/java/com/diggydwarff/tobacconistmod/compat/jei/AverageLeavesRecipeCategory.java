@@ -18,7 +18,7 @@ import net.minecraft.resources.ResourceLocation;
 public class AverageLeavesRecipeCategory implements IRecipeCategory<AverageLeavesJeiRecipe> {
 
     public static final RecipeType<AverageLeavesJeiRecipe> TYPE =
-            new RecipeType<>(new ResourceLocation(TobacconistMod.MODID, "average_leaves"), AverageLeavesJeiRecipe.class);
+            new RecipeType<>(ResourceLocation.fromNamespaceAndPath(TobacconistMod.MODID, "average_leaves"), AverageLeavesJeiRecipe.class);
 
     private final IDrawable background;
     private final IDrawable icon;

@@ -1,5 +1,7 @@
 package com.diggydwarff.tobacconistmod.handlers;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import com.diggydwarff.tobacconistmod.TobacconistMod;
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
 import com.diggydwarff.tobacconistmod.block.custom.HookahBlock;
@@ -10,18 +12,18 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.EmptyBlockGetter;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RegisterColorHandlersEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 
-@Mod.EventBusSubscriber(modid = TobacconistMod.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(modid = TobacconistMod.MODID, value = Dist.CLIENT)
 public class ClientColorHandlers {
 
     @SubscribeEvent
     public static void onBlockColors(RegisterColorHandlersEvent.Block event) {
         event.register((state, level, pos, tintIndex) -> {
-            if (tintIndex != 0) return 0xFFFFFF;
+            if (tintIndex != 0) return 0xFFFFFFFF;
 
             DyeColor color = state.getValue(HookahBlock.COLOR);
             int c = color.getTextColor();
@@ -36,7 +38,7 @@ public class ClientColorHandlers {
             g = (int)(255 * (1 - strength) + g * strength);
             b = (int)(255 * (1 - strength) + b * strength);
 
-            return (r << 16) | (g << 8) | b;
+            return 0xFF000000 | (r << 16) | (g << 8) | b;
         }, ModBlocks.HOOKAH.get());
     }
 
@@ -46,14 +48,14 @@ public class ClientColorHandlers {
         event.register((stack, tintIndex) -> {
 
             // Only tint layer0
-            if (tintIndex != 0) return 0xFFFFFF;
+            if (tintIndex != 0) return 0xFFFFFFFF;
 
-            var tag = stack.getTag();
+            var tag = LegacyItemTags.getTag(stack);
             if (tag == null || !tag.contains(WoodenPipeRecipe.NBT_WOOD_PLANK))
-                return 0xFFFFFF;
+                return 0xFFFFFFFF;
 
             ResourceLocation id =
-                    new ResourceLocation(tag.getString(WoodenPipeRecipe.NBT_WOOD_PLANK));
+                    ResourceLocation.parse(tag.getString(WoodenPipeRecipe.NBT_WOOD_PLANK));
 
             var item = BuiltInRegistries.ITEM.get(id);
 
@@ -79,18 +81,18 @@ public class ClientColorHandlers {
                 g = clamp((int)(g * darken));
                 b = clamp((int)(b * darken));
 
-                return (r << 16) | (g << 8) | b;
+                return 0xFF000000 | (r << 16) | (g << 8) | b;
             }
 
-            return 0xFFFFFF;
+            return 0xFFFFFFFF;
 
-        }, BuiltInRegistries.ITEM.get(new ResourceLocation("tobacconistmod", "wooden_smoking_pipe")));
+        }, BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath("tobacconistmod", "wooden_smoking_pipe")));
 
         event.register((stack, tintIndex) -> {
-            if (tintIndex != 0) return 0xFFFFFF;
+            if (tintIndex != 0) return 0xFFFFFFFF;
 
             // default inventory color for undyed/base hookah item
-            return 0xB0B0B0;
+            return 0xFFB0B0B0;
         }, ModBlocks.HOOKAH.get());
     }
 

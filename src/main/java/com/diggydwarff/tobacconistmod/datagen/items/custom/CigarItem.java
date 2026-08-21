@@ -1,7 +1,8 @@
 package com.diggydwarff.tobacconistmod.datagen.items.custom;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelBlockEntity;
-import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
 import com.diggydwarff.tobacconistmod.datagen.items.SmokingItem;
 import com.diggydwarff.tobacconistmod.util.*;
 import net.minecraft.ChatFormatting;
@@ -10,7 +11,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
@@ -35,7 +38,7 @@ public class CigarItem extends SmokingItem {
         this.triggerSmokingEffectPlayer(player, (ServerLevel) level, 0, stack);
 
         if (stack.getDamageValue() >= stack.getMaxDamage() - 1) {
-            stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(hand));
+            stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
         } else {
             stack.setDamageValue(stack.getDamageValue() + 1);
         }
@@ -50,6 +53,7 @@ public class CigarItem extends SmokingItem {
         }
 
         this.triggerSmokingEffectPlayer(player, level, 0, stack);
+
         int nextDamage = stack.getDamageValue() + 1;
         if (nextDamage >= stack.getMaxDamage()) {
             stack.shrink(1);
@@ -74,8 +78,8 @@ public class CigarItem extends SmokingItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-        CompoundTag tag = stack.getTag();
+    public void appendHoverText(ItemStack stack, Item.TooltipContext worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+        CompoundTag tag = LegacyItemTags.getTag(stack);
 
         if (tag != null) {
             String wrapper = TobaccoTooltipHelper.cleanTobaccoName(tag.getString("wrapper"));
@@ -99,12 +103,10 @@ public class CigarItem extends SmokingItem {
             }
             tooltip.add(Component.empty());
 
-            if (TobacconistConfig.isQualitySystemEnabled()) {
-                int displayQuality = getDisplayQuality10(stack);
-                if (displayQuality >= 0) {
-                    tooltip.add(Component.literal("Quality: " + displayQuality + "/10")
-                            .withStyle(ChatFormatting.GRAY));
-                }
+            int displayQuality = getDisplayQuality10(stack);
+            if (displayQuality >= 0) {
+                tooltip.add(Component.literal("Quality: " + displayQuality + "/10")
+                        .withStyle(ChatFormatting.GRAY));
             }
 
             tooltip.add(Component.literal("Filler: " + getFillerLine(stack)).withStyle(ChatFormatting.GRAY));
@@ -121,6 +123,8 @@ public class CigarItem extends SmokingItem {
             tooltip.add(Component.empty());
             tooltip.add(Component.literal("✿ Fermented").withStyle(ChatFormatting.DARK_GRAY));
             tooltip.add(Component.literal("ᵐ Months aged, ʸ Years aged").withStyle(ChatFormatting.DARK_GRAY));
+            tooltip.add(Component.literal("Wrapper aging/fermentation unavailable until wrapper NBT is stored on cigar recipes.")
+                    .withStyle(ChatFormatting.DARK_GRAY));
         }
     }
 
@@ -128,12 +132,10 @@ public class CigarItem extends SmokingItem {
         CompoundTag packed = TobaccoTooltipHelper.getPackedTobaccoData(stack);
         if (packed == null) {
             // build default legacy filler
-            String prefix = TobacconistConfig.isQualitySystemEnabled()
-                    ? "Standard Air-Cured Ribbon Cut "
-                    : "Air-Cured Ribbon Cut ";
-            return prefix + TobaccoTooltipHelper.cleanTobaccoName(
-                    TobaccoTooltipHelper.getPackedLeafName(stack)
-            );
+            return "Standard Air-Cured Ribbon Cut " +
+                    TobaccoTooltipHelper.cleanTobaccoName(
+                            TobaccoTooltipHelper.getPackedLeafName(stack)
+                    );
         }
 
         int quality100 = packed.contains(TobaccoCuringHelper.TAG_QUALITY)
@@ -143,7 +145,7 @@ public class CigarItem extends SmokingItem {
         String qualityWord = TobaccoTooltipHelper.getQualityWord(quality100);
 
         ItemStack temp = new ItemStack(stack.getItem());
-        temp.setTag(packed.copy());
+        LegacyItemTags.setTag(temp, packed.copy());
 
         String cureType = TobaccoCuringHelper.getCureType(temp);
         String cutType = TobaccoCuringHelper.getCutType(temp);
@@ -173,9 +175,7 @@ public class CigarItem extends SmokingItem {
                 .trim();
 
         StringBuilder out = new StringBuilder();
-        if (!qualityWord.isEmpty()) {
-            out.append(qualityWord);
-        }
+        out.append(qualityWord);
 
         if (!cureWord.isEmpty()) {
             out.append(" ").append(cureWord);
@@ -210,7 +210,7 @@ public class CigarItem extends SmokingItem {
             return Math.max(1, Math.round(quality / 10.0f));
         }
 
-        CompoundTag tag = stack.getTag();
+        CompoundTag tag = LegacyItemTags.getTag(stack);
         if (tag != null && tag.contains(TobaccoCuringHelper.TAG_QUALITY)) {
             return Math.max(1, Math.round(tag.getInt(TobaccoCuringHelper.TAG_QUALITY) / 10.0f));
         }
@@ -219,7 +219,7 @@ public class CigarItem extends SmokingItem {
     }
 
     private String getCigarSummary(ItemStack stack) {
-        CompoundTag tag = stack.getTag();
+        CompoundTag tag = LegacyItemTags.getTag(stack);
         if (tag == null) {
             return "Unknown Blend";
         }
@@ -257,7 +257,7 @@ public class CigarItem extends SmokingItem {
     }
 
     private String getWrapperLine(ItemStack stack) {
-        CompoundTag tag = stack.getTag();
+        CompoundTag tag = LegacyItemTags.getTag(stack);
         if (tag == null) {
             return "Unknown";
         }
@@ -299,9 +299,7 @@ public class CigarItem extends SmokingItem {
         String cureWord = TobaccoCuringHelper.getCureDisplayName(cureType);
 
         StringBuilder out = new StringBuilder();
-        if (!qualityWord.isEmpty()) {
-            out.append(qualityWord);
-        }
+        out.append(qualityWord);
 
         if (!cureWord.isEmpty()) {
             out.append(" ").append(cureWord);

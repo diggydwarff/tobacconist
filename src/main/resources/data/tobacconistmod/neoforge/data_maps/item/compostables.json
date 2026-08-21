@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": {
+    "tobacconistmod:spoiled_tobacco": {
+      "chance": 0.85
+    }
+  }
+}

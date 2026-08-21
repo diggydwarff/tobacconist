@@ -1,5 +1,7 @@
 package com.diggydwarff.tobacconistmod.util;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.Item;
@@ -104,8 +106,8 @@ public final class TobaccoCuringHelper {
             return ItemStack.EMPTY;
         }
 
-        if (rawStack.hasTag()) {
-            result.setTag(rawStack.getTag().copy());
+        if (LegacyItemTags.hasTag(rawStack)) {
+            LegacyItemTags.setTag(result, LegacyItemTags.getTag(rawStack).copy());
         }
 
         return result;
@@ -137,29 +139,29 @@ public final class TobaccoCuringHelper {
     }
 
     public static void copyTobaccoProcessingData(ItemStack from, ItemStack to) {
-        CompoundTag tag = from.hasTag() ? from.getTag().copy() : new CompoundTag();
+        CompoundTag tag = LegacyItemTags.hasTag(from) ? LegacyItemTags.getTag(from).copy() : new CompoundTag();
         tag.remove(TAG_GROWTH_QUALITY);
 
         int quality = getQuality(from);
         tag.putInt(TAG_QUALITY, quality);
         tag.putString(TAG_QUALITY_TIER, getQualityTierId(quality));
 
-        to.setTag(tag);
+        LegacyItemTags.setTag(to, tag);
     }
 
     public static void setCutType(ItemStack stack, String cutType) {
-        CompoundTag tag = stack.getOrCreateTag();
+        CompoundTag tag = LegacyItemTags.getOrCreateTag(stack);
         tag.putString(TAG_CUT_TYPE, cutType);
     }
 
     public static String getCutType(ItemStack stack) {
         if (stack.isEmpty()) return "";
 
-        if (!stack.hasTag()) {
+        if (!LegacyItemTags.hasTag(stack)) {
             return isLooseTobacco(stack) ? CUT_RIBBON : "";
         }
 
-        CompoundTag tag = stack.getTag();
+        CompoundTag tag = LegacyItemTags.getTag(stack);
         if (!tag.contains(TAG_CUT_TYPE)) {
             return isLooseTobacco(stack) ? CUT_RIBBON : "";
         }
@@ -185,11 +187,11 @@ public final class TobaccoCuringHelper {
     public static String getCureType(ItemStack stack) {
         if (stack.isEmpty()) return "";
 
-        if (!stack.hasTag()) {
+        if (!LegacyItemTags.hasTag(stack)) {
             return isDryTobaccoLeaf(stack) || isLooseTobacco(stack) ? CURE_AIR : "";
         }
 
-        CompoundTag tag = stack.getTag();
+        CompoundTag tag = LegacyItemTags.getTag(stack);
         if (!tag.contains(TAG_CURE_TYPE)) {
             return isDryTobaccoLeaf(stack) || isLooseTobacco(stack) ? CURE_AIR : "";
         }
@@ -203,7 +205,7 @@ public final class TobaccoCuringHelper {
     }
 
     public static void applyCureData(ItemStack stack, String cureType, int quality) {
-        CompoundTag tag = stack.getOrCreateTag();
+        CompoundTag tag = LegacyItemTags.getOrCreateTag(stack);
         tag.putString(TAG_CURE_TYPE, cureType);
 
         int clamped = clampQuality(quality);
@@ -215,7 +217,7 @@ public final class TobaccoCuringHelper {
         if (stack.isEmpty()) return;
         if (!isRawTobaccoLeaf(stack) && !isDryTobaccoLeaf(stack) && !isLooseTobacco(stack)) return;
 
-        CompoundTag tag = stack.getOrCreateTag();
+        CompoundTag tag = LegacyItemTags.getOrCreateTag(stack);
 
         if (isRawTobaccoLeaf(stack)) {
             if (!tag.contains(TAG_GROWTH_QUALITY)) {
@@ -254,11 +256,11 @@ public final class TobaccoCuringHelper {
     }
 
     public static int getQuality(ItemStack stack) {
-        if (!stack.hasTag()) {
+        if (!LegacyItemTags.hasTag(stack)) {
             return isRawTobaccoLeaf(stack) ? 50 : 75;
         }
 
-        CompoundTag tag = stack.getTag();
+        CompoundTag tag = LegacyItemTags.getTag(stack);
         if (tag.contains(TAG_QUALITY)) {
             return clampQuality(tag.getInt(TAG_QUALITY));
         }
@@ -308,7 +310,7 @@ public final class TobaccoCuringHelper {
     }
 
     public static void applyCreativeLeafDefaults(ItemStack stack, boolean cured) {
-        CompoundTag tag = stack.getOrCreateTag();
+        CompoundTag tag = LegacyItemTags.getOrCreateTag(stack);
 
         if (cured) {
             tag.putInt(TAG_QUALITY, 75);
@@ -333,7 +335,7 @@ public final class TobaccoCuringHelper {
         ItemStack stack = base.copy();
         stack.setCount(1);
 
-        CompoundTag tag = stack.getOrCreateTag();
+        CompoundTag tag = LegacyItemTags.getOrCreateTag(stack);
         tag.putInt(TAG_QUALITY, 75);
         tag.putString(TAG_QUALITY_TIER, getQualityTierId(75));
         tag.putString(TAG_CURE_TYPE, CURE_AIR);
@@ -373,7 +375,7 @@ public final class TobaccoCuringHelper {
         if (stack.isEmpty()) return;
         if (!isRawTobaccoLeaf(stack) && !isDryTobaccoLeaf(stack) && !isLooseTobacco(stack)) return;
 
-        CompoundTag tag = stack.getOrCreateTag();
+        CompoundTag tag = LegacyItemTags.getOrCreateTag(stack);
 
         if (isRawTobaccoLeaf(stack)) {
             if (!tag.contains(TAG_GROWTH_QUALITY)) {

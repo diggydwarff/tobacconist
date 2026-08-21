@@ -1,5 +1,7 @@
 package com.diggydwarff.tobacconistmod.compat.jei;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
 import net.minecraft.world.item.ItemStack;
 
@@ -12,7 +14,7 @@ public record HookahUseJeiRecipe(
 ) {
     public static List<HookahUseJeiRecipe> createAll() {
         ItemStack loaded = new ItemStack(ModBlocks.HOOKAH.get().asItem());
-        loaded.getOrCreateTag().putBoolean("Loaded", true);
+        LegacyItemTags.getOrCreateTag(loaded).putBoolean("Loaded", true);
 
         return List.of(
                 new HookahUseJeiRecipe(

@@ -1,7 +1,8 @@
 package com.diggydwarff.tobacconistmod.datagen.items.custom;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelBlockEntity;
-import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
@@ -22,58 +23,70 @@ public class TobaccoLeafItem extends Item {
     @Override
     public Component getName(ItemStack stack) {
         Component baseName = super.getName(stack);
-        boolean qualityEnabled = TobacconistConfig.isQualitySystemEnabled();
 
         if (TobaccoCuringHelper.isDryTobaccoLeaf(stack)) {
+            int quality = TobaccoCuringHelper.getQuality(stack);
+            String tier = TobaccoCuringHelper.getQualityTier(quality);
             String cureType = TobaccoCuringHelper.getCureType(stack);
-            String prefix = "";
-            if (qualityEnabled) {
-                prefix = TobaccoCuringHelper.getQualityTier(TobaccoCuringHelper.getQuality(stack));
-            }
+
             if (!cureType.isEmpty()) {
-                if (!prefix.isEmpty()) prefix += " ";
-                prefix += TobaccoCuringHelper.getCureDisplayName(cureType);
+                return Component.literal(tier + " " + TobaccoCuringHelper.getCureDisplayName(cureType) + " ")
+                        .append(baseName);
             }
-            return prefix.isEmpty() ? baseName : Component.literal(prefix + " ").append(baseName);
+
+            return Component.literal(tier + " ").append(baseName);
         }
 
-        if (TobaccoCuringHelper.isRawTobaccoLeaf(stack) && qualityEnabled) {
-            return Component.literal(TobaccoCuringHelper.getRawLeafTier(getRawGrowthQuality(stack)) + " ").append(baseName);
+        if (TobaccoCuringHelper.isRawTobaccoLeaf(stack)) {
+            int growth = getRawGrowthQuality(stack);
+            String tier = TobaccoCuringHelper.getRawLeafTier(growth);
+            return Component.literal(tier + " ").append(baseName);
         }
+
         return baseName;
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext level, List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, level, tooltip, flag);
 
         if (TobaccoCuringHelper.isRawTobaccoLeaf(stack)) {
-            if (TobacconistConfig.isQualitySystemEnabled()) {
-                int growth = getRawGrowthQuality(stack);
-                tooltip.add(Component.literal("Growth Quality: " + growth + " (" + TobaccoCuringHelper.getRawLeafTier(growth) + ")")
-                        .withStyle(ChatFormatting.GRAY));
-            }
+            int growth = getRawGrowthQuality(stack);
+            tooltip.add(Component.literal(
+                    "Growth Quality: " + growth + " (" + TobaccoCuringHelper.getRawLeafTier(growth) + ")"
+            ).withStyle(ChatFormatting.GRAY));
         } else {
-            if (TobacconistConfig.isQualitySystemEnabled()) {
-                int quality = TobaccoCuringHelper.getQuality(stack);
-                tooltip.add(Component.literal("Quality: " + quality + " (" + TobaccoCuringHelper.getQualityTier(quality) + ")")
-                        .withStyle(ChatFormatting.GRAY));
-            }
+            int quality = TobaccoCuringHelper.getQuality(stack);
+            tooltip.add(Component.literal(
+                    "Quality: " + quality + " (" + TobaccoCuringHelper.getQualityTier(quality) + ")"
+            ).withStyle(ChatFormatting.GRAY));
+
             String cureType = TobaccoCuringHelper.getCureType(stack);
             if (!cureType.isEmpty()) {
-                tooltip.add(Component.literal("Cure: " + TobaccoCuringHelper.getCureDisplayName(cureType))
-                        .withStyle(ChatFormatting.GRAY));
+                tooltip.add(Component.literal(
+                        "Cure: " + TobaccoCuringHelper.getCureDisplayName(cureType)
+                ).withStyle(ChatFormatting.GRAY));
             }
         }
 
-        if (TobaccoBarrelBlockEntity.isFermented(stack)) tooltip.add(Component.literal("Fermented").withStyle(ChatFormatting.GOLD));
+        if (TobaccoBarrelBlockEntity.isFermented(stack)) {
+            tooltip.add(Component.literal("Fermented").withStyle(ChatFormatting.GOLD));
+        }
+
         int agedDays = TobaccoBarrelBlockEntity.getAgedDays(stack);
-        if (agedDays > 0) tooltip.add(Component.literal("Age: " + formatAge(agedDays) + " (" + getAgeLabel(agedDays) + ")").withStyle(ChatFormatting.GOLD));
-        if (TobaccoBarrelBlockEntity.isRuined(stack)) tooltip.add(Component.literal("Ruined").withStyle(ChatFormatting.RED));
+        if (agedDays > 0) {
+            tooltip.add(Component.literal(
+                    "Age: " + formatAge(agedDays) + " (" + getAgeLabel(agedDays) + ")"
+            ).withStyle(ChatFormatting.GOLD));
+        }
+
+        if (TobaccoBarrelBlockEntity.isRuined(stack)) {
+            tooltip.add(Component.literal("Ruined").withStyle(ChatFormatting.DARK_RED));
+        }
     }
 
     private int getRawGrowthQuality(ItemStack stack) {
-        CompoundTag tag = stack.getTag();
+        CompoundTag tag = LegacyItemTags.getTag(stack);
         if (tag != null && tag.contains(TobaccoCuringHelper.TAG_GROWTH_QUALITY)) {
             return Math.max(0, Math.min(70, tag.getInt(TobaccoCuringHelper.TAG_GROWTH_QUALITY)));
         }
@@ -83,7 +96,11 @@ public class TobaccoLeafItem extends Item {
     private String formatAge(int agedDays) {
         int years = agedDays / 365;
         int days = agedDays % 365;
-        return years > 0 ? years + "y " + days + "d" : days + "d";
+
+        if (years > 0) {
+            return years + "y " + days + "d";
+        }
+        return days + "d";
     }
 
     private String getAgeLabel(int agedDays) {
