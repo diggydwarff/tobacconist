@@ -247,10 +247,16 @@ public class ModBlockLootTables extends BlockLootSubProvider {
                                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0f, 4.0f)))))
         );
 
-        this.add(ModBlocks.WILD_FLOWERING_TOBACCO.get(), createCropDrops(ModBlocks.WILD_FLOWERING_TOBACCO.get(), ModItems.WILD_TOBACCO_LEAF.get(),
-                ModItems.WILD_TOBACCO_SEEDS.get(), LootItemBlockStatePropertyCondition
-                        .hasBlockStateProperties(ModBlocks.WILD_FLOWERING_TOBACCO.get())
-                        .setProperties(StatePropertiesPredicate.Builder.properties())));
+        this.add(ModBlocks.WILD_FLOWERING_TOBACCO.get(),
+                LootTable.lootTable()
+                        .withPool(LootPool.lootPool()
+                                .setRolls(ConstantValue.exactly(1))
+                                .add(LootItem.lootTableItem(ModItems.WILD_TOBACCO_LEAF.get())))
+                        .withPool(LootPool.lootPool()
+                                .setRolls(ConstantValue.exactly(1))
+                                .add(LootItem.lootTableItem(ModItems.WILD_TOBACCO_SEEDS.get())
+                                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0f, 2.0f)))))
+        );
 
     }
 
