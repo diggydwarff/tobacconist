@@ -94,8 +94,8 @@ public class LooseTobaccoItem extends Item {
         }
 
         TobaccoAromaticHelper.AromaticProfile aromatic = TobaccoAromaticHelper.getAromaticProfile(stack);
-        if (aromatic.isAromatic()) {
-            tooltip.add(Component.literal(aromatic.tooltipLine()).withStyle(ChatFormatting.GRAY));
+        if (aromatic.isAromatic() && !(this instanceof BlendedTobaccoItem)) {
+            tooltip.add(Component.literal(aromatic.tooltipLine()).withStyle(ChatFormatting.LIGHT_PURPLE));
         }
 
         if (TobaccoBarrelBlockEntity.isFermented(stack)) {

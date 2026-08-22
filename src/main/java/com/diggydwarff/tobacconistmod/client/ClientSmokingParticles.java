@@ -2,8 +2,8 @@ package com.diggydwarff.tobacconistmod.client;
 
 import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
 import com.diggydwarff.tobacconistmod.datagen.items.SmokingItem;
+import com.diggydwarff.tobacconistmod.util.SmokeParticleHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -42,17 +42,12 @@ public class ClientSmokingParticles {
         double y = player.getY() + height;
         double z = player.getZ() + Mth.cos(yaw) * forward + Mth.sin(yaw) * side;
 
-        double vx = -Mth.sin(yaw) * 0.008D + (mc.level.random.nextDouble() - 0.5D) * 0.003D;
-        double vy = 0.012D + mc.level.random.nextDouble() * 0.004D;
-        double vz =  Mth.cos(yaw) * 0.008D + (mc.level.random.nextDouble() - 0.5D) * 0.003D;
+        double dirX = -Mth.sin(yaw);
+        double dirZ = Mth.cos(yaw);
 
         int density = Math.max(1, TobacconistConfig.CLIENT.particleDensity.get());
         if (mc.level.random.nextInt(density) == 0) {
-            mc.level.addParticle(
-                    ParticleTypes.CAMPFIRE_COSY_SMOKE,
-                    x, y + 0.01D, z,
-                    vx * 0.6D, vy * 0.8D, vz * 0.6D
-            );
+            SmokeParticleHelper.spawnClientMouthSmoke(mc.level, x, y + 0.01D, z, dirX, dirZ);
         }
     }
 }

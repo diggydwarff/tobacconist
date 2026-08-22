@@ -12,6 +12,7 @@ import com.diggydwarff.tobacconistmod.effect.ModEffects;
 import com.diggydwarff.tobacconistmod.fluid.ModMolassesFluids;
 import com.diggydwarff.tobacconistmod.fluid.GlassBottleMolassesFluidHandler;
 import com.diggydwarff.tobacconistmod.fluid.MolassesBottleFluidHandler;
+import com.diggydwarff.tobacconistmod.particle.ModParticles;
 import com.diggydwarff.tobacconistmod.recipes.ModRecipeSerializers;
 import com.diggydwarff.tobacconistmod.recipes.ModRecipes;
 import com.diggydwarff.tobacconistmod.screen.ModMenuTypes;
@@ -45,6 +46,7 @@ public class TobacconistMod {
         modEventBus.addListener(this::registerCapabilities);
 
         ModMolassesFluids.register(modEventBus);
+        ModParticles.register(modEventBus);
         CreateCompat.init(modEventBus);
 
         ModItems.register(modEventBus);

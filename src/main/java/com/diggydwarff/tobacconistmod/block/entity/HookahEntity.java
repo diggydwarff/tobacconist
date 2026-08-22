@@ -7,12 +7,12 @@ import com.diggydwarff.tobacconistmod.block.custom.HookahBlock;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.screen.HookahMenu;
 import com.diggydwarff.tobacconistmod.util.HookahFuelHelper;
+import com.diggydwarff.tobacconistmod.util.SmokeParticleHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -160,14 +160,11 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
                 smokePos = pos.above(); // move to top block
             }
 
-            serverLevel.sendParticles(
-                    ParticleTypes.CAMPFIRE_COSY_SMOKE,
-                    smokePos.getX() + 0.5,
-                    smokePos.getY() + 0.9,
-                    smokePos.getZ() + 0.5,
-                    1,
-                    0, 0, 0,
-                    0
+            SmokeParticleHelper.spawnServerHookahSmoke(
+                    serverLevel,
+                    smokePos.getX() + 0.5D,
+                    smokePos.getY() + 0.9D,
+                    smokePos.getZ() + 0.5D
             );
 
             pEntity.progress++;

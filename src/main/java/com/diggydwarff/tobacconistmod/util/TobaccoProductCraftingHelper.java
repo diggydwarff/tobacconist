@@ -23,6 +23,23 @@ public final class TobaccoProductCraftingHelper {
         TobaccoDataHelper.applyTobaccoMetadata(result, tobaccoStack);
         CompoundTag tag = LegacyItemTags.getOrCreateTag(result);
         tag.putString("tobacco", TobaccoProductQualityHelper.getShortTobaccoLabel(tobaccoStack));
+
+        // PackedTobaccoData keeps the complete filler snapshot, but finished products also
+        // need process state on their root tag because tooltip/smoking logic reads these
+        // values directly from the finished cigarette.
+        CompoundTag sourceTag = LegacyItemTags.getTag(tobaccoStack);
+        if (sourceTag != null) {
+            int agedDays = sourceTag.getInt("AgedDays");
+            if (agedDays > 0) tag.putInt("AgedDays", agedDays);
+            else tag.remove("AgedDays");
+
+            if (TobaccoBarrelBlockEntity.isFermented(tobaccoStack)) tag.putBoolean("Fermented", true);
+            else tag.remove("Fermented");
+
+            if (TobaccoBarrelBlockEntity.isRuined(tobaccoStack)) tag.putBoolean("Ruined", true);
+            else tag.remove("Ruined");
+        }
+
         TobaccoProductQualityHelper.applyProductQualityToTag(
                 tag,
                 tobaccoStack,

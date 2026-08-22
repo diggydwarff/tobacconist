@@ -3,6 +3,7 @@ package com.diggydwarff.tobacconistmod.compat.create;
 import com.diggydwarff.tobacconistmod.TobacconistMod;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModList;
 
@@ -31,9 +32,13 @@ public final class CreateCompat {
             "com.diggydwarff.tobacconistmod.compat.create.CreateDisplayLinkCompat";
     private static final String ITEM_ATTRIBUTE_COMPAT_CLASS =
             "com.diggydwarff.tobacconistmod.compat.create.CreateItemAttributeCompat";
+    private static final String SMOKE_CLEARING_COMPAT_CLASS =
+            "com.diggydwarff.tobacconistmod.compat.create.CreateSmokeClearingCompat";
 
     private static BiFunction<Level, BlockPos, FanCuringAssist> fanCuringResolver =
             (level, pos) -> FanCuringAssist.NONE;
+    private static BiFunction<Level, Vec3, SmokeAirflow> smokeAirflowResolver =
+            (level, pos) -> SmokeAirflow.NONE;
 
     private CreateCompat() {}
 
@@ -53,6 +58,7 @@ public final class CreateCompat {
         registerCreateIntegration(FAN_CURING_COMPAT_CLASS);
         registerCreateIntegration(DISPLAY_LINK_COMPAT_CLASS, modEventBus);
         registerCreateIntegration(ITEM_ATTRIBUTE_COMPAT_CLASS, modEventBus);
+        registerCreateIntegration(SMOKE_CLEARING_COMPAT_CLASS);
         TobacconistMod.LOGGER.info("Create detected; Tobacconist Create compatibility enabled.");
     }
 
@@ -78,6 +84,19 @@ public final class CreateCompat {
         }
     }
 
+
+    /**
+     * Loader-safe description of smoke movement contributed by optional integrations.
+     * The direction is normalized; strength is a small per-particle velocity contribution.
+     */
+    public record SmokeAirflow(double x, double y, double z, double strength, boolean intakeCapture) {
+        public static final SmokeAirflow NONE = new SmokeAirflow(0.0D, 0.0D, 0.0D, 0.0D, false);
+
+        public boolean active() {
+            return strength > 0.0D && (x != 0.0D || y != 0.0D || z != 0.0D);
+        }
+    }
+
     public static FanCuringAssist getFanCuringAssist(Level level, BlockPos pos) {
         if (level == null || pos == null) {
             return FanCuringAssist.NONE;
@@ -87,6 +106,26 @@ public final class CreateCompat {
 
     static void installFanCuringResolver(BiFunction<Level, BlockPos, FanCuringAssist> resolver) {
         fanCuringResolver = Objects.requireNonNull(resolver);
+    }
+
+    public static SmokeAirflow getSmokeAirflow(Level level, Vec3 pos) {
+        if (level == null || pos == null) {
+            return SmokeAirflow.NONE;
+        }
+        SmokeAirflow airflow = smokeAirflowResolver.apply(level, pos);
+        return airflow == null ? SmokeAirflow.NONE : airflow;
+    }
+
+    /** Kept as a convenience for any older common-side callers. */
+    public static boolean isSmokeVentilated(Level level, BlockPos pos) {
+        if (level == null || pos == null) {
+            return false;
+        }
+        return getSmokeAirflow(level, Vec3.atCenterOf(pos)).active();
+    }
+
+    static void installSmokeAirflowResolver(BiFunction<Level, Vec3, SmokeAirflow> resolver) {
+        smokeAirflowResolver = Objects.requireNonNull(resolver);
     }
 
     private static void registerCreateIntegration(String className, IEventBus modEventBus) {

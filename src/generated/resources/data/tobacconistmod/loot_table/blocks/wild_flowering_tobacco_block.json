@@ -10,49 +10,25 @@
       "bonus_rolls": 0.0,
       "entries": [
         {
-          "type": "minecraft:alternatives",
-          "children": [
-            {
-              "type": "minecraft:item",
-              "conditions": [
-                {
-                  "block": "tobacconistmod:wild_flowering_tobacco_block",
-                  "condition": "minecraft:block_state_property",
-                  "properties": {}
-                }
-              ],
-              "name": "tobacconistmod:tobacco_leaf_wild"
-            },
-            {
-              "type": "minecraft:item",
-              "name": "tobacconistmod:wild_tobacco_seeds"
-            }
-          ]
+          "type": "minecraft:item",
+          "name": "tobacconistmod:tobacco_leaf_wild"
         }
       ],
       "rolls": 1.0
     },
     {
       "bonus_rolls": 0.0,
-      "conditions": [
-        {
-          "block": "tobacconistmod:wild_flowering_tobacco_block",
-          "condition": "minecraft:block_state_property",
-          "properties": {}
-        }
-      ],
       "entries": [
         {
           "type": "minecraft:item",
           "functions": [
             {
-              "enchantment": "minecraft:fortune",
-              "formula": "minecraft:binomial_with_bonus_count",
-              "function": "minecraft:apply_bonus",
-              "parameters": {
-                "extra": 3,
-                "probability": 0.5714286
-              }
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 2.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
             }
           ],
           "name": "tobacconistmod:wild_tobacco_seeds"

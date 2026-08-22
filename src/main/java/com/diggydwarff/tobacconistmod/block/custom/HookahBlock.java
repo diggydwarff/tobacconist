@@ -4,9 +4,9 @@ import com.mojang.serialization.MapCodec;
 import com.diggydwarff.tobacconistmod.block.entity.HookahEntity;
 import com.diggydwarff.tobacconistmod.block.entity.ModBlockEntities;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.HookahHoseItem;
+import com.diggydwarff.tobacconistmod.util.SmokeParticleHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -36,7 +36,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Random;
 
 import static com.diggydwarff.tobacconistmod.block.ModBlocks.BLOCKS;
 
@@ -159,26 +158,15 @@ public class HookahBlock extends BaseEntityBlock {
             if (blockEntity instanceof HookahEntity hookah && hookah.progress > 0) {
                 for (ItemStack stack : pPlayer.getHandSlots()) {
                     if (stack.getItem() instanceof HookahHoseItem) {
-                        Vec3 look = pPlayer.getLookAngle()
-                                .multiply(0.3D, 0.3D, 0.3D)
-                                .multiply(0.066D, 0.066D, 0.066D);
-
-                        Random rand = new Random();
-                        for (int i = 0; i < 5; ++i) {
-                            Vec3 newVec = new Vec3(
-                                    rand.nextDouble() - 0.5D,
-                                    rand.nextDouble() - 0.5D,
-                                    rand.nextDouble() - 0.5D
-                            ).multiply(0.01D, 0.01D, 0.01D);
-                            Vec3 mergeVec = look.add(newVec);
-                            ((ServerLevel) pLevel).sendParticles(
-                                    ParticleTypes.CAMPFIRE_COSY_SMOKE,
-                                    pPlayer.getX() + mergeVec.x,
-                                    pPlayer.getY() + 1.4 + mergeVec.y,
-                                    pPlayer.getZ() + mergeVec.z,
-                                    1, 0, 0, 0, 0
-                            );
-                        }
+                        Vec3 look = pPlayer.getLookAngle();
+                        SmokeParticleHelper.spawnServerMouthSmoke(
+                                (ServerLevel) pLevel,
+                                pPlayer.getX() + look.x * 0.12D,
+                                pPlayer.getY() + 1.4D + look.y * 0.04D,
+                                pPlayer.getZ() + look.z * 0.12D,
+                                look.x,
+                                look.z
+                        );
 
                         return InteractionResult.sidedSuccess(false);
                     }

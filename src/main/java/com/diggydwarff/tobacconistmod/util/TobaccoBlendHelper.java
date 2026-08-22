@@ -43,7 +43,7 @@ public final class TobaccoBlendHelper {
     public static boolean canBlend(List<ItemStack> inputs) {
         if (inputs == null || inputs.size() < 2 || inputs.size() > 3) return false;
 
-        Set<String> varieties = new HashSet<>();
+        Set<String> componentIdentities = new HashSet<>();
         String cut = null;
         Boolean fermented = null;
         Boolean ruined = null;
@@ -52,9 +52,20 @@ public final class TobaccoBlendHelper {
             if (!isBlendableBaseTobacco(stack)) return false;
 
             String variety = getVarietyId(stack);
-            if (variety.isEmpty() || !varieties.add(variety)) return false;
+            if (variety.isEmpty()) return false;
 
             String stackCut = TobaccoCuringHelper.getCutType(stack);
+            String stackCure = TobaccoCuringHelper.getCureType(stack);
+            String stackFlavor = TobaccoAromaticHelper.normalizeFlavorId(
+                    TobaccoAromaticHelper.getFlavorId(stack)
+            );
+
+            // Quality-only differences of otherwise identical tobacco belong in the
+            // homogenizer, not the blender. The same variety is still a valid blend
+            // component when its cure or aromatic casing is genuinely different.
+            String componentIdentity = variety + "|" + stackCure + "|" + stackFlavor;
+            if (!componentIdentities.add(componentIdentity)) return false;
+
             boolean stackFermented = TobaccoBarrelBlockEntity.isFermented(stack);
             boolean stackRuined = TobaccoBarrelBlockEntity.isRuined(stack);
 

@@ -136,38 +136,65 @@ public class CigarItem extends SmokingItem {
             tooltip.add(Component.literal("Wrapper: " + getWrapperLine(stack)).withStyle(ChatFormatting.GRAY));
 
             CompoundTag packedBlend = TobaccoTooltipHelper.getPackedTobaccoData(stack);
+            boolean hasBlendComponents = packedBlend != null
+                    && !TobaccoBlendHelper.getComponentData(packedBlend).isEmpty();
+            TobaccoAromaticHelper.AromaticProfile aromatic =
+                    TobaccoAromaticHelper.getProductAromaticProfile(stack);
+            if (aromatic.isAromatic() && !hasBlendComponents) {
+                tooltip.add(Component.literal(aromatic.tooltipLine())
+                        .withStyle(ChatFormatting.LIGHT_PURPLE));
+            }
+
+            if (TobaccoBarrelBlockEntity.isRuined(stack)) {
+                tooltip.add(Component.literal("Ruined").withStyle(ChatFormatting.DARK_RED));
+            }
+
+            // Keep the complete filler blend breakdown as the final normal metadata section.
             if (packedBlend != null) {
-                List<String> blendLines = TobaccoBlendHelper.getDetailedComponentLines(packedBlend);
-                if (!blendLines.isEmpty()) {
+                List<TobaccoBlendComponent> blendComponents = TobaccoBlendHelper.getComponentData(packedBlend);
+                if (!blendComponents.isEmpty()) {
                     String blendName = packedBlend.getString(TobaccoBlendHelper.TAG_BLEND_NAME);
                     tooltip.add(Component.literal(blendName.isEmpty()
                                     ? "Filler Blend Components:"
                                     : "Filler Blend: " + blendName)
                             .withStyle(ChatFormatting.DARK_GRAY));
-                    for (String line : blendLines) {
-                        tooltip.add(Component.literal("  " + line).withStyle(ChatFormatting.DARK_GRAY));
+                    for (TobaccoBlendComponent component : blendComponents) {
+                        StringBuilder base = new StringBuilder("  ")
+                                .append(TobaccoBlendHelper.formatVariety(component.variety()));
+                        if (TobacconistConfig.isQualitySystemEnabled()) {
+                            base.append(" Q").append(component.quality());
+                        }
+                        if (!component.cure().isBlank()) {
+                            base.append(" • ").append(TobaccoCuringHelper.getCureDisplayName(component.cure()));
+                        }
+
+                        var line = Component.literal(base.toString()).withStyle(ChatFormatting.DARK_GRAY);
+                        String flavor = TobaccoAromaticHelper.formatFlavorId(component.flavorId());
+                        line.append(Component.literal(" • " + (flavor.isEmpty() ? "Plain" : flavor))
+                                .withStyle(flavor.isEmpty()
+                                        ? ChatFormatting.DARK_GRAY
+                                        : ChatFormatting.LIGHT_PURPLE));
+                        tooltip.add(line);
                     }
                 }
-            }
-
-            TobaccoAromaticHelper.AromaticProfile aromatic =
-                    TobaccoAromaticHelper.getProductAromaticProfile(stack);
-            if (aromatic.isAromatic()) {
-                tooltip.add(Component.literal(aromatic.tooltipLine())
-                        .withStyle(ChatFormatting.GRAY));
-            }
-
-            if (TobaccoBarrelBlockEntity.isRuined(stack)) {
-                tooltip.add(Component.literal("Ruined").withStyle(ChatFormatting.DARK_RED));
             }
         }
 
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
 
         if (flagIn.isAdvanced()) {
-            tooltip.add(Component.empty());
-            tooltip.add(Component.literal("✿ Fermented").withStyle(ChatFormatting.DARK_GRAY));
-            tooltip.add(Component.literal("ᵐ Months aged, ʸ Years aged").withStyle(ChatFormatting.DARK_GRAY));
+            boolean fermented = TobaccoBarrelBlockEntity.isFermented(stack);
+            int agedDays = TobaccoBarrelBlockEntity.getAgedDays(stack);
+            if (fermented || agedDays > 0) {
+                tooltip.add(Component.empty());
+                if (fermented) {
+                    tooltip.add(Component.literal("✿ Fermented").withStyle(ChatFormatting.DARK_GRAY));
+                }
+                if (agedDays > 0) {
+                    tooltip.add(Component.literal("ᵐ Months aged, ʸ Years aged")
+                            .withStyle(ChatFormatting.DARK_GRAY));
+                }
+            }
         }
     }
 

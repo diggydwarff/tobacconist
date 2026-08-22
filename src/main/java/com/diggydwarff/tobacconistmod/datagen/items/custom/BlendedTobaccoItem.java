@@ -47,23 +47,24 @@ public class BlendedTobaccoItem extends LooseTobaccoItem {
 
         tooltip.add(Component.literal("Blend Components:").withStyle(ChatFormatting.DARK_GRAY));
         for (TobaccoBlendComponent component : components) {
-            StringBuilder line = new StringBuilder("  ")
+            StringBuilder base = new StringBuilder("  ")
                     .append(TobaccoBlendHelper.formatVariety(component.variety()));
 
             if (TobacconistConfig.isQualitySystemEnabled()) {
-                line.append(" Q").append(component.quality());
+                base.append(" Q").append(component.quality());
             }
 
             if (!component.cure().isBlank()) {
-                line.append(" • ").append(TobaccoCuringHelper.getCureDisplayName(component.cure()));
+                base.append(" • ").append(TobaccoCuringHelper.getCureDisplayName(component.cure()));
             }
 
+            var line = Component.literal(base.toString()).withStyle(ChatFormatting.DARK_GRAY);
             String flavor = TobaccoAromaticHelper.formatFlavorId(component.flavorId());
             if (!flavor.isEmpty()) {
-                line.append(" • ").append(flavor);
+                line.append(Component.literal(" • " + flavor).withStyle(ChatFormatting.LIGHT_PURPLE));
             }
 
-            tooltip.add(Component.literal(line.toString()).withStyle(ChatFormatting.DARK_GRAY));
+            tooltip.add(line);
         }
     }
 }

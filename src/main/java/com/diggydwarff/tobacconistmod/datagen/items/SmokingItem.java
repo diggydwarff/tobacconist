@@ -3,8 +3,8 @@ package com.diggydwarff.tobacconistmod.datagen.items;
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelBlockEntity;
 import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
 import com.diggydwarff.tobacconistmod.effect.ModEffects;
+import com.diggydwarff.tobacconistmod.util.SmokeParticleHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -16,8 +16,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.Random;
 
 public abstract class SmokingItem extends Item {
 
@@ -60,19 +58,14 @@ public abstract class SmokingItem extends Item {
                 1.0F
         );
 
-        Random rand = new Random();
-        for (int i = 0; i < 5; ++i) {
-            Vec3 newVec = new Vec3(rand.nextDouble() - 0.5D, rand.nextDouble() - 0.5D, rand.nextDouble() - 0.5D);
-            newVec = newVec.multiply(0.01D, 0.01D, 0.01D);
-            Vec3 mergeVec = look.add(newVec);
-            level.sendParticles(
-                    ParticleTypes.CAMPFIRE_COSY_SMOKE,
-                    player.getX() + mergeVec.x,
-                    player.getY() + 1.4 + mergeVec.y,
-                    player.getZ() + mergeVec.z,
-                    Math.max(1, smokelevel), 0, 0, 0, 0
-            );
-        }
+        SmokeParticleHelper.spawnServerMouthSmoke(
+                level,
+                player.getX() + look.x * 0.12D,
+                player.getY() + 1.4D + look.y * 0.04D,
+                player.getZ() + look.z * 0.12D,
+                look.x,
+                look.z
+        );
 
         if (TobacconistConfig.areNicotineEffectsEnabled()) {
             player.addEffect(new MobEffectInstance(
