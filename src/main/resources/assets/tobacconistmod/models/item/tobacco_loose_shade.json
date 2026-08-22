@@ -2,5 +2,13 @@
   "parent": "item/generated",
   "textures": {
     "layer0": "tobacconistmod:item/tobacco_loose_shade"
-  }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "tobacconistmod:flake_cut": 1.0
+      },
+      "model": "tobacconistmod:item/tobacco_loose_shade_flake"
+    }
+  ]
 }

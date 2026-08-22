@@ -40,6 +40,8 @@ public final class CreateCompat {
             "com.diggydwarff.tobacconistmod.compat.create.CreateLogisticsCompat";
     private static final String SMOKE_CLEARING_COMPAT_CLASS =
             "com.diggydwarff.tobacconistmod.compat.create.CreateSmokeClearingCompat";
+    private static final String PONDER_COMPAT_CLASS =
+            "com.diggydwarff.tobacconistmod.compat.create.CreatePonderCompat";
 
     private static BiFunction<Level, BlockPos, FanCuringAssist> fanCuringResolver =
             (level, pos) -> FanCuringAssist.NONE;
@@ -69,6 +71,14 @@ public final class CreateCompat {
         registerCreateIntegration(LOGISTICS_COMPAT_CLASS, modEventBus);
         registerCreateIntegration(SMOKE_CLEARING_COMPAT_CLASS);
         TobacconistMod.LOGGER.info("Create detected; Tobacconist Create compatibility enabled.");
+    }
+
+    /** Client-only Create/Ponder setup, kept behind reflection so Create remains optional. */
+    public static void initClient() {
+        if (!loaded()) {
+            return;
+        }
+        registerCreateIntegration(PONDER_COMPAT_CLASS);
     }
 
     /**

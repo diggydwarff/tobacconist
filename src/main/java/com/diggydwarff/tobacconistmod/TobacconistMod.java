@@ -1,5 +1,6 @@
 package com.diggydwarff.tobacconistmod;
 
+import com.diggydwarff.tobacconistmod.client.LooseTobaccoModelProperties;
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
 import com.diggydwarff.tobacconistmod.block.entity.ModBlockEntities;
 import com.diggydwarff.tobacconistmod.command.TobacconistCommands;
@@ -33,6 +34,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.NeoForge;
@@ -52,6 +54,7 @@ public class TobacconistMod {
     public TobacconistMod(IEventBus modEventBus, ModContainer modContainer) {
         modEventBus.addListener(this::registerDynamicItems);
         modEventBus.addListener(this::registerCapabilities);
+        modEventBus.addListener(this::clientSetup);
 
         ModMolassesFluids.register(modEventBus);
         ModExtractionFluids.register(modEventBus);
@@ -74,6 +77,11 @@ public class TobacconistMod {
         modContainer.registerConfig(ModConfig.Type.SERVER, TobacconistConfig.SERVER_SPEC);
 
         NeoForge.EVENT_BUS.register(this);
+    }
+
+    private void clientSetup(FMLClientSetupEvent event) {
+        event.enqueueWork(LooseTobaccoModelProperties::register);
+        CreateCompat.initClient();
     }
 
     private void registerDynamicItems(RegisterEvent event) {
