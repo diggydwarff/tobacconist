@@ -34,6 +34,8 @@ public final class CreateCompat {
             "com.diggydwarff.tobacconistmod.compat.create.CreateDisplayLinkCompat";
     private static final String ITEM_ATTRIBUTE_COMPAT_CLASS =
             "com.diggydwarff.tobacconistmod.compat.create.CreateItemAttributeCompat";
+    private static final String ARM_COMPAT_CLASS =
+            "com.diggydwarff.tobacconistmod.compat.create.CreateArmCompat";
     private static final String SMOKE_CLEARING_COMPAT_CLASS =
             "com.diggydwarff.tobacconistmod.compat.create.CreateSmokeClearingCompat";
 
@@ -61,6 +63,7 @@ public final class CreateCompat {
         registerCreateIntegration(FAN_CURING_COMPAT_CLASS);
         registerCreateIntegration(DISPLAY_LINK_COMPAT_CLASS, modEventBus);
         registerCreateIntegration(ITEM_ATTRIBUTE_COMPAT_CLASS, modEventBus);
+        registerCreateIntegration(ARM_COMPAT_CLASS, modEventBus);
         registerCreateIntegration(SMOKE_CLEARING_COMPAT_CLASS);
         TobacconistMod.LOGGER.info("Create detected; Tobacconist Create compatibility enabled.");
     }
