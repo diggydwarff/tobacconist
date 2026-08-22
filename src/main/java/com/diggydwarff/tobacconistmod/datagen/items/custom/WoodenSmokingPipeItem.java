@@ -143,6 +143,7 @@ public class WoodenSmokingPipeItem extends SmokingItem {
         if (puffs <= 0) {
             LegacyItemTags.getOrCreateTag(pipe).remove("PuffsLeft");
             LegacyItemTags.getOrCreateTag(pipe).remove("PackedTobacco");
+            LegacyItemTags.getOrCreateTag(pipe).remove("PackedTobaccoData");
         } else {
             LegacyItemTags.getOrCreateTag(pipe).putInt("PuffsLeft", puffs);
         }
@@ -179,6 +180,9 @@ public class WoodenSmokingPipeItem extends SmokingItem {
 
                 Item packedItem = BuiltInRegistries.ITEM.get(ResourceLocation.parse(id));
                 ItemStack packedStack = new ItemStack(packedItem);
+                if (tag.contains("PackedTobaccoData")) {
+                    LegacyItemTags.setTag(packedStack, tag.getCompound("PackedTobaccoData").copy());
+                }
 
                 tooltip.add(Component.literal("Packed: ")
                         .append(packedStack.getHoverName()));

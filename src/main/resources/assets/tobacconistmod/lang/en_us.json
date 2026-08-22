@@ -228,5 +228,9 @@
   "tobacconistmod.display_source.tobacco_barrel_age": "Tobacco Age",
   "tobacconistmod.display_source.flue_firebox_status": "Flue Firebox Status",
   "tobacconistmod.display_source.flue_firebox_fuel": "Flue Firebox Fuel",
-  "tobacconistmod.display_source.hookah_status": "Hookah Status"
+  "tobacconistmod.display_source.hookah_status": "Hookah Status",
+  "item.tobacconistmod.blended_tobacco": "Blended Tobacco",
+  "item.tobacconistmod.brass_name_tag": "Brass Label",
+  "item.tobacconistmod.incomplete_cigarette": "Incomplete Cigarette",
+  "item.tobacconistmod.incomplete_cigar": "Incomplete Cigar"
 }

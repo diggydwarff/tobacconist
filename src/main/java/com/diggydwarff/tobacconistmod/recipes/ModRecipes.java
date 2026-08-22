@@ -29,6 +29,8 @@ public class ModRecipes {
             SERIALIZERS.register("crafting_special_tobacco_box_label", () -> new SimpleCraftingRecipeSerializer<>(TobaccoBoxLabelRecipe::new));
     public static final Supplier<RecipeSerializer<LabelDuplicateRecipe>> LABEL_DUPLICATE_RECIPE_SERIALIZER =
             SERIALIZERS.register("crafting_special_label_duplicate", () -> new SimpleCraftingRecipeSerializer<>(LabelDuplicateRecipe::new));
+    public static final Supplier<RecipeSerializer<TobaccoBlendingRecipe>> TOBACCO_BLENDING_RECIPE_SERIALIZER =
+            SERIALIZERS.register("crafting_special_tobacco_blending", () -> new SimpleCraftingRecipeSerializer<>(TobaccoBlendingRecipe::new));
 
     public static void register(IEventBus eventBus) { SERIALIZERS.register(eventBus); }
 }

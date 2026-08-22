@@ -176,14 +176,15 @@ public class TobaccoBoxItem extends Item {
             return false;
         }
 
+        // Branding belongs to the box, not the compatibility identity of its contents.
+        // A labeled box may accept the same unlabeled product, and an unlabeled box adopts
+        // the label of a matching named product being returned to it.
         if (!boxLabel.isEmpty()) {
-            if (incomingLabel.isEmpty() || !boxLabel.equals(incomingLabel)) {
+            if (!incomingLabel.isEmpty() && !boxLabel.equals(incomingLabel)) {
                 return false;
             }
-        } else {
-            if (!incomingLabel.isEmpty()) {
-                return false;
-            }
+        } else if (!incomingLabel.isEmpty()) {
+            TobaccoBoxHelper.setLabel(box, incomingLabel);
         }
 
         int cap = TobaccoBoxHelper.getCapacity(stored);

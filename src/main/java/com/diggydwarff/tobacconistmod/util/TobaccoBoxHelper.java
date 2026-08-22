@@ -4,6 +4,7 @@ import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
 
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.nbt.CompoundTag;
@@ -28,7 +29,8 @@ public class TobaccoBoxHelper {
                 || item == ModItems.TOBACCO_LOOSE_BURLEY.get()
                 || item == ModItems.TOBACCO_LOOSE_ORIENTAL.get()
                 || item == ModItems.TOBACCO_LOOSE_DOKHA.get()
-                || item == ModItems.TOBACCO_LOOSE_SHADE.get();
+                || item == ModItems.TOBACCO_LOOSE_SHADE.get()
+                || item == ModItems.BLENDED_TOBACCO.get();
     }
 
     public static int getCapacity(ItemStack content) {
@@ -129,6 +131,8 @@ public class TobaccoBoxHelper {
 
         if (tag.isEmpty()) {
             LegacyItemTags.setTag(box, null);
+        } else {
+            LegacyItemTags.setTag(box, tag);
         }
     }
 
@@ -162,11 +166,31 @@ public class TobaccoBoxHelper {
         return ItemStack.isSameItemSameComponents(aCopy, bCopy);
     }
 
+    /**
+     * Box compatibility is based on the tobacco/product itself, not branding. Strip both the
+     * Tobacconist ProductLabel and vanilla 1.21 custom names before comparing stacks. Also
+     * scrub an accidentally packed legacy ProductLabel so named aromatic/blended products can
+     * always be returned to the box they came from.
+     */
     public static void clearCustomProductName(ItemStack stack) {
+        stack.remove(DataComponents.CUSTOM_NAME);
+
         CompoundTag tag = LegacyItemTags.getTag(stack);
         if (tag == null) return;
 
         tag.remove(TAG_PRODUCT_LABEL);
+
+        if (tag.contains("PackedTobaccoData")) {
+            CompoundTag packed = tag.getCompound("PackedTobaccoData");
+            packed.remove(TAG_PRODUCT_LABEL);
+            if (packed.contains("display")) {
+                CompoundTag packedDisplay = packed.getCompound("display");
+                packedDisplay.remove("Name");
+                if (packedDisplay.isEmpty()) packed.remove("display");
+                else packed.put("display", packedDisplay);
+            }
+            tag.put("PackedTobaccoData", packed);
+        }
 
         if (tag.contains("display")) {
             CompoundTag display = tag.getCompound("display");
@@ -180,6 +204,8 @@ public class TobaccoBoxHelper {
 
         if (tag.isEmpty()) {
             LegacyItemTags.setTag(stack, null);
+        } else {
+            LegacyItemTags.setTag(stack, tag);
         }
     }
 
@@ -325,6 +351,20 @@ public class TobaccoBoxHelper {
     }
 
     private static String resolveTobaccoTypeDisplay(ItemStack stack) {
+        if (stack.is(ModItems.BLENDED_TOBACCO.get())) {
+            String intrinsicName = TobaccoBlendHelper.getIntrinsicBlendName(stack);
+            if (!intrinsicName.isEmpty()) return intrinsicName;
+
+            java.util.List<String> components = TobaccoBlendHelper.getComponents(stack);
+            if (!components.isEmpty()) {
+                return components.stream()
+                        .map(TobaccoBlendHelper::formatVariety)
+                        .reduce((a, b) -> a + "/" + b)
+                        .orElse("") + " Blend";
+            }
+            return "Blend";
+        }
+
         String raw = resolveTobaccoTypeId(stack);
         return formatTobaccoType(raw);
     }
@@ -503,6 +543,7 @@ public class TobaccoBoxHelper {
         if (content.is(ModItems.CIGAR.get())) return "Cigars";
         if (content.is(ModItems.CIGARETTE.get())) return "Cigarettes";
         if (content.is(ModItems.SHISHA_TOBACCO.get())) return "Shisha Tobacco";
+        if (content.is(ModItems.BLENDED_TOBACCO.get())) return "Blended Tobacco";
         return "Loose Tobacco";
     }
 
@@ -510,6 +551,7 @@ public class TobaccoBoxHelper {
         if (content.is(ModItems.CIGAR.get())) return "Cigar";
         if (content.is(ModItems.CIGARETTE.get())) return "Cigarette";
         if (content.is(ModItems.SHISHA_TOBACCO.get())) return "Shisha Tobacco";
+        if (content.is(ModItems.BLENDED_TOBACCO.get())) return "Blended Tobacco";
         return "Loose Tobacco";
     }
 

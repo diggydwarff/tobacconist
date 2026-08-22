@@ -18,6 +18,7 @@ public final class TobaccoCuringHelper {
     public static final String CURE_FIRE = "fire";
     public static final String CURE_SUN = "sun";
     public static final String CURE_FLUE = "flue";
+    public static final String CURE_MIXED = "mixed";
 
     public static final String CUT_RIBBON = "ribbon";
     public static final String CUT_SHAG = "shag";
@@ -56,7 +57,8 @@ public final class TobaccoCuringHelper {
                 || item == ModItems.TOBACCO_LOOSE_BURLEY.get()
                 || item == ModItems.TOBACCO_LOOSE_ORIENTAL.get()
                 || item == ModItems.TOBACCO_LOOSE_DOKHA.get()
-                || item == ModItems.TOBACCO_LOOSE_SHADE.get();
+                || item == ModItems.TOBACCO_LOOSE_SHADE.get()
+                || item == ModItems.BLENDED_TOBACCO.get();
     }
 
     public static boolean isProcessedTobacco(ItemStack stack) {
@@ -367,6 +369,7 @@ public final class TobaccoCuringHelper {
             case CURE_FIRE -> "Fire-Cured";
             case CURE_SUN -> "Sun-Cured";
             case CURE_FLUE -> "Flue-Cured";
+            case CURE_MIXED -> "Mixed-Cure";
             default -> "Air-Cured";
         };
     }

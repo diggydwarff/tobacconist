@@ -25,10 +25,16 @@ public final class CreatePressCompat {
                     () -> new StandardProcessingRecipe.Serializer<>(CreateTobaccoPressingRecipe::new)
             );
 
+    public static final Supplier<RecipeSerializer<CreateTobaccoAssemblyPressingRecipe>> TOBACCO_ASSEMBLY_PRESSING =
+            SERIALIZERS.register(
+                    "create_tobacco_assembly_pressing",
+                    () -> new StandardProcessingRecipe.Serializer<>(CreateTobaccoAssemblyPressingRecipe::new)
+            );
+
     private CreatePressCompat() {}
 
     public static void register(IEventBus modEventBus) {
         SERIALIZERS.register(modEventBus);
-        TobacconistMod.LOGGER.info("Create Mechanical Press tobacco integration enabled.");
+        TobacconistMod.LOGGER.info("Create Mechanical Press tobacco + product assembly integration enabled.");
     }
 }

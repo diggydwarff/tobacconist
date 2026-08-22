@@ -2,6 +2,7 @@ package com.diggydwarff.tobacconistmod.compat.create;
 
 import com.diggydwarff.tobacconistmod.datagen.items.custom.BottledMolassesFlavors;
 import com.diggydwarff.tobacconistmod.fluid.ModMolassesFluids;
+import com.diggydwarff.tobacconistmod.util.TobaccoAromaticHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoProcessingHelper;
 import com.simibubi.create.content.kinetics.mixer.MixingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeParams;
@@ -13,7 +14,7 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 
 
-/** Dynamic Create mixing recipe: Rough tobacco or unused Shisha + 250 mB flavor dose -> Shisha. */
+/** Dynamic Create mixing recipe: Rough tobacco/unused Shisha -> Shisha; other loose cuts -> aromatic tobacco. */
 public final class CreateTobaccoMixingRecipe extends MixingRecipe {
     private static final int FLAVOR_PROBE_AMOUNT = 250;
 
@@ -66,8 +67,9 @@ public final class CreateTobaccoMixingRecipe extends MixingRecipe {
         }
 
         return flavor != null
-                && TobaccoProcessingHelper.canMechanicallyFlavorShisha(
-                        tobacco, flavor.getShishaFlavorTag());
+                && (TobaccoProcessingHelper.canMechanicallyFlavorShisha(
+                        tobacco, flavor.getShishaFlavorTag())
+                    || TobaccoAromaticHelper.canAromatize(tobacco));
     }
 
     private void captureTobacco(ItemStack tobacco) {
@@ -75,11 +77,14 @@ public final class CreateTobaccoMixingRecipe extends MixingRecipe {
             return;
         }
 
-        ItemStack result = TobaccoProcessingHelper.mechanicallyFlavorShisha(
-                tobacco, flavor.getShishaFlavorTag());
-        if (result.isEmpty()) {
-            return;
+        ItemStack result;
+        if (TobaccoProcessingHelper.canMechanicallyFlavorShisha(tobacco, flavor.getShishaFlavorTag())) {
+            result = TobaccoProcessingHelper.mechanicallyFlavorShisha(
+                    tobacco, flavor.getShishaFlavorTag());
+        } else {
+            result = TobaccoAromaticHelper.aromatize(tobacco, flavor);
         }
+        if (result.isEmpty()) return;
 
         ItemStack template = result.copy();
         template.setCount(1);

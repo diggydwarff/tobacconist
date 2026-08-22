@@ -74,9 +74,29 @@ public class CigaretteItem extends SmokingItem {
 
     @Override
     public Component getName(ItemStack stack) {
+        boolean flavored = TobaccoAromaticHelper.getProductAromaticProfile(stack).isAromatic();
+        CompoundTag packed = TobaccoTooltipHelper.getPackedTobaccoData(stack);
+        boolean blended = packed != null && !TobaccoBlendHelper.getComponentData(packed).isEmpty();
+
+        String productName;
+        if (blended) {
+            productName = flavored ? "Flavored Blended Cigarette" : "Blended Cigarette";
+        } else {
+            productName = flavored ? "Flavored Cigarette" : "Cigarette";
+        }
+
         String label = TobaccoLabelHelper.getProductLabel(stack);
         if (!label.isEmpty()) {
-            return TobaccoLabelHelper.buildNamedProduct(label, "Cigarette");
+            return TobaccoLabelHelper.buildNamedProduct(label, productName);
+        }
+
+        String blendName = packed == null ? "" : packed.getString(TobaccoBlendHelper.TAG_BLEND_NAME);
+        if (!blendName.isEmpty()) {
+            return Component.literal(blendName + " " + (flavored ? "Flavored Cigarette" : "Cigarette"));
+        }
+
+        if (blended || flavored) {
+            return Component.literal(productName);
         }
         return super.getName(stack);
     }
@@ -124,6 +144,28 @@ public class CigaretteItem extends SmokingItem {
             String cureType = TobaccoCuringHelper.getCureType(temp);
             if (!cureType.isEmpty()) {
                 tooltip.add(Component.literal("Cure: " + TobaccoCuringHelper.getCureDisplayName(cureType))
+                        .withStyle(ChatFormatting.GRAY));
+            }
+
+            CompoundTag packedBlend = TobaccoTooltipHelper.getPackedTobaccoData(stack);
+            if (packedBlend != null) {
+                List<String> blendLines = TobaccoBlendHelper.getDetailedComponentLines(packedBlend);
+                if (!blendLines.isEmpty()) {
+                    String blendName = packedBlend.getString(TobaccoBlendHelper.TAG_BLEND_NAME);
+                    tooltip.add(Component.literal(blendName.isEmpty()
+                                    ? "Blend Components:"
+                                    : "Blend: " + blendName)
+                            .withStyle(ChatFormatting.DARK_GRAY));
+                    for (String line : blendLines) {
+                        tooltip.add(Component.literal("  " + line).withStyle(ChatFormatting.DARK_GRAY));
+                    }
+                }
+            }
+
+            TobaccoAromaticHelper.AromaticProfile aromatic =
+                    TobaccoAromaticHelper.getProductAromaticProfile(stack);
+            if (aromatic.isAromatic()) {
+                tooltip.add(Component.literal(aromatic.tooltipLine())
                         .withStyle(ChatFormatting.GRAY));
             }
 

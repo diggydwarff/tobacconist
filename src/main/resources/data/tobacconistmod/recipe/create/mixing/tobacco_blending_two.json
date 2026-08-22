@@ -1,0 +1,19 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "type": "tobacconistmod:create_tobacco_blending",
+  "ingredients": [
+    { "tag": "tobacconistmod:loose_tobacco" },
+    { "tag": "tobacconistmod:loose_tobacco" }
+  ],
+  "results": [
+    {
+      "id": "tobacconistmod:blended_tobacco",
+      "count": 2
+    }
+  ]
+}

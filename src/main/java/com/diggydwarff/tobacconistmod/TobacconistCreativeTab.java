@@ -5,6 +5,7 @@ import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.ShishaFlavoringItem;
+import com.diggydwarff.tobacconistmod.compat.create.CreateCompat;
 import com.diggydwarff.tobacconistmod.recipes.WoodenPipeRecipe;
 import com.diggydwarff.tobacconistmod.util.PaintingTabHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
@@ -47,6 +48,10 @@ public class TobacconistCreativeTab {
 
                         output.accept(TOBACCO_BOX.get());
                         output.accept(TOBACCO_LABEL.get());
+                        output.accept(BLENDED_TOBACCO.get());
+                        if (CreateCompat.loaded()) {
+                            output.accept(BRASS_NAME_TAG.get());
+                        }
 
                         output.accept(creativeLeaf(new ItemStack(WILD_TOBACCO_LEAF.get()), false));
                         output.accept(creativeLeaf(new ItemStack(VIRGINIA_TOBACCO_LEAF.get()), false));

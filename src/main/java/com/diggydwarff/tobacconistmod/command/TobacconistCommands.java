@@ -4,14 +4,18 @@ import com.diggydwarff.tobacconistmod.block.AbstractTallTobaccoCropBlock;
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelBlockEntity;
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoDryingRackBlockEntity;
 import com.diggydwarff.tobacconistmod.util.TobaccoCropDebugHelper;
+import com.diggydwarff.tobacconistmod.util.TobaccoTestItemFactory;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -27,6 +31,29 @@ public class TobacconistCommands {
                         .requires(source -> source.hasPermission(2))
                         .then(Commands.literal("debug")
                                 .executes(ctx -> runDebug(ctx.getSource())))
+                        .then(Commands.literal("give")
+                                .executes(ctx -> showGiveHelp(ctx.getSource()))
+                                .then(Commands.literal("help")
+                                        .executes(ctx -> showGiveHelp(ctx.getSource())))
+                                .then(Commands.argument("type", StringArgumentType.word())
+                                        .suggests((ctx, builder) -> SharedSuggestionProvider.suggest(
+                                                new String[] {
+                                                        "raw", "leaf", "loose", "blend",
+                                                        "cigarette", "cigar", "shisha"
+                                                },
+                                                builder
+                                        ))
+                                        .executes(ctx -> giveTestItem(
+                                                ctx.getSource(),
+                                                StringArgumentType.getString(ctx, "type"),
+                                                ""
+                                        ))
+                                        .then(Commands.argument("options", StringArgumentType.greedyString())
+                                                .executes(ctx -> giveTestItem(
+                                                        ctx.getSource(),
+                                                        StringArgumentType.getString(ctx, "type"),
+                                                        StringArgumentType.getString(ctx, "options")
+                                                )))))
                         .then(Commands.literal("barrel")
                                 .then(Commands.literal("ferment")
                                         .executes(ctx -> forceBarrelFerment(ctx.getSource())))
@@ -50,6 +77,39 @@ public class TobacconistCommands {
                                 .then(Commands.literal("status")
                                         .executes(ctx -> rackStatus(ctx.getSource()))))
         );
+    }
+
+    private static int showGiveHelp(CommandSourceStack source) {
+        source.sendSuccess(() -> Component.literal(TobaccoTestItemFactory.helpText()), false);
+        source.sendSuccess(() -> Component.literal(
+                "Example: /tobacconist give loose variety=virginia quality=90 cure=flue cut=shag flavor=berry fermented=true age=365"
+        ), false);
+        source.sendSuccess(() -> Component.literal(
+                "Blend example: /tobacconist give blend components=virginia:95:flue:none,burley:90:air:berry,shade:88:sun:none cut=shag"
+        ), false);
+        return 1;
+    }
+
+    private static int giveTestItem(CommandSourceStack source, String type, String options) throws CommandSyntaxException {
+        ServerPlayer player = source.getPlayerOrException();
+
+        final ItemStack stack;
+        try {
+            stack = TobaccoTestItemFactory.create(type, options);
+        } catch (IllegalArgumentException ex) {
+            source.sendFailure(Component.literal(ex.getMessage()));
+            return 0;
+        }
+
+        ItemStack given = stack.copy();
+        if (!player.addItem(given)) {
+            player.drop(given, false);
+        }
+
+        source.sendSuccess(() -> Component.literal(
+                "Gave " + stack.getCount() + "x " + stack.getHoverName().getString()
+        ), false);
+        return stack.getCount();
     }
 
     private static int runDebug(CommandSourceStack source) throws CommandSyntaxException {

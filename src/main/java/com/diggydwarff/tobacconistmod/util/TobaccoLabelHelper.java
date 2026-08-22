@@ -32,6 +32,8 @@ public class TobaccoLabelHelper {
 
         if (tag.isEmpty()) {
             LegacyItemTags.setTag(stack, null);
+        } else {
+            LegacyItemTags.setTag(stack, tag);
         }
     }
 
@@ -54,6 +56,8 @@ public class TobaccoLabelHelper {
 
         if (tag.isEmpty()) {
             LegacyItemTags.setTag(stack, null);
+        } else {
+            LegacyItemTags.setTag(stack, tag);
         }
     }
 

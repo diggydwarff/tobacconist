@@ -146,6 +146,21 @@ public class ModItems {
     public static final Supplier<Item> TOBACCO_LOOSE_SHADE =
             ITEMS.register("tobacco_loose_shade", () -> new LooseTobaccoItem(new Item.Properties(), 40, 10));
 
+    public static final Supplier<Item> BLENDED_TOBACCO =
+            ITEMS.register("blended_tobacco", () -> new BlendedTobaccoItem(new Item.Properties()));
+
+    // Create-compatible factory tooling and metadata-carrying assembly intermediates.
+    // These are registered unconditionally so saved stacks remain valid if Create is removed;
+    // recipes/automation that expose them remain Create-gated.
+    public static final Supplier<Item> BRASS_NAME_TAG =
+            ITEMS.register("brass_name_tag", () -> new BrassNameTagItem(new Item.Properties()));
+
+    public static final Supplier<Item> INCOMPLETE_CIGARETTE =
+            ITEMS.register("incomplete_cigarette", () -> new Item(new Item.Properties().stacksTo(1)));
+
+    public static final Supplier<Item> INCOMPLETE_CIGAR =
+            ITEMS.register("incomplete_cigar", () -> new Item(new Item.Properties().stacksTo(1)));
+
     public static final Supplier<Item> SPOILED_TOBACCO =
             ITEMS.register("spoiled_tobacco",
                     () -> new SpoiledTobaccoItem(new Item.Properties().stacksTo(64)));

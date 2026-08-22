@@ -70,53 +70,7 @@ public class CigarRecipe extends CustomRecipe {
             return ItemStack.EMPTY;
         }
 
-        ItemStack returnStack = new ItemStack(ModItems.CIGAR.get(), 1);
-        CompoundTag tag = LegacyItemTags.getOrCreateTag(returnStack);
-
-        CompoundTag wrapperData = LegacyItemTags.getTag(tobaccoLeafStack);
-        if (wrapperData != null) {
-            tag.put("WrapperLeafData", wrapperData.copy());
-        }
-
-        tag.putString("tobacco", TobaccoProductQualityHelper.getShortTobaccoLabel(tobaccoStack));
-        tag.putString("wrapper", tobaccoLeafStack.getDisplayName().getString());
-
-        TobaccoDataHelper.applyTobaccoMetadata(returnStack, tobaccoStack);
-
-        CompoundTag fillerTag = LegacyItemTags.getTag(tobaccoStack);
-        CompoundTag wrapperTag = LegacyItemTags.getTag(tobaccoLeafStack);
-
-        int fillerAge = fillerTag != null ? fillerTag.getInt("AgedDays") : 0;
-        int wrapperAge = wrapperTag != null ? wrapperTag.getInt("AgedDays") : 0;
-        int finalAge = Math.max(fillerAge, wrapperAge);
-
-        if (finalAge > 0) {
-            tag.putInt("AgedDays", finalAge);
-        }
-
-        boolean fermented =
-                (fillerTag != null && fillerTag.getBoolean("Fermented")) ||
-                        (wrapperTag != null && wrapperTag.getBoolean("Fermented"));
-
-        if (fermented) {
-            tag.putBoolean("Fermented", true);
-        }
-
-        boolean ruined =
-                (fillerTag != null && fillerTag.getBoolean("Ruined")) ||
-                        (wrapperTag != null && wrapperTag.getBoolean("Ruined"));
-
-        if (ruined) {
-            tag.putBoolean("Ruined", true);
-        }
-
-        TobaccoProductQualityHelper.applyProductQualityToTag(
-                tag,
-                tobaccoStack,
-                TobaccoProductQualityHelper.getCigarQuality(tobaccoStack)
-        );
-
-        return returnStack;
+        return com.diggydwarff.tobacconistmod.util.TobaccoProductCraftingHelper.makeCigar(tobaccoStack, tobaccoLeafStack);
     }
 
     @Override

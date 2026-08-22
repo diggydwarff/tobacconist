@@ -70,23 +70,7 @@ public class CigaretteRecipe extends CustomRecipe {
             return ItemStack.EMPTY;
         }
 
-        ItemStack result = new ItemStack(ModItems.CIGARETTE.get());
-
-        CompoundTag tag = LegacyItemTags.getOrCreateTag(result);
-        tag.putString("tobacco", TobaccoProductQualityHelper.getShortTobaccoLabel(tobaccoStack));
-
-        TobaccoDataHelper.applyTobaccoMetadata(result, tobaccoStack);
-
-        // Use the same product-quality scoring path as cigars and shisha.
-        // This makes the existing cut preferences meaningful for cigarettes too
-        // (Shag best, then Ribbon, with Rough/Flake penalized).
-        TobaccoProductQualityHelper.applyProductQualityToTag(
-                tag,
-                tobaccoStack,
-                TobaccoProductQualityHelper.getCigaretteQuality(tobaccoStack)
-        );
-
-        return result;
+        return com.diggydwarff.tobacconistmod.util.TobaccoProductCraftingHelper.makeCigarette(tobaccoStack);
     }
 
     @Override
