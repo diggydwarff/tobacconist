@@ -20,7 +20,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "$(thing)Farmer's Delight$() and $(thing)Fruits Delight$() add extra flavored-molasses recipes when installed. Their dedicated flavor entries appear in the Shisha & Hookahs category only when the matching mod is loaded.",
+      "text": "$(thing)Farmer's Delight$() and $(thing)Fruits Delight$() add extra Flavoring Essence ingredients when installed. Their dedicated essence entries appear in the Shisha & Hookahs category only when the matching mod is loaded.",
       "title": "Food Mod Integrations"
     }
   ]

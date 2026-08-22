@@ -167,6 +167,9 @@ public class ModItems {
 
     public static final Supplier<Item> BOTTLED_MOLASSES_PLAIN = ITEMS.register("bottled_molasses_plain", () -> BottledMolassesFlavors.BOTTLED_MOLASSES_PLAIN.getItem());
 
+    public static final Supplier<Item> BOTTLED_AQUA_VITAE =
+            ITEMS.register("bottled_aqua_vitae", () -> new AquaVitaeItem(new Item.Properties().stacksTo(1)));
+
     // TOBACCO SEED ITEMS
     public static final Supplier<Item> WILD_TOBACCO_SEEDS =
             ITEMS.register("wild_tobacco_seeds",

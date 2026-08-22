@@ -4,7 +4,7 @@ import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
 
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
-import com.diggydwarff.tobacconistmod.datagen.items.custom.ShishaFlavoringItem;
+import com.diggydwarff.tobacconistmod.datagen.items.custom.BottledMolassesFlavors;
 import com.diggydwarff.tobacconistmod.compat.create.CreateCompat;
 import com.diggydwarff.tobacconistmod.recipes.WoodenPipeRecipe;
 import com.diggydwarff.tobacconistmod.util.PaintingTabHelper;
@@ -23,9 +23,6 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
 import java.util.function.Supplier;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.StreamSupport;
 
 import static com.diggydwarff.tobacconistmod.datagen.items.ModItems.*;
 
@@ -145,8 +142,9 @@ public class TobacconistCreativeTab {
                         output.accept(PaintingTabHelper.paintingVariant("havana_cigar"));
                         output.accept(PaintingTabHelper.paintingVariant("andean_mapacho"));
 
+                        output.accept(BOTTLED_AQUA_VITAE.get());
                         output.accept(BOTTLED_MOLASSES_PLAIN.get());
-                        addAllMolassesFlavorings(output);
+                        addAllEssencesAndMolasses(output);
 
                     }).build());
 
@@ -167,16 +165,11 @@ public class TobacconistCreativeTab {
         output.accept(TobaccoCuringHelper.makeCreativeLoose(base, TobaccoCuringHelper.CUT_FLAKE));
     }
 
-    private static void addAllMolassesFlavorings(CreativeModeTab.Output output) {
-        List<Item> flavorings = StreamSupport.stream(BuiltInRegistries.ITEM.spliterator(), false)
-                .filter(item -> item instanceof ShishaFlavoringItem)
-                .sorted(Comparator.comparing(item ->
-                        BuiltInRegistries.ITEM.getKey(item).toString()
-                ))
-                .toList();
-
-        for (Item item : flavorings) {
-            output.accept(item);
+    private static void addAllEssencesAndMolasses(CreativeModeTab.Output output) {
+        for (BottledMolassesFlavors flavor : BottledMolassesFlavors.values()) {
+            if (flavor.isPlain()) continue;
+            output.accept(flavor.getEssenceItem());
+            output.accept(flavor.getItem());
         }
     }
 

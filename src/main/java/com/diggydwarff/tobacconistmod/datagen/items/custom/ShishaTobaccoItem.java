@@ -134,12 +134,9 @@ public class ShishaTobaccoItem extends SmokingProduct {
                     tag.getString("flavor2"),
                     tag.getString("flavor3")
             )) {
-                if (shishaFlavor.contains("Molasses")) {
-                    Pattern r = Pattern.compile("\\(([^)]+)\\)");
-                    Matcher m = r.matcher(shishaFlavor);
-                    if (m.find()) {
-                        tooltip.add(Component.literal("* " + m.group(0)).withStyle(ChatFormatting.GOLD));
-                    }
+                String flavorName = getShishaFlavorDisplayName(shishaFlavor);
+                if (!flavorName.isEmpty()) {
+                    tooltip.add(Component.literal("* " + flavorName).withStyle(ChatFormatting.LIGHT_PURPLE));
                 }
             }
         }
@@ -151,6 +148,24 @@ public class ShishaTobaccoItem extends SmokingProduct {
             tooltip.add(Component.literal("✿ Fermented").withStyle(ChatFormatting.DARK_GRAY));
             tooltip.add(Component.literal("ᵐ Months aged, ʸ Years aged").withStyle(ChatFormatting.DARK_GRAY));
         }
+    }
+
+    /** Supports both the new clean flavor IDs and legacy "Bottle of Molasses (...)" metadata. */
+    private String getShishaFlavorDisplayName(String storedFlavor) {
+        if (storedFlavor == null || storedFlavor.isBlank()) return "";
+
+        if (storedFlavor.contains("Molasses")) {
+            Matcher matcher = Pattern.compile("\\(([^)]+)\\)").matcher(storedFlavor);
+            if (matcher.find()) {
+                String legacy = matcher.group(1);
+                return legacy.endsWith(" Flavored")
+                        ? legacy.substring(0, legacy.length() - " Flavored".length())
+                        : legacy;
+            }
+            return "";
+        }
+
+        return storedFlavor;
     }
 
     private String formatAge(int agedDays) {

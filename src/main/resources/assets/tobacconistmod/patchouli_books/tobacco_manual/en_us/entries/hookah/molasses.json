@@ -1,23 +1,38 @@
 {
-  "name": "Making Molasses",
-  "icon": "tobacconistmod:bottled_molasses_plain",
+  "name": "Essences & Molasses",
+  "icon": "tobacconistmod:bottled_aqua_vitae",
   "category": "tobacconistmod:hookah",
   "sortnum": 0,
   "pages": [
     {
       "type": "patchouli:spotlight",
-      "item": "tobacconistmod:bottled_molasses_plain",
-      "text": "Plain molasses is the base for every flavored shisha bottle. It is made through the Brewing Stand rather than the crafting table."
+      "item": "tobacconistmod:bottled_aqua_vitae",
+      "text": "Flavoring is split into two ingredients: $(thing)Aqua Vitae$(), the extraction spirit, and concentrated $(thing)Flavoring Essence$(). Molasses supplies the heavy sweetness and moisture used for shisha."
     },
     {
       "type": "patchouli:text",
-      "text": "Put a $(item)Potion bottle$() into a Brewing Stand and use $(item)Sugar Cane$() as the brewing ingredient. A plain Water Bottle works because it is the vanilla Potion item with water contents. The result is a Bottle of Molasses.",
-      "title": "Brewing Plain Molasses"
+      "title": "Aqua Vitae",
+      "text": "First brew the vanilla $(item)Mundane Potion$() from a Water Bottle and Sugar. Brew that Mundane Potion with $(item)Wheat$() to make a Bottle of Aqua Vitae. Aqua Vitae is an extraction ingredient, not a drinking mechanic."
     },
     {
       "type": "patchouli:text",
-      "text": "Most flavors are then simple shapeless crafting: $(thing)1 Bottle of Molasses + the listed food/ingredient$() → 1 flavored molasses bottle. Flavor bottles have $(item)4 uses$() when mixed into shisha.",
-      "title": "Flavoring"
+      "title": "Flavoring Essence",
+      "text": "Brew $(item)Aqua Vitae + a flavor ingredient$() to make that ingredient's Flavoring Essence. Each essence bottle is $(item)single-use$(). Apple makes Apple Essence, Cocoa Beans make Cocoa Essence, and so on."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Plain Molasses",
+      "text": "Plain molasses keeps its simple Brewing Stand route: brew a vanilla $(item)Water Bottle$() with $(item)Sugar Cane$() to make one full Bottle of Molasses."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Two Uses for Essence",
+      "text": "Use $(item)1 essence bottle + loose tobacco$() to lightly case it into aromatic tobacco. Or craft $(item)1 essence bottle + 1 plain Molasses bottle$() to make a full one-use bottle of flavored molasses for wet shisha."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Create Automation",
+      "text": "With Create installed, a $(thing)heated Mechanical Mixer$() can make Aqua Vitae from Water + Sugar + Wheat, make Essence from Aqua Vitae + its flavor ingredient, and make plain molasses from Water + Sugar Cane. A Spout applies 1000 mB Essence to loose tobacco; a Mixer combines 1000 mB Essence with 1000 mB plain molasses."
     },
     {
       "type": "patchouli:relations",

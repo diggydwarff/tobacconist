@@ -1,5 +1,6 @@
 package com.diggydwarff.tobacconistmod.util;
 
+import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelBlockEntity;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
@@ -99,10 +100,10 @@ public final class TobaccoProcessingHelper {
         return recutLooseTobacco(stack, nextCut);
     }
 
-    /** Initial Create Mixer input rule: only Rough loose tobacco can become Shisha. */
+    /** Any loose cut can become Shisha once it is thoroughly mixed with a full flavored-molasses batch. */
     public static boolean canMechanicallyMixToShisha(ItemStack stack) {
         return TobaccoCuringHelper.isLooseTobacco(stack)
-                && TobaccoCuringHelper.CUT_ROUGH.equals(TobaccoCuringHelper.getCutType(stack));
+                && !TobaccoBarrelBlockEntity.isRuined(stack);
     }
 
     /** Returns whether the stack is Tobacconist Shisha Tobacco. */
@@ -196,7 +197,7 @@ public final class TobaccoProcessingHelper {
     }
 
     /**
-     * Create's progressive flavoring rule. A Mixer can either start Shisha from Rough tobacco or
+     * Create's progressive flavoring rule. A Mixer can either start Shisha from loose tobacco or
      * add one more flavor to unused Shisha that still has an open flavor slot.
      */
     public static boolean canMechanicallyFlavorShisha(ItemStack stack) {
@@ -211,7 +212,7 @@ public final class TobaccoProcessingHelper {
         return canMechanicallyMixToShisha(stack) || canAddShishaFlavor(stack, flavorName);
     }
 
-    /** Applies one 250 mB Mixer flavor dose to Rough tobacco or an existing unused Shisha. */
+    /** Applies one full 1000 mB flavored-molasses batch to loose tobacco or unused Shisha. */
     public static ItemStack mechanicallyFlavorShisha(ItemStack stack, String flavorName) {
         if (!canMechanicallyFlavorShisha(stack, flavorName)) {
             return ItemStack.EMPTY;

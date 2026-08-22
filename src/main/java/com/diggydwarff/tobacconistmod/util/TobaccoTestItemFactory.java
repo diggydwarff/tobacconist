@@ -201,12 +201,12 @@ public final class TobaccoTestItemFactory {
     }
 
     private static ItemStack makeShisha(Map<String, String> options) {
-        Map<String, String> roughOptions = new HashMap<>(options);
-        roughOptions.put("cut", TobaccoCuringHelper.CUT_ROUGH);
-        // flavor=/flavors= describe the Shisha casing, not aromatic metadata on the Rough filler.
-        roughOptions.remove("flavor");
-        roughOptions.remove("flavors");
-        ItemStack filler = makeFiller(roughOptions, TobaccoCuringHelper.CUT_ROUGH);
+        Map<String, String> fillerOptions = new HashMap<>(options);
+        // flavor=/flavors= describe the wet Shisha treatment, not aromatic metadata on the filler.
+        // Rough remains the convenient default, but cut= now lets the test command exercise any loose cut.
+        fillerOptions.remove("flavor");
+        fillerOptions.remove("flavors");
+        ItemStack filler = makeFiller(fillerOptions, TobaccoCuringHelper.CUT_ROUGH);
 
         String flavorList = options.getOrDefault("flavors", options.getOrDefault("flavor", "berry"));
         List<String> shishaFlavors = new ArrayList<>();

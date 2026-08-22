@@ -15,6 +15,8 @@ public class ModRecipes {
 
     public static final Supplier<RecipeSerializer<ShishaTobaccoRecipe>> SHISHA_TOBACCO_RECIPE_SERIALIZER =
             SERIALIZERS.register("crafting_special_shishatobacco", () -> new SimpleCraftingRecipeSerializer<>(ShishaTobaccoRecipe::new));
+    public static final Supplier<RecipeSerializer<FlavorMolassesRecipe>> FLAVOR_MOLASSES_RECIPE_SERIALIZER =
+            SERIALIZERS.register("crafting_special_flavor_molasses", () -> new SimpleCraftingRecipeSerializer<>(FlavorMolassesRecipe::new));
     public static final Supplier<RecipeSerializer<CigaretteRecipe>> CIGARETTE_RECIPE_SERIALIZER =
             SERIALIZERS.register("crafting_special_cigarette", () -> new SimpleCraftingRecipeSerializer<>(CigaretteRecipe::new));
     public static final Supplier<RecipeSerializer<CigarRecipe>> CIGAR_RECIPE_SERIALIZER =

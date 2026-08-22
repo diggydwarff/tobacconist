@@ -6,22 +6,27 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Craft shisha from exactly $(item)1 loose tobacco$() plus $(item)1 to 3 flavored molasses bottles$(). The ingredients may be placed anywhere in the crafting grid; no unrelated items may be present."
+      "text": "Craft shisha from exactly $(item)1 loose tobacco$() plus $(item)1 to 3 full flavored molasses bottles$(). Any loose cut or blend is accepted; no unrelated items may be present."
     },
     {
       "type": "patchouli:text",
-      "text": "Each flavor bottle is reusable for $(item)4 shisha crafts$(). Every craft damages each flavor bottle used by one step. When its fourth use is consumed, that bottle disappears.",
-      "title": "Reusable Flavor Bottles"
+      "title": "Wet Treatment",
+      "text": "Unlike Flavoring Essence, which lightly cases aromatic tobacco, each flavored molasses bottle is a $(thing)full one-use wet treatment$(). A bottle used for shisha is consumed and leaves an empty Glass Bottle."
     },
     {
       "type": "patchouli:text",
-      "text": "For shisha, $(thing)Rough Cut$() is ideal. Ribbon is the second-best choice. Flake is workable but capped lower, and Shag is strongly penalized. The finished shisha keeps the tobacco's aging, fermentation, and ruined state.",
-      "title": "Best Cut"
+      "title": "Best Cut",
+      "text": "Any cut works, but cut still affects product quality. $(thing)Rough Cut$() is ideal, Ribbon is second-best, Flake is workable but capped lower, and Shag is strongly penalized. Aging, fermentation, ruined state, blend data, and other tobacco metadata are preserved."
     },
     {
       "type": "patchouli:text",
-      "text": "Using 2 or 3 flavor bottles records a multi-flavor blend on the shisha. The hookah does not require a particular flavor; any shisha item produced by this recipe can be loaded into its shisha slot.",
-      "title": "Blends"
+      "title": "Blends",
+      "text": "Using 2 or 3 flavored molasses bottles records a multi-flavor blend on the shisha. Unused shisha may also be mixed again until its three flavor slots are full."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Create Mixer",
+      "text": "With Create installed, mix $(item)1000 mB flavored molasses$() with loose tobacco in a Mechanical Mixer. The same metadata-preserving route can add another full flavored-molasses treatment to unused shisha."
     },
     {
       "type": "patchouli:relations",

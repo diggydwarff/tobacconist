@@ -7,10 +7,7 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
 
-/**
- * Exposes the existing four-use molasses bottle as a standard 1000 mB NeoForge fluid container.
- * Each durability point corresponds to one 250 mB shisha dose.
- */
+/** A molasses bottle is one full 1000 mB batch; flavored bottles are consumed whole by Shisha. */
 public final class MolassesBottleFluidHandler implements IFluidHandlerItem {
     public static final int CAPACITY = 1000;
     public static final int DOSE = 250;
@@ -24,35 +21,23 @@ public final class MolassesBottleFluidHandler implements IFluidHandlerItem {
     }
 
     public static int amountIn(ItemStack stack) {
-        if (stack.isEmpty() || !stack.isDamageableItem()) {
-            return 0;
-        }
-        int usesLeft = Math.max(0, stack.getMaxDamage() - stack.getDamageValue());
-        return Math.min(CAPACITY, usesLeft * DOSE);
+        return stack.isEmpty() || BottledMolassesFlavors.fromItem(stack.getItem()) == null ? 0 : CAPACITY;
     }
 
-    public static boolean hasDose(ItemStack stack) {
-        return amountIn(stack) >= DOSE;
+    public static boolean isFullBottle(ItemStack stack) {
+        return amountIn(stack) == CAPACITY;
     }
 
-    @Override
-    public int getTanks() {
-        return 1;
-    }
+    @Override public int getTanks() { return 1; }
 
     @Override
     public FluidStack getFluidInTank(int tank) {
-        if (tank != 0) {
-            return FluidStack.EMPTY;
-        }
-        int amount = amountIn(container);
-        return amount <= 0 ? FluidStack.EMPTY : new FluidStack(ModMolassesFluids.source(flavor), amount);
+        return tank == 0 && !container.isEmpty()
+                ? new FluidStack(ModMolassesFluids.source(flavor), CAPACITY)
+                : FluidStack.EMPTY;
     }
 
-    @Override
-    public int getTankCapacity(int tank) {
-        return tank == 0 ? CAPACITY : 0;
-    }
+    @Override public int getTankCapacity(int tank) { return tank == 0 ? CAPACITY : 0; }
 
     @Override
     public boolean isFluidValid(int tank, FluidStack stack) {
@@ -61,60 +46,22 @@ public final class MolassesBottleFluidHandler implements IFluidHandlerItem {
 
     @Override
     public int fill(FluidStack resource, IFluidHandler.FluidAction action) {
-        if (!isFluidValid(0, resource)) {
-            return 0;
-        }
-
-        int stored = amountIn(container);
-        int room = CAPACITY - stored;
-        int fillable = Math.min(room, resource.getAmount());
-        fillable -= fillable % DOSE;
-        if (fillable <= 0) {
-            return 0;
-        }
-
-        if (action.execute()) {
-            setAmount(stored + fillable);
-        }
-        return fillable;
+        // Registered molasses items are already full. Empty vanilla bottles use the generic handler.
+        return 0;
     }
 
     @Override
     public FluidStack drain(FluidStack resource, IFluidHandler.FluidAction action) {
-        if (resource.isEmpty() || resource.getFluid() != ModMolassesFluids.source(flavor)) {
-            return FluidStack.EMPTY;
-        }
+        if (resource.isEmpty() || resource.getFluid() != ModMolassesFluids.source(flavor)) return FluidStack.EMPTY;
         return drain(resource.getAmount(), action);
     }
 
     @Override
     public FluidStack drain(int maxDrain, IFluidHandler.FluidAction action) {
-        int stored = amountIn(container);
-        int drainable = Math.min(stored, maxDrain);
-        drainable -= drainable % DOSE;
-        if (drainable <= 0) {
-            return FluidStack.EMPTY;
-        }
-
-        if (action.execute()) {
-            setAmount(stored - drainable);
-        }
-        return new FluidStack(ModMolassesFluids.source(flavor), drainable);
+        if (container.isEmpty() || maxDrain < CAPACITY) return FluidStack.EMPTY;
+        if (action.execute()) container = new ItemStack(Items.GLASS_BOTTLE);
+        return new FluidStack(ModMolassesFluids.source(flavor), CAPACITY);
     }
 
-    @Override
-    public ItemStack getContainer() {
-        return container;
-    }
-
-    private void setAmount(int amount) {
-        int clamped = Math.max(0, Math.min(CAPACITY, amount));
-        if (clamped == 0) {
-            container = new ItemStack(Items.GLASS_BOTTLE);
-            return;
-        }
-
-        int usesLeft = clamped / DOSE;
-        container.setDamageValue(Math.max(0, container.getMaxDamage() - usesLeft));
-    }
+    @Override public ItemStack getContainer() { return container; }
 }

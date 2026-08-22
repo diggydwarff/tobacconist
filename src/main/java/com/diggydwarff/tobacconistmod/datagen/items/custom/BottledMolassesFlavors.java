@@ -73,6 +73,7 @@ public enum BottledMolassesFlavors {
      * asks for it.</p>
      */
     private Item item;
+    private Item essenceItem;
     private final String bottleDisplayName;
 
     BottledMolassesFlavors(String name){
@@ -85,13 +86,35 @@ public enum BottledMolassesFlavors {
 
     public Item getItem(){
         if (item == null) {
-            item = new ShishaFlavoringItem(new Item.Properties().stacksTo(1).durability(4));
+            // Molasses bottles now represent a full 1000 mB batch. Flavoring Essence is
+            // likewise a full single-use ingredient, and flavored molasses is intentionally one-use.
+            item = new BottledMolassesItem(new Item.Properties().stacksTo(1));
         }
         return item;
     }
 
     public ItemStack getStack(){
         return new ItemStack(getItem());
+    }
+
+    public boolean isPlain() {
+        return this == BOTTLED_MOLASSES_PLAIN;
+    }
+
+    /** Lazily registered single-use essence item for every non-plain flavor. */
+    public Item getEssenceItem() {
+        if (isPlain()) {
+            return null;
+        }
+        if (essenceItem == null) {
+            essenceItem = new FlavoringEssenceItem(new Item.Properties().stacksTo(1));
+        }
+        return essenceItem;
+    }
+
+    public ItemStack getEssenceStack() {
+        Item essence = getEssenceItem();
+        return essence == null ? ItemStack.EMPTY : new ItemStack(essence);
     }
 
     /** Stable registry path for this molasses flavor's real fluid. */
@@ -108,7 +131,30 @@ public enum BottledMolassesFlavors {
 
     /** English display label stored by the existing Shisha metadata format. */
     public String getShishaFlavorTag() {
-        return bottleDisplayName;
+        return isPlain() ? "Molasses" : getFlavorDisplayName();
+    }
+
+    /** Stable registry path for this flavor's concentrated essence fluid. */
+    public String getEssenceFluidName() {
+        return "essence_" + getFlavorPath();
+    }
+
+    /** Stable registry path for this flavor's essence bottle. */
+    public String getEssenceItemName() {
+        return "flavoring_essence_" + getFlavorPath();
+    }
+
+    public String getFlavorDisplayName() {
+        int open = bottleDisplayName.indexOf('(');
+        int close = bottleDisplayName.lastIndexOf(')');
+        if (open < 0 || close <= open) {
+            return "Plain";
+        }
+        String flavor = bottleDisplayName.substring(open + 1, close);
+        if (flavor.endsWith(" Flavored")) {
+            flavor = flavor.substring(0, flavor.length() - " Flavored".length());
+        }
+        return flavor;
     }
 
     public String getFluidDisplayName() {
@@ -118,16 +164,26 @@ public enum BottledMolassesFlavors {
             return "Molasses";
         }
 
-        String flavor = bottleDisplayName.substring(open + 1, close);
-        if (flavor.endsWith(" Flavored")) {
-            flavor = flavor.substring(0, flavor.length() - " Flavored".length());
-        }
-        return flavor + " Molasses";
+        return getFlavorDisplayName() + " Molasses";
+    }
+
+    private String getFlavorPath() {
+        String fluid = getFluidName();
+        return fluid.startsWith("molasses_") ? fluid.substring("molasses_".length()) : fluid;
     }
 
     public static BottledMolassesFlavors fromItem(Item item) {
         for (BottledMolassesFlavors flavor : values()) {
             if (flavor.item == item) {
+                return flavor;
+            }
+        }
+        return null;
+    }
+
+    public static BottledMolassesFlavors fromEssenceItem(Item item) {
+        for (BottledMolassesFlavors flavor : values()) {
+            if (!flavor.isPlain() && flavor.getEssenceItem() == item) {
                 return flavor;
             }
         }

@@ -1,9 +1,8 @@
 package com.diggydwarff.tobacconistmod.recipes;
 
 import com.diggydwarff.tobacconistmod.datagen.items.custom.BottledMolassesFlavors;
-import com.diggydwarff.tobacconistmod.datagen.items.custom.LooseTobaccoItem;
-import com.diggydwarff.tobacconistmod.datagen.items.custom.ShishaFlavoringItem;
-import com.diggydwarff.tobacconistmod.fluid.MolassesBottleFluidHandler;
+import com.diggydwarff.tobacconistmod.datagen.items.custom.FlavoringEssenceItem;
+import com.diggydwarff.tobacconistmod.fluid.EssenceBottleFluidHandler;
 import com.diggydwarff.tobacconistmod.util.TobaccoAromaticHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoProcessingHelper;
@@ -21,127 +20,106 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Shared molasses crafting path.
- * Rough loose tobacco + 1-3 molasses doses makes Shisha; any other loose cut + exactly one dose
- * becomes single-flavor aromatic tobacco. Existing unused Shisha may still receive up to 3 flavors.
+ * Essence lightly cases any loose tobacco into an aromatic. Full flavored-molasses bottles are the
+ * heavy wet treatment that makes Shisha from any loose cut; unused Shisha may still take up to
+ * three flavored-molasses applications.
  */
 public class ShishaTobaccoRecipe extends CustomRecipe {
-    public ShishaTobaccoRecipe(CraftingBookCategory category) {
-        super(category);
-    }
+    public ShishaTobaccoRecipe(CraftingBookCategory category) { super(category); }
+
+    private record Inputs(ItemStack source, BottledMolassesFlavors essence, List<BottledMolassesFlavors> molasses) {}
 
     @Override
-    public boolean matches(CraftingInput craftingContainer, Level level) {
-        ItemStack sourceStack = ItemStack.EMPTY;
-        List<BottledMolassesFlavors> flavors = new ArrayList<>(3);
+    public boolean matches(CraftingInput input, Level level) {
+        Inputs parsed = parse(input);
+        if (parsed == null) return false;
 
-        for (int i = 0; i < craftingContainer.size(); ++i) {
-            ItemStack itemstack = craftingContainer.getItem(i);
-            if (itemstack.isEmpty()) continue;
-
-            if (itemstack.getItem() instanceof LooseTobaccoItem
-                    || TobaccoProcessingHelper.isShisha(itemstack)) {
-                if (!sourceStack.isEmpty()) return false;
-                sourceStack = itemstack;
-            } else if (itemstack.getItem() instanceof ShishaFlavoringItem) {
-                if (!MolassesBottleFluidHandler.hasDose(itemstack)) return false;
-                BottledMolassesFlavors flavor = BottledMolassesFlavors.fromItem(itemstack.getItem());
-                if (flavor == null) return false;
-                flavors.add(flavor);
-            } else {
-                return false;
-            }
+        if (parsed.essence() != null) {
+            return TobaccoCuringHelper.isLooseTobacco(parsed.source())
+                    && TobaccoAromaticHelper.canAromatize(parsed.source());
         }
 
-        if (sourceStack.isEmpty() || flavors.isEmpty()) return false;
+        if (TobaccoCuringHelper.isLooseTobacco(parsed.source())) {
+            return !parsed.molasses().isEmpty() && parsed.molasses().size() <= 3
+                    && TobaccoProcessingHelper.canMechanicallyMixToShisha(parsed.source());
+        }
+        return TobaccoProcessingHelper.canAddShishaFlavor(parsed.source())
+                && TobaccoProcessingHelper.getShishaFlavorCount(parsed.source()) + parsed.molasses().size() <= 3;
+    }
 
-        if (sourceStack.getItem() instanceof LooseTobaccoItem) {
-            if (TobaccoCuringHelper.CUT_ROUGH.equals(TobaccoCuringHelper.getCutType(sourceStack))) {
-                return flavors.size() <= 3;
-            }
-            return flavors.size() == 1 && TobaccoAromaticHelper.canAromatize(sourceStack);
+    @Override
+    public ItemStack assemble(CraftingInput input, HolderLookup.Provider registries) {
+        Inputs parsed = parse(input);
+        if (parsed == null) return ItemStack.EMPTY;
+
+        if (parsed.essence() != null) {
+            return TobaccoAromaticHelper.aromatize(parsed.source(), parsed.essence());
         }
 
-        return TobaccoProcessingHelper.canAddShishaFlavor(sourceStack)
-                && TobaccoProcessingHelper.getShishaFlavorCount(sourceStack) + flavors.size() <= 3;
-    }
-
-    @Override
-    public ItemStack assemble(CraftingInput craftingContainer, HolderLookup.Provider registries) {
-        ItemStack sourceStack = ItemStack.EMPTY;
-        List<BottledMolassesFlavors> flavors = new ArrayList<>(3);
-
-        for (int i = 0; i < craftingContainer.size(); ++i) {
-            ItemStack itemstack = craftingContainer.getItem(i);
-            if (itemstack.isEmpty()) continue;
-
-            if (itemstack.getItem() instanceof LooseTobaccoItem
-                    || TobaccoProcessingHelper.isShisha(itemstack)) {
-                sourceStack = itemstack;
-            } else if (itemstack.getItem() instanceof ShishaFlavoringItem
-                    && MolassesBottleFluidHandler.hasDose(itemstack)) {
-                BottledMolassesFlavors flavor = BottledMolassesFlavors.fromItem(itemstack.getItem());
-                if (flavor != null) flavors.add(flavor);
-            }
+        List<String> flavorNames = parsed.molasses().stream()
+                .map(BottledMolassesFlavors::getShishaFlavorTag).toList();
+        if (TobaccoCuringHelper.isLooseTobacco(parsed.source())) {
+            return TobaccoProcessingHelper.createShisha(parsed.source(), flavorNames);
         }
-
-        if (sourceStack.getItem() instanceof LooseTobaccoItem) {
-            if (TobaccoCuringHelper.CUT_ROUGH.equals(TobaccoCuringHelper.getCutType(sourceStack))) {
-                return TobaccoProcessingHelper.createShisha(
-                        sourceStack,
-                        flavors.stream().map(BottledMolassesFlavors::getShishaFlavorTag).toList()
-                );
-            }
-            return flavors.size() == 1
-                    ? TobaccoAromaticHelper.aromatize(sourceStack, flavors.getFirst())
-                    : ItemStack.EMPTY;
-        }
-
-        return TobaccoProcessingHelper.addShishaFlavors(
-                sourceStack,
-                flavors.stream().map(BottledMolassesFlavors::getShishaFlavorTag).toList()
-        );
+        return TobaccoProcessingHelper.addShishaFlavors(parsed.source(), flavorNames);
     }
 
-    @Override
-    public boolean isSpecial() {
-        return true;
-    }
+    private Inputs parse(CraftingInput input) {
+        ItemStack source = ItemStack.EMPTY;
+        BottledMolassesFlavors essence = null;
+        List<BottledMolassesFlavors> molasses = new ArrayList<>(3);
 
-    @Override
-    public boolean canCraftInDimensions(int width, int height) {
-        return width * height >= 2;
-    }
-
-    @Override
-    public NonNullList<ItemStack> getRemainingItems(CraftingInput craftingContainer) {
-        NonNullList<ItemStack> remains = NonNullList.withSize(craftingContainer.size(), ItemStack.EMPTY);
-
-        for (int i = 0; i < craftingContainer.size(); ++i) {
-            ItemStack stack = craftingContainer.getItem(i);
+        for (int i = 0; i < input.size(); i++) {
+            ItemStack stack = input.getItem(i);
             if (stack.isEmpty()) continue;
 
-            if (stack.getItem() instanceof ShishaFlavoringItem) {
-                ItemStack bottle = stack.copy();
-                bottle.setCount(1);
+            if (TobaccoCuringHelper.isLooseTobacco(stack) || TobaccoProcessingHelper.isShisha(stack)) {
+                if (!source.isEmpty()) return null;
+                source = stack;
+                continue;
+            }
 
-                if (bottle.isDamageableItem() && MolassesBottleFluidHandler.hasDose(bottle)) {
-                    int nextDamage = Math.min(bottle.getMaxDamage(), bottle.getDamageValue() + 1);
-                    if (nextDamage >= bottle.getMaxDamage()) {
-                        remains.set(i, new ItemStack(Items.GLASS_BOTTLE));
-                    } else {
-                        bottle.setDamageValue(nextDamage);
-                        remains.set(i, bottle);
-                    }
-                }
+            if (stack.getItem() instanceof FlavoringEssenceItem) {
+                if (essence != null || !molasses.isEmpty()) return null;
+                essence = BottledMolassesFlavors.fromEssenceItem(stack.getItem());
+                if (essence == null) return null;
+                continue;
+            }
+
+            BottledMolassesFlavors flavor = BottledMolassesFlavors.fromItem(stack.getItem());
+            if (flavor != null && !flavor.isPlain()) {
+                if (essence != null || molasses.size() >= 3) return null;
+                molasses.add(flavor);
+                continue;
+            }
+            return null;
+        }
+        if (source.isEmpty() || (essence == null && molasses.isEmpty())) return null;
+        return new Inputs(source, essence, List.copyOf(molasses));
+    }
+
+    @Override public boolean isSpecial() { return true; }
+    @Override public boolean canCraftInDimensions(int width, int height) { return width * height >= 2; }
+
+    @Override
+    public NonNullList<ItemStack> getRemainingItems(CraftingInput input) {
+        NonNullList<ItemStack> remains = NonNullList.withSize(input.size(), ItemStack.EMPTY);
+        for (int i = 0; i < input.size(); i++) {
+            ItemStack stack = input.getItem(i);
+            if (stack.isEmpty()) continue;
+
+            if (stack.getItem() instanceof FlavoringEssenceItem) {
+                remains.set(i, new ItemStack(Items.GLASS_BOTTLE));
+                continue;
+            }
+
+            BottledMolassesFlavors molasses = BottledMolassesFlavors.fromItem(stack.getItem());
+            if (molasses != null && !molasses.isPlain()) {
+                remains.set(i, new ItemStack(Items.GLASS_BOTTLE));
             }
         }
-
         return remains;
     }
 
-    @Override
-    public RecipeSerializer<?> getSerializer() {
-        return ModRecipes.SHISHA_TOBACCO_RECIPE_SERIALIZER.get();
-    }
+    @Override public RecipeSerializer<?> getSerializer() { return ModRecipes.SHISHA_TOBACCO_RECIPE_SERIALIZER.get(); }
 }

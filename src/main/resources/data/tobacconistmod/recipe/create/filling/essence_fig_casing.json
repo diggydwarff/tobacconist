@@ -1,0 +1,24 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "type": "tobacconistmod:create_tobacco_casing",
+  "ingredients": [
+    {
+      "tag": "tobacconistmod:loose_tobacco"
+    },
+    {
+      "type": "neoforge:single",
+      "amount": 1000,
+      "fluid": "tobacconistmod:essence_fig"
+    }
+  ],
+  "results": [
+    {
+      "id": "tobacconistmod:tobacco_loose_wild"
+    }
+  ]
+}

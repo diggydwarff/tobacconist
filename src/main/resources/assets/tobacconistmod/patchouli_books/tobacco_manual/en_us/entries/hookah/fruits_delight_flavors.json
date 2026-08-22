@@ -1,65 +1,22 @@
 {
-  "name": "Fruits Delight Flavors",
-  "icon": "tobacconistmod:bottled_molasses_blueberry_flavor",
+  "name": "Fruits Delight Essences",
+  "icon": "tobacconistmod:flavoring_essence_blueberry",
   "category": "tobacconistmod:hookah",
   "sortnum": 7,
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "When Fruits Delight is installed, its fruits add a large set of additional molasses flavors. Each recipe remains the same basic idea: one Bottle of Molasses plus the named fruit ingredient."
+      "text": "When Fruits Delight is installed, its fruits can be brewed into Aqua Vitae to make matching Flavoring Essences. Each fresh essence bottle supplies one full casing/flavoring use."
     },
     {
-      "type": "patchouli:crafting",
-      "recipe": "tobacconistmod:compat/fruitsdelight/bottled_molasses_blueberry_flavor",
-      "recipe2": "tobacconistmod:compat/fruitsdelight/bottled_molasses_lychee_flavor",
-      "title": "Blueberry & Lychee"
+      "type": "patchouli:text",
+      "title": "Fruit Essences I",
+      "text": "Peach, Pear, Mango, Lychee, Hawberry, Orange, Persimmon, Blueberry, and Lemon each make their matching essence."
     },
     {
-      "type": "patchouli:crafting",
-      "recipe": "tobacconistmod:compat/fruitsdelight/bottled_molasses_persimmon_flavor",
-      "recipe2": "tobacconistmod:compat/fruitsdelight/bottled_molasses_bayberry_flavor",
-      "title": "Persimmon & Bayberry"
-    },
-    {
-      "type": "patchouli:crafting",
-      "recipe": "tobacconistmod:compat/fruitsdelight/bottled_molasses_pear_flavor",
-      "recipe2": "tobacconistmod:compat/fruitsdelight/bottled_molasses_durian_flavor",
-      "title": "Pear & Durian"
-    },
-    {
-      "type": "patchouli:crafting",
-      "recipe": "tobacconistmod:compat/fruitsdelight/bottled_molasses_orange_flavor",
-      "recipe2": "tobacconistmod:compat/fruitsdelight/bottled_molasses_hamimelon_flavor",
-      "title": "Orange & Hamimelon"
-    },
-    {
-      "type": "patchouli:crafting",
-      "recipe": "tobacconistmod:compat/fruitsdelight/bottled_molasses_fig_flavor",
-      "recipe2": "tobacconistmod:compat/fruitsdelight/bottled_molasses_mangosteen_flavor",
-      "title": "Fig & Mangosteen"
-    },
-    {
-      "type": "patchouli:crafting",
-      "recipe": "tobacconistmod:compat/fruitsdelight/bottled_molasses_peach_flavor",
-      "recipe2": "tobacconistmod:compat/fruitsdelight/bottled_molasses_cranberry_flavor",
-      "title": "Peach & Cranberry"
-    },
-    {
-      "type": "patchouli:crafting",
-      "recipe": "tobacconistmod:compat/fruitsdelight/bottled_molasses_hawberry_flavor",
-      "recipe2": "tobacconistmod:compat/fruitsdelight/bottled_molasses_lemon_flavor",
-      "title": "Hawberry & Lemon"
-    },
-    {
-      "type": "patchouli:crafting",
-      "recipe": "tobacconistmod:compat/fruitsdelight/bottled_molasses_mango_flavor",
-      "recipe2": "tobacconistmod:compat/fruitsdelight/bottled_molasses_kiwi_flavor",
-      "title": "Mango & Kiwi"
-    },
-    {
-      "type": "patchouli:crafting",
-      "recipe": "tobacconistmod:compat/fruitsdelight/bottled_molasses_pineapple_flavor",
-      "title": "Pineapple"
+      "type": "patchouli:text",
+      "title": "Fruit Essences II",
+      "text": "Hamimelon Slice, Pineapple, Mangosteen, Cranberry, Bayberry, Fig, Kiwi, and Durian each make their matching essence."
     }
   ],
   "flag": "mod:fruitsdelight"

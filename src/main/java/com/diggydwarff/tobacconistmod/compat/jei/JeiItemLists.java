@@ -4,7 +4,7 @@ import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
 
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.LabelItem;
-import com.diggydwarff.tobacconistmod.datagen.items.custom.ShishaFlavoringItem;
+import com.diggydwarff.tobacconistmod.datagen.items.custom.BottledMolassesFlavors;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.WoodenSmokingPipeItem;
 import com.diggydwarff.tobacconistmod.util.TobaccoBoxHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
@@ -35,15 +35,17 @@ public final class JeiItemLists {
         out.add(makeLoose(ModItems.TOBACCO_LOOSE_ORIENTAL.get()));
         out.add(makeLoose(ModItems.TOBACCO_LOOSE_DOKHA.get()));
         out.add(makeLoose(ModItems.TOBACCO_LOOSE_SHADE.get()));
+        out.add(makeLoose(ModItems.BLENDED_TOBACCO.get()));
 
         return out;
     }
 
     public static List<ItemStack> getAllShishaFlavorings() {
-        return StreamSupport.stream(BuiltInRegistries.ITEM.spliterator(), false)
-                .filter(item -> item instanceof ShishaFlavoringItem)
-                .map(ItemStack::new)
-                .toList();
+        List<ItemStack> out = new ArrayList<>();
+        for (BottledMolassesFlavors flavor : BottledMolassesFlavors.values()) {
+            if (!flavor.isPlain()) out.add(flavor.getStack());
+        }
+        return List.copyOf(out);
     }
 
     public static List<ItemStack> getAllTobaccoBoxSupportedContents() {

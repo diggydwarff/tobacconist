@@ -1,7 +1,6 @@
 package com.diggydwarff.tobacconistmod.compat.create;
 
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
-import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoProcessingHelper;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.world.item.ItemStack;
@@ -13,9 +12,9 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
- * Runtime-only ingredient that captures the exact Shisha source stack selected by a Basin.
- * It accepts either Rough loose tobacco for the first flavor or unused Shisha with fewer than
- * three flavors for progressive blending. The wrapper lets arbitrary per-stack metadata drive
+ * Runtime-only ingredient that captures the exact tobacco stack selected by Create processing.
+ * It accepts any loose-tobacco cut when the owning recipe permits it, or unused Shisha with fewer
+ * than three flavors for progressive mixing. The wrapper lets arbitrary per-stack metadata drive
  * the output without hard-coding it into recipe JSON.
  */
 public final class CreateTobaccoCaptureIngredient implements ICustomIngredient {
@@ -46,23 +45,22 @@ public final class CreateTobaccoCaptureIngredient implements ICustomIngredient {
 
     @Override
     public Stream<ItemStack> getItems() {
-        Stream<ItemStack> roughTobaccos = Stream.of(
+        // Untagged loose stacks advertise the full loose-tobacco family to recipe viewers.
+        // Runtime validation is recipe-specific and accepts/preserves the actual cut metadata.
+        Stream<ItemStack> looseTobaccos = Stream.of(
                 ModItems.TOBACCO_LOOSE_WILD.get(),
                 ModItems.TOBACCO_LOOSE_VIRGINIA.get(),
                 ModItems.TOBACCO_LOOSE_BURLEY.get(),
                 ModItems.TOBACCO_LOOSE_ORIENTAL.get(),
                 ModItems.TOBACCO_LOOSE_DOKHA.get(),
-                ModItems.TOBACCO_LOOSE_SHADE.get()
-        ).map(item -> {
-            ItemStack stack = new ItemStack(item);
-            TobaccoCuringHelper.setCutType(stack, TobaccoCuringHelper.CUT_ROUGH);
-            return stack;
-        });
+                ModItems.TOBACCO_LOOSE_SHADE.get(),
+                ModItems.BLENDED_TOBACCO.get()
+        ).map(ItemStack::new);
 
         ItemStack shisha = new ItemStack(ModItems.SHISHA_TOBACCO.get());
         com.diggydwarff.tobacconistmod.util.LegacyItemTags.getOrCreateTag(shisha)
-                .putString("flavor1", "Bottle of Molasses");
-        return Stream.concat(roughTobaccos, Stream.of(shisha));
+                .putString("flavor1", "Apple");
+        return Stream.concat(looseTobaccos, Stream.of(shisha));
     }
 
     @Override

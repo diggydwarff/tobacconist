@@ -38,13 +38,9 @@ public final class TobaccoAromaticHelper {
 
     private TobaccoAromaticHelper() {}
 
-    /**
-     * Rough tobacco remains reserved for Shisha. Any other unused loose cut may be cased once
-     * with one molasses flavor and then used normally in pipes, cigarettes, cigars, or blends.
-     */
+    /** Any unused loose cut may be lightly cased once with a concentrated Flavoring Essence. */
     public static boolean canAromatize(ItemStack stack) {
         return TobaccoCuringHelper.isLooseTobacco(stack)
-                && !TobaccoCuringHelper.CUT_ROUGH.equals(TobaccoCuringHelper.getCutType(stack))
                 && !isAromatic(stack)
                 && !TobaccoBarrelBlockEntity.isRuined(stack);
     }

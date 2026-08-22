@@ -26,6 +26,8 @@ public final class CreateCompat {
             "com.diggydwarff.tobacconistmod.compat.create.CreatePressCompat";
     private static final String MIXER_COMPAT_CLASS =
             "com.diggydwarff.tobacconistmod.compat.create.CreateMixerCompat";
+    private static final String FILLING_COMPAT_CLASS =
+            "com.diggydwarff.tobacconistmod.compat.create.CreateFillingCompat";
     private static final String FAN_CURING_COMPAT_CLASS =
             "com.diggydwarff.tobacconistmod.compat.create.CreateFanCuringCompat";
     private static final String DISPLAY_LINK_COMPAT_CLASS =
@@ -55,6 +57,7 @@ public final class CreateCompat {
         registerCreateIntegration(DEPLOYER_COMPAT_CLASS);
         registerCreateIntegration(PRESS_COMPAT_CLASS, modEventBus);
         registerCreateIntegration(MIXER_COMPAT_CLASS, modEventBus);
+        registerCreateIntegration(FILLING_COMPAT_CLASS, modEventBus);
         registerCreateIntegration(FAN_CURING_COMPAT_CLASS);
         registerCreateIntegration(DISPLAY_LINK_COMPAT_CLASS, modEventBus);
         registerCreateIntegration(ITEM_ATTRIBUTE_COMPAT_CLASS, modEventBus);

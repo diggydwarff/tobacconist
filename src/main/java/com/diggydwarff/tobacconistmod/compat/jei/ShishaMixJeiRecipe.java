@@ -15,7 +15,7 @@ public record ShishaMixJeiRecipe(
     public static List<ShishaMixJeiRecipe> createAll() {
         ItemStack output = new ItemStack(ModItems.SHISHA_TOBACCO.get());
         LegacyItemTags.getOrCreateTag(output).putString("tobacco", "Virginia");
-        LegacyItemTags.getOrCreateTag(output).putString("flavor1", "Molasses");
+        LegacyItemTags.getOrCreateTag(output).putString("flavor1", "Apple");
         LegacyItemTags.getOrCreateTag(output).putInt("Quality", 60);
 
         java.util.ArrayList<ItemStack> sources = new java.util.ArrayList<>(JeiItemLists.getAllLooseTobaccos());
