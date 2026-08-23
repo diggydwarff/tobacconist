@@ -3,8 +3,8 @@ package com.diggydwarff.tobacconistmod.block.custom;
 import com.mojang.serialization.MapCodec;
 import com.diggydwarff.tobacconistmod.block.entity.HookahEntity;
 import com.diggydwarff.tobacconistmod.block.entity.ModBlockEntities;
+import com.diggydwarff.tobacconistmod.datagen.items.SmokingItem;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.HookahHoseItem;
-import com.diggydwarff.tobacconistmod.util.SmokeParticleHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -31,7 +31,6 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
@@ -158,16 +157,15 @@ public class HookahBlock extends BaseEntityBlock {
             if (blockEntity instanceof HookahEntity hookah && hookah.progress > 0) {
                 for (ItemStack stack : pPlayer.getHandSlots()) {
                     if (stack.getItem() instanceof HookahHoseItem) {
-                        Vec3 look = pPlayer.getLookAngle();
-                        SmokeParticleHelper.spawnServerMouthSmoke(
-                                (ServerLevel) pLevel,
-                                pPlayer.getX() + look.x * 0.12D,
-                                pPlayer.getY() + 1.4D + look.y * 0.04D,
-                                pPlayer.getZ() + look.z * 0.12D,
-                                look.x,
-                                look.z
-                        );
+                        if (pPlayer.getCooldowns().isOnCooldown(stack.getItem())) {
+                            return InteractionResult.sidedSuccess(false);
+                        }
 
+                        ItemStack shisha = hookah.getShishaForSmoking();
+                        if (shisha.isEmpty()) return InteractionResult.PASS;
+
+                        SmokingItem.applySmokingEffects(pPlayer, (ServerLevel) pLevel, shisha);
+                        pPlayer.getCooldowns().addCooldown(stack.getItem(), 20);
                         return InteractionResult.sidedSuccess(false);
                     }
                 }

@@ -7,17 +7,27 @@
     {
       "type": "patchouli:spotlight",
       "item": "tobacconistmod:wild_tobacco_seeds",
-      "text": "$(thing)Wild Tobacco$() is the natural starting point. Flowering wild tobacco can appear in Forest, Birch Forest, and Dark Forest. Breaking it can provide wild leaf and seeds."
+      "text": "$(thing)Wild Tobacco$() is the natural starting point. Flowering wild tobacco can appear in Forest, Birch Forest, and Dark Forest. Breaking it can provide wild leaf and seeds. Wild seeds are $(bold)not$() sold by normal Tobacconists; a Wandering Trader may occasionally carry them as a backup source."
     },
     {
       "type": "patchouli:text",
-      "text": "The other varieties are most reliably obtained from a $(thing)Tobacconist Master$() villager. A Hookah is that profession's workstation. Place a Hookah where an unemployed villager can claim it, just as you would place a normal villager workstation.",
-      "title": "Tobacconist Master"
+      "title": "The Tobacconist",
+      "text": "Cultivated varieties are obtained most reliably from a $(thing)Tobacconist$() villager. A Hookah is the profession's workstation. New Tobacconists always offer two cultivated seed varieties chosen for the biome where they take the profession."
     },
     {
       "type": "patchouli:text",
-      "text": "At novice level, the Tobacconist Master can offer $(item)Wild, Virginia, Burley, Oriental, Dokha, and Shade seeds$(). Each seed trade costs 1 Emerald; availability is still subject to the villager's normal trade list and stock.",
-      "title": "Seed Trades"
+      "title": "Regional Seed Trades",
+      "text": "$(item)Plains/default:$() Virginia + Burley$(br)$(item)Savanna:$() Virginia + Oriental$(br)$(item)Desert:$() Dokha + Oriental$(br)$(item)Badlands:$() Oriental + Dokha$(br)$(item)Jungle:$() Shade + Burley$(br)$(item)Forest:$() Burley + Shade$(br)$(item)Taiga:$() Burley + Shade$(br)$(item)Snowy:$() Burley + Virginia"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Later Trades",
+      "text": "Leveling a Tobacconist adds a small set of practical trades rather than replacing the seed role. Apprentices buy raw leaf from their primary regional variety and sell Rolling Paper; Journeymen sell a Clay Smoking Pipe and Tobacco Pouch; Experts sell Bamboo Charcoal and Plain Molasses; Masters sell a Tobacco Box and Tobacconist's Spectacles."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Finding Every Variety",
+      "text": "A single village is not meant to provide every cultivated variety. Visit another climate to find a different regional pair. Forest and Jungle mappings also apply when a Tobacconist takes its job there, including in modded villages or relocated settlements."
     },
     {
       "type": "patchouli:relations",

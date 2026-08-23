@@ -9,6 +9,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FlowerBlock;
+import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.neoforged.bus.api.IEventBus;
@@ -83,6 +84,16 @@ public class ModBlocks {
     public static final Supplier<Block> WILD_FLOWERING_TOBACCO = registerBlock("wild_flowering_tobacco_block",
             () -> new FlowerBlock(MobEffects.CONFUSION, 5,
                     BlockBehaviour.Properties.ofFullCopy(Blocks.ALLIUM).noOcclusion().noCollission()));
+
+    // No BlockItem: the normal Wild Flowering Tobacco item is what players place into a Flower Pot.
+    public static final Supplier<Block> POTTED_WILD_FLOWERING_TOBACCO = BLOCKS.register(
+            "potted_wild_flowering_tobacco",
+            () -> new FlowerPotBlock(
+                    () -> (FlowerPotBlock) Blocks.FLOWER_POT,
+                    WILD_FLOWERING_TOBACCO,
+                    BlockBehaviour.Properties.ofFullCopy(Blocks.POTTED_ALLIUM).noOcclusion()
+            )
+    );
     public static final Supplier<Block> WILD_TOBACCO_CROP = BLOCKS.register("tobacco_crop_wild",
             () -> new WildCropBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WHEAT).noOcclusion().noCollission()));
 

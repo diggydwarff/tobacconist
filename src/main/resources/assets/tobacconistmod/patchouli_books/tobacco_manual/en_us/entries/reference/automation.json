@@ -20,8 +20,13 @@
     },
     {
       "type": "patchouli:text",
-      "text": "The $(thing)Tobacco Barrel$() is intentionally interaction-driven rather than exposing a general item-handler capability. Insert and remove its batch by right-clicking the block.",
+      "text": "The $(thing)Tobacco Barrel$() exposes automation while still enforcing its normal batch rules. Valid cured or loose tobacco may be inserted when it matches the stored batch; extraction exposes the stored processed batch without discarding tobacco metadata. Manual right-click insertion/removal still works normally.",
       "title": "Barrel"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Other Processing Blocks",
+      "text": "The Drying Rack, Tobacco Barrel, Flue Firebox, and Hookah expose validated NeoForge item automation where appropriate. Automation never bypasses the blocks' normal input, batch, curing, fuel, or slot rules."
     }
   ]
 }

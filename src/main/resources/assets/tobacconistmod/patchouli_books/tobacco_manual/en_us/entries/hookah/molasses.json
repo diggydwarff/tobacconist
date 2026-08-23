@@ -32,7 +32,8 @@
     {
       "type": "patchouli:text",
       "title": "Create Automation",
-      "text": "With Create installed, a $(thing)heated Mechanical Mixer$() can make Aqua Vitae from Water + Sugar + Wheat, make Essence from Aqua Vitae + its flavor ingredient, and make plain molasses from Water + Sugar Cane. A Spout applies 1000 mB Essence to loose tobacco; a Mixer combines 1000 mB Essence with 1000 mB plain molasses."
+      "text": "With Create installed, a $(thing)heated Mechanical Mixer$() can make Aqua Vitae from Water + Sugar + Wheat, make Essence from Aqua Vitae + its flavor ingredient, and make plain molasses from Water + Sugar Cane. A Spout applies 1000 mB Essence to loose tobacco; a Mixer combines 1000 mB Essence with 1000 mB plain molasses.",
+      "flag": "mod:create"
     },
     {
       "type": "patchouli:relations",

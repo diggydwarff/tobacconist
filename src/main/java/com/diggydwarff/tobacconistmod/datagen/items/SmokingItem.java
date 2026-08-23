@@ -47,6 +47,11 @@ public abstract class SmokingItem extends Item {
     }
 
     public void triggerSmokingEffectPlayer(Player player, ServerLevel level, int smokelevel, ItemStack tobaccoStack) {
+        applySmokingEffects(player, level, tobaccoStack);
+    }
+
+    /** Shared smoking pipeline used by held items, Curios smoking and Hookahs. */
+    public static void applySmokingEffects(Player player, ServerLevel level, ItemStack tobaccoStack) {
         Vec3 look = player.getLookAngle();
 
         level.playSound(
@@ -82,7 +87,7 @@ public abstract class SmokingItem extends Item {
         applyConfiguredAdditionalEffects(player);
     }
 
-    protected void applyConfiguredAdditionalEffects(Player player) {
+    private static void applyConfiguredAdditionalEffects(Player player) {
         for (String entry : TobacconistConfig.COMMON.additionalEffects.get()) {
             try {
                 String[] parts = entry.split(",");
@@ -109,7 +114,7 @@ public abstract class SmokingItem extends Item {
         }
     }
 
-    protected void applyQualityHealthBonus(Player player, ItemStack tobaccoStack) {
+    private static void applyQualityHealthBonus(Player player, ItemStack tobaccoStack) {
         if (!TobacconistConfig.isQualitySystemEnabled()) return;
         if (tobaccoStack == null || tobaccoStack.isEmpty()) return;
 

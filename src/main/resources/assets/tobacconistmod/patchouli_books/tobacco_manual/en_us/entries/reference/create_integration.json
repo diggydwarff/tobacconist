@@ -1,0 +1,43 @@
+{
+  "name": "Create Integration",
+  "icon": "create:cogwheel",
+  "category": "tobacconistmod:reference",
+  "sortnum": 4,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "When $(thing)Create$() is installed, Tobacconist gains an optional industrial path. The ordinary hand-crafted workflows remain valid; Create automates the same stages while preserving tobacco variety, quality, cure, cut, age, fermentation, flavor, blend identity, labels, and other processing data."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Harvest & Cure",
+      "text": "Create Mechanical Harvesters can harvest mature two-block tobacco without duplicating upper/lower drops. Encased Fan airflow can accelerate Air Curing; fan-blown Campfire smoke/heat accelerates Fire Curing; fan-blown Lava heat can accelerate Flue Curing. Sun Curing keeps its normal sunlight rules."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Cut, Press & Blend",
+      "text": "A Deployer using a Chaveta advances cured tobacco through $(item)Rough → Ribbon → Shag$(). A Mechanical Press turns Rough Cut into Flake and can finish cigarette/cigar assembly. Mechanical Mixers can homogenize compatible leaf quality and blend two or three loose tobaccos while preserving blend identity."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Flavor Factory",
+      "text": "Heated Mixers can produce Aqua Vitae and Flavoring Essences. Spouts apply 1000 mB Essence to loose tobacco for aromatic casing, while Mixers combine Essence with plain molasses and mix flavored molasses into Shisha. The same flavor ingredient tags are shared with the manual Brewing Stand route."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Logistics",
+      "text": "Mechanical Arms, Funnels, Chutes, Belts, Packagers, Stock Links, Factory Gauges, and related Create logistics can work with supported Tobacconist inventories. Attribute Filters understand tobacco variety, cure, cut, quality, flavor, blends, labels, and finished-product metadata. Factory Gauges can match requests by Tobacconist quality tier."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Displays & Smoke",
+      "text": "Display Links can report useful status from Drying Racks, Tobacco Barrels, Flue Fireboxes, and Hookahs. Encased Fans can also push or pull tobacco smoke; indoor smoke follows ceilings toward extraction airflow and is consumed at fan intakes."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Ponder",
+      "text": "Create's Ponder system contains Tobacconist scenes for curing, cutting/pressing, blending/barrel work, Aqua Vitae/Essence/Shisha production, cigarette/cigar assembly, packaging, branding, and factory logistics. When in doubt, use Ponder on the relevant Tobacconist item or processing block."
+    }
+  ],
+  "flag": "mod:create"
+}

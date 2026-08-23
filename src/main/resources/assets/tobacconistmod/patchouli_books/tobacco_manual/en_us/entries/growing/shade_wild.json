@@ -17,6 +17,11 @@
       "type": "patchouli:text",
       "text": "Shade tobacco can show Good conditions in a forest even at light 13. That is expected: light 13 is still within Shade's acceptable range. Conditions report the farm environment, while maturity is shown separately through Growth and Potential Quality.",
       "title": "Shade Example"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Wild Flowers",
+      "text": "Wild Flowering Tobacco behaves like a normal small flower for vanilla systems. It can be placed in a $(item)Flower Pot$() and is recognized by flower-aware interactions such as bees."
     }
   ]
 }

@@ -10,7 +10,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "$(thing)1. Find seeds.$() Wild tobacco grows naturally in Forest, Birch Forest, and Dark Forest. A Tobacconist Master villager can also sell every tobacco seed variety for emeralds.",
+      "text": "$(thing)1. Find seeds.$() Wild tobacco grows naturally in Forest, Birch Forest, and Dark Forest. Cultivated varieties come from regional $(thing)Tobacconist$() villagers; different regions stock different pairs of seeds.",
       "title": "1 — Seeds"
     },
     {

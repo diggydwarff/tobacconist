@@ -20,6 +20,11 @@
     },
     {
       "type": "patchouli:text",
+      "title": "Exploration Goals",
+      "text": "$(thing)Seeds of the World$() — obtain all six tobacco seed varieties. Regional Tobacconist trades make this an exploration challenge.$(br2)$(thing)Well Equipped$() — obtain a Clay Smoking Pipe, Tobacco Pouch, Tobacco Box, and Tobacconist's Spectacles."
+    },
+    {
+      "type": "patchouli:text",
       "title": "Master Tobacconist",
       "text": "The final goal remembers your progress over time. Obtain Tobacconist’s Spectacles, a wooden smoking pipe, a cigarette, a cigar, shisha tobacco, and a Tobacco Barrel. You do $(bold)not$() need to carry all six at once."
     }

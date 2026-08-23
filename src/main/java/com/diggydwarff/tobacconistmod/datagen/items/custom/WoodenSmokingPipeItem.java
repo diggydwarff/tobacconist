@@ -2,7 +2,7 @@ package com.diggydwarff.tobacconistmod.datagen.items.custom;
 
 import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
 
-import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
+import com.diggydwarff.tobacconistmod.datagen.items.ModTags;
 import com.diggydwarff.tobacconistmod.datagen.items.SmokingItem;
 import com.diggydwarff.tobacconistmod.recipes.WoodenPipeRecipe;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -18,7 +18,6 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerLevel;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 public class WoodenSmokingPipeItem extends SmokingItem {
@@ -32,16 +31,7 @@ public class WoodenSmokingPipeItem extends SmokingItem {
     }
 
     private boolean isTobacco(ItemStack stack) {
-        // Best: use a tag like #tobacconistmod:pipe_tobacco
-        // return stack.is(ModTags.Items.PIPE_TOBACCO);
-
-        return stack.getItem() == ModItems.TOBACCO_LOOSE_BURLEY.get()
-                || stack.getItem() == ModItems.TOBACCO_LOOSE_ORIENTAL.get()
-                || stack.getItem() == ModItems.TOBACCO_LOOSE_DOKHA.get()
-                || stack.getItem() == ModItems.TOBACCO_LOOSE_SHADE.get()
-                || stack.getItem() == ModItems.TOBACCO_LOOSE_VIRGINIA.get()
-                || stack.getItem() == ModItems.TOBACCO_LOOSE_WILD.get();
-
+        return stack.is(ModTags.Items.LOOSE_TOBACCO);
     }
 
     @Override
@@ -71,13 +61,14 @@ public class WoodenSmokingPipeItem extends SmokingItem {
         int puffs = tag == null ? 0 : tag.getInt(NBT_PUFFS);
         if (puffs <= 0) return false;
 
-        this.triggerSmokingEffectPlayer(player, level, 0, stack);
+        this.triggerSmokingEffectPlayer(player, level, 0, getPackedTobaccoStack(stack));
 
         puffs--;
         CompoundTag mutableTag = LegacyItemTags.getOrCreateTag(stack);
         if (puffs <= 0) {
             mutableTag.remove(NBT_PUFFS);
             mutableTag.remove(NBT_TOBACCO);
+            mutableTag.remove("PackedTobaccoData");
         } else {
             mutableTag.putInt(NBT_PUFFS, puffs);
         }
@@ -100,21 +91,59 @@ public class WoodenSmokingPipeItem extends SmokingItem {
         return tag != null && tag.contains(NBT_TOBACCO) && tag.getInt(NBT_PUFFS) > 0;
     }
 
-    private void pack(ItemStack pipe, ItemStack tobacco) {
-        LegacyItemTags.getOrCreateTag(pipe).putString(NBT_TOBACCO,
-                BuiltInRegistries.ITEM.getKey(tobacco.getItem()).toString());
-        LegacyItemTags.getOrCreateTag(pipe).putInt(NBT_PUFFS, MAX_PUFFS);
+    public boolean canPack(ItemStack pipe) {
+        return !isPacked(pipe);
     }
 
-    private void unpack(ItemStack pipe) {
-        var tag = LegacyItemTags.getOrCreateTag(pipe);
-        tag.remove(NBT_TOBACCO);
-        tag.remove(NBT_PUFFS);
+    /** Packs one exact tobacco batch into this pipe, preserving all custom tobacco data. */
+    public boolean packFromTobacco(ItemStack pipe, ItemStack tobacco) {
+        if (!canPack(pipe) || tobacco.isEmpty() || !isTobacco(tobacco)) return false;
+
+        CompoundTag pipeTag = LegacyItemTags.getOrCreateTag(pipe);
+        pipeTag.putString(NBT_TOBACCO, BuiltInRegistries.ITEM.getKey(tobacco.getItem()).toString());
+        pipeTag.putInt(NBT_PUFFS, tobacco.getItem() instanceof LooseTobaccoItem loose
+                ? loose.getMaxPuffs()
+                : MAX_PUFFS);
+
+        CompoundTag tobaccoData = LegacyItemTags.getTag(tobacco);
+        if (tobaccoData != null) {
+            pipeTag.put("PackedTobaccoData", tobaccoData.copy());
+        } else {
+            pipeTag.remove("PackedTobaccoData");
+        }
+        return true;
+    }
+
+    /** Rebuilds the tobacco stack stored inside a packed pipe for quality/age effects and tooltips. */
+    public static ItemStack getPackedTobaccoStack(ItemStack pipe) {
+        CompoundTag tag = LegacyItemTags.getTag(pipe);
+        if (tag == null || !tag.contains(NBT_TOBACCO)) return ItemStack.EMPTY;
+
+        ResourceLocation id = ResourceLocation.tryParse(tag.getString(NBT_TOBACCO));
+        if (id == null || !BuiltInRegistries.ITEM.containsKey(id)) return ItemStack.EMPTY;
+
+        ItemStack tobacco = new ItemStack(BuiltInRegistries.ITEM.get(id));
+        if (tag.contains("PackedTobaccoData")) {
+            LegacyItemTags.setTag(tobacco, tag.getCompound("PackedTobaccoData").copy());
+        }
+        return tobacco;
     }
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack pipe = player.getItemInHand(hand);
+
+        // A filled pouch in the offhand can pack an empty main-hand pipe directly.
+        if (hand == InteractionHand.MAIN_HAND && player.getOffhandItem().getItem() instanceof TobaccoPouchItem) {
+            ItemStack pouch = player.getOffhandItem();
+            ItemStack stored = TobaccoPouchItem.getStoredStack(pouch);
+            if (!stored.isEmpty() && canPack(pipe)) {
+                if (!level.isClientSide() && packFromTobacco(pipe, stored)) {
+                    TobaccoPouchItem.consumeOne(pouch);
+                }
+                return InteractionResultHolder.sidedSuccess(pipe, level.isClientSide());
+            }
+        }
 
         // If pipe is in offhand AND player holding tobacco in main hand,
         // allow tobacco to handle packing instead of smoking
@@ -136,7 +165,7 @@ public class WoodenSmokingPipeItem extends SmokingItem {
             return InteractionResultHolder.pass(pipe);
         }
 
-        this.triggerSmokingEffectPlayer(player, (ServerLevel) level, 0, pipe);
+        this.triggerSmokingEffectPlayer(player, (ServerLevel) level, 0, getPackedTobaccoStack(pipe));
 
         puffs--;
 

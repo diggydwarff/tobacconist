@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "A $(thing)Tobacco Box$() stores one exact type/batch of finished or loose tobacco while preserving its metadata. Supported contents are Cigars, Cigarettes, Shisha Tobacco, and all six Loose Tobacco varieties."
+      "text": "A $(thing)Tobacco Box$() stores one exact type/batch of finished or loose tobacco while preserving its metadata. Supported contents are Cigars, Cigarettes, Shisha Tobacco, all six Loose Tobacco varieties, and Blended Tobacco."
     },
     {
       "type": "patchouli:crafting",

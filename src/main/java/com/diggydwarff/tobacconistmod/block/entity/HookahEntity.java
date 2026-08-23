@@ -104,6 +104,11 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
         return itemHandler;
     }
 
+    public ItemStack getShishaForSmoking() {
+        ItemStack shisha = itemHandler.getStackInSlot(1);
+        return shisha.isEmpty() ? ItemStack.EMPTY : shisha.copy();
+    }
+
     @Override
     protected void saveAdditional(CompoundTag nbt, HolderLookup.Provider registries) {
         nbt.put("inventory", itemHandler.serializeNBT(registries));

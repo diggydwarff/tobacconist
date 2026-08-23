@@ -1,8 +1,47 @@
 {
   "replace": false,
   "values": {
+    "tobacconistmod:wild_tobacco_seeds": {
+      "chance": 0.3
+    },
+    "tobacconistmod:virginia_tobacco_seeds": {
+      "chance": 0.3
+    },
+    "tobacconistmod:burley_tobacco_seeds": {
+      "chance": 0.3
+    },
+    "tobacconistmod:oriental_tobacco_seeds": {
+      "chance": 0.3
+    },
+    "tobacconistmod:dokha_tobacco_seeds": {
+      "chance": 0.3
+    },
+    "tobacconistmod:shade_tobacco_seeds": {
+      "chance": 0.3
+    },
+    "tobacconistmod:tobacco_leaf_wild": {
+      "chance": 0.5
+    },
+    "tobacconistmod:tobacco_leaf_virginia": {
+      "chance": 0.5
+    },
+    "tobacconistmod:tobacco_leaf_burley": {
+      "chance": 0.5
+    },
+    "tobacconistmod:tobacco_leaf_oriental": {
+      "chance": 0.5
+    },
+    "tobacconistmod:tobacco_leaf_dokha": {
+      "chance": 0.5
+    },
+    "tobacconistmod:tobacco_leaf_shade": {
+      "chance": 0.5
+    },
+    "tobacconistmod:wild_flowering_tobacco_block": {
+      "chance": 0.65
+    },
     "tobacconistmod:spoiled_tobacco": {
-      "chance": 0.85
+      "chance": 1.0
     }
   }
 }

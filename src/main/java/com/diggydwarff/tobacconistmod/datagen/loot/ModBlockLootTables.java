@@ -41,6 +41,14 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         this.dropSelf(ModBlocks.TOBACCO_BARREL.get());
         this.dropSelf(ModBlocks.FLUE_FIREBOX.get());
 
+        // Potted plants drop both the vanilla pot and the plant used to fill it.
+        this.add(ModBlocks.POTTED_WILD_FLOWERING_TOBACCO.get(),
+                LootTable.lootTable()
+                        .withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
+                                .add(LootItem.lootTableItem(net.minecraft.world.item.Items.FLOWER_POT)))
+                        .withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
+                                .add(LootItem.lootTableItem(ModBlocks.WILD_FLOWERING_TOBACCO.get()))));
+
         this.add(ModBlocks.SHADE_TOBACCO_CRATE.get(), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
                 .add(LootItem.lootTableItem(ModItems.TOBACCO_LOOSE_SHADE.get()).apply(SetItemCountFunction.setCount(ConstantValue.exactly(9.0f))))));
         this.add(ModBlocks.DOKHA_TOBACCO_CRATE.get(), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))

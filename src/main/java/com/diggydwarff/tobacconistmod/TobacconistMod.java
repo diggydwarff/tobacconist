@@ -35,6 +35,7 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.NeoForge;
@@ -52,6 +53,7 @@ public class TobacconistMod {
     public TobacconistMod(IEventBus modEventBus, ModContainer modContainer) {
         modEventBus.addListener(this::registerDynamicItems);
         modEventBus.addListener(this::registerCapabilities);
+        modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::clientSetup);
 
         ModMolassesFluids.register(modEventBus);
@@ -75,6 +77,13 @@ public class TobacconistMod {
         modContainer.registerConfig(ModConfig.Type.SERVER, TobacconistConfig.SERVER_SPEC);
 
         NeoForge.EVENT_BUS.register(this);
+    }
+
+
+    private void commonSetup(FMLCommonSetupEvent event) {
+        event.enqueueWork(() -> ((net.minecraft.world.level.block.FlowerPotBlock) net.minecraft.world.level.block.Blocks.FLOWER_POT)
+                .addPlant(ResourceLocation.fromNamespaceAndPath(MODID, "wild_flowering_tobacco_block"),
+                        ModBlocks.POTTED_WILD_FLOWERING_TOBACCO));
     }
 
     private void clientSetup(FMLClientSetupEvent event) {

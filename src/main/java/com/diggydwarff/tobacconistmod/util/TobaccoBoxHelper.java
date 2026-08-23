@@ -3,6 +3,7 @@ package com.diggydwarff.tobacconistmod.util;
 import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
 
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
+import com.diggydwarff.tobacconistmod.datagen.items.ModTags;
 import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -24,13 +25,7 @@ public class TobaccoBoxHelper {
         return item == ModItems.CIGAR.get()
                 || item == ModItems.CIGARETTE.get()
                 || item == ModItems.SHISHA_TOBACCO.get()
-                || item == ModItems.TOBACCO_LOOSE_WILD.get()
-                || item == ModItems.TOBACCO_LOOSE_VIRGINIA.get()
-                || item == ModItems.TOBACCO_LOOSE_BURLEY.get()
-                || item == ModItems.TOBACCO_LOOSE_ORIENTAL.get()
-                || item == ModItems.TOBACCO_LOOSE_DOKHA.get()
-                || item == ModItems.TOBACCO_LOOSE_SHADE.get()
-                || item == ModItems.BLENDED_TOBACCO.get();
+                || stack.is(ModTags.Items.LOOSE_TOBACCO);
     }
 
     public static int getCapacity(ItemStack content) {

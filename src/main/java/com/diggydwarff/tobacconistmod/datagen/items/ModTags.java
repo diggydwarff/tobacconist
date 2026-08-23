@@ -12,8 +12,23 @@ public class ModTags {
 
     public static class Items {
 
+        public static final TagKey<Item> TOBACCO_SEEDS = tag("tobacco_seeds");
+        public static final TagKey<Item> RAW_TOBACCO_LEAVES = tag("raw_tobacco_leaves");
+        public static final TagKey<Item> CURED_TOBACCO_LEAVES = tag("cured_tobacco_leaves");
+        public static final TagKey<Item> TOBACCO_LEAVES = tag("tobacco_leaves");
+        public static final TagKey<Item> LOOSE_TOBACCO = tag("loose_tobacco");
+        public static final TagKey<Item> SMOKING_PIPES = tag("smoking_pipes");
+
+        // NeoForge common tags: intentionally limited to concepts other mods can reasonably share.
+        public static final TagKey<Item> COMMON_TOBACCO_SEEDS = commonTag("seeds/tobacco");
+        public static final TagKey<Item> COMMON_TOBACCO_CROPS = commonTag("crops/tobacco");
+
         private static TagKey<Item> tag(String name) {
             return ItemTags.create(ResourceLocation.fromNamespaceAndPath(TobacconistMod.MODID, name));
+        }
+
+        private static TagKey<Item> commonTag(String name) {
+            return ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", name));
         }
 
     }

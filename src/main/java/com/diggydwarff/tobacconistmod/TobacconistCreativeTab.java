@@ -43,6 +43,7 @@ public class TobacconistCreativeTab {
                         output.accept(HOOKAH_HOSE.get());
                         output.accept(SHISHA_TOBACCO.get());
 
+                        output.accept(TOBACCO_POUCH.get());
                         output.accept(TOBACCO_BOX.get());
                         output.accept(TOBACCO_LABEL.get());
                         output.accept(BLENDED_TOBACCO.get());
@@ -114,6 +115,7 @@ public class TobacconistCreativeTab {
                         output.accept(makePipe(Items.BAMBOO_PLANKS));
                         output.accept(makePipe(Items.CRIMSON_PLANKS));
                         output.accept(makePipe(Items.WARPED_PLANKS));
+                        output.accept(CLAY_SMOKING_PIPE.get());
                         output.accept(GOLD_SMOKING_PIPE.get());
                         output.accept(IRON_SMOKING_PIPE.get());
                         output.accept(COPPER_SMOKING_PIPE.get());

@@ -27,6 +27,10 @@ public class ModItems {
     // PIPE ITEMS
     public static final Supplier<Item> WOODEN_SMOKING_PIPE = ITEMS.register("wooden_smoking_pipe", () -> new WoodenSmokingPipeItem(new Item.Properties().stacksTo(1)));
 
+    public static final Supplier<Item> CLAY_SMOKING_PIPE =
+            ITEMS.register("clay_smoking_pipe",
+                    () -> new WoodenSmokingPipeItem(new Item.Properties().stacksTo(1)));
+
     public static final Supplier<Item> GOLD_SMOKING_PIPE =
             ITEMS.register("gold_smoking_pipe",
                     () -> new GoldSmokingPipeItem(new Item.Properties().stacksTo(1)));
@@ -100,6 +104,9 @@ public class ModItems {
 
     public static final Supplier<Item> BAMBOO_CHARCOAL = ITEMS.register("bamboo_charcoal", () -> new BambooCharcoalItem(new Item.Properties()));
 
+    public static final Supplier<Item> TOBACCO_POUCH =
+            ITEMS.register("tobacco_pouch", () -> new TobaccoPouchItem(new Item.Properties().stacksTo(1)));
+
 
     public static final Supplier<Item> CIGAR = ITEMS.register("cigar",
             () -> new CigarItem(new Item.Properties().durability(100)));
@@ -142,7 +149,7 @@ public class ModItems {
 
     public static final Supplier<Item> TOBACCO_LOOSE_DOKHA =
             ITEMS.register("tobacco_loose_dokha", () -> new LooseTobaccoItem(new Item.Properties(), 40, 20));
- 
+
     public static final Supplier<Item> TOBACCO_LOOSE_SHADE =
             ITEMS.register("tobacco_loose_shade", () -> new LooseTobaccoItem(new Item.Properties(), 40, 10));
 

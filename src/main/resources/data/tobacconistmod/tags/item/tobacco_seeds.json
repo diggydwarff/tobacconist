@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "tobacconistmod:wild_tobacco_seeds",
+    "tobacconistmod:virginia_tobacco_seeds",
+    "tobacconistmod:burley_tobacco_seeds",
+    "tobacconistmod:oriental_tobacco_seeds",
+    "tobacconistmod:dokha_tobacco_seeds",
+    "tobacconistmod:shade_tobacco_seeds"
+  ]
+}

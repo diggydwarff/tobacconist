@@ -3,12 +3,12 @@ package com.diggydwarff.tobacconistmod.datagen.items.custom;
 import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
 
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelBlockEntity;
+import com.diggydwarff.tobacconistmod.datagen.items.ModTags;
 import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
 import com.diggydwarff.tobacconistmod.util.TobaccoAromaticHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoLabelHelper;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -18,7 +18,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -123,7 +122,15 @@ public class LooseTobaccoItem extends Item {
         ItemStack tobacco = player.getItemInHand(hand);
         ItemStack offhand = player.getOffhandItem();
 
-        if (!(offhand.getItem() instanceof WoodenSmokingPipeItem)) {
+        if (offhand.getItem() instanceof TobaccoPouchItem) {
+            if (level.isClientSide()) return InteractionResultHolder.success(tobacco);
+            return TobaccoPouchItem.storeOne(player, offhand, tobacco)
+                    ? InteractionResultHolder.sidedSuccess(tobacco, false)
+                    : InteractionResultHolder.pass(tobacco);
+        }
+
+        if (!(offhand.getItem() instanceof WoodenSmokingPipeItem pipeItem)
+                || !tobacco.is(ModTags.Items.LOOSE_TOBACCO)) {
             return InteractionResultHolder.pass(tobacco);
         }
 
@@ -131,24 +138,11 @@ public class LooseTobaccoItem extends Item {
             return InteractionResultHolder.success(tobacco);
         }
 
-        CompoundTag pipeTag = LegacyItemTags.getOrCreateTag(offhand);
-        int puffsLeft = pipeTag.getInt(NBT_PUFFS);
-        if (puffsLeft > 0) {
+        if (!pipeItem.packFromTobacco(offhand, tobacco)) {
             return InteractionResultHolder.pass(tobacco);
         }
 
-        pipeTag.putString(NBT_TOBACCO, BuiltInRegistries.ITEM.getKey(tobacco.getItem()).toString());
-        pipeTag.putInt(NBT_PUFFS, this.maxPuffs);
-
-        CompoundTag tobaccoData = LegacyItemTags.getTag(tobacco);
-        if (tobaccoData != null) {
-            pipeTag.put("PackedTobaccoData", tobaccoData.copy());
-        }
-
-        if (!player.getAbilities().instabuild) {
-            tobacco.shrink(1);
-        }
-
+        if (!player.getAbilities().instabuild) tobacco.shrink(1);
         return InteractionResultHolder.sidedSuccess(tobacco, false);
     }
 

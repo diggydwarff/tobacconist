@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:flower_pot"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "tobacconistmod:wild_flowering_tobacco_block"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "tobacconistmod:blocks/potted_wild_flowering_tobacco"
+}

@@ -26,8 +26,8 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Hookah-hose draws currently provide the hookah smoke interaction itself; they do not run the same nicotine/quality-effect routine as smoking a cigar, cigarette, or packed pipe. This is normal for the current hookah implementation.",
-      "title": "Effect Difference"
+      "text": "A hose draw now uses the same smoking-effect pipeline as pipes, cigars, and cigarettes, based on the $(item)Shisha actually loaded in the Hookah$(). Nicotine, configured additional effects, quality bonuses, and aging bonuses therefore behave consistently. A short hose cooldown prevents rapid effect spam.",
+      "title": "Smoking Effects"
     },
     {
       "type": "patchouli:relations",

@@ -99,6 +99,21 @@
 - Added Ponders for tobacco cutting/pressing, blending/barrel processing, Aqua Vitae/Essence/Shisha production, Cigarette/Cigar assembly, and factory logistics
 - Raw and cured leaves link directly to the relevant curing/processing tutorials
 
+### Vanilla Integration & Tobacconist Polish
+- Reworked the **Tobacconist villager** into a simple five-level profession while keeping seed acquisition as its core role
+  - Normal Tobacconists no longer sell **Wild Tobacco Seeds**
+  - New Tobacconists reliably sell two cultivated seed varieties suited to their local region
+  - Later levels add a small set of useful tobacco supplies, equipment, and storage trades
+- Added restrained **Wandering Trader** access to Wild Tobacco Seeds and Wild Flowering Tobacco as a backup to natural discovery
+- Added the reusable **Tobacco Pouch**, holding up to 16 units of one exact loose-tobacco batch and packing pipes directly from the offhand
+- Added a simple **Clay Smoking Pipe** with the normal reusable pipe-smoking workflow
+- Added vanilla **Composter** support for tobacco seeds, raw leaves, Wild Flowering Tobacco, and Spoiled Tobacco
+- Added **Potted Wild Flowering Tobacco** and vanilla flower/bee tag integration
+- Added **Seeds of the World** and **Well Equipped** advancements
+- Expanded tobacco-family item tags and added common `c:seeds/tobacco` and `c:crops/tobacco` interoperability tags
+- Updated The Tobacconist's Manual for regional seed trading, new items, composting, Hookah effects, current automation, tobacco tags, and the full Create 4.0 integration
+- Removed two obsolete duplicate Manual categories left beside the newer Cutting & Crafting and Fermenting & Aging chapters
+
 ### Visuals & Quality of Life
 - Added subtle per-flavor **Flavoring Essence bottle colors** while retaining the vanilla-style bottle appearance
 - Added distinct **pressed Flake tobacco item models/textures**
@@ -107,6 +122,8 @@
 - Updated The Tobacconist's Manual with the new industrial processing, flavor compatibility, and Create workflows
 
 ### Fixes & Compatibility
+- Hookah hose draws now use the same nicotine, configured-effect, quality, and aging pipeline as other smoking methods, based on the loaded Shisha
+- Packed pipes now evaluate smoking quality/aging effects from the tobacco actually stored inside the pipe instead of the pipe item itself
 - Fixed Double Apple, Double Golden Apple, and Double Royal Apple Create recipe selection/production
 - Hardened Create classloading and resource conditions so **Tobacconist still launches and functions without Create installed**
 - Kept Curios, JEI, Patchouli, and supported food-mod integrations optional

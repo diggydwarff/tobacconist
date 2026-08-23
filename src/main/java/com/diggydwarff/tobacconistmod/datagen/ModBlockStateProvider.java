@@ -34,6 +34,12 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlockWithItem(ModBlocks.WILD_FLOWERING_TOBACCO.get(), models().cross(blockTexture(ModBlocks.WILD_FLOWERING_TOBACCO.get()).getPath(),
                 blockTexture(ModBlocks.WILD_FLOWERING_TOBACCO.get())).renderType("cutout"));
 
+        simpleBlock(ModBlocks.POTTED_WILD_FLOWERING_TOBACCO.get(),
+                models().withExistingParent("potted_wild_flowering_tobacco",
+                                ResourceLocation.withDefaultNamespace("block/flower_pot_cross"))
+                        .texture("plant", blockTexture(ModBlocks.WILD_FLOWERING_TOBACCO.get()))
+                        .renderType("cutout"));
+
     }
 
     public void makeTobaccoCrop(CropBlock block, String modelName, String textureName, String type) {
