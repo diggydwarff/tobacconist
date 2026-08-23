@@ -116,7 +116,10 @@ public class ModItems {
 
     public static final Supplier<Item> HOOKAH_HOSE = ITEMS.register("hookah_hose", () -> new HookahHoseItem(new Item.Properties()));
 
-    public static final Supplier<Item> SHISHA_TOBACCO = ITEMS.register("shisha_tobacco", () -> new ShishaTobaccoItem(new Item.Properties().durability(5000)));
+    public static final Supplier<Item> SHISHA_TOBACCO = ITEMS.register("shisha_tobacco", () -> new ShishaTobaccoItem(new Item.Properties().durability(6500)));
+
+    public static final Supplier<Item> DIRTY_HOOKAH_WATER =
+            ITEMS.register("dirty_hookah_water", () -> new DirtyHookahWaterItem(new Item.Properties().stacksTo(1)));
 
     // TOBACCO LEAF ITEMS (wet)
     public static final Supplier<Item> WILD_TOBACCO_LEAF = ITEMS.register("tobacco_leaf_wild", () -> new TobaccoLeafItem(new Item.Properties()));
@@ -136,25 +139,25 @@ public class ModItems {
     public static final Supplier<Item> SHADE_TOBACCO_LEAF_DRY = ITEMS.register("tobacco_leaf_shade_dry", () -> new TobaccoLeafItem(new Item.Properties()));
 
     public static final Supplier<Item> TOBACCO_LOOSE_WILD =
-            ITEMS.register("tobacco_loose_wild", () -> new LooseTobaccoItem(new Item.Properties(), 40, 5));
+            ITEMS.register("tobacco_loose_wild", () -> new LooseTobaccoItem(new Item.Properties().stacksTo(64), 40, 5));
 
     public static final Supplier<Item> TOBACCO_LOOSE_VIRGINIA =
-            ITEMS.register("tobacco_loose_virginia", () -> new LooseTobaccoItem(new Item.Properties(), 40, 10));
+            ITEMS.register("tobacco_loose_virginia", () -> new LooseTobaccoItem(new Item.Properties().stacksTo(64), 40, 10));
 
     public static final Supplier<Item> TOBACCO_LOOSE_BURLEY =
-            ITEMS.register("tobacco_loose_burley", () -> new LooseTobaccoItem(new Item.Properties(), 40, 15));
+            ITEMS.register("tobacco_loose_burley", () -> new LooseTobaccoItem(new Item.Properties().stacksTo(64), 40, 15));
 
     public static final Supplier<Item> TOBACCO_LOOSE_ORIENTAL =
-            ITEMS.register("tobacco_loose_oriental", () -> new LooseTobaccoItem(new Item.Properties(), 40, 15));
+            ITEMS.register("tobacco_loose_oriental", () -> new LooseTobaccoItem(new Item.Properties().stacksTo(64), 40, 15));
 
     public static final Supplier<Item> TOBACCO_LOOSE_DOKHA =
-            ITEMS.register("tobacco_loose_dokha", () -> new LooseTobaccoItem(new Item.Properties(), 40, 20));
+            ITEMS.register("tobacco_loose_dokha", () -> new LooseTobaccoItem(new Item.Properties().stacksTo(64), 40, 20));
 
     public static final Supplier<Item> TOBACCO_LOOSE_SHADE =
-            ITEMS.register("tobacco_loose_shade", () -> new LooseTobaccoItem(new Item.Properties(), 40, 10));
+            ITEMS.register("tobacco_loose_shade", () -> new LooseTobaccoItem(new Item.Properties().stacksTo(64), 40, 10));
 
     public static final Supplier<Item> BLENDED_TOBACCO =
-            ITEMS.register("blended_tobacco", () -> new BlendedTobaccoItem(new Item.Properties()));
+            ITEMS.register("blended_tobacco", () -> new BlendedTobaccoItem(new Item.Properties().stacksTo(64)));
 
     // Create-compatible factory tooling and metadata-carrying assembly intermediates.
     // These are registered unconditionally so saved stacks remain valid if Create is removed;

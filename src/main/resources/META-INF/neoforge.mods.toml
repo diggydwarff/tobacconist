@@ -3,6 +3,9 @@ loaderVersion="${loader_version_range}"
 license="${mod_license}"
 
 [[mixins]]
+config="tobacconistmod.mixins.json"
+
+[[mixins]]
 config="tobacconistmod.create.mixins.json"
 requiredMods=["create"]
 

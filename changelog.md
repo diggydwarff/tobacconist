@@ -105,7 +105,10 @@
   - New Tobacconists reliably sell two cultivated seed varieties suited to their local region
   - Later levels add a small set of useful tobacco supplies, equipment, and storage trades
 - Added restrained **Wandering Trader** access to Wild Tobacco Seeds and Wild Flowering Tobacco as a backup to natural discovery
-- Added the reusable **Tobacco Pouch**, holding up to 16 units of one exact loose-tobacco batch and packing pipes directly from the offhand
+- Added the reusable **Tobacco Pouch**, holding up to 128 units of one exact loose-tobacco batch and packing pipes directly from the offhand
+  - Loose tobacco retains its normal 64-item stack size, so one Pouch carries two full loose-tobacco stacks in one slot
+  - Pipes packed from a Pouch receive a small randomized **41–45 puff** load instead of the normal 40-puff hand pack
+  - Tobacco Pouches can be recolored with one or more vanilla dyes; each recolor starts fresh while multiple dyes in the same craft blend into custom colors
 - Added a simple **Clay Smoking Pipe** with the normal reusable pipe-smoking workflow
 - Added vanilla **Composter** support for tobacco seeds, raw leaves, Wild Flowering Tobacco, and Spoiled Tobacco
 - Added **Potted Wild Flowering Tobacco** and vanilla flower/bee tag integration
@@ -123,6 +126,8 @@
 
 ### Fixes & Compatibility
 - Hookah hose draws now use the same nicotine, configured-effect, quality, and aging pipeline as other smoking methods, based on the loaded Shisha
+- Hookah draw smoke now originates clearly in front of the player's mouth with a fuller exhale cloud, while passive smoke from the Hookah top remains restrained
+- Fixed Tobacco Pouch dyeing so vanilla dye recognition works again while recoloring still resets the previous color and multi-dye crafts blend normally
 - Packed pipes now evaluate smoking quality/aging effects from the tobacco actually stored inside the pipe instead of the pipe item itself
 - Fixed Double Apple, Double Golden Apple, and Double Royal Apple Create recipe selection/production
 - Hardened Create classloading and resource conditions so **Tobacconist still launches and functions without Create installed**

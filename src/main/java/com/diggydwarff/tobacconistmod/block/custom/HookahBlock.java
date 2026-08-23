@@ -164,7 +164,8 @@ public class HookahBlock extends BaseEntityBlock {
                         ItemStack shisha = hookah.getShishaForSmoking();
                         if (shisha.isEmpty()) return InteractionResult.PASS;
 
-                        SmokingItem.applySmokingEffects(pPlayer, (ServerLevel) pLevel, shisha);
+                        SmokingItem.applyHookahSmokingEffects(pPlayer, (ServerLevel) pLevel, shisha);
+                        hookah.applyDirtyWaterPenalty(pPlayer);
                         pPlayer.getCooldowns().addCooldown(stack.getItem(), 20);
                         return InteractionResult.sidedSuccess(false);
                     }

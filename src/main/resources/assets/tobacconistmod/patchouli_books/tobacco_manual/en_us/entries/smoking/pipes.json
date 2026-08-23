@@ -10,7 +10,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "To pack a pipe, hold an $(thing)empty pipe in your offhand$() and $(thing)loose tobacco in your main hand$(), then right-click with the tobacco. One loose tobacco is consumed and the pipe receives $(item)40 puffs$(). A filled Tobacco Pouch can also pack an empty pipe directly.",
+      "text": "To pack a pipe, hold an $(thing)empty pipe in your offhand$() and $(thing)loose tobacco in your main hand$(), then right-click with the tobacco. One loose tobacco is consumed and a hand-packed pipe receives $(item)40 puffs$(). Packing from a filled Tobacco Pouch is slightly more efficient, granting $(item)41–45 puffs$().",
       "title": "Packing"
     },
     {
@@ -27,7 +27,7 @@
     {
       "type": "patchouli:text",
       "title": "Tobacco Pouch",
-      "text": "A Tobacco Pouch stores up to $(item)16$() units of one exact loose-tobacco batch and preserves its processing data. Hold the pouch in your offhand and use loose tobacco to load it; use an empty pipe with the filled pouch still offhand to pack directly. Sneak-right-click the pouch in your main hand to withdraw one tobacco."
+      "text": "Loose tobacco stacks normally to $(item)64$(). A Tobacco Pouch stores up to $(item)128$() units of one exact loose-tobacco batch—two full stacks in one slot—while preserving all processing data. Hold it in your offhand and use loose tobacco to load as much as will fit; an empty main-hand pipe can then pack directly from the pouch with a small 1–5 puff packing bonus. Sneak-right-click the pouch in your main hand to withdraw one tobacco. Craft a Pouch with one dye to set a predictable new color, or combine several dyes in the same craft to blend a custom color. Re-dyeing starts fresh from the new dye selection instead of blending with the Pouch's previous color."
     },
     {
       "type": "patchouli:crafting",

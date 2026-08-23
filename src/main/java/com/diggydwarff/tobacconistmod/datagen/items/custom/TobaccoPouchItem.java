@@ -23,7 +23,7 @@ import java.util.List;
  * so variety, cure, cut, quality, age, flavor and blend metadata remain intact.
  */
 public class TobaccoPouchItem extends Item {
-    public static final int CAPACITY = 16;
+    public static final int CAPACITY = 128;
 
     private static final String TAG_ITEM = "StoredTobacco";
     private static final String TAG_DATA = "StoredTobaccoData";
@@ -54,7 +54,7 @@ public class TobaccoPouchItem extends Item {
         // Main-hand loose tobacco -> offhand pouch.
         if (main.is(ModTags.Items.LOOSE_TOBACCO)) {
             if (level.isClientSide()) return InteractionResultHolder.success(pouch);
-            return storeOne(player, pouch, main)
+            return storeFromStack(player, pouch, main)
                     ? InteractionResultHolder.sidedSuccess(pouch, false)
                     : InteractionResultHolder.pass(pouch);
         }
@@ -64,7 +64,7 @@ public class TobaccoPouchItem extends Item {
             ItemStack stored = getStoredStack(pouch);
             if (!stored.isEmpty() && pipeItem.canPack(main)) {
                 if (level.isClientSide()) return InteractionResultHolder.success(pouch);
-                if (pipeItem.packFromTobacco(main, stored)) {
+                if (pipeItem.packFromPouch(main, stored, level.random)) {
                     setStoredCount(pouch, getStoredCount(pouch) - 1);
                     return InteractionResultHolder.sidedSuccess(pouch, false);
                 }
@@ -74,12 +74,15 @@ public class TobaccoPouchItem extends Item {
         return InteractionResultHolder.pass(pouch);
     }
 
-    public static boolean storeOne(Player player, ItemStack pouch, ItemStack tobacco) {
+    public static boolean storeFromStack(Player player, ItemStack pouch, ItemStack tobacco) {
         int count = getStoredCount(pouch);
-        if (count >= CAPACITY) return false;
+        if (count >= CAPACITY || tobacco.isEmpty()) return false;
 
         ItemStack stored = getStoredStack(pouch);
         if (!stored.isEmpty() && !sameBatch(stored, tobacco)) return false;
+
+        int moved = Math.min(CAPACITY - count, tobacco.getCount());
+        if (moved <= 0) return false;
 
         CompoundTag tag = LegacyItemTags.getOrCreateTag(pouch);
         if (stored.isEmpty()) {
@@ -91,9 +94,9 @@ public class TobaccoPouchItem extends Item {
                 tag.remove(TAG_DATA);
             }
         }
-        tag.putInt(TAG_COUNT, count + 1);
+        tag.putInt(TAG_COUNT, count + moved);
 
-        if (!player.getAbilities().instabuild) tobacco.shrink(1);
+        if (!player.getAbilities().instabuild) tobacco.shrink(moved);
         return true;
     }
 
@@ -174,7 +177,9 @@ public class TobaccoPouchItem extends Item {
 
         if (stored.isEmpty()) {
             tooltip.add(Component.literal("Empty (0/" + CAPACITY + ")").withStyle(ChatFormatting.GRAY));
-            tooltip.add(Component.literal("Hold in offhand to store loose tobacco").withStyle(ChatFormatting.DARK_GRAY));
+            tooltip.add(Component.literal("Holds two full loose-tobacco stacks").withStyle(ChatFormatting.DARK_GRAY));
+            tooltip.add(Component.literal("Offhand packing grants 1-5 bonus puffs").withStyle(ChatFormatting.DARK_GRAY));
+            tooltip.add(Component.literal("Craft with one or more dyes to recolor").withStyle(ChatFormatting.DARK_GRAY));
             return;
         }
 
@@ -191,7 +196,9 @@ public class TobaccoPouchItem extends Item {
             tooltip.add(Component.literal(line.toString()).withStyle(ChatFormatting.DARK_GRAY));
         }
 
+        tooltip.add(Component.literal("Offhand packing grants 1-5 bonus puffs").withStyle(ChatFormatting.DARK_GRAY));
         tooltip.add(Component.literal("Use from offhand to pack an empty pipe").withStyle(ChatFormatting.DARK_GRAY));
+        tooltip.add(Component.literal("Craft with one or more dyes to recolor").withStyle(ChatFormatting.DARK_GRAY));
         tooltip.add(Component.literal("Sneak-right-click to withdraw").withStyle(ChatFormatting.DARK_GRAY));
     }
 }

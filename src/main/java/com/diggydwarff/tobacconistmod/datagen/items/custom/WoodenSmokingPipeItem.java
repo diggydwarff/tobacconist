@@ -9,6 +9,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.item.Item;
@@ -24,7 +25,9 @@ public class WoodenSmokingPipeItem extends SmokingItem {
 
     public  static final String NBT_TOBACCO = "PackedTobacco";
     public static final String NBT_PUFFS = "PuffsLeft";
+    public static final String NBT_PACKED_MAX_PUFFS = "PackedMaxPuffs";
     public static final int MAX_PUFFS = 40;
+    private static final int MAX_POUCH_BONUS_PUFFS = 5;
 
     public WoodenSmokingPipeItem(Properties properties) {
         super(properties);
@@ -68,6 +71,7 @@ public class WoodenSmokingPipeItem extends SmokingItem {
         if (puffs <= 0) {
             mutableTag.remove(NBT_PUFFS);
             mutableTag.remove(NBT_TOBACCO);
+            mutableTag.remove(NBT_PACKED_MAX_PUFFS);
             mutableTag.remove("PackedTobaccoData");
         } else {
             mutableTag.putInt(NBT_PUFFS, puffs);
@@ -82,8 +86,9 @@ public class WoodenSmokingPipeItem extends SmokingItem {
             return false;
         }
 
-        int puffs = tag.getInt("PuffsLeft");
-        return puffs > 0 && puffs < 40;
+        int puffs = tag.getInt(NBT_PUFFS);
+        int packedMax = getPackedMaxPuffs(stack);
+        return puffs > 0 && puffs < packedMax;
     }
 
     private boolean isPacked(ItemStack pipe) {
@@ -97,13 +102,30 @@ public class WoodenSmokingPipeItem extends SmokingItem {
 
     /** Packs one exact tobacco batch into this pipe, preserving all custom tobacco data. */
     public boolean packFromTobacco(ItemStack pipe, ItemStack tobacco) {
+        return packFromTobacco(pipe, tobacco, 0);
+    }
+
+    /**
+     * Packing from a Tobacco Pouch is slightly more efficient than hand-packing: each reload
+     * receives a small random 1-5 puff bonus while keeping the normal tobacco's base capacity.
+     */
+    public boolean packFromPouch(ItemStack pipe, ItemStack tobacco, RandomSource random) {
+        if (random == null) return packFromTobacco(pipe, tobacco);
+        return packFromTobacco(pipe, tobacco, 1 + random.nextInt(MAX_POUCH_BONUS_PUFFS));
+    }
+
+    private boolean packFromTobacco(ItemStack pipe, ItemStack tobacco, int bonusPuffs) {
         if (!canPack(pipe) || tobacco.isEmpty() || !isTobacco(tobacco)) return false;
+
+        int basePuffs = tobacco.getItem() instanceof LooseTobaccoItem loose
+                ? loose.getMaxPuffs()
+                : MAX_PUFFS;
+        int packedMaxPuffs = basePuffs + Math.max(0, bonusPuffs);
 
         CompoundTag pipeTag = LegacyItemTags.getOrCreateTag(pipe);
         pipeTag.putString(NBT_TOBACCO, BuiltInRegistries.ITEM.getKey(tobacco.getItem()).toString());
-        pipeTag.putInt(NBT_PUFFS, tobacco.getItem() instanceof LooseTobaccoItem loose
-                ? loose.getMaxPuffs()
-                : MAX_PUFFS);
+        pipeTag.putInt(NBT_PUFFS, packedMaxPuffs);
+        pipeTag.putInt(NBT_PACKED_MAX_PUFFS, packedMaxPuffs);
 
         CompoundTag tobaccoData = LegacyItemTags.getTag(tobacco);
         if (tobaccoData != null) {
@@ -112,6 +134,13 @@ public class WoodenSmokingPipeItem extends SmokingItem {
             pipeTag.remove("PackedTobaccoData");
         }
         return true;
+    }
+
+    private static int getPackedMaxPuffs(ItemStack pipe) {
+        CompoundTag tag = LegacyItemTags.getTag(pipe);
+        if (tag == null) return MAX_PUFFS;
+        int storedMax = tag.getInt(NBT_PACKED_MAX_PUFFS);
+        return storedMax > 0 ? storedMax : MAX_PUFFS;
     }
 
     /** Rebuilds the tobacco stack stored inside a packed pipe for quality/age effects and tooltips. */
@@ -138,7 +167,7 @@ public class WoodenSmokingPipeItem extends SmokingItem {
             ItemStack pouch = player.getOffhandItem();
             ItemStack stored = TobaccoPouchItem.getStoredStack(pouch);
             if (!stored.isEmpty() && canPack(pipe)) {
-                if (!level.isClientSide() && packFromTobacco(pipe, stored)) {
+                if (!level.isClientSide() && packFromPouch(pipe, stored, level.random)) {
                     TobaccoPouchItem.consumeOne(pouch);
                 }
                 return InteractionResultHolder.sidedSuccess(pipe, level.isClientSide());
@@ -170,8 +199,9 @@ public class WoodenSmokingPipeItem extends SmokingItem {
         puffs--;
 
         if (puffs <= 0) {
-            LegacyItemTags.getOrCreateTag(pipe).remove("PuffsLeft");
-            LegacyItemTags.getOrCreateTag(pipe).remove("PackedTobacco");
+            LegacyItemTags.getOrCreateTag(pipe).remove(NBT_PUFFS);
+            LegacyItemTags.getOrCreateTag(pipe).remove(NBT_TOBACCO);
+            LegacyItemTags.getOrCreateTag(pipe).remove(NBT_PACKED_MAX_PUFFS);
             LegacyItemTags.getOrCreateTag(pipe).remove("PackedTobaccoData");
         } else {
             LegacyItemTags.getOrCreateTag(pipe).putInt("PuffsLeft", puffs);
@@ -190,7 +220,7 @@ public class WoodenSmokingPipeItem extends SmokingItem {
     public int getBarWidth(ItemStack stack) {
         if (!isPacked(stack)) return 0;
         int puffs = LegacyItemTags.getOrCreateTag(stack).getInt(NBT_PUFFS);
-        return Math.round(13.0F * (puffs / (float) MAX_PUFFS));
+        return Math.min(13, Math.round(13.0F * (puffs / (float) getPackedMaxPuffs(stack))));
     }
 
     @Override

@@ -50,8 +50,17 @@ public abstract class SmokingItem extends Item {
         applySmokingEffects(player, level, tobaccoStack);
     }
 
-    /** Shared smoking pipeline used by held items, Curios smoking and Hookahs. */
+    /** Shared smoking pipeline used by held items and Curios smoking. */
     public static void applySmokingEffects(Player player, ServerLevel level, ItemStack tobaccoStack) {
+        applySmokingEffects(player, level, tobaccoStack, false);
+    }
+
+    /** Hookah draws keep the fuller old puff cloud while passive top smoke stays restrained. */
+    public static void applyHookahSmokingEffects(Player player, ServerLevel level, ItemStack tobaccoStack) {
+        applySmokingEffects(player, level, tobaccoStack, true);
+    }
+
+    private static void applySmokingEffects(Player player, ServerLevel level, ItemStack tobaccoStack, boolean hookahDraw) {
         Vec3 look = player.getLookAngle();
 
         level.playSound(
@@ -63,14 +72,44 @@ public abstract class SmokingItem extends Item {
                 1.0F
         );
 
-        SmokeParticleHelper.spawnServerMouthSmoke(
-                level,
-                player.getX() + look.x * 0.12D,
-                player.getY() + 1.4D + look.y * 0.04D,
-                player.getZ() + look.z * 0.12D,
-                look.x,
-                look.z
-        );
+        double smokeX;
+        double smokeY;
+        double smokeZ;
+        double smokeDirX = look.x;
+        double smokeDirZ = look.z;
+
+        if (hookahDraw) {
+            // Hookah exhales should visibly leave the front of the player's mouth rather than
+            // spawning inside/behind the head. Normalize only the horizontal facing so looking
+            // sharply up or down cannot collapse the forward offset back into the player model.
+            Vec3 horizontalLook = new Vec3(look.x, 0.0D, look.z);
+            if (horizontalLook.lengthSqr() < 1.0E-6D) {
+                horizontalLook = Vec3.directionFromRotation(0.0F, player.getYRot());
+            } else {
+                horizontalLook = horizontalLook.normalize();
+            }
+
+            Vec3 mouth = player.getEyePosition().add(0.0D, -0.18D, 0.0D);
+            smokeX = mouth.x + horizontalLook.x * 0.44D;
+            smokeY = mouth.y + look.y * 0.03D;
+            smokeZ = mouth.z + horizontalLook.z * 0.44D;
+            smokeDirX = horizontalLook.x;
+            smokeDirZ = horizontalLook.z;
+        } else {
+            smokeX = player.getX() + look.x * 0.12D;
+            smokeY = player.getY() + 1.4D + look.y * 0.04D;
+            smokeZ = player.getZ() + look.z * 0.12D;
+        }
+
+        if (hookahDraw) {
+            SmokeParticleHelper.spawnServerHookahPuffSmoke(
+                    level, smokeX, smokeY, smokeZ, smokeDirX, smokeDirZ
+            );
+        } else {
+            SmokeParticleHelper.spawnServerMouthSmoke(
+                    level, smokeX, smokeY, smokeZ, smokeDirX, smokeDirZ
+            );
+        }
 
         if (TobacconistConfig.areNicotineEffectsEnabled()) {
             player.addEffect(new MobEffectInstance(

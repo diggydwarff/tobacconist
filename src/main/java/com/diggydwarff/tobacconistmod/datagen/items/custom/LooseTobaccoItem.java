@@ -124,7 +124,7 @@ public class LooseTobaccoItem extends Item {
 
         if (offhand.getItem() instanceof TobaccoPouchItem) {
             if (level.isClientSide()) return InteractionResultHolder.success(tobacco);
-            return TobaccoPouchItem.storeOne(player, offhand, tobacco)
+            return TobaccoPouchItem.storeFromStack(player, offhand, tobacco)
                     ? InteractionResultHolder.sidedSuccess(tobacco, false)
                     : InteractionResultHolder.pass(tobacco);
         }

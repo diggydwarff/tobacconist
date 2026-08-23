@@ -1,6 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "tobacconistmod:item/tobacco_pouch"
+    "layer0": "tobacconistmod:item/tobacco_pouch",
+    "layer1": "tobacconistmod:item/tobacco_pouch_details"
   }
 }

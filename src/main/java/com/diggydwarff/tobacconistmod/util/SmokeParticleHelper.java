@@ -43,6 +43,25 @@ public final class SmokeParticleHelper {
         spawnServerCeilingHaze(level, random, x, y, z, 0.65F);
     }
 
+    /**
+     * Fuller cloud used only when a player actively draws from a Hookah. This intentionally
+     * restores the satisfying pre-R20.17a puff without increasing the passive top plume.
+     */
+    public static void spawnServerHookahPuffSmoke(ServerLevel level,
+                                                  double x, double y, double z,
+                                                  double dirX, double dirZ) {
+        if (level == null) return;
+
+        RandomSource random = level.random;
+        for (int i = 0; i < 7; i++) {
+            double cloudX = x + (random.nextDouble() - 0.5D) * 0.10D;
+            double cloudY = y + (random.nextDouble() - 0.5D) * 0.05D;
+            double cloudZ = z + (random.nextDouble() - 0.5D) * 0.10D;
+            spawnServerRisingSmoke(level, random, cloudX, cloudY, cloudZ, dirX, dirZ, true);
+        }
+        spawnServerCeilingHaze(level, random, x, y, z, 0.85F);
+    }
+
     public static void spawnServerHookahSmoke(ServerLevel level,
                                               double x, double y, double z) {
         if (level == null) return;
@@ -65,7 +84,7 @@ public final class SmokeParticleHelper {
 
         double forward = fromMouth ? 0.012D : 0.003D;
         double vx = dirX * forward + (random.nextDouble() - 0.5D) * 0.005D;
-        double vy = (fromMouth ? 0.030D : 0.038D) + random.nextDouble() * 0.012D;
+        double vy = (fromMouth ? 0.030D : 0.024D) + random.nextDouble() * (fromMouth ? 0.012D : 0.008D);
         double vz = dirZ * forward + (random.nextDouble() - 0.5D) * 0.005D;
 
         level.addParticle(ModParticles.TOBACCO_SMOKE.get(), px, py, pz, vx, vy, vz);
@@ -82,7 +101,7 @@ public final class SmokeParticleHelper {
 
         double forward = fromMouth ? 0.012D : 0.003D;
         double vx = dirX * forward + (random.nextDouble() - 0.5D) * 0.005D;
-        double vy = (fromMouth ? 0.030D : 0.038D) + random.nextDouble() * 0.012D;
+        double vy = (fromMouth ? 0.030D : 0.024D) + random.nextDouble() * (fromMouth ? 0.012D : 0.008D);
         double vz = dirZ * forward + (random.nextDouble() - 0.5D) * 0.005D;
 
         sendSingleWithVelocity(level, ModParticles.TOBACCO_SMOKE.get(),

@@ -186,8 +186,11 @@ public final class CreateDisplayLinkCompat {
 
             if (hookah.getBlockState().hasProperty(BlockStateProperties.LIT)
                     && hookah.getBlockState().getValue(BlockStateProperties.LIT)) {
-                return Component.literal("Smoking");
+                return hookah.isUsingDirtyWater()
+                        ? Component.literal("Smoking (Dirty Water)")
+                        : Component.literal("Smoking");
             }
+            if (hookah.isUsingDirtyWater()) return Component.literal("Dirty Water");
             if (hookah.getItemHandler().getStackInSlot(1).isEmpty()) return Component.literal("Needs Shisha");
             if (hookah.getItemHandler().getStackInSlot(2).isEmpty()) return Component.literal("Needs Water");
             if (hookah.getItemHandler().getStackInSlot(0).isEmpty()) return Component.literal("Needs Fuel");

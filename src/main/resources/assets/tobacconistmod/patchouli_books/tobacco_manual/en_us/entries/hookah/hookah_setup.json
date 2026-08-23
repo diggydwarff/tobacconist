@@ -16,7 +16,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Hookah slots:$(br2)$(thing)Left/fuel:$() Bamboo Charcoal, Charcoal, or Coal$(br)$(thing)Shisha:$() Shisha Tobacco only$(br)$(thing)Water:$() a vanilla Potion item containing Water$(br2)The water bottle is not consumed by the current hookah process.",
+      "text": "Hookah slots:$(br2)$(thing)Left/fuel:$() Bamboo Charcoal, Charcoal, or Coal$(br)$(thing)Shisha:$() Shisha Tobacco only$(br)$(thing)Water:$() a fresh vanilla Potion item containing Water$(br2)Fresh water is reusable, but it eventually becomes dirty from repeated Shisha use.",
       "title": "Loading"
     },
     {
@@ -26,8 +26,13 @@
     },
     {
       "type": "patchouli:text",
-      "text": "A hose draw now uses the same smoking-effect pipeline as pipes, cigars, and cigarettes, based on the $(item)Shisha actually loaded in the Hookah$(). Nicotine, configured additional effects, quality bonuses, and aging bonuses therefore behave consistently. A short hose cooldown prevents rapid effect spam.",
+      "text": "A hose draw uses the same smoking-effect pipeline as pipes, cigars, and cigarettes, based on the $(item)Shisha actually loaded in the Hookah$(). Nicotine, configured additional effects, quality bonuses, and aging bonuses therefore behave consistently. A short hose cooldown prevents rapid effect spam.",
       "title": "Smoking Effects"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "A fresh Water Bottle lasts for a random $(item)2–5 fully consumed Shisha loads$(). It then becomes $(bad)Dirty Hookah Water$(). The Hookah still works, but hose draws through dirty water give a short $(bad)Nausea$() effect. This never deals damage. Remove the dirty bottle and right-click it to empty it back into a Glass Bottle.",
+      "title": "Hookah Water"
     },
     {
       "type": "patchouli:relations",

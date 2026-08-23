@@ -15,7 +15,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "One fresh Shisha Tobacco item has $(item)5,000 processing durability$(), equal to about $(item)4 minutes 10 seconds$() of continuous active use. The shisha is consumed when that timer is exhausted.",
+      "text": "One fresh Shisha Tobacco item has $(item)6,500 processing durability$(), equal to about $(item)5 minutes 25 seconds$() of continuous active use. This is 30% longer than the previous duration. The shisha is consumed when that timer is exhausted.",
       "title": "Shisha Duration"
     },
     {

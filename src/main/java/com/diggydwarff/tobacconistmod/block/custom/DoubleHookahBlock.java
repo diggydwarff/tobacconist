@@ -3,13 +3,12 @@ package com.diggydwarff.tobacconistmod.block.custom;
 import com.mojang.serialization.MapCodec;
 import com.diggydwarff.tobacconistmod.block.entity.HookahEntity;
 import com.diggydwarff.tobacconistmod.block.entity.ModBlockEntities;
+import com.diggydwarff.tobacconistmod.datagen.items.SmokingItem;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.HookahHoseItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
@@ -33,12 +32,10 @@ import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Random;
 
 public class DoubleHookahBlock extends BaseEntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
@@ -95,32 +92,6 @@ public class DoubleHookahBlock extends BaseEntityBlock {
                 .setValue(FACING, ctx.getHorizontalDirection().getOpposite())
                 .setValue(LIT, false)
                 .setValue(HALF, DoubleBlockHalf.LOWER);
-    }
-
-    @Override
-    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
-        if (!state.getValue(LIT)) return;
-        if (state.getValue(HALF) != DoubleBlockHalf.UPPER) return;
-
-        double x = pos.getX() + 0.5D;
-        double y = pos.getY() + 0.98D;
-        double z = pos.getZ() + 0.5D;
-
-        if (random.nextFloat() < 0.7F) {
-            level.addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE,
-                    x + (random.nextDouble() - 0.5D) * 0.05D,
-                    y,
-                    z + (random.nextDouble() - 0.5D) * 0.05D,
-                    0.0D, 0.03D, 0.0D);
-        }
-
-        if (random.nextFloat() < 0.25F) {
-            level.addParticle(ParticleTypes.SMOKE,
-                    x + (random.nextDouble() - 0.5D) * 0.04D,
-                    y + 0.03D,
-                    z + (random.nextDouble() - 0.5D) * 0.04D,
-                    0.0D, 0.02D, 0.0D);
-        }
     }
 
     @Override
@@ -238,27 +209,16 @@ public class DoubleHookahBlock extends BaseEntityBlock {
             if (blockEntity instanceof HookahEntity hookah && hookah.progress > 0) {
                 for (ItemStack stack : player.getHandSlots()) {
                     if (stack.getItem() instanceof HookahHoseItem) {
-                        Vec3 look = player.getLookAngle()
-                                .multiply(0.3D, 0.3D, 0.3D)
-                                .multiply(0.066D, 0.066D, 0.066D);
-
-                        Random rand = new Random();
-                        for (int i = 0; i < 5; ++i) {
-                            Vec3 newVec = new Vec3(
-                                    rand.nextDouble() - 0.5D,
-                                    rand.nextDouble() - 0.5D,
-                                    rand.nextDouble() - 0.5D
-                            ).multiply(0.01D, 0.01D, 0.01D);
-                            Vec3 mergeVec = look.add(newVec);
-                            ((ServerLevel) level).sendParticles(
-                                    ParticleTypes.CAMPFIRE_COSY_SMOKE,
-                                    player.getX() + mergeVec.x,
-                                    player.getY() + 1.4 + mergeVec.y,
-                                    player.getZ() + mergeVec.z,
-                                    1, 0, 0, 0, 0
-                            );
+                        if (player.getCooldowns().isOnCooldown(stack.getItem())) {
+                            return InteractionResult.sidedSuccess(false);
                         }
 
+                        ItemStack shisha = hookah.getShishaForSmoking();
+                        if (shisha.isEmpty()) return InteractionResult.PASS;
+
+                        SmokingItem.applyHookahSmokingEffects(player, (ServerLevel) level, shisha);
+                        hookah.applyDirtyWaterPenalty(player);
+                        player.getCooldowns().addCooldown(stack.getItem(), 20);
                         return InteractionResult.sidedSuccess(false);
                     }
                 }

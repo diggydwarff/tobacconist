@@ -42,6 +42,7 @@ public class TobacconistCreativeTab {
                         output.accept(CIGARETTE.get());
                         output.accept(HOOKAH_HOSE.get());
                         output.accept(SHISHA_TOBACCO.get());
+                        output.accept(DIRTY_HOOKAH_WATER.get());
 
                         output.accept(TOBACCO_POUCH.get());
                         output.accept(TOBACCO_BOX.get());
@@ -71,6 +72,8 @@ public class TobacconistCreativeTab {
                         addLooseVariants(output, new ItemStack(TOBACCO_LOOSE_ORIENTAL.get()));
                         addLooseVariants(output, new ItemStack(TOBACCO_LOOSE_DOKHA.get()));
                         addLooseVariants(output, new ItemStack(TOBACCO_LOOSE_SHADE.get()));
+
+                        output.accept(ModBlocks.WILD_FLOWERING_TOBACCO.get());
 
                         output.accept(ModBlocks.TOBACCO_DRYING_RACK.get());
                         output.accept(ModBlocks.FLUE_FIREBOX.get());

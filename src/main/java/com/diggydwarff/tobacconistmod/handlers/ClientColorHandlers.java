@@ -5,12 +5,14 @@ import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
 import com.diggydwarff.tobacconistmod.TobacconistMod;
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
 import com.diggydwarff.tobacconistmod.block.custom.HookahBlock;
+import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.recipes.WoodenPipeRecipe;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.component.DyedItemColor;
 import net.minecraft.world.level.EmptyBlockGetter;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
@@ -94,6 +96,13 @@ public class ClientColorHandlers {
             // default inventory color for undyed/base hookah item
             return 0xFFB0B0B0;
         }, ModBlocks.HOOKAH.get());
+
+        event.register((stack, tintIndex) -> {
+            // layer0 is the leather body; layer1 contains the untinted tobacco/cord details.
+            if (tintIndex != 0) return 0xFFFFFFFF;
+            int rgb = DyedItemColor.getOrDefault(stack, DyedItemColor.LEATHER_COLOR);
+            return 0xFF000000 | rgb;
+        }, ModItems.TOBACCO_POUCH.get());
     }
 
     private static int clamp(int v) {

@@ -11,6 +11,8 @@ import com.diggydwarff.tobacconistmod.util.SmokeParticleHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
@@ -41,22 +43,31 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
             return switch (slot) {
                 case 0 -> HookahFuelHelper.isFuel(stack);
                 case 1 -> stack.is(ModItems.SHISHA_TOBACCO.get());
-                case 2 -> isWaterPotion(stack);
+                case 2 -> isWaterPotion(stack) || stack.is(ModItems.DIRTY_HOOKAH_WATER.get());
                 default -> false;
             };
         }
 
         @Override
         protected void onContentsChanged(int slot) {
+            if (slot == 2) {
+                ItemStack water = getStackInSlot(2);
+                if (water.isEmpty() || isWaterPotion(water)) {
+                    waterUses = 0;
+                    waterUseThreshold = 0;
+                }
+            }
             setChanged();
         }
     };
 
     protected final ContainerData data;
     public int progress = 0;
-    private int maxProgress = 5000;
+    private int maxProgress = 6500;
     private int fuelTime = 0;
     private int currentFuelMaxTime = 0;
+    private int waterUses = 0;
+    private int waterUseThreshold = 0;
 
     public HookahEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.HOOKAH.get(), pos, state);
@@ -109,12 +120,34 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
         return shisha.isEmpty() ? ItemStack.EMPTY : shisha.copy();
     }
 
+    public boolean isUsingDirtyWater() {
+        return itemHandler.getStackInSlot(2).is(ModItems.DIRTY_HOOKAH_WATER.get());
+    }
+
+    /**
+     * Dirty Hookah Water is deliberately a nuisance rather than a danger.
+     * It never damages the player; a hose draw only gives a brief Nausea effect.
+     */
+    public void applyDirtyWaterPenalty(Player player) {
+        if (!isUsingDirtyWater()) return;
+        player.addEffect(new MobEffectInstance(
+                MobEffects.CONFUSION,
+                120,
+                0,
+                false,
+                false,
+                true
+        ));
+    }
+
     @Override
     protected void saveAdditional(CompoundTag nbt, HolderLookup.Provider registries) {
         nbt.put("inventory", itemHandler.serializeNBT(registries));
         nbt.putInt("hookah.progress", this.progress);
         nbt.putInt("hookah.fuelTime", this.fuelTime);
         nbt.putInt("hookah.currentFuelMaxTime", this.currentFuelMaxTime);
+        nbt.putInt("hookah.waterUses", this.waterUses);
+        nbt.putInt("hookah.waterUseThreshold", this.waterUseThreshold);
         super.saveAdditional(nbt, registries);
     }
 
@@ -125,6 +158,8 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
         this.progress = nbt.getInt("hookah.progress");
         this.fuelTime = nbt.getInt("hookah.fuelTime");
         this.currentFuelMaxTime = nbt.getInt("hookah.currentFuelMaxTime");
+        this.waterUses = nbt.getInt("hookah.waterUses");
+        this.waterUseThreshold = nbt.getInt("hookah.waterUseThreshold");
     }
 
     public void drops() {
@@ -165,12 +200,17 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
                 smokePos = pos.above(); // move to top block
             }
 
-            SmokeParticleHelper.spawnServerHookahSmoke(
-                    serverLevel,
-                    smokePos.getX() + 0.5D,
-                    smokePos.getY() + 0.9D,
-                    smokePos.getZ() + 0.5D
-            );
+            // Hookah smoke is continuous, but emitting every tick created an oversized,
+            // aggressive plume (especially on double-height Hookahs). A gentle pulse every
+            // 10 ticks keeps the Hookah visibly lit without flooding the room with particles.
+            if (level.getGameTime() % 10L == 0L) {
+                SmokeParticleHelper.spawnServerHookahSmoke(
+                        serverLevel,
+                        smokePos.getX() + 0.5D,
+                        smokePos.getY() + 0.9D,
+                        smokePos.getZ() + 0.5D
+                );
+            }
 
             pEntity.progress++;
             pEntity.fuelTime--;
@@ -181,6 +221,7 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
 
             if (shisha.getDamageValue() >= shisha.getMaxDamage()) {
                 pEntity.itemHandler.extractItem(1, 1, false);
+                pEntity.recordCompletedShishaUse(level);
             } else {
                 pEntity.itemHandler.setStackInSlot(1, shisha);
             }
@@ -210,6 +251,23 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
         this.progress = 0;
     }
 
+    private void recordCompletedShishaUse(Level level) {
+        ItemStack water = itemHandler.getStackInSlot(2);
+        if (!isWaterPotion(water)) return;
+
+        if (waterUseThreshold < 2 || waterUseThreshold > 5) {
+            waterUseThreshold = 2 + level.random.nextInt(4); // 2-5 completed Shisha loads
+        }
+
+        waterUses++;
+        if (waterUses >= waterUseThreshold) {
+            itemHandler.setStackInSlot(2, new ItemStack(ModItems.DIRTY_HOOKAH_WATER.get()));
+            waterUses = 0;
+            waterUseThreshold = 0;
+        }
+        setChanged();
+    }
+
     private static boolean isWaterPotion(ItemStack stack) {
         PotionContents potionContents = stack.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);
         return stack.is(Items.POTION) && potionContents.is(Potions.WATER);
@@ -217,7 +275,8 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
 
     private static boolean canProcess(HookahEntity entity) {
         boolean hasShishaInSlot = entity.itemHandler.getStackInSlot(1).is(ModItems.SHISHA_TOBACCO.get());
-        boolean hasWaterInSlot = isWaterPotion(entity.itemHandler.getStackInSlot(2));
-        return hasShishaInSlot && hasWaterInSlot;
+        ItemStack water = entity.itemHandler.getStackInSlot(2);
+        boolean hasUsableWater = isWaterPotion(water) || water.is(ModItems.DIRTY_HOOKAH_WATER.get());
+        return hasShishaInSlot && hasUsableWater;
     }
 }
