@@ -10,7 +10,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "$(thing)Curios$() is optional. With it installed, you gain the Eyes and Mouth accessory slots. Without it, Spectacles use the vanilla head slot and smoking still works through ordinary right-click use.",
+      "text": "$(thing)Curios$() is optional. With it installed, you gain the Head and Mouth accessory slots. Without it, Spectacles use the vanilla head slot and smoking still works through ordinary right-click use.",
       "title": "Curios"
     },
     {
