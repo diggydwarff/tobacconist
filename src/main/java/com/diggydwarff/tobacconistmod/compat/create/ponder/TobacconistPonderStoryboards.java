@@ -1,7 +1,6 @@
 package com.diggydwarff.tobacconistmod.compat.create.ponder;
 
 import com.google.common.collect.ImmutableList;
-import com.diggydwarff.tobacconistmod.block.AbstractTallTobaccoCropBlock;
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoDryingRackBlockEntity;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
@@ -20,8 +19,6 @@ import com.simibubi.create.foundation.ponder.CreateSceneBuilder;
 import net.createmod.catnip.data.IntAttached;
 import net.createmod.catnip.nbt.NBTHelper;
 import net.createmod.catnip.math.Pointing;
-import net.createmod.ponder.api.element.ElementLink;
-import net.createmod.ponder.api.element.WorldSectionElement;
 import net.createmod.ponder.api.scene.SceneBuilder;
 import net.createmod.ponder.api.scene.SceneBuildingUtil;
 import net.createmod.ponder.api.scene.Selection;
@@ -31,110 +28,45 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 
-/** Seven animated Ponder scenes covering Tobacconist's Create production chain. */
+/** Six animated Ponder scenes covering Tobacconist's Create production chain. */
 public final class TobacconistPonderStoryboards {
     private TobacconistPonderStoryboards() {}
 
-    public static void harvesting(SceneBuilder builder, SceneBuildingUtil util) {
-        CreateSceneBuilder scene = begin(builder, "tobacconist_harvesting", "Automating Tobacco Harvesting");
-
-        BlockState matureLower = ModBlocks.VIRGINIA_TOBACCO_CROP.get().defaultBlockState()
-                .setValue(AbstractTallTobaccoCropBlock.AGE, 3)
-                .setValue(AbstractTallTobaccoCropBlock.HALF, DoubleBlockHalf.LOWER);
-        BlockState matureUpper = ModBlocks.VIRGINIA_TOBACCO_CROP.get().defaultBlockState()
-                .setValue(AbstractTallTobaccoCropBlock.AGE, 7)
-                .setValue(AbstractTallTobaccoCropBlock.HALF, DoubleBlockHalf.UPPER);
-        BlockState youngLower = ModBlocks.VIRGINIA_TOBACCO_CROP.get().defaultBlockState()
-                .setValue(AbstractTallTobaccoCropBlock.AGE, 0)
-                .setValue(AbstractTallTobaccoCropBlock.HALF, DoubleBlockHalf.LOWER);
-
-        for (int x = 2; x <= 4; x++) {
-            scene.world().setBlock(util.grid().at(x, 0, 2), Blocks.FARMLAND.defaultBlockState(), false);
-            scene.world().setBlock(util.grid().at(x, 1, 2), matureLower, false);
-            scene.world().setBlock(util.grid().at(x, 2, 2), matureUpper, false);
-        }
-
-        Selection cropRow = util.select().fromTo(2, 0, 2, 4, 2, 2);
-        scene.world().showSection(cropRow, Direction.DOWN);
-        scene.idle(15);
-        scene.overlay().showText(70)
-                .attachKeyFrame()
-                .placeNearTarget()
-                .pointAt(util.vector().topOf(3, 2, 2))
-                .text("Mature tobacco grows two blocks tall and carries its rolled quality into the harvested leaves");
-        scene.idle(80);
-
-        BlockState harvesterState = AllBlocks.MECHANICAL_HARVESTER.get().defaultBlockState()
-                .setValue(HorizontalDirectionalBlock.FACING, Direction.NORTH);
-        for (int x = 2; x <= 4; x++) {
-            scene.world().setBlock(util.grid().at(x, 1, 4), harvesterState, false);
-            scene.world().setBlock(util.grid().at(x, 1, 5), AllBlocks.LINEAR_CHASSIS.get().defaultBlockState(), false);
-        }
-
-        Selection rigSelection = util.select().fromTo(2, 1, 4, 4, 1, 5);
-        ElementLink<WorldSectionElement> rig = scene.world().showIndependentSection(rigSelection, Direction.DOWN);
-        scene.idle(10);
-        scene.overlay().showText(80)
-                .attachKeyFrame()
-                .placeNearTarget()
-                .pointAt(util.vector().centerOf(3, 1, 4))
-                .text("A Mechanical Harvester on a moving Contraption can harvest mature tobacco automatically");
-        scene.idle(45);
-
-        scene.world().moveSection(rig, util.vector().of(0, 0, -2), 55);
-        scene.idle(30);
-        for (int x = 2; x <= 4; x++) {
-            scene.world().setBlock(util.grid().at(x, 1, 2), youngLower, false);
-            scene.world().setBlock(util.grid().at(x, 2, 2), Blocks.AIR.defaultBlockState(), false);
-            scene.effects().indicateSuccess(util.grid().at(x, 1, 2));
-            scene.world().createItemEntity(util.vector().topOf(x, 1, 2), util.vector().of(0, .08, 0),
-                    new ItemStack(ModItems.VIRGINIA_TOBACCO_LEAF.get()));
-        }
-        scene.idle(20);
-        scene.overlay().showControls(util.vector().topOf(3, 1, 2), Pointing.DOWN, 45)
-                .withItem(new ItemStack(ModItems.VIRGINIA_TOBACCO_SEEDS.get()));
-        scene.overlay().showText(70)
-                .placeNearTarget()
-                .pointAt(util.vector().topOf(3, 1, 2))
-                .text("Automation preserves Tobacconist quality metadata and also produces the normal seed drops");
-        scene.idle(80);
-    }
-
     public static void curing(SceneBuilder builder, SceneBuildingUtil util) {
-        CreateSceneBuilder scene = begin(builder, "tobacconist_curing", "Automating Tobacco Curing");
+        CreateSceneBuilder scene = begin(builder, "tobacconist_curing", "Curing Tobacco");
 
         BlockPos rack = util.grid().at(4, 1, 3);
         BlockPos fan = util.grid().at(1, 1, 3);
         BlockPos fanShaft = util.grid().at(0, 1, 3);
         BlockPos cog = util.grid().at(0, 1, 4);
-        BlockPos arm = util.grid().at(5, 1, 5);
+        BlockPos utilitySpot = util.grid().at(5, 1, 5);
+        BlockPos catalyst = util.grid().at(2, 1, 3);
+        BlockPos belowRack = rack.below();
 
         scene.world().setBlock(rack, ModBlocks.TOBACCO_DRYING_RACK.get().defaultBlockState(), false);
+        reveal(scene, util, rack);
+
+        ItemStack rawLeaves = new ItemStack(ModItems.VIRGINIA_TOBACCO_LEAF.get(), 8);
+        scene.world().modifyBlockEntity(rack, TobaccoDryingRackBlockEntity.class,
+                be -> be.setItem(0, rawLeaves.copy()));
+        scene.overlay().showControls(util.vector().topOf(rack), Pointing.DOWN, 35).withItem(rawLeaves.copy());
+        scene.overlay().showText(75)
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().topOf(rack))
+                .text("Drying Racks preserve the leaf variety and quality while one of four curing environments does the work");
+        scene.idle(85);
+
+        // Air curing: Create airflow accelerates the ordinary covered/open-air cure.
         scene.world().setBlock(fan, AllBlocks.ENCASED_FAN.get().defaultBlockState()
                 .setValue(BlockStateProperties.FACING, Direction.EAST), false);
         scene.world().setBlock(fanShaft, AllBlocks.SHAFT.get().defaultBlockState()
                 .setValue(ShaftBlock.AXIS, Direction.Axis.X), false);
         scene.world().setBlock(cog, AllBlocks.COGWHEEL.get().defaultBlockState()
                 .setValue(ShaftBlock.AXIS, Direction.Axis.X), false);
-        scene.world().setBlock(arm, AllBlocks.MECHANICAL_ARM.get().defaultBlockState(), false);
-
-        reveal(scene, util, rack);
-        ItemStack rawLeaves = new ItemStack(ModItems.VIRGINIA_TOBACCO_LEAF.get(), 8);
-        scene.world().modifyBlockEntity(rack, TobaccoDryingRackBlockEntity.class,
-                be -> be.setItem(0, rawLeaves.copy()));
-        scene.overlay().showControls(util.vector().topOf(rack), Pointing.DOWN, 35).withItem(rawLeaves.copy());
-        scene.overlay().showText(70)
-                .attachKeyFrame()
-                .placeNearTarget()
-                .pointAt(util.vector().topOf(rack))
-                .text("Drying Racks accept raw tobacco leaves while preserving variety and quality");
-        scene.idle(80);
-
         Selection fanDrive = util.select().position(fan).add(util.select().position(fanShaft))
                 .add(util.select().position(cog));
         scene.world().showSection(fanDrive, Direction.DOWN);
@@ -144,22 +76,115 @@ public final class TobacconistPonderStoryboards {
                 .attachKeyFrame()
                 .placeNearTarget()
                 .pointAt(util.vector().centerOf(fan))
-                .text("Create Encased Fan airflow reaching the rack accelerates curing");
-        scene.idle(85);
+                .text("Air-curing works naturally; Create Encased Fan airflow can accelerate it without changing the cure type");
+        scene.idle(90);
 
+        // Sun curing: clear the fan away and show the resulting cure on the same rack.
+        scene.world().setBlock(fan, Blocks.AIR.defaultBlockState(), false);
+        scene.world().setBlock(fanShaft, Blocks.AIR.defaultBlockState(), false);
+        scene.world().setBlock(cog, Blocks.AIR.defaultBlockState(), false);
+        ItemStack sunCured = new ItemStack(ModItems.VIRGINIA_TOBACCO_LEAF_DRY.get(), 8);
+        TobaccoCuringHelper.applyCureData(sunCured, TobaccoCuringHelper.CURE_SUN, 75);
+        scene.overlay().showControls(util.vector().topOf(rack), Pointing.DOWN, 45).withItem(sunCured);
+        scene.overlay().showText(80)
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().topOf(rack))
+                .text("Sun-curing uses direct daylight or a glass shelter above the rack and produces Sun-Cured leaves");
+        scene.idle(90);
+
+        // Fire curing: a lit campfire directly beneath the rack supplies smoke and heat.
+        scene.world().setBlock(belowRack, Blocks.CAMPFIRE.defaultBlockState()
+                .setValue(BlockStateProperties.LIT, true), false);
+        ItemStack fireCured = new ItemStack(ModItems.VIRGINIA_TOBACCO_LEAF_DRY.get(), 8);
+        TobaccoCuringHelper.applyCureData(fireCured, TobaccoCuringHelper.CURE_FIRE, 75);
+        scene.overlay().showControls(util.vector().centerOf(belowRack).add(0, .5, 0), Pointing.DOWN, 45)
+                .withItem(fireCured);
+        scene.overlay().showText(85)
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().centerOf(belowRack))
+                .text("Fire-curing places the rack directly over a lit Campfire, exposing the tobacco to smoke and heat");
+        scene.idle(95);
+
+        // Create can accelerate fire curing by blowing campfire smoke directly across the rack.
+        scene.world().setBlock(belowRack, Blocks.SMOOTH_STONE.defaultBlockState(), false);
+        scene.world().setBlock(fan, AllBlocks.ENCASED_FAN.get().defaultBlockState()
+                .setValue(BlockStateProperties.FACING, Direction.EAST), false);
+        scene.world().setBlock(fanShaft, AllBlocks.SHAFT.get().defaultBlockState()
+                .setValue(ShaftBlock.AXIS, Direction.Axis.X), false);
+        scene.world().setBlock(cog, AllBlocks.COGWHEEL.get().defaultBlockState()
+                .setValue(ShaftBlock.AXIS, Direction.Axis.X), false);
+        scene.world().setBlock(catalyst, Blocks.CAMPFIRE.defaultBlockState()
+                .setValue(BlockStateProperties.LIT, true), false);
+        scene.world().showSection(fanDrive, Direction.DOWN);
+        reveal(scene, util, catalyst);
+        scene.world().setKineticSpeed(fanDrive, 32);
+        scene.effects().rotationDirectionIndicator(cog);
+        scene.overlay().showText(90)
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().centerOf(catalyst))
+                .text("Blowing air through a lit Campfire carries smoke across the rack, accelerating Fire-curing");
+        scene.idle(100);
+
+        // Flue curing: remove the smoke source and demonstrate indirect heat from the firebox.
+        scene.world().setBlock(fan, Blocks.AIR.defaultBlockState(), false);
+        scene.world().setBlock(fanShaft, Blocks.AIR.defaultBlockState(), false);
+        scene.world().setBlock(cog, Blocks.AIR.defaultBlockState(), false);
+        scene.world().setBlock(catalyst, Blocks.AIR.defaultBlockState(), false);
+        scene.world().setBlock(utilitySpot, ModBlocks.FLUE_FIREBOX.get().defaultBlockState()
+                .setValue(BlockStateProperties.LIT, true)
+                .setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.WEST), false);
+        reveal(scene, util, utilitySpot);
+        ItemStack flueCured = new ItemStack(ModItems.VIRGINIA_TOBACCO_LEAF_DRY.get(), 8);
+        TobaccoCuringHelper.applyCureData(flueCured, TobaccoCuringHelper.CURE_FLUE, 75);
+        scene.overlay().showControls(util.vector().topOf(utilitySpot), Pointing.DOWN, 45).withItem(flueCured);
+        scene.overlay().showText(95)
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().centerOf(utilitySpot))
+                .text("Flue-curing uses a lit Flue Firebox nearby under a roof, providing indirect heat without smoke touching the leaves");
+        scene.idle(105);
+
+        // Create blasting airflow from lava provides the same smoke-free cure at a faster rate.
+        scene.world().setBlock(utilitySpot, Blocks.AIR.defaultBlockState(), false);
+        scene.world().setBlock(fan, AllBlocks.ENCASED_FAN.get().defaultBlockState()
+                .setValue(BlockStateProperties.FACING, Direction.EAST), false);
+        scene.world().setBlock(fanShaft, AllBlocks.SHAFT.get().defaultBlockState()
+                .setValue(ShaftBlock.AXIS, Direction.Axis.X), false);
+        scene.world().setBlock(cog, AllBlocks.COGWHEEL.get().defaultBlockState()
+                .setValue(ShaftBlock.AXIS, Direction.Axis.X), false);
+        scene.world().setBlock(catalyst, Blocks.LAVA.defaultBlockState(), false);
+        scene.world().showSection(fanDrive, Direction.DOWN);
+        reveal(scene, util, catalyst);
+        scene.world().setKineticSpeed(fanDrive, 32);
+        scene.effects().rotationDirectionIndicator(cog);
+        scene.overlay().showText(90)
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().centerOf(catalyst))
+                .text("Blowing air through Lava creates intense smoke-free heat, accelerating Flue-curing");
+        scene.idle(100);
+
+        // Finish with the Create automation layer shared by every rack method.
+        scene.world().setBlock(fan, Blocks.AIR.defaultBlockState(), false);
+        scene.world().setBlock(fanShaft, Blocks.AIR.defaultBlockState(), false);
+        scene.world().setBlock(cog, Blocks.AIR.defaultBlockState(), false);
+        scene.world().setBlock(catalyst, Blocks.AIR.defaultBlockState(), false);
+        scene.world().setBlock(utilitySpot, AllBlocks.MECHANICAL_ARM.get().defaultBlockState(), false);
+        scene.world().setKineticSpeed(util.select().position(utilitySpot), 32);
         ItemStack curedLeaves = new ItemStack(ModItems.VIRGINIA_TOBACCO_LEAF_DRY.get(), 8);
+        TobaccoCuringHelper.applyCureData(curedLeaves, TobaccoCuringHelper.CURE_AIR, 75);
         scene.world().modifyBlockEntity(rack, TobaccoDryingRackBlockEntity.class,
                 be -> be.setItem(0, curedLeaves.copy()));
         scene.effects().indicateSuccess(rack);
-        scene.idle(15);
-        reveal(scene, util, arm);
-        scene.world().setKineticSpeed(util.select().position(arm), 32);
         scene.overlay().showControls(util.vector().topOf(rack), Pointing.DOWN, 45).withItem(curedLeaves.copy());
-        scene.overlay().showText(80)
+        scene.overlay().showText(85)
                 .placeNearTarget()
-                .pointAt(util.vector().centerOf(arm))
-                .text("Mechanical Arms can load raw leaves and only take leaves after curing is complete");
-        scene.idle(90);
+                .pointAt(util.vector().centerOf(utilitySpot))
+                .text("Mechanical Arms can load raw leaves and only extract them after the selected curing process is complete");
+        scene.idle(95);
     }
 
     public static void processing(SceneBuilder builder, SceneBuildingUtil util) {
@@ -528,7 +553,7 @@ public final class TobacconistPonderStoryboards {
                 .attachKeyFrame()
                 .placeNearTarget()
                 .pointAt(util.vector().centerOf(destinationPackager))
-                .text("Packagers can deliver valid inputs directly to Drying Racks, Barrels, Fireboxes and Hookahs");
+                .text("Packagers can deliver valid inputs directly to Drying Racks, Tobacco Barrels and Flue Fireboxes");
         scene.idle(105);
 
         scene.world().showSection(util.select().position(arm).add(util.select().position(outputDepot)), Direction.DOWN);
