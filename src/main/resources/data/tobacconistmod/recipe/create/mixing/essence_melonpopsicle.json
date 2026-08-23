@@ -5,15 +5,18 @@
       "modid": "create"
     },
     {
-      "type": "neoforge:mod_loaded",
-      "modid": "farmersdelight"
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "tobacconistmod:flavorings/melonpopsicle"
+      }
     }
   ],
   "type": "create:mixing",
   "heat_requirement": "heated",
   "ingredients": [
     {
-      "item": "farmersdelight:melon_popsicle"
+      "tag": "tobacconistmod:flavorings/melonpopsicle"
     },
     {
       "type": "neoforge:single",

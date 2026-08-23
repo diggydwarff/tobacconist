@@ -1,0 +1,29 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#c:foods/marshmallow",
+      "required": false
+    },
+    {
+      "id": "#c:marshmallows",
+      "required": false
+    },
+    {
+      "id": "#forge:marshmallow",
+      "required": false
+    },
+    {
+      "id": "create_confectionery:marshmallow",
+      "required": false
+    },
+    {
+      "id": "#c:foods/marshmallows",
+      "required": false
+    },
+    {
+      "id": "#forge:marshmallows",
+      "required": false
+    }
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#c:foods/fruits/strawberry",
+      "required": false
+    },
+    {
+      "id": "#c:fruits/strawberry",
+      "required": false
+    },
+    {
+      "id": "#c:foods/strawberry",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/strawberry",
+      "required": false
+    },
+    {
+      "id": "croptopia:strawberry",
+      "required": false
+    },
+    {
+      "id": "neapolitan:strawberries",
+      "required": false
+    },
+    {
+      "id": "neapolitan:white_strawberries",
+      "required": false
+    },
+    {
+      "id": "#c:foods/fruit/strawberry",
+      "required": false
+    },
+    {
+      "id": "#c:fruit/strawberry",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/strawberry",
+      "required": false
+    },
+    {
+      "id": "#c:foods/berries/strawberry",
+      "required": false
+    },
+    {
+      "id": "#c:foods/berry/strawberry",
+      "required": false
+    },
+    {
+      "id": "#c:berries/strawberry",
+      "required": false
+    },
+    {
+      "id": "#c:berry/strawberry",
+      "required": false
+    },
+    {
+      "id": "#forge:berries/strawberry",
+      "required": false
+    },
+    {
+      "id": "#forge:berry/strawberry",
+      "required": false
+    }
+  ]
+}

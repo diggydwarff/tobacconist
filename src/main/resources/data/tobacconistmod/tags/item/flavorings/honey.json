@@ -1,0 +1,26 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:honey_bottle",
+    {
+      "id": "#c:drinks/honey",
+      "required": false
+    },
+    {
+      "id": "#c:foods/honey",
+      "required": false
+    },
+    {
+      "id": "#forge:honey",
+      "required": false
+    },
+    {
+      "id": "#c:honey",
+      "required": false
+    },
+    {
+      "id": "#forge:honey_bottles",
+      "required": false
+    }
+  ]
+}

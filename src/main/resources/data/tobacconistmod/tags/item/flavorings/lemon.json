@@ -1,0 +1,41 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#c:foods/fruits/lemon",
+      "required": false
+    },
+    {
+      "id": "#c:fruits/lemon",
+      "required": false
+    },
+    {
+      "id": "#c:foods/lemon",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/lemon",
+      "required": false
+    },
+    {
+      "id": "fruitsdelight:lemon",
+      "required": false
+    },
+    {
+      "id": "croptopia:lemon",
+      "required": false
+    },
+    {
+      "id": "#c:foods/fruit/lemon",
+      "required": false
+    },
+    {
+      "id": "#c:fruit/lemon",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/lemon",
+      "required": false
+    }
+  ]
+}

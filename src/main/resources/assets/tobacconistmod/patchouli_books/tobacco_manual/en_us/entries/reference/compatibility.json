@@ -20,8 +20,8 @@
     },
     {
       "type": "patchouli:text",
-      "text": "$(thing)Farmer's Delight$() and $(thing)Fruits Delight$() add extra Flavoring Essence ingredients when installed. Their dedicated essence entries appear in the Shisha & Hookahs category only when the matching mod is loaded.",
-      "title": "Food Mod Integrations"
+      "text": "Flavoring ingredients are $(thing)tag-driven$(). Tobacconist accepts matching common ingredient tags plus optional items from Farmer's Delight, Fruits Delight, Croptopia, Neapolitan, HerbalBrews, Expanded Delight, Rustic Delight, Coffee Delight, Create Confectionery, and other correctly tagged food mods. These integrations never make those mods required.",
+      "title": "Flavor Compatibility"
     }
   ]
 }

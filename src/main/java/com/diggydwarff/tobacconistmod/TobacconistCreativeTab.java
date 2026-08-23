@@ -143,8 +143,9 @@ public class TobacconistCreativeTab {
                         output.accept(PaintingTabHelper.paintingVariant("andean_mapacho"));
 
                         output.accept(BOTTLED_AQUA_VITAE.get());
+                        addAllEssences(output);
                         output.accept(BOTTLED_MOLASSES_PLAIN.get());
-                        addAllEssencesAndMolasses(output);
+                        addAllFlavoredMolasses(output);
 
                     }).build());
 
@@ -165,10 +166,16 @@ public class TobacconistCreativeTab {
         output.accept(TobaccoCuringHelper.makeCreativeLoose(base, TobaccoCuringHelper.CUT_FLAKE));
     }
 
-    private static void addAllEssencesAndMolasses(CreativeModeTab.Output output) {
+    private static void addAllEssences(CreativeModeTab.Output output) {
         for (BottledMolassesFlavors flavor : BottledMolassesFlavors.values()) {
             if (flavor.isPlain()) continue;
             output.accept(flavor.getEssenceItem());
+        }
+    }
+
+    private static void addAllFlavoredMolasses(CreativeModeTab.Output output) {
+        for (BottledMolassesFlavors flavor : BottledMolassesFlavors.values()) {
+            if (flavor.isPlain()) continue;
             output.accept(flavor.getItem());
         }
     }

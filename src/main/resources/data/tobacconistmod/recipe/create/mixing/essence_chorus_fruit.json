@@ -3,13 +3,20 @@
     {
       "type": "neoforge:mod_loaded",
       "modid": "create"
+    },
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "tobacconistmod:flavorings/chorus_fruit"
+      }
     }
   ],
   "type": "create:mixing",
   "heat_requirement": "heated",
   "ingredients": [
     {
-      "item": "minecraft:chorus_fruit"
+      "tag": "tobacconistmod:flavorings/chorus_fruit"
     },
     {
       "type": "neoforge:single",

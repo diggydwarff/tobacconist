@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:carrot",
+    {
+      "id": "#c:crops/carrot",
+      "required": false
+    },
+    {
+      "id": "#c:foods/carrot",
+      "required": false
+    }
+  ]
+}

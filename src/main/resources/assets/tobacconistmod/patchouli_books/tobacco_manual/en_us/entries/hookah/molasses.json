@@ -38,6 +38,7 @@
       "type": "patchouli:relations",
       "entries": [
         "tobacconistmod:hookah/vanilla_flavors",
+        "tobacconistmod:hookah/flavor_compatibility",
         "tobacconistmod:hookah/shisha"
       ],
       "title": "Related Chapters"

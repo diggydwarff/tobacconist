@@ -1,0 +1,41 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#c:foods/fruits/orange",
+      "required": false
+    },
+    {
+      "id": "#c:fruits/orange",
+      "required": false
+    },
+    {
+      "id": "#c:foods/orange",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/orange",
+      "required": false
+    },
+    {
+      "id": "fruitsdelight:orange",
+      "required": false
+    },
+    {
+      "id": "croptopia:orange",
+      "required": false
+    },
+    {
+      "id": "#c:foods/fruit/orange",
+      "required": false
+    },
+    {
+      "id": "#c:fruit/orange",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/orange",
+      "required": false
+    }
+  ]
+}

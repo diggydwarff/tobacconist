@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:pumpkin",
+    {
+      "id": "#c:crops/pumpkin",
+      "required": false
+    },
+    {
+      "id": "#c:foods/pumpkin",
+      "required": false
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:enchanted_golden_apple",
+    {
+      "id": "#c:foods/fruits/enchanted_golden_apple",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/enchanted_golden_apple",
+      "required": false
+    },
+    {
+      "id": "#c:foods/fruit/enchanted_golden_apple",
+      "required": false
+    },
+    {
+      "id": "#c:fruits/enchanted_golden_apple",
+      "required": false
+    },
+    {
+      "id": "#c:fruit/enchanted_golden_apple",
+      "required": false
+    },
+    {
+      "id": "#c:foods/enchanted_golden_apple",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/enchanted_golden_apple",
+      "required": false
+    }
+  ]
+}

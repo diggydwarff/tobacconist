@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "farmersdelight:apple_pie_slice",
+      "required": false
+    },
+    {
+      "id": "#c:foods/pies/apple",
+      "required": false
+    },
+    {
+      "id": "#c:foods/pie/apple",
+      "required": false
+    }
+  ]
+}

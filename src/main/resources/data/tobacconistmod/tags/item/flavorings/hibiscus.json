@@ -1,0 +1,29 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#c:flowers/hibiscus",
+      "required": false
+    },
+    {
+      "id": "#c:herbs/hibiscus",
+      "required": false
+    },
+    {
+      "id": "#forge:flowers/hibiscus",
+      "required": false
+    },
+    {
+      "id": "herbalbrews:hibiscus",
+      "required": false
+    },
+    {
+      "id": "#c:hibiscus",
+      "required": false
+    },
+    {
+      "id": "#forge:hibiscus",
+      "required": false
+    }
+  ]
+}

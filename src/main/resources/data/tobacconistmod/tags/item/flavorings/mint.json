@@ -1,0 +1,37 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#c:crops/mint",
+      "required": false
+    },
+    {
+      "id": "#c:herbs/mint",
+      "required": false
+    },
+    {
+      "id": "#c:foods/mint",
+      "required": false
+    },
+    {
+      "id": "#forge:herbs/mint",
+      "required": false
+    },
+    {
+      "id": "neapolitan:mint_leaves",
+      "required": false
+    },
+    {
+      "id": "#c:mint",
+      "required": false
+    },
+    {
+      "id": "#c:mint_leaves",
+      "required": false
+    },
+    {
+      "id": "#forge:mint",
+      "required": false
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:sugar",
+    {
+      "id": "#c:sugars",
+      "required": false
+    },
+    {
+      "id": "#forge:sugar",
+      "required": false
+    },
+    {
+      "id": "#c:sugar",
+      "required": false
+    },
+    {
+      "id": "#c:dusts/sugar",
+      "required": false
+    },
+    {
+      "id": "#forge:dusts/sugar",
+      "required": false
+    }
+  ]
+}

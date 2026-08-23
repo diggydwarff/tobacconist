@@ -1,0 +1,41 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#c:foods/fruits/kiwi",
+      "required": false
+    },
+    {
+      "id": "#c:fruits/kiwi",
+      "required": false
+    },
+    {
+      "id": "#c:foods/kiwi",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/kiwi",
+      "required": false
+    },
+    {
+      "id": "fruitsdelight:kiwi",
+      "required": false
+    },
+    {
+      "id": "croptopia:kiwi",
+      "required": false
+    },
+    {
+      "id": "#c:foods/fruit/kiwi",
+      "required": false
+    },
+    {
+      "id": "#c:fruit/kiwi",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/kiwi",
+      "required": false
+    }
+  ]
+}

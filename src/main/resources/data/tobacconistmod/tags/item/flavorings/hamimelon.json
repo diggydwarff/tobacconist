@@ -1,0 +1,37 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#c:foods/fruits/hamimelon",
+      "required": false
+    },
+    {
+      "id": "#c:fruits/hamimelon",
+      "required": false
+    },
+    {
+      "id": "#c:foods/hamimelon",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/hamimelon",
+      "required": false
+    },
+    {
+      "id": "fruitsdelight:hamimelon_slice",
+      "required": false
+    },
+    {
+      "id": "#c:foods/fruit/hamimelon",
+      "required": false
+    },
+    {
+      "id": "#c:fruit/hamimelon",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/hamimelon",
+      "required": false
+    }
+  ]
+}

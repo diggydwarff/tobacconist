@@ -1,0 +1,41 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#c:crops/vanilla",
+      "required": false
+    },
+    {
+      "id": "#c:foods/vanilla",
+      "required": false
+    },
+    {
+      "id": "#forge:crops/vanilla",
+      "required": false
+    },
+    {
+      "id": "croptopia:vanilla",
+      "required": false
+    },
+    {
+      "id": "neapolitan:vanilla_pods",
+      "required": false
+    },
+    {
+      "id": "neapolitan:dried_vanilla_pods",
+      "required": false
+    },
+    {
+      "id": "#c:vanilla",
+      "required": false
+    },
+    {
+      "id": "#c:vanilla_pods",
+      "required": false
+    },
+    {
+      "id": "#forge:vanilla",
+      "required": false
+    }
+  ]
+}

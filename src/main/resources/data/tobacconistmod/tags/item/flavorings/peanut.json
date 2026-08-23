@@ -1,0 +1,49 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#c:crops/peanut",
+      "required": false
+    },
+    {
+      "id": "#c:foods/peanut",
+      "required": false
+    },
+    {
+      "id": "#c:nuts/peanut",
+      "required": false
+    },
+    {
+      "id": "#forge:crops/peanut",
+      "required": false
+    },
+    {
+      "id": "croptopia:peanut",
+      "required": false
+    },
+    {
+      "id": "croptopia:peanut_butter",
+      "required": false
+    },
+    {
+      "id": "expandeddelight:peanut",
+      "required": false
+    },
+    {
+      "id": "expandeddelight:peanut_butter",
+      "required": false
+    },
+    {
+      "id": "#c:peanuts",
+      "required": false
+    },
+    {
+      "id": "#c:foods/peanuts",
+      "required": false
+    },
+    {
+      "id": "#forge:peanuts",
+      "required": false
+    }
+  ]
+}

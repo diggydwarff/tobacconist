@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "farmersdelight:glow_berry_custard",
+      "required": false
+    },
+    {
+      "id": "#c:foods/custards/glow_berry",
+      "required": false
+    },
+    {
+      "id": "#c:foods/custard/glow_berry",
+      "required": false
+    }
+  ]
+}

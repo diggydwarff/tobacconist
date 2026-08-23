@@ -42,8 +42,6 @@ import net.neoforged.neoforge.common.crafting.DataComponentIngredient;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
-import net.neoforged.fml.ModList;
-import net.minecraft.core.registries.BuiltInRegistries;
 import org.slf4j.Logger;
 
 @Mod(TobacconistMod.MODID)
@@ -167,93 +165,68 @@ public class TobacconistMod {
                 new ItemStack(ModItems.BOTTLED_AQUA_VITAE.get())
         );
 
-        registerVanillaEssenceBrewing(event);
-        if (ModList.get().isLoaded("farmersdelight")) registerFarmersDelightEssenceBrewing(event);
-        if (ModList.get().isLoaded("fruitsdelight")) registerFruitsDelightEssenceBrewing(event);
+        registerFlavorEssenceBrewing(event);
     }
 
-    private void registerVanillaEssenceBrewing(RegisterBrewingRecipesEvent event) {
-        addEssenceRecipe(event, BottledMolassesFlavors.BOTTLED_MOLASSES_APPLE_FLAVOR, Items.APPLE);
-        addDoubleEssenceRecipe(event, BottledMolassesFlavors.BOTTLED_MOLASSES_APPLE_FLAVOR,
-                BottledMolassesFlavors.BOTTLED_MOLASSES_TWO_APPLES_FLAVOR, Items.APPLE);
-        addEssenceRecipe(event, BottledMolassesFlavors.BOTTLED_MOLASSES_GOLDENAPPLE_FLAVOR, Items.GOLDEN_APPLE);
-        addDoubleEssenceRecipe(event, BottledMolassesFlavors.BOTTLED_MOLASSES_GOLDENAPPLE_FLAVOR,
-                BottledMolassesFlavors.BOTTLED_MOLASSES_TWO_GOLDENAPPLES_FLAVOR, Items.GOLDEN_APPLE);
-        addEssenceRecipe(event, BottledMolassesFlavors.BOTTLED_MOLASSES_ROYALAPPLE_FLAVOR, Items.ENCHANTED_GOLDEN_APPLE);
-        addDoubleEssenceRecipe(event, BottledMolassesFlavors.BOTTLED_MOLASSES_ROYALAPPLE_FLAVOR,
-                BottledMolassesFlavors.BOTTLED_MOLASSES_TWO_ROYALAPPLES_FLAVOR, Items.ENCHANTED_GOLDEN_APPLE);
+    private void registerFlavorEssenceBrewing(RegisterBrewingRecipesEvent event) {
+        // Every ordinary flavor is tag-driven. This keeps Brewing Stand and Create Mixer
+        // compatibility identical and lets other mods/datapacks add equivalent ingredients.
+        for (BottledMolassesFlavors flavor : BottledMolassesFlavors.values()) {
+            if (flavor.hasDirectEssenceInfusion() && hasFlavoringIngredient(event, flavor)) {
+                addEssenceRecipe(event, flavor);
+            }
+        }
 
-        addEssenceRecipe(event, BottledMolassesFlavors.BOTTLED_MOLASSES_MELON_FLAVOR, Items.MELON_SLICE);
-        addEssenceRecipe(event, BottledMolassesFlavors.BOTTLED_MOLASSES_SWEETBERRY_FLAVOR, Items.SWEET_BERRIES);
-        addEssenceRecipe(event, BottledMolassesFlavors.BOTTLED_MOLASSES_GLOWBERRY_FLAVOR, Items.GLOW_BERRIES);
-        // "Berry" is the mixed-berry concentrate, avoiding a duplicate Sweet Berries brewing recipe.
-        addDoubleEssenceRecipe(event, BottledMolassesFlavors.BOTTLED_MOLASSES_SWEETBERRY_FLAVOR,
-                BottledMolassesFlavors.BOTTLED_MOLASSES_BERRY_FLAVOR, Items.GLOW_BERRIES);
-        addEssenceRecipe(event, BottledMolassesFlavors.BOTTLED_MOLASSES_CHORUS_FRUIT_FLAVOR, Items.CHORUS_FRUIT);
-        addEssenceRecipe(event, BottledMolassesFlavors.BOTTLED_MOLASSES_HONEY_FLAVOR, Items.HONEY_BOTTLE);
-        addEssenceRecipe(event, BottledMolassesFlavors.BOTTLED_MOLASSES_CAKE_FLAVOR, Items.CAKE);
-        addEssenceRecipe(event, BottledMolassesFlavors.BOTTLED_MOLASSES_COOKIES_FLAVOR, Items.COOKIE);
-        addEssenceRecipe(event, BottledMolassesFlavors.BOTTLED_MOLASSES_CREAM_FLAVOR, Items.MILK_BUCKET);
-        addEssenceRecipe(event, BottledMolassesFlavors.BOTTLED_MOLASSES_COCOA_FLAVOR, Items.COCOA_BEANS);
-        addEssenceRecipe(event, BottledMolassesFlavors.BOTTLED_MOLASSES_PUMPKIN_FLAVOR, Items.PUMPKIN);
-        addEssenceRecipe(event, BottledMolassesFlavors.BOTTLED_MOLASSES_SUGAR_FLAVOR, Items.SUGAR);
-        addEssenceRecipe(event, BottledMolassesFlavors.BOTTLED_MOLASSES_CARROT_FLAVOR, Items.CARROT);
+        // Double Apple variants intentionally use a fresh single-strength essence as their base.
+        addCompositeEssenceRecipe(event,
+                BottledMolassesFlavors.BOTTLED_MOLASSES_APPLE_FLAVOR,
+                BottledMolassesFlavors.BOTTLED_MOLASSES_TWO_APPLES_FLAVOR,
+                BottledMolassesFlavors.BOTTLED_MOLASSES_APPLE_FLAVOR);
+        addCompositeEssenceRecipe(event,
+                BottledMolassesFlavors.BOTTLED_MOLASSES_GOLDENAPPLE_FLAVOR,
+                BottledMolassesFlavors.BOTTLED_MOLASSES_TWO_GOLDENAPPLES_FLAVOR,
+                BottledMolassesFlavors.BOTTLED_MOLASSES_GOLDENAPPLE_FLAVOR);
+        addCompositeEssenceRecipe(event,
+                BottledMolassesFlavors.BOTTLED_MOLASSES_ROYALAPPLE_FLAVOR,
+                BottledMolassesFlavors.BOTTLED_MOLASSES_TWO_ROYALAPPLES_FLAVOR,
+                BottledMolassesFlavors.BOTTLED_MOLASSES_ROYALAPPLE_FLAVOR);
+
+        // Mixed Berry remains Sweet Berry Essence + a Glow Berry ingredient rather than a
+        // generic berry tag, avoiding overlap with Strawberry/Blueberry/etc.
+        addCompositeEssenceRecipe(event,
+                BottledMolassesFlavors.BOTTLED_MOLASSES_SWEETBERRY_FLAVOR,
+                BottledMolassesFlavors.BOTTLED_MOLASSES_BERRY_FLAVOR,
+                BottledMolassesFlavors.BOTTLED_MOLASSES_GLOWBERRY_FLAVOR);
     }
 
-    private void registerFarmersDelightEssenceBrewing(RegisterBrewingRecipesEvent event) {
-        addOptionalEssenceRecipe(event, BottledMolassesFlavors.BOTTLED_MOLASSES_APPLEPIE_FLAVOR, "farmersdelight:apple_pie_slice");
-        addOptionalEssenceRecipe(event, BottledMolassesFlavors.BOTTLED_MOLASSES_SWEETBERRY_CHEESECAKE_FLAVOR, "farmersdelight:sweet_berry_cheesecake_slice");
-        addOptionalEssenceRecipe(event, BottledMolassesFlavors.BOTTLED_MOLASSES_CHOCOLATEPIE_FLAVOR, "farmersdelight:chocolate_pie_slice");
-        addOptionalEssenceRecipe(event, BottledMolassesFlavors.BOTTLED_MOLASSES_SWEETBERRY_COOKIE_FLAVOR, "farmersdelight:sweet_berry_cookie");
-        addOptionalEssenceRecipe(event, BottledMolassesFlavors.BOTTLED_MOLASSES_HONEYCOOKIE_FLAVOR, "farmersdelight:honey_cookie");
-        addOptionalEssenceRecipe(event, BottledMolassesFlavors.BOTTLED_MOLASSES_MELONPOPSICLE_FLAVOR, "farmersdelight:melon_popsicle");
-        addOptionalEssenceRecipe(event, BottledMolassesFlavors.BOTTLED_MOLASSES_GLOWBERRY_CUSTARD_FLAVOR, "farmersdelight:glow_berry_custard");
+    private boolean hasFlavoringIngredient(RegisterBrewingRecipesEvent event, BottledMolassesFlavors flavor) {
+        return event.getRegistryAccess()
+                .lookupOrThrow(Registries.ITEM)
+                .get(flavor.getFlavoringIngredientTag())
+                .map(tag -> tag.size() > 0)
+                .orElse(false);
     }
 
-    private void registerFruitsDelightEssenceBrewing(RegisterBrewingRecipesEvent event) {
-        addOptionalEssenceRecipe(event, BottledMolassesFlavors.BOTTLED_MOLASSES_PEACH_FLAVOR, "fruitsdelight:peach");
-        addOptionalEssenceRecipe(event, BottledMolassesFlavors.BOTTLED_MOLASSES_PEAR_FLAVOR, "fruitsdelight:pear");
-        addOptionalEssenceRecipe(event, BottledMolassesFlavors.BOTTLED_MOLASSES_MANGO_FLAVOR, "fruitsdelight:mango");
-        addOptionalEssenceRecipe(event, BottledMolassesFlavors.BOTTLED_MOLASSES_LYCHEE_FLAVOR, "fruitsdelight:lychee");
-        addOptionalEssenceRecipe(event, BottledMolassesFlavors.BOTTLED_MOLASSES_HAWBERRY_FLAVOR, "fruitsdelight:hawberry");
-        addOptionalEssenceRecipe(event, BottledMolassesFlavors.BOTTLED_MOLASSES_ORANGE_FLAVOR, "fruitsdelight:orange");
-        addOptionalEssenceRecipe(event, BottledMolassesFlavors.BOTTLED_MOLASSES_PERSIMMON_FLAVOR, "fruitsdelight:persimmon");
-        addOptionalEssenceRecipe(event, BottledMolassesFlavors.BOTTLED_MOLASSES_BLUEBERRY_FLAVOR, "fruitsdelight:blueberry");
-        addOptionalEssenceRecipe(event, BottledMolassesFlavors.BOTTLED_MOLASSES_LEMON_FLAVOR, "fruitsdelight:lemon");
-        addOptionalEssenceRecipe(event, BottledMolassesFlavors.BOTTLED_MOLASSES_HAMIMELON_FLAVOR, "fruitsdelight:hamimelon_slice");
-        addOptionalEssenceRecipe(event, BottledMolassesFlavors.BOTTLED_MOLASSES_PINEAPPLE_FLAVOR, "fruitsdelight:pineapple");
-        addOptionalEssenceRecipe(event, BottledMolassesFlavors.BOTTLED_MOLASSES_MANGOSTEEN_FLAVOR, "fruitsdelight:mangosteen");
-        addOptionalEssenceRecipe(event, BottledMolassesFlavors.BOTTLED_MOLASSES_CRANBERRY_FLAVOR, "fruitsdelight:cranberry");
-        addOptionalEssenceRecipe(event, BottledMolassesFlavors.BOTTLED_MOLASSES_BAYBERRY_FLAVOR, "fruitsdelight:bayberry");
-        addOptionalEssenceRecipe(event, BottledMolassesFlavors.BOTTLED_MOLASSES_FIG_FLAVOR, "fruitsdelight:fig");
-        addOptionalEssenceRecipe(event, BottledMolassesFlavors.BOTTLED_MOLASSES_KIWI_FLAVOR, "fruitsdelight:kiwi");
-        addOptionalEssenceRecipe(event, BottledMolassesFlavors.BOTTLED_MOLASSES_DURIAN_FLAVOR, "fruitsdelight:durian");
-    }
-
-    private void addEssenceRecipe(RegisterBrewingRecipesEvent event, BottledMolassesFlavors flavor, net.minecraft.world.item.Item ingredient) {
+    private void addEssenceRecipe(RegisterBrewingRecipesEvent event, BottledMolassesFlavors flavor) {
         event.getBuilder().addRecipe(
                 Ingredient.of(ModItems.BOTTLED_AQUA_VITAE.get()),
-                Ingredient.of(ingredient),
+                Ingredient.of(flavor.getFlavoringIngredientTag()),
                 flavor.getEssenceStack()
         );
     }
 
-    private void addDoubleEssenceRecipe(RegisterBrewingRecipesEvent event,
-                                        BottledMolassesFlavors base,
-                                        BottledMolassesFlavors doubled,
-                                        net.minecraft.world.item.Item ingredient) {
-        // Component-aware input requires a fresh single-use essence bottle, preventing
-        // already-processed bottles from being converted into a fresh double-strength bottle.
+    private void addCompositeEssenceRecipe(RegisterBrewingRecipesEvent event,
+                                           BottledMolassesFlavors base,
+                                           BottledMolassesFlavors result,
+                                           BottledMolassesFlavors ingredientFlavor) {
+        if (!hasFlavoringIngredient(event, ingredientFlavor)) {
+            return;
+        }
         event.getBuilder().addRecipe(
                 DataComponentIngredient.of(false, base.getEssenceStack()),
-                Ingredient.of(ingredient),
-                doubled.getEssenceStack()
+                Ingredient.of(ingredientFlavor.getFlavoringIngredientTag()),
+                result.getEssenceStack()
         );
-    }
-
-    private void addOptionalEssenceRecipe(RegisterBrewingRecipesEvent event, BottledMolassesFlavors flavor, String itemId) {
-        ResourceLocation id = ResourceLocation.parse(itemId);
-        BuiltInRegistries.ITEM.getOptional(id).ifPresent(item -> addEssenceRecipe(event, flavor, item));
     }
 
     @SubscribeEvent

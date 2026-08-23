@@ -1,0 +1,65 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#c:foods/fruits/cranberry",
+      "required": false
+    },
+    {
+      "id": "#c:fruits/cranberry",
+      "required": false
+    },
+    {
+      "id": "#c:foods/cranberry",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/cranberry",
+      "required": false
+    },
+    {
+      "id": "fruitsdelight:cranberry",
+      "required": false
+    },
+    {
+      "id": "croptopia:cranberry",
+      "required": false
+    },
+    {
+      "id": "#c:foods/fruit/cranberry",
+      "required": false
+    },
+    {
+      "id": "#c:fruit/cranberry",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/cranberry",
+      "required": false
+    },
+    {
+      "id": "#c:foods/berries/cranberry",
+      "required": false
+    },
+    {
+      "id": "#c:foods/berry/cranberry",
+      "required": false
+    },
+    {
+      "id": "#c:berries/cranberry",
+      "required": false
+    },
+    {
+      "id": "#c:berry/cranberry",
+      "required": false
+    },
+    {
+      "id": "#forge:berries/cranberry",
+      "required": false
+    },
+    {
+      "id": "#forge:berry/cranberry",
+      "required": false
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:chorus_fruit",
+    {
+      "id": "#c:foods/fruits/chorus_fruit",
+      "required": false
+    },
+    {
+      "id": "#c:fruits/chorus_fruit",
+      "required": false
+    },
+    {
+      "id": "#c:foods/chorus_fruit",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/chorus_fruit",
+      "required": false
+    },
+    {
+      "id": "#c:foods/fruit/chorus_fruit",
+      "required": false
+    },
+    {
+      "id": "#c:fruit/chorus_fruit",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/chorus_fruit",
+      "required": false
+    }
+  ]
+}

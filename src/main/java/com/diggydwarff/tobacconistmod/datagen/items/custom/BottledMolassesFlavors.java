@@ -1,5 +1,9 @@
 package com.diggydwarff.tobacconistmod.datagen.items.custom;
 
+import com.diggydwarff.tobacconistmod.TobacconistMod;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
@@ -61,7 +65,33 @@ public enum BottledMolassesFlavors {
     BOTTLED_MOLASSES_BAYBERRY_FLAVOR("[Bottle of Molasses (Bayberry Flavored)]"),
     BOTTLED_MOLASSES_FIG_FLAVOR("[Bottle of Molasses (Fig Flavored)]"),
     BOTTLED_MOLASSES_KIWI_FLAVOR("[Bottle of Molasses (Kiwi Flavored)]"),
-    BOTTLED_MOLASSES_DURIAN_FLAVOR("[Bottle of Molasses (Durian Flavored)]");
+    BOTTLED_MOLASSES_DURIAN_FLAVOR("[Bottle of Molasses (Durian Flavored)]"),
+
+    // CROSS-MOD / GENERIC FLAVOR COMPATIBILITY
+    BOTTLED_MOLASSES_COFFEE_FLAVOR("[Bottle of Molasses (Coffee Flavored)]"),
+    BOTTLED_MOLASSES_VANILLA_FLAVOR("[Bottle of Molasses (Vanilla Flavored)]"),
+    BOTTLED_MOLASSES_STRAWBERRY_FLAVOR("[Bottle of Molasses (Strawberry Flavored)]"),
+    BOTTLED_MOLASSES_BANANA_FLAVOR("[Bottle of Molasses (Banana Flavored)]"),
+    BOTTLED_MOLASSES_MINT_FLAVOR("[Bottle of Molasses (Mint Flavored)]"),
+    BOTTLED_MOLASSES_LIME_FLAVOR("[Bottle of Molasses (Lime Flavored)]"),
+    BOTTLED_MOLASSES_GRAPEFRUIT_FLAVOR("[Bottle of Molasses (Grapefruit Flavored)]"),
+    BOTTLED_MOLASSES_CHERRY_FLAVOR("[Bottle of Molasses (Cherry Flavored)]"),
+    BOTTLED_MOLASSES_GRAPE_FLAVOR("[Bottle of Molasses (Grape Flavored)]"),
+    BOTTLED_MOLASSES_COCONUT_FLAVOR("[Bottle of Molasses (Coconut Flavored)]"),
+    BOTTLED_MOLASSES_BLACKBERRY_FLAVOR("[Bottle of Molasses (Blackberry Flavored)]"),
+    BOTTLED_MOLASSES_RASPBERRY_FLAVOR("[Bottle of Molasses (Raspberry Flavored)]"),
+    BOTTLED_MOLASSES_CINNAMON_FLAVOR("[Bottle of Molasses (Cinnamon Flavored)]"),
+    BOTTLED_MOLASSES_CARAMEL_FLAVOR("[Bottle of Molasses (Caramel Flavored)]"),
+    BOTTLED_MOLASSES_APRICOT_FLAVOR("[Bottle of Molasses (Apricot Flavored)]"),
+    BOTTLED_MOLASSES_PLUM_FLAVOR("[Bottle of Molasses (Plum Flavored)]"),
+    BOTTLED_MOLASSES_DRAGONFRUIT_FLAVOR("[Bottle of Molasses (Dragonfruit Flavored)]"),
+    BOTTLED_MOLASSES_MARSHMALLOW_FLAVOR("[Bottle of Molasses (Marshmallow Flavored)]"),
+    BOTTLED_MOLASSES_TEA_FLAVOR("[Bottle of Molasses (Tea Flavored)]"),
+    BOTTLED_MOLASSES_HIBISCUS_FLAVOR("[Bottle of Molasses (Hibiscus Flavored)]"),
+    BOTTLED_MOLASSES_LAVENDER_FLAVOR("[Bottle of Molasses (Lavender Flavored)]"),
+    BOTTLED_MOLASSES_PEANUT_FLAVOR("[Bottle of Molasses (Peanut Flavored)]"),
+    BOTTLED_MOLASSES_BROWNIE_FLAVOR("[Bottle of Molasses (Brownie Flavored)]"),
+    BOTTLED_MOLASSES_CUSTARD_FLAVOR("[Bottle of Molasses (Custard Flavored)]");
 
     /**
      * Lazily created during the ITEM registration event.
@@ -167,9 +197,29 @@ public enum BottledMolassesFlavors {
         return getFlavorDisplayName() + " Molasses";
     }
 
-    private String getFlavorPath() {
+    public String getFlavorPath() {
         String fluid = getFluidName();
         return fluid.startsWith("molasses_") ? fluid.substring("molasses_".length()) : fluid;
+    }
+
+    /**
+     * Shared ingredient tag used by both Brewing Stand and Create essence production.
+     * Keeping the recipe pointed at our tag lets other food mods opt in without a hard dependency.
+     */
+    public TagKey<Item> getFlavoringIngredientTag() {
+        return TagKey.create(
+                Registries.ITEM,
+                ResourceLocation.fromNamespaceAndPath(TobacconistMod.MODID, "flavorings/" + getFlavorPath())
+        );
+    }
+
+    /** Composite essences are produced from an existing essence plus another flavor ingredient. */
+    public boolean hasDirectEssenceInfusion() {
+        return !isPlain()
+                && this != BOTTLED_MOLASSES_TWO_APPLES_FLAVOR
+                && this != BOTTLED_MOLASSES_TWO_GOLDENAPPLES_FLAVOR
+                && this != BOTTLED_MOLASSES_TWO_ROYALAPPLES_FLAVOR
+                && this != BOTTLED_MOLASSES_BERRY_FLAVOR;
     }
 
     public static BottledMolassesFlavors fromItem(Item item) {

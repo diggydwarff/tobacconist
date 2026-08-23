@@ -1,0 +1,37 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#c:foods/fruits/mangosteen",
+      "required": false
+    },
+    {
+      "id": "#c:fruits/mangosteen",
+      "required": false
+    },
+    {
+      "id": "#c:foods/mangosteen",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/mangosteen",
+      "required": false
+    },
+    {
+      "id": "fruitsdelight:mangosteen",
+      "required": false
+    },
+    {
+      "id": "#c:foods/fruit/mangosteen",
+      "required": false
+    },
+    {
+      "id": "#c:fruit/mangosteen",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/mangosteen",
+      "required": false
+    }
+  ]
+}

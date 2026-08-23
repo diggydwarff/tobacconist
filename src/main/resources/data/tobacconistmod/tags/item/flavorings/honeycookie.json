@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "farmersdelight:honey_cookie",
+      "required": false
+    },
+    {
+      "id": "#c:foods/cookies/honey",
+      "required": false
+    },
+    {
+      "id": "#c:foods/cookie/honey",
+      "required": false
+    }
+  ]
+}

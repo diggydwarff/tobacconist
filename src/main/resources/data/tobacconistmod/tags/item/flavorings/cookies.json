@@ -1,0 +1,18 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:cookie",
+    {
+      "id": "#c:foods/cookies/plain",
+      "required": false
+    },
+    {
+      "id": "#forge:cookies/plain",
+      "required": false
+    },
+    {
+      "id": "#c:foods/cookie/plain",
+      "required": false
+    }
+  ]
+}

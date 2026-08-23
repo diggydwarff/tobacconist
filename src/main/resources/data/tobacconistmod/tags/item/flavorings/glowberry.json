@@ -1,0 +1,58 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:glow_berries",
+    {
+      "id": "#c:foods/fruits/glow_berry",
+      "required": false
+    },
+    {
+      "id": "#c:fruits/glow_berry",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/glow_berry",
+      "required": false
+    },
+    {
+      "id": "#c:foods/fruit/glow_berry",
+      "required": false
+    },
+    {
+      "id": "#c:fruit/glow_berry",
+      "required": false
+    },
+    {
+      "id": "#c:foods/glow_berry",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/glow_berry",
+      "required": false
+    },
+    {
+      "id": "#c:foods/berries/glow_berry",
+      "required": false
+    },
+    {
+      "id": "#c:foods/berry/glow_berry",
+      "required": false
+    },
+    {
+      "id": "#c:berries/glow_berry",
+      "required": false
+    },
+    {
+      "id": "#c:berry/glow_berry",
+      "required": false
+    },
+    {
+      "id": "#forge:berries/glow_berry",
+      "required": false
+    },
+    {
+      "id": "#forge:berry/glow_berry",
+      "required": false
+    }
+  ]
+}

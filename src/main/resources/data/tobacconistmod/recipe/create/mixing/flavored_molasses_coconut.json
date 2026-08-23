@@ -1,0 +1,27 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "type": "neoforge:single",
+      "amount": 1000,
+      "fluid": "tobacconistmod:molasses_plain"
+    },
+    {
+      "type": "neoforge:single",
+      "amount": 1000,
+      "fluid": "tobacconistmod:essence_coconut"
+    }
+  ],
+  "results": [
+    {
+      "amount": 1000,
+      "id": "tobacconistmod:molasses_coconut"
+    }
+  ]
+}

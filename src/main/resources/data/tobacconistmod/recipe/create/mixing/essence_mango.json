@@ -5,15 +5,18 @@
       "modid": "create"
     },
     {
-      "type": "neoforge:mod_loaded",
-      "modid": "fruitsdelight"
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "tobacconistmod:flavorings/mango"
+      }
     }
   ],
   "type": "create:mixing",
   "heat_requirement": "heated",
   "ingredients": [
     {
-      "item": "fruitsdelight:mango"
+      "tag": "tobacconistmod:flavorings/mango"
     },
     {
       "type": "neoforge:single",

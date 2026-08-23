@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "farmersdelight:sweet_berry_cookie",
+      "required": false
+    },
+    {
+      "id": "#c:foods/cookies/sweet_berry",
+      "required": false
+    },
+    {
+      "id": "#c:foods/cookie/sweet_berry",
+      "required": false
+    }
+  ]
+}

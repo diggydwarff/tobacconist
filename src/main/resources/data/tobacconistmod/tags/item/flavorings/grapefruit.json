@@ -1,0 +1,37 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#c:foods/fruits/grapefruit",
+      "required": false
+    },
+    {
+      "id": "#c:fruits/grapefruit",
+      "required": false
+    },
+    {
+      "id": "#c:foods/grapefruit",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/grapefruit",
+      "required": false
+    },
+    {
+      "id": "croptopia:grapefruit",
+      "required": false
+    },
+    {
+      "id": "#c:foods/fruit/grapefruit",
+      "required": false
+    },
+    {
+      "id": "#c:fruit/grapefruit",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/grapefruit",
+      "required": false
+    }
+  ]
+}

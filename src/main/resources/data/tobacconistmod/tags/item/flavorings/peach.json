@@ -1,0 +1,45 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#c:foods/fruits/peach",
+      "required": false
+    },
+    {
+      "id": "#c:fruits/peach",
+      "required": false
+    },
+    {
+      "id": "#c:foods/peach",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/peach",
+      "required": false
+    },
+    {
+      "id": "fruitsdelight:peach",
+      "required": false
+    },
+    {
+      "id": "croptopia:peach",
+      "required": false
+    },
+    {
+      "id": "croptopia:nectarine",
+      "required": false
+    },
+    {
+      "id": "#c:foods/fruit/peach",
+      "required": false
+    },
+    {
+      "id": "#c:fruit/peach",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/peach",
+      "required": false
+    }
+  ]
+}

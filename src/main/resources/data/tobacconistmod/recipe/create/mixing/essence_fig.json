@@ -5,15 +5,18 @@
       "modid": "create"
     },
     {
-      "type": "neoforge:mod_loaded",
-      "modid": "fruitsdelight"
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "tobacconistmod:flavorings/fig"
+      }
     }
   ],
   "type": "create:mixing",
   "heat_requirement": "heated",
   "ingredients": [
     {
-      "item": "fruitsdelight:fig"
+      "tag": "tobacconistmod:flavorings/fig"
     },
     {
       "type": "neoforge:single",

@@ -3,13 +3,20 @@
     {
       "type": "neoforge:mod_loaded",
       "modid": "create"
+    },
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "tobacconistmod:flavorings/cream"
+      }
     }
   ],
   "type": "create:mixing",
   "heat_requirement": "heated",
   "ingredients": [
     {
-      "item": "minecraft:milk_bucket"
+      "tag": "tobacconistmod:flavorings/cream"
     },
     {
       "type": "neoforge:single",

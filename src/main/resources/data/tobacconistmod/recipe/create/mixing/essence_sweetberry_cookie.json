@@ -5,15 +5,18 @@
       "modid": "create"
     },
     {
-      "type": "neoforge:mod_loaded",
-      "modid": "farmersdelight"
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "tobacconistmod:flavorings/sweetberry_cookie"
+      }
     }
   ],
   "type": "create:mixing",
   "heat_requirement": "heated",
   "ingredients": [
     {
-      "item": "farmersdelight:sweet_berry_cookie"
+      "tag": "tobacconistmod:flavorings/sweetberry_cookie"
     },
     {
       "type": "neoforge:single",

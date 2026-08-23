@@ -1,0 +1,58 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:sweet_berries",
+    {
+      "id": "#c:foods/fruits/sweet_berry",
+      "required": false
+    },
+    {
+      "id": "#c:fruits/sweet_berry",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/sweet_berry",
+      "required": false
+    },
+    {
+      "id": "#c:foods/fruit/sweet_berry",
+      "required": false
+    },
+    {
+      "id": "#c:fruit/sweet_berry",
+      "required": false
+    },
+    {
+      "id": "#c:foods/sweet_berry",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/sweet_berry",
+      "required": false
+    },
+    {
+      "id": "#c:foods/berries/sweet_berry",
+      "required": false
+    },
+    {
+      "id": "#c:foods/berry/sweet_berry",
+      "required": false
+    },
+    {
+      "id": "#c:berries/sweet_berry",
+      "required": false
+    },
+    {
+      "id": "#c:berry/sweet_berry",
+      "required": false
+    },
+    {
+      "id": "#forge:berries/sweet_berry",
+      "required": false
+    },
+    {
+      "id": "#forge:berry/sweet_berry",
+      "required": false
+    }
+  ]
+}

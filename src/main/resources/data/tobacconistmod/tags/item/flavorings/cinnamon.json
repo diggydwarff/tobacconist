@@ -1,0 +1,41 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#c:crops/cinnamon",
+      "required": false
+    },
+    {
+      "id": "#c:spices/cinnamon",
+      "required": false
+    },
+    {
+      "id": "#c:foods/cinnamon",
+      "required": false
+    },
+    {
+      "id": "#forge:spices/cinnamon",
+      "required": false
+    },
+    {
+      "id": "croptopia:cinnamon",
+      "required": false
+    },
+    {
+      "id": "expandeddelight:raw_cinnamon",
+      "required": false
+    },
+    {
+      "id": "expandeddelight:ground_cinnamon",
+      "required": false
+    },
+    {
+      "id": "#c:cinnamon",
+      "required": false
+    },
+    {
+      "id": "#forge:cinnamon",
+      "required": false
+    }
+  ]
+}

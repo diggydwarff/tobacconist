@@ -1,0 +1,61 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#c:foods/fruits/hawberry",
+      "required": false
+    },
+    {
+      "id": "#c:fruits/hawberry",
+      "required": false
+    },
+    {
+      "id": "#c:foods/hawberry",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/hawberry",
+      "required": false
+    },
+    {
+      "id": "fruitsdelight:hawberry",
+      "required": false
+    },
+    {
+      "id": "#c:foods/fruit/hawberry",
+      "required": false
+    },
+    {
+      "id": "#c:fruit/hawberry",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/hawberry",
+      "required": false
+    },
+    {
+      "id": "#c:foods/berries/hawberry",
+      "required": false
+    },
+    {
+      "id": "#c:foods/berry/hawberry",
+      "required": false
+    },
+    {
+      "id": "#c:berries/hawberry",
+      "required": false
+    },
+    {
+      "id": "#c:berry/hawberry",
+      "required": false
+    },
+    {
+      "id": "#forge:berries/hawberry",
+      "required": false
+    },
+    {
+      "id": "#forge:berry/hawberry",
+      "required": false
+    }
+  ]
+}
