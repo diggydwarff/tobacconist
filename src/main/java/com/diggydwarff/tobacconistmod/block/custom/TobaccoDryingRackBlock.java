@@ -4,6 +4,8 @@ import com.mojang.serialization.MapCodec;
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoDryingRackBlockEntity;
 import com.diggydwarff.tobacconistmod.block.entity.ModBlockEntities;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.util.RandomSource;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
@@ -21,6 +23,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -31,64 +34,41 @@ public class TobaccoDryingRackBlock extends BaseEntityBlock {
 
     public static final BooleanProperty HAS_LEAVES = BooleanProperty.create("has_leaves");
     public static final BooleanProperty OVER_CAMPFIRE = BooleanProperty.create("over_campfire");
+    /**
+     * Coarse visual fill level for the four drying-rack models.
+     * 0 = empty, 1 = lightly loaded, 2 = mostly loaded, 3 = completely full.
+     */
+    public static final IntegerProperty LOAD_STAGE = IntegerProperty.create("load_stage", 0, 3);
+    /** Visual cure-color stage: 0 = raw green through 5 = fully cured brown. */
+    public static final IntegerProperty CURE_STAGE = IntegerProperty.create("cure_stage", 0, 5);
 
-    private static final VoxelShape SHAPE = Shapes.or(
-            // chunky corner feet + posts
-            box(1.5, 0, 1.5, 4.5, 1, 4.5),
-            box(11.5, 0, 1.5, 14.5, 1, 4.5),
-            box(1.5, 0, 11.5, 4.5, 1, 14.5),
-            box(11.5, 0, 11.5, 14.5, 1, 14.5),
-            box(2, 1, 2, 4, 8.5, 4),
-            box(12, 1, 2, 14, 8.5, 4),
-            box(2, 1, 12, 4, 8.5, 14),
-            box(12, 1, 12, 14, 8.5, 14),
+    // The new authored rack occupies one full block in X/Z and rises to 26.5 model pixels.
+    // Keep the interaction/selection outline faithful to those outer bounds so its visible
+    // upper half can be selected instead of clicking through to the air block behind it.
+    private static final VoxelShape OUTLINE_SHAPE = box(0.0, 0.0, 0.0, 16.0, 26.5, 16.0);
 
-            // upper frame
-            box(4, 6.5, 2, 12, 8, 4),
-            box(4, 6.5, 12, 12, 8, 14),
-            box(2, 6.5, 4, 4, 8, 12),
-            box(12, 6.5, 4, 14, 8, 12),
-
-            // drying slats
-            box(4, 6.75, 5, 12, 7.5, 6.5),
-            box(4, 6.75, 7.25, 12, 7.5, 8.75),
-            box(4, 6.75, 9.5, 12, 7.5, 11),
-
-            // lower braces
-            box(4, 2, 2.5, 12, 3.5, 3.5),
-            box(4, 2, 12.5, 12, 3.5, 13.5),
-            box(2.5, 2, 4, 3.5, 3.5, 12),
-            box(12.5, 2, 4, 13.5, 3.5, 12)
-    );
-
-    private static final VoxelShape SHAPE_FIRE = Shapes.or(
-            // tall posts; renderer continues these downward into the campfire block below
-            box(2, 0, 2, 4, 12.5, 4),
-            box(12, 0, 2, 14, 12.5, 4),
-            box(2, 0, 12, 4, 12.5, 14),
-            box(12, 0, 12, 14, 12.5, 14),
-
-            // upper frame
-            box(4, 10.5, 2, 12, 12, 4),
-            box(4, 10.5, 12, 12, 12, 14),
-            box(2, 10.5, 4, 4, 12, 12),
-            box(12, 10.5, 4, 14, 12, 12),
-
-            // hanging slats
-            box(4, 9.75, 5, 12, 10.5, 6.5),
-            box(4, 9.75, 7.25, 12, 10.5, 8.75),
-            box(4, 9.75, 9.5, 12, 10.5, 11),
-
-            // lower braces
-            box(4, 2, 2.5, 12, 3.5, 3.5),
-            box(4, 2, 12.5, 12, 3.5, 13.5),
-            box(2.5, 2, 4, 3.5, 3.5, 12),
-            box(12.5, 2, 4, 13.5, 3.5, 12)
+    // Collision follows the four structural posts and perimeter rails only.  The authored
+    // drying shelves are intentionally omitted from collision: vanilla Campfire smoke particles
+    // rise through the center of the rack, and solid shelf collision made that plume collect
+    // underneath each tier even though the visual model is an open slatted rack.
+    private static final VoxelShape COLLISION_SHAPE = Shapes.or(
+            box(0.562162, 0.0, 0.562162, 2.032432, 26.0, 2.032432),
+            box(13.967568, 0.0, 0.562162, 15.437838, 26.0, 2.032432),
+            box(0.562162, 0.0, 13.967568, 2.032432, 26.0, 15.437838),
+            box(13.967568, 0.0, 13.967568, 15.437838, 26.0, 15.437838),
+            box(0.648649, 1.0, 0.648649, 1.945946, 2.5, 15.351351),
+            box(14.054054, 1.0, 0.648649, 15.351351, 2.5, 15.351351),
+            box(1.945946, 1.0, 0.648649, 14.054054, 2.5, 1.945946),
+            box(1.945946, 1.0, 14.054054, 14.054054, 2.5, 15.351351),
+            box(0.648649, 24.0, 0.648649, 1.945946, 25.5, 15.351351),
+            box(14.054054, 24.0, 0.648649, 15.351351, 25.5, 15.351351),
+            box(1.945946, 24.0, 0.648649, 14.054054, 25.5, 1.945946),
+            box(1.945946, 24.0, 14.054054, 14.054054, 25.5, 15.351351)
     );
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return state.getValue(OVER_CAMPFIRE) ? SHAPE_FIRE : SHAPE;
+        return OUTLINE_SHAPE;
     }
 
     @Override
@@ -100,17 +80,34 @@ public class TobaccoDryingRackBlock extends BaseEntityBlock {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(HAS_LEAVES, false)
-                .setValue(OVER_CAMPFIRE, false));
+                .setValue(OVER_CAMPFIRE, false)
+                .setValue(LOAD_STAGE, 0)
+                .setValue(CURE_STAGE, 0));
     }
 
     @Override
     public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return state.getValue(OVER_CAMPFIRE) ? SHAPE_FIRE : SHAPE;
+        return COLLISION_SHAPE;
     }
 
     @Override
     public RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
+    }
+
+    @Override
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        if (!state.getValue(OVER_CAMPFIRE) || random.nextFloat() >= 0.55F) {
+            return;
+        }
+
+        // The rack is taller than one block. Relay a little of the lit campfire plume from just
+        // above the authored top rail so smoke visibly continues into the sky instead of appearing
+        // to terminate inside the drying shelves. The center remains physically open as well.
+        double x = pos.getX() + 0.5D + (random.nextDouble() - 0.5D) * 0.24D;
+        double y = pos.getY() + (26.8D / 16.0D);
+        double z = pos.getZ() + 0.5D + (random.nextDouble() - 0.5D) * 0.24D;
+        level.addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, x, y, z, 0.0D, 0.07D, 0.0D);
     }
 
     @Override
@@ -154,19 +151,12 @@ public class TobaccoDryingRackBlock extends BaseEntityBlock {
         if (player.isShiftKeyDown()) {
             if (!level.isClientSide) {
 
-                if (!rack.hasLeaves()) {
-                    player.displayClientMessage(
-                            Component.literal("Rack: Empty"),
-                            true
-                    );
-                } else {
-                    player.displayClientMessage(
-                            Component.literal(
-                                    "Rack: " + rack.getLeafCount() + "/16 | " + rack.getRackStatusText()
-                            ),
-                            true
-                    );
-                }
+                player.displayClientMessage(
+                        Component.literal(
+                                "Rack: " + rack.getLeafCount() + "/16 Leaves | " + rack.getRackStatusText()
+                        ),
+                        true
+                );
             }
 
             return InteractionResult.sidedSuccess(level.isClientSide);
@@ -247,6 +237,6 @@ public class TobaccoDryingRackBlock extends BaseEntityBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<net.minecraft.world.level.block.Block, BlockState> builder) {
-        builder.add(HAS_LEAVES, OVER_CAMPFIRE);
+        builder.add(HAS_LEAVES, OVER_CAMPFIRE, LOAD_STAGE, CURE_STAGE);
     }
 }

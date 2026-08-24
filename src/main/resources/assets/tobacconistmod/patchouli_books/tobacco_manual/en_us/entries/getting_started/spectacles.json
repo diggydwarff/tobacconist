@@ -21,7 +21,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "$(thing)Crops$(): variety, growth %, environmental Conditions, potential quality when quality is enabled, and a Ready to Harvest notice. $(br2)$(thing)Drying Racks$(): contents, cure method, progress, time remaining or paused state, and quality. $(br2)$(thing)Barrels$(): contents, mode, progress, age, fermentation/ruin state, warmth, humidity, and quality.",
+      "text": "$(thing)Crops$(): variety, growth %, environmental Conditions, potential quality when quality is enabled, and a Ready to Harvest notice. $(br2)$(thing)Drying Racks / Hanging Bunches$(): contents, cure method, progress, time remaining or paused state, and quality. $(br2)$(thing)Barrels$(): contents, mode, progress, age, fermentation/ruin state, warmth, humidity, and quality.",
       "title": "What They Show"
     },
     {

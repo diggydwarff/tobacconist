@@ -5,6 +5,8 @@ import com.diggydwarff.tobacconistmod.block.entity.FlueFireboxBlockEntity;
 import com.diggydwarff.tobacconistmod.block.entity.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.util.RandomSource;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -67,6 +69,31 @@ public class FlueFireboxBlock extends BaseEntityBlock implements EntityBlock {
     @Override
     public BlockState mirror(BlockState state, Mirror mirror) {
         return state.rotate(mirror.getRotation(state.getValue(BlockStateProperties.HORIZONTAL_FACING)));
+    }
+
+    @Override
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        if (!state.getValue(BlockStateProperties.LIT)) {
+            return;
+        }
+
+        // Furnace-style wisps from the front opening. Keep the probability deliberately low: the
+        // firebox communicates that it is burning without producing a campfire-sized smoke cloud.
+        if (random.nextFloat() < 0.32F) {
+            Direction facing = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
+            double sideways = random.nextDouble() * 0.42D - 0.21D;
+            double x = pos.getX() + 0.5D + facing.getStepX() * 0.52D;
+            double y = pos.getY() + 0.56D + random.nextDouble() * 0.20D;
+            double z = pos.getZ() + 0.5D + facing.getStepZ() * 0.52D;
+
+            if (facing.getAxis() == Direction.Axis.X) {
+                z += sideways;
+            } else {
+                x += sideways;
+            }
+
+            level.addParticle(ParticleTypes.SMOKE, x, y, z, 0.0D, 0.015D, 0.0D);
+        }
     }
 
     @Override

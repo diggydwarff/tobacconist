@@ -25,7 +25,13 @@ public record HookahStationJeiRecipe(
                                 new ItemStack(ModBlocks.ORNATE_GOLD_HOOKAH.get().asItem()),
                                 new ItemStack(ModBlocks.ORNATE_COPPER_HOOKAH.get().asItem()),
                                 new ItemStack(ModBlocks.ORNATE_AMETHYST_HOOKAH.get().asItem()),
-                                new ItemStack(ModBlocks.ORNATE_DIAMOND_HOOKAH.get().asItem())
+                                new ItemStack(ModBlocks.ORNATE_DIAMOND_HOOKAH.get().asItem()),
+                                new ItemStack(ModBlocks.TALL_HOOKAH.get().asItem()),
+                                new ItemStack(ModBlocks.REDSTONE_HOOKAH.get().asItem()),
+                                new ItemStack(ModBlocks.LAPIS_HOOKAH.get().asItem()),
+                                new ItemStack(ModBlocks.OBSIDIAN_HOOKAH.get().asItem()),
+                                new ItemStack(ModBlocks.EMERALD_HOOKAH.get().asItem()),
+                                new ItemStack(ModBlocks.NETHERITE_HOOKAH.get().asItem())
                         ),
                         List.of(
                                 new ItemStack(Items.COAL),
@@ -46,7 +52,13 @@ public record HookahStationJeiRecipe(
                 makeLoaded(ModBlocks.ORNATE_GOLD_HOOKAH.get().asItem()),
                 makeLoaded(ModBlocks.ORNATE_COPPER_HOOKAH.get().asItem()),
                 makeLoaded(ModBlocks.ORNATE_AMETHYST_HOOKAH.get().asItem()),
-                makeLoaded(ModBlocks.ORNATE_DIAMOND_HOOKAH.get().asItem())
+                makeLoaded(ModBlocks.ORNATE_DIAMOND_HOOKAH.get().asItem()),
+                makeLoaded(ModBlocks.TALL_HOOKAH.get().asItem()),
+                makeLoaded(ModBlocks.REDSTONE_HOOKAH.get().asItem()),
+                makeLoaded(ModBlocks.LAPIS_HOOKAH.get().asItem()),
+                makeLoaded(ModBlocks.OBSIDIAN_HOOKAH.get().asItem()),
+                makeLoaded(ModBlocks.EMERALD_HOOKAH.get().asItem()),
+                makeLoaded(ModBlocks.NETHERITE_HOOKAH.get().asItem())
         );
     }
 

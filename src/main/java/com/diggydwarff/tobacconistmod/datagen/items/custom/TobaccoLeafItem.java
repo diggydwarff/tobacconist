@@ -3,22 +3,65 @@ package com.diggydwarff.tobacconistmod.datagen.items.custom;
 import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
 
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelBlockEntity;
+import com.diggydwarff.tobacconistmod.block.custom.HangingTobaccoBlock;
 import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class TobaccoLeafItem extends Item {
     public TobaccoLeafItem(Properties properties) {
         super(properties);
+    }
+
+    @Override
+    public InteractionResult useOn(UseOnContext context) {
+        ItemStack stack = context.getItemInHand();
+        var player = context.getPlayer();
+
+        // Traditional hanging bunch placement: sneak-use the underside of a sturdy block while
+        // holding one complete 16-leaf raw batch. Cured leaves never place a new bunch.
+        if (player == null
+                || !player.isShiftKeyDown()
+                || context.getClickedFace() != Direction.DOWN
+                || !TobaccoCuringHelper.isRawTobaccoLeaf(stack)) {
+            return super.useOn(context);
+        }
+
+        if (stack.getCount() < 16) {
+            if (!context.getLevel().isClientSide) {
+                player.displayClientMessage(Component.literal("You need 16 matching raw tobacco leaves to hang a curing bunch."), true);
+            }
+            return InteractionResult.sidedSuccess(context.getLevel().isClientSide);
+        }
+
+        BlockPos upperPos = context.getClickedPos().below();
+        if (!HangingTobaccoBlock.canPlaceBundle(context.getLevel(), upperPos)) {
+            if (!context.getLevel().isClientSide) {
+                player.displayClientMessage(Component.literal("The bunch needs two open blocks below a sturdy underside."), true);
+            }
+            return InteractionResult.sidedSuccess(context.getLevel().isClientSide);
+        }
+
+        if (!context.getLevel().isClientSide) {
+            ItemStack batch = stack.copyWithCount(16);
+            if (HangingTobaccoBlock.placeBundle(context.getLevel(), upperPos, batch)
+                    && !player.getAbilities().instabuild) {
+                stack.shrink(16);
+            }
+        }
+
+        return InteractionResult.sidedSuccess(context.getLevel().isClientSide);
     }
 
     @Override

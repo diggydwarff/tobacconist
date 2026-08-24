@@ -20,7 +20,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "$(thing)3. Cure the leaf.$() Put matching raw leaves on a Tobacco Drying Rack. Air, sun, fire, and flue curing each need different surroundings and take different amounts of time.",
+      "text": "$(thing)3. Cure the leaf.$() Put matching raw leaves on a Tobacco Drying Rack, or hang a traditional 16-leaf bunch beneath a sturdy block. Air, sun, fire, and flue curing each need different surroundings and take different amounts of time.",
       "title": "3 — Cure"
     },
     {

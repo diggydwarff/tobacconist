@@ -17,11 +17,24 @@ public class ModBlockEntities {
             BlockEntityType.Builder.of(
                     HookahEntity::new,
                     ModBlocks.HOOKAH.get(),
+                    ModBlocks.TALL_HOOKAH.get(),
                     ModBlocks.ORNATE_COPPER_HOOKAH.get(),
+                    ModBlocks.EXPOSED_COPPER_HOOKAH.get(),
+                    ModBlocks.WEATHERED_COPPER_HOOKAH.get(),
+                    ModBlocks.OXIDIZED_COPPER_HOOKAH.get(),
+                    ModBlocks.WAXED_COPPER_HOOKAH.get(),
+                    ModBlocks.WAXED_EXPOSED_COPPER_HOOKAH.get(),
+                    ModBlocks.WAXED_WEATHERED_COPPER_HOOKAH.get(),
+                    ModBlocks.WAXED_OXIDIZED_COPPER_HOOKAH.get(),
                     ModBlocks.ORNATE_GOLD_HOOKAH.get(),
                     ModBlocks.ORNATE_DIAMOND_HOOKAH.get(),
                     ModBlocks.ORNATE_IRON_HOOKAH.get(),
-                    ModBlocks.ORNATE_AMETHYST_HOOKAH.get()
+                    ModBlocks.ORNATE_AMETHYST_HOOKAH.get(),
+                    ModBlocks.REDSTONE_HOOKAH.get(),
+                    ModBlocks.LAPIS_HOOKAH.get(),
+                    ModBlocks.OBSIDIAN_HOOKAH.get(),
+                    ModBlocks.EMERALD_HOOKAH.get(),
+                    ModBlocks.NETHERITE_HOOKAH.get()
             ).build(null));
 
     public static final Supplier<BlockEntityType<TobaccoDryingRackBlockEntity>> TOBACCO_DRYING_RACK =
@@ -29,6 +42,13 @@ public class ModBlockEntities {
                     BlockEntityType.Builder.of(
                             TobaccoDryingRackBlockEntity::new,
                             ModBlocks.TOBACCO_DRYING_RACK.get()
+                    ).build(null));
+
+    public static final Supplier<BlockEntityType<HangingTobaccoBlockEntity>> HANGING_TOBACCO =
+            BLOCK_ENTITIES.register("hanging_tobacco", () ->
+                    BlockEntityType.Builder.of(
+                            HangingTobaccoBlockEntity::new,
+                            ModBlocks.HANGING_TOBACCO_LEAVES.get()
                     ).build(null));
 
     public static final Supplier<BlockEntityType<FlueFireboxBlockEntity>> FLUE_FIREBOX =

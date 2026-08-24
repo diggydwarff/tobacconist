@@ -94,11 +94,20 @@ public class TobacconistCreativeTab {
                         output.accept(SHADE_TOBACCO_SEEDS.get());
 
                         output.accept(ModBlocks.HOOKAH.get());
+                        output.accept(ModBlocks.TALL_HOOKAH.get());
                         output.accept(ModBlocks.ORNATE_COPPER_HOOKAH.get());
+                        output.accept(ModBlocks.EXPOSED_COPPER_HOOKAH.get());
+                        output.accept(ModBlocks.WEATHERED_COPPER_HOOKAH.get());
+                        output.accept(ModBlocks.OXIDIZED_COPPER_HOOKAH.get());
                         output.accept(ModBlocks.ORNATE_IRON_HOOKAH.get());
+                        output.accept(ModBlocks.REDSTONE_HOOKAH.get());
+                        output.accept(ModBlocks.LAPIS_HOOKAH.get());
+                        output.accept(ModBlocks.OBSIDIAN_HOOKAH.get());
                         output.accept(ModBlocks.ORNATE_GOLD_HOOKAH.get());
-                        output.accept(ModBlocks.ORNATE_DIAMOND_HOOKAH.get());
                         output.accept(ModBlocks.ORNATE_AMETHYST_HOOKAH.get());
+                        output.accept(ModBlocks.ORNATE_DIAMOND_HOOKAH.get());
+                        output.accept(ModBlocks.EMERALD_HOOKAH.get());
+                        output.accept(ModBlocks.NETHERITE_HOOKAH.get());
 
                         output.accept(STONE_CHAVETA.get());
                         output.accept(IRON_CHAVETA.get());

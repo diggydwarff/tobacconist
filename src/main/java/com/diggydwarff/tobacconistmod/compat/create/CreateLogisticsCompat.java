@@ -46,6 +46,19 @@ public final class CreateLogisticsCompat {
         registerDoubleHookah(ModBlocks.ORNATE_DIAMOND_HOOKAH.get());
         registerDoubleHookah(ModBlocks.ORNATE_IRON_HOOKAH.get());
         registerDoubleHookah(ModBlocks.ORNATE_AMETHYST_HOOKAH.get());
+        registerDoubleHookah(ModBlocks.TALL_HOOKAH.get());
+        registerDoubleHookah(ModBlocks.EXPOSED_COPPER_HOOKAH.get());
+        registerDoubleHookah(ModBlocks.WEATHERED_COPPER_HOOKAH.get());
+        registerDoubleHookah(ModBlocks.OXIDIZED_COPPER_HOOKAH.get());
+        registerDoubleHookah(ModBlocks.WAXED_COPPER_HOOKAH.get());
+        registerDoubleHookah(ModBlocks.WAXED_EXPOSED_COPPER_HOOKAH.get());
+        registerDoubleHookah(ModBlocks.WAXED_WEATHERED_COPPER_HOOKAH.get());
+        registerDoubleHookah(ModBlocks.WAXED_OXIDIZED_COPPER_HOOKAH.get());
+        registerDoubleHookah(ModBlocks.REDSTONE_HOOKAH.get());
+        registerDoubleHookah(ModBlocks.LAPIS_HOOKAH.get());
+        registerDoubleHookah(ModBlocks.OBSIDIAN_HOOKAH.get());
+        registerDoubleHookah(ModBlocks.EMERALD_HOOKAH.get());
+        registerDoubleHookah(ModBlocks.NETHERITE_HOOKAH.get());
 
         // The normal Create unpacker already respects our NeoForge item handlers, including
         // metadata-sensitive barrel batches, fuel validation and Hookah slot validation.

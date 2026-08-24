@@ -4,12 +4,14 @@ import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
 
 import com.diggydwarff.tobacconistmod.block.custom.DoubleHookahBlock;
 import com.diggydwarff.tobacconistmod.block.custom.HookahBlock;
+import com.diggydwarff.tobacconistmod.block.custom.NetheriteHookahBlock;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.screen.HookahMenu;
 import com.diggydwarff.tobacconistmod.util.HookahFuelHelper;
 import com.diggydwarff.tobacconistmod.util.SmokeParticleHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -36,6 +38,8 @@ import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
 
 public class HookahEntity extends BlockEntity implements MenuProvider {
+
+    private boolean suppressDrops;
 
     private final ItemStackHandler itemHandler = new ItemStackHandler(3) {
         @Override
@@ -115,6 +119,18 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
         return itemHandler;
     }
 
+    /** Preserve inventory/timers while copper Hookahs change oxidation or wax state. */
+    public CompoundTag saveTransferData(HolderLookup.Provider registries) {
+        CompoundTag tag = new CompoundTag();
+        saveAdditional(tag, registries);
+        return tag;
+    }
+
+    public void loadTransferData(CompoundTag tag, HolderLookup.Provider registries) {
+        loadAdditional(tag, registries);
+        setChanged();
+    }
+
     public ItemStack getShishaForSmoking() {
         ItemStack shisha = itemHandler.getStackInSlot(1);
         return shisha.isEmpty() ? ItemStack.EMPTY : shisha.copy();
@@ -163,6 +179,13 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
     }
 
     public void drops() {
+        // Creative removal (and any early break event that marks the block entity) must never
+        // spill Hookah contents. Keep the guard separate from clearing the handler so this
+        // remains safe even if another callback reaches onRemove in the same break sequence.
+        if (suppressDrops) {
+            return;
+        }
+
         SimpleContainer inventory = new SimpleContainer(itemHandler.getSlots());
         for (int i = 0; i < itemHandler.getSlots(); i++) {
             inventory.setItem(i, itemHandler.getStackInSlot(i));
@@ -170,8 +193,41 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
         Containers.dropContents(this.level, this.worldPosition, inventory);
     }
 
+    /** Creative-mode block removal should not spill the Hookah inventory into the world. */
+    public void clearContentsForCreativeBreak() {
+        suppressDrops = true;
+        for (int i = 0; i < itemHandler.getSlots(); i++) {
+            itemHandler.setStackInSlot(i, ItemStack.EMPTY);
+        }
+        setChanged();
+    }
+
     public static void tick(Level level, BlockPos pos, BlockState state, HookahEntity pEntity) {
-        if (level.isClientSide()) return;
+        if (level.isClientSide()) {
+            // Netherite Hookahs are prestige blocks: keep the ambience obvious and reliable
+            // by driving it from the block-entity client tick instead of the much less
+            // predictable random animateTick path. Roughly 3 bursts per second.
+            if (state.getBlock() instanceof NetheriteHookahBlock && level.getGameTime() % 7L == 0L) {
+                int count = 2 + level.random.nextInt(2);
+                for (int i = 0; i < count; i++) {
+                    double x = pos.getX() + 0.25D + level.random.nextDouble() * 0.50D;
+                    double y = pos.getY() + 0.18D + level.random.nextDouble() * 1.22D;
+                    double z = pos.getZ() + 0.25D + level.random.nextDouble() * 0.50D;
+                    double vx = (level.random.nextDouble() - 0.5D) * 0.018D;
+                    double vy = 0.014D + level.random.nextDouble() * 0.018D;
+                    double vz = (level.random.nextDouble() - 0.5D) * 0.018D;
+                    level.addParticle(ParticleTypes.REVERSE_PORTAL, x, y, z, vx, vy, vz);
+                }
+                if (level.random.nextInt(3) == 0) {
+                    level.addParticle(ParticleTypes.PORTAL,
+                            pos.getX() + 0.5D, pos.getY() + 0.55D + level.random.nextDouble() * 0.65D, pos.getZ() + 0.5D,
+                            (level.random.nextDouble() - 0.5D) * 0.10D,
+                            (level.random.nextDouble() - 0.5D) * 0.04D,
+                            (level.random.nextDouble() - 0.5D) * 0.10D);
+                }
+            }
+            return;
+        }
 
         boolean litNow = false;
 
@@ -193,22 +249,23 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
             litNow = true;
 
             ServerLevel serverLevel = (ServerLevel) level;
-            BlockPos smokePos = pos;
             BlockState blockState = level.getBlockState(pos);
-
+            double smokeY = pos.getY() + 0.90D;
             if (blockState.getBlock() instanceof DoubleHookahBlock) {
-                smokePos = pos.above(); // move to top block
+                // The tall/material models are about 1.5 blocks high while still reserving
+                // the upper block for placement. Emit from the actual bowl instead of
+                // floating near the top of the reserved second block.
+                smokeY = pos.getY() + 1.56D;
             }
 
             // Hookah smoke is continuous, but emitting every tick created an oversized,
-            // aggressive plume (especially on double-height Hookahs). A gentle pulse every
-            // 10 ticks keeps the Hookah visibly lit without flooding the room with particles.
+            // aggressive plume. A gentle pulse every 10 ticks keeps it visibly lit.
             if (level.getGameTime() % 10L == 0L) {
                 SmokeParticleHelper.spawnServerHookahSmoke(
                         serverLevel,
-                        smokePos.getX() + 0.5D,
-                        smokePos.getY() + 0.9D,
-                        smokePos.getZ() + 0.5D
+                        pos.getX() + 0.5D,
+                        smokeY,
+                        pos.getZ() + 0.5D
                 );
             }
 

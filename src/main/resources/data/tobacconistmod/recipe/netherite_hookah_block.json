@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "NNN",
+    "NHN",
+    "NNN"
+  ],
+  "key": {
+    "N": {
+      "item": "minecraft:netherite_ingot"
+    },
+    "H": {
+      "item": "tobacconistmod:ornate_diamond_hookah_block"
+    }
+  },
+  "result": {
+    "count": 1,
+    "id": "tobacconistmod:netherite_hookah_block"
+  }
+}

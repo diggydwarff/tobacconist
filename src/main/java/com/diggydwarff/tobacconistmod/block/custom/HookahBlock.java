@@ -58,12 +58,28 @@ public class HookahBlock extends BaseEntityBlock {
                 .setValue(GLOWING, false));
     }
 
+    // Match the visible model instead of behaving like a full opaque cube.
     private static final VoxelShape SHAPE =
-            Block.box(0, 0, 0, 16, 10, 16);
+            Block.box(4, 0, 4, 12, 16, 12);
 
     @Override
     public VoxelShape getShape(BlockState p_60555_, BlockGetter p_60556_, BlockPos p_60557_, CollisionContext p_60558_) {
         return SHAPE;
+    }
+
+    @Override
+    protected boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
+        return true;
+    }
+
+    @Override
+    protected int getLightBlock(BlockState state, BlockGetter level, BlockPos pos) {
+        return 0;
+    }
+
+    @Override
+    protected float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos) {
+        return 1.0F;
     }
 
     @Override
@@ -94,6 +110,31 @@ public class HookahBlock extends BaseEntityBlock {
     @Override
     public RenderShape getRenderShape(BlockState p_49232_) {
         return RenderShape.MODEL;
+    }
+
+    @Override
+    public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+        if (!level.isClientSide && player.getAbilities().instabuild) {
+            BlockEntity blockEntity = level.getBlockEntity(pos);
+            if (blockEntity instanceof HookahEntity hookah) {
+                hookah.clearContentsForCreativeBreak();
+            }
+        }
+
+        // Never remove the block manually from playerWillDestroy. The normal break
+        // lifecycle must own removal; creative loot suppression is handled separately.
+        return super.playerWillDestroy(level, pos, state, player);
+    }
+
+    @Override
+    public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state,
+                              @Nullable BlockEntity blockEntity, ItemStack tool) {
+        // Absolute final guard: Creative mode must never generate the Hookah block item
+        // through its loot table. Survival continues through vanilla playerDestroy.
+        if (player.getAbilities().instabuild) {
+            return;
+        }
+        super.playerDestroy(level, player, pos, state, blockEntity, tool);
     }
 
     @Override

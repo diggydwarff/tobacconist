@@ -2,7 +2,7 @@
   "name": "Flue Curing",
   "icon": "tobacconistmod:flue_firebox",
   "category": "tobacconistmod:curing",
-  "sortnum": 4,
+  "sortnum": 5,
   "pages": [
     {
       "type": "patchouli:text",
@@ -13,6 +13,11 @@
       "recipe": "tobacconistmod:flue_firebox",
       "title": "Flue Firebox",
       "text": "A lit Flue Firebox supplies the heat source used by nearby racks."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Hanging Bunches",
+      "text": "Hanging bunches can also Flue Cure from nearby lit Flue Fireboxes. Direct fire or smoke contamination still disqualifies clean flue curing; the bunch itself is already considered covered because it must be attached beneath a support."
     },
     {
       "type": "patchouli:text",

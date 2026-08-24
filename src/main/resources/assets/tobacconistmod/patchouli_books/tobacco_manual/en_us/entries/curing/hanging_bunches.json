@@ -1,0 +1,43 @@
+{
+  "name": "Hanging Leaf Bunches",
+  "icon": "tobacconistmod:tobacco_leaf_virginia",
+  "category": "tobacconistmod:curing",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "For a more traditional curing setup, raw tobacco can be hung in $(thing)16-leaf bunches$() instead of loaded into a Drying Rack. Hold at least $(item)16 identical raw leaves$(), sneak, and right-click the $(thing)underside$() of a sturdy block. Exactly 16 leaves are tied into one hanging bunch."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Same Tobacco Cure",
+      "text": "A hanging bunch uses the same curing times, quality rules, interruptions, rain damage, color progression, and method priority as a Drying Rack: $(thing)Fire → Flue → Sun → Air$(). Break either half of the bunch to recover all 16 leaves when you are ready."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Pergola Sun Curing",
+      "text": "Because a bunch is attached beneath a block, direct sky above it is impossible. Hanging tobacco instead looks for $(thing)side-access skylight$(). A neighboring open-air column with strong daytime sky light allows Sun Curing. This makes long $(item)beam / gap / beam / gap$() pergolas and slatted curing sheds work naturally."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Covered Air Curing",
+      "text": "If the roof is solid around the bunch and no side opening can see the sky, the bunch falls back to $(thing)Air Curing$(). A nearby lit Campfire below the lower leaves enables Fire Curing, while clean indirect heat from a lit Flue Firebox enables Flue Curing under the same general barn rules as a rack."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Traditional, Not Automated",
+      "text": "Hanging bunches are intentionally manual. They expose no hopper inventory and no Create Display Link source. Create fan airflow may still assist the curing environment, but items cannot be inserted or extracted automatically. Use Drying Racks when logistics and automation matter."
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "tobacconistmod:curing/rack_basics",
+        "tobacconistmod:curing/air_curing",
+        "tobacconistmod:curing/sun_curing",
+        "tobacconistmod:curing/fire_curing",
+        "tobacconistmod:curing/flue_curing"
+      ],
+      "title": "Related Chapters"
+    }
+  ]
+}

@@ -99,6 +99,15 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         return hasLeaves() ? storedLeaf.getCount() : 0;
     }
 
+    /** Maps the real 0..16 inventory count onto the four visual rack models. */
+    public int getVisualLoadStage() {
+        int count = Math.min(MAX_LEAVES, getLeafCount());
+        if (count <= 0) return 0;
+        if (count <= 5) return 1;
+        if (count <= 11) return 2;
+        return 3;
+    }
+
     public boolean isFull() {
         return hasLeaves() && storedLeaf.getCount() >= MAX_LEAVES;
     }
@@ -396,8 +405,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         }
         if (fanAssist == CreateCompat.FanCuringAssist.AIR
                 && !isOverLitCampfire(level, worldPosition)
-                && !canFlueCure(level, worldPosition)
-                && !hasDirectSunlight(level, worldPosition)) {
+                && !canFlueCure(level, worldPosition)) {
+            // Plain airflow assists both Air Curing and an otherwise-valid Sun Cure.
             return CREATE_FAN_AIR_TICK_RATE;
         }
         return 1;
@@ -458,6 +467,11 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         }
 
         if (hasDirectSunlight(level, worldPosition)) {
+            if (fanAssist == CreateCompat.FanCuringAssist.AIR) {
+                return isGlassSunCure(level, worldPosition)
+                        ? "Sun-curing (glass shelter, Create fan-assisted)"
+                        : "Sun-curing (Create fan-assisted)";
+            }
             return isGlassSunCure(level, worldPosition)
                     ? "Sun-curing (glass shelter)"
                     : "Sun-curing (direct sunlight)";
@@ -547,6 +561,9 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             }
         }
 
+        // Repairs the visual fill stage after old worlds load and keeps it tied to inventory.
+        rack.syncRackState();
+
         if (!rack.hasLeaves()) {
             rack.lastTickHadValidDrying = false;
             return;
@@ -577,7 +594,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         int progressTicks = 0;
 
         // Keep Tobacconist's cure-method precedence. Create airflow supplies/accelerates the
-        // matching environment, but sunlight remains its own unaccelerated curing path.
+        // matching environment. Plain AIR airflow also assists an otherwise-valid Sun Cure
+        // without changing the batch's cure method away from Sun.
         if (overCampfire || fanAssist == CreateCompat.FanCuringAssist.FIRE) {
             validDryingThisTick = true;
             rack.usedFireDrying = true;
@@ -594,9 +612,11 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             rack.flueTicks += progressTicks;
         } else if (inSun) {
             validDryingThisTick = true;
-            progressTicks = 1;
-            rack.sunTicks++;
-            rack.sunExposureTicks++;
+            progressTicks = fanAssist == CreateCompat.FanCuringAssist.AIR
+                    ? CREATE_FAN_AIR_TICK_RATE
+                    : 1;
+            rack.sunTicks += progressTicks;
+            rack.sunExposureTicks += progressTicks;
         } else if (airDry || fanAssist == CreateCompat.FanCuringAssist.AIR) {
             validDryingThisTick = true;
             progressTicks = fanAssist == CreateCompat.FanCuringAssist.AIR
@@ -617,6 +637,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         }
 
         rack.dryingProgress += progressTicks;
+        rack.syncRackState();
 
         int requiredSunTime = isGlassSunCure(level, pos) ? GLASS_SUN_DRY_TIME : SUN_DRY_TIME;
 
@@ -668,6 +689,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         }
 
         dryingProgress += ticks;
+        syncRackState();
 
         int requiredSunTime = isGlassSunCure(level, worldPosition) ? GLASS_SUN_DRY_TIME : SUN_DRY_TIME;
 
@@ -813,12 +835,35 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             return;
         }
 
-        if (state.hasProperty(TobaccoDryingRackBlock.HAS_LEAVES)) {
-            boolean current = state.getValue(TobaccoDryingRackBlock.HAS_LEAVES);
-            boolean shouldBe = hasLeaves();
-            if (current != shouldBe) {
-                level.setBlock(worldPosition, state.setValue(TobaccoDryingRackBlock.HAS_LEAVES, shouldBe), 3);
+        BlockState updated = state;
+        boolean changed = false;
+
+        if (updated.hasProperty(TobaccoDryingRackBlock.HAS_LEAVES)) {
+            boolean shouldHaveLeaves = hasLeaves();
+            if (updated.getValue(TobaccoDryingRackBlock.HAS_LEAVES) != shouldHaveLeaves) {
+                updated = updated.setValue(TobaccoDryingRackBlock.HAS_LEAVES, shouldHaveLeaves);
+                changed = true;
             }
+        }
+
+        if (updated.hasProperty(TobaccoDryingRackBlock.LOAD_STAGE)) {
+            int visualStage = getVisualLoadStage();
+            if (updated.getValue(TobaccoDryingRackBlock.LOAD_STAGE) != visualStage) {
+                updated = updated.setValue(TobaccoDryingRackBlock.LOAD_STAGE, visualStage);
+                changed = true;
+            }
+        }
+
+        if (updated.hasProperty(TobaccoDryingRackBlock.CURE_STAGE)) {
+            int cureStage = getVisualCureStage();
+            if (updated.getValue(TobaccoDryingRackBlock.CURE_STAGE) != cureStage) {
+                updated = updated.setValue(TobaccoDryingRackBlock.CURE_STAGE, cureStage);
+                changed = true;
+            }
+        }
+
+        if (changed) {
+            level.setBlock(worldPosition, updated, 3);
         }
     }
 

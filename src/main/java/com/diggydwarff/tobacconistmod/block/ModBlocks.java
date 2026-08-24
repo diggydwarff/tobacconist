@@ -33,53 +33,71 @@ public class ModBlocks {
                     })
                     .noOcclusion()));
 
+    public static final Supplier<Block> TALL_HOOKAH = registerSingleStackBlock("tall_hookah_block",
+            () -> new DyeableDoubleHookahBlock(hookahProperties()
+                    .lightLevel(state -> {
+                        if (state.getValue(DyeableDoubleHookahBlock.GLOWING)) return 12;
+                        return state.getValue(DoubleHookahBlock.LIT) ? 6 : 0;
+                    })));
+
+    // Keep the original registry IDs for the pre-4.0 material Hookahs so existing worlds remain compatible.
     public static final Supplier<Block> ORNATE_COPPER_HOOKAH = registerSingleStackBlock("ornate_copper_hookah_block",
-            () -> new DoubleHookahBlock(
-                    BlockBehaviour.Properties.of()
-                            .strength(0.8F)
-                            .sound(SoundType.METAL)
-                            .lightLevel(state -> state.getValue(DoubleHookahBlock.LIT) ? 6 : 0)
-                            .noOcclusion()
-            ));
+            () -> new CopperHookahBlock(hookahProperties(), 0, false));
+    public static final Supplier<Block> EXPOSED_COPPER_HOOKAH = registerSingleStackBlock("exposed_copper_hookah_block",
+            () -> new CopperHookahBlock(hookahProperties(), 1, false));
+    public static final Supplier<Block> WEATHERED_COPPER_HOOKAH = registerSingleStackBlock("weathered_copper_hookah_block",
+            () -> new CopperHookahBlock(hookahProperties(), 2, false));
+    public static final Supplier<Block> OXIDIZED_COPPER_HOOKAH = registerSingleStackBlock("oxidized_copper_hookah_block",
+            () -> new CopperHookahBlock(hookahProperties(), 3, false));
+    public static final Supplier<Block> WAXED_COPPER_HOOKAH = registerSingleStackBlock("waxed_copper_hookah_block",
+            () -> new CopperHookahBlock(hookahProperties(), 0, true));
+    public static final Supplier<Block> WAXED_EXPOSED_COPPER_HOOKAH = registerSingleStackBlock("waxed_exposed_copper_hookah_block",
+            () -> new CopperHookahBlock(hookahProperties(), 1, true));
+    public static final Supplier<Block> WAXED_WEATHERED_COPPER_HOOKAH = registerSingleStackBlock("waxed_weathered_copper_hookah_block",
+            () -> new CopperHookahBlock(hookahProperties(), 2, true));
+    public static final Supplier<Block> WAXED_OXIDIZED_COPPER_HOOKAH = registerSingleStackBlock("waxed_oxidized_copper_hookah_block",
+            () -> new CopperHookahBlock(hookahProperties(), 3, true));
 
     public static final Supplier<Block> ORNATE_GOLD_HOOKAH = registerSingleStackBlock("ornate_gold_hookah_block",
-            () -> new DoubleHookahBlock(
-                    BlockBehaviour.Properties.of()
-                            .strength(0.8F)
-                            .sound(SoundType.METAL)
-                            .lightLevel(state -> state.getValue(DoubleHookahBlock.LIT) ? 6 : 0)
-                            .noOcclusion()
-            ));
-
+            () -> new DoubleHookahBlock(hookahProperties()));
     public static final Supplier<Block> ORNATE_DIAMOND_HOOKAH = registerSingleStackBlock("ornate_diamond_hookah_block",
-            () -> new DoubleHookahBlock(
-                    BlockBehaviour.Properties.of()
-                            .strength(0.8F)
-                            .sound(SoundType.METAL)
-                            .lightLevel(state -> state.getValue(DoubleHookahBlock.LIT) ? 6 : 0)
-                            .noOcclusion()
-            ));
-
+            () -> new DoubleHookahBlock(hookahProperties()));
     public static final Supplier<Block> ORNATE_IRON_HOOKAH = registerSingleStackBlock("ornate_iron_hookah_block",
-            () -> new DoubleHookahBlock(
-                    BlockBehaviour.Properties.of()
-                            .strength(0.8F)
-                            .sound(SoundType.METAL)
-                            .lightLevel(state -> state.getValue(DoubleHookahBlock.LIT) ? 6 : 0)
-                            .noOcclusion()
-            ));
-
+            () -> new DoubleHookahBlock(hookahProperties()));
     public static final Supplier<Block> ORNATE_AMETHYST_HOOKAH = registerSingleStackBlock("ornate_amethyst_hookah_block",
-            () -> new DoubleHookahBlock(
-                    BlockBehaviour.Properties.of()
-                            .strength(0.8F)
-                            .sound(SoundType.METAL)
-                            .lightLevel(state -> state.getValue(DoubleHookahBlock.LIT) ? 6 : 0)
-                            .noOcclusion()
-            ));
+            () -> new DoubleHookahBlock(hookahProperties()));
+
+    public static final Supplier<Block> REDSTONE_HOOKAH = registerSingleStackBlock("redstone_hookah_block",
+            () -> new DoubleHookahBlock(hookahProperties()));
+    public static final Supplier<Block> LAPIS_HOOKAH = registerSingleStackBlock("lapis_hookah_block",
+            () -> new DoubleHookahBlock(hookahProperties()));
+    public static final Supplier<Block> OBSIDIAN_HOOKAH = registerSingleStackBlock("obsidian_hookah_block",
+            () -> new DoubleHookahBlock(hookahProperties().strength(4.0F, 1200.0F).sound(SoundType.STONE)));
+    public static final Supplier<Block> EMERALD_HOOKAH = registerSingleStackBlock("emerald_hookah_block",
+            () -> new DoubleHookahBlock(hookahProperties()));
+    public static final Supplier<Block> NETHERITE_HOOKAH = registerSingleStackBlock("netherite_hookah_block",
+            () -> new NetheriteHookahBlock(hookahProperties()
+                    .strength(5.0F, 1200.0F)
+                    .lightLevel(state -> state.hasProperty(DoubleHookahBlock.LIT) && state.getValue(DoubleHookahBlock.LIT) ? 8 : 3)));
+
+    private static BlockBehaviour.Properties hookahProperties() {
+        return BlockBehaviour.Properties.of()
+                .strength(0.8F)
+                .sound(SoundType.METAL)
+                .lightLevel(state -> state.hasProperty(DoubleHookahBlock.LIT) && state.getValue(DoubleHookahBlock.LIT) ? 6 : 0)
+                .noOcclusion();
+    }
 
     public static final Supplier<Block> TOBACCO_DRYING_RACK = registerBlock("tobacco_drying_rack_block",
             () -> new TobaccoDryingRackBlock(BlockBehaviour.Properties.of().strength(0.8F).sound(SoundType.WOOD).noOcclusion()));
+
+    // Traditional curing option: placed directly from a stack of 16 raw leaves, so it has no BlockItem.
+    public static final Supplier<Block> HANGING_TOBACCO_LEAVES = BLOCKS.register("hanging_tobacco_leaves",
+            () -> new HangingTobaccoBlock(BlockBehaviour.Properties.of()
+                    .strength(0.35F)
+                    .sound(SoundType.GRASS)
+                    .noOcclusion()
+                    .noCollission()));
 
     public static final Supplier<Block> WILD_FLOWERING_TOBACCO = registerBlock("wild_flowering_tobacco_block",
             () -> new FlowerBlock(MobEffects.CONFUSION, 5,

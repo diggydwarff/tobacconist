@@ -21,8 +21,13 @@
     },
     {
       "type": "patchouli:text",
-      "text": "The rack automatically chooses the strongest valid method each tick in this order: $(thing)Fire → Flue → Sun → Air$(). You do not select a mode in a menu; the structure and environment select it for you.",
+      "text": "The rack automatically chooses the strongest valid method each tick in this order: $(thing)Fire → Flue → Sun → Air$(). You do not select a mode in a menu; the structure and environment select it for you. With Create installed, fan airflow reaching either the lower or upper section can assist a valid cure.",
       "title": "Automatic Method"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Traditional Alternative",
+      "text": "A Drying Rack is not required. Sneak-right-click the underside of a sturdy block while holding 16 matching raw leaves to make a traditional hanging bunch. It cures by the same methods but cannot use hoppers or Display Links."
     },
     {
       "type": "patchouli:text",
@@ -32,6 +37,7 @@
     {
       "type": "patchouli:relations",
       "entries": [
+        "tobacconistmod:curing/hanging_bunches",
         "tobacconistmod:curing/air_curing",
         "tobacconistmod:curing/sun_curing",
         "tobacconistmod:curing/fire_curing",

@@ -6,12 +6,12 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "When $(thing)Create$() is installed, Tobacconist gains an optional industrial path. The ordinary hand-crafted workflows remain valid; Create automates the same stages while preserving tobacco variety, quality, cure, cut, age, fermentation, flavor, blend identity, labels, and other processing data."
+      "text": "When $(thing)Create$() is installed, Tobacconist gains an optional industrial path. The ordinary hand-crafted workflows remain valid; Create automates the same stages while preserving tobacco variety, quality, cure, cut, age, fermentation, flavor, blend identity, labels, and other processing data. Hanging tobacco bunches can also receive environmental fan assistance, but they expose no item automation or Display Link source."
     },
     {
       "type": "patchouli:text",
       "title": "Harvest & Cure",
-      "text": "Create Mechanical Harvesters can harvest mature two-block tobacco without duplicating upper/lower drops. Encased Fan airflow can accelerate Air Curing; fan-blown Campfire smoke/heat accelerates Fire Curing; fan-blown Lava heat can accelerate Flue Curing. Sun Curing keeps its normal sunlight rules."
+      "text": "Create Mechanical Harvesters can harvest mature two-block tobacco without duplicating upper/lower drops. Encased Fan airflow can accelerate Air Curing and Sun Curing; airflow hitting either the lower or upper section of the tall rack counts. Fan-blown Campfire smoke/heat accelerates Fire Curing, and fan-blown Lava heat can accelerate Flue Curing."
     },
     {
       "type": "patchouli:text",

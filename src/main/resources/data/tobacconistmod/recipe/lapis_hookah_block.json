@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "LLL",
+    "LHL",
+    "LLL"
+  ],
+  "key": {
+    "L": {
+      "item": "minecraft:lapis_lazuli"
+    },
+    "H": {
+      "item": "tobacconistmod:hookah_block"
+    }
+  },
+  "result": {
+    "count": 1,
+    "id": "tobacconistmod:lapis_hookah_block"
+  }
+}

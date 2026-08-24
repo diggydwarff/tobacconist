@@ -108,7 +108,7 @@ public final class CreateDisplayLinkCompat {
         @Override
         protected MutableComponent provideLine(DisplayLinkContext context, DisplayTargetStats stats) {
             TobaccoDryingRackBlockEntity rack = source(context, TobaccoDryingRackBlockEntity.class);
-            return rack == null ? EMPTY_LINE : Component.literal(Integer.toString(rack.getLeafCount()));
+            return rack == null ? EMPTY_LINE : Component.literal(rack.getLeafCount() + "/16 Leaves");
         }
     }
 

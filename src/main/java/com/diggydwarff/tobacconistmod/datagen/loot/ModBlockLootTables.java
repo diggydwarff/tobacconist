@@ -37,7 +37,22 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         this.dropSelf(ModBlocks.ORNATE_DIAMOND_HOOKAH.get());
         this.dropSelf(ModBlocks.ORNATE_IRON_HOOKAH.get());
         this.dropSelf(ModBlocks.ORNATE_AMETHYST_HOOKAH.get());
+        this.dropSelf(ModBlocks.TALL_HOOKAH.get());
+        this.dropSelf(ModBlocks.EXPOSED_COPPER_HOOKAH.get());
+        this.dropSelf(ModBlocks.WEATHERED_COPPER_HOOKAH.get());
+        this.dropSelf(ModBlocks.OXIDIZED_COPPER_HOOKAH.get());
+        this.dropSelf(ModBlocks.WAXED_COPPER_HOOKAH.get());
+        this.dropSelf(ModBlocks.WAXED_EXPOSED_COPPER_HOOKAH.get());
+        this.dropSelf(ModBlocks.WAXED_WEATHERED_COPPER_HOOKAH.get());
+        this.dropSelf(ModBlocks.WAXED_OXIDIZED_COPPER_HOOKAH.get());
+        this.dropSelf(ModBlocks.REDSTONE_HOOKAH.get());
+        this.dropSelf(ModBlocks.LAPIS_HOOKAH.get());
+        this.dropSelf(ModBlocks.OBSIDIAN_HOOKAH.get());
+        this.dropSelf(ModBlocks.EMERALD_HOOKAH.get());
+        this.dropSelf(ModBlocks.NETHERITE_HOOKAH.get());
         this.dropSelf(ModBlocks.TOBACCO_DRYING_RACK.get());
+        // No block item: the hanging bunch is placed from 16 raw leaves and its BE drops the batch.
+        this.add(ModBlocks.HANGING_TOBACCO_LEAVES.get(), LootTable.lootTable());
         this.dropSelf(ModBlocks.TOBACCO_BARREL.get());
         this.dropSelf(ModBlocks.FLUE_FIREBOX.get());
 

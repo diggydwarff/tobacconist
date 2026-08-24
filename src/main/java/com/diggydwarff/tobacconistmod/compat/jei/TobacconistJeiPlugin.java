@@ -196,6 +196,12 @@ public class TobacconistJeiPlugin implements IModPlugin {
         registration.addRecipeCatalyst(new ItemStack(ModBlocks.ORNATE_COPPER_HOOKAH.get().asItem()), HookahStationRecipeCategory.TYPE);
         registration.addRecipeCatalyst(new ItemStack(ModBlocks.ORNATE_AMETHYST_HOOKAH.get().asItem()), HookahStationRecipeCategory.TYPE);
         registration.addRecipeCatalyst(new ItemStack(ModBlocks.ORNATE_DIAMOND_HOOKAH.get().asItem()), HookahStationRecipeCategory.TYPE);
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.TALL_HOOKAH.get().asItem()), HookahStationRecipeCategory.TYPE);
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.REDSTONE_HOOKAH.get().asItem()), HookahStationRecipeCategory.TYPE);
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.LAPIS_HOOKAH.get().asItem()), HookahStationRecipeCategory.TYPE);
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.OBSIDIAN_HOOKAH.get().asItem()), HookahStationRecipeCategory.TYPE);
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.EMERALD_HOOKAH.get().asItem()), HookahStationRecipeCategory.TYPE);
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.NETHERITE_HOOKAH.get().asItem()), HookahStationRecipeCategory.TYPE);
         registration.addRecipeCatalyst(new ItemStack(ModItems.BAMBOO_CHARCOAL.get().asItem()), HookahStationRecipeCategory.TYPE);
         registration.addRecipeCatalyst(new ItemStack(Items.COAL), HookahStationRecipeCategory.TYPE);
         registration.addRecipeCatalyst(new ItemStack(Items.CHARCOAL), HookahStationRecipeCategory.TYPE);

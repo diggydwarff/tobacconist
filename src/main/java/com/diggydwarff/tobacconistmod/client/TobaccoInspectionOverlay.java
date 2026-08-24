@@ -5,6 +5,8 @@ import com.diggydwarff.tobacconistmod.block.entity.BarrelEnvironmentHelper;
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelBlockEntity;
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelMode;
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoDryingRackBlockEntity;
+import com.diggydwarff.tobacconistmod.block.entity.HangingTobaccoBlockEntity;
+import com.diggydwarff.tobacconistmod.block.custom.HangingTobaccoBlock;
 import com.diggydwarff.tobacconistmod.compat.SpectaclesEquipmentHelper;
 import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
 import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
@@ -42,13 +44,28 @@ public final class TobaccoInspectionOverlay {
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.player == null || minecraft.level == null) return;
         if (minecraft.screen != null) return;
-        if (!SpectaclesEquipmentHelper.isWearing(minecraft.player)) return;
 
         HitResult hit = minecraft.hitResult;
         if (!(hit instanceof BlockHitResult blockHit) || hit.getType() != HitResult.Type.BLOCK) return;
 
         BlockPos pos = blockHit.getBlockPos();
         BlockState state = minecraft.level.getBlockState(pos);
+        BlockEntity targeted = minecraft.level.getBlockEntity(pos);
+
+        // Capacity is basic rack information rather than a specialist inspection statistic.
+        // Show it whenever the player is actually looking at the rack so filling it gives an
+        // immediate 0/16, 1/16 ... 16/16 readout. Spectacles keep the richer cure diagnostics.
+        if (targeted instanceof TobaccoDryingRackBlockEntity rack
+                && !SpectaclesEquipmentHelper.isWearing(minecraft.player)) {
+            drawPanel(graphics, minecraft.font, new Inspection(
+                    "Tobacco Drying Rack",
+                    List.of(new Line("Leaves: " + rack.getLeafCount() + "/16", TEXT))
+            ));
+            return;
+        }
+
+        if (!SpectaclesEquipmentHelper.isWearing(minecraft.player)) return;
+
         Inspection inspection = inspect(minecraft, pos, state);
         if (inspection == null || inspection.lines().isEmpty()) return;
 
@@ -84,16 +101,42 @@ public final class TobaccoInspectionOverlay {
             return new Inspection(crop.getDisplayName(), lines);
         }
 
+        if (state.getBlock() instanceof HangingTobaccoBlock) {
+            BlockPos upperPos = state.getValue(HangingTobaccoBlock.HALF) == DoubleBlockHalf.UPPER
+                    ? pos
+                    : pos.above();
+            BlockEntity hangingEntity = minecraft.level.getBlockEntity(upperPos);
+            if (hangingEntity instanceof HangingTobaccoBlockEntity hanging) {
+                List<Line> lines = new ArrayList<>();
+                ItemStack stack = hanging.getStoredLeaf();
+                lines.add(new Line("Leaves: " + hanging.getLeafCount() + "/16", TEXT));
+                if (!stack.isEmpty()) {
+                    lines.add(new Line(stack.getHoverName().getString(), TEXT));
+                    lines.add(new Line("Method: " + hanging.getCurrentCureMethod(), hanging.isDryingActive() ? GOOD : WARN));
+                    lines.add(new Line("Progress: " + hanging.getDryProgressPercent() + "%", TEXT));
+                    if (hanging.isFinished()) {
+                        lines.add(new Line("Finished", GOOD));
+                    } else if (hanging.isDryingActive()) {
+                        lines.add(new Line("Est. remaining: " + formatTicks(hanging.getEstimatedTicksRemaining()), MUTED));
+                    } else {
+                        lines.add(new Line("Processing paused", WARN));
+                    }
+                    addQualityLine(lines, stack);
+                }
+                return new Inspection("Hanging Tobacco Bunch", lines);
+            }
+        }
+
         BlockEntity blockEntity = minecraft.level.getBlockEntity(pos);
         if (blockEntity instanceof TobaccoDryingRackBlockEntity rack) {
             List<Line> lines = new ArrayList<>();
+            lines.add(new Line("Leaves: " + rack.getLeafCount() + "/16", rack.hasLeaves() ? TEXT : MUTED));
             if (!rack.hasLeaves()) {
-                lines.add(new Line("Empty", MUTED));
                 return new Inspection("Tobacco Drying Rack", lines);
             }
 
             ItemStack stack = rack.getStoredLeaf();
-            lines.add(new Line(stack.getHoverName().getString() + " x" + rack.getLeafCount(), TEXT));
+            lines.add(new Line(stack.getHoverName().getString(), TEXT));
             lines.add(new Line("Method: " + rack.getCurrentCureMethod(), rack.isDryingActive() ? GOOD : WARN));
             lines.add(new Line("Progress: " + rack.getDryProgressPercent() + "%", TEXT));
 

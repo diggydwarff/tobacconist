@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "OOO",
+    "OHO",
+    "OOO"
+  ],
+  "key": {
+    "O": {
+      "item": "minecraft:obsidian"
+    },
+    "H": {
+      "item": "tobacconistmod:hookah_block"
+    }
+  },
+  "result": {
+    "count": 1,
+    "id": "tobacconistmod:obsidian_hookah_block"
+  }
+}

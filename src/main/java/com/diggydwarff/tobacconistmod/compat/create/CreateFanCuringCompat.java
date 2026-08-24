@@ -29,14 +29,23 @@ public final class CreateFanCuringCompat {
             return CreateCompat.FanCuringAssist.NONE;
         }
 
+        // The authored drying rack is ~1.65 blocks tall even though its block entity lives in
+        // the lower block position. Probe both vertical sections so a horizontal fan aimed at
+        // either the lower shelves OR the upper leaves counts as assisted curing.
+        CreateCompat.FanCuringAssist lower = resolveAssistAtProbe(level, rackPos);
+        CreateCompat.FanCuringAssist upper = resolveAssistAtProbe(level, rackPos.above());
+        return upper.priority() > lower.priority() ? upper : lower;
+    }
+
+    private static CreateCompat.FanCuringAssist resolveAssistAtProbe(Level level, BlockPos probePos) {
         int searchDistance = getConfiguredSearchDistance();
         CreateCompat.FanCuringAssist best = CreateCompat.FanCuringAssist.NONE;
 
-        // A fan can only affect the rack when both blocks are aligned on one cardinal axis.
-        // Search outward from the rack along those six possible lines instead of scanning a cube.
+        // A fan can only affect this part of the rack when both positions are aligned on one
+        // cardinal axis. Search outward from the probe rather than scanning a cube.
         for (Direction fanFacing : Direction.values()) {
             for (int distance = 1; distance <= searchDistance; distance++) {
-                BlockPos fanPos = rackPos.relative(fanFacing.getOpposite(), distance);
+                BlockPos fanPos = probePos.relative(fanFacing.getOpposite(), distance);
                 if (!(level.getBlockEntity(fanPos) instanceof EncasedFanBlockEntity fan)) {
                     continue;
                 }
@@ -51,8 +60,8 @@ public final class CreateFanCuringCompat {
                 }
 
                 // Create queries belt/depot processing at offset (block distance - 1).
-                // Reuse that same coordinate so blocks obstructing the airflow are respected by
-                // AirCurrent's already-computed maxDistance/segments.
+                // Reuse that coordinate so AirCurrent's obstruction/catalyst segments remain
+                // authoritative for both the lower and upper rack probes.
                 float airflowOffset = distance - 1.0f;
                 if (airflowOffset > current.maxDistance + 1.0e-3f) {
                     continue;

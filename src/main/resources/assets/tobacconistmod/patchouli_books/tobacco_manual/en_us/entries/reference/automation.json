@@ -27,6 +27,11 @@
       "type": "patchouli:text",
       "title": "Other Processing Blocks",
       "text": "The Drying Rack, Tobacco Barrel, Flue Firebox, and Hookah expose validated NeoForge item automation where appropriate. Automation never bypasses the blocks' normal input, batch, curing, fuel, or slot rules."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Hanging Tobacco",
+      "text": "Traditional hanging 16-leaf bunches are deliberately not inventory machines. Hoppers, funnels, arms, and Display Links cannot insert, extract, or read them. Break the bunch to recover its leaves. Environmental Create fan assistance can still accelerate a valid cure."
     }
   ]
 }

@@ -42,8 +42,10 @@ public class DoubleHookahBlock extends BaseEntityBlock {
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
     public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
 
-    private static final VoxelShape LOWER_SHAPE = Block.box(0, 0, 0, 16, 16, 16);
-    private static final VoxelShape UPPER_SHAPE = Block.box(0, 0, 0, 16, 16, 16);
+    // The visible material Hookahs are narrow 1.5-block-tall models.  Do not give
+    // either half a full-cube outline/collision/light footprint.
+    private static final VoxelShape LOWER_SHAPE = Block.box(2.5, 0, 2.5, 13.5, 16, 13.5);
+    private static final VoxelShape UPPER_SHAPE = Block.box(2.5, 0, 2.5, 13.5, 12, 13.5);
 
     @Override
     protected MapCodec<? extends BaseEntityBlock> codec() {
@@ -66,6 +68,21 @@ public class DoubleHookahBlock extends BaseEntityBlock {
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return state.getValue(HALF) == DoubleBlockHalf.LOWER ? LOWER_SHAPE : UPPER_SHAPE;
+    }
+
+    @Override
+    protected boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
+        return true;
+    }
+
+    @Override
+    protected int getLightBlock(BlockState state, BlockGetter level, BlockPos pos) {
+        return 0;
+    }
+
+    @Override
+    protected float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos) {
+        return 1.0F;
     }
 
     @Override
@@ -143,9 +160,21 @@ public class DoubleHookahBlock extends BaseEntityBlock {
     @Override
     public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         DoubleBlockHalf half = state.getValue(HALF);
+        BlockPos lowerPos = half == DoubleBlockHalf.LOWER ? pos : pos.below();
+
+        if (!level.isClientSide && player.getAbilities().instabuild) {
+            BlockEntity blockEntity = level.getBlockEntity(lowerPos);
+            if (blockEntity instanceof HookahEntity hookah) {
+                hookah.clearContentsForCreativeBreak();
+            }
+
+            // Let vanilla/NeoForge perform the Creative break exactly once. The event
+            // guards suppress loot from both this half and the partner teardown.
+            return super.playerWillDestroy(level, pos, state, player);
+        }
+
         BlockPos otherPos = half == DoubleBlockHalf.LOWER ? pos.above() : pos.below();
         BlockState otherState = level.getBlockState(otherPos);
-
         if (otherState.is(this) && otherState.getValue(HALF) != half) {
             level.setBlock(otherPos, Blocks.AIR.defaultBlockState(), 35);
             level.levelEvent(player, 2001, otherPos, Block.getId(otherState));
@@ -155,8 +184,20 @@ public class DoubleHookahBlock extends BaseEntityBlock {
     }
 
     @Override
+    public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state,
+                              @Nullable BlockEntity blockEntity, ItemStack tool) {
+        // Do not let either half's loot table produce a Hookah item in Creative.
+        if (player.getAbilities().instabuild) {
+            return;
+        }
+        super.playerDestroy(level, player, pos, state, blockEntity, tool);
+    }
+
+    @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
-        if (state.getBlock() != newState.getBlock()) {
+        boolean copperTransition = state.getBlock() instanceof CopperHookahBlock
+                && newState.getBlock() instanceof CopperHookahBlock;
+        if (state.getBlock() != newState.getBlock() && !copperTransition) {
             if (state.getValue(HALF) == DoubleBlockHalf.LOWER) {
                 BlockEntity blockEntity = level.getBlockEntity(pos);
                 if (blockEntity instanceof HookahEntity hookahEntity) {

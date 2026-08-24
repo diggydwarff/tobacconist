@@ -2,7 +2,7 @@
   "name": "Curing Quality",
   "icon": "tobacconistmod:tobacco_leaf_virginia_dry",
   "category": "tobacconistmod:curing",
-  "sortnum": 5,
+  "sortnum": 6,
   "pages": [
     {
       "type": "patchouli:text",

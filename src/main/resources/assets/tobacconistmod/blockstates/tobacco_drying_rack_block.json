@@ -1,9 +1,148 @@
 {
   "variants": {
-    "has_leaves=false,over_campfire=false": { "model": "tobacconistmod:block/tobacco_drying_rack_block" },
-    "has_leaves=true,over_campfire=false":  { "model": "tobacconistmod:block/tobacco_drying_rack_block" },
-
-    "has_leaves=false,over_campfire=true":  { "model": "tobacconistmod:block/tobacco_drying_rack_block_fire" },
-    "has_leaves=true,over_campfire=true":   { "model": "tobacconistmod:block/tobacco_drying_rack_block_fire" }
+    "cure_stage=0,load_stage=0,over_campfire=false": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_empty"
+    },
+    "cure_stage=0,load_stage=0,over_campfire=true": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_empty"
+    },
+    "cure_stage=1,load_stage=0,over_campfire=false": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_empty"
+    },
+    "cure_stage=1,load_stage=0,over_campfire=true": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_empty"
+    },
+    "cure_stage=2,load_stage=0,over_campfire=false": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_empty"
+    },
+    "cure_stage=2,load_stage=0,over_campfire=true": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_empty"
+    },
+    "cure_stage=3,load_stage=0,over_campfire=false": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_empty"
+    },
+    "cure_stage=3,load_stage=0,over_campfire=true": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_empty"
+    },
+    "cure_stage=4,load_stage=0,over_campfire=false": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_empty"
+    },
+    "cure_stage=4,load_stage=0,over_campfire=true": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_empty"
+    },
+    "cure_stage=5,load_stage=0,over_campfire=false": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_empty"
+    },
+    "cure_stage=5,load_stage=0,over_campfire=true": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_empty"
+    },
+    "cure_stage=0,load_stage=1,over_campfire=false": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_partial_empty_cure_0"
+    },
+    "cure_stage=0,load_stage=1,over_campfire=true": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_partial_empty_cure_0"
+    },
+    "cure_stage=1,load_stage=1,over_campfire=false": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_partial_empty_cure_1"
+    },
+    "cure_stage=1,load_stage=1,over_campfire=true": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_partial_empty_cure_1"
+    },
+    "cure_stage=2,load_stage=1,over_campfire=false": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_partial_empty_cure_2"
+    },
+    "cure_stage=2,load_stage=1,over_campfire=true": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_partial_empty_cure_2"
+    },
+    "cure_stage=3,load_stage=1,over_campfire=false": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_partial_empty_cure_3"
+    },
+    "cure_stage=3,load_stage=1,over_campfire=true": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_partial_empty_cure_3"
+    },
+    "cure_stage=4,load_stage=1,over_campfire=false": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_partial_empty_cure_4"
+    },
+    "cure_stage=4,load_stage=1,over_campfire=true": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_partial_empty_cure_4"
+    },
+    "cure_stage=5,load_stage=1,over_campfire=false": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_partial_empty_cure_5"
+    },
+    "cure_stage=5,load_stage=1,over_campfire=true": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_partial_empty_cure_5"
+    },
+    "cure_stage=0,load_stage=2,over_campfire=false": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_partial_full_cure_0"
+    },
+    "cure_stage=0,load_stage=2,over_campfire=true": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_partial_full_cure_0"
+    },
+    "cure_stage=1,load_stage=2,over_campfire=false": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_partial_full_cure_1"
+    },
+    "cure_stage=1,load_stage=2,over_campfire=true": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_partial_full_cure_1"
+    },
+    "cure_stage=2,load_stage=2,over_campfire=false": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_partial_full_cure_2"
+    },
+    "cure_stage=2,load_stage=2,over_campfire=true": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_partial_full_cure_2"
+    },
+    "cure_stage=3,load_stage=2,over_campfire=false": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_partial_full_cure_3"
+    },
+    "cure_stage=3,load_stage=2,over_campfire=true": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_partial_full_cure_3"
+    },
+    "cure_stage=4,load_stage=2,over_campfire=false": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_partial_full_cure_4"
+    },
+    "cure_stage=4,load_stage=2,over_campfire=true": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_partial_full_cure_4"
+    },
+    "cure_stage=5,load_stage=2,over_campfire=false": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_partial_full_cure_5"
+    },
+    "cure_stage=5,load_stage=2,over_campfire=true": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_partial_full_cure_5"
+    },
+    "cure_stage=0,load_stage=3,over_campfire=false": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_full_cure_0"
+    },
+    "cure_stage=0,load_stage=3,over_campfire=true": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_full_cure_0"
+    },
+    "cure_stage=1,load_stage=3,over_campfire=false": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_full_cure_1"
+    },
+    "cure_stage=1,load_stage=3,over_campfire=true": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_full_cure_1"
+    },
+    "cure_stage=2,load_stage=3,over_campfire=false": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_full_cure_2"
+    },
+    "cure_stage=2,load_stage=3,over_campfire=true": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_full_cure_2"
+    },
+    "cure_stage=3,load_stage=3,over_campfire=false": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_full_cure_3"
+    },
+    "cure_stage=3,load_stage=3,over_campfire=true": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_full_cure_3"
+    },
+    "cure_stage=4,load_stage=3,over_campfire=false": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_full_cure_4"
+    },
+    "cure_stage=4,load_stage=3,over_campfire=true": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_full_cure_4"
+    },
+    "cure_stage=5,load_stage=3,over_campfire=false": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_full_cure_5"
+    },
+    "cure_stage=5,load_stage=3,over_campfire=true": {
+      "model": "tobacconistmod:block/tobacco_drying_rack_full_cure_5"
+    }
   }
 }
