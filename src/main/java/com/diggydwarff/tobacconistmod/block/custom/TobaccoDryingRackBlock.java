@@ -41,6 +41,8 @@ public class TobaccoDryingRackBlock extends BaseEntityBlock {
     public static final IntegerProperty LOAD_STAGE = IntegerProperty.create("load_stage", 0, 3);
     /** Visual cure-color stage: 0 = raw green through 5 = fully cured brown. */
     public static final IntegerProperty CURE_STAGE = IntegerProperty.create("cure_stage", 0, 5);
+    /** Tobacco variety tint, matching hanging bunches: 0 wild, 1 Virginia, 2 Burley, 3 Oriental, 4 Dokha, 5 Shade. */
+    public static final IntegerProperty VARIETY = IntegerProperty.create("variety", 0, 5);
 
     // The new authored rack occupies one full block in X/Z and rises to 26.5 model pixels.
     // Keep the interaction/selection outline faithful to those outer bounds so its visible
@@ -82,7 +84,8 @@ public class TobaccoDryingRackBlock extends BaseEntityBlock {
                 .setValue(HAS_LEAVES, false)
                 .setValue(OVER_CAMPFIRE, false)
                 .setValue(LOAD_STAGE, 0)
-                .setValue(CURE_STAGE, 0));
+                .setValue(CURE_STAGE, 0)
+                .setValue(VARIETY, 0));
     }
 
     @Override
@@ -237,6 +240,6 @@ public class TobaccoDryingRackBlock extends BaseEntityBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<net.minecraft.world.level.block.Block, BlockState> builder) {
-        builder.add(HAS_LEAVES, OVER_CAMPFIRE, LOAD_STAGE, CURE_STAGE);
+        builder.add(HAS_LEAVES, OVER_CAMPFIRE, LOAD_STAGE, CURE_STAGE, VARIETY);
     }
 }

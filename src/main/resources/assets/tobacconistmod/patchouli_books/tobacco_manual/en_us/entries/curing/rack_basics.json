@@ -27,7 +27,7 @@
     {
       "type": "patchouli:text",
       "title": "Traditional Alternative",
-      "text": "A Drying Rack is not required. Sneak-right-click the underside of a sturdy block while holding 16 matching raw leaves to make a traditional hanging bunch. It cures by the same methods but cannot use hoppers or Display Links."
+      "text": "A Drying Rack is not required. Sneak-right-click the underside of a sturdy block while holding 16 matching raw or cured leaves to make a traditional hanging bunch. Raw bunches cure by the same methods; cured bunches can be hung for decoration/storage but cannot use hoppers or Display Links."
     },
     {
       "type": "patchouli:text",

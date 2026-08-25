@@ -4,6 +4,7 @@ import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
 
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoGrowthHelper;
+import com.diggydwarff.tobacconistmod.util.TobaccoCrateHelper;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceLocation;
@@ -22,6 +23,24 @@ public class AverageTobaccoLeavesRecipe extends CustomRecipe {
 
     @Override
     public boolean matches(CraftingInput container, Level level) {
+        // A completely filled 3x3 grid of one tobacco item is reserved for lossless crating,
+        // even when those nine stacks carry different NBT/components.
+        ItemStack crateFirst = ItemStack.EMPTY;
+        int crateSlots = 0;
+        boolean sameCrateType = true;
+        for (int i = 0; i < container.size(); i++) {
+            ItemStack stack = container.getItem(i);
+            if (stack.isEmpty()) continue;
+            crateSlots++;
+            if (!TobaccoCrateHelper.isCrateableTobacco(stack)) {
+                sameCrateType = false;
+                break;
+            }
+            if (crateFirst.isEmpty()) crateFirst = stack;
+            else if (!TobaccoCrateHelper.sameTobaccoType(crateFirst, stack)) sameCrateType = false;
+        }
+        if (crateSlots == TobaccoCrateHelper.CAPACITY && sameCrateType) return false;
+
         ItemStack first = ItemStack.EMPTY;
         boolean foundAny = false;
         int nonEmptyStacks = 0;

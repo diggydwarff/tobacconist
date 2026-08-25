@@ -6,12 +6,12 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "For a more traditional curing setup, raw tobacco can be hung in $(thing)16-leaf bunches$() instead of loaded into a Drying Rack. Hold at least $(item)16 identical raw leaves$(), sneak, and right-click the $(thing)underside$() of a sturdy block. Exactly 16 leaves are tied into one hanging bunch."
+      "text": "For a more traditional curing setup or decorative storage, tobacco can be hung in $(thing)16-leaf bunches$() instead of loaded into a Drying Rack. Hold at least $(item)16 identical raw or cured leaves$(), sneak, and right-click the $(thing)underside$() of a sturdy block. Exactly 16 leaves are tied into one hanging bunch. Already-cured leaves hang immediately as decorative storage and keep their cure, quality, and other processing data."
     },
     {
       "type": "patchouli:text",
       "title": "Same Tobacco Cure",
-      "text": "A hanging bunch uses the same curing times, quality rules, interruptions, rain damage, color progression, and method priority as a Drying Rack: $(thing)Fire → Flue → Sun → Air$(). Break either half of the bunch to recover all 16 leaves when you are ready."
+      "text": "A hanging bunch uses the same curing times, quality rules, interruptions, rain damage, color progression, and method priority as a Drying Rack: $(thing)Fire → Flue → Sun → Air$(). Finished bunches retain subtle variety-specific cured coloration. Break either half of the bunch to recover all 16 leaves with their processing data intact."
     },
     {
       "type": "patchouli:text",

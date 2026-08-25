@@ -862,6 +862,16 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             }
         }
 
+        if (updated.hasProperty(TobaccoDryingRackBlock.VARIETY)) {
+            int variety = hasLeaves()
+                    ? com.diggydwarff.tobacconistmod.block.custom.HangingTobaccoBlock.getVarietyIndex(storedLeaf)
+                    : 0;
+            if (updated.getValue(TobaccoDryingRackBlock.VARIETY) != variety) {
+                updated = updated.setValue(TobaccoDryingRackBlock.VARIETY, variety);
+                changed = true;
+            }
+        }
+
         if (changed) {
             level.setBlock(worldPosition, updated, 3);
         }

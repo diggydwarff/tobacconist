@@ -33,6 +33,8 @@ public class ModRecipes {
             SERIALIZERS.register("crafting_special_label_duplicate", () -> new SimpleCraftingRecipeSerializer<>(LabelDuplicateRecipe::new));
     public static final Supplier<RecipeSerializer<TobaccoBlendingRecipe>> TOBACCO_BLENDING_RECIPE_SERIALIZER =
             SERIALIZERS.register("crafting_special_tobacco_blending", () -> new SimpleCraftingRecipeSerializer<>(TobaccoBlendingRecipe::new));
+    public static final Supplier<RecipeSerializer<TobaccoCrateRecipe>> TOBACCO_CRATE_RECIPE_SERIALIZER =
+            SERIALIZERS.register("crafting_special_tobacco_crate", () -> new SimpleCraftingRecipeSerializer<>(TobaccoCrateRecipe::new));
 
     public static void register(IEventBus eventBus) { SERIALIZERS.register(eventBus); }
 }

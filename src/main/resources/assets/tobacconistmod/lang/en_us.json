@@ -472,5 +472,12 @@
   "advancement.tobacconistmod.hookah_collector.desc": "Collect every main Hookah style.",
   "advancement.tobacconistmod.netherite_hookah": "Smoke in Style",
   "advancement.tobacconistmod.netherite_hookah.desc": "Craft or obtain a Netherite Hookah.",
-  "block.tobacconistmod.hanging_tobacco_leaves": "Hanging Tobacco Leaves"
+  "block.tobacconistmod.hanging_tobacco_leaves": "Hanging Tobacco Leaves",
+  "block.tobacconistmod.blended_tobacco_crate": "Blended Tobacco Crate",
+  "block.tobacconistmod.raw_wild_tobacco_crate": "Raw Wild Tobacco Crate",
+  "block.tobacconistmod.raw_virginia_tobacco_crate": "Raw Virginia Tobacco Crate",
+  "block.tobacconistmod.raw_burley_tobacco_crate": "Raw Burley Tobacco Crate",
+  "block.tobacconistmod.raw_oriental_tobacco_crate": "Raw Oriental Tobacco Crate",
+  "block.tobacconistmod.raw_dokha_tobacco_crate": "Raw Dokha Tobacco Crate",
+  "block.tobacconistmod.raw_shade_tobacco_crate": "Raw Shade Tobacco Crate"
 }

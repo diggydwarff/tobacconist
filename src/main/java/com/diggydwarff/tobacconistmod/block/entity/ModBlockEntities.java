@@ -44,6 +44,25 @@ public class ModBlockEntities {
                             ModBlocks.TOBACCO_DRYING_RACK.get()
                     ).build(null));
 
+    public static final Supplier<BlockEntityType<TobaccoCrateBlockEntity>> TOBACCO_CRATE =
+            BLOCK_ENTITIES.register("tobacco_crate", () ->
+                    BlockEntityType.Builder.of(
+                            TobaccoCrateBlockEntity::new,
+                            ModBlocks.WILD_TOBACCO_CRATE.get(),
+                            ModBlocks.VIRGINIA_TOBACCO_CRATE.get(),
+                            ModBlocks.BURLEY_TOBACCO_CRATE.get(),
+                            ModBlocks.ORIENTAL_TOBACCO_CRATE.get(),
+                            ModBlocks.DOKHA_TOBACCO_CRATE.get(),
+                            ModBlocks.SHADE_TOBACCO_CRATE.get(),
+                            ModBlocks.RAW_WILD_TOBACCO_CRATE.get(),
+                            ModBlocks.RAW_VIRGINIA_TOBACCO_CRATE.get(),
+                            ModBlocks.RAW_BURLEY_TOBACCO_CRATE.get(),
+                            ModBlocks.RAW_ORIENTAL_TOBACCO_CRATE.get(),
+                            ModBlocks.RAW_DOKHA_TOBACCO_CRATE.get(),
+                            ModBlocks.RAW_SHADE_TOBACCO_CRATE.get(),
+                            ModBlocks.BLENDED_TOBACCO_CRATE.get()
+                    ).build(null));
+
     public static final Supplier<BlockEntityType<HangingTobaccoBlockEntity>> HANGING_TOBACCO =
             BLOCK_ENTITIES.register("hanging_tobacco", () ->
                     BlockEntityType.Builder.of(

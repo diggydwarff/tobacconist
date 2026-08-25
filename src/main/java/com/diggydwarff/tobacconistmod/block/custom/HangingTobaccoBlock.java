@@ -3,6 +3,7 @@ package com.diggydwarff.tobacconistmod.block.custom;
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
 import com.diggydwarff.tobacconistmod.block.entity.HangingTobaccoBlockEntity;
 import com.diggydwarff.tobacconistmod.block.entity.ModBlockEntities;
+import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -40,23 +41,34 @@ public class HangingTobaccoBlock extends BaseEntityBlock {
 
     public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
     public static final IntegerProperty CURE_STAGE = IntegerProperty.create("cure_stage", 0, 5);
+    public static final IntegerProperty VARIETY = IntegerProperty.create("variety", 0, 5);
 
     // The refined bunch is smaller and no longer includes the temporary decorative beam.
     // Keep generous outline boxes so the upper knot and lower leaves are both easy to target.
     private static final VoxelShape UPPER_OUTLINE_SHAPE = box(3.5D, 2.75D, 3.5D, 12.5D, 15.25D, 12.5D);
-    private static final VoxelShape LOWER_OUTLINE_SHAPE = box(0.8D, 0.0D, 0.8D, 15.2D, 13.75D, 15.2D);
+    private static final VoxelShape LOWER_OUTLINE_SHAPE = box(1.5D, 8.0D, 1.5D, 14.5D, 16.0D, 14.5D);
     private static final ThreadLocal<Set<BlockPos>> REMOVING = ThreadLocal.withInitial(HashSet::new);
 
     public HangingTobaccoBlock(Properties properties) {
         super(properties);
         registerDefaultState(stateDefinition.any()
                 .setValue(HALF, DoubleBlockHalf.UPPER)
-                .setValue(CURE_STAGE, 0));
+                .setValue(CURE_STAGE, 0)
+                .setValue(VARIETY, 0));
     }
 
     @Override
     protected MapCodec<? extends BaseEntityBlock> codec() {
         return simpleCodec(HangingTobaccoBlock::new);
+    }
+
+    public static int getVarietyIndex(ItemStack stack) {
+        if (stack.is(ModItems.VIRGINIA_TOBACCO_LEAF.get()) || stack.is(ModItems.VIRGINIA_TOBACCO_LEAF_DRY.get())) return 1;
+        if (stack.is(ModItems.BURLEY_TOBACCO_LEAF.get()) || stack.is(ModItems.BURLEY_TOBACCO_LEAF_DRY.get())) return 2;
+        if (stack.is(ModItems.ORIENTAL_TOBACCO_LEAF.get()) || stack.is(ModItems.ORIENTAL_TOBACCO_LEAF_DRY.get())) return 3;
+        if (stack.is(ModItems.DOKHA_TOBACCO_LEAF.get()) || stack.is(ModItems.DOKHA_TOBACCO_LEAF_DRY.get())) return 4;
+        if (stack.is(ModItems.SHADE_TOBACCO_LEAF.get()) || stack.is(ModItems.SHADE_TOBACCO_LEAF_DRY.get())) return 5;
+        return 0; // Wild / fallback
     }
 
     public static boolean canPlaceBundle(Level level, BlockPos upperPos) {
@@ -73,12 +85,16 @@ public class HangingTobaccoBlock extends BaseEntityBlock {
         if (!canPlaceBundle(level, upperPos) || leaves.isEmpty()) return false;
 
         Block block = ModBlocks.HANGING_TOBACCO_LEAVES.get();
+        int variety = getVarietyIndex(leaves);
+        int cureStage = com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper.isDryTobaccoLeaf(leaves) ? 5 : 0;
         BlockState upper = block.defaultBlockState()
                 .setValue(HALF, DoubleBlockHalf.UPPER)
-                .setValue(CURE_STAGE, 0);
+                .setValue(CURE_STAGE, cureStage)
+                .setValue(VARIETY, variety);
         BlockState lower = block.defaultBlockState()
                 .setValue(HALF, DoubleBlockHalf.LOWER)
-                .setValue(CURE_STAGE, 0);
+                .setValue(CURE_STAGE, cureStage)
+                .setValue(VARIETY, variety);
 
         // Install both halves before normal neighbor updates can validate the partner.
         level.setBlock(upperPos, upper, 2);
@@ -260,6 +276,6 @@ public class HangingTobaccoBlock extends BaseEntityBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(HALF, CURE_STAGE);
+        builder.add(HALF, CURE_STAGE, VARIETY);
     }
 }

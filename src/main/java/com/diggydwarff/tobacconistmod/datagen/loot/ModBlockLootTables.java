@@ -64,18 +64,21 @@ public class ModBlockLootTables extends BlockLootSubProvider {
                         .withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
                                 .add(LootItem.lootTableItem(ModBlocks.WILD_FLOWERING_TOBACCO.get()))));
 
-        this.add(ModBlocks.SHADE_TOBACCO_CRATE.get(), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
-                .add(LootItem.lootTableItem(ModItems.TOBACCO_LOOSE_SHADE.get()).apply(SetItemCountFunction.setCount(ConstantValue.exactly(9.0f))))));
-        this.add(ModBlocks.DOKHA_TOBACCO_CRATE.get(), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
-                .add(LootItem.lootTableItem(ModItems.TOBACCO_LOOSE_DOKHA.get()).apply(SetItemCountFunction.setCount(ConstantValue.exactly(9.0f))))));
-        this.add(ModBlocks.ORIENTAL_TOBACCO_CRATE.get(), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
-                .add(LootItem.lootTableItem(ModItems.TOBACCO_LOOSE_ORIENTAL.get()).apply(SetItemCountFunction.setCount(ConstantValue.exactly(9.0f))))));
-        this.add(ModBlocks.BURLEY_TOBACCO_CRATE.get(), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
-                .add(LootItem.lootTableItem(ModItems.TOBACCO_LOOSE_BURLEY.get()).apply(SetItemCountFunction.setCount(ConstantValue.exactly(9.0f))))));
-        this.add(ModBlocks.VIRGINIA_TOBACCO_CRATE.get(), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
-                .add(LootItem.lootTableItem(ModItems.TOBACCO_LOOSE_VIRGINIA.get()).apply(SetItemCountFunction.setCount(ConstantValue.exactly(9.0f))))));
-        this.add(ModBlocks.WILD_TOBACCO_CRATE.get(), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
-                .add(LootItem.lootTableItem(ModItems.TOBACCO_LOOSE_WILD.get()).apply(SetItemCountFunction.setCount(ConstantValue.exactly(9.0f))))));
+        // TobaccoCrateBlockEntity owns crate drops so the exact nine input stacks (including
+        // all quality/cure/cut/aromatic NBT/components) are restored instead of flattened.
+        this.add(ModBlocks.SHADE_TOBACCO_CRATE.get(), LootTable.lootTable());
+        this.add(ModBlocks.RAW_SHADE_TOBACCO_CRATE.get(), LootTable.lootTable());
+        this.add(ModBlocks.DOKHA_TOBACCO_CRATE.get(), LootTable.lootTable());
+        this.add(ModBlocks.RAW_DOKHA_TOBACCO_CRATE.get(), LootTable.lootTable());
+        this.add(ModBlocks.ORIENTAL_TOBACCO_CRATE.get(), LootTable.lootTable());
+        this.add(ModBlocks.RAW_ORIENTAL_TOBACCO_CRATE.get(), LootTable.lootTable());
+        this.add(ModBlocks.BURLEY_TOBACCO_CRATE.get(), LootTable.lootTable());
+        this.add(ModBlocks.RAW_BURLEY_TOBACCO_CRATE.get(), LootTable.lootTable());
+        this.add(ModBlocks.VIRGINIA_TOBACCO_CRATE.get(), LootTable.lootTable());
+        this.add(ModBlocks.RAW_VIRGINIA_TOBACCO_CRATE.get(), LootTable.lootTable());
+        this.add(ModBlocks.WILD_TOBACCO_CRATE.get(), LootTable.lootTable());
+        this.add(ModBlocks.RAW_WILD_TOBACCO_CRATE.get(), LootTable.lootTable());
+        this.add(ModBlocks.BLENDED_TOBACCO_CRATE.get(), LootTable.lootTable());
 
         LootItemCondition.Builder wildBuilder = LootItemBlockStatePropertyCondition
                 .hasBlockStateProperties(ModBlocks.WILD_TOBACCO_CROP.get())

@@ -1,40 +1,220 @@
 {
   "variants": {
-    "cure_stage=0,half=lower": {
+    "cure_stage=0,half=lower,variety=0": {
       "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_0"
     },
-    "cure_stage=1,half=lower": {
+    "cure_stage=1,half=lower,variety=0": {
       "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_1"
     },
-    "cure_stage=2,half=lower": {
+    "cure_stage=2,half=lower,variety=0": {
       "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_2"
     },
-    "cure_stage=3,half=lower": {
+    "cure_stage=3,half=lower,variety=0": {
       "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_3"
     },
-    "cure_stage=4,half=lower": {
+    "cure_stage=4,half=lower,variety=0": {
       "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_4"
     },
-    "cure_stage=5,half=lower": {
-      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_5"
+    "cure_stage=5,half=lower,variety=0": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_5_wild"
     },
-    "cure_stage=0,half=upper": {
+    "cure_stage=0,half=lower,variety=1": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_0_virginia"
+    },
+    "cure_stage=1,half=lower,variety=1": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_1"
+    },
+    "cure_stage=2,half=lower,variety=1": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_2"
+    },
+    "cure_stage=3,half=lower,variety=1": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_3"
+    },
+    "cure_stage=4,half=lower,variety=1": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_4"
+    },
+    "cure_stage=5,half=lower,variety=1": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_5_virginia"
+    },
+    "cure_stage=0,half=lower,variety=2": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_0_burley"
+    },
+    "cure_stage=1,half=lower,variety=2": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_1"
+    },
+    "cure_stage=2,half=lower,variety=2": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_2"
+    },
+    "cure_stage=3,half=lower,variety=2": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_3"
+    },
+    "cure_stage=4,half=lower,variety=2": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_4"
+    },
+    "cure_stage=5,half=lower,variety=2": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_5_burley"
+    },
+    "cure_stage=0,half=lower,variety=3": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_0_oriental"
+    },
+    "cure_stage=1,half=lower,variety=3": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_1"
+    },
+    "cure_stage=2,half=lower,variety=3": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_2"
+    },
+    "cure_stage=3,half=lower,variety=3": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_3"
+    },
+    "cure_stage=4,half=lower,variety=3": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_4"
+    },
+    "cure_stage=5,half=lower,variety=3": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_5_oriental"
+    },
+    "cure_stage=0,half=lower,variety=4": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_0_dokha"
+    },
+    "cure_stage=1,half=lower,variety=4": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_1"
+    },
+    "cure_stage=2,half=lower,variety=4": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_2"
+    },
+    "cure_stage=3,half=lower,variety=4": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_3"
+    },
+    "cure_stage=4,half=lower,variety=4": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_4"
+    },
+    "cure_stage=5,half=lower,variety=4": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_5_dokha"
+    },
+    "cure_stage=0,half=lower,variety=5": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_0_shade"
+    },
+    "cure_stage=1,half=lower,variety=5": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_1"
+    },
+    "cure_stage=2,half=lower,variety=5": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_2"
+    },
+    "cure_stage=3,half=lower,variety=5": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_3"
+    },
+    "cure_stage=4,half=lower,variety=5": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_4"
+    },
+    "cure_stage=5,half=lower,variety=5": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_5_shade"
+    },
+    "cure_stage=0,half=upper,variety=0": {
       "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_0"
     },
-    "cure_stage=1,half=upper": {
+    "cure_stage=1,half=upper,variety=0": {
       "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_1"
     },
-    "cure_stage=2,half=upper": {
+    "cure_stage=2,half=upper,variety=0": {
       "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_2"
     },
-    "cure_stage=3,half=upper": {
+    "cure_stage=3,half=upper,variety=0": {
       "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_3"
     },
-    "cure_stage=4,half=upper": {
+    "cure_stage=4,half=upper,variety=0": {
       "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_4"
     },
-    "cure_stage=5,half=upper": {
-      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_5"
+    "cure_stage=5,half=upper,variety=0": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_5_wild"
+    },
+    "cure_stage=0,half=upper,variety=1": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_0_virginia"
+    },
+    "cure_stage=1,half=upper,variety=1": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_1"
+    },
+    "cure_stage=2,half=upper,variety=1": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_2"
+    },
+    "cure_stage=3,half=upper,variety=1": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_3"
+    },
+    "cure_stage=4,half=upper,variety=1": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_4"
+    },
+    "cure_stage=5,half=upper,variety=1": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_5_virginia"
+    },
+    "cure_stage=0,half=upper,variety=2": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_0_burley"
+    },
+    "cure_stage=1,half=upper,variety=2": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_1"
+    },
+    "cure_stage=2,half=upper,variety=2": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_2"
+    },
+    "cure_stage=3,half=upper,variety=2": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_3"
+    },
+    "cure_stage=4,half=upper,variety=2": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_4"
+    },
+    "cure_stage=5,half=upper,variety=2": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_5_burley"
+    },
+    "cure_stage=0,half=upper,variety=3": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_0_oriental"
+    },
+    "cure_stage=1,half=upper,variety=3": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_1"
+    },
+    "cure_stage=2,half=upper,variety=3": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_2"
+    },
+    "cure_stage=3,half=upper,variety=3": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_3"
+    },
+    "cure_stage=4,half=upper,variety=3": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_4"
+    },
+    "cure_stage=5,half=upper,variety=3": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_5_oriental"
+    },
+    "cure_stage=0,half=upper,variety=4": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_0_dokha"
+    },
+    "cure_stage=1,half=upper,variety=4": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_1"
+    },
+    "cure_stage=2,half=upper,variety=4": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_2"
+    },
+    "cure_stage=3,half=upper,variety=4": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_3"
+    },
+    "cure_stage=4,half=upper,variety=4": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_4"
+    },
+    "cure_stage=5,half=upper,variety=4": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_5_dokha"
+    },
+    "cure_stage=0,half=upper,variety=5": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_0_shade"
+    },
+    "cure_stage=1,half=upper,variety=5": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_1"
+    },
+    "cure_stage=2,half=upper,variety=5": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_2"
+    },
+    "cure_stage=3,half=upper,variety=5": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_3"
+    },
+    "cure_stage=4,half=upper,variety=5": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_4"
+    },
+    "cure_stage=5,half=upper,variety=5": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_5_shade"
     }
   }
 }

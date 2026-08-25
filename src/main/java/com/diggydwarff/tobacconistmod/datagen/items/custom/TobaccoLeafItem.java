@@ -30,17 +30,18 @@ public class TobaccoLeafItem extends Item {
         var player = context.getPlayer();
 
         // Traditional hanging bunch placement: sneak-use the underside of a sturdy block while
-        // holding one complete 16-leaf raw batch. Cured leaves never place a new bunch.
+        // holding one complete 16-leaf batch. Raw leaves cure normally; cured leaves hang as storage/decoration.
         if (player == null
                 || !player.isShiftKeyDown()
                 || context.getClickedFace() != Direction.DOWN
-                || !TobaccoCuringHelper.isRawTobaccoLeaf(stack)) {
+                || (!TobaccoCuringHelper.isRawTobaccoLeaf(stack)
+                && !TobaccoCuringHelper.isDryTobaccoLeaf(stack))) {
             return super.useOn(context);
         }
 
-        if (stack.getCount() < 16) {
+        if (stack.getCount() < 16 && !player.getAbilities().instabuild) {
             if (!context.getLevel().isClientSide) {
-                player.displayClientMessage(Component.literal("You need 16 matching raw tobacco leaves to hang a curing bunch."), true);
+                player.displayClientMessage(Component.literal("You need 16 matching tobacco leaves to hang a bunch."), true);
             }
             return InteractionResult.sidedSuccess(context.getLevel().isClientSide);
         }

@@ -79,12 +79,19 @@ public class TobacconistCreativeTab {
                         output.accept(ModBlocks.FLUE_FIREBOX.get());
                         output.accept(ModBlocks.TOBACCO_BARREL.get());
 
+                        output.accept(ModBlocks.RAW_WILD_TOBACCO_CRATE.get());
+                        output.accept(ModBlocks.RAW_VIRGINIA_TOBACCO_CRATE.get());
+                        output.accept(ModBlocks.RAW_BURLEY_TOBACCO_CRATE.get());
+                        output.accept(ModBlocks.RAW_ORIENTAL_TOBACCO_CRATE.get());
+                        output.accept(ModBlocks.RAW_DOKHA_TOBACCO_CRATE.get());
+                        output.accept(ModBlocks.RAW_SHADE_TOBACCO_CRATE.get());
                         output.accept(ModBlocks.WILD_TOBACCO_CRATE.get());
                         output.accept(ModBlocks.VIRGINIA_TOBACCO_CRATE.get());
                         output.accept(ModBlocks.BURLEY_TOBACCO_CRATE.get());
                         output.accept(ModBlocks.ORIENTAL_TOBACCO_CRATE.get());
                         output.accept(ModBlocks.DOKHA_TOBACCO_CRATE.get());
                         output.accept(ModBlocks.SHADE_TOBACCO_CRATE.get());
+                        output.accept(ModBlocks.BLENDED_TOBACCO_CRATE.get());
 
                         output.accept(WILD_TOBACCO_SEEDS.get());
                         output.accept(VIRGINIA_TOBACCO_SEEDS.get());

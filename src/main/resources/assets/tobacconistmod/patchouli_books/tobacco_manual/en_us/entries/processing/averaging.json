@@ -20,7 +20,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "This is the safe way to consolidate batches when quality metadata prevents ordinary stacking. Do not use tobacco crates as a quality-compression system; crates are not part of the recommended quality workflow.",
+      "text": "Averaging intentionally combines compatible quality values. Tobacco crates do something different: fill a 3x3 grid with nine of the same tobacco item and the crate stores each unit losslessly, even when their NBT differs. Breaking the crate spills those exact nine inputs back out.",
       "title": "Quality-Safe Consolidation"
     }
   ]

@@ -1,0 +1,6 @@
+{
+  "parent": "tobacconistmod:block/hanging_tobacco_leaves_lower",
+  "textures": {
+    "base": "tobacconistmod:block/hanging_tobacco_leaves_cure_5_wild"
+  }
+}

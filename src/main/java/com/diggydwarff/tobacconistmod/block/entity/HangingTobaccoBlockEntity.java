@@ -51,6 +51,9 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
     private int sunTicks = 0;
     private int fireTicks = 0;
     private int flueTicks = 0;
+    // Persist the botanical variety independently of cure state so a bunch that cures in place
+    // always switches to its own finished variety model/texture.
+    private int tobaccoVariety = 0;
 
     private int createFanAssistRefresh = 0;
     private CreateCompat.FanCuringAssist cachedCreateFanAssist = CreateCompat.FanCuringAssist.NONE;
@@ -72,11 +75,13 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
     }
 
     public void setLeaves(ItemStack source) {
-        if (source.isEmpty() || !TobaccoCuringHelper.isRawTobaccoLeaf(source)) {
+        if (source.isEmpty() || (!TobaccoCuringHelper.isRawTobaccoLeaf(source)
+                && !TobaccoCuringHelper.isDryTobaccoLeaf(source))) {
             return;
         }
 
         storedLeaf = source.copyWithCount(LEAF_COUNT);
+        tobaccoVariety = HangingTobaccoBlock.getVarietyIndex(source);
         resetProgress();
         syncState();
         syncToClient();
@@ -84,6 +89,7 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
 
     public void discardContents() {
         storedLeaf = ItemStack.EMPTY;
+        tobaccoVariety = 0;
         resetProgress();
         setChanged();
     }
@@ -95,12 +101,15 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
 
         Containers.dropItemStack(level, pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, storedLeaf.copy());
         storedLeaf = ItemStack.EMPTY;
+        tobaccoVariety = 0;
         resetProgress();
         setChanged();
     }
 
     public boolean isFinished() {
-        if (!hasLeaves() || !LegacyItemTags.hasTag(storedLeaf)) return false;
+        if (!hasLeaves()) return false;
+        if (TobaccoCuringHelper.isDryTobaccoLeaf(storedLeaf)) return true;
+        if (!LegacyItemTags.hasTag(storedLeaf)) return false;
         CompoundTag tag = LegacyItemTags.getTag(storedLeaf);
         return tag != null && tag.contains(TobaccoCuringHelper.TAG_CURE_TYPE);
     }
@@ -470,16 +479,23 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
         }
 
         int cureStage = getVisualCureStage();
-        if (upper.getValue(HangingTobaccoBlock.CURE_STAGE) != cureStage) {
-            level.setBlock(worldPosition, upper.setValue(HangingTobaccoBlock.CURE_STAGE, cureStage), 3);
+        int variety = tobaccoVariety;
+        if (upper.getValue(HangingTobaccoBlock.CURE_STAGE) != cureStage
+                || upper.getValue(HangingTobaccoBlock.VARIETY) != variety) {
+            level.setBlock(worldPosition, upper
+                    .setValue(HangingTobaccoBlock.CURE_STAGE, cureStage)
+                    .setValue(HangingTobaccoBlock.VARIETY, variety), 3);
         }
 
         BlockPos lowerPos = worldPosition.below();
         BlockState lower = level.getBlockState(lowerPos);
         if (lower.is(ModBlocks.HANGING_TOBACCO_LEAVES.get())
                 && lower.getValue(HangingTobaccoBlock.HALF) == DoubleBlockHalf.LOWER
-                && lower.getValue(HangingTobaccoBlock.CURE_STAGE) != cureStage) {
-            level.setBlock(lowerPos, lower.setValue(HangingTobaccoBlock.CURE_STAGE, cureStage), 3);
+                && (lower.getValue(HangingTobaccoBlock.CURE_STAGE) != cureStage
+                || lower.getValue(HangingTobaccoBlock.VARIETY) != variety)) {
+            level.setBlock(lowerPos, lower
+                    .setValue(HangingTobaccoBlock.CURE_STAGE, cureStage)
+                    .setValue(HangingTobaccoBlock.VARIETY, variety), 3);
         }
     }
 
@@ -637,6 +653,7 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
         tag.putInt("SunTicks", sunTicks);
         tag.putInt("FireTicks", fireTicks);
         tag.putInt("FlueTicks", flueTicks);
+        tag.putInt("TobaccoVariety", tobaccoVariety);
     }
 
     @Override
@@ -657,5 +674,8 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
         sunTicks = tag.getInt("SunTicks");
         fireTicks = tag.getInt("FireTicks");
         flueTicks = tag.getInt("FlueTicks");
+        tobaccoVariety = tag.contains("TobaccoVariety")
+                ? tag.getInt("TobaccoVariety")
+                : HangingTobaccoBlock.getVarietyIndex(storedLeaf);
     }
 }

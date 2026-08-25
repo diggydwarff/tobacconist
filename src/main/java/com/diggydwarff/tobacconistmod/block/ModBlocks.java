@@ -91,7 +91,7 @@ public class ModBlocks {
     public static final Supplier<Block> TOBACCO_DRYING_RACK = registerBlock("tobacco_drying_rack_block",
             () -> new TobaccoDryingRackBlock(BlockBehaviour.Properties.of().strength(0.8F).sound(SoundType.WOOD).noOcclusion()));
 
-    // Traditional curing option: placed directly from a stack of 16 raw leaves, so it has no BlockItem.
+    // Traditional hanging option: placed directly from a stack of 16 raw or cured leaves, so it has no BlockItem.
     public static final Supplier<Block> HANGING_TOBACCO_LEAVES = BLOCKS.register("hanging_tobacco_leaves",
             () -> new HangingTobaccoBlock(BlockBehaviour.Properties.of()
                     .strength(0.35F)
@@ -130,43 +130,93 @@ public class ModBlocks {
     public static final Supplier<Block> SHADE_TOBACCO_CROP = BLOCKS.register("tobacco_crop_shade",
             () -> new ShadeCropBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WHEAT).noOcclusion().noCollission()));
 
+
+    public static final Supplier<Block> RAW_VIRGINIA_TOBACCO_CRATE = registerBlock("raw_virginia_tobacco_crate",
+            () -> new TobaccoCrateBlock(BlockBehaviour.Properties.of()
+                    .strength(1.0F)
+                    .sound(SoundType.WOOD)
+                    .noOcclusion()
+            ));
+
+    public static final Supplier<Block> RAW_BURLEY_TOBACCO_CRATE = registerBlock("raw_burley_tobacco_crate",
+            () -> new TobaccoCrateBlock(BlockBehaviour.Properties.of()
+                    .strength(1.0F)
+                    .sound(SoundType.WOOD)
+                    .noOcclusion()
+            ));
+
+    public static final Supplier<Block> RAW_ORIENTAL_TOBACCO_CRATE = registerBlock("raw_oriental_tobacco_crate",
+            () -> new TobaccoCrateBlock(BlockBehaviour.Properties.of()
+                    .strength(1.0F)
+                    .sound(SoundType.WOOD)
+                    .noOcclusion()
+            ));
+
+    public static final Supplier<Block> RAW_DOKHA_TOBACCO_CRATE = registerBlock("raw_dokha_tobacco_crate",
+            () -> new TobaccoCrateBlock(BlockBehaviour.Properties.of()
+                    .strength(1.0F)
+                    .sound(SoundType.WOOD)
+                    .noOcclusion()
+            ));
+
+    public static final Supplier<Block> RAW_SHADE_TOBACCO_CRATE = registerBlock("raw_shade_tobacco_crate",
+            () -> new TobaccoCrateBlock(BlockBehaviour.Properties.of()
+                    .strength(1.0F)
+                    .sound(SoundType.WOOD)
+                    .noOcclusion()
+            ));
+
+    public static final Supplier<Block> RAW_WILD_TOBACCO_CRATE = registerBlock("raw_wild_tobacco_crate",
+            () -> new TobaccoCrateBlock(BlockBehaviour.Properties.of()
+                    .strength(1.0F)
+                    .sound(SoundType.WOOD)
+                    .noOcclusion()
+            ));
+
     public static final Supplier<Block> VIRGINIA_TOBACCO_CRATE = registerBlock("virginia_tobacco_crate",
-            () -> new Block(BlockBehaviour.Properties.of()
+            () -> new TobaccoCrateBlock(BlockBehaviour.Properties.of()
                     .strength(1.0F)
                     .sound(SoundType.WOOD)
                     .noOcclusion()
             ));
 
     public static final Supplier<Block> BURLEY_TOBACCO_CRATE = registerBlock("burley_tobacco_crate",
-            () -> new Block(BlockBehaviour.Properties.of()
+            () -> new TobaccoCrateBlock(BlockBehaviour.Properties.of()
                     .strength(1.0F)
                     .sound(SoundType.WOOD)
                     .noOcclusion()
             ));
 
     public static final Supplier<Block> ORIENTAL_TOBACCO_CRATE = registerBlock("oriental_tobacco_crate",
-            () -> new Block(BlockBehaviour.Properties.of()
+            () -> new TobaccoCrateBlock(BlockBehaviour.Properties.of()
                     .strength(1.0F)
                     .sound(SoundType.WOOD)
                     .noOcclusion()
             ));
 
     public static final Supplier<Block> DOKHA_TOBACCO_CRATE = registerBlock("dokha_tobacco_crate",
-            () -> new Block(BlockBehaviour.Properties.of()
+            () -> new TobaccoCrateBlock(BlockBehaviour.Properties.of()
                     .strength(1.0F)
                     .sound(SoundType.WOOD)
                     .noOcclusion()
             ));
 
     public static final Supplier<Block> SHADE_TOBACCO_CRATE = registerBlock("shade_tobacco_crate",
-            () -> new Block(BlockBehaviour.Properties.of()
+            () -> new TobaccoCrateBlock(BlockBehaviour.Properties.of()
                     .strength(1.0F)
                     .sound(SoundType.WOOD)
                     .noOcclusion()
             ));
 
     public static final Supplier<Block> WILD_TOBACCO_CRATE = registerBlock("wild_tobacco_crate",
-            () -> new Block(BlockBehaviour.Properties.of()
+            () -> new TobaccoCrateBlock(BlockBehaviour.Properties.of()
+                    .strength(1.0F)
+                    .sound(SoundType.WOOD)
+                    .noOcclusion()
+            ));
+
+    public static final Supplier<Block> BLENDED_TOBACCO_CRATE = registerBlock("blended_tobacco_crate",
+            () -> new TobaccoCrateBlock(BlockBehaviour.Properties.of()
                     .strength(1.0F)
                     .sound(SoundType.WOOD)
                     .noOcclusion()
