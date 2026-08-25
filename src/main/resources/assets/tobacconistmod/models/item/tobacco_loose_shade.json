@@ -6,6 +6,18 @@
   "overrides": [
     {
       "predicate": {
+        "tobacconistmod:shag_cut": 1.0
+      },
+      "model": "tobacconistmod:item/tobacco_loose_shade_shag"
+    },
+    {
+      "predicate": {
+        "tobacconistmod:rough_cut": 1.0
+      },
+      "model": "tobacconistmod:item/tobacco_loose_shade_rough"
+    },
+    {
+      "predicate": {
         "tobacconistmod:flake_cut": 1.0
       },
       "model": "tobacconistmod:item/tobacco_loose_shade_flake"
