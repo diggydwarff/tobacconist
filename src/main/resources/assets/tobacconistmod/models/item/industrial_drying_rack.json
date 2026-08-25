@@ -1,3 +1,6 @@
 {
-  "parent": "tobacconistmod:block/industrial_drying_rack_frame"
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "tobacconistmod:item/industrial_drying_rack"
+  }
 }

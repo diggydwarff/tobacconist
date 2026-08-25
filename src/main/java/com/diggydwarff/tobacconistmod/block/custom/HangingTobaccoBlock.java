@@ -43,9 +43,10 @@ public class HangingTobaccoBlock extends BaseEntityBlock {
     public static final IntegerProperty CURE_STAGE = IntegerProperty.create("cure_stage", 0, 5);
     public static final IntegerProperty VARIETY = IntegerProperty.create("variety", 0, 5);
 
-    // Selection bounds cover the upper knot and lower leaf mass.
-    private static final VoxelShape UPPER_OUTLINE_SHAPE = box(3.5D, 2.75D, 3.5D, 12.5D, 15.25D, 12.5D);
-    private static final VoxelShape LOWER_OUTLINE_SHAPE = box(1.5D, 8.0D, 1.5D, 14.5D, 16.0D, 14.5D);
+    // Selection bounds follow the current two-block hanging-bundle model.
+    // A few long leaves cross the half boundary, so the per-half boxes overlap slightly.
+    private static final VoxelShape UPPER_OUTLINE_SHAPE = box(1.75D, -2.58D, 2.75D, 14.25D, 15.5D, 13.25D);
+    private static final VoxelShape LOWER_OUTLINE_SHAPE = box(2.25D, 2.42D, 4.75D, 13.75D, 18.92D, 10.75D);
     private static final ThreadLocal<Set<BlockPos>> REMOVING = ThreadLocal.withInitial(HashSet::new);
 
     public HangingTobaccoBlock(Properties properties) {

@@ -54,7 +54,7 @@ The Flue Firebox emits a small active smoke effect while lit.
 
 ## Industrial Drying Rack
 
-The **Industrial Drying Rack** is the Create-era factory counterpart to the wooden rack. It holds **32 matching leaves** and deliberately cannot be loaded or unloaded by player right-clicks; use Funnels, Mechanical Arms, Packagers, or other validated item automation. Breaking the block still returns its stored contents.
+The **Industrial Drying Rack** is the Create-era factory counterpart to the wooden rack. It holds **32 matching leaves** and deliberately cannot be loaded or unloaded by player right-clicks; use Funnels, Mechanical Arms, Packagers, or other validated item automation. Breaking the block still returns its stored contents. The rack has **no internal fan, motor, or power connector**: it is an open forced-air frame whose curing assistance must come from external Create machinery.
 
 Unlike the wooden rack, the industrial rack makes **no curing progress without Create-assisted airflow**. It reuses the same four cure identities and quality calculation:
 

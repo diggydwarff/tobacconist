@@ -27,7 +27,7 @@
     {
       "type": "patchouli:text",
       "title": "Industrial Drying Rack",
-      "text": "With $(thing)Create$() installed, the $(item)Industrial Drying Rack$() is a factory upgrade. It holds $(item)32$() matching leaves, cannot be loaded or unloaded by hand, and makes no curing progress without Create-assisted airflow. Its assisted Air/Sun and Fire/Flue curing is modestly faster than the wooden rack, with identical quality rules."
+      "text": "With $(thing)Create$() installed, the $(item)Industrial Drying Rack$() is a 32-leaf automation-only factory rack. It has no internal fan or power connector: external Create airflow is required for all curing. Assisted Air/Sun and Fire/Flue curing is modestly faster than the wooden rack, with identical quality rules."
     },
     {
       "type": "patchouli:text",

@@ -1,8 +1,1089 @@
 {
   "multipart": [
-    { "apply": { "model": "tobacconistmod:block/industrial_drying_rack_frame" } },
-    { "when": { "load_stage": "1" }, "apply": { "model": "tobacconistmod:block/industrial_drying_rack_load_1" } },
-    { "when": { "load_stage": "2" }, "apply": { "model": "tobacconistmod:block/industrial_drying_rack_load_2" } },
-    { "when": { "load_stage": "3" }, "apply": { "model": "tobacconistmod:block/industrial_drying_rack_load_3" } }
+    {
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_frame"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "1",
+        "cure_stage": "0",
+        "variety": "0"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_1_cure_0_wild"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "1",
+        "cure_stage": "0",
+        "variety": "1"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_1_cure_0_virginia"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "1",
+        "cure_stage": "0",
+        "variety": "2"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_1_cure_0_burley"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "1",
+        "cure_stage": "0",
+        "variety": "3"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_1_cure_0_oriental"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "1",
+        "cure_stage": "0",
+        "variety": "4"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_1_cure_0_dokha"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "1",
+        "cure_stage": "0",
+        "variety": "5"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_1_cure_0_shade"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "1",
+        "cure_stage": "1",
+        "variety": "0"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_1_cure_1_wild"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "1",
+        "cure_stage": "1",
+        "variety": "1"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_1_cure_1_virginia"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "1",
+        "cure_stage": "1",
+        "variety": "2"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_1_cure_1_burley"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "1",
+        "cure_stage": "1",
+        "variety": "3"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_1_cure_1_oriental"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "1",
+        "cure_stage": "1",
+        "variety": "4"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_1_cure_1_dokha"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "1",
+        "cure_stage": "1",
+        "variety": "5"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_1_cure_1_shade"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "1",
+        "cure_stage": "2",
+        "variety": "0"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_1_cure_2_wild"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "1",
+        "cure_stage": "2",
+        "variety": "1"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_1_cure_2_virginia"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "1",
+        "cure_stage": "2",
+        "variety": "2"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_1_cure_2_burley"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "1",
+        "cure_stage": "2",
+        "variety": "3"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_1_cure_2_oriental"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "1",
+        "cure_stage": "2",
+        "variety": "4"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_1_cure_2_dokha"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "1",
+        "cure_stage": "2",
+        "variety": "5"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_1_cure_2_shade"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "1",
+        "cure_stage": "3",
+        "variety": "0"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_1_cure_3_wild"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "1",
+        "cure_stage": "3",
+        "variety": "1"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_1_cure_3_virginia"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "1",
+        "cure_stage": "3",
+        "variety": "2"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_1_cure_3_burley"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "1",
+        "cure_stage": "3",
+        "variety": "3"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_1_cure_3_oriental"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "1",
+        "cure_stage": "3",
+        "variety": "4"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_1_cure_3_dokha"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "1",
+        "cure_stage": "3",
+        "variety": "5"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_1_cure_3_shade"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "1",
+        "cure_stage": "4",
+        "variety": "0"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_1_cure_4_wild"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "1",
+        "cure_stage": "4",
+        "variety": "1"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_1_cure_4_virginia"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "1",
+        "cure_stage": "4",
+        "variety": "2"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_1_cure_4_burley"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "1",
+        "cure_stage": "4",
+        "variety": "3"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_1_cure_4_oriental"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "1",
+        "cure_stage": "4",
+        "variety": "4"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_1_cure_4_dokha"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "1",
+        "cure_stage": "4",
+        "variety": "5"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_1_cure_4_shade"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "1",
+        "cure_stage": "5",
+        "variety": "0"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_1_cure_5_wild"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "1",
+        "cure_stage": "5",
+        "variety": "1"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_1_cure_5_virginia"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "1",
+        "cure_stage": "5",
+        "variety": "2"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_1_cure_5_burley"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "1",
+        "cure_stage": "5",
+        "variety": "3"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_1_cure_5_oriental"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "1",
+        "cure_stage": "5",
+        "variety": "4"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_1_cure_5_dokha"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "1",
+        "cure_stage": "5",
+        "variety": "5"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_1_cure_5_shade"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "2",
+        "cure_stage": "0",
+        "variety": "0"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_2_cure_0_wild"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "2",
+        "cure_stage": "0",
+        "variety": "1"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_2_cure_0_virginia"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "2",
+        "cure_stage": "0",
+        "variety": "2"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_2_cure_0_burley"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "2",
+        "cure_stage": "0",
+        "variety": "3"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_2_cure_0_oriental"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "2",
+        "cure_stage": "0",
+        "variety": "4"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_2_cure_0_dokha"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "2",
+        "cure_stage": "0",
+        "variety": "5"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_2_cure_0_shade"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "2",
+        "cure_stage": "1",
+        "variety": "0"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_2_cure_1_wild"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "2",
+        "cure_stage": "1",
+        "variety": "1"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_2_cure_1_virginia"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "2",
+        "cure_stage": "1",
+        "variety": "2"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_2_cure_1_burley"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "2",
+        "cure_stage": "1",
+        "variety": "3"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_2_cure_1_oriental"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "2",
+        "cure_stage": "1",
+        "variety": "4"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_2_cure_1_dokha"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "2",
+        "cure_stage": "1",
+        "variety": "5"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_2_cure_1_shade"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "2",
+        "cure_stage": "2",
+        "variety": "0"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_2_cure_2_wild"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "2",
+        "cure_stage": "2",
+        "variety": "1"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_2_cure_2_virginia"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "2",
+        "cure_stage": "2",
+        "variety": "2"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_2_cure_2_burley"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "2",
+        "cure_stage": "2",
+        "variety": "3"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_2_cure_2_oriental"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "2",
+        "cure_stage": "2",
+        "variety": "4"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_2_cure_2_dokha"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "2",
+        "cure_stage": "2",
+        "variety": "5"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_2_cure_2_shade"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "2",
+        "cure_stage": "3",
+        "variety": "0"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_2_cure_3_wild"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "2",
+        "cure_stage": "3",
+        "variety": "1"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_2_cure_3_virginia"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "2",
+        "cure_stage": "3",
+        "variety": "2"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_2_cure_3_burley"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "2",
+        "cure_stage": "3",
+        "variety": "3"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_2_cure_3_oriental"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "2",
+        "cure_stage": "3",
+        "variety": "4"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_2_cure_3_dokha"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "2",
+        "cure_stage": "3",
+        "variety": "5"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_2_cure_3_shade"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "2",
+        "cure_stage": "4",
+        "variety": "0"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_2_cure_4_wild"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "2",
+        "cure_stage": "4",
+        "variety": "1"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_2_cure_4_virginia"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "2",
+        "cure_stage": "4",
+        "variety": "2"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_2_cure_4_burley"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "2",
+        "cure_stage": "4",
+        "variety": "3"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_2_cure_4_oriental"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "2",
+        "cure_stage": "4",
+        "variety": "4"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_2_cure_4_dokha"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "2",
+        "cure_stage": "4",
+        "variety": "5"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_2_cure_4_shade"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "2",
+        "cure_stage": "5",
+        "variety": "0"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_2_cure_5_wild"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "2",
+        "cure_stage": "5",
+        "variety": "1"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_2_cure_5_virginia"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "2",
+        "cure_stage": "5",
+        "variety": "2"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_2_cure_5_burley"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "2",
+        "cure_stage": "5",
+        "variety": "3"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_2_cure_5_oriental"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "2",
+        "cure_stage": "5",
+        "variety": "4"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_2_cure_5_dokha"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "2",
+        "cure_stage": "5",
+        "variety": "5"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_2_cure_5_shade"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "3",
+        "cure_stage": "0",
+        "variety": "0"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_3_cure_0_wild"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "3",
+        "cure_stage": "0",
+        "variety": "1"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_3_cure_0_virginia"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "3",
+        "cure_stage": "0",
+        "variety": "2"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_3_cure_0_burley"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "3",
+        "cure_stage": "0",
+        "variety": "3"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_3_cure_0_oriental"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "3",
+        "cure_stage": "0",
+        "variety": "4"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_3_cure_0_dokha"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "3",
+        "cure_stage": "0",
+        "variety": "5"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_3_cure_0_shade"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "3",
+        "cure_stage": "1",
+        "variety": "0"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_3_cure_1_wild"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "3",
+        "cure_stage": "1",
+        "variety": "1"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_3_cure_1_virginia"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "3",
+        "cure_stage": "1",
+        "variety": "2"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_3_cure_1_burley"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "3",
+        "cure_stage": "1",
+        "variety": "3"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_3_cure_1_oriental"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "3",
+        "cure_stage": "1",
+        "variety": "4"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_3_cure_1_dokha"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "3",
+        "cure_stage": "1",
+        "variety": "5"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_3_cure_1_shade"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "3",
+        "cure_stage": "2",
+        "variety": "0"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_3_cure_2_wild"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "3",
+        "cure_stage": "2",
+        "variety": "1"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_3_cure_2_virginia"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "3",
+        "cure_stage": "2",
+        "variety": "2"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_3_cure_2_burley"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "3",
+        "cure_stage": "2",
+        "variety": "3"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_3_cure_2_oriental"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "3",
+        "cure_stage": "2",
+        "variety": "4"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_3_cure_2_dokha"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "3",
+        "cure_stage": "2",
+        "variety": "5"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_3_cure_2_shade"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "3",
+        "cure_stage": "3",
+        "variety": "0"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_3_cure_3_wild"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "3",
+        "cure_stage": "3",
+        "variety": "1"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_3_cure_3_virginia"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "3",
+        "cure_stage": "3",
+        "variety": "2"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_3_cure_3_burley"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "3",
+        "cure_stage": "3",
+        "variety": "3"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_3_cure_3_oriental"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "3",
+        "cure_stage": "3",
+        "variety": "4"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_3_cure_3_dokha"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "3",
+        "cure_stage": "3",
+        "variety": "5"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_3_cure_3_shade"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "3",
+        "cure_stage": "4",
+        "variety": "0"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_3_cure_4_wild"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "3",
+        "cure_stage": "4",
+        "variety": "1"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_3_cure_4_virginia"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "3",
+        "cure_stage": "4",
+        "variety": "2"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_3_cure_4_burley"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "3",
+        "cure_stage": "4",
+        "variety": "3"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_3_cure_4_oriental"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "3",
+        "cure_stage": "4",
+        "variety": "4"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_3_cure_4_dokha"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "3",
+        "cure_stage": "4",
+        "variety": "5"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_3_cure_4_shade"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "3",
+        "cure_stage": "5",
+        "variety": "0"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_3_cure_5_wild"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "3",
+        "cure_stage": "5",
+        "variety": "1"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_3_cure_5_virginia"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "3",
+        "cure_stage": "5",
+        "variety": "2"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_3_cure_5_burley"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "3",
+        "cure_stage": "5",
+        "variety": "3"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_3_cure_5_oriental"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "3",
+        "cure_stage": "5",
+        "variety": "4"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_3_cure_5_dokha"
+      }
+    },
+    {
+      "when": {
+        "load_stage": "3",
+        "cure_stage": "5",
+        "variety": "5"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_load_3_cure_5_shade"
+      }
+    }
   ]
 }

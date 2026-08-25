@@ -97,6 +97,14 @@ public class ModBlocks {
                     .sound(SoundType.METAL)
                     .noOcclusion()));
 
+    // Deferred for a later visual-polish update: keep the block implementation registered for
+    // development, but intentionally expose no BlockItem/recipe/creative entry in 4.0.0.
+    public static final Supplier<Block> GLASS_ASHTRAY = BLOCKS.register("glass_ashtray",
+            () -> new GlassAshtrayBlock(BlockBehaviour.Properties.of()
+                    .strength(0.3F)
+                    .sound(SoundType.GLASS)
+                    .noOcclusion()));
+
     // Traditional hanging option: placed directly from a stack of 16 raw or cured leaves, so it has no BlockItem.
     public static final Supplier<Block> HANGING_TOBACCO_LEAVES = BLOCKS.register("hanging_tobacco_leaves",
             () -> new HangingTobaccoBlock(BlockBehaviour.Properties.of()

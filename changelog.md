@@ -154,6 +154,9 @@
 - Added dedicated item textures for **Ribbon, Shag, Rough, and Flake** cuts, color-graded per tobacco variety
 - Refreshed item art for loose/blended tobacco, Shisha, Tobacco Pouch, Tobacco Box, Drying Rack, Spectacles, Hookah Hose, Kiseru, and decorative pipes
 - Updated Drying Rack and Hanging Tobacco leaf colors to reflect both cure progression and tobacco variety
+- Rebuilt **Hanging Tobacco Bunch** visuals around the new dense no-stick bundle model while retaining the established raw/cured variety palettes
+- Replaced the Industrial Drying Rack placeholder art with its final two-tier steel factory model and matching cure/variety leaf colors; cleaned the upper profile, extended the lower slats, and added a dedicated steel-grey 16x16 item sprite
+- Deferred the **Glass Ashtray** to a later visual-polish update; its implementation scaffold remains in source but it is not obtainable in 4.0.0
 - Added a **zombie tobacconist villager profession texture**
 - Cleaned partial transparency artifacts from several tobacco item textures
 - Reorganized the creative tab so **all Flavoring Essences appear together before all Molasses bottles**

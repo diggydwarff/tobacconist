@@ -1,0 +1,6 @@
+{
+  "parent": "tobacconistmod:block/industrial_drying_rack_load_3",
+  "textures": {
+    "base": "tobacconistmod:block/industrial_drying_rack_cure_3_wild"
+  }
+}

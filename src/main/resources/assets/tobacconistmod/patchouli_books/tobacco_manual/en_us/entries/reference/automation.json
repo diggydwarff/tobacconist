@@ -16,7 +16,7 @@
     {
       "type": "patchouli:text",
       "title": "Industrial Rack",
-      "text": "The $(thing)Industrial Drying Rack$() is intentionally automation-only: players cannot insert or remove its tobacco by right-clicking. It holds 32 matching leaves and works with validated Create/NeoForge logistics such as Funnels, Mechanical Arms, Packagers and item handlers. Curing itself still requires Create fan assistance."
+      "text": "The $(thing)Industrial Drying Rack$() is automation-only: players cannot insert or remove tobacco by right-clicking. It holds 32 matching leaves and works with Funnels, Mechanical Arms, Packagers and item handlers. It has no internal fan or power connector; external Create airflow drives curing."
     },
     {
       "type": "patchouli:text",

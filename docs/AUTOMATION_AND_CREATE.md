@@ -27,7 +27,7 @@ Hanging Tobacco Bunches can receive environmental fan assistance but expose no i
 
 The **Industrial Drying Rack** is the dedicated factory tier. It holds **32 matching leaves**, rejects manual right-click loading/removal, and is intended to sit directly in Create logistics lines. Mechanical Arms, Funnels, Packagers/Stock Links, and the validated item capability can load raw leaves and remove only finished output. Display Links and Spectacles report the same cure/status information with the 32-leaf capacity.
 
-The industrial rack cannot cure passively. It must receive Create fan assistance: plain airflow for Air or an otherwise-valid Sun Cure, fan-blown Campfire smoke/heat for Fire, or fan-blown Lava heat for Flue. Its assisted progress is modestly faster than a fan-assisted wooden rack (5 vs 4 progress ticks for Air/Sun; 7 vs 6 for Fire/Flue), with no quality bonus. This keeps the wooden rack useful for traditional/passive curing while the industrial rack trades cost and infrastructure for density and throughput.
+The industrial rack cannot cure passively and contains **no internal fan or power input**. External Create airflow is the machine: plain airflow provides Air or an otherwise-valid Sun Cure, fan-blown Campfire smoke/heat provides Fire, and fan-blown Lava heat provides Flue. Its assisted progress is modestly faster than a fan-assisted wooden rack (5 vs 4 progress ticks for Air/Sun; 7 vs 6 for Fire/Flue), with no quality bonus. This keeps the wooden rack useful for traditional/passive curing while the industrial rack trades cost and infrastructure for density and throughput.
 
 ## Bulk quality homogenization
 
