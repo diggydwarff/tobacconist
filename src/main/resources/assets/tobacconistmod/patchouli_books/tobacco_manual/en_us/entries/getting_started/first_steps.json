@@ -30,7 +30,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "$(thing)5. Refine or craft.$() Loose tobacco can go into a pipe, become a cigarette, become cigar filler, or be cased with Flavoring Essence for aromatics or mixed with flavored molasses into shisha. Cured or loose tobacco can also be fermented or aged in a Tobacco Barrel.",
+      "text": "$(thing)5. Refine, blend, store, or craft.$() Loose tobacco can go into a pipe, become a cigarette/cigar, be blended with compatible tobacco, be cased with Flavoring Essence, or be mixed with flavored Molasses into Shisha. Cured/loose tobacco can be fermented or aged in a Barrel. Boxes store exact batches; full 3×3 same-item grids make lossless Crates.",
       "title": "5 — Finish"
     },
     {
@@ -44,7 +44,9 @@
         "tobacconistmod:getting_started/seeds_and_villager",
         "tobacconistmod:getting_started/spectacles",
         "tobacconistmod:growing/basics",
-        "tobacconistmod:curing/rack_basics"
+        "tobacconistmod:curing/rack_basics",
+        "tobacconistmod:processing/blending",
+        "tobacconistmod:storage/tobacco_crates"
       ],
       "title": "Related Chapters",
       "text": "Start with these chapters if this is your first crop."

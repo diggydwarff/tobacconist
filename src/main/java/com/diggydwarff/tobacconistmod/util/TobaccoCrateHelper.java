@@ -22,11 +22,10 @@ public final class TobaccoCrateHelper {
     public static boolean isCrateableTobacco(ItemStack stack) {
         return TobaccoCuringHelper.isRawTobaccoLeaf(stack)
                 || TobaccoCuringHelper.isDryTobaccoLeaf(stack)
-                || TobaccoCuringHelper.isLooseTobacco(stack)
-                || stack.is(ModItems.BLENDED_TOBACCO.get());
+                || TobaccoCuringHelper.isLooseTobacco(stack);
     }
 
-    /** Same registry item only; per-stack NBT/components are intentionally allowed to differ. */
+    /** Crate inputs must share the same registry item; stack data may differ. */
     public static boolean sameTobaccoType(ItemStack first, ItemStack second) {
         return !first.isEmpty() && !second.isEmpty() && first.getItem() == second.getItem();
     }

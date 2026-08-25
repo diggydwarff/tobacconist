@@ -45,7 +45,7 @@ public class LabelItem extends Item {
 
         String name = stack.getHoverName().getString();
 
-        // store our clean label
+        // Store the normalized label text.
         LegacyItemTags.getOrCreateTag(stack).putString(TAG_LABEL_NAME, name);
 
         // remove the italic vanilla name

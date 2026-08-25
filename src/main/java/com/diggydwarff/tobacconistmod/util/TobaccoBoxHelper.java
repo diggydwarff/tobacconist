@@ -66,7 +66,7 @@ public class TobaccoBoxHelper {
      * The 1.21 ItemStack NBT codec requires registry access. Tobacco boxes are item-only
      * helpers with no Level/RegistryAccess parameter, so persist the small subset this mod
      * actually needs: registry id, damage and custom tobacco data. The reader also accepts
-     * the old 1.20.1 ItemStack compound layout for world upgrade compatibility.
+     * the 1.20.1 ItemStack compound layout for world migration.
      */
     private static CompoundTag writeStoredStack(ItemStack stack) {
         CompoundTag stored = new CompoundTag();
@@ -164,8 +164,8 @@ public class TobaccoBoxHelper {
     /**
      * Box compatibility is based on the tobacco/product itself, not branding. Strip both the
      * Tobacconist ProductLabel and vanilla 1.21 custom names before comparing stacks. Also
-     * scrub an accidentally packed legacy ProductLabel so named aromatic/blended products can
-     * always be returned to the box they came from.
+     * remove legacy ProductLabel data so named aromatic or blended products remain compatible
+     * with their stored batch.
      */
     public static void clearCustomProductName(ItemStack stack) {
         stack.remove(DataComponents.CUSTOM_NAME);
@@ -265,13 +265,13 @@ public class TobaccoBoxHelper {
 
         StringBuilder out = new StringBuilder();
 
-        // Label first, if present
+        // Product labels are displayed before processing descriptors.
         String label = tag.getString("ProductLabel");
         if (!label.isEmpty()) {
             out.append(label);
         }
 
-        // These keys are examples. Replace with your real stored keys/helper calls.
+
         String cutType = tag.getString("CutType");
         String cureType = tag.getString("CureType");
         int quality = tag.contains("Quality") ? tag.getInt("Quality") : -1;

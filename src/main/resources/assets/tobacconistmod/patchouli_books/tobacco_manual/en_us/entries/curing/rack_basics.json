@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "The $(thing)Tobacco Drying Rack$() turns raw leaf into cured leaf. A rack holds up to $(item)16$() identical raw leaves. Leaves in one rack must be the same item with the same components/quality data."
+      "text": "The $(thing)Tobacco Drying Rack$() turns raw leaf into cured leaf. A rack holds up to $(item)16$() identical raw leaves. Leaves in one rack must be the same item with the same components/quality data. Looking at the rack shows its live $(item)X/16 Leaves$() count."
     },
     {
       "type": "patchouli:crafting",
@@ -16,7 +16,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Right-click the rack with raw tobacco to add one leaf. Empty-hand right-click removes the batch. Sneak-right-click reports the rack status. Once curing reaches $(item)10%$(), the batch locks and no more leaves may be added until it is removed or finished.",
+      "text": "Right-click the rack with raw tobacco to add one leaf. Empty-hand right-click removes the batch. Sneak-right-click reports detailed status. The visible rack progresses through empty, low, medium, and full load models. Once curing reaches $(item)10%$(), the batch locks and no more leaves may be added until it is removed or finished.",
       "title": "Loading the Rack"
     },
     {
@@ -27,11 +27,11 @@
     {
       "type": "patchouli:text",
       "title": "Traditional Alternative",
-      "text": "A Drying Rack is not required. Sneak-right-click the underside of a sturdy block while holding 16 matching raw or cured leaves to make a traditional hanging bunch. Raw bunches cure by the same methods; cured bunches can be hung for decoration/storage but cannot use hoppers or Display Links."
+      "text": "A Drying Rack is not required. Sneak-right-click the underside of a sturdy block while holding 16 matching raw or cured leaves to make a traditional hanging bunch. In Creative mode, one held leaf is enough to place the 16-leaf bunch. Raw bunches cure by the same methods; cured bunches can be hung for decoration/storage but expose no inventory automation or Display Link."
     },
     {
       "type": "patchouli:text",
-      "text": "Hoppers can automate racks. Insert raw leaves from a horizontal side. The top and bottom cannot insert. A hopper underneath can extract only after curing is complete.",
+      "text": "Vanilla hoppers can automate racks. Insert raw leaves from a horizontal side; top and bottom cannot insert. A hopper underneath can extract only after curing is complete. Create/NeoForge capability automation still respects the rack’s validation and finished-output rules.",
       "title": "Automation"
     },
     {

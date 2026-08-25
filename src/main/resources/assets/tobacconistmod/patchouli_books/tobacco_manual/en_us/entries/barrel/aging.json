@@ -15,12 +15,12 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Quality gains slow over time:$(br2)Days 1–7: +1 every 3 days$(br)Days 8–30: +1 every 7 days$(br)Days 31–90: +1 every 15 days$(br)Days 91–365: +1 every 30 days$(br2)Quality can rise as high as 120.",
+      "text": "Quality gains follow exact aged-day milestones:$(br2)Days 3, 6: +1$(br)Days 14, 21, 28: +1$(br)Days 45, 60, 75, 90: +1$(br)Then every 30-day multiple through day 360$(br2)Quality can rise as high as 120.",
       "title": "Quality Schedule"
     },
     {
       "type": "patchouli:text",
-      "text": "After day 365 there are no further aging-quality gains. The barrel begins periodic spoil checks instead. The chance grows with extreme age, up to a 10% monthly check. Very old tobacco is therefore a prestige/risk choice, not free infinite quality.",
+      "text": "After day 365 there are no further aging-quality gains. The first non-zero extreme-age spoil check occurs at day 396, then at later 30-day month-index changes. Chance rises by 0.5 percentage points per month index, capped at 10%. Spoilage reduces quality by 15.",
       "title": "Extreme Age"
     },
     {

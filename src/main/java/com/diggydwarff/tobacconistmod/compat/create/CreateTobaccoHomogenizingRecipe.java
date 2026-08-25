@@ -12,12 +12,9 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 /**
  * Pair-wise Create homogenizing recipe for raw or cured tobacco leaves.
  *
- * <p>Raw leaves average GrowthQuality before curing; cured leaves average final Quality. Each
- * Mixer cycle consumes one leaf from each of two compatible, different-quality stacks and emits
- * two leaves at the integer average quality. Because the second runtime ingredient rejects the
- * first quality, Create must select a genuinely different quality stack instead of consuming twice
- * from the first stack. Equal-sized input stacks therefore converge completely: 16x Q60 + 16x Q80
- * becomes 32x Q70 after sixteen normal Mixer cycles.</p>
+ * <p>Each Mixer cycle consumes one leaf from two compatible stacks with different quality
+ * values and returns two leaves at their integer average. Raw leaves average GrowthQuality;
+ * cured leaves average final Quality. The second ingredient rejects the first captured quality.</p>
  */
 public final class CreateTobaccoHomogenizingRecipe extends MixingRecipe {
     private ItemStack firstLeaf = ItemStack.EMPTY;

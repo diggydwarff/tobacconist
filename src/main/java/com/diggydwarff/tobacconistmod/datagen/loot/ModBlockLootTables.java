@@ -276,7 +276,7 @@ public class ModBlockLootTables extends BlockLootSubProvider {
                                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0f, 4.0f)))))
         );
 
-        // Flowering wild tobacco is a simple worldgen plant, not an age-gated crop.
+        // Flowering wild tobacco uses direct plant drops rather than crop-age predicates.
         // Always drop one leaf plus one or two seeds.
         this.add(ModBlocks.WILD_FLOWERING_TOBACCO.get(),
                 LootTable.lootTable()

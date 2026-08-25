@@ -77,8 +77,7 @@ public class FlueFireboxBlock extends BaseEntityBlock implements EntityBlock {
             return;
         }
 
-        // Furnace-style wisps from the front opening. Keep the probability deliberately low: the
-        // firebox communicates that it is burning without producing a campfire-sized smoke cloud.
+        // Emit sparse furnace-style smoke from the front opening while lit.
         if (random.nextFloat() < 0.32F) {
             Direction facing = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
             double sideways = random.nextDouble() * 0.42D - 0.21D;

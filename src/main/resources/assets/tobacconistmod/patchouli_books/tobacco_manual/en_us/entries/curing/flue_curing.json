@@ -31,7 +31,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Any normal fire, soul fire, campfire, or soul campfire within the 3×3×3 area centered around the rack blocks flue curing. This is intentional: flue curing is meant to be heated without direct smoke contamination.",
+      "text": "Any normal fire, soul fire, campfire, or soul campfire within the 3×3×3 area centered around the rack blocks flue curing. Flue curing requires indirect heat without direct smoke contamination.",
       "title": "No Smoke Contamination"
     },
     {

@@ -64,10 +64,7 @@ public final class TobaccoProcessingHelper {
         return result;
     }
 
-    /**
-     * Returns the next target used by the planned Create + Chaveta production line.
-     * Dry leaf -> Rough -> Ribbon -> Shag. Flake is intentionally reserved for pressing.
-     */
+    /** Returns the next mechanical cut: cured leaf -> Rough -> Ribbon -> Shag. */
     public static String getNextMechanicalCut(ItemStack stack) {
         if (TobaccoCuringHelper.isDryTobaccoLeaf(stack)) {
             return TobaccoCuringHelper.CUT_ROUGH;
@@ -83,9 +80,7 @@ public final class TobaccoProcessingHelper {
         };
     }
 
-    /**
-     * Executes one step of the planned mechanical cutting progression.
-     */
+    /** Applies one mechanical cutting step. */
     public static ItemStack mechanicallyCutOne(ItemStack stack) {
         String nextCut = getNextMechanicalCut(stack);
         if (nextCut.isEmpty()) {
@@ -93,7 +88,7 @@ public final class TobaccoProcessingHelper {
         }
 
         if (TobaccoCuringHelper.isDryTobaccoLeaf(stack)) {
-            // Match the existing manual cured-leaf cutting yield.
+            // Cured leaves yield three loose tobacco.
             return cutDryLeaf(stack, nextCut, 3);
         }
 
@@ -156,8 +151,7 @@ public final class TobaccoProcessingHelper {
     }
 
     /**
-     * Flavor-aware progressive rule. Duplicate flavors are intentionally allowed: a player may
-     * choose a double/triple-strength blend, provided the Shisha is unused and still has room.
+     * Duplicate flavor entries are permitted while unused Shisha still has an open flavor slot.
      */
     public static boolean canAddShishaFlavor(ItemStack stack, String flavorName) {
         return canAddShishaFlavor(stack)
@@ -244,8 +238,7 @@ public final class TobaccoProcessingHelper {
         tag.putString("flavor3", flavorNames.size() > 2 ? flavorNames.get(2) : "");
 
         TobaccoDataHelper.applyTobaccoMetadata(result, tobaccoStack);
-        // applyTobaccoMetadata commits through the legacy CUSTOM_DATA bridge, so reacquire the
-        // live tag before adding the remaining Shisha-specific fields.
+        // Reacquire custom data after applyTobaccoMetadata writes the stack component.
         tag = LegacyItemTags.getOrCreateTag(result);
 
         CompoundTag tobaccoData = LegacyItemTags.getTag(tobaccoStack);
@@ -319,8 +312,7 @@ public final class TobaccoProcessingHelper {
      * Averages one leaf from each compatible quality stack and returns two identical leaves.
      * Raw leaves keep the result as GrowthQuality so they can be standardized before curing.
      * Cured leaves keep their existing cure/processing metadata and receive the averaged final
-     * Quality. Integer half-points are rounded down deliberately so automation never creates
-     * quality through rounding.
+     * Quality. Integer half-points are rounded down.
      */
     public static ItemStack mechanicallyHomogenizeLeafPair(ItemStack first, ItemStack second) {
         if (!canMechanicallyHomogenizeLeaves(first, second)) {

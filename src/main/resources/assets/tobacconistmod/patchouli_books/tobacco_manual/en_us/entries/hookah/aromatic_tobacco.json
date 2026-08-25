@@ -1,0 +1,32 @@
+{
+  "name": "Aromatic Tobacco",
+  "icon": "tobacconistmod:bottled_essence_apple",
+  "category": "tobacconistmod:hookah",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Flavoring Essence can lightly case suitable loose tobacco without turning it into Shisha. Combine $(item)1 Flavoring Essence + loose tobacco$(). The Essence is consumed and the tobacco gains the matching aromatic flavor."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Metadata",
+      "text": "Aromatic casing preserves the tobacco’s variety or blend identity, quality, cure, cut, fermentation, age, ruined state, and other processing data. The flavor becomes part of the tobacco component identity used by blending and filtering."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Create Spout",
+      "text": "With Create installed, a Spout applies the same casing using $(item)1000 mB$() of the matching Flavoring Essence fluid.",
+      "flag": "mod:create"
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "tobacconistmod:hookah/molasses",
+        "tobacconistmod:processing/blending",
+        "tobacconistmod:hookah/shisha"
+      ],
+      "title": "Related Chapters"
+    }
+  ]
+}

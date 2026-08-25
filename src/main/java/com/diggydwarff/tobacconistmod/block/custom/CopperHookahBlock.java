@@ -80,16 +80,13 @@ public class CopperHookahBlock extends DoubleHookahBlock {
                 .setValue(FACING, oldLower.getValue(FACING))
                 .setValue(LIT, oldLower.getValue(LIT))
                 .setValue(HALF, DoubleBlockHalf.LOWER);
-        // Replace both halves as one logical stage change. UPDATE_KNOWN_SHAPE prevents the
-        // temporary old/new-stage mismatch from causing DoubleHookahBlock.updateShape() to
-        // delete one half while the other is still being replaced. UPDATE_SUPPRESS_DROPS
-        // also guarantees oxidation/waxing is a visual state change, never a break event.
+        // Replace both halves without intermediate shape validation or item drops.
         int flags = Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_SUPPRESS_DROPS;
         BlockPos upper = lower.above();
         level.setBlock(upper, replacement.setValue(HALF, DoubleBlockHalf.UPPER), flags);
         level.setBlock(lower, replacement, flags);
 
-        // Both halves now belong to the same target block, so normal neighbor updates are safe.
+        // Run neighbor updates after both halves have been replaced.
         level.updateNeighborsAt(lower, target);
         level.updateNeighborsAt(upper, target);
         BlockEntity be = level.getBlockEntity(lower);

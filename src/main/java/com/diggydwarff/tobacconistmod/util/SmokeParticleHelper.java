@@ -43,10 +43,7 @@ public final class SmokeParticleHelper {
         spawnServerCeilingHaze(level, random, x, y, z, 0.65F);
     }
 
-    /**
-     * Fuller cloud used only when a player actively draws from a Hookah. This intentionally
-     * restores the satisfying pre-R20.17a puff without increasing the passive top plume.
-     */
+    /** Spawns the fuller smoke cloud used for an active Hookah draw. */
     public static void spawnServerHookahPuffSmoke(ServerLevel level,
                                                   double x, double y, double z,
                                                   double dirX, double dirZ) {
@@ -68,8 +65,7 @@ public final class SmokeParticleHelper {
 
         RandomSource random = level.random;
         spawnServerRisingSmoke(level, random, x, y, z, 0.0D, 0.0D, false);
-        // Hookahs tick continuously, so haze is intentionally probabilistic to keep particle
-        // counts bounded while still making an enclosed lounge accumulate visible smoke.
+        // Sample passive ceiling haze probabilistically to limit particle count.
         spawnServerCeilingHaze(level, random, x, y, z, 0.18F);
     }
 
@@ -119,8 +115,7 @@ public final class SmokeParticleHelper {
         double vy = 0.001D + random.nextDouble() * 0.002D;
         double vz = (random.nextDouble() - 0.5D) * 0.012D;
 
-        // Signal-style campfire smoke is intentionally used here because it persists much longer
-        // than ordinary smoke while retaining the vanilla campfire-smoke look.
+        // Use the persistent indoor-smoke particle for ceiling haze.
         level.addParticle(ModParticles.TOBACCO_INDOOR_SMOKE.get(),
                 px, hazeY, pz, vx, vy, vz);
     }
@@ -148,11 +143,7 @@ public final class SmokeParticleHelper {
             BlockPos scanPos = origin.above(distance);
             BlockState state = level.getBlockState(scanPos);
             if (!state.isAir() && !state.getCollisionShape(level, scanPos).isEmpty()) {
-                // The old calculation added the integer block distance to the particle's
-                // fractional Y coordinate. In a low room that could place indoor haze *inside*
-                // the ceiling block (for example y=1.5 + distance 2 -> y=3.28), leaving it
-                // collision-pinned where a ceiling extractor could not slide it laterally.
-                // Anchor to the actual lower face of the ceiling block instead.
+                // Place haze just below the detected ceiling collision surface.
                 return scanPos.getY() - 0.08D;
             }
         }

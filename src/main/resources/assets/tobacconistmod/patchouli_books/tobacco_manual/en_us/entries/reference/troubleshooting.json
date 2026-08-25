@@ -20,17 +20,17 @@
     },
     {
       "type": "patchouli:text",
-      "text": "$(thing)Hookah will not light:$() load valid fuel, Shisha Tobacco, and a Water Potion. If you want to smoke from it, also hold a Hookah Hose. Fuel is not the same as shisha durability; both must remain available.",
+      "text": "$(thing)Hookah will not light:$() load valid fuel, Shisha Tobacco, and a Water Potion or Dirty Hookah Water. If you want to smoke from it, also hold a Hookah Hose. Fuel is not the same as shisha durability; both must remain available.",
       "title": "Hookah"
     },
     {
       "type": "patchouli:text",
-      "text": "$(thing)Two tobacco stacks will not merge:$() their hidden quality/cure/cut/aging/label components may differ. Use the averaging recipe for compatible raw/cured/loose tobacco, or keep distinct batches in Tobacco Boxes.",
+      "text": "$(thing)Two tobacco stacks will not merge:$() their hidden quality/cure/cut/aging/label components may differ. Use averaging for compatible raw/cured/single-variety loose tobacco, a Tobacco Box for one exact batch, or a Tobacco Crate to package nine same-item units without averaging their metadata.",
       "title": "Stacking"
     },
     {
       "type": "patchouli:text",
-      "text": "$(thing)Spectacles show nothing:$() equip them in the vanilla head slot, or in Curios Head if Curios is installed, then look directly at a tobacco crop, Drying Rack, or Tobacco Barrel with no other GUI open.",
+      "text": "$(thing)Spectacles show nothing:$() equip them in the vanilla head slot, or in Curios Head if Curios is installed, then look directly at a tobacco crop, Drying Rack, hanging tobacco bunch, or Tobacco Barrel with no other GUI open.",
       "title": "Spectacles"
     }
   ]

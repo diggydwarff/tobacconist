@@ -40,7 +40,7 @@ public class ModBlocks {
                         return state.getValue(DoubleHookahBlock.LIT) ? 6 : 0;
                     })));
 
-    // Keep the original registry IDs for the pre-4.0 material Hookahs so existing worlds remain compatible.
+    // Preserve existing material Hookah registry IDs for world compatibility.
     public static final Supplier<Block> ORNATE_COPPER_HOOKAH = registerSingleStackBlock("ornate_copper_hookah_block",
             () -> new CopperHookahBlock(hookahProperties(), 0, false));
     public static final Supplier<Block> EXPOSED_COPPER_HOOKAH = registerSingleStackBlock("exposed_copper_hookah_block",

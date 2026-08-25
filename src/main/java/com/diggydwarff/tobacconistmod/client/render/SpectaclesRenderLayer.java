@@ -43,8 +43,7 @@ public class SpectaclesRenderLayer extends RenderLayer<AbstractClientPlayer, Pla
         poseStack.pushPose();
         this.getParentModel().head.translateAndRotate(poseStack);
 
-        // Tuned to sit on the forehead more like Engineer's Goggles.
-        // If we want to fine-tune later, these three values are the only ones to touch.
+        // Position the item model on the forehead.
         poseStack.translate(0.0F, -0.40F, -0.255F);
         poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
         poseStack.scale(0.52F, 0.52F, 0.52F);

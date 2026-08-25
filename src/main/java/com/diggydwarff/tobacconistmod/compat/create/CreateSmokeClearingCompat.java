@@ -12,20 +12,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-/**
- * Optional Create integration that lets Encased Fans physically influence Tobacconist smoke.
- *
- * <p>This deliberately uses a forgiving nearby-airflow volume instead of requiring smoke to sit
- * on the exact one-block fan axis. Pulling fans draw nearby smoke toward the fan; pushing fans
- * carry it away from the fan. The effect gets stronger as smoke gets closer.</p>
- */
+/** Applies nearby Create fan airflow to Tobacconist smoke particles. */
 public final class CreateSmokeClearingCompat {
     private static final int SEARCH_RADIUS = 6;
     private static final double MAX_LATERAL_DISTANCE = 3.25D;
     private static final long CACHE_TICKS = 2L;
 
-    // Hookahs can emit continuously, so avoid rescanning the surrounding blocks every single tick.
-    // Weak level keys ensure the cache disappears when a world is unloaded.
+    // Cache nearby airflow briefly; weak level keys release entries when worlds unload.
     private static final Map<Level, Map<Long, CachedAirflow>> CACHE = new WeakHashMap<>();
 
     private CreateSmokeClearingCompat() {}
@@ -57,8 +50,7 @@ public final class CreateSmokeClearingCompat {
         double bestStrength = 0.0D;
         int radiusSquared = SEARCH_RADIUS * SEARCH_RADIUS;
 
-        // Sphere rather than a full cube: enough to catch a nearby ceiling/wall fan without
-        // making every puff scan an unnecessarily large block volume.
+        // Restrict the fan scan to a spherical search radius.
         for (int dx = -SEARCH_RADIUS; dx <= SEARCH_RADIUS; dx++) {
             for (int dy = -SEARCH_RADIUS; dy <= SEARCH_RADIUS; dy++) {
                 for (int dz = -SEARCH_RADIUS; dz <= SEARCH_RADIUS; dz++) {
@@ -75,17 +67,11 @@ public final class CreateSmokeClearingCompat {
                     Direction workingSide = fan.getAirflowOriginSide();
                     if (workingSide == null) continue;
 
-                    // getAirflowOriginSide() identifies the physical side of the fan where its
-                    // working air volume exists. AirCurrent.direction is the direction the air
-                    // itself travels, which reverses for a pulling fan. Using current.direction
-                    // here made ceiling extractors only see smoke almost directly against the
-                    // intake; haze farther along the ceiling fell outside the axial test.
+                    // Test smoke against the fan's physical working side; pull airflow reverses travel direction.
                     Vec3 facing = Vec3.atLowerCornerOf(workingSide.getNormal());
                     Vec3 relative = smokePos.subtract(fanCenter);
 
-                    // Smoke must be on the fan's working side. Keep a small tolerance around the
-                    // fan face for collision/ceiling boundaries, while allowing the full Create
-                    // airflow distance outward into the room.
+                    // Accept smoke within the fan's working-side airflow volume.
                     double axialDistance = relative.dot(facing);
                     if (axialDistance < -0.75D || axialDistance > current.maxDistance + 1.50D) continue;
 
@@ -100,8 +86,7 @@ public final class CreateSmokeClearingCompat {
                             lateralDistance / MAX_LATERAL_DISTANCE, 0.0D, 1.0D);
                     double speedFactor = Mth.clamp(Math.abs(fan.getSpeed()) / 64.0D, 0.45D, 1.50D);
 
-                    // This value is applied every particle tick. Far/off-axis smoke only starts
-                    // drifting toward the air current; close smoke is progressively grabbed.
+                    // Scale force by proximity, lateral alignment, and fan speed.
                     double strength = (0.0015D + proximity * 0.0105D)
                             * (0.30D + lateralFactor * 0.70D)
                             * speedFactor;
@@ -109,11 +94,10 @@ public final class CreateSmokeClearingCompat {
 
                     Vec3 flowDirection;
                     if (current.pushing) {
-                        // Blowing fan: carry smoke outward along the fan face.
+                        // Pushing airflow carries smoke outward.
                         flowDirection = facing;
                     } else {
-                        // Pulling fan: converge toward the fan center as well as along its intake
-                        // direction so nearby off-axis haze looks like it is being sucked in.
+                        // Pulling airflow converges smoke toward the intake center.
                         Vec3 towardFan = fanCenter.subtract(smokePos);
                         if (towardFan.lengthSqr() < 1.0e-6D) {
                             flowDirection = facing.scale(-1.0D);
@@ -125,13 +109,7 @@ public final class CreateSmokeClearingCompat {
                         }
                     }
 
-                    // Once smoke has visibly converged on a pulling fan's intake face, consume
-                    // it instead of letting vanilla block collision leave a permanent wisp parked
-                    // under/against the fan. Use a slightly wider intake funnel than the physical
-                    // fan face so ceiling smoke does not form a collision ring around the casing.
-                    // Smoke
-                    // sliding along a ceiling should visibly converge and then disappear into
-                    // the extractor instead of forming a collision ring around its casing.
+                    // Remove smoke after it reaches the pulling fan's intake volume.
                     boolean intakeCapture = !current.pushing
                             && axialDistance > -0.35D
                             && axialDistance < 1.40D

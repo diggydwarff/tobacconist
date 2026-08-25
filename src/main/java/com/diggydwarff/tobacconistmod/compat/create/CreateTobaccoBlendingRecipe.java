@@ -13,8 +13,8 @@ import java.util.List;
 
 /**
  * Metadata-preserving Create Mixer recipe for 2- or 3-variety loose tobacco blends.
- * Each ingredient captures the real stack selected from the Basin; the result is then built from
- * those exact stacks so quality, cure, age and processing state match manual crafting.
+ * Each ingredient captures the runtime stack selected from the Basin; the result is built from
+ * those stacks so quality, cure, age, and processing state match crafting-grid output.
  */
 public final class CreateTobaccoBlendingRecipe extends MixingRecipe {
     private final int blendSize;

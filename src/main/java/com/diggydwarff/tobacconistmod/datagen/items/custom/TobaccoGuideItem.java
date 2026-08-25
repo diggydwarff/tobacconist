@@ -16,8 +16,7 @@ import net.neoforged.fml.ModList;
 import java.util.List;
 
 /**
- * The real Tobacconist manual item. Patchouli remains optional; when present,
- * right-clicking this item opens the Tobacconist manual.
+ * Opens the Tobacconist manual when Patchouli is installed.
  */
 public class TobaccoGuideItem extends Item {
     public TobaccoGuideItem(Properties properties) {

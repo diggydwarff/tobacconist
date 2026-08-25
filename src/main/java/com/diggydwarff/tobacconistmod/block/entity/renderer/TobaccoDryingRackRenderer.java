@@ -11,10 +11,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 
-/**
- * The authored Blockbench models now render the rack leaves. This renderer only keeps the
- * post extensions used when a rack stands over a campfire.
- */
+/** Renders the rack post extensions used while the rack stands over a campfire. */
 public class TobaccoDryingRackRenderer implements BlockEntityRenderer<TobaccoDryingRackBlockEntity> {
 
     private static final ResourceLocation RACK_TEXTURE =

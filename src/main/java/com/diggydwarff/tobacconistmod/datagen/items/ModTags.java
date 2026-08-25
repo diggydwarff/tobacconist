@@ -19,7 +19,7 @@ public class ModTags {
         public static final TagKey<Item> LOOSE_TOBACCO = tag("loose_tobacco");
         public static final TagKey<Item> SMOKING_PIPES = tag("smoking_pipes");
 
-        // NeoForge common tags: intentionally limited to concepts other mods can reasonably share.
+        // Common tags are limited to cross-mod tobacco seed/crop concepts.
         public static final TagKey<Item> COMMON_TOBACCO_SEEDS = commonTag("seeds/tobacco");
         public static final TagKey<Item> COMMON_TOBACCO_CROPS = commonTag("crops/tobacco");
 

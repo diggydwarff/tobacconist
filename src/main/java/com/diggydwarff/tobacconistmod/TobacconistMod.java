@@ -159,15 +159,14 @@ public class TobacconistMod {
 
     @SubscribeEvent
     public void registerBrewingRecipes(RegisterBrewingRecipesEvent event) {
-        // Keep the original small-scale molasses route, but require an actual Water Potion.
+        // Plain molasses requires a Water Potion and Sugar Cane.
         event.getBuilder().addRecipe(
                 DataComponentIngredient.of(false, PotionContents.createItemStack(Items.POTION, Potions.WATER)),
                 Ingredient.of(Items.SUGAR_CANE),
                 new ItemStack(BottledMolassesFlavors.BOTTLED_MOLASSES_PLAIN.getItem())
         );
 
-        // Mundane Potion is the deliberately vanilla stepping stone: Water + Sugar -> Mundane,
-        // then Wheat represents the mash/distillation step that produces our extraction spirit.
+        // Aqua Vitae brewing starts from a Mundane Potion and Wheat.
         event.getBuilder().addRecipe(
                 DataComponentIngredient.of(false, PotionContents.createItemStack(Items.POTION, Potions.MUNDANE)),
                 Ingredient.of(Items.WHEAT),
@@ -178,15 +177,14 @@ public class TobacconistMod {
     }
 
     private void registerFlavorEssenceBrewing(RegisterBrewingRecipesEvent event) {
-        // Every ordinary flavor is tag-driven. This keeps Brewing Stand and Create Mixer
-        // compatibility identical and lets other mods/datapacks add equivalent ingredients.
+        // Flavor tags are shared by Brewing Stand and Create recipes.
         for (BottledMolassesFlavors flavor : BottledMolassesFlavors.values()) {
             if (flavor.hasDirectEssenceInfusion() && hasFlavoringIngredient(event, flavor)) {
                 addEssenceRecipe(event, flavor);
             }
         }
 
-        // Double Apple variants intentionally use a fresh single-strength essence as their base.
+        // Double Apple variants use the matching single-strength essence as their base.
         addCompositeEssenceRecipe(event,
                 BottledMolassesFlavors.BOTTLED_MOLASSES_APPLE_FLAVOR,
                 BottledMolassesFlavors.BOTTLED_MOLASSES_TWO_APPLES_FLAVOR,
@@ -200,8 +198,7 @@ public class TobacconistMod {
                 BottledMolassesFlavors.BOTTLED_MOLASSES_TWO_ROYALAPPLES_FLAVOR,
                 BottledMolassesFlavors.BOTTLED_MOLASSES_ROYALAPPLE_FLAVOR);
 
-        // Mixed Berry remains Sweet Berry Essence + a Glow Berry ingredient rather than a
-        // generic berry tag, avoiding overlap with Strawberry/Blueberry/etc.
+        // Mixed Berry uses Sweet Berry Essence plus Glow Berry to avoid generic berry-tag overlap.
         addCompositeEssenceRecipe(event,
                 BottledMolassesFlavors.BOTTLED_MOLASSES_SWEETBERRY_FLAVOR,
                 BottledMolassesFlavors.BOTTLED_MOLASSES_BERRY_FLAVOR,

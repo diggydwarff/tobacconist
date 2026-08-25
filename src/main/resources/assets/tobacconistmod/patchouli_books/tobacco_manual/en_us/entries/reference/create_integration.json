@@ -11,12 +11,12 @@
     {
       "type": "patchouli:text",
       "title": "Harvest & Cure",
-      "text": "Create Mechanical Harvesters can harvest mature two-block tobacco without duplicating upper/lower drops. Encased Fan airflow can accelerate Air Curing and Sun Curing; airflow hitting either the lower or upper section of the tall rack counts. Fan-blown Campfire smoke/heat accelerates Fire Curing, and fan-blown Lava heat can accelerate Flue Curing."
+      "text": "Create Mechanical Harvesters can harvest mature two-block tobacco without duplicating upper/lower drops. Encased Fan airflow can accelerate Air Curing and an otherwise-valid Sun Cure at 4× progress; airflow reaching either the lower or upper section of the tall rack counts. Fan-blown Campfire smoke/heat and Lava heat accelerate Fire/Flue progress at 6×."
     },
     {
       "type": "patchouli:text",
       "title": "Cut, Press & Blend",
-      "text": "A Deployer using a Chaveta advances cured tobacco through $(item)Rough → Ribbon → Shag$(). A Mechanical Press turns Rough Cut into Flake and can finish cigarette/cigar assembly. Mechanical Mixers can homogenize compatible leaf quality and blend two or three loose tobaccos while preserving blend identity."
+      "text": "A Deployer using a Chaveta advances cured tobacco through $(item)Rough → Ribbon → Shag$(). A Mechanical Press turns Rough Cut into Flake and can finish cigarette/cigar assembly. Mechanical Mixers can homogenize compatible leaf quality and blend two or three compatible single-variety loose tobaccos while preserving blend identity."
     },
     {
       "type": "patchouli:text",

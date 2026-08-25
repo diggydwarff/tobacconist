@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
  * Minecraft 1.20.5+ stores arbitrary item data in minecraft:custom_data.
  *
  * The live tag returned by getOrCreateTag() writes mutations back into the
- * CUSTOM_DATA component, allowing the old gameplay code to remain readable
+ * CUSTOM_DATA component while exposing CompoundTag-style access
  * while the port is completed.
  */
 public final class LegacyItemTags {

@@ -320,7 +320,7 @@ public final class TobaccoCuringHelper {
             tag.putString(TAG_CURE_TYPE, CURE_AIR);
             tag.remove(TAG_GROWTH_QUALITY);
         } else {
-            // Raw creative leaf should just be "Good"
+            // Default raw creative leaves to the Good growth-quality tier.
             tag.putInt(TAG_GROWTH_QUALITY, 40);
             tag.remove(TAG_QUALITY);
             tag.remove(TAG_QUALITY_TIER);

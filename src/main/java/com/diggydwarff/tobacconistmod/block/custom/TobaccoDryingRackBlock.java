@@ -44,15 +44,10 @@ public class TobaccoDryingRackBlock extends BaseEntityBlock {
     /** Tobacco variety tint, matching hanging bunches: 0 wild, 1 Virginia, 2 Burley, 3 Oriental, 4 Dokha, 5 Shade. */
     public static final IntegerProperty VARIETY = IntegerProperty.create("variety", 0, 5);
 
-    // The new authored rack occupies one full block in X/Z and rises to 26.5 model pixels.
-    // Keep the interaction/selection outline faithful to those outer bounds so its visible
-    // upper half can be selected instead of clicking through to the air block behind it.
+    // Selection bounds cover the full 16x16x26.5-pixel model.
     private static final VoxelShape OUTLINE_SHAPE = box(0.0, 0.0, 0.0, 16.0, 26.5, 16.0);
 
-    // Collision follows the four structural posts and perimeter rails only.  The authored
-    // drying shelves are intentionally omitted from collision: vanilla Campfire smoke particles
-    // rise through the center of the rack, and solid shelf collision made that plume collect
-    // underneath each tier even though the visual model is an open slatted rack.
+    // Collision covers the frame only, leaving the rack center open for movement and smoke.
     private static final VoxelShape COLLISION_SHAPE = Shapes.or(
             box(0.562162, 0.0, 0.562162, 2.032432, 26.0, 2.032432),
             box(13.967568, 0.0, 0.562162, 15.437838, 26.0, 2.032432),
@@ -104,9 +99,7 @@ public class TobaccoDryingRackBlock extends BaseEntityBlock {
             return;
         }
 
-        // The rack is taller than one block. Relay a little of the lit campfire plume from just
-        // above the authored top rail so smoke visibly continues into the sky instead of appearing
-        // to terminate inside the drying shelves. The center remains physically open as well.
+        // Continue the campfire plume above the rack's top rail.
         double x = pos.getX() + 0.5D + (random.nextDouble() - 0.5D) * 0.24D;
         double y = pos.getY() + (26.8D / 16.0D);
         double z = pos.getZ() + 0.5D + (random.nextDouble() - 0.5D) * 0.24D;

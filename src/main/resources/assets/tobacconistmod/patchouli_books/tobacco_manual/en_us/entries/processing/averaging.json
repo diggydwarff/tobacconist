@@ -6,11 +6,11 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "The crafting grid can $(thing)average$() two or more compatible tobacco stacks/items. This is useful when the same tobacco has different quality values and will not stack naturally."
+      "text": "The crafting grid can $(thing)average$() 2–8 compatible tobacco items. This is useful when the same tobacco has different quality values and will not stack naturally."
     },
     {
       "type": "patchouli:text",
-      "text": "All inputs must be the same tobacco item and processing mode. Raw leaf can only average with the same raw leaf. Cured leaf must also have the same cure type. Loose tobacco must have both the same cure and the same cut.",
+      "text": "All inputs must be the same tobacco item and processing mode. Raw leaf can only average with the same raw leaf. Cured leaf must also have the same cure type. Single-variety loose tobacco must have the same cure and the same cut. Blended Tobacco is not quality-averaged this way because its component identity must remain intact.",
       "title": "Compatibility Rules"
     },
     {
@@ -20,8 +20,16 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Averaging intentionally combines compatible quality values. Tobacco crates do something different: fill a 3x3 grid with nine of the same tobacco item and the crate stores each unit losslessly, even when their NBT differs. Breaking the crate spills those exact nine inputs back out.",
+      "text": "Averaging combines compatible quality values. Tobacco Crates do something different: fill a full 3×3 grid with nine of the same tobacco item and the crate stores each unit losslessly, even when their NBT/components differ. Breaking the crate spills those exact nine inputs back out.",
       "title": "Quality-Safe Consolidation"
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "tobacconistmod:processing/blending",
+        "tobacconistmod:storage/tobacco_crates"
+      ],
+      "title": "Related Chapters"
     }
   ]
 }

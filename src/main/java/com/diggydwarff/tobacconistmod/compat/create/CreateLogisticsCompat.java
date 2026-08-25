@@ -60,10 +60,7 @@ public final class CreateLogisticsCompat {
         registerDoubleHookah(ModBlocks.EMERALD_HOOKAH.get());
         registerDoubleHookah(ModBlocks.NETHERITE_HOOKAH.get());
 
-        // The normal Create unpacker already respects our NeoForge item handlers, including
-        // metadata-sensitive barrel batches, fuel validation and Hookah slot validation.
-        // The rack is the one special case: its normal automation rejects UP/DOWN insertion,
-        // while a Packager is a deliberate bulk-loading endpoint and should work from any face.
+        // Use a custom rack unpacker because normal sided insertion rejects top/bottom faces.
         UnpackingHandler.REGISTRY.register(
                 ModBlocks.TOBACCO_DRYING_RACK.get(),
                 CreateLogisticsCompat::unpackDryingRack
@@ -99,9 +96,8 @@ public final class CreateLogisticsCompat {
                                              List<ItemStack> items,
                                              @Nullable PackageOrderWithCrafts orderContext,
                                              boolean simulate) {
-        // DryingRackItemHandler treats every horizontal face identically. Normalize vertical
-        // Packager access to one horizontal face so Create's proven all-or-nothing default
-        // unpacker can still perform the actual capacity/metadata simulation and insertion.
+        // DryingRackItemHandler treats horizontal faces identically. Normalize vertical Packager
+        // access to a horizontal face so the default unpacker can validate capacity and metadata.
         Direction effectiveSide = side == Direction.UP || side == Direction.DOWN
                 ? Direction.NORTH
                 : side;

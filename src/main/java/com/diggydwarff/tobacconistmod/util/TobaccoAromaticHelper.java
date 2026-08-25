@@ -143,8 +143,7 @@ public final class TobaccoAromaticHelper {
             }
 
             String display = String.join(" + ", flavorNames);
-            // Majority-aromatic blends read as fully flavored. A 1/3 or 1/2 aromatic blend is
-            // intentionally presented as a subtle hint instead.
+            // Majority-aromatic blends use FULL strength; smaller shares use HINT.
             AromaticStrength strength = flavored * 2 > components.size()
                     ? AromaticStrength.FULL
                     : AromaticStrength.HINT;

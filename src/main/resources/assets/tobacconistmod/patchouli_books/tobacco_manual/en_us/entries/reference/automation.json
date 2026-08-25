@@ -6,16 +6,16 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "The $(thing)Drying Rack$() has explicit hopper rules. Horizontal sides can insert valid raw leaves. The top and bottom cannot insert. The bottom can extract only when the batch has completely finished curing."
+      "text": "The $(thing)Drying Rack$() has explicit vanilla hopper rules. Horizontal sides can insert valid raw leaves. The top and bottom cannot insert. The bottom can extract only when the batch has completely finished curing."
     },
     {
       "type": "patchouli:text",
-      "text": "Rack automation still obeys batch rules: leaves must match the stored leaf's exact item/components, the rack holds at most 16, and insertion is blocked once progress reaches 10%. A hopper pulling from the bottom extracts only the requested amount rather than vacuuming the entire batch.",
+      "text": "Rack automation still obeys batch rules: leaves must match the stored leaf’s exact item/components, the rack holds at most 16, and insertion is blocked once progress reaches 10%. A vanilla hopper pulls finished output from the bottom. NeoForge/Create capability consumers also pass through the rack’s validated finished-output handler.",
       "title": "Drying Rack"
     },
     {
       "type": "patchouli:text",
-      "text": "The $(thing)Hookah$() exposes its three-slot item handler to NeoForge automation. Automated insertion is still validated per slot: fuel in slot 0, Shisha Tobacco in slot 1, and a Water Potion in slot 2.",
+      "text": "The $(thing)Hookah$() exposes its three-slot item handler to NeoForge automation. Automated insertion is still validated per slot: fuel in slot 0, Shisha Tobacco in slot 1, and a Water Potion or Dirty Hookah Water in slot 2.",
       "title": "Hookah"
     },
     {
@@ -31,7 +31,12 @@
     {
       "type": "patchouli:text",
       "title": "Hanging Tobacco",
-      "text": "Traditional hanging 16-leaf bunches are deliberately not inventory machines. Hoppers, funnels, arms, and Display Links cannot insert, extract, or read them. Break the bunch to recover its leaves. Environmental Create fan assistance can still accelerate a valid cure."
+      "text": "Traditional hanging 16-leaf bunches are not inventory machines. Hoppers, funnels, Mechanical Arms, and Display Links cannot insert, extract, or read them. Break the bunch to recover its leaves. Environmental Create fan assistance can still accelerate a valid cure."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Tobacco Crates",
+      "text": "Tobacco Crates are packaged blocks rather than live inventories. Their nine stored units are recovered by breaking the crate; individual contents are not exposed to hopper/Create logistics."
     }
   ]
 }

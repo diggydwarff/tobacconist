@@ -11,11 +11,8 @@ import java.util.Objects;
 import java.util.function.BiFunction;
 
 /**
- * Loader-safe entry point for all Create integration.
- *
- * <p>This class deliberately contains no imports or signatures from Create. Common Tobacconist
- * code may safely reference this class even when Create is not installed. Classes that directly
- * reference Create APIs are loaded reflectively only after {@link #loaded()} is true.</p>
+ * Loader-safe entry point for optional Create integration. Create API classes are loaded only
+ * after {@link #loaded()} succeeds, so common code can reference this class without Create.
  */
 public final class CreateCompat {
     public static final String MOD_ID = "create";
@@ -135,7 +132,7 @@ public final class CreateCompat {
         return airflow == null ? SmokeAirflow.NONE : airflow;
     }
 
-    /** Kept as a convenience for any older common-side callers. */
+    /** Compatibility alias for common-side callers. */
     public static boolean isSmokeVentilated(Level level, BlockPos pos) {
         if (level == null || pos == null) {
             return false;

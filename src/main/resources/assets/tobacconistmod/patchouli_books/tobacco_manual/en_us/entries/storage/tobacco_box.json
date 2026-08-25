@@ -32,6 +32,7 @@
       "type": "patchouli:relations",
       "entries": [
         "tobacconistmod:storage/labels",
+        "tobacconistmod:storage/tobacco_crates",
         "tobacconistmod:processing/averaging"
       ],
       "title": "Related Chapters"

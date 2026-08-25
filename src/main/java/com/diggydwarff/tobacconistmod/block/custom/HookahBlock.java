@@ -129,8 +129,7 @@ public class HookahBlock extends BaseEntityBlock {
     @Override
     public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state,
                               @Nullable BlockEntity blockEntity, ItemStack tool) {
-        // Absolute final guard: Creative mode must never generate the Hookah block item
-        // through its loot table. Survival continues through vanilla playerDestroy.
+        // Skip loot generation for Creative breaks.
         if (player.getAbilities().instabuild) {
             return;
         }

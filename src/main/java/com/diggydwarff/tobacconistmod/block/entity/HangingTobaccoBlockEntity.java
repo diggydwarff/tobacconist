@@ -23,12 +23,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 
 /**
- * A traditional 16-leaf tobacco bunch hung directly from the underside of a roof/beam.
- *
- * <p>The upper block owns this block entity; the lower half is visual/physical only. Curing
- * intentionally mirrors the Drying Rack's timers, quality calculation, priority order and
- * Create-fan assistance, but the environment checks are adapted to a hanging bundle: sun comes
- * through side skylight/pergola gaps because direct sky above the attachment point is impossible.</p>
+ * Stores and cures a 16-leaf hanging batch. The upper half owns the block entity; sunlight is
+ * evaluated through horizontal sky channels because the attachment block covers the top face.
  */
 public class HangingTobaccoBlockEntity extends BlockEntity {
 
@@ -51,8 +47,7 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
     private int sunTicks = 0;
     private int fireTicks = 0;
     private int flueTicks = 0;
-    // Persist the botanical variety independently of cure state so a bunch that cures in place
-    // always switches to its own finished variety model/texture.
+    // Stored separately so the finished model retains the botanical variety.
     private int tobaccoVariety = 0;
 
     private int createFanAssistRefresh = 0;
@@ -510,8 +505,7 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
         if (level == null) return CreateCompat.FanCuringAssist.NONE;
 
         if (createFanAssistRefresh-- <= 0) {
-            // Probe from the lower half: Create's resolver checks this position and the block
-            // above it, covering both physical halves of the two-block hanging bundle.
+            // Probe from the lower half so Create airflow can reach either half of the bundle.
             cachedCreateFanAssist = CreateCompat.getFanCuringAssist(level, worldPosition.below());
             createFanAssistRefresh = CREATE_FAN_ASSIST_REFRESH_TICKS;
         }
@@ -527,14 +521,7 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
                 && state.getValue(CampfireBlock.LIT);
     }
 
-    /**
-     * Side-sky sun check for pergolas/slatted curing structures.
-     *
-     * <p>The support block above a hanging bunch necessarily blocks vertical sky. Instead, one
-     * horizontal neighboring column must be genuine open air with daytime sky light. This makes
-     * long alternating beam/gap/beam/gap rows work naturally, while a fully solid roof remains
-     * Air Curing.</p>
-     */
+    /** Requires a horizontal air channel with daytime sky access for hanging Sun Curing. */
     private static boolean hasPergolaSunlight(Level level, BlockPos upperPos) {
         if (!level.isDay() || level.isRaining()) return false;
 
@@ -568,7 +555,7 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
         return false;
     }
 
-    /** Hanging tobacco under a solid roof naturally falls back to Air Curing. */
+    /** Air Curing is valid whenever the bunch is not exposed to rain through a side opening. */
     private static boolean canAirDry(Level level, BlockPos upperPos) {
         return !isSideRainExposed(level, upperPos);
     }

@@ -31,7 +31,7 @@ public class ModVillagerTrades {
         if (!ResourceLocation.fromNamespaceAndPath(TobacconistMod.MODID, "tobacconist_master").equals(key)) return;
 
         // Two novice offers means both regional seed varieties are guaranteed on a normal Tobacconist.
-        // Wild seed is intentionally excluded: find it naturally or from a Wandering Trader.
+        // Wild seeds come from worldgen or Wandering Traders, not tobacconist seed trades.
         List<VillagerTrades.ItemListing> level1 = event.getTrades().get(1);
         level1.add(regionalSeedTrade(false));
         level1.add(regionalSeedTrade(true));
@@ -97,7 +97,7 @@ public class ModVillagerTrades {
     private static RegionalProfile profileFor(Entity trader) {
         Holder<Biome> biome = trader.level().getBiome(trader.blockPosition());
 
-        // The order intentionally handles the strongest specialty regions first.
+        // Check the most specific regional biome groups first.
         if (biome.is(BiomeTags.IS_BADLANDS)) {
             return new RegionalProfile(ModItems.ORIENTAL_TOBACCO_SEEDS, ModItems.DOKHA_TOBACCO_SEEDS,
                     ModItems.ORIENTAL_TOBACCO_LEAF);

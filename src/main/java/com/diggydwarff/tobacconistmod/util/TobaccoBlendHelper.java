@@ -227,7 +227,7 @@ public final class TobaccoBlendHelper {
             return out;
         }
 
-        // Migration fallback for blends created by the first blending implementation.
+        // Reads the initial blend-data layout for save compatibility.
         if (!tag.contains(TAG_BLEND_COMPONENTS)) return List.of();
         ListTag legacyList = tag.getList(TAG_BLEND_COMPONENTS, 8);
         List<String> legacy = new ArrayList<>(legacyList.size());
@@ -270,11 +270,7 @@ public final class TobaccoBlendHelper {
         if (!secretName.isEmpty()) tag.putString(TAG_BLEND_NAME, secretName);
     }
 
-    /**
-     * Human-readable, per-component description of a blend. This is intentionally derived
-     * from the stored component snapshots so cigarettes/cigars do not collapse a blend
-     * into only its averaged quality/cure/flavor metadata.
-     */
+    /** Builds display lines from the stored per-component blend snapshots. */
     public static List<String> getDetailedComponentLines(CompoundTag tag) {
         List<TobaccoBlendComponent> components = getComponentData(tag);
         if (components.isEmpty()) return List.of();

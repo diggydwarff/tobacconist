@@ -1,0 +1,36 @@
+{
+  "name": "Tobacco Crates",
+  "icon": "tobacconistmod:virginia_tobacco_crate",
+  "category": "tobacconistmod:storage",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "A Tobacco Crate is lossless bulk packaging for exactly $(item)9$() units. Fill every slot of a 3×3 crafting grid with the $(thing)same registry item$(). The nine items may carry different quality, cure, cut, age, flavor, or other NBT/components."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Raw vs Cured Crates",
+      "text": "Raw leaves create a green $(thing)Raw <Variety> Tobacco Crate$(). Cured leaves and single-variety loose tobacco create the normal cured-color crate for that variety. Blended Tobacco creates a Blended Tobacco Crate."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Lossless Contents",
+      "text": "The crate stores each of the nine inputs separately. Breaking a filled crate in Survival spills those exact nine units back out; it does not average or flatten their metadata. Creative breaking suppresses the stored drops."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Not a Live Inventory",
+      "text": "Crates are packaged storage blocks, not nine-slot machines. Hoppers, funnels, and Mechanical Arms do not insert/extract individual contents from a placed crate. Break the crate to unpack it."
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "tobacconistmod:storage/tobacco_box",
+        "tobacconistmod:processing/averaging",
+        "tobacconistmod:processing/blending"
+      ],
+      "title": "Related Chapters"
+    }
+  ]
+}

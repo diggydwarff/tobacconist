@@ -20,13 +20,8 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Factory Gauge matching for metadata-heavy tobacco.
- *
- * Create normally treats every component difference as a distinct stock item. Tobacco quality
- * is intentionally variable, so a gauge configured with one representative Good leaf should be
- * able to restock other Good leaves of the same otherwise-identical product. Only numeric quality
- * values are tier-normalized; variety, cure, cut, flavor, blend, wrapper and other metadata remain
- * exact.
+ * Factory Gauge matching that normalizes numeric quality within a quality tier while requiring
+ * variety, cure, cut, flavor, blend, wrapper, and other product metadata to match exactly.
  */
 public final class CreateFactoryGaugeTobaccoMatching {
     private CreateFactoryGaugeTobaccoMatching() {}

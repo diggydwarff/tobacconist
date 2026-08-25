@@ -11,20 +11,18 @@ import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 
 /**
- * Create pressing recipe whose real output is derived from the actual input ItemStack.
+ * Create pressing recipe with output derived from the runtime input ItemStack.
  *
- * <p>A normal Create pressing JSON has a static output. Tobacconist cannot use that directly
- * because quality, cure, fermentation, age and the rest of the tobacco processing state live on
- * the individual stack. When this recipe matches Rough tobacco, it supplies Create with a
- * one-item Flake result copied from that exact input. Create then applies that result once per
- * input item, preserving quantities without multiplying them.</p>
+ * <p>Create pressing JSON uses a static output, while Tobacconist must preserve per-stack
+ * quality, cure, fermentation, age, and processing metadata. Matching Rough tobacco produces
+ * a one-item Flake result copied from the runtime input.</p>
  */
 public final class CreateTobaccoPressingRecipe extends PressingRecipe {
     public CreateTobaccoPressingRecipe(ProcessingRecipeParams params) {
         super(params);
 
-        // Make the representative recipe output display as Flake in recipe viewers. The actual
-        // processing result is replaced in matches() with a metadata-preserving copy of the input.
+        // Mark the representative recipe output as Flake for recipe viewers. Runtime processing
+        // replaces it with a metadata-preserving copy of the input.
         if (!results.isEmpty()) {
             ProcessingOutput displayOutput = results.getFirst();
             ItemStack displayStack = displayOutput.getStack();

@@ -81,8 +81,7 @@ public class TobacconistConfig {
         List<? extends String> configured;
         try {
             configured = SERVER.secretBlends.get();
-            // Worlds that generated the first R20 defaults before this richer format existed
-            // transparently use the stricter defaults unless the server owner customized them.
+            // Upgrade the legacy default list while preserving customized server values.
             if (configured.equals(LEGACY_DEFAULT_SECRET_BLENDS)) {
                 configured = DEFAULT_SECRET_BLENDS;
             }
@@ -147,7 +146,7 @@ public class TobacconistConfig {
         String variety = normalizeToken(fields[0]);
         if (variety.isEmpty()) return null;
 
-        // Legacy variety-only entries remain valid and simply ignore quality/cure/flavor.
+        // Variety-only entries act as wildcards for quality, cure, and flavor.
         if (fields.length == 1) {
             return new SecretBlendRequirement(variety, 0, "*", "*");
         }

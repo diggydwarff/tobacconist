@@ -33,8 +33,7 @@ public final class TobaccoFanSmokeParticle extends CampfireSmokeParticle {
         super(level, x, y, z, xSpeed, ySpeed, zSpeed, signal);
         this.indoorSmoke = signal;
 
-        // Keep enclosed-room haze around a little longer than vanilla signal smoke without
-        // changing its appearance or turning it into the much heavier custom haze experiment.
+        // Extend enclosed smoke lifetime without changing the vanilla particle appearance.
         if (this.indoorSmoke) {
             this.lifetime = Math.max(this.lifetime + 28, (int) Math.round(this.lifetime * 1.28D));
         }
@@ -55,39 +54,31 @@ public final class TobaccoFanSmokeParticle extends CampfireSmokeParticle {
 
         super.tick();
 
-        // A pulling fan should finish the job: once the smoke has visibly reached the intake,
-        // remove it instead of letting vanilla collision leave it hovering around the fan block.
+        // Remove smoke after it reaches a pulling fan intake.
         if (airflow.intakeCapture()) {
             this.remove();
             return;
         }
 
-        // Long-lived ceiling haze should stop behaving like trapped indoor smoke once airflow
-        // carries it out from beneath the roof. Without this transition a signal-smoke particle
-        // could retain its long indoor lifetime, hit an exterior wall, and sit there while the fan
-        // kept pushing horizontally. Sky-exposed smoke regains normal buoyancy and its remaining
-        // lifetime is capped to a few seconds so it clears like outdoor smoke.
+        // Convert long-lived indoor smoke to normal outdoor behavior after it reaches open sky.
         if (this.indoorSmoke && isSkyExposed()) {
             releaseToOutdoorSmoke();
         }
 
-        // Vanilla collision keeps smoke below solid ceilings, which is desirable, but an upward
-        // extractor can otherwise leave those particles parked in place. This must apply to BOTH
-        // the long-lived indoor haze and ordinary rising smoke: ordinary wisps can also reach the
-        // roof and become collision-stopped before the nearby fan has time to collect them.
+        // Slide ceiling-blocked smoke along fan airflow so extractors can collect it.
         if (airflow.active() && isBlockedAbove()) {
             slideAlongCeiling(airflow);
         }
     }
 
     private void applyFanAirflow(CreateCompat.SmokeAirflow airflow) {
-        // Ceiling smoke is deliberately a little easier for an extractor fan to grab.
+        // Increase extractor capture slightly for ceiling-level smoke.
         double acceleration = airflow.strength() * (this.indoorSmoke ? 1.30D : 1.0D);
         this.xd += airflow.x() * acceleration;
         this.yd += airflow.y() * acceleration;
         this.zd += airflow.z() * acceleration;
 
-        // Keep strong/high-RPM fans visibly useful without letting a particle accelerate forever.
+        // Cap accumulated fan velocity.
         double speedSquared = this.xd * this.xd + this.yd * this.yd + this.zd * this.zd;
         double maxSquared = MAX_FAN_SPEED * MAX_FAN_SPEED;
         if (speedSquared > maxSquared) {
@@ -108,11 +99,7 @@ public final class TobaccoFanSmokeParticle extends CampfireSmokeParticle {
         double slideX = airflow.x() / horizontalLength * slide;
         double slideZ = airflow.z() / horizontalLength * slide;
 
-        // Once vanilla Particle collision marks a smoke wisp as stopped by the ceiling, later
-        // horizontal move() calls can remain effectively pinned. Move the ceiling-bound wisp by
-        // position instead, but only while the destination itself is open air. This keeps the
-        // smoke hugging the underside of the roof while still allowing an extractor to collect
-        // it from several blocks away.
+        // Move ceiling-bound smoke directly when vanilla collision has pinned its velocity.
         double nextX = this.x + slideX;
         double nextZ = this.z + slideZ;
         BlockPos destination = BlockPos.containing(nextX, this.y, nextZ);
@@ -136,9 +123,7 @@ public final class TobaccoFanSmokeParticle extends CampfireSmokeParticle {
             this.lifetime = Math.min(this.lifetime, this.age + OUTDOOR_REMAINING_LIFETIME);
         }
 
-        // Restore an obvious but still gentle upward drift. If the fan has pushed the wisp into
-        // an outside wall, lift it a tiny amount by position as well; this bypasses the same
-        // vanilla collision pinning that can occur under ceilings and lets it climb/dissipate.
+        // Restore upward drift outdoors and lift wall-pinned smoke through open space.
         this.yd = Math.max(this.yd, OUTDOOR_WALL_RISE);
         if (isAgainstWall()) {
             double nextY = this.y + 0.012D;
@@ -164,9 +149,7 @@ public final class TobaccoFanSmokeParticle extends CampfireSmokeParticle {
     }
 
     private boolean isBlockedAbove() {
-        // Check several short offsets. A vanilla smoke particle may stop a few tenths of a block
-        // below the actual underside after collision; checking only y + 0.55 missed some of those
-        // wisps and prevented the ceiling-slide code from ever running.
+        // Probe multiple offsets because collision can stop smoke below the ceiling surface.
         return isSolidAtOffset(0.14D)
                 || isSolidAtOffset(0.34D)
                 || isSolidAtOffset(CEILING_TEST_OFFSET);

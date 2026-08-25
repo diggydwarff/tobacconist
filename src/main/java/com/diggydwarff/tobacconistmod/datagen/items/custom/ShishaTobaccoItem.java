@@ -150,7 +150,7 @@ public class ShishaTobaccoItem extends SmokingProduct {
         }
     }
 
-    /** Supports both the new clean flavor IDs and legacy "Bottle of Molasses (...)" metadata. */
+    /** Accepts current flavor IDs and legacy "Bottle of Molasses (...)" metadata. */
     private String getShishaFlavorDisplayName(String storedFlavor) {
         if (storedFlavor == null || storedFlavor.isBlank()) return "";
 

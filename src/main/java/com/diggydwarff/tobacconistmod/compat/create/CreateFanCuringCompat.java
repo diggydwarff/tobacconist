@@ -12,9 +12,8 @@ import net.minecraft.world.level.Level;
 /**
  * Create-side resolver for fan-assisted Drying Rack curing.
  *
- * <p>The Drying Rack remains the processing machine. This class only reports what kind of
- * Create airflow is actually reaching the rack, allowing the rack's existing time, quality,
- * interruption, rain-damage, and mixed-method systems to remain authoritative.</p>
+ * <p>Reports the Create airflow reaching a rack; curing time, quality, interruption,
+ * rain damage, and mixed-method state remain owned by the rack block entity.</p>
  */
 public final class CreateFanCuringCompat {
 
@@ -29,9 +28,7 @@ public final class CreateFanCuringCompat {
             return CreateCompat.FanCuringAssist.NONE;
         }
 
-        // The authored drying rack is ~1.65 blocks tall even though its block entity lives in
-        // the lower block position. Probe both vertical sections so a horizontal fan aimed at
-        // either the lower shelves OR the upper leaves counts as assisted curing.
+        // Probe both vertical sections of the tall rack for fan airflow.
         CreateCompat.FanCuringAssist lower = resolveAssistAtProbe(level, rackPos);
         CreateCompat.FanCuringAssist upper = resolveAssistAtProbe(level, rackPos.above());
         return upper.priority() > lower.priority() ? upper : lower;
@@ -41,8 +38,7 @@ public final class CreateFanCuringCompat {
         int searchDistance = getConfiguredSearchDistance();
         CreateCompat.FanCuringAssist best = CreateCompat.FanCuringAssist.NONE;
 
-        // A fan can only affect this part of the rack when both positions are aligned on one
-        // cardinal axis. Search outward from the probe rather than scanning a cube.
+        // Search cardinal axes outward from the probe position.
         for (Direction fanFacing : Direction.values()) {
             for (int distance = 1; distance <= searchDistance; distance++) {
                 BlockPos fanPos = probePos.relative(fanFacing.getOpposite(), distance);

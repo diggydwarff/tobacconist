@@ -15,12 +15,12 @@
     },
     {
       "type": "patchouli:text",
-      "text": "One fresh Shisha Tobacco item has $(item)6,500 processing durability$(), equal to about $(item)5 minutes 25 seconds$() of continuous active use. This is 30% longer than the previous duration. The shisha is consumed when that timer is exhausted.",
+      "text": "One fresh Shisha Tobacco item has $(item)6,500 processing durability$(), equal to about $(item)5 minutes 25 seconds$() of continuous active use. The shisha is consumed when that timer is exhausted.",
       "title": "Shisha Duration"
     },
     {
       "type": "patchouli:text",
-      "text": "If the hookah will not light, verify all three contents: valid fuel, Shisha Tobacco, and a Water Potion. Also remember that an already-started fuel reserve can remain stored while the hookah is missing shisha or water.",
+      "text": "If the hookah will not light, verify all three contents: valid fuel, Shisha Tobacco, and a Water Potion or Dirty Hookah Water. Also remember that an already-started fuel reserve can remain stored while the hookah is missing shisha or water.",
       "title": "Troubleshooting"
     }
   ]

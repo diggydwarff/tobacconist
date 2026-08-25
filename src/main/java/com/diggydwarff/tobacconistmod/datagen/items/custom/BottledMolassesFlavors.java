@@ -116,8 +116,7 @@ public enum BottledMolassesFlavors {
 
     public Item getItem(){
         if (item == null) {
-            // Molasses bottles now represent a full 1000 mB batch. Flavoring Essence is
-            // likewise a full single-use ingredient, and flavored molasses is intentionally one-use.
+            // Molasses and Essence bottles each represent a full 1000 mB processing batch.
             item = new BottledMolassesItem(new Item.Properties().stacksTo(1));
         }
         return item;
@@ -147,7 +146,7 @@ public enum BottledMolassesFlavors {
         return essence == null ? ItemStack.EMPTY : new ItemStack(essence);
     }
 
-    /** Stable registry path for this molasses flavor's real fluid. */
+    /** Stable registry path for this molasses flavor fluid. */
     public String getFluidName() {
         String path = getName();
         if (path.startsWith("bottled_")) {
@@ -159,7 +158,7 @@ public enum BottledMolassesFlavors {
         return path;
     }
 
-    /** English display label stored by the existing Shisha metadata format. */
+    /** English display label stored by Shisha metadata. */
     public String getShishaFlavorTag() {
         return isPlain() ? "Molasses" : getFlavorDisplayName();
     }
@@ -202,10 +201,7 @@ public enum BottledMolassesFlavors {
         return fluid.startsWith("molasses_") ? fluid.substring("molasses_".length()) : fluid;
     }
 
-    /**
-     * Shared ingredient tag used by both Brewing Stand and Create essence production.
-     * Keeping the recipe pointed at our tag lets other food mods opt in without a hard dependency.
-     */
+    /** Ingredient tag shared by Brewing Stand and Create essence recipes. */
     public TagKey<Item> getFlavoringIngredientTag() {
         return TagKey.create(
                 Registries.ITEM,

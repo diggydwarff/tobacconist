@@ -55,11 +55,8 @@ public final class CreateTobaccoMixingRecipe extends MixingRecipe {
     }
 
     private boolean canUseTobacco(ItemStack tobacco) {
-        // Create checks the just-produced Basin output against the same recipe immediately after
-        // applying it. Without this one-shot guard, an output left in the Basin can be consumed
-        // again in the same mixer animation and fill multiple flavor slots from one insertion.
-        // Clearing the guard after that check still allows the player to extract and deliberately
-        // reinsert the Shisha for another dose, including the same flavor.
+        // Prevent the freshly produced Basin output from matching the same flavor recipe twice
+        // during one mixer application.
         if (!immediateContinuationGuard.isEmpty()
                 && ItemStack.isSameItemSameComponents(tobacco, immediateContinuationGuard)) {
             immediateContinuationGuard = ItemStack.EMPTY;

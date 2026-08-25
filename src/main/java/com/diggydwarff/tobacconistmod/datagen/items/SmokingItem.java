@@ -55,7 +55,7 @@ public abstract class SmokingItem extends Item {
         applySmokingEffects(player, level, tobaccoStack, false);
     }
 
-    /** Hookah draws keep the fuller old puff cloud while passive top smoke stays restrained. */
+    /** Applies the larger smoke cloud used for a Hookah hose draw. */
     public static void applyHookahSmokingEffects(Player player, ServerLevel level, ItemStack tobaccoStack) {
         applySmokingEffects(player, level, tobaccoStack, true);
     }

@@ -43,8 +43,7 @@ public class HangingTobaccoBlock extends BaseEntityBlock {
     public static final IntegerProperty CURE_STAGE = IntegerProperty.create("cure_stage", 0, 5);
     public static final IntegerProperty VARIETY = IntegerProperty.create("variety", 0, 5);
 
-    // The refined bunch is smaller and no longer includes the temporary decorative beam.
-    // Keep generous outline boxes so the upper knot and lower leaves are both easy to target.
+    // Selection bounds cover the upper knot and lower leaf mass.
     private static final VoxelShape UPPER_OUTLINE_SHAPE = box(3.5D, 2.75D, 3.5D, 12.5D, 15.25D, 12.5D);
     private static final VoxelShape LOWER_OUTLINE_SHAPE = box(1.5D, 8.0D, 1.5D, 14.5D, 16.0D, 14.5D);
     private static final ThreadLocal<Set<BlockPos>> REMOVING = ThreadLocal.withInitial(HashSet::new);

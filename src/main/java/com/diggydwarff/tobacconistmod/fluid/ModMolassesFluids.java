@@ -16,10 +16,10 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
- * Registers one real, non-placeable molasses fluid per existing Tobacconist flavor.
+ * Registers one non-placeable molasses fluid per Tobacconist flavor.
  *
- * <p>No fluid block or bucket is supplied intentionally. Each molasses bottle is a portable full
- * 1000 mB batch, while Create/NeoForge tanks and pipes handle the registered fluids directly.</p>
+ * <p>No fluid block or bucket is registered. Bottles represent full 1000 mB batches, while
+ * Create/NeoForge tanks and pipes handle the registered fluids directly.</p>
  */
 public final class ModMolassesFluids {
     private static final DeferredRegister<FluidType> FLUID_TYPES =

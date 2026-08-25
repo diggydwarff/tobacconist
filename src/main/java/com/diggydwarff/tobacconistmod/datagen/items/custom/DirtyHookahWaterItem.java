@@ -13,11 +13,7 @@ import net.minecraft.world.level.Level;
 
 import java.util.List;
 
-/**
- * Water that has been used in a Hookah long enough to become stale/dirty.
- * It is intentionally non-lethal: the Hookah still functions, but smoking
- * through dirty water applies a short Nausea effect until fresh water is used.
- */
+/** Hookah water that applies Nausea on a hose draw until replaced with fresh water. */
 public class DirtyHookahWaterItem extends Item {
     public DirtyHookahWaterItem(Properties properties) {
         super(properties);

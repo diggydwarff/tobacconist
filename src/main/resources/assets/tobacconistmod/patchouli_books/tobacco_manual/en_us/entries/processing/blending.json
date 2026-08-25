@@ -1,0 +1,36 @@
+{
+  "name": "Blending Tobacco",
+  "icon": "tobacconistmod:blended_tobacco",
+  "category": "tobacconistmod:processing",
+  "sortnum": 3,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Blend $(item)2 or 3$() compatible single-variety loose tobaccos in the crafting grid. Inputs must share the same cut, fermented state, and ruined state. Blended Tobacco itself is not a base blend input."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Distinct Components",
+      "text": "A blend component is identified by $(thing)variety + cure + aromatic flavor$(). Quality-only differences of otherwise identical tobacco are for averaging/homogenizing, not blending. The same variety may appear more than once only when its cure or aromatic flavor differs."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Result",
+      "text": "The output count equals the number of inputs. Quality and aged days are averaged. If cure types differ, the result records a Mixed cure. Component snapshots are stored so the blend’s identity survives later processing."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Secret Blends",
+      "text": "Servers can define hidden named blends that match variety, minimum quality, cure, and flavor requirements. The default configuration includes several examples; the resulting item name and tooltip use the intrinsic blend name once a definition matches."
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "tobacconistmod:processing/averaging",
+        "tobacconistmod:hookah/aromatic_tobacco",
+        "tobacconistmod:hookah/shisha"
+      ],
+      "title": "Related Chapters"
+    }
+  ]
+}

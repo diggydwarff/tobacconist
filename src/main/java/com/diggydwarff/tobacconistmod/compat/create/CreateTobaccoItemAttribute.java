@@ -83,8 +83,7 @@ public record CreateTobaccoItemAttribute(String category, String value) implemen
 
     @Override
     public String getTranslationKey() {
-        // format() is deliberately overridden so Create does not need translations in its own
-        // namespace for Tobacconist-provided attribute values.
+        // Format Tobacconist attributes locally instead of relying on Create translations.
         return "tobacconist_metadata";
     }
 
@@ -310,7 +309,7 @@ public record CreateTobaccoItemAttribute(String category, String value) implemen
         return TobaccoAromaticHelper.getFlavorName(directTag);
     }
 
-    /** Supports current clean Shisha names plus the older "Bottle of Molasses (...)" form. */
+    /** Accepts current Shisha flavor IDs and the legacy "Bottle of Molasses (...)" metadata form. */
     private static String normalizeShishaFlavor(String value) {
         if (value == null || value.isBlank()) return "";
         String trimmed = value.trim();

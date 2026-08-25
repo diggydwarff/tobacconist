@@ -104,14 +104,7 @@ public class ClientColorHandlers {
         }, ModItems.TOBACCO_POUCH.get());
     }
 
-    /**
-     * Vanilla's standard dye diffuse colors.  The previous Hookah tint mixed every dye
-     * 40% toward white, which made strong colors (especially yellow, red, blue and green)
-     * look pastel compared with wool/concrete and other dyed Minecraft blocks.
-     *
-     * Keep these explicit so both one-block and tall Hookahs use the same stable palette
-     * regardless of text/UI color changes in DyeColor.
-     */
+    /** Vanilla-style dye diffuse colors shared by one-block and tall Hookahs. */
     private static int vanillaDyeRgb(DyeColor color) {
         int rgb = switch (color) {
             case WHITE -> 0xF9FFFE;

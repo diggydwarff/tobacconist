@@ -99,7 +99,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         return hasLeaves() ? storedLeaf.getCount() : 0;
     }
 
-    /** Maps the real 0..16 inventory count onto the four visual rack models. */
+    /** Maps the 0..16 inventory count onto the four visual rack models. */
     public int getVisualLoadStage() {
         int count = Math.min(MAX_LEAVES, getLeafCount());
         if (count <= 0) return 0;
@@ -561,7 +561,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             }
         }
 
-        // Repairs the visual fill stage after old worlds load and keeps it tied to inventory.
+        // Synchronize visual load/cure state with the stored batch.
         rack.syncRackState();
 
         if (!rack.hasLeaves()) {
@@ -593,9 +593,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         boolean validDryingThisTick = false;
         int progressTicks = 0;
 
-        // Keep Tobacconist's cure-method precedence. Create airflow supplies/accelerates the
-        // matching environment. Plain AIR airflow also assists an otherwise-valid Sun Cure
-        // without changing the batch's cure method away from Sun.
+        // Cure precedence is Fire, Flue, Sun, then Air. Plain fan airflow can accelerate a valid Sun cure.
         if (overCampfire || fanAssist == CreateCompat.FanCuringAssist.FIRE) {
             validDryingThisTick = true;
             rack.usedFireDrying = true;
@@ -801,9 +799,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         quality = TobaccoCuringHelper.clampQuality(Math.min(100, quality));
 
         TobaccoCuringHelper.applyCureData(cured, cureType, quality);
-        // GrowthQuality is only an intermediate crop-stage value. Once final cured quality has
-        // been calculated, keeping it would fragment otherwise-identical cured leaves into
-        // separate stacks and make Create batch homogenizing needlessly awkward.
+        // Cured stacks store final Quality rather than GrowthQuality.
         LegacyItemTags.getOrCreateTag(cured).remove(TobaccoCuringHelper.TAG_GROWTH_QUALITY);
 
         storedLeaf = cured;

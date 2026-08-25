@@ -17,9 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Keeps Tobacco Pouch dyeing on Minecraft's proven vanilla dye recipe, but makes
- * each recolor start fresh instead of mixing in the pouch's previous color.
- * Multiple dyes in the same crafting operation are still blended normally.
+ * Uses vanilla dye blending for Tobacco Pouches while excluding the pouch's existing color
+ * from a new crafting operation. Multiple dyes in the same craft are blended normally.
  */
 @Mixin(ArmorDyeRecipe.class)
 public abstract class ArmorDyeRecipeMixin {

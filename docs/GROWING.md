@@ -1,0 +1,49 @@
+# Growing Tobacco
+
+## Overview
+
+Tobacconist has six varieties: Virginia, Burley, Oriental, Dokha, Shade, and Wild. Cultivated crops grow on farmland through stages 0–7. From stage 4 onward the plant occupies a second block above the base. Natural growth requires raw brightness 9 or higher.
+
+Harvesting a mature plant creates raw leaves with `GrowthQuality`. Growth quality is limited to 0–70; later curing can raise the finished quality toward 100.
+
+## Growth-quality calculation
+
+Before the harvest random roll, growth potential is:
+
+`28 + biome/2 + light*3/5 + temperature*3/5 + harvest*3/4`, clamped to 0–70.
+
+Harvest then adds a random 0–10 and clamps the result to 0–70. Spectacles report the environmental condition score separately from crop maturity so a young plant is not treated as environmentally poor simply because it is not ready to harvest.
+
+Harvest timing contributes:
+
+- Mature: +8
+- One stage early: -3
+- Earlier than that: -12
+
+## Light and temperature targets
+
+| Variety | Ideal light | Acceptable light | Ideal temperature | Acceptable temperature |
+| --- | --- | --- | --- | --- |
+| Virginia | 13–15 | 12–15 | 0.80–1.20 | 0.65–1.35 |
+| Burley | 12–15 | 11–15 | 0.60–0.95 | 0.45–1.10 |
+| Oriental | 14–15 | 13–15 | 1.30–2.00 | 1.00–2.00 |
+| Dokha | 14–15 | 13–15 | 1.70–2.00 | 1.30–2.00 |
+| Shade | 9–12 | 8–13 | 0.90–1.20 | 0.75–1.35 |
+| Wild | 11–15 | 9–15 | 0.50–1.50 | 0.20–2.00 |
+
+Temperature values are Minecraft biome base-temperature values.
+
+## Biome preferences
+
+- **Virginia:** Plains/Savanna +20; Forest +10; Desert/Badlands -15.
+- **Burley:** Plains/Forest +20; Jungle +10; Desert/Badlands -15.
+- **Oriental:** Desert/Badlands +20; Savanna +10; Jungle/Forest -15.
+- **Dokha:** Desert +20; Badlands +10; Jungle/Forest -15.
+- **Shade:** Jungle +20; Forest +10; Desert/Badlands/Savanna -15.
+- **Wild:** most biomes +10; Desert/Badlands -5.
+
+## Harvesting and automation
+
+Breaking a mature tall crop handles the upper/lower halves as one plant so it does not duplicate drops. Create Mechanical Harvesters use the same quality generation and seed/drop rules as normal harvesting.
+
+Use Tobacconist's Spectacles to inspect light, temperature, biome suitability, maturity, and potential quality in-world.

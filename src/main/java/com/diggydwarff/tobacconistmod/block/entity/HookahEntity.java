@@ -140,10 +140,7 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
         return itemHandler.getStackInSlot(2).is(ModItems.DIRTY_HOOKAH_WATER.get());
     }
 
-    /**
-     * Dirty Hookah Water is deliberately a nuisance rather than a danger.
-     * It never damages the player; a hose draw only gives a brief Nausea effect.
-     */
+    /** Applies the Nausea penalty for drawing through Dirty Hookah Water. */
     public void applyDirtyWaterPenalty(Player player) {
         if (!isUsingDirtyWater()) return;
         player.addEffect(new MobEffectInstance(
@@ -179,9 +176,7 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
     }
 
     public void drops() {
-        // Creative removal (and any early break event that marks the block entity) must never
-        // spill Hookah contents. Keep the guard separate from clearing the handler so this
-        // remains safe even if another callback reaches onRemove in the same break sequence.
+        // Creative removal suppresses inventory drops.
         if (suppressDrops) {
             return;
         }
@@ -193,7 +188,7 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
         Containers.dropContents(this.level, this.worldPosition, inventory);
     }
 
-    /** Creative-mode block removal should not spill the Hookah inventory into the world. */
+    /** Clears the Hookah inventory without producing drops during a Creative break. */
     public void clearContentsForCreativeBreak() {
         suppressDrops = true;
         for (int i = 0; i < itemHandler.getSlots(); i++) {
@@ -204,9 +199,7 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
 
     public static void tick(Level level, BlockPos pos, BlockState state, HookahEntity pEntity) {
         if (level.isClientSide()) {
-            // Netherite Hookahs are prestige blocks: keep the ambience obvious and reliable
-            // by driving it from the block-entity client tick instead of the much less
-            // predictable random animateTick path. Roughly 3 bursts per second.
+            // Netherite Hookahs emit a regular client-side portal ambience.
             if (state.getBlock() instanceof NetheriteHookahBlock && level.getGameTime() % 7L == 0L) {
                 int count = 2 + level.random.nextInt(2);
                 for (int i = 0; i < count; i++) {
@@ -258,8 +251,7 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
                 smokeY = pos.getY() + 1.56D;
             }
 
-            // Hookah smoke is continuous, but emitting every tick created an oversized,
-            // aggressive plume. A gentle pulse every 10 ticks keeps it visibly lit.
+            // Emit the active plume every 10 ticks.
             if (level.getGameTime() % 10L == 0L) {
                 SmokeParticleHelper.spawnServerHookahSmoke(
                         serverLevel,
@@ -272,7 +264,7 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
             pEntity.progress++;
             pEntity.fuelTime--;
 
-            // keep old shisha durability damage logic
+            // Shisha durability is consumed while the Hookah is active.
             ItemStack shisha = pEntity.itemHandler.getStackInSlot(1).copy();
             shisha.setDamageValue(shisha.getDamageValue() + 1);
 
@@ -286,9 +278,7 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
             setChanged(level, pos, state);
 
             if (pEntity.progress >= pEntity.maxProgress) {
-                // The shisha durability is the actual consumption timer. At this point
-                // the spent shisha stack has already been removed above; there is no
-                // crafted output to move into another slot.
+                // Shisha durability is the consumption timer; there is no output slot.
                 pEntity.resetProgress();
             }
         } else {
