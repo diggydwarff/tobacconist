@@ -1,0 +1,21 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "type": "tobacconistmod:create_tobacco_homogenizing",
+  "ingredients": [
+    {
+      "item": "tobacconistmod:tobacco_leaf_dokha_dry"
+    }
+  ],
+  "results": [
+    {
+      "id": "tobacconistmod:tobacco_leaf_dokha_dry",
+      "count": 64
+    }
+  ],
+  "processing_time": 100
+}

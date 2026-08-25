@@ -39,11 +39,15 @@ public final class CreateCompat {
             "com.diggydwarff.tobacconistmod.compat.create.CreateSmokeClearingCompat";
     private static final String PONDER_COMPAT_CLASS =
             "com.diggydwarff.tobacconistmod.compat.create.CreatePonderCompat";
+    private static final String HOMOGENIZATION_COMPAT_CLASS =
+            "com.diggydwarff.tobacconistmod.compat.create.CreateHomogenizationCompat";
 
     private static BiFunction<Level, BlockPos, FanCuringAssist> fanCuringResolver =
             (level, pos) -> FanCuringAssist.NONE;
     private static BiFunction<Level, Vec3, SmokeAirflow> smokeAirflowResolver =
             (level, pos) -> SmokeAirflow.NONE;
+    private static BiFunction<Level, BlockPos, HomogenizationStatus> homogenizationStatusResolver =
+            (level, pos) -> HomogenizationStatus.NONE;
 
     private CreateCompat() {}
 
@@ -67,6 +71,7 @@ public final class CreateCompat {
         registerCreateIntegration(ARM_COMPAT_CLASS, modEventBus);
         registerCreateIntegration(LOGISTICS_COMPAT_CLASS, modEventBus);
         registerCreateIntegration(SMOKE_CLEARING_COMPAT_CLASS);
+        registerCreateIntegration(HOMOGENIZATION_COMPAT_CLASS);
         TobacconistMod.LOGGER.info("Create detected; Tobacconist Create compatibility enabled.");
     }
 
@@ -142,6 +147,28 @@ public final class CreateCompat {
 
     static void installSmokeAirflowResolver(BiFunction<Level, Vec3, SmokeAirflow> resolver) {
         smokeAirflowResolver = Objects.requireNonNull(resolver);
+    }
+
+    public record HomogenizationStatus(boolean relevant, int count, int target, double averageQuality,
+                                       int predictedQuality, boolean ready, int signalStrength,
+                                       boolean processing, boolean finishMode, boolean finishArmed,
+                                       int incompatibleCount, boolean uniform) {
+        public static final HomogenizationStatus NONE =
+                new HomogenizationStatus(false, 0, 64, 0.0D, 0, false, 0,
+                        false, false, false, 0, false);
+    }
+
+    public static HomogenizationStatus getHomogenizationStatus(Level level, BlockPos pos) {
+        if (level == null || pos == null) {
+            return HomogenizationStatus.NONE;
+        }
+        HomogenizationStatus status = homogenizationStatusResolver.apply(level, pos);
+        return status == null ? HomogenizationStatus.NONE : status;
+    }
+
+    static void installHomogenizationStatusResolver(
+            BiFunction<Level, BlockPos, HomogenizationStatus> resolver) {
+        homogenizationStatusResolver = Objects.requireNonNull(resolver);
     }
 
     private static void registerCreateIntegration(String className, IEventBus modEventBus) {

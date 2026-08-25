@@ -32,7 +32,7 @@ public class TobaccoGuideItem extends Item {
                 PatchouliCompat.openManual(serverPlayer);
             } else {
                 player.displayClientMessage(
-                        Component.literal("Patchouli is required to open the Tobacconist's Manual.")
+                        Component.translatable("tobacconistmod.message.manual.requires_patchouli")
                                 .withStyle(ChatFormatting.RED),
                         true
                 );
@@ -46,9 +46,9 @@ public class TobaccoGuideItem extends Item {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, context, tooltip, flag);
         if (ModList.get().isLoaded("patchouli")) {
-            tooltip.add(Component.literal("Right-click to open the manual").withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable("tobacconistmod.tooltip.manual.open").withStyle(ChatFormatting.GRAY));
         } else {
-            tooltip.add(Component.literal("Requires Patchouli to open").withStyle(ChatFormatting.DARK_GRAY));
+            tooltip.add(Component.translatable("tobacconistmod.tooltip.manual.requires_patchouli").withStyle(ChatFormatting.DARK_GRAY));
         }
     }
 }

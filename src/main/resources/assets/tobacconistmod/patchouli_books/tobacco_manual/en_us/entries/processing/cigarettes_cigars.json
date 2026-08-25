@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "$(thing)Cigarette:$() craft exactly 1 loose tobacco with 1 Rolling Paper anywhere in the crafting grid. No other ingredients may be present. The result carries the tobacco's processing metadata and a product-quality score based on tobacco quality and cut."
+      "text": "$(thing)Cigarette:$() craft exactly 1 loose tobacco with 1 Rolling Paper. Final quality is driven mainly by the tobacco's actual quality; cut choice is a preparation modifier. Manual crafting and Create assembly calculate the same score and preserve the same metadata."
     },
     {
       "type": "patchouli:crafting",
@@ -16,17 +16,17 @@
     },
     {
       "type": "patchouli:text",
-      "text": "For cigarettes, $(thing)Shag$() is the ideal cut. Ribbon is a good second choice. Rough and Flake are heavily penalized and cap the final cigarette quality at 6/10 and 5/10 respectively.",
+      "text": "For cigarettes, $(thing)Shag$() is ideal and Ribbon is a strong alternative. Rough and especially Flake reduce the final score, but leaf quality remains the dominant factor; a reasonable second-choice cut no longer turns excellent tobacco into a mediocre cigarette.",
       "title": "Cigarette Cut"
     },
     {
       "type": "patchouli:text",
-      "text": "$(thing)Cigar:$() craft exactly 1 loose tobacco with 1 Tobacco Leaf. The loose tobacco is the filler and determines the filler product score; the leaf is recorded as the wrapper. The cigar preserves aging/fermentation information from its ingredients.",
+      "text": "$(thing)Cigar:$() combine 1 loose tobacco filler with 1 dry Tobacco Leaf wrapper. Final quality is $(item)75% filler + 25% wrapper$(), then adjusted modestly for filler preparation. Fermentation/aging already improve each component's leaf quality before this calculation.",
       "title": "Cigar Recipe"
     },
     {
       "type": "patchouli:text",
-      "text": "For cigars, $(thing)Flake$() is ideal. Rough is the strong second choice. Ribbon caps at 7/10 and Shag at 4/10. A cigar lasts $(item)100 puffs$(); a cigarette lasts $(item)15 puffs$().",
+      "text": "For cigars, $(thing)Rough$() is the ideal filler preparation and Ribbon is a strong second choice. Flake and Shag are less suitable. The wrapper's own quality now matters to the finished cigar. A cigar lasts $(item)100 puffs$(); a cigarette lasts $(item)15 puffs$().",
       "title": "Cigar Cut & Puffs"
     },
     {

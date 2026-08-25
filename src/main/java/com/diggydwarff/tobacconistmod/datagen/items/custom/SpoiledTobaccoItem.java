@@ -21,7 +21,7 @@ public class SpoiledTobaccoItem extends Item {
                                 List<Component> tooltip,
                                 TooltipFlag flag) {
 
-        tooltip.add(Component.literal("Spoiled tobacco. Useless for smoking."));
-        tooltip.add(Component.literal("Can be composted."));
+        tooltip.add(Component.translatable("tobacconistmod.tooltip.spoiled_tobacco.useless"));
+        tooltip.add(Component.translatable("tobacconistmod.tooltip.spoiled_tobacco.compost"));
     }
 }

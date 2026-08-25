@@ -3,6 +3,7 @@ package com.diggydwarff.tobacconistmod.util;
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelBlockEntity;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.BottledMolassesFlavors;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.LinkedHashSet;
@@ -28,11 +29,25 @@ public final class TobaccoAromaticHelper {
             return strength != AromaticStrength.NONE && flavorName != null && !flavorName.isBlank();
         }
 
-        public String tooltipLine() {
-            if (!isAromatic()) return "";
+        public Component tooltipComponent() {
+            if (!isAromatic()) return Component.empty();
+            Component flavor = flavorComponent();
             return strength == AromaticStrength.HINT
-                    ? "Hint of " + flavorName
-                    : "Flavor: " + flavorName;
+                    ? Component.translatable("tobacconistmod.ui.hint_of", flavor)
+                    : Component.translatable("tobacconistmod.ui.flavor", flavor);
+        }
+
+        private Component flavorComponent() {
+            if (flavorName.contains(" + ")) {
+                String[] names = flavorName.split(" \\+ ");
+                Component combined = Component.empty();
+                for (int i = 0; i < names.length; i++) {
+                    if (i > 0) combined = combined.copy().append(Component.translatable("tobacconistmod.ui.flavor_separator"));
+                    combined = combined.copy().append(TobaccoText.flavor(names[i]));
+                }
+                return combined;
+            }
+            return TobaccoText.flavor(flavorName);
         }
     }
 

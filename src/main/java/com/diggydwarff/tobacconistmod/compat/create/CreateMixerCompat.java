@@ -11,7 +11,7 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 import java.util.function.Supplier;
 
-/** Create Basin + Mechanical Mixer registration for fluid-based Shisha production. */
+/** Registers Tobacconist Create Basin and Mechanical Mixer recipe types. */
 public final class CreateMixerCompat {
     private static final DeferredRegister<RecipeSerializer<?>> SERIALIZERS =
             DeferredRegister.create(BuiltInRegistries.RECIPE_SERIALIZER, TobacconistMod.MODID);
@@ -42,12 +42,6 @@ public final class CreateMixerCompat {
                     () -> new IngredientType<>(CreateTobaccoCaptureIngredient.CODEC)
             );
 
-    public static final Supplier<IngredientType<CreateTobaccoHomogenizingIngredient>> TOBACCO_HOMOGENIZING_CAPTURE =
-            INGREDIENT_TYPES.register(
-                    "tobacco_homogenizing_capture",
-                    () -> new IngredientType<>(CreateTobaccoHomogenizingIngredient.CODEC)
-            );
-
     public static final Supplier<IngredientType<CreateTobaccoBlendIngredient>> TOBACCO_BLEND_CAPTURE =
             INGREDIENT_TYPES.register(
                     "tobacco_blending_capture",
@@ -59,6 +53,6 @@ public final class CreateMixerCompat {
     public static void register(IEventBus modEventBus) {
         SERIALIZERS.register(modEventBus);
         INGREDIENT_TYPES.register(modEventBus);
-        TobacconistMod.LOGGER.info("Create Mechanical Mixer Shisha + homogenizing + tobacco blending integration enabled.");
+        TobacconistMod.LOGGER.info("Create Mechanical Mixer Shisha, homogenizing, and tobacco blending integration enabled.");
     }
 }

@@ -41,7 +41,7 @@ public class WoodenPipeFillRecipeCategory implements IRecipeCategory<WoodenPipeF
 
     @Override
     public Component getTitle() {
-        return Component.literal("Fill Wooden Pipe");
+        return Component.translatable("tobacconistmod.jei.fill_wooden_pipe");
     }
 
     @Override
@@ -76,11 +76,11 @@ public class WoodenPipeFillRecipeCategory implements IRecipeCategory<WoodenPipeF
         slot.draw(guiGraphics, 85, 19);
 
         guiGraphics.drawString(mc.font,
-                Component.literal("Tobacco + pipe"),
+                Component.translatable("tobacconistmod.jei.tobacco_plus_pipe"),
                 4, 4, 0x404040, false);
 
         guiGraphics.drawString(mc.font,
-                Component.literal("Offhand use"),
+                Component.translatable("tobacconistmod.jei.offhand_use"),
                 4, 44, 0x808080, false);
     }
 

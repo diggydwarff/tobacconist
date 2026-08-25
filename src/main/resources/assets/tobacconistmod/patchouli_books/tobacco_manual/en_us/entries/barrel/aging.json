@@ -20,6 +20,11 @@
     },
     {
       "type": "patchouli:text",
+      "title": "Automated Cellars",
+      "text": "With Create installed, tobacco exposes exact aged days plus $(thing)Aged at least 7, 30, 90, and 365 days$() Attribute Filter values. Aging is intentionally still extractable, so a filtered Smart Funnel or other filtered logistics can release a barrel automatically at the age you choose. Unfiltered automation will extract it immediately."
+    },
+    {
+      "type": "patchouli:text",
       "text": "After day 365 there are no further aging-quality gains. The first non-zero extreme-age spoil check occurs at day 396, then at later 30-day month-index changes. Chance rises by 0.5 percentage points per month index, capped at 10%. Spoilage reduces quality by 15.",
       "title": "Extreme Age"
     },

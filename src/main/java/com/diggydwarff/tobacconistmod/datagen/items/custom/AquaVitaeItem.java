@@ -17,7 +17,7 @@ public final class AquaVitaeItem extends Item {
     @Override
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, context, tooltip, flag);
-        tooltip.add(Component.literal("A distilled spirit used to extract flavoring essences")
+        tooltip.add(Component.translatable("tobacconistmod.tooltip.aqua_vitae")
                 .withStyle(ChatFormatting.GRAY));
     }
 }

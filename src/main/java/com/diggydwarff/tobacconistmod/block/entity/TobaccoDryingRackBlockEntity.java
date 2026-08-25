@@ -7,6 +7,7 @@ import com.diggydwarff.tobacconistmod.block.custom.TobaccoDryingRackBlock;
 import com.diggydwarff.tobacconistmod.compat.create.CreateCompat;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
+import com.diggydwarff.tobacconistmod.util.TobaccoText;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -15,6 +16,7 @@ import net.neoforged.neoforge.items.IItemHandler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.Containers;
 import net.minecraft.world.WorldlyContainer;
@@ -412,17 +414,67 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         return 1;
     }
 
-    public String getRackStatusText() {
+    public MutableComponent getRackStatusComponent() {
         if (!hasLeaves()) {
-            return "Empty";
+            return Component.translatable("tobacconistmod.ui.empty");
         }
-
         if (isFinished()) {
-            String cureType = TobaccoCuringHelper.getCureType(storedLeaf);
-            return "Finished - " + TobaccoCuringHelper.getCureDisplayName(cureType);
+            return Component.translatable(
+                    "tobacconistmod.status.finished_cure",
+                    TobaccoText.cure(TobaccoCuringHelper.getCureType(storedLeaf))
+            );
+        }
+        return Component.translatable(
+                "tobacconistmod.status.method_progress",
+                getCurrentCureMethodComponent(),
+                getDryProgressPercent()
+        );
+    }
+
+    public MutableComponent getCurrentCureMethodComponent() {
+        if (level == null || !hasLeaves()) {
+            return Component.translatable("tobacconistmod.ui.empty");
+        }
+        if (isFinished()) {
+            return TobaccoText.cure(TobaccoCuringHelper.getCureType(storedLeaf));
         }
 
-        return getCurrentCureMethod() + " - " + getDryProgressPercent() + "%";
+        boolean directRain = level.isRainingAt(worldPosition.above()) && level.canSeeSky(worldPosition.above());
+        CreateCompat.FanCuringAssist fanAssist = directRain
+                ? CreateCompat.FanCuringAssist.NONE
+                : getCreateFanAssist();
+
+        if (isOverLitCampfire(level, worldPosition) || fanAssist == CreateCompat.FanCuringAssist.FIRE) {
+            return Component.translatable(fanAssist == CreateCompat.FanCuringAssist.FIRE
+                    ? "tobacconistmod.cure_method.fire_create_smoke"
+                    : "tobacconistmod.cure_method.fire_campfire_heat");
+        }
+        if (canFlueCure(level, worldPosition) || fanAssist == CreateCompat.FanCuringAssist.FLUE) {
+            return Component.translatable(fanAssist == CreateCompat.FanCuringAssist.FLUE
+                    ? "tobacconistmod.cure_method.flue_create_heat"
+                    : "tobacconistmod.cure_method.flue_barn_heat");
+        }
+        if (hasDirectSunlight(level, worldPosition)) {
+            if (fanAssist == CreateCompat.FanCuringAssist.AIR) {
+                return Component.translatable(isGlassSunCure(level, worldPosition)
+                        ? "tobacconistmod.cure_method.sun_glass_create"
+                        : "tobacconistmod.cure_method.sun_create");
+            }
+            return Component.translatable(isGlassSunCure(level, worldPosition)
+                    ? "tobacconistmod.cure_method.sun_glass"
+                    : "tobacconistmod.cure_method.sun_direct");
+        }
+        if (canAirDry(level, worldPosition) || fanAssist == CreateCompat.FanCuringAssist.AIR) {
+            if (fanAssist == CreateCompat.FanCuringAssist.AIR) {
+                return Component.translatable("tobacconistmod.cure_method.air_create");
+            }
+            return Component.translatable(!level.canSeeSky(worldPosition.above())
+                    ? "tobacconistmod.cure_method.air_cover"
+                    : "tobacconistmod.cure_method.air_open");
+        }
+        return Component.translatable(directRain
+                ? "tobacconistmod.cure_method.paused_rain"
+                : "tobacconistmod.cure_method.paused_unsuitable");
     }
 
     public boolean isDryingActive() {
@@ -438,60 +490,6 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
                 || hasDirectSunlight(level, worldPosition)
                 || canAirDry(level, worldPosition)
                 || (!directRain && fanAssist != CreateCompat.FanCuringAssist.NONE);
-    }
-
-    public String getCurrentCureMethod() {
-        if (level == null || !hasLeaves()) {
-            return "Empty";
-        }
-
-        if (isFinished()) {
-            return TobaccoCuringHelper.getCureDisplayName(TobaccoCuringHelper.getCureType(storedLeaf));
-        }
-
-        boolean directRain = level.isRainingAt(worldPosition.above()) && level.canSeeSky(worldPosition.above());
-        CreateCompat.FanCuringAssist fanAssist = directRain
-                ? CreateCompat.FanCuringAssist.NONE
-                : getCreateFanAssist();
-
-        if (isOverLitCampfire(level, worldPosition) || fanAssist == CreateCompat.FanCuringAssist.FIRE) {
-            return fanAssist == CreateCompat.FanCuringAssist.FIRE
-                    ? "Fire-curing (Create smoke airflow)"
-                    : "Fire-curing (campfire heat)";
-        }
-
-        if (canFlueCure(level, worldPosition) || fanAssist == CreateCompat.FanCuringAssist.FLUE) {
-            return fanAssist == CreateCompat.FanCuringAssist.FLUE
-                    ? "Flue-curing (Create heated airflow)"
-                    : "Flue-curing (indirect barn heat)";
-        }
-
-        if (hasDirectSunlight(level, worldPosition)) {
-            if (fanAssist == CreateCompat.FanCuringAssist.AIR) {
-                return isGlassSunCure(level, worldPosition)
-                        ? "Sun-curing (glass shelter, Create fan-assisted)"
-                        : "Sun-curing (Create fan-assisted)";
-            }
-            return isGlassSunCure(level, worldPosition)
-                    ? "Sun-curing (glass shelter)"
-                    : "Sun-curing (direct sunlight)";
-        }
-
-        if (canAirDry(level, worldPosition) || fanAssist == CreateCompat.FanCuringAssist.AIR) {
-            if (fanAssist == CreateCompat.FanCuringAssist.AIR) {
-                return "Air-curing (Create fan-assisted)";
-            }
-            if (!level.canSeeSky(worldPosition.above())) {
-                return "Air-curing (under cover)";
-            }
-            return "Air-curing (open air)";
-        }
-
-        if (directRain) {
-            return "Paused (rain exposure)";
-        }
-
-        return "Paused (unsuitable conditions)";
     }
 
     public boolean isFinished() {
@@ -1157,9 +1155,9 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
     }
 
     public List<Component> getFullDebugLines() {
-        String itemName = storedLeaf.isEmpty()
-                ? "Empty"
-                : storedLeaf.getHoverName().getString() + " x" + storedLeaf.getCount();
+        Component itemName = storedLeaf.isEmpty()
+                ? Component.translatable("tobacconistmod.ui.empty")
+                : Component.translatable("tobacconistmod.ui.item_count", storedLeaf.getHoverName(), storedLeaf.getCount());
 
         int light = level != null ? level.getBrightness(LightLayer.SKY, worldPosition.above()) : 0;
         boolean raining = level != null && level.isRainingAt(worldPosition.above());
@@ -1167,31 +1165,27 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         boolean openAirSun = level != null && isOpenAirSunStructure(level, worldPosition);
 
         return List.of(
-                Component.literal("=== Drying Rack Debug ===").withStyle(ChatFormatting.GOLD),
-                Component.literal("Stored: " + itemName),
-
-                Component.literal("Method: " + getCurrentCureMethod()),
-                Component.literal("Progress: " + getDryProgressPercent() + "%"),
-
-                Component.literal("Air Ticks: " + airTicks),
-                Component.literal("Sun Ticks: " + sunTicks),
-                Component.literal("Fire Ticks: " + fireTicks),
-                Component.literal("Flue Ticks: " + flueTicks),
-
-                Component.literal("Direct Rain Exposure: " + directRainExposureTicks),
-                Component.literal("Wet Damage Penalty: " + wetDamagePenalty),
-                Component.literal("Interruptions: " + interruptionCount),
-                Component.literal("Sun Exposure: " + sunExposureTicks),
-
-                Component.literal("Light: " + light),
-                Component.literal("Raining: " + raining),
-                Component.literal("Glass Sun Cure: " + glassSun),
-                Component.literal("Open-Air Sun Structure: " + openAirSun),
-
-                Component.literal("Finished: " + isFinished()),
-                Component.literal("Batch Locked: " + isBatchLocked())
+                Component.translatable("tobacconistmod.debug.drying_rack_title").withStyle(ChatFormatting.GOLD),
+                Component.translatable("tobacconistmod.debug.stored", itemName),
+                Component.translatable("tobacconistmod.debug.method", getCurrentCureMethodComponent()),
+                Component.translatable("tobacconistmod.debug.progress", getDryProgressPercent()),
+                Component.translatable("tobacconistmod.debug.air_ticks", airTicks),
+                Component.translatable("tobacconistmod.debug.sun_ticks", sunTicks),
+                Component.translatable("tobacconistmod.debug.fire_ticks", fireTicks),
+                Component.translatable("tobacconistmod.debug.flue_ticks", flueTicks),
+                Component.translatable("tobacconistmod.debug.direct_rain_exposure", directRainExposureTicks),
+                Component.translatable("tobacconistmod.debug.wet_damage_penalty", wetDamagePenalty),
+                Component.translatable("tobacconistmod.debug.interruptions", interruptionCount),
+                Component.translatable("tobacconistmod.debug.sun_exposure", sunExposureTicks),
+                Component.translatable("tobacconistmod.debug.light", light),
+                Component.translatable("tobacconistmod.debug.raining", TobaccoText.yesNo(raining)),
+                Component.translatable("tobacconistmod.debug.glass_sun_cure", TobaccoText.yesNo(glassSun)),
+                Component.translatable("tobacconistmod.debug.open_air_sun_structure", TobaccoText.yesNo(openAirSun)),
+                Component.translatable("tobacconistmod.debug.finished", TobaccoText.yesNo(isFinished())),
+                Component.translatable("tobacconistmod.debug.batch_locked", TobaccoText.yesNo(isBatchLocked()))
         );
     }
+
 
     private void ruinFromRain() {
         if (storedLeaf.isEmpty()) {

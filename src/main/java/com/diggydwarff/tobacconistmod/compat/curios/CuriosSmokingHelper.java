@@ -1,6 +1,7 @@
 package com.diggydwarff.tobacconistmod.compat.curios;
 
 import com.diggydwarff.tobacconistmod.datagen.items.SmokingItem;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.curios.api.CuriosApi;
@@ -13,28 +14,28 @@ public final class CuriosSmokingHelper {
      * Attempts one deliberate puff. Returns {@code null} on success or a short
      * player-facing failure message when no puff could be taken.
      */
-    public static String trySmokeMouthItem(ServerPlayer player) {
-        final String[] result = {"No Curios Mouth slot is available."};
+    public static Component trySmokeMouthItem(ServerPlayer player) {
+        final Component[] result = {Component.translatable("tobacconistmod.message.mouth.no_slot")};
 
         CuriosApi.getCuriosInventory(player).ifPresent(inventory -> {
             var mouth = inventory.getCurios().get("mouth");
             if (mouth == null || mouth.getStacks().getSlots() <= 0) {
-                result[0] = "No Curios Mouth slot is available.";
+                result[0] = Component.translatable("tobacconistmod.message.mouth.no_slot");
                 return;
             }
 
             ItemStack stack = mouth.getStacks().getStackInSlot(0);
             if (stack.isEmpty()) {
-                result[0] = "No item is equipped in your Mouth slot.";
+                result[0] = Component.translatable("tobacconistmod.message.mouth.empty");
                 return;
             }
             if (!(stack.getItem() instanceof SmokingItem smokingItem)) {
-                result[0] = "The item in your Mouth slot cannot be smoked.";
+                result[0] = Component.translatable("tobacconistmod.message.mouth.not_smokable");
                 return;
             }
 
             if (!smokingItem.smokeFromMouthSlot(player, player.serverLevel(), stack)) {
-                result[0] = "That item has no puffs left.";
+                result[0] = Component.translatable("tobacconistmod.message.mouth.no_puffs");
                 return;
             }
 

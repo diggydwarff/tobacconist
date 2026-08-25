@@ -48,11 +48,10 @@ public class WoodenSmokingPipeItem extends SmokingItem {
             var item = BuiltInRegistries.ITEM.get(id);
             ItemStack plankStack = new ItemStack(item);
 
-            // Example: "Oak Planks" → "Oak"
-            String plankName = plankStack.getHoverName().getString();
-            plankName = plankName.replace(" Planks", "");
-
-            return Component.literal(plankName + " Smoking Pipe");
+            return Component.translatable(
+                    "tobacconistmod.product.wooden_smoking_pipe",
+                    plankStack.getHoverName()
+            );
         }
 
         return super.getName(stack);
@@ -233,7 +232,7 @@ public class WoodenSmokingPipeItem extends SmokingItem {
         CompoundTag tag = LegacyItemTags.getTag(stack);
 
         if (tag != null && tag.contains("PuffsLeft")) {
-            tooltip.add(Component.literal("Puffs left: " + tag.getInt("PuffsLeft")));
+            tooltip.add(Component.translatable("tobacconistmod.ui.puffs_left", tag.getInt("PuffsLeft")));
             if (tag.contains("PackedTobacco")) {
                 String id = tag.getString("PackedTobacco");
 
@@ -243,12 +242,11 @@ public class WoodenSmokingPipeItem extends SmokingItem {
                     LegacyItemTags.setTag(packedStack, tag.getCompound("PackedTobaccoData").copy());
                 }
 
-                tooltip.add(Component.literal("Packed: ")
-                        .append(packedStack.getHoverName()));
+                tooltip.add(Component.translatable("tobacconistmod.ui.packed", packedStack.getHoverName()));
             }
         } else {
-            tooltip.add(Component.literal("Empty"));
-            tooltip.add(Component.literal("Hold in offhand and right-click with tobacco in hand to pack"));
+            tooltip.add(Component.translatable("tobacconistmod.ui.empty"));
+            tooltip.add(Component.translatable("tobacconistmod.tooltip.pipe.pack_instruction"));
         }
     }
 

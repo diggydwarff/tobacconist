@@ -1,64 +1,26 @@
 package com.diggydwarff.tobacconistmod.compat.create;
 
-import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
-import com.diggydwarff.tobacconistmod.util.TobaccoProcessingHelper;
 import com.simibubi.create.content.kinetics.mixer.MixingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeParams;
-import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 
-/**
- * Pair-wise Create homogenizing recipe for raw or cured tobacco leaves.
- *
- * <p>Each Mixer cycle consumes one leaf from two compatible stacks with different quality
- * values and returns two leaves at their integer average. Raw leaves average GrowthQuality;
- * cured leaves average final Quality. The second ingredient rejects the first captured quality.</p>
- */
+/** Create Mixer recipe marker for batch leaf-quality homogenization. */
 public final class CreateTobaccoHomogenizingRecipe extends MixingRecipe {
-    private ItemStack firstLeaf = ItemStack.EMPTY;
+    public static final int DEFAULT_BATCH_SIZE = 64;
+    public static final int MIN_BATCH_SIZE = 16;
+    public static final int FINISH_SIGNAL = 15;
 
     public CreateTobaccoHomogenizingRecipe(ProcessingRecipeParams params) {
         super(params);
-
-        if (ingredients.size() >= 2) {
-            NonNullList<Ingredient> runtimeIngredients = NonNullList.create();
-            runtimeIngredients.add(new CreateTobaccoHomogenizingIngredient(
-                    stack -> TobaccoCuringHelper.isRawTobaccoLeaf(stack)
-                            || TobaccoCuringHelper.isDryTobaccoLeaf(stack),
-                    this::captureFirst
-            ).toVanilla());
-            runtimeIngredients.add(new CreateTobaccoHomogenizingIngredient(
-                    this::canUseSecond,
-                    this::captureSecond
-            ).toVanilla());
-            this.ingredients = runtimeIngredients;
-        }
+        // Keep the recipe's single leaf ingredient for Create's recipe lookup. Actual batch
+        // counts and the requirement for visible quality variance are enforced by
+        // CreateTobaccoHomogenization.
     }
 
-    private void captureFirst(ItemStack stack) {
-        firstLeaf = stack.copy();
-        firstLeaf.setCount(1);
-    }
-
-    private boolean canUseSecond(ItemStack stack) {
-        return !firstLeaf.isEmpty()
-                && TobaccoProcessingHelper.canMechanicallyHomogenizeLeaves(firstLeaf, stack);
-    }
-
-    private void captureSecond(ItemStack stack) {
-        if (!canUseSecond(stack)) {
-            return;
-        }
-
-        ItemStack result = TobaccoProcessingHelper.mechanicallyHomogenizeLeafPair(firstLeaf, stack);
-        if (result.isEmpty()) {
-            return;
-        }
-
-        ItemStack template = result.copy();
-        enforceNextResult(template::copy);
+    public ItemStack getLeafTemplate() {
+        if (getRollableResults().isEmpty()) return ItemStack.EMPTY;
+        return getRollableResults().getFirst().getStack().copyWithCount(1);
     }
 
     @Override

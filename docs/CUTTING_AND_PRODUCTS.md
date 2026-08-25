@@ -17,20 +17,30 @@ A Deployer holding a Chaveta advances one mechanical cutting step:
 
 `Cured Leaf → Rough → Ribbon → Shag`
 
+When used by a Deployer, the Chaveta is treated as a reusable industrial machine tool: automated cutting does **not** consume Chaveta durability. Hand crafting retains the normal Chaveta durability rules.
+
 Rough Cut is the branch point for the Mechanical Press. Pressing Rough Cut produces Flake without changing the tobacco's processing metadata.
 
-## Product quality by cut
+## Finished-product quality
 
-Finished-product score starts from the tobacco's quality rounded to a 0–10 base, then applies the cut modifier and cap.
+Leaf quality is the dominant input to the final 1–10 product score. Cut choice is a **preparation adjustment**, not a replacement for growing, curing, fermentation, or aging quality.
+
+Cigarettes and Shisha score the tobacco directly. Cigars first calculate a component quality of **75% filler + 25% wrapper**, rounded to the nearest whole quality point, then apply the filler-cut adjustment. Cigar crafting requires a **dry cured Tobacco Leaf** wrapper in both manual and Create assembly.
+
+The preparation adjustments below are applied to the underlying 0–120 tobacco quality before conversion to the displayed 1–10 score. Caps only prevent clearly unsuitable preparations from reaching the very top score.
 
 | Cut | Cigarette | Cigar | Shisha |
 | --- | ---: | ---: | ---: |
-| Shag | modifier 0, cap 10 | -4, cap 4 | -4, cap 4 |
-| Ribbon | -1, cap 9 | -2, cap 7 | -1, cap 8 |
-| Rough | -3, cap 6 | -1, cap 9 | 0, cap 10 |
-| Flake | -4, cap 5 | 0, cap 10 | -2, cap 7 |
+| Shag | +0 Q, cap 10 | -15 Q, cap 8 | -15 Q, cap 8 |
+| Ribbon | -3 Q, cap 10 | -3 Q, cap 10 | -3 Q, cap 10 |
+| Rough | -12 Q, cap 8 | +0 Q, cap 10 | +0 Q, cap 10 |
+| Flake | -20 Q, cap 7 | -8 Q, cap 9 | -10 Q, cap 9 |
 
-That makes Shag the ideal cigarette cut, Flake the ideal cigar cut, and Rough the ideal shisha cut.
+That makes **Shag** the ideal cigarette preparation, **Rough** the ideal cigar filler preparation, and **Rough** the ideal Shisha preparation. Ribbon remains a strong alternative for all three instead of heavily downgrading otherwise excellent tobacco.
+
+For cigars, the wrapper is now a real quality component rather than display-only metadata. Overall cigar age is also weighted 75% filler / 25% wrapper instead of taking whichever component is older. Ruined-state and other processing metadata continue to propagate through the finished product.
+
+The stored `ProductQuality` is authoritative for finished products: the tooltip, Create quality Attributes, Tobacco Box displays, and quality-based smoking bonus all use the same final score.
 
 ## Quality averaging
 

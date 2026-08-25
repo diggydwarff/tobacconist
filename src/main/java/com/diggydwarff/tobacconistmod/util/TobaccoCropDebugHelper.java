@@ -90,28 +90,19 @@ public class TobaccoCropDebugHelper {
         CropDebugInfo info = getDebugInfo(level, pos, state);
 
         return List.of(
-                Component.literal("=== Tobacco Crop Debug ===").withStyle(ChatFormatting.GOLD),
-
-                Component.literal("Stage: " + info.age()),
-                Component.literal("Score: " + info.totalScore() + " (" + info.status() + ")"),
-
-                Component.literal("Biome: " + info.biomeScore() + " "
-                        + explain(info.biomeScore(), "bad biome", "ok biome", "good biome")),
-
-                Component.literal("Temperature: " + info.tempScore() + " "
-                        + explain(info.tempScore(), "too cold/hot", "acceptable", "good")),
-
-                Component.literal("Light: " + info.lightScore() + " "
-                        + explain(info.lightScore(), "too dark", "ok light", "strong light")),
-
-                Component.literal("Rain: " + info.rainScore() + " "
-                        + explain(info.rainScore(), "too wet", "ok", "dry/good")),
-
-                Component.literal("Can See Sky: " + info.canSeeSky()),
-                Component.literal("Sky Light: " + info.skyLight()),
-                Component.literal("Raining: " + info.raining())
+                Component.translatable("tobacconistmod.debug.tobacco_crop_title").withStyle(ChatFormatting.GOLD),
+                Component.translatable("tobacconistmod.debug.stage", info.age()),
+                Component.translatable("tobacconistmod.debug.score", info.totalScore(), statusComponent(info.status())),
+                Component.translatable("tobacconistmod.debug.biome", info.biomeScore(), explainComponent("biome", info.biomeScore())),
+                Component.translatable("tobacconistmod.debug.temperature", info.tempScore(), explainComponent("temperature", info.tempScore())),
+                Component.translatable("tobacconistmod.debug.light_detail", info.lightScore(), explainComponent("light", info.lightScore())),
+                Component.translatable("tobacconistmod.debug.rain", info.rainScore(), explainComponent("rain", info.rainScore())),
+                Component.translatable("tobacconistmod.debug.can_see_sky", TobaccoText.yesNo(info.canSeeSky())),
+                Component.translatable("tobacconistmod.debug.sky_light", info.skyLight()),
+                Component.translatable("tobacconistmod.debug.raining", TobaccoText.yesNo(info.raining()))
         );
     }
+
 
     public static String getActionBarLine(Level level, BlockPos pos, BlockState state) {
         CropDebugInfo info = getDebugInfo(level, pos, state);
@@ -124,9 +115,18 @@ public class TobaccoCropDebugHelper {
                 + " R:" + info.rainScore();
     }
 
-    private static String explain(int score, String bad, String ok, String good) {
-        if (score >= 3) return "(" + good + ")";
-        if (score >= 0) return "(" + ok + ")";
-        return "(" + bad + ")";
+    private static Component explainComponent(String factor, int score) {
+        String grade = score >= 3 ? "good" : score >= 0 ? "ok" : "bad";
+        return Component.translatable("tobacconistmod.debug.factor." + factor + "." + grade);
     }
+
+    private static Component statusComponent(String status) {
+        String id = switch (status) {
+            case "Ideal" -> "ideal";
+            case "OK" -> "ok";
+            default -> "poor";
+        };
+        return Component.translatable("tobacconistmod.debug.crop_status." + id);
+    }
+
 }

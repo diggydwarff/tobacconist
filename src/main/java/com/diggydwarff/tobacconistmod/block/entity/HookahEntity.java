@@ -106,7 +106,7 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
 
     @Override
     public Component getDisplayName() {
-        return Component.literal("Hookah");
+        return Component.translatable("container.tobacconistmod.hookah");
     }
 
     @Nullable

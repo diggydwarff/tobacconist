@@ -310,7 +310,7 @@ public abstract class AbstractTallTobaccoCropBlock extends CropBlock {
 
         int effectiveAge = getEffectiveAge(level, inspectPos, inspectState);
 
-        String message = TobaccoGrowthHelper.getInspectionMessage(
+        Component message = TobaccoGrowthHelper.getInspectionMessage(
                 level,
                 inspectPos,
                 getVariety(),
@@ -318,7 +318,7 @@ public abstract class AbstractTallTobaccoCropBlock extends CropBlock {
                 getMaxAge()
         );
 
-        player.displayClientMessage(Component.literal(message), true);
+        player.displayClientMessage(message, true);
         return InteractionResult.CONSUME;
     }
 }

@@ -6,10 +6,13 @@ import com.diggydwarff.tobacconistmod.compat.create.CreateCompat;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
+import com.diggydwarff.tobacconistmod.util.TobaccoText;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
@@ -194,45 +197,51 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
                 || fan != CreateCompat.FanCuringAssist.NONE;
     }
 
-    public String getCurrentCureMethod() {
-        if (level == null || !hasLeaves()) return "Empty";
-        if (isFinished()) {
-            return TobaccoCuringHelper.getCureDisplayName(TobaccoCuringHelper.getCureType(storedLeaf));
-        }
+    public MutableComponent getCurrentCureMethodComponent() {
+        if (level == null || !hasLeaves()) return Component.translatable("tobacconistmod.ui.empty");
+        if (isFinished()) return TobaccoText.cure(TobaccoCuringHelper.getCureType(storedLeaf));
 
         boolean rain = isSideRainExposed(level, worldPosition);
         CreateCompat.FanCuringAssist fan = rain ? CreateCompat.FanCuringAssist.NONE : getCreateFanAssist();
 
         if (isFirePriority(fan)) {
-            return fan == CreateCompat.FanCuringAssist.FIRE
-                    ? "Fire-curing (Create smoke airflow)"
-                    : "Fire-curing (campfire smoke)";
+            return Component.translatable(fan == CreateCompat.FanCuringAssist.FIRE
+                    ? "tobacconistmod.cure_method.fire_create_smoke"
+                    : "tobacconistmod.cure_method.fire_campfire_smoke");
         }
         if (isFluePriority(fan)) {
-            return fan == CreateCompat.FanCuringAssist.FLUE
-                    ? "Flue-curing (Create heated airflow)"
-                    : "Flue-curing (indirect barn heat)";
+            return Component.translatable(fan == CreateCompat.FanCuringAssist.FLUE
+                    ? "tobacconistmod.cure_method.flue_create_heat"
+                    : "tobacconistmod.cure_method.flue_barn_heat");
         }
         if (hasPergolaSunlight(level, worldPosition)) {
-            return fan == CreateCompat.FanCuringAssist.AIR
-                    ? "Sun-curing (pergola light, fan-assisted)"
-                    : "Sun-curing (pergola/side light)";
+            return Component.translatable(fan == CreateCompat.FanCuringAssist.AIR
+                    ? "tobacconistmod.cure_method.sun_pergola_create"
+                    : "tobacconistmod.cure_method.sun_pergola");
         }
         if (canAirDry(level, worldPosition) || fan == CreateCompat.FanCuringAssist.AIR) {
-            return fan == CreateCompat.FanCuringAssist.AIR
-                    ? "Air-curing (fan-assisted)"
-                    : "Air-curing (covered)";
+            return Component.translatable(fan == CreateCompat.FanCuringAssist.AIR
+                    ? "tobacconistmod.cure_method.air_create"
+                    : "tobacconistmod.cure_method.air_covered");
         }
-        if (rain) return "Paused (rain through side opening)";
-        return "Paused (unsuitable conditions)";
+        return Component.translatable(rain
+                ? "tobacconistmod.cure_method.paused_rain_side"
+                : "tobacconistmod.cure_method.paused_unsuitable");
     }
 
-    public String getStatusText() {
-        if (!hasLeaves()) return "Empty";
+    public MutableComponent getStatusComponent() {
+        if (!hasLeaves()) return Component.translatable("tobacconistmod.ui.empty");
         if (isFinished()) {
-            return "Finished - " + TobaccoCuringHelper.getCureDisplayName(TobaccoCuringHelper.getCureType(storedLeaf));
+            return Component.translatable(
+                    "tobacconistmod.status.finished_cure",
+                    TobaccoText.cure(TobaccoCuringHelper.getCureType(storedLeaf))
+            );
         }
-        return getCurrentCureMethod() + " - " + getDryProgressPercent() + "%";
+        return Component.translatable(
+                "tobacconistmod.status.method_progress",
+                getCurrentCureMethodComponent(),
+                getDryProgressPercent()
+        );
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, HangingTobaccoBlockEntity bundle) {

@@ -6,6 +6,7 @@ import com.diggydwarff.tobacconistmod.util.TobaccoBlendComponent;
 import com.diggydwarff.tobacconistmod.util.TobaccoBlendHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoLabelHelper;
+import com.diggydwarff.tobacconistmod.util.TobaccoText;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
@@ -26,7 +27,7 @@ public class BlendedTobaccoItem extends LooseTobaccoItem {
 
         Component base;
         if (!productLabel.isEmpty()) {
-            base = TobaccoLabelHelper.buildNamedProduct(productLabel, "Blended Tobacco");
+            base = TobaccoLabelHelper.buildNamedProduct(productLabel, Component.translatable("item.tobacconistmod.blended_tobacco"));
         } else if (!blendName.isEmpty()) {
             base = Component.literal(blendName);
         } else {
@@ -35,7 +36,7 @@ public class BlendedTobaccoItem extends LooseTobaccoItem {
 
         String cut = TobaccoCuringHelper.getCutType(stack);
         if (cut.isEmpty()) return base;
-        return Component.literal(TobaccoCuringHelper.getCutDisplayName(cut) + " ").append(base);
+        return Component.translatable("tobacconistmod.product.cut_named", TobaccoText.cut(cut), base);
     }
 
     @Override
@@ -45,26 +46,13 @@ public class BlendedTobaccoItem extends LooseTobaccoItem {
         List<TobaccoBlendComponent> components = TobaccoBlendHelper.getComponentData(stack);
         if (components.isEmpty()) return;
 
-        tooltip.add(Component.literal("Blend Components:").withStyle(ChatFormatting.DARK_GRAY));
+        tooltip.add(Component.translatable("tobacconistmod.ui.blend_components").withStyle(ChatFormatting.DARK_GRAY));
         for (TobaccoBlendComponent component : components) {
-            StringBuilder base = new StringBuilder("  ")
-                    .append(TobaccoBlendHelper.formatVariety(component.variety()));
-
-            if (TobacconistConfig.isQualitySystemEnabled()) {
-                base.append(" Q").append(component.quality());
-            }
-
-            if (!component.cure().isBlank()) {
-                base.append(" • ").append(TobaccoCuringHelper.getCureDisplayName(component.cure()));
-            }
-
-            var line = Component.literal(base.toString()).withStyle(ChatFormatting.DARK_GRAY);
-            String flavor = TobaccoAromaticHelper.formatFlavorId(component.flavorId());
-            if (!flavor.isEmpty()) {
-                line.append(Component.literal(" • " + flavor).withStyle(ChatFormatting.LIGHT_PURPLE));
-            }
-
-            tooltip.add(line);
+            Component flavor = component.flavorId().isBlank() ? null : TobaccoText.flavor(component.flavorId());
+            Integer quality = TobacconistConfig.isQualitySystemEnabled() ? component.quality() : null;
+            tooltip.add(TobaccoText.blendComponent(
+                    component.variety(), quality, component.cure(), flavor
+            ).withStyle(ChatFormatting.DARK_GRAY));
         }
     }
 }

@@ -4,6 +4,7 @@ import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
 
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
@@ -15,8 +16,8 @@ public record HookahLoadJeiRecipe(
         ItemStack water,
         ItemStack heat,
         ItemStack output,
-        String line1,
-        String line2
+        Component line1,
+        Component line2
 ) {
     public static List<HookahLoadJeiRecipe> createAll() {
         ItemStack hookah = new ItemStack(ModBlocks.HOOKAH.get().asItem());
@@ -34,8 +35,8 @@ public record HookahLoadJeiRecipe(
                         water,
                         heat,
                         loaded,
-                        "Add shisha, water, and heat",
-                        "Prepares the hookah for smoking"
+                        Component.translatable("tobacconistmod.jei.hookah_load.action"),
+                        Component.translatable("tobacconistmod.jei.hookah_load.result")
                 )
         );
     }

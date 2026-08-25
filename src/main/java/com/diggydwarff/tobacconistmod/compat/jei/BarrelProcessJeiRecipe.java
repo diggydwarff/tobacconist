@@ -5,6 +5,7 @@ import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelBlockEntity;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
@@ -14,8 +15,8 @@ import java.util.List;
 public record BarrelProcessJeiRecipe(
         ItemStack input,
         ItemStack output,
-        String line1,
-        String line2
+        Component line1,
+        Component line2
 ) {
     public static List<BarrelProcessJeiRecipe> createAll() {
         List<BarrelProcessJeiRecipe> recipes = new ArrayList<>();
@@ -38,15 +39,15 @@ public record BarrelProcessJeiRecipe(
         recipes.add(new BarrelProcessJeiRecipe(
                 dryLeaf,
                 fermentedLeaf,
-                "Warmth 3+ / Barrel humidity 25+",
-                "Ferments after 2 in-game days"
+                Component.translatable("tobacconistmod.jei.barrel.ferment_condition"),
+                Component.translatable("tobacconistmod.jei.barrel.ferment_result")
         ));
 
         recipes.add(new BarrelProcessJeiRecipe(
                 fermentedLeaf.copy(),
                 agedLeaf,
-                "Warmth 0 or lower / Humidity 1-3",
-                "Ages in cool dark storage"
+                Component.translatable("tobacconistmod.jei.barrel.age_condition"),
+                Component.translatable("tobacconistmod.jei.barrel.age_result")
         ));
     }
 

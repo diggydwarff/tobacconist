@@ -219,6 +219,7 @@ public final class CreateDeployerCompat {
         )
                 .require(input.getItem())
                 .require(heldItem.getItem())
+                .toolNotConsumed()
                 .output(result)
                 .build();
 

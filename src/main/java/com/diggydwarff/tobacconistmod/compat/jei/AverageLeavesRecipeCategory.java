@@ -37,9 +37,9 @@ public class AverageLeavesRecipeCategory implements IRecipeCategory<AverageLeave
 
     @Override
     public Component getTitle() {
-        return Component.literal(TobacconistConfig.isQualitySystemEnabled()
-                ? "Average Tobacco Leaves"
-                : "Combine Tobacco Leaves");
+        return Component.translatable(TobacconistConfig.isQualitySystemEnabled()
+                ? "tobacconistmod.jei.average_tobacco_leaves"
+                : "tobacconistmod.jei.combine_tobacco_leaves");
     }
 
     @Override
@@ -74,20 +74,20 @@ public class AverageLeavesRecipeCategory implements IRecipeCategory<AverageLeave
         slot.draw(guiGraphics, 85, 29);
 
         guiGraphics.drawString(mc.font,
-                Component.literal("Match 2 leaves"),
+                Component.translatable("tobacconistmod.jei.match_two_leaves"),
                 4, 4, 0x404040, false);
 
         if (TobacconistConfig.isQualitySystemEnabled()) {
             guiGraphics.drawString(mc.font,
-                    Component.literal("Average quality"),
+                    Component.translatable("tobacconistmod.jei.average_quality"),
                     4, 14, 0x404040, false);
 
             guiGraphics.drawString(mc.font,
-                    Component.literal("Ex: 40 + 80 -> 60"),
+                    Component.translatable("tobacconistmod.jei.average_example"),
                     4, 56, 0x808080, false);
         } else {
             guiGraphics.drawString(mc.font,
-                    Component.literal("Combine matching leaves"),
+                    Component.translatable("tobacconistmod.jei.combine_matching_leaves"),
                     4, 14, 0x404040, false);
         }
     }

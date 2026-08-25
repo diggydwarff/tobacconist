@@ -66,6 +66,10 @@ public class TobaccoLabelHelper {
     }
 
     public static Component buildNamedProduct(String label, String suffix) {
-        return Component.literal(label + " " + suffix);
+        return Component.translatable("tobacconistmod.product.named", label, suffix);
+    }
+
+    public static Component buildNamedProduct(String label, Component suffix) {
+        return Component.translatable("tobacconistmod.product.named", label, suffix);
     }
 }

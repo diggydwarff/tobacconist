@@ -37,10 +37,10 @@ public class TobacconistsSpectaclesItem extends Item implements Equipable {
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, context, tooltip, flag);
         if (ModList.get().isLoaded("curios")) {
-            tooltip.add(Component.literal("Wear in the Curios Head slot or helmet slot").withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable("tobacconistmod.tooltip.spectacles.curios_or_head").withStyle(ChatFormatting.GRAY));
         } else {
-            tooltip.add(Component.literal("Wear in the helmet slot").withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable("tobacconistmod.tooltip.spectacles.head").withStyle(ChatFormatting.GRAY));
         }
-        tooltip.add(Component.literal("Reveals tobacco growth and processing information").withStyle(ChatFormatting.DARK_GRAY));
+        tooltip.add(Component.translatable("tobacconistmod.tooltip.spectacles.info").withStyle(ChatFormatting.DARK_GRAY));
     }
 }

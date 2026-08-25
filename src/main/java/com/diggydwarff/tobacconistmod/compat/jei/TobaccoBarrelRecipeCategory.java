@@ -38,7 +38,7 @@ public class TobaccoBarrelRecipeCategory implements IRecipeCategory<BarrelProces
 
     @Override
     public Component getTitle() {
-        return Component.literal("Tobacco Barrel Processing");
+        return Component.translatable("tobacconistmod.jei.tobacco_barrel_processing");
     }
 
     @Override

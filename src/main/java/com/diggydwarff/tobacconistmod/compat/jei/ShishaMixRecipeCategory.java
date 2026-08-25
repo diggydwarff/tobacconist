@@ -38,7 +38,7 @@ public class ShishaMixRecipeCategory implements IRecipeCategory<ShishaMixJeiReci
 
     @Override
     public Component getTitle() {
-        return Component.literal("Shisha Mixing");
+        return Component.translatable("tobacconistmod.jei.shisha_mixing");
     }
 
     @Override
@@ -80,7 +80,7 @@ public class ShishaMixRecipeCategory implements IRecipeCategory<ShishaMixJeiReci
         slot.draw(guiGraphics, 75, 21);
         slot.draw(guiGraphics, 125, 21);
 
-        guiGraphics.drawString(mc.font, "Tobacco + flavored molasses", 4, 4, 0x404040, false);
-        guiGraphics.drawString(mc.font, "Full bottle = 1 wet treatment", 4, 52, 0x808080, false);
+        guiGraphics.drawString(mc.font, Component.translatable("tobacconistmod.jei.tobacco_plus_flavored_molasses"), 4, 4, 0x404040, false);
+        guiGraphics.drawString(mc.font, Component.translatable("tobacconistmod.jei.full_bottle_treatment"), 4, 52, 0x808080, false);
     }
 }

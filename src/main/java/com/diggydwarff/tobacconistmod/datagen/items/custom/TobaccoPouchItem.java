@@ -3,6 +3,7 @@ package com.diggydwarff.tobacconistmod.datagen.items.custom;
 import com.diggydwarff.tobacconistmod.datagen.items.ModTags;
 import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
+import com.diggydwarff.tobacconistmod.util.TobaccoText;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -176,29 +177,29 @@ public class TobaccoPouchItem extends Item {
         int count = getStoredCount(stack);
 
         if (stored.isEmpty()) {
-            tooltip.add(Component.literal("Empty (0/" + CAPACITY + ")").withStyle(ChatFormatting.GRAY));
-            tooltip.add(Component.literal("Holds two full loose-tobacco stacks").withStyle(ChatFormatting.DARK_GRAY));
-            tooltip.add(Component.literal("Offhand packing grants 1-5 bonus puffs").withStyle(ChatFormatting.DARK_GRAY));
-            tooltip.add(Component.literal("Craft with one or more dyes to recolor").withStyle(ChatFormatting.DARK_GRAY));
+            tooltip.add(Component.translatable("tobacconistmod.ui.empty_capacity", 0, CAPACITY).withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable("tobacconistmod.tooltip.pouch.capacity").withStyle(ChatFormatting.DARK_GRAY));
+            tooltip.add(Component.translatable("tobacconistmod.tooltip.pouch.bonus_puffs").withStyle(ChatFormatting.DARK_GRAY));
+            tooltip.add(Component.translatable("tobacconistmod.tooltip.pouch.dye").withStyle(ChatFormatting.DARK_GRAY));
             return;
         }
 
-        tooltip.add(Component.literal(count + "/" + CAPACITY + " • ").append(stored.getHoverName())
+        tooltip.add(Component.translatable("tobacconistmod.ui.capacity_item", count, CAPACITY, stored.getHoverName())
                 .withStyle(ChatFormatting.GRAY));
 
         String cure = TobaccoCuringHelper.getCureType(stored);
         String cut = TobaccoCuringHelper.getCutType(stored);
         if (!cure.isEmpty() || !cut.isEmpty()) {
-            StringBuilder line = new StringBuilder();
-            if (!cure.isEmpty()) line.append(TobaccoCuringHelper.getCureDisplayName(cure));
+            var line = Component.empty();
+            if (!cure.isEmpty()) line.append(TobaccoText.cure(cure));
             if (!cure.isEmpty() && !cut.isEmpty()) line.append(" • ");
-            if (!cut.isEmpty()) line.append(TobaccoCuringHelper.getCutDisplayName(cut));
-            tooltip.add(Component.literal(line.toString()).withStyle(ChatFormatting.DARK_GRAY));
+            if (!cut.isEmpty()) line.append(TobaccoText.cut(cut));
+            tooltip.add(line.withStyle(ChatFormatting.DARK_GRAY));
         }
 
-        tooltip.add(Component.literal("Offhand packing grants 1-5 bonus puffs").withStyle(ChatFormatting.DARK_GRAY));
-        tooltip.add(Component.literal("Use from offhand to pack an empty pipe").withStyle(ChatFormatting.DARK_GRAY));
-        tooltip.add(Component.literal("Craft with one or more dyes to recolor").withStyle(ChatFormatting.DARK_GRAY));
-        tooltip.add(Component.literal("Sneak-right-click to withdraw").withStyle(ChatFormatting.DARK_GRAY));
+        tooltip.add(Component.translatable("tobacconistmod.tooltip.pouch.bonus_puffs").withStyle(ChatFormatting.DARK_GRAY));
+        tooltip.add(Component.translatable("tobacconistmod.tooltip.pouch.pack_pipe").withStyle(ChatFormatting.DARK_GRAY));
+        tooltip.add(Component.translatable("tobacconistmod.tooltip.pouch.dye").withStyle(ChatFormatting.DARK_GRAY));
+        tooltip.add(Component.translatable("tobacconistmod.tooltip.pouch.withdraw").withStyle(ChatFormatting.DARK_GRAY));
     }
 }

@@ -38,7 +38,7 @@ public class CigaretteRecipeCategory implements IRecipeCategory<CigaretteJeiReci
 
     @Override
     public Component getTitle() {
-        return Component.literal("Cigarette Rolling");
+        return Component.translatable("tobacconistmod.jei.cigarette_rolling");
     }
 
     @Override
@@ -73,7 +73,7 @@ public class CigaretteRecipeCategory implements IRecipeCategory<CigaretteJeiReci
         slot.draw(guiGraphics, 85, 17);
 
         guiGraphics.drawString(mc.font,
-                Component.literal("Tobacco + paper"),
+                Component.translatable("tobacconistmod.jei.tobacco_plus_paper"),
                 4, 4, 0x404040, false);
     }
 }

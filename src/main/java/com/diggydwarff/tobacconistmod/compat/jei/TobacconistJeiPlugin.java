@@ -100,17 +100,17 @@ public class TobacconistJeiPlugin implements IModPlugin {
         registration.addIngredientInfo(
                 java.util.List.of(new ItemStack(ModBlocks.TOBACCO_BARREL.get().asItem())),
                 mezz.jei.api.constants.VanillaTypes.ITEM_STACK,
-                Component.literal("Used to ferment and age dry tobacco leaves."),
-                Component.literal(""),
-                Component.literal("Fermentation:"),
-                Component.literal("- Put dry leaves into the barrel"),
-                Component.literal("- Requires warmth 3+ and humidity 25+"),
-                Component.literal("- Ferments after 2 in-game days"),
-                Component.literal(""),
-                Component.literal("Aging:"),
-                Component.literal("- Fermented leaves can continue aging"),
-                Component.literal("- Best in cool, dark storage"),
-                Component.literal("- Lower warmth and moderate humidity preferred")
+                Component.translatable("tobacconistmod.jei.info.barrel.summary"),
+                Component.empty(),
+                Component.translatable("tobacconistmod.jei.info.barrel.fermentation"),
+                Component.translatable("tobacconistmod.jei.info.barrel.fermentation_1"),
+                Component.translatable("tobacconistmod.jei.info.barrel.fermentation_2"),
+                Component.translatable("tobacconistmod.jei.info.barrel.fermentation_3"),
+                Component.empty(),
+                Component.translatable("tobacconistmod.jei.info.barrel.aging"),
+                Component.translatable("tobacconistmod.jei.info.barrel.aging_1"),
+                Component.translatable("tobacconistmod.jei.info.barrel.aging_2"),
+                Component.translatable("tobacconistmod.jei.info.barrel.aging_3")
         );
 
         registration.addIngredientInfo(
@@ -123,31 +123,31 @@ public class TobacconistJeiPlugin implements IModPlugin {
                         new ItemStack(ModItems.SHADE_TOBACCO_LEAF_DRY.get())
                 ),
                 VanillaTypes.ITEM_STACK,
-                Component.literal("Dry leaves can be fermented and aged in a tobacco barrel.")
+                Component.translatable("tobacconistmod.jei.info.dry_leaf_barrel")
         );
 
         registration.addIngredientInfo(
                 java.util.List.of(new ItemStack(ModBlocks.TOBACCO_DRYING_RACK.get().asItem())),
                 mezz.jei.api.constants.VanillaTypes.ITEM_STACK,
-                Component.literal("Used to cure raw tobacco leaves."),
-                Component.literal(""),
-                Component.literal("Air curing: shade or indirect light"),
-                Component.literal("Sun curing: direct sunlight"),
-                Component.literal("Flue curing: hot dry enclosed heat"),
-                Component.literal("Fire curing: smoke and low heat")
+                Component.translatable("tobacconistmod.jei.info.rack.summary"),
+                Component.empty(),
+                Component.translatable("tobacconistmod.jei.info.rack.air"),
+                Component.translatable("tobacconistmod.jei.info.rack.sun"),
+                Component.translatable("tobacconistmod.jei.info.rack.flue"),
+                Component.translatable("tobacconistmod.jei.info.rack.fire")
         );
 
         registration.addIngredientInfo(
                 java.util.List.of(new ItemStack(ModItems.HOOKAH_HOSE.get())),
                 mezz.jei.api.constants.VanillaTypes.ITEM_STACK,
-                Component.literal("Used to smoke from a loaded hookah."),
-                Component.literal(""),
-                Component.literal("How to use:"),
-                Component.literal("- Place and load a hookah with fuel, water, and shisha"),
-                Component.literal("- Keep the hose in your hand"),
-                Component.literal("- Right-click the loaded hookah to smoke"),
-                Component.literal(""),
-                Component.literal("The hookah will consume its contents over time.")
+                Component.translatable("tobacconistmod.jei.info.hose.summary"),
+                Component.empty(),
+                Component.translatable("tobacconistmod.jei.info.hose.how_to"),
+                Component.translatable("tobacconistmod.jei.info.hose.step_1"),
+                Component.translatable("tobacconistmod.jei.info.hose.step_2"),
+                Component.translatable("tobacconistmod.jei.info.hose.step_3"),
+                Component.empty(),
+                Component.translatable("tobacconistmod.jei.info.hose.consume")
         );
 
         registration.addRecipes(DryingRackRecipeCategory.TYPE, DryingRackJeiRecipe.createAll());

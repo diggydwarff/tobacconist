@@ -30,7 +30,7 @@ public class ShishaTobaccoItem extends SmokingProduct {
     public Component getName(ItemStack stack) {
         String label = TobaccoLabelHelper.getProductLabel(stack);
         if (!label.isEmpty()) {
-            return TobaccoLabelHelper.buildNamedProduct(label, "Shisha Tobacco");
+            return TobaccoLabelHelper.buildNamedProduct(label, Component.translatable("item.tobacconistmod.shisha_tobacco"));
         }
         return super.getName(stack);
     }
@@ -66,18 +66,23 @@ public class ShishaTobaccoItem extends SmokingProduct {
 
         String label = TobaccoLabelHelper.getProductLabel(stack);
         if (!label.isEmpty()) {
-            tooltip.add(Component.literal("Label: " + label).withStyle(ChatFormatting.YELLOW));
+            tooltip.add(Component.translatable("tobacconistmod.ui.label", label).withStyle(ChatFormatting.YELLOW));
         }
 
         if (tag != null) {
             String tobacco = TobaccoTooltipHelper.cleanTobaccoName(tag.getString("tobacco"));
             if (!tobacco.isEmpty()) {
-                String summary = tobacco + TobaccoTooltipHelper.getProcessSuffix(tag);
-                tooltip.add(Component.literal(summary).withStyle(ChatFormatting.GOLD));
+                tooltip.add(Component.translatable(
+                        "tobacconistmod.tooltip.variety_summary",
+                        TobaccoText.varietyFromStoredName(tobacco),
+                        TobaccoTooltipHelper.getProcessSuffix(tag)
+                ).withStyle(ChatFormatting.GOLD));
                 int agedDays = TobaccoBarrelBlockEntity.getAgedDays(stack);
                 if (agedDays > 0) {
-                    tooltip.add(Component.literal(
-                            "Age: " + formatAge(agedDays) + " (" + getAgeLabel(agedDays) + ")"
+                    tooltip.add(Component.translatable(
+                            "tobacconistmod.ui.age_detailed",
+                            TobaccoText.ageDuration(agedDays),
+                            TobaccoText.ageLabel(agedDays)
                     ).withStyle(ChatFormatting.GOLD));
                 }
 
@@ -87,7 +92,7 @@ public class ShishaTobaccoItem extends SmokingProduct {
             if (TobacconistConfig.isQualitySystemEnabled()) {
                 int displayQuality = getDisplayQuality10(stack);
                 if (displayQuality >= 0) {
-                    tooltip.add(Component.literal("Quality: " + displayQuality + "/10")
+                    tooltip.add(Component.translatable("tobacconistmod.ui.quality_10", displayQuality)
                             .withStyle(ChatFormatting.GRAY));
                 }
             }
@@ -112,7 +117,7 @@ public class ShishaTobaccoItem extends SmokingProduct {
                     : TobaccoCuringHelper.getCutType(temp);
 
             if (!cutType.isEmpty()) {
-                tooltip.add(Component.literal("Cut: " + TobaccoCuringHelper.getCutDisplayName(cutType))
+                tooltip.add(Component.translatable("tobacconistmod.ui.cut", TobaccoText.cut(cutType))
                         .withStyle(ChatFormatting.GRAY));
             }
 
@@ -121,12 +126,12 @@ public class ShishaTobaccoItem extends SmokingProduct {
                     : TobaccoCuringHelper.getCureType(temp);
 
             if (!cureType.isEmpty()) {
-                tooltip.add(Component.literal("Cure: " + TobaccoCuringHelper.getCureDisplayName(cureType))
+                tooltip.add(Component.translatable("tobacconistmod.ui.cure", TobaccoText.cure(cureType))
                         .withStyle(ChatFormatting.GRAY));
             }
 
             if (TobaccoBarrelBlockEntity.isRuined(stack)) {
-                tooltip.add(Component.literal("Ruined").withStyle(ChatFormatting.DARK_RED));
+                tooltip.add(Component.translatable("tobacconistmod.ui.ruined").withStyle(ChatFormatting.DARK_RED));
             }
 
             for (String shishaFlavor : Arrays.asList(
@@ -136,7 +141,7 @@ public class ShishaTobaccoItem extends SmokingProduct {
             )) {
                 String flavorName = getShishaFlavorDisplayName(shishaFlavor);
                 if (!flavorName.isEmpty()) {
-                    tooltip.add(Component.literal("* " + flavorName).withStyle(ChatFormatting.LIGHT_PURPLE));
+                    tooltip.add(Component.translatable("tobacconistmod.tooltip.flavor_bullet", TobaccoText.flavor(flavorName)).withStyle(ChatFormatting.LIGHT_PURPLE));
                 }
             }
         }
@@ -145,8 +150,8 @@ public class ShishaTobaccoItem extends SmokingProduct {
 
         if (flagIn.isAdvanced()) {
             tooltip.add(Component.empty());
-            tooltip.add(Component.literal("✿ Fermented").withStyle(ChatFormatting.DARK_GRAY));
-            tooltip.add(Component.literal("ᵐ Months aged, ʸ Years aged").withStyle(ChatFormatting.DARK_GRAY));
+            tooltip.add(Component.translatable("tobacconistmod.ui.fermented_marker").withStyle(ChatFormatting.DARK_GRAY));
+            tooltip.add(Component.translatable("tobacconistmod.ui.age_legend").withStyle(ChatFormatting.DARK_GRAY));
         }
     }
 
@@ -168,21 +173,4 @@ public class ShishaTobaccoItem extends SmokingProduct {
         return storedFlavor;
     }
 
-    private String formatAge(int agedDays) {
-        int years = agedDays / 365;
-        int days = agedDays % 365;
-
-        if (years > 0) {
-            return years + "y " + days + "d";
-        }
-        return days + "d";
-    }
-
-    private String getAgeLabel(int agedDays) {
-        if (agedDays < 7) return "Fresh";
-        if (agedDays < 30) return "Light Aged";
-        if (agedDays < 90) return "Deep Aged";
-        if (agedDays < 365) return "Vintage";
-        return "Cellared";
-    }
 }

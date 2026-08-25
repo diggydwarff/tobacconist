@@ -19,6 +19,10 @@ Fermentation requires 48,000 valid ticks (about two Minecraft days). A successfu
 
 Internal Barrel Humidity is a stored reservoir that changes with the environment; it is not the same value as the environmental Humidity shown by the environment helper.
 
+### Automated fermentation safety
+
+While a barrel is actively **FERMENTING**, its item-handler extraction is locked. Funnels, Chutes, Packagers, hoppers/capability consumers, and Mechanical Arms cannot pull the batch out early. This makes a normal `curing → barrel → output logistics` line safe without requiring an external redstone lock around the finite fermentation cycle.
+
 ## Aging
 
 Aging requires:
@@ -41,6 +45,10 @@ Every 24,000 uninterrupted aging ticks adds one aged day.
 Aging and fermentation can raise quality to 120.
 
 After day 365, no further aging-quality gains are possible. The first non-zero extreme-age spoil check occurs when the internal month index reaches 1 (day 396), then at later 30-day month-index changes. The chance is `0.5% × month index`, capped at 10%. Spoilage from extreme age reduces quality by 15 and converts the batch to Spoiled Tobacco.
+
+### Automated aging cellars
+
+Aging is intentionally **not** extraction-locked because it has no single mandatory endpoint. Create Attribute Filters expose the exact aged-day count and `Aged at least 7`, `30`, `90`, and `365 days` thresholds. Use those attributes on Smart Funnels, filtered Mechanical Arms, or other filtered Create logistics to release a barrel at the desired cellar age. An unfiltered extractor can remove aging tobacco immediately, so age-controlled cellars should always filter their output.
 
 ## Environment controls
 

@@ -5,7 +5,6 @@ import com.diggydwarff.tobacconistmod.block.custom.TobaccoDryingRackBlock;
 import com.diggydwarff.tobacconistmod.block.entity.FlueFireboxBlockEntity;
 import com.diggydwarff.tobacconistmod.block.entity.HookahEntity;
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelBlockEntity;
-import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelMode;
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoDryingRackBlockEntity;
 import com.simibubi.create.api.registry.CreateRegistries;
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmBlockEntity;
@@ -131,7 +130,7 @@ public final class CreateArmCompat {
         public ItemStack extract(ArmBlockEntity armBlockEntity, int slot, int amount, boolean simulate) {
             BlockEntity blockEntity = level.getBlockEntity(pos);
             if (!(blockEntity instanceof TobaccoBarrelBlockEntity barrel)
-                    || barrel.getMode() != TobaccoBarrelMode.IDLE) {
+                    || barrel.isAutomatedExtractionLocked()) {
                 return ItemStack.EMPTY;
             }
             return super.extract(armBlockEntity, slot, amount, simulate);

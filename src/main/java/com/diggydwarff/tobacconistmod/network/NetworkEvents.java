@@ -29,7 +29,7 @@ public final class NetworkEvents {
                     if (!(context.player() instanceof ServerPlayer player)) return;
 
                     if (!ModList.get().isLoaded("curios")) {
-                        player.displayClientMessage(Component.literal("Manual mouth-slot smoking requires Curios."), true);
+                        player.displayClientMessage(Component.translatable("tobacconistmod.message.mouth_slot_requires_curios"), true);
                         return;
                     }
 
@@ -39,11 +39,11 @@ public final class NetworkEvents {
                         return;
                     }
 
-                    String failure = CuriosSmokingHelper.trySmokeMouthItem(player);
+                    Component failure = CuriosSmokingHelper.trySmokeMouthItem(player);
                     if (failure == null) {
                         LAST_MANUAL_SMOKE_TICK.put(player.getUUID(), now);
                     } else {
-                        player.displayClientMessage(Component.literal(failure), true);
+                        player.displayClientMessage(failure, true);
                     }
                 }
         );

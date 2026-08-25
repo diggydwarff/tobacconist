@@ -148,8 +148,11 @@ public class TobaccoDryingRackBlock extends BaseEntityBlock {
             if (!level.isClientSide) {
 
                 player.displayClientMessage(
-                        Component.literal(
-                                "Rack: " + rack.getLeafCount() + "/16 Leaves | " + rack.getRackStatusText()
+                        Component.translatable(
+                                "tobacconistmod.message.rack.inspect",
+                                rack.getLeafCount(),
+                                16,
+                                rack.getRackStatusComponent()
                         ),
                         true
                 );
@@ -164,7 +167,7 @@ public class TobaccoDryingRackBlock extends BaseEntityBlock {
             if (rack.isBatchLocked()) {
                 if (!level.isClientSide) {
                     player.displayClientMessage(
-                            Component.literal("This batch is already drying. Remove it to restart."),
+                            Component.translatable("tobacconistmod.message.rack.batch_locked"),
                             true
                     );
                 }

@@ -29,6 +29,11 @@
       "title": "Automatic Modes"
     },
     {
+      "type": "patchouli:text",
+      "title": "Create Extraction",
+      "text": "Create automation treats fermentation and aging differently. Fermenting is a protected finite batch, so automated extraction waits until it finishes. Aging has no universal endpoint, so it remains extractable; use an aging Attribute Filter when you want an automated cellar to wait for a specific age."
+    },
+    {
       "type": "patchouli:relations",
       "entries": [
         "tobacconistmod:barrel/fermentation",

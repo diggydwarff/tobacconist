@@ -1,32 +1,63 @@
 {
-  "name": "Averaging Tobacco",
+  "name": "Averaging & Homogenizing",
   "icon": "tobacconistmod:tobacco_leaf_wild_dry",
   "category": "tobacconistmod:processing",
   "sortnum": 2,
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "The crafting grid can $(thing)average$() 2–8 compatible tobacco items. This is useful when the same tobacco has different quality values and will not stack naturally."
+      "text": "The crafting grid can $(thing)average$() 2–8 compatible tobacco items. This is useful for small lots with different quality values that would not otherwise stack."
     },
     {
       "type": "patchouli:text",
-      "text": "All inputs must be the same tobacco item and processing mode. Raw leaf can only average with the same raw leaf. Cured leaf must also have the same cure type. Single-variety loose tobacco must have the same cure and the same cut. Blended Tobacco is not quality-averaged this way because its component identity must remain intact.",
-      "title": "Compatibility Rules"
+      "title": "Crafting Averaging",
+      "text": "All inputs must be the same tobacco item and compatible processing state. Raw leaf averages with the same raw leaf. Cured leaf must share its cure type. Single-variety loose tobacco must share cure and cut. The result averages occupied crafting slots and rounds to the nearest whole quality value."
     },
     {
       "type": "patchouli:text",
-      "text": "The result's quality is the arithmetic average of the participating crafting-grid slots, rounded to the nearest whole number. The output count equals the number of occupied tobacco slots. The recipe does not change the cure or cut of a compatible batch.",
-      "title": "Result"
+      "title": "Create Homogenization",
+      "text": "With Create installed, a Mechanical Mixer over a Basin can standardize compatible raw or cured leaves in bulk. A Mixer cycle only starts when its selected batch contains $(thing)at least two different quality values$(). Variety/item and all non-quality processing data must match."
     },
     {
       "type": "patchouli:text",
-      "text": "Averaging combines compatible quality values. Tobacco Crates do something different: fill a full 3×3 grid with nine of the same tobacco item and the crate stores each unit losslessly, even when their NBT/components differ. Breaking the crate spills those exact nine inputs back out.",
-      "title": "Quality-Safe Consolidation"
+      "title": "Batch Quality",
+      "text": "Create homogenization uses a $(thing)count-weighted average$() and rounds to the $(thing)nearest$() whole quality. Every leaf in that Mixer cycle leaves at the same quality. Already-uniform tobacco is not pointlessly remixed."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Analog Batch Control",
+      "text": "Signal 0 keeps the default $(thing)64-leaf$() target. Power either the $(thing)Mixer or Basin$(); if both are powered, the stronger signal wins. Signals 1–14 select 16/32/48/64/96/128/160/192/256/320/384/448/512/576 leaves."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Signal 15: Finish",
+      "text": "A new rise to signal $(thing)15$() finishes the compatible leaves $(thing)currently inside the Basin$() once, with a 16-leaf minimum. Mixed qualities are homogenized; an already-uniform lot is passed through unchanged. Drop below 15 before issuing another finish command."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Continuous Factories",
+      "text": "Homogenizer input is protected from Chutes, Hoppers, Funnels, and similar extractors until the Mixer processes or flushes it. Repeated same-quality stacks may occupy multiple Basin slots so a later quality can still enter. If all 576 input spaces become full with one quality, that uniform tobacco passes through automatically instead of deadlocking the line."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Multi-Stage Homogenizing",
+      "text": "One Mixer standardizes one physical batch, so a large harvest can leave several nearby qualities. For predictable multi-stage lines, make downstream targets larger than upstream ones: for example 64/128-leaf primary Mixers feeding a 256/576-leaf final Mixer. Pulse 15 to finish the leftover tail."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Grading First",
+      "text": "Create quality Attributes can siphon unusually low or premium leaves away before homogenizing. This lets a factory standardize the normal crop range without sacrificing rare high-quality tobacco or letting extreme low outliers drag down the bulk lot."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Averaging vs Crating",
+      "text": "Homogenizing standardizes quality. Tobacco Crates do not: a full 3×3 grid stores nine units of the same tobacco item losslessly, preserving each unit’s own NBT/components until the crate is broken."
     },
     {
       "type": "patchouli:relations",
       "entries": [
         "tobacconistmod:processing/blending",
+        "tobacconistmod:reference/create_integration",
         "tobacconistmod:storage/tobacco_crates"
       ],
       "title": "Related Chapters"

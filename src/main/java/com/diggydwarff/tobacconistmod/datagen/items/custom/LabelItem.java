@@ -82,7 +82,7 @@ public class LabelItem extends Item {
         if (!name.isEmpty()) {
             tooltip.add(Component.literal(name).withStyle(ChatFormatting.GOLD));
         } else {
-            tooltip.add(Component.literal("Rename in an anvil").withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable("tobacconistmod.tooltip.rename_in_anvil").withStyle(ChatFormatting.GRAY));
         }
     }
 }

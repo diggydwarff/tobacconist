@@ -39,7 +39,7 @@ public class CigarRecipe extends CustomRecipe {
             if (itemstack.getItem() instanceof LooseTobaccoItem) {
                 if (!tobaccoStack.isEmpty()) return false;
                 tobaccoStack = itemstack;
-            } else if (itemstack.getItem() instanceof TobaccoLeafItem) {
+            } else if (TobaccoCuringHelper.isDryTobaccoLeaf(itemstack)) {
                 if (!tobaccoLeafStack.isEmpty()) return false;
                 tobaccoLeafStack = itemstack;
             } else {
@@ -61,7 +61,7 @@ public class CigarRecipe extends CustomRecipe {
 
             if (itemstack.getItem() instanceof LooseTobaccoItem) {
                 tobaccoStack = itemstack;
-            } else if (itemstack.getItem() instanceof TobaccoLeafItem) {
+            } else if (TobaccoCuringHelper.isDryTobaccoLeaf(itemstack)) {
                 tobaccoLeafStack = itemstack;
             }
         }

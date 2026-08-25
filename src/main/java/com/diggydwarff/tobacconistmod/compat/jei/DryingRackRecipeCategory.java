@@ -38,7 +38,7 @@ public class DryingRackRecipeCategory implements IRecipeCategory<DryingRackJeiRe
 
     @Override
     public Component getTitle() {
-        return Component.literal("Tobacco Drying Rack");
+        return Component.translatable("tobacconistmod.jei.tobacco_drying_rack");
     }
 
     @Override

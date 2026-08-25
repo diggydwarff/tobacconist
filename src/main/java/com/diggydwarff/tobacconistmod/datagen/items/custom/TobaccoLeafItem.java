@@ -6,6 +6,7 @@ import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelBlockEntity;
 import com.diggydwarff.tobacconistmod.block.custom.HangingTobaccoBlock;
 import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
+import com.diggydwarff.tobacconistmod.util.TobaccoText;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -41,7 +42,7 @@ public class TobaccoLeafItem extends Item {
 
         if (stack.getCount() < 16 && !player.getAbilities().instabuild) {
             if (!context.getLevel().isClientSide) {
-                player.displayClientMessage(Component.literal("You need 16 matching tobacco leaves to hang a bunch."), true);
+                player.displayClientMessage(Component.translatable("tobacconistmod.message.hanging.need_16"), true);
             }
             return InteractionResult.sidedSuccess(context.getLevel().isClientSide);
         }
@@ -49,7 +50,7 @@ public class TobaccoLeafItem extends Item {
         BlockPos upperPos = context.getClickedPos().below();
         if (!HangingTobaccoBlock.canPlaceBundle(context.getLevel(), upperPos)) {
             if (!context.getLevel().isClientSide) {
-                player.displayClientMessage(Component.literal("The bunch needs two open blocks below a sturdy underside."), true);
+                player.displayClientMessage(Component.translatable("tobacconistmod.message.hanging.need_space"), true);
             }
             return InteractionResult.sidedSuccess(context.getLevel().isClientSide);
         }
@@ -72,24 +73,26 @@ public class TobaccoLeafItem extends Item {
 
         if (TobaccoCuringHelper.isDryTobaccoLeaf(stack)) {
             String cureType = TobaccoCuringHelper.getCureType(stack);
-            String prefix = "";
+            Component prefix = Component.empty();
 
             if (qualityEnabled) {
-                int quality = TobaccoCuringHelper.getQuality(stack);
-                prefix = TobaccoCuringHelper.getQualityTier(quality);
+                prefix = TobaccoText.qualityTier(TobaccoCuringHelper.getQuality(stack));
             }
 
             if (!cureType.isEmpty()) {
-                if (!prefix.isEmpty()) prefix += " ";
-                prefix += TobaccoCuringHelper.getCureDisplayName(cureType);
+                prefix = prefix.getString().isEmpty()
+                        ? TobaccoText.cure(cureType)
+                        : Component.empty().append(prefix).append(" ").append(TobaccoText.cure(cureType));
             }
 
-            return prefix.isEmpty() ? baseName : Component.literal(prefix + " ").append(baseName);
+            return prefix.getString().isEmpty()
+                    ? baseName
+                    : Component.empty().append(prefix).append(" ").append(baseName);
         }
 
         if (TobaccoCuringHelper.isRawTobaccoLeaf(stack) && qualityEnabled) {
             int growth = getRawGrowthQuality(stack);
-            return Component.literal(TobaccoCuringHelper.getRawLeafTier(growth) + " ").append(baseName);
+            return Component.empty().append(TobaccoText.rawLeafTier(growth)).append(" ").append(baseName);
         }
 
         return baseName;
@@ -102,39 +105,39 @@ public class TobaccoLeafItem extends Item {
         if (TobaccoCuringHelper.isRawTobaccoLeaf(stack)) {
             if (TobacconistConfig.isQualitySystemEnabled()) {
                 int growth = getRawGrowthQuality(stack);
-                tooltip.add(Component.literal(
-                        "Growth Quality: " + growth + " (" + TobaccoCuringHelper.getRawLeafTier(growth) + ")"
+                tooltip.add(Component.translatable(
+                        "tobacconistmod.ui.growth_quality", growth, TobaccoText.rawLeafTier(growth)
                 ).withStyle(ChatFormatting.GRAY));
             }
         } else {
             if (TobacconistConfig.isQualitySystemEnabled()) {
                 int quality = TobaccoCuringHelper.getQuality(stack);
-                tooltip.add(Component.literal(
-                        "Quality: " + quality + " (" + TobaccoCuringHelper.getQualityTier(quality) + ")"
+                tooltip.add(Component.translatable(
+                        "tobacconistmod.ui.quality", quality, TobaccoText.qualityTier(quality)
                 ).withStyle(ChatFormatting.GRAY));
             }
 
             String cureType = TobaccoCuringHelper.getCureType(stack);
             if (!cureType.isEmpty()) {
-                tooltip.add(Component.literal(
-                        "Cure: " + TobaccoCuringHelper.getCureDisplayName(cureType)
+                tooltip.add(Component.translatable(
+                        "tobacconistmod.ui.cure", TobaccoText.cure(cureType)
                 ).withStyle(ChatFormatting.GRAY));
             }
         }
 
         if (TobaccoBarrelBlockEntity.isFermented(stack)) {
-            tooltip.add(Component.literal("Fermented").withStyle(ChatFormatting.GOLD));
+            tooltip.add(Component.translatable("tobacconistmod.ui.fermented").withStyle(ChatFormatting.GOLD));
         }
 
         int agedDays = TobaccoBarrelBlockEntity.getAgedDays(stack);
         if (agedDays > 0) {
-            tooltip.add(Component.literal(
-                    "Age: " + formatAge(agedDays) + " (" + getAgeLabel(agedDays) + ")"
+            tooltip.add(Component.translatable(
+                    "tobacconistmod.ui.age_detailed", TobaccoText.ageDuration(agedDays), TobaccoText.ageLabel(agedDays)
             ).withStyle(ChatFormatting.GOLD));
         }
 
         if (TobaccoBarrelBlockEntity.isRuined(stack)) {
-            tooltip.add(Component.literal("Ruined").withStyle(ChatFormatting.DARK_RED));
+            tooltip.add(Component.translatable("tobacconistmod.ui.ruined").withStyle(ChatFormatting.DARK_RED));
         }
     }
 
@@ -146,21 +149,4 @@ public class TobaccoLeafItem extends Item {
         return 50;
     }
 
-    private String formatAge(int agedDays) {
-        int years = agedDays / 365;
-        int days = agedDays % 365;
-
-        if (years > 0) {
-            return years + "y " + days + "d";
-        }
-        return days + "d";
-    }
-
-    private String getAgeLabel(int agedDays) {
-        if (agedDays < 7) return "Fresh";
-        if (agedDays < 30) return "Light Aged";
-        if (agedDays < 90) return "Deep Aged";
-        if (agedDays < 365) return "Vintage";
-        return "Cellared";
-    }
 }

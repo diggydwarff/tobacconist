@@ -6,11 +6,15 @@ import com.diggydwarff.tobacconistmod.block.entity.HookahEntity;
 import com.diggydwarff.tobacconistmod.block.entity.ModBlockEntities;
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelBlockEntity;
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoDryingRackBlockEntity;
+import com.diggydwarff.tobacconistmod.util.TobaccoText;
+import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.api.behaviour.display.DisplaySource;
 import com.simibubi.create.api.registry.CreateRegistries;
 import com.simibubi.create.content.redstone.displayLink.DisplayLinkContext;
 import com.simibubi.create.content.redstone.displayLink.source.SingleLineDisplaySource;
 import com.simibubi.create.content.redstone.displayLink.target.DisplayTargetStats;
+import com.simibubi.create.content.processing.basin.BasinBlockEntity;
+import com.simibubi.create.content.logistics.vault.ItemVaultBlockEntity;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
@@ -18,6 +22,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -46,6 +52,14 @@ public final class CreateDisplayLinkCompat {
             DISPLAY_SOURCES.register("flue_firebox_fuel", FlueFireboxFuelSource::new);
     private static final DeferredHolder<DisplaySource, HookahStatusSource> HOOKAH_STATUS =
             DISPLAY_SOURCES.register("hookah_status", HookahStatusSource::new);
+    private static final DeferredHolder<DisplaySource, HomogenizationStatusSource> HOMOGENIZATION_STATUS =
+            DISPLAY_SOURCES.register("homogenization_status", HomogenizationStatusSource::new);
+    private static final DeferredHolder<DisplaySource, HomogenizationAverageSource> HOMOGENIZATION_AVERAGE =
+            DISPLAY_SOURCES.register("homogenization_average", HomogenizationAverageSource::new);
+    private static final DeferredHolder<DisplaySource, VaultTobaccoCountSource> VAULT_TOBACCO_COUNT =
+            DISPLAY_SOURCES.register("vault_tobacco_count", VaultTobaccoCountSource::new);
+    private static final DeferredHolder<DisplaySource, VaultAverageQualitySource> VAULT_AVERAGE_QUALITY =
+            DISPLAY_SOURCES.register("vault_average_quality", VaultAverageQualitySource::new);
 
     private CreateDisplayLinkCompat() {}
 
@@ -68,6 +82,10 @@ public final class CreateDisplayLinkCompat {
             DisplaySource.BY_BLOCK_ENTITY.add(ModBlockEntities.FLUE_FIREBOX.get(), FLUE_FIREBOX_STATUS.get());
             DisplaySource.BY_BLOCK_ENTITY.add(ModBlockEntities.FLUE_FIREBOX.get(), FLUE_FIREBOX_FUEL.get());
             DisplaySource.BY_BLOCK_ENTITY.add(ModBlockEntities.HOOKAH.get(), HOOKAH_STATUS.get());
+            DisplaySource.BY_BLOCK_ENTITY.add(AllBlockEntityTypes.BASIN.get(), HOMOGENIZATION_STATUS.get());
+            DisplaySource.BY_BLOCK_ENTITY.add(AllBlockEntityTypes.BASIN.get(), HOMOGENIZATION_AVERAGE.get());
+            DisplaySource.BY_BLOCK_ENTITY.add(AllBlockEntityTypes.ITEM_VAULT.get(), VAULT_TOBACCO_COUNT.get());
+            DisplaySource.BY_BLOCK_ENTITY.add(AllBlockEntityTypes.ITEM_VAULT.get(), VAULT_AVERAGE_QUALITY.get());
         });
     }
 
@@ -92,7 +110,7 @@ public final class CreateDisplayLinkCompat {
         @Override
         protected MutableComponent provideLine(DisplayLinkContext context, DisplayTargetStats stats) {
             TobaccoDryingRackBlockEntity rack = source(context, TobaccoDryingRackBlockEntity.class);
-            return rack == null ? EMPTY_LINE : Component.literal(rack.getRackStatusText());
+            return rack == null ? EMPTY_LINE : rack.getRackStatusComponent();
         }
     }
 
@@ -100,7 +118,7 @@ public final class CreateDisplayLinkCompat {
         @Override
         protected MutableComponent provideLine(DisplayLinkContext context, DisplayTargetStats stats) {
             TobaccoDryingRackBlockEntity rack = source(context, TobaccoDryingRackBlockEntity.class);
-            return rack == null ? EMPTY_LINE : Component.literal(rack.getDryProgressPercent() + "%");
+            return rack == null ? EMPTY_LINE : Component.translatable("tobacconistmod.ui.percent", rack.getDryProgressPercent());
         }
     }
 
@@ -108,7 +126,7 @@ public final class CreateDisplayLinkCompat {
         @Override
         protected MutableComponent provideLine(DisplayLinkContext context, DisplayTargetStats stats) {
             TobaccoDryingRackBlockEntity rack = source(context, TobaccoDryingRackBlockEntity.class);
-            return rack == null ? EMPTY_LINE : Component.literal(rack.getLeafCount() + "/16 Leaves");
+            return rack == null ? EMPTY_LINE : Component.translatable("tobacconistmod.ui.leaf_count_short", rack.getLeafCount(), 16);
         }
     }
 
@@ -117,14 +135,14 @@ public final class CreateDisplayLinkCompat {
         protected MutableComponent provideLine(DisplayLinkContext context, DisplayTargetStats stats) {
             TobaccoBarrelBlockEntity barrel = source(context, TobaccoBarrelBlockEntity.class);
             if (barrel == null) return EMPTY_LINE;
-            if (barrel.getStoredTobacco().isEmpty()) return Component.literal("Empty");
+            if (barrel.getStoredTobacco().isEmpty()) return Component.translatable("tobacconistmod.ui.empty");
 
-            String mode = barrel.getModeNameForInspection();
+            MutableComponent mode = TobaccoText.barrelMode(barrel.getMode());
             int progress = barrel.getProcessProgressPercent();
             if (progress > 0) {
-                return Component.literal(mode + " - " + progress + "%");
+                return Component.translatable("tobacconistmod.status.method_progress", mode, progress);
             }
-            return Component.literal(mode);
+            return mode;
         }
     }
 
@@ -132,7 +150,7 @@ public final class CreateDisplayLinkCompat {
         @Override
         protected MutableComponent provideLine(DisplayLinkContext context, DisplayTargetStats stats) {
             TobaccoBarrelBlockEntity barrel = source(context, TobaccoBarrelBlockEntity.class);
-            return barrel == null ? EMPTY_LINE : Component.literal(barrel.getProcessProgressPercent() + "%");
+            return barrel == null ? EMPTY_LINE : Component.translatable("tobacconistmod.ui.percent", barrel.getProcessProgressPercent());
         }
     }
 
@@ -140,7 +158,7 @@ public final class CreateDisplayLinkCompat {
         @Override
         protected MutableComponent provideLine(DisplayLinkContext context, DisplayTargetStats stats) {
             TobaccoBarrelBlockEntity barrel = source(context, TobaccoBarrelBlockEntity.class);
-            return barrel == null ? EMPTY_LINE : Component.literal(barrel.getBarrelHumidity() + "%");
+            return barrel == null ? EMPTY_LINE : Component.translatable("tobacconistmod.ui.percent", barrel.getBarrelHumidity());
         }
     }
 
@@ -151,11 +169,10 @@ public final class CreateDisplayLinkCompat {
             if (barrel == null) return EMPTY_LINE;
 
             ItemStack stored = barrel.getStoredTobacco();
-            if (stored.isEmpty()) return Component.literal("0d");
+            if (stored.isEmpty()) return TobaccoText.ageDuration(0);
 
             int days = TobaccoBarrelBlockEntity.getAgedDays(stored);
-            if (days < 365) return Component.literal(days + "d");
-            return Component.literal((days / 365) + "y " + (days % 365) + "d");
+            return TobaccoText.ageDuration(days);
         }
     }
 
@@ -163,7 +180,7 @@ public final class CreateDisplayLinkCompat {
         @Override
         protected MutableComponent provideLine(DisplayLinkContext context, DisplayTargetStats stats) {
             FlueFireboxBlockEntity firebox = source(context, FlueFireboxBlockEntity.class);
-            return firebox == null ? EMPTY_LINE : Component.literal(firebox.isLit() ? "Lit" : "Idle");
+            return firebox == null ? EMPTY_LINE : Component.translatable(firebox.isLit() ? "tobacconistmod.ui.lit" : "tobacconistmod.ui.idle");
         }
     }
 
@@ -174,7 +191,84 @@ public final class CreateDisplayLinkCompat {
             if (firebox == null) return EMPTY_LINE;
             int total = firebox.getBurnTimeTotal();
             int percent = total <= 0 ? 0 : Math.min(100, firebox.getBurnTime() * 100 / total);
-            return Component.literal(percent + "%");
+            return Component.translatable("tobacconistmod.ui.percent", percent);
+        }
+    }
+
+    private static final class HomogenizationStatusSource extends TobacconistSingleLineSource {
+        @Override
+        protected MutableComponent provideLine(DisplayLinkContext context, DisplayTargetStats stats) {
+            BasinBlockEntity basin = source(context, BasinBlockEntity.class);
+            if (basin == null || basin.getLevel() == null) return EMPTY_LINE;
+
+            CreateTobaccoHomogenization.HomogenizationStatus status =
+                    CreateTobaccoHomogenization.getStatus(basin.getLevel(), basin.getBlockPos());
+            if (!status.relevant()) return Component.translatable("tobacconistmod.ui.no_tobacco_batch");
+            if (status.processing()) {
+                return Component.translatable("tobacconistmod.display.homogenizing_batch", status.count(), status.target());
+            }
+            if (status.finishMode() && !status.finishArmed()) {
+                return Component.translatable("tobacconistmod.display.finish_rearm");
+            }
+            if (status.uniform()) {
+                return Component.translatable("tobacconistmod.display.batch_uniform", status.count(), status.predictedQuality());
+            }
+            if (status.ready()) {
+                return status.finishMode()
+                        ? Component.translatable("tobacconistmod.display.finish_ready", status.count())
+                        : Component.translatable("tobacconistmod.display.batch_ready", status.count(), status.target());
+            }
+            return Component.translatable("tobacconistmod.display.batch_filling", status.count(), status.target());
+        }
+    }
+
+    private static final class HomogenizationAverageSource extends TobacconistSingleLineSource {
+        @Override
+        protected MutableComponent provideLine(DisplayLinkContext context, DisplayTargetStats stats) {
+            BasinBlockEntity basin = source(context, BasinBlockEntity.class);
+            if (basin == null || basin.getLevel() == null) return EMPTY_LINE;
+
+            CreateTobaccoHomogenization.HomogenizationStatus status =
+                    CreateTobaccoHomogenization.getStatus(basin.getLevel(), basin.getBlockPos());
+            if (!status.relevant()) return Component.translatable("tobacconistmod.ui.no_tobacco_batch");
+            return Component.translatable(
+                    "tobacconistmod.display.average_predicted",
+                    String.format(java.util.Locale.ROOT, "%.1f", status.averageQuality()),
+                    status.predictedQuality());
+        }
+    }
+
+    private abstract static class VaultTobaccoSource extends TobacconistSingleLineSource {
+        protected CreateTobaccoHomogenization.InventoryQualitySummary summary(DisplayLinkContext context) {
+            ItemVaultBlockEntity vault = source(context, ItemVaultBlockEntity.class);
+            if (vault == null || vault.getLevel() == null) {
+                return CreateTobaccoHomogenization.InventoryQualitySummary.EMPTY;
+            }
+            IItemHandler handler = vault.getLevel().getCapability(
+                    Capabilities.ItemHandler.BLOCK, vault.getBlockPos(), null);
+            return CreateTobaccoHomogenization.summarizeInventory(handler);
+        }
+    }
+
+    private static final class VaultTobaccoCountSource extends VaultTobaccoSource {
+        @Override
+        protected MutableComponent provideLine(DisplayLinkContext context, DisplayTargetStats stats) {
+            CreateTobaccoHomogenization.InventoryQualitySummary summary = summary(context);
+            return summary.present()
+                    ? Component.translatable("tobacconistmod.display.tobacco_count", summary.count())
+                    : Component.translatable("tobacconistmod.display.no_tobacco");
+        }
+    }
+
+    private static final class VaultAverageQualitySource extends VaultTobaccoSource {
+        @Override
+        protected MutableComponent provideLine(DisplayLinkContext context, DisplayTargetStats stats) {
+            CreateTobaccoHomogenization.InventoryQualitySummary summary = summary(context);
+            if (!summary.present()) return Component.translatable("tobacconistmod.display.no_tobacco");
+            if (!summary.compatible()) return Component.translatable("tobacconistmod.display.mixed_tobacco_lots");
+            return Component.translatable(
+                    "tobacconistmod.display.average_quality",
+                    String.format(java.util.Locale.ROOT, "%.1f", summary.averageQuality()));
         }
     }
 
@@ -186,15 +280,15 @@ public final class CreateDisplayLinkCompat {
 
             if (hookah.getBlockState().hasProperty(BlockStateProperties.LIT)
                     && hookah.getBlockState().getValue(BlockStateProperties.LIT)) {
-                return hookah.isUsingDirtyWater()
-                        ? Component.literal("Smoking (Dirty Water)")
-                        : Component.literal("Smoking");
+                return Component.translatable(hookah.isUsingDirtyWater()
+                        ? "tobacconistmod.hookah.status.smoking_dirty_water"
+                        : "tobacconistmod.hookah.status.smoking");
             }
-            if (hookah.isUsingDirtyWater()) return Component.literal("Dirty Water");
-            if (hookah.getItemHandler().getStackInSlot(1).isEmpty()) return Component.literal("Needs Shisha");
-            if (hookah.getItemHandler().getStackInSlot(2).isEmpty()) return Component.literal("Needs Water");
-            if (hookah.getItemHandler().getStackInSlot(0).isEmpty()) return Component.literal("Needs Fuel");
-            return Component.literal("Ready");
+            if (hookah.isUsingDirtyWater()) return Component.translatable("tobacconistmod.hookah.status.dirty_water");
+            if (hookah.getItemHandler().getStackInSlot(1).isEmpty()) return Component.translatable("tobacconistmod.hookah.status.needs_shisha");
+            if (hookah.getItemHandler().getStackInSlot(2).isEmpty()) return Component.translatable("tobacconistmod.hookah.status.needs_water");
+            if (hookah.getItemHandler().getStackInSlot(0).isEmpty()) return Component.translatable("tobacconistmod.hookah.status.needs_fuel");
+            return Component.translatable("tobacconistmod.ui.ready");
         }
     }
 

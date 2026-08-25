@@ -94,13 +94,9 @@ public class TobacconistCommands {
     }
 
     private static int showGiveHelp(CommandSourceStack source) {
-        source.sendSuccess(() -> Component.literal(TobaccoTestItemFactory.helpText()), false);
-        source.sendSuccess(() -> Component.literal(
-                "Example: /tobacconist give loose variety=virginia quality=90 cure=flue cut=shag flavor=berry fermented=true age=365"
-        ), false);
-        source.sendSuccess(() -> Component.literal(
-                "Blend example: /tobacconist give blend components=virginia:95:flue:none,burley:90:air:berry,shade:88:sun:none cut=shag"
-        ), false);
+        source.sendSuccess(() -> Component.translatable("tobacconistmod.command.give_help"), false);
+        source.sendSuccess(() -> Component.translatable("tobacconistmod.command.give_example"), false);
+        source.sendSuccess(() -> Component.translatable("tobacconistmod.command.blend_example"), false);
         return 1;
     }
 
@@ -111,7 +107,7 @@ public class TobacconistCommands {
         try {
             stack = TobaccoTestItemFactory.create(type, options);
         } catch (IllegalArgumentException ex) {
-            source.sendFailure(Component.literal(ex.getMessage()));
+            source.sendFailure(Component.translatable("tobacconistmod.command.invalid_test_item"));
             return 0;
         }
 
@@ -120,9 +116,7 @@ public class TobacconistCommands {
             player.drop(given, false);
         }
 
-        source.sendSuccess(() -> Component.literal(
-                "Gave " + stack.getCount() + "x " + stack.getHoverName().getString()
-        ), false);
+        source.sendSuccess(() -> Component.translatable("tobacconistmod.command.gave_item", stack.getCount(), stack.getHoverName()), false);
         return stack.getCount();
     }
 
@@ -131,7 +125,7 @@ public class TobacconistCommands {
 
         HitResult hit = player.pick(5.0D, 0.0F, false);
         if (!(hit instanceof BlockHitResult blockHit)) {
-            source.sendFailure(Component.literal("No block in sight."));
+            source.sendFailure(Component.translatable("tobacconistmod.command.no_block"));
             return 0;
         }
 
@@ -157,11 +151,11 @@ public class TobacconistCommands {
         if (state.getBlock() instanceof HangingTobaccoBlock) {
             HangingTobaccoBlockEntity hanging = HangingTobaccoBlock.getBundleEntity(level, state, pos);
             if (hanging != null) {
-                source.sendSuccess(() -> Component.literal("Hanging Tobacco: " + hanging.getLeafCount() + "/16 Leaves"), false);
-                source.sendSuccess(() -> Component.literal("Status: " + hanging.getStatusText()), false);
-                source.sendSuccess(() -> Component.literal("Progress: " + hanging.getDryProgressPercent() + "%"), false);
-                source.sendSuccess(() -> Component.literal("Method: " + hanging.getCurrentCureMethod()), false);
-                source.sendSuccess(() -> Component.literal("Estimated ticks remaining: " + hanging.getEstimatedTicksRemaining()), false);
+                source.sendSuccess(() -> Component.translatable("tobacconistmod.command.hanging_leaves", hanging.getLeafCount(), 16), false);
+                source.sendSuccess(() -> Component.translatable("tobacconistmod.command.status", hanging.getStatusComponent()), false);
+                source.sendSuccess(() -> Component.translatable("tobacconistmod.command.progress", hanging.getDryProgressPercent()), false);
+                source.sendSuccess(() -> Component.translatable("tobacconistmod.command.method", hanging.getCurrentCureMethodComponent()), false);
+                source.sendSuccess(() -> Component.translatable("tobacconistmod.command.estimated_ticks", hanging.getEstimatedTicksRemaining()), false);
                 return 1;
             }
         }
@@ -173,7 +167,7 @@ public class TobacconistCommands {
             return 1;
         }
 
-        source.sendFailure(Component.literal("Not a tobacconist block."));
+        source.sendFailure(Component.translatable("tobacconistmod.command.not_tobacconist_block"));
         return 0;
     }
 
@@ -182,12 +176,12 @@ public class TobacconistCommands {
         TobaccoBarrelBlockEntity barrel = getLookedAtBarrel(player);
 
         if (barrel == null) {
-            source.sendFailure(Component.literal("No tobacco barrel in sight."));
+            source.sendFailure(Component.translatable("tobacconistmod.command.no_barrel"));
             return 0;
         }
 
         barrel.forceFinishFermentation();
-        source.sendSuccess(() -> Component.literal("Forced barrel fermentation."), false);
+        source.sendSuccess(() -> Component.translatable("tobacconistmod.command.barrel_fermented"), false);
         return 1;
     }
 
@@ -196,12 +190,12 @@ public class TobacconistCommands {
         TobaccoBarrelBlockEntity barrel = getLookedAtBarrel(player);
 
         if (barrel == null) {
-            source.sendFailure(Component.literal("No tobacco barrel in sight."));
+            source.sendFailure(Component.translatable("tobacconistmod.command.no_barrel"));
             return 0;
         }
 
         barrel.addAgedDays(days);
-        source.sendSuccess(() -> Component.literal("Added " + days + " aging days to barrel."), false);
+        source.sendSuccess(() -> Component.translatable("tobacconistmod.command.barrel_added_age", days), false);
         return 1;
     }
 
@@ -210,12 +204,12 @@ public class TobacconistCommands {
         TobaccoBarrelBlockEntity barrel = getLookedAtBarrel(player);
 
         if (barrel == null) {
-            source.sendFailure(Component.literal("No tobacco barrel in sight."));
+            source.sendFailure(Component.translatable("tobacconistmod.command.no_barrel"));
             return 0;
         }
 
         barrel.forceRuin();
-        source.sendSuccess(() -> Component.literal("Ruined barrel contents."), false);
+        source.sendSuccess(() -> Component.translatable("tobacconistmod.command.barrel_ruined"), false);
         return 1;
     }
 
@@ -225,34 +219,34 @@ public class TobacconistCommands {
 
         if (rack != null) {
             if (!rack.hasLeaves()) {
-                source.sendFailure(Component.literal("That drying rack is empty."));
+                source.sendFailure(Component.translatable("tobacconistmod.command.rack_empty"));
                 return 0;
             }
             if (rack.isFinished()) {
-                source.sendFailure(Component.literal("That drying rack is already finished."));
+                source.sendFailure(Component.translatable("tobacconistmod.command.rack_finished"));
                 return 0;
             }
             rack.debugFinishNow();
-            source.sendSuccess(() -> Component.literal("Forced rack curing to finish."), false);
+            source.sendSuccess(() -> Component.translatable("tobacconistmod.command.rack_forced_finish"), false);
             return 1;
         }
 
         HangingTobaccoBlockEntity hanging = getLookedAtHanging(player);
         if (hanging != null) {
             if (!hanging.hasLeaves()) {
-                source.sendFailure(Component.literal("That hanging tobacco bunch is empty."));
+                source.sendFailure(Component.translatable("tobacconistmod.command.hanging_empty"));
                 return 0;
             }
             if (hanging.isFinished()) {
-                source.sendFailure(Component.literal("That hanging tobacco bunch is already finished."));
+                source.sendFailure(Component.translatable("tobacconistmod.command.hanging_finished"));
                 return 0;
             }
             hanging.debugFinishNow();
-            source.sendSuccess(() -> Component.literal("Forced hanging tobacco curing to finish."), false);
+            source.sendSuccess(() -> Component.translatable("tobacconistmod.command.hanging_forced_finish"), false);
             return 1;
         }
 
-        source.sendFailure(Component.literal("No tobacco drying rack or hanging tobacco bunch in sight."));
+        source.sendFailure(Component.translatable("tobacconistmod.command.no_curing_block"));
         return 0;
     }
 
@@ -262,18 +256,18 @@ public class TobacconistCommands {
 
         if (rack != null) {
             if (!rack.hasLeaves()) {
-                source.sendFailure(Component.literal("That drying rack is empty."));
+                source.sendFailure(Component.translatable("tobacconistmod.command.rack_empty"));
                 return 0;
             }
             if (rack.isFinished()) {
-                source.sendFailure(Component.literal("That drying rack is already finished."));
+                source.sendFailure(Component.translatable("tobacconistmod.command.rack_finished"));
                 return 0;
             }
             int before = rack.getDryProgressPercent();
             rack.debugAddTime(ticks);
             int after = rack.getDryProgressPercent();
-            source.sendSuccess(() -> Component.literal(
-                    "Added " + ticks + " ticks to drying rack (" + before + "% -> " + after + "%)."
+            source.sendSuccess(() -> Component.translatable(
+                    "tobacconistmod.command.rack_added_ticks", ticks, before, after
             ), false);
             return 1;
         }
@@ -281,23 +275,23 @@ public class TobacconistCommands {
         HangingTobaccoBlockEntity hanging = getLookedAtHanging(player);
         if (hanging != null) {
             if (!hanging.hasLeaves()) {
-                source.sendFailure(Component.literal("That hanging tobacco bunch is empty."));
+                source.sendFailure(Component.translatable("tobacconistmod.command.hanging_empty"));
                 return 0;
             }
             if (hanging.isFinished()) {
-                source.sendFailure(Component.literal("That hanging tobacco bunch is already finished."));
+                source.sendFailure(Component.translatable("tobacconistmod.command.hanging_finished"));
                 return 0;
             }
             int before = hanging.getDryProgressPercent();
             hanging.debugAddTime(ticks);
             int after = hanging.getDryProgressPercent();
-            source.sendSuccess(() -> Component.literal(
-                    "Added " + ticks + " ticks to hanging tobacco (" + before + "% -> " + after + "%)."
+            source.sendSuccess(() -> Component.translatable(
+                    "tobacconistmod.command.hanging_added_ticks", ticks, before, after
             ), false);
             return 1;
         }
 
-        source.sendFailure(Component.literal("No tobacco drying rack or hanging tobacco bunch in sight."));
+        source.sendFailure(Component.translatable("tobacconistmod.command.no_curing_block"));
         return 0;
     }
 
@@ -306,20 +300,20 @@ public class TobacconistCommands {
         TobaccoDryingRackBlockEntity rack = getLookedAtRack(player);
 
         if (rack != null) {
-            source.sendSuccess(() -> Component.literal("Rack: " + rack.getRackStatusText()), false);
-            source.sendSuccess(() -> Component.literal("Progress: " + rack.getDryProgressPercent() + "%"), false);
+            source.sendSuccess(() -> Component.translatable("tobacconistmod.command.rack_status", rack.getRackStatusComponent()), false);
+            source.sendSuccess(() -> Component.translatable("tobacconistmod.command.progress", rack.getDryProgressPercent()), false);
             return 1;
         }
 
         HangingTobaccoBlockEntity hanging = getLookedAtHanging(player);
         if (hanging != null) {
-            source.sendSuccess(() -> Component.literal("Hanging tobacco: " + hanging.getStatusText()), false);
-            source.sendSuccess(() -> Component.literal("Leaves: " + hanging.getLeafCount() + "/16"), false);
-            source.sendSuccess(() -> Component.literal("Progress: " + hanging.getDryProgressPercent() + "%"), false);
+            source.sendSuccess(() -> Component.translatable("tobacconistmod.command.hanging_status", hanging.getStatusComponent()), false);
+            source.sendSuccess(() -> Component.translatable("tobacconistmod.command.leaves", hanging.getLeafCount(), 16), false);
+            source.sendSuccess(() -> Component.translatable("tobacconistmod.command.progress", hanging.getDryProgressPercent()), false);
             return 1;
         }
 
-        source.sendFailure(Component.literal("No tobacco drying rack or hanging tobacco bunch in sight."));
+        source.sendFailure(Component.translatable("tobacconistmod.command.no_curing_block"));
         return 0;
     }
 
@@ -327,15 +321,15 @@ public class TobacconistCommands {
         ServerPlayer player = source.getPlayerOrException();
         HangingTobaccoBlockEntity hanging = getLookedAtHanging(player);
         if (hanging == null) {
-            source.sendFailure(Component.literal("No hanging tobacco bunch in sight."));
+            source.sendFailure(Component.translatable("tobacconistmod.command.no_hanging"));
             return 0;
         }
         if (hanging.isFinished()) {
-            source.sendFailure(Component.literal("That hanging tobacco bunch is already finished."));
+            source.sendFailure(Component.translatable("tobacconistmod.command.hanging_finished"));
             return 0;
         }
         hanging.debugFinishNow();
-        source.sendSuccess(() -> Component.literal("Forced hanging tobacco curing to finish."), false);
+        source.sendSuccess(() -> Component.translatable("tobacconistmod.command.hanging_forced_finish"), false);
         return 1;
     }
 
@@ -343,18 +337,18 @@ public class TobacconistCommands {
         ServerPlayer player = source.getPlayerOrException();
         HangingTobaccoBlockEntity hanging = getLookedAtHanging(player);
         if (hanging == null) {
-            source.sendFailure(Component.literal("No hanging tobacco bunch in sight."));
+            source.sendFailure(Component.translatable("tobacconistmod.command.no_hanging"));
             return 0;
         }
         if (hanging.isFinished()) {
-            source.sendFailure(Component.literal("That hanging tobacco bunch is already finished."));
+            source.sendFailure(Component.translatable("tobacconistmod.command.hanging_finished"));
             return 0;
         }
         int before = hanging.getDryProgressPercent();
         hanging.debugAddTime(ticks);
         int after = hanging.getDryProgressPercent();
-        source.sendSuccess(() -> Component.literal(
-                "Added " + ticks + " ticks to hanging tobacco (" + before + "% -> " + after + "%)."
+        source.sendSuccess(() -> Component.translatable(
+                "tobacconistmod.command.hanging_added_ticks", ticks, before, after
         ), false);
         return 1;
     }
@@ -363,11 +357,11 @@ public class TobacconistCommands {
         ServerPlayer player = source.getPlayerOrException();
         HangingTobaccoBlockEntity hanging = getLookedAtHanging(player);
         if (hanging == null) {
-            source.sendFailure(Component.literal("No hanging tobacco bunch in sight."));
+            source.sendFailure(Component.translatable("tobacconistmod.command.no_hanging"));
             return 0;
         }
-        source.sendSuccess(() -> Component.literal("Hanging tobacco: " + hanging.getStatusText()), false);
-        source.sendSuccess(() -> Component.literal("Progress: " + hanging.getDryProgressPercent() + "%"), false);
+        source.sendSuccess(() -> Component.translatable("tobacconistmod.command.hanging_status", hanging.getStatusComponent()), false);
+        source.sendSuccess(() -> Component.translatable("tobacconistmod.command.progress", hanging.getDryProgressPercent()), false);
         return 1;
     }
 

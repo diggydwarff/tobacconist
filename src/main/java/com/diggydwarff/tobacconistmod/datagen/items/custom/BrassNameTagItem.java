@@ -23,9 +23,9 @@ public class BrassNameTagItem extends Item {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         String name = getStampName(stack);
         if (name.isEmpty()) {
-            tooltip.add(Component.literal("Rename in an anvil").withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable("tobacconistmod.tooltip.rename_in_anvil").withStyle(ChatFormatting.GRAY));
         } else {
-            tooltip.add(Component.literal("Reusable Deployer label: " + name).withStyle(ChatFormatting.GOLD));
+            tooltip.add(Component.translatable("tobacconistmod.tooltip.reusable_deployer_label", name).withStyle(ChatFormatting.GOLD));
         }
     }
 }

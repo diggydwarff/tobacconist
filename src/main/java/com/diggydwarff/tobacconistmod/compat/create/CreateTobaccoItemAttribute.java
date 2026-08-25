@@ -9,6 +9,7 @@ import com.diggydwarff.tobacconistmod.util.TobaccoBoxHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoProductQualityHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoTooltipHelper;
+import com.diggydwarff.tobacconistmod.util.TobaccoText;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -58,27 +59,45 @@ public record CreateTobaccoItemAttribute(String category, String value) implemen
 
     @Override
     public MutableComponent format(boolean inverted) {
-        String text = switch (category) {
-            case "product" -> "Product: " + value;
-            case "growth_quality_score" -> "Growth Quality Score: " + value;
-            case "growth_quality_tier" -> "Growth Quality: " + value;
-            case "growth_quality_threshold" -> "Growth Quality: " + value;
-            case "quality_score" -> "Quality Score: " + value;
-            case "quality_tier" -> "Quality: " + value;
-            case "quality_threshold" -> "Quality: " + value;
-            case "variety" -> "Variety: " + value;
-            case "contains_variety" -> "Contains Variety: " + value;
-            case "cure" -> "Cure: " + value;
-            case "cut" -> "Cut: " + value;
-            case "flavor" -> "Flavor: " + value;
-            case "blend_name" -> "Blend: " + value;
-            case "wrapper_variety" -> "Wrapper Variety: " + value;
-            case "box_contents" -> "Box Contents: " + value;
-            case "box_label" -> "Box Label: " + value;
-            case "state" -> value;
-            default -> value;
+        Component formattedValue = switch (category) {
+            case "product", "box_contents" -> TobaccoText.product(value);
+            case "growth_quality_tier", "quality_tier" -> TobaccoText.qualityTierFromDisplay(value);
+            case "growth_quality_band", "quality_band", "age_days", "age_threshold", "box_fill" -> Component.literal(value);
+            case "growth_quality_threshold", "quality_threshold" -> TobaccoText.qualityThreshold(value);
+            case "variety", "contains_variety", "wrapper_variety" -> TobaccoText.variety(value);
+            case "cure" -> TobaccoText.cure(value);
+            case "cut" -> TobaccoText.cut(value);
+            case "flavor" -> TobaccoText.flavor(value);
+            case "state" -> TobaccoText.state(value);
+            default -> Component.literal(value);
         };
-        return Component.literal(inverted ? "Not " + text : text);
+
+        MutableComponent text = switch (category) {
+            case "product" -> Component.translatable("tobacconistmod.create.attribute.product", formattedValue);
+            case "growth_quality_score" -> Component.translatable("tobacconistmod.create.attribute.growth_quality_score", formattedValue);
+            case "growth_quality_tier", "growth_quality_threshold" -> Component.translatable("tobacconistmod.create.attribute.growth_quality", formattedValue);
+            case "growth_quality_band" -> Component.translatable("tobacconistmod.create.attribute.growth_quality_band", formattedValue);
+            case "quality_score" -> Component.translatable("tobacconistmod.create.attribute.quality_score", formattedValue);
+            case "quality_tier", "quality_threshold" -> Component.translatable("tobacconistmod.create.attribute.quality", formattedValue);
+            case "quality_band" -> Component.translatable("tobacconistmod.create.attribute.quality_band", formattedValue);
+            case "age_days" -> Component.translatable("tobacconistmod.create.attribute.age_days", formattedValue);
+            case "age_threshold" -> Component.translatable("tobacconistmod.create.attribute.aged_at_least", formattedValue);
+            case "variety" -> Component.translatable("tobacconistmod.create.attribute.variety", formattedValue);
+            case "contains_variety" -> Component.translatable("tobacconistmod.create.attribute.contains_variety", formattedValue);
+            case "cure" -> Component.translatable("tobacconistmod.create.attribute.cure", formattedValue);
+            case "cut" -> Component.translatable("tobacconistmod.create.attribute.cut", formattedValue);
+            case "flavor" -> Component.translatable("tobacconistmod.create.attribute.flavor", formattedValue);
+            case "blend_name" -> Component.translatable("tobacconistmod.create.attribute.blend", formattedValue);
+            case "wrapper_variety" -> Component.translatable("tobacconistmod.create.attribute.wrapper_variety", formattedValue);
+            case "box_contents" -> Component.translatable("tobacconistmod.create.attribute.box_contents", formattedValue);
+            case "box_fill" -> Component.translatable("tobacconistmod.create.attribute.box_fill", formattedValue);
+            case "box_label" -> Component.translatable("tobacconistmod.create.attribute.box_label", formattedValue);
+            case "state" -> formattedValue.copy();
+            default -> formattedValue.copy();
+        };
+        return inverted
+                ? Component.translatable("tobacconistmod.create.attribute.not", text)
+                : text;
     }
 
     @Override
@@ -98,6 +117,13 @@ public record CreateTobaccoItemAttribute(String category, String value) implemen
             add(attributes, "product", "Tobacco Box");
 
             ItemStack stored = TobaccoBoxHelper.getStoredItem(stack);
+            int storedCount = TobaccoBoxHelper.getStoredCount(stack);
+            if (stored.isEmpty() || storedCount <= 0) {
+                add(attributes, "box_fill", "Empty");
+            } else {
+                int capacity = TobaccoBoxHelper.getCapacity(stored);
+                add(attributes, "box_fill", storedCount >= capacity ? "Full" : "Partially Filled");
+            }
             add(attributes, "box_contents", getBoxContents(stored));
 
             String label = TobaccoBoxHelper.getLabel(stack);
@@ -105,10 +131,7 @@ public record CreateTobaccoItemAttribute(String category, String value) implemen
                 add(attributes, "box_label", label);
             }
 
-            // Boxes expose the useful tobacco metadata of their contents so Create can sort
-            // sealed stock by variety, quality, cure, flavor, blend, etc. Product and box-only
-            // attributes remain tied to the box itself rather than pretending the box is also
-            // a cigarette/cigar/etc.
+            // Expose stored tobacco metadata for Attribute Filter sorting while retaining box-only attributes.
             if (!stored.isEmpty()) {
                 collectTobaccoMetadata(stored, attributes, false);
             }
@@ -179,6 +202,7 @@ public record CreateTobaccoItemAttribute(String category, String value) implemen
         if (raw) {
             int quality = TobaccoCuringHelper.getQuality(stack);
             add(attributes, "growth_quality_score", Integer.toString(quality));
+            add(attributes, "growth_quality_band", qualityBand(quality, 70));
             add(attributes, "growth_quality_tier", TobaccoCuringHelper.getRawLeafTier(quality));
             if (quality >= 31) add(attributes, "growth_quality_threshold", "Good or Better");
             if (quality >= 46) add(attributes, "growth_quality_threshold", "Excellent or Better");
@@ -222,14 +246,26 @@ public record CreateTobaccoItemAttribute(String category, String value) implemen
         }
 
         addProcessStates(directTag, attributes);
+        if (tobaccoTag != directTag) {
+            addProcessStates(tobaccoTag, attributes);
+        }
     }
 
     private static void addTobaccoQuality(List<ItemAttribute> attributes, int quality) {
         add(attributes, "quality_score", Integer.toString(quality));
+        add(attributes, "quality_band", qualityBand(quality, 120));
         add(attributes, "quality_tier", TobaccoCuringHelper.getQualityTier(quality));
         if (quality >= 61) add(attributes, "quality_threshold", "Good or Better");
         if (quality >= 81) add(attributes, "quality_threshold", "Excellent or Better");
         if (quality >= 90) add(attributes, "quality_threshold", "Perfect or Better");
+    }
+
+    private static String qualityBand(int quality, int maximum) {
+        int clamped = Math.max(0, Math.min(maximum, quality));
+        if (clamped == 0) return "0";
+        int lower = ((clamped - 1) / 5) * 5 + 1;
+        int upper = Math.min(maximum, lower + 4);
+        return lower == upper ? Integer.toString(lower) : lower + "–" + upper;
     }
 
     private static void addProductQuality(List<ItemAttribute> attributes, int quality10) {
@@ -327,7 +363,17 @@ public record CreateTobaccoItemAttribute(String category, String value) implemen
     private static void addProcessStates(CompoundTag tag, List<ItemAttribute> attributes) {
         if (tag == null) return;
         if (tag.getBoolean("Fermented")) add(attributes, "state", "Fermented");
-        if (tag.getInt("AgedDays") > 0) add(attributes, "state", "Aged");
+
+        int agedDays = Math.max(0, tag.getInt("AgedDays"));
+        if (agedDays > 0) {
+            add(attributes, "state", "Aged");
+            add(attributes, "age_days", Integer.toString(agedDays));
+            if (agedDays >= 7) add(attributes, "age_threshold", "7");
+            if (agedDays >= 30) add(attributes, "age_threshold", "30");
+            if (agedDays >= 90) add(attributes, "age_threshold", "90");
+            if (agedDays >= 365) add(attributes, "age_threshold", "365");
+        }
+
         if (tag.getBoolean("Ruined")) add(attributes, "state", "Ruined");
     }
 

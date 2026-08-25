@@ -114,7 +114,7 @@ public class TobaccoBarrelBlock extends BaseEntityBlock {
                     held.shrink(inserted);
                 }
             } else {
-                player.displayClientMessage(Component.literal("Cannot insert that tobacco batch."), true);
+                player.displayClientMessage(Component.translatable("tobacconistmod.message.barrel.invalid_batch"), true);
             }
         }
 

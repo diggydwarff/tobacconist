@@ -16,7 +16,7 @@ public final class FlavoringEssenceItem extends Item {
     @Override
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, context, tooltip, flag);
-        tooltip.add(Component.literal("Concentrated extract for casing tobacco or preparing shisha base")
+        tooltip.add(Component.translatable("tobacconistmod.tooltip.flavoring_essence")
                 .withStyle(net.minecraft.ChatFormatting.DARK_GRAY));
     }
 }

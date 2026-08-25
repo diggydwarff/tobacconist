@@ -38,7 +38,7 @@ public class HookahUseRecipeCategory implements IRecipeCategory<HookahUseJeiReci
 
     @Override
     public Component getTitle() {
-        return Component.literal("Hookah Use");
+        return Component.translatable("tobacconistmod.jei.hookah_use");
     }
 
     @Override

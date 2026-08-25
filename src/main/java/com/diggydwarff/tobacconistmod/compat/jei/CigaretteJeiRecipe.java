@@ -39,7 +39,7 @@ public record CigaretteJeiRecipe(
         TobaccoCuringHelper.setCutType(tobacco, TobaccoCuringHelper.CUT_RIBBON);
 
         ItemStack paper = new ItemStack(ModItems.ROLLING_PAPER.get());
-        ItemStack output = new ItemStack(ModItems.CIGARETTE.get());
+        ItemStack output = com.diggydwarff.tobacconistmod.util.TobaccoProductCraftingHelper.makeCigarette(tobacco);
 
         recipes.add(new CigaretteJeiRecipe(tobacco, paper, output));
     }

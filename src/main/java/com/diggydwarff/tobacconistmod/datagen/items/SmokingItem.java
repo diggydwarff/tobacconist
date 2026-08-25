@@ -5,6 +5,7 @@ import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
 import com.diggydwarff.tobacconistmod.effect.ModEffects;
 import com.diggydwarff.tobacconistmod.util.SmokeParticleHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
+import com.diggydwarff.tobacconistmod.util.TobaccoProductQualityHelper;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -157,7 +158,7 @@ public abstract class SmokingItem extends Item {
         if (!TobacconistConfig.isQualitySystemEnabled()) return;
         if (tobaccoStack == null || tobaccoStack.isEmpty()) return;
 
-        int quality = TobaccoCuringHelper.getQuality(tobaccoStack);
+        int quality = TobaccoProductQualityHelper.getEffectiveSmokingQuality(tobaccoStack);
         int agedDays = TobaccoBarrelBlockEntity.getAgedDays(tobaccoStack);
 
         int duration = 0;

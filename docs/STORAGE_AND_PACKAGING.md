@@ -13,7 +13,13 @@ A Tobacco Box stores one exact batch of a supported finished/loose product:
 - Shisha: 16
 - Loose tobacco, including Blended Tobacco: 16
 
-The first inserted product defines the accepted item/components. Boxes preserve product metadata. Named Labels can brand a box; extracted products inherit the box label.
+The first inserted product defines the accepted item/components. Boxes preserve product metadata. Named Labels can brand a box; extracted products inherit the box label. Finished Cigars, Cigarettes, and Shisha display the same stored `ProductQuality` used by the item itself rather than falling back to the filler tobacco's raw quality.
+
+### Create automatic packing
+
+A Deployer can insert matching Cigars, Cigarettes, Shisha, or loose tobacco into a Tobacco Box while preserving exact metadata. For non-stackable Cigars and Cigarettes, keep the box stationary on a **Depot beneath the Deployer** so repeated Deployer cycles fill the same box.
+
+Create Attribute Filters expose `Box fill: Empty`, `Box fill: Partially Filled`, and `Box fill: Full`. A typical line uses a filtered Funnel to place empty boxes on the Depot, the Deployer to fill them, and another filtered Funnel to remove only full boxes. Capacities remain 8 Cigars, 12 Cigarettes, 16 Shisha, or 16 loose tobacco.
 
 ## Tobacco Crates
 

@@ -6,6 +6,7 @@ import com.diggydwarff.tobacconistmod.block.entity.TobaccoDryingRackBlockEntity;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.BottledMolassesFlavors;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.kinetics.deployer.DeployerBlockEntity;
 import com.simibubi.create.content.kinetics.mixer.MechanicalMixerBlockEntity;
@@ -23,6 +24,7 @@ import net.createmod.ponder.api.scene.SceneBuilder;
 import net.createmod.ponder.api.scene.SceneBuildingUtil;
 import net.createmod.ponder.api.scene.Selection;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
@@ -31,12 +33,12 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
-/** Six animated Ponder scenes covering Tobacconist's Create production chain. */
+/** Animated Ponder scenes covering Tobacconist Create workflows. */
 public final class TobacconistPonderStoryboards {
     private TobacconistPonderStoryboards() {}
 
     public static void curing(SceneBuilder builder, SceneBuildingUtil util) {
-        CreateSceneBuilder scene = begin(builder, "tobacconist_curing", "Curing Tobacco");
+        CreateSceneBuilder scene = begin(builder, "tobacconist_curing");
 
         BlockPos rack = util.grid().at(4, 1, 3);
         BlockPos fan = util.grid().at(1, 1, 3);
@@ -57,7 +59,7 @@ public final class TobacconistPonderStoryboards {
                 .attachKeyFrame()
                 .placeNearTarget()
                 .pointAt(util.vector().topOf(rack))
-                .text("Drying Racks preserve the leaf variety and quality while one of four curing environments does the work");
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_curing.text_1").getString());
         scene.idle(85);
 
         // Air curing: Create airflow accelerates the ordinary covered/open-air cure.
@@ -76,7 +78,7 @@ public final class TobacconistPonderStoryboards {
                 .attachKeyFrame()
                 .placeNearTarget()
                 .pointAt(util.vector().centerOf(fan))
-                .text("Air-curing works naturally; Create Encased Fan airflow can accelerate it without changing the cure type");
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_curing.text_2").getString());
         scene.idle(90);
 
         // Sun curing: clear the fan away and show the resulting cure on the same rack.
@@ -90,7 +92,7 @@ public final class TobacconistPonderStoryboards {
                 .attachKeyFrame()
                 .placeNearTarget()
                 .pointAt(util.vector().topOf(rack))
-                .text("Sun-curing uses direct daylight or a glass shelter above the rack and produces Sun-Cured leaves");
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_curing.text_3").getString());
         scene.idle(90);
 
         // Fire curing: a lit campfire directly beneath the rack supplies smoke and heat.
@@ -104,7 +106,7 @@ public final class TobacconistPonderStoryboards {
                 .attachKeyFrame()
                 .placeNearTarget()
                 .pointAt(util.vector().centerOf(belowRack))
-                .text("Fire-curing places the rack directly over a lit Campfire, exposing the tobacco to smoke and heat");
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_curing.text_4").getString());
         scene.idle(95);
 
         // Create can accelerate fire curing by blowing campfire smoke directly across the rack.
@@ -125,7 +127,7 @@ public final class TobacconistPonderStoryboards {
                 .attachKeyFrame()
                 .placeNearTarget()
                 .pointAt(util.vector().centerOf(catalyst))
-                .text("Blowing air through a lit Campfire carries smoke across the rack, accelerating Fire-curing");
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_curing.text_5").getString());
         scene.idle(100);
 
         // Flue curing: remove the smoke source and demonstrate indirect heat from the firebox.
@@ -144,7 +146,7 @@ public final class TobacconistPonderStoryboards {
                 .attachKeyFrame()
                 .placeNearTarget()
                 .pointAt(util.vector().centerOf(utilitySpot))
-                .text("Flue-curing uses a lit Flue Firebox nearby under a roof, providing indirect heat without smoke touching the leaves");
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_curing.text_6").getString());
         scene.idle(105);
 
         // Create blasting airflow from lava provides the same smoke-free cure at a faster rate.
@@ -164,7 +166,7 @@ public final class TobacconistPonderStoryboards {
                 .attachKeyFrame()
                 .placeNearTarget()
                 .pointAt(util.vector().centerOf(catalyst))
-                .text("Blowing air through Lava creates intense smoke-free heat, accelerating Flue-curing");
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_curing.text_7").getString());
         scene.idle(100);
 
         // Finish with the Create automation layer shared by every rack method.
@@ -183,12 +185,12 @@ public final class TobacconistPonderStoryboards {
         scene.overlay().showText(85)
                 .placeNearTarget()
                 .pointAt(util.vector().centerOf(utilitySpot))
-                .text("Mechanical Arms can load raw leaves and only extract them after the selected curing process is complete");
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_curing.text_8").getString());
         scene.idle(95);
     }
 
     public static void processing(SceneBuilder builder, SceneBuildingUtil util) {
-        CreateSceneBuilder scene = begin(builder, "tobacconist_processing", "Cutting and Pressing Tobacco");
+        CreateSceneBuilder scene = begin(builder, "tobacconist_processing");
 
         BlockPos depotA = util.grid().at(2, 1, 3);
         BlockPos deployer = util.grid().at(2, 3, 3);
@@ -234,7 +236,7 @@ public final class TobacconistPonderStoryboards {
                 .attachKeyFrame()
                 .placeNearTarget()
                 .pointAt(util.vector().topOf(depotA))
-                .text("A Deployer holding a Chaveta cuts cured leaf through Rough, Ribbon and Shag stages");
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_processing.text_1").getString());
         scene.idle(35);
         scene.world().moveDeployer(deployer, 1, 25);
         scene.idle(26);
@@ -255,7 +257,7 @@ public final class TobacconistPonderStoryboards {
                 .attachKeyFrame()
                 .placeNearTarget()
                 .pointAt(util.vector().centerOf(press))
-                .text("The Mechanical Press converts Rough-cut tobacco into Flake while preserving tobacco metadata");
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_processing.text_2").getString());
         scene.idle(30);
         scene.world().modifyBlockEntity(press, MechanicalPressBlockEntity.class,
                 pte -> pte.getPressingBehaviour().start(Mode.BELT));
@@ -269,8 +271,77 @@ public final class TobacconistPonderStoryboards {
         scene.idle(65);
     }
 
+    public static void homogenizing(SceneBuilder builder, SceneBuildingUtil util) {
+        CreateSceneBuilder scene = begin(builder, "tobacconist_homogenizing");
+
+        BlockPos basin = util.grid().at(2, 1, 3);
+        BlockPos mixer = util.grid().at(2, 3, 3);
+        BlockPos idlerCog = util.grid().at(2, 3, 4);
+        BlockPos drive = util.grid().at(2, 3, 5);
+        BlockPos redstone = util.grid().at(3, 3, 3);
+
+        scene.world().setBlock(basin, AllBlocks.BASIN.get().defaultBlockState(), false);
+        scene.world().setBlock(mixer, AllBlocks.MECHANICAL_MIXER.get().defaultBlockState(), false);
+        scene.world().setBlock(idlerCog, AllBlocks.COGWHEEL.get().defaultBlockState(), false);
+        scene.world().setBlock(drive, AllBlocks.COGWHEEL.get().defaultBlockState(), false);
+
+        Selection mixerAssembly = util.select().position(basin).add(util.select().position(mixer))
+                .add(util.select().position(idlerCog)).add(util.select().position(drive));
+        scene.world().showSection(mixerAssembly, Direction.DOWN);
+        scene.world().setKineticSpeed(util.select().position(mixer).add(util.select().position(idlerCog))
+                .add(util.select().position(drive)), 32);
+        scene.effects().rotationDirectionIndicator(drive);
+
+        ItemStack low = rawLeafWithQuality(49, 32);
+        ItemStack high = rawLeafWithQuality(59, 32);
+        scene.world().createItemOnBeltLike(basin, Direction.UP, low);
+        scene.world().createItemOnBeltLike(basin, Direction.UP, high);
+        scene.overlay().showText(100)
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().topOf(basin))
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_homogenizing.text_1").getString());
+        scene.idle(110);
+
+        scene.overlay().showText(100)
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().centerOf(mixer))
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_homogenizing.text_2").getString());
+        scene.world().modifyBlockEntity(mixer, MechanicalMixerBlockEntity.class, pte -> pte.startProcessingBasin());
+        scene.idle(65);
+        scene.world().removeItemsFromBelt(basin);
+        ItemStack standardized = rawLeafWithQuality(54, 64);
+        visualizeBasinResult(scene, util, basin, standardized);
+        scene.overlay().showControls(util.vector().topOf(basin), Pointing.DOWN, 50).withItem(standardized);
+        scene.effects().indicateSuccess(basin);
+        scene.idle(70);
+
+        clearBasinResult(scene, util, basin);
+        scene.world().setBlock(redstone, Blocks.REDSTONE_BLOCK.defaultBlockState(), false);
+        scene.world().showSection(util.select().position(redstone), Direction.DOWN);
+        scene.overlay().showText(100)
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().centerOf(redstone))
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_homogenizing.text_3").getString());
+        scene.idle(110);
+
+        scene.overlay().showText(100)
+                .placeNearTarget()
+                .pointAt(util.vector().topOf(basin))
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_homogenizing.text_4").getString());
+        scene.idle(110);
+    }
+
+    private static ItemStack rawLeafWithQuality(int quality, int count) {
+        ItemStack stack = new ItemStack(ModItems.VIRGINIA_TOBACCO_LEAF.get(), count);
+        LegacyItemTags.getOrCreateTag(stack).putInt(TobaccoCuringHelper.TAG_GROWTH_QUALITY, quality);
+        return stack;
+    }
+
     public static void blending(SceneBuilder builder, SceneBuildingUtil util) {
-        CreateSceneBuilder scene = begin(builder, "tobacconist_blending", "Blending and Fermenting Tobacco");
+        CreateSceneBuilder scene = begin(builder, "tobacconist_blending");
 
         BlockPos basin = util.grid().at(2, 1, 3);
         BlockPos mixer = util.grid().at(2, 3, 3);
@@ -305,7 +376,7 @@ public final class TobacconistPonderStoryboards {
                 .attachKeyFrame()
                 .placeNearTarget()
                 .pointAt(util.vector().topOf(basin))
-                .text("A Mechanical Mixer combines two or three compatible loose tobaccos into metadata-aware blends");
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_blending.text_1").getString());
         scene.idle(35);
         scene.world().modifyBlockEntity(mixer, MechanicalMixerBlockEntity.class, pte -> pte.startProcessingBasin());
         scene.idle(65);
@@ -315,7 +386,7 @@ public final class TobacconistPonderStoryboards {
         scene.overlay().showText(70)
                 .placeNearTarget()
                 .pointAt(util.vector().topOf(basin))
-                .text("Blend components and secret blend identity are carried forward");
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_blending.text_2").getString());
         scene.idle(80);
 
         Selection barrelLine = util.select().position(barrel).add(util.select().position(packager)).add(util.select().position(arm));
@@ -326,12 +397,12 @@ public final class TobacconistPonderStoryboards {
                 .attachKeyFrame()
                 .placeNearTarget()
                 .pointAt(util.vector().topOf(barrel))
-                .text("Mechanical Arms and Packagers can feed compatible batches into Tobacco Barrels without bypassing batch rules");
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_blending.text_3").getString());
         scene.idle(100);
     }
 
     public static void flavoring(SceneBuilder builder, SceneBuildingUtil util) {
-        CreateSceneBuilder scene = begin(builder, "tobacconist_flavoring", "Aqua Vitae, Essences and Shisha");
+        CreateSceneBuilder scene = begin(builder, "tobacconist_flavoring");
 
         BlockPos burner = util.grid().at(2, 1, 3);
         BlockPos basin = util.grid().at(2, 2, 3);
@@ -364,7 +435,7 @@ public final class TobacconistPonderStoryboards {
                 .attachKeyFrame()
                 .placeNearTarget()
                 .pointAt(util.vector().topOf(basin))
-                .text("With heat, the Mechanical Mixer combines water, sugar and wheat into Aqua Vitae");
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_flavoring.text_1").getString());
         scene.idle(30);
         scene.world().modifyBlockEntity(mixer, MechanicalMixerBlockEntity.class, pte -> pte.startProcessingBasin());
         scene.idle(65);
@@ -383,7 +454,7 @@ public final class TobacconistPonderStoryboards {
         scene.overlay().showText(85)
                 .placeNearTarget()
                 .pointAt(util.vector().topOf(basin))
-                .text("Aqua Vitae plus a flavor ingredient produces the corresponding Flavoring Essence");
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_flavoring.text_2").getString());
         scene.idle(25);
         scene.world().modifyBlockEntity(mixer, MechanicalMixerBlockEntity.class, pte -> pte.startProcessingBasin());
         scene.idle(55);
@@ -404,7 +475,7 @@ public final class TobacconistPonderStoryboards {
                 .attachKeyFrame()
                 .placeNearTarget()
                 .pointAt(util.vector().centerOf(spout))
-                .text("A Spout can apply a full 1000 mB Essence to loose tobacco for a light aromatic casing");
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_flavoring.text_3").getString());
         scene.idle(70);
         scene.effects().indicateSuccess(depot);
         scene.idle(35);
@@ -419,7 +490,7 @@ public final class TobacconistPonderStoryboards {
                 .attachKeyFrame()
                 .placeNearTarget()
                 .pointAt(util.vector().topOf(basin))
-                .text("Flavored Molasses mixed heavily with suitable loose tobacco produces Shisha");
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_flavoring.text_4").getString());
         scene.idle(30);
         scene.world().modifyBlockEntity(mixer, MechanicalMixerBlockEntity.class, pte -> pte.startProcessingBasin());
         scene.idle(65);
@@ -433,7 +504,7 @@ public final class TobacconistPonderStoryboards {
     }
 
     public static void assembly(SceneBuilder builder, SceneBuildingUtil util) {
-        CreateSceneBuilder scene = begin(builder, "tobacconist_assembly", "Automating Cigarettes and Cigars");
+        CreateSceneBuilder scene = begin(builder, "tobacconist_assembly");
 
         BlockPos depot = util.grid().at(2, 1, 3);
         BlockPos deployer = util.grid().at(2, 3, 3);
@@ -475,7 +546,7 @@ public final class TobacconistPonderStoryboards {
                 .attachKeyFrame()
                 .placeNearTarget()
                 .pointAt(util.vector().topOf(depot))
-                .text("Deployers assemble tobacco with the required paper or wrapper into metadata-carrying intermediates");
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_assembly.text_1").getString());
         scene.idle(35);
         scene.world().moveDeployer(deployer, 1, 25);
         scene.idle(26);
@@ -496,7 +567,7 @@ public final class TobacconistPonderStoryboards {
                 .attachKeyFrame()
                 .placeNearTarget()
                 .pointAt(util.vector().centerOf(press))
-                .text("A Mechanical Press finishes the Cigarette or Cigar without discarding quality, flavor or blend metadata");
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_assembly.text_2").getString());
         scene.idle(30);
         scene.world().modifyBlockEntity(press, MechanicalPressBlockEntity.class,
                 pte -> pte.getPressingBehaviour().start(Mode.BELT));
@@ -513,7 +584,7 @@ public final class TobacconistPonderStoryboards {
     }
 
     public static void logistics(SceneBuilder builder, SceneBuildingUtil util) {
-        CreateSceneBuilder scene = begin(builder, "tobacconist_logistics", "Tobacco Factory Logistics");
+        CreateSceneBuilder scene = begin(builder, "tobacconist_logistics");
 
         BlockPos chest = util.grid().at(1, 1, 4);
         BlockPos stockLink = util.grid().at(1, 2, 4);
@@ -539,7 +610,7 @@ public final class TobacconistPonderStoryboards {
                 .attachKeyFrame()
                 .placeNearTarget()
                 .pointAt(util.vector().centerOf(stockLink))
-                .text("Stock Links expose Tobacconist inventories and storage to Create's logistics network");
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_logistics.text_1").getString());
         scene.idle(90);
 
         scene.world().showSection(util.select().position(sourcePackager).add(util.select().position(destinationPackager)), Direction.DOWN);
@@ -553,7 +624,7 @@ public final class TobacconistPonderStoryboards {
                 .attachKeyFrame()
                 .placeNearTarget()
                 .pointAt(util.vector().centerOf(destinationPackager))
-                .text("Packagers can deliver valid inputs directly to Drying Racks, Tobacco Barrels and Flue Fireboxes");
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_logistics.text_2").getString());
         scene.idle(105);
 
         scene.world().showSection(util.select().position(arm).add(util.select().position(outputDepot)), Direction.DOWN);
@@ -567,7 +638,7 @@ public final class TobacconistPonderStoryboards {
                 .attachKeyFrame()
                 .placeNearTarget()
                 .pointAt(util.vector().centerOf(arm))
-                .text("Mechanical Arms can route inputs and completed products while each Tobacconist machine enforces its own rules");
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_logistics.text_3").getString());
         scene.idle(105);
 
         reveal(scene, util, gauge);
@@ -577,7 +648,7 @@ public final class TobacconistPonderStoryboards {
                 .attachKeyFrame()
                 .placeNearTarget()
                 .pointAt(util.vector().centerOf(gauge))
-                .text("Factory Gauges can restock tobacco by quality tier, so different numeric scores in the same tier can satisfy demand");
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_logistics.text_4").getString());
         scene.idle(110);
 
         scene.rotateCameraY(15);
@@ -586,7 +657,7 @@ public final class TobacconistPonderStoryboards {
         scene.overlay().showText(80)
                 .placeNearTarget()
                 .pointAt(util.vector().topOf(chest))
-                .text("Create packaging preserves Tobacconist components, keeping factory logistics metadata-safe");
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_logistics.text_5").getString());
         scene.idle(90);
     }
 
@@ -602,9 +673,9 @@ public final class TobacconistPonderStoryboards {
                 nbt -> nbt.remove("VisualizedItems"));
     }
 
-    private static CreateSceneBuilder begin(SceneBuilder builder, String id, String title) {
+    private static CreateSceneBuilder begin(SceneBuilder builder, String id) {
         CreateSceneBuilder scene = new CreateSceneBuilder(builder);
-        scene.title(id, title);
+        scene.title(id, Component.translatable("tobacconistmod.ponder." + id + ".header").getString());
         scene.configureBasePlate(0, 0, 6);
         scene.scaleSceneView(0.96f);
         scene.setSceneOffsetY(-1);

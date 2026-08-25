@@ -62,11 +62,7 @@ public final class CreateFactoryGaugeTobaccoMatching {
         return total;
     }
 
-    /**
-     * Replaces a representative tier-matched Gauge request with the exact stack variants currently
-     * present on the stock network. This lets Create's normal packager extraction remain strict and
-     * metadata-safe while the Gauge itself works at quality-tier granularity.
-     */
+    /** Resolves a tier request to exact stock variants for component-exact packager extraction. */
     public static PackageOrderWithCrafts resolveRestockOrder(UUID network,
                                                               PackageOrderWithCrafts original,
                                                               @Nullable IdentifiedInventory ignoredInventory) {
@@ -112,7 +108,9 @@ public final class CreateFactoryGaugeTobaccoMatching {
             remaining -= amount;
         }
 
-        return resolved.isEmpty() ? original : PackageOrderWithCrafts.simple(resolved);
+        return remaining == 0 && !resolved.isEmpty()
+                ? PackageOrderWithCrafts.simple(resolved)
+                : original;
     }
 
     private static void mergeExact(List<BigItemStack> candidates, BigItemStack incoming) {

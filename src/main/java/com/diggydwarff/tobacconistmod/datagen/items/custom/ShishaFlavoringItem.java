@@ -22,7 +22,7 @@ public class ShishaFlavoringItem extends Item {
 
         if (stack.isDamageableItem()) {
             int usesLeft = stack.getMaxDamage() - stack.getDamageValue();
-            tooltip.add(Component.literal("Uses Left: " + usesLeft + "/4").withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable("tobacconistmod.tooltip.uses_left", usesLeft, 4).withStyle(ChatFormatting.GRAY));
         }
     }
 

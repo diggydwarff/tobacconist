@@ -200,8 +200,11 @@ public class HangingTobaccoBlock extends BaseEntityBlock {
         if (hanging == null) return InteractionResult.PASS;
 
         if (!level.isClientSide) {
-            player.displayClientMessage(Component.literal(
-                    "Hanging Tobacco: " + hanging.getLeafCount() + "/16 Leaves | " + hanging.getStatusText()
+            player.displayClientMessage(Component.translatable(
+                    "tobacconistmod.message.hanging.inspect",
+                    hanging.getLeafCount(),
+                    16,
+                    hanging.getStatusComponent()
             ), true);
         }
         return InteractionResult.sidedSuccess(level.isClientSide);

@@ -10,6 +10,7 @@ These guides document the Minecraft 1.21.1 NeoForge implementation in this sourc
 - [Smoking, Pipes, and Hookahs](SMOKING_AND_HOOKAHS.md)
 - [Storage and Packaging](STORAGE_AND_PACKAGING.md)
 - [Automation and Create](AUTOMATION_AND_CREATE.md)
+- [Homogenization and Quality Grading](HOMOGENIZATION_AND_GRADING.md)
 - [Quality and Metadata](QUALITY_AND_METADATA.md)
 - [Configuration and Debug Tools](CONFIGURATION_AND_DEBUG.md)
 - [Version history](../changelog.md)

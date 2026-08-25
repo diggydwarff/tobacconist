@@ -6,37 +6,72 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "When $(thing)Create$() is installed, Tobacconist gains an optional industrial path. The ordinary hand-crafted workflows remain valid; Create automates the same stages while preserving tobacco variety, quality, cure, cut, age, fermentation, flavor, blend identity, labels, and other processing data. Hanging tobacco bunches can also receive environmental fan assistance, but they expose no item automation or Display Link source."
+      "text": "When $(thing)Create$() is installed, Tobacconist gains an optional industrial path. Hand-crafted workflows remain valid. Create processing preserves tobacco identity and metadata unless a recipe explicitly changes it."
     },
     {
       "type": "patchouli:text",
       "title": "Harvest & Cure",
-      "text": "Create Mechanical Harvesters can harvest mature two-block tobacco without duplicating upper/lower drops. Encased Fan airflow can accelerate Air Curing and an otherwise-valid Sun Cure at 4× progress; airflow reaching either the lower or upper section of the tall rack counts. Fan-blown Campfire smoke/heat and Lava heat accelerate Fire/Flue progress at 6×."
+      "text": "Mechanical Harvesters can harvest mature two-block tobacco without duplicating upper/lower drops. Encased Fan airflow accelerates Air Curing and an otherwise-valid Sun Cure at 4× progress. Fan-blown Campfire smoke/heat and Lava heat accelerate Fire/Flue progress at 6×."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Bulk Homogenization",
+      "text": "Mechanical Mixers standardize compatible raw or cured leaf batches. A cycle requires at least two quality values, uses a count-weighted average rounded to the nearest whole quality, and locks the chosen inputs when mixing begins. Uniform tobacco waits instead of being remixed."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Homogenizer Control",
+      "text": "No signal uses 64 leaves. Power either the Mixer or Basin; if both are powered, the stronger signal wins. Signals 1–14 select 16/32/48/64/96/128/160/192/256/320/384/448/512/576. Signal 15 finishes the current Basin once. Keep Create's normal Basin Comparator/fullness signal separate from this control line."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Homogenizer Lines",
+      "text": "One Mixer can process an entire stream in repeated physical batches, but those batches may leave at nearby qualities. Use a larger downstream target than the primary target — e.g. 64/128 → 256/576 — so several first-stage grades are actually combined. Pulse 15 for the final remainder."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Safe Basin Logistics",
+      "text": "Homogenizer inputs are protected from generic extraction until processing or a finish flush claims them. Identical tobacco stacks can occupy multiple Basin slots while waiting for another quality. A completely full 576-leaf uniform Basin auto-passes unchanged so a continuous line cannot deadlock."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Grading & Filters",
+      "text": "Create Attribute Filters expose exact quality scores, quality tiers, 5-point Quality Bands such as 46–50 or 51–55, exact aged days, and aging thresholds at 7/30/90/365 days. Use grading to siphon exceptional low/high outliers before bulk homogenization."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Factory Gauges",
+      "text": "Factory Gauge/Frogport tobacco requests remain tier-aware: different numeric scores inside the same Tobacconist quality tier may satisfy the request. Factory Gauges do not accept Create Attribute Filter items. For exact-score or Quality-Band logistics, sort the tobacco first and keep those stocks on separate logistics networks."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Automated Barrels",
+      "text": "Funnels, Chutes, Packagers, and Mechanical Arms cannot extract an actively $(thing)Fermenting$() batch. Aging stays extractable so filtered logistics can release tobacco at 7/30/90/365-day thresholds. Unfiltered aging output can pull immediately."
     },
     {
       "type": "patchouli:text",
       "title": "Cut, Press & Blend",
-      "text": "A Deployer using a Chaveta advances cured tobacco through $(item)Rough → Ribbon → Shag$(). A Mechanical Press turns Rough Cut into Flake and can finish cigarette/cigar assembly. Mechanical Mixers can homogenize compatible leaf quality and blend two or three compatible single-variety loose tobaccos while preserving blend identity."
+      "text": "A Deployer with a Chaveta advances $(item)Rough → Ribbon → Shag$(). The Chaveta is a reusable machine tool and loses no durability in automated cutting. A Press makes Flake from Rough and finishes supported cigarette/cigar assembly. Mixers handle metadata-aware blends."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Automatic Boxing",
+      "text": "A Deployer can pack Cigars, Cigarettes, Shisha or loose tobacco into a Tobacco Box while preserving exact metadata. For non-stackable Cigars/Cigarettes, use a box on a Depot so repeated Deployer cycles fill the same box. Smart Funnels can sort boxes by Empty / Partially Filled / Full attributes."
     },
     {
       "type": "patchouli:text",
       "title": "Flavor Factory",
-      "text": "Heated Mixers can produce Aqua Vitae and Flavoring Essences. Spouts apply 1000 mB Essence to loose tobacco for aromatic casing, while Mixers combine Essence with plain molasses and mix flavored molasses into Shisha. The same flavor ingredient tags are shared with the manual Brewing Stand route."
+      "text": "Heated Mixers can produce Aqua Vitae and Flavoring Essences. Spouts apply 1000 mB Essence to loose tobacco for aromatic casing, while Mixers combine Essence with plain molasses and mix flavored molasses into Shisha."
     },
     {
       "type": "patchouli:text",
-      "title": "Logistics",
-      "text": "Mechanical Arms, Funnels, Chutes, Belts, Packagers, Stock Links, Factory Gauges, and related Create logistics can work with supported Tobacconist inventories. Attribute Filters understand tobacco variety, cure, cut, quality, flavor, blends, labels, and finished-product metadata. Factory Gauges can match requests by Tobacconist quality tier."
-    },
-    {
-      "type": "patchouli:text",
-      "title": "Displays & Smoke",
-      "text": "Display Links can report useful status from Drying Racks, Tobacco Barrels, Flue Fireboxes, and Hookahs. Encased Fans can also push or pull tobacco smoke; indoor smoke follows ceilings toward extraction airflow and is consumed at fan intakes."
+      "title": "Displays",
+      "text": "Display Links report Drying Rack, Tobacco Barrel, Flue Firebox, and Hookah status. Create Basins expose homogenization count, target, average, predicted output, uniform/waiting state, and incompatible tobacco. Item Vaults can report tobacco count and average quality for one compatible lot."
     },
     {
       "type": "patchouli:text",
       "title": "Ponder",
-      "text": "Create's Ponder system contains Tobacconist scenes for curing, cutting/pressing, blending/barrel work, Aqua Vitae/Essence/Shisha production, cigarette/cigar assembly, packaging, branding, and factory logistics. When in doubt, use Ponder on the relevant Tobacconist item or processing block."
+      "text": "Ponder scenes cover curing, iterative bulk homogenization, cutting/pressing, blending/barrel work, Aqua Vitae/Essence/Shisha production, cigarette/cigar assembly, and factory logistics."
     }
   ],
   "flag": "mod:create"

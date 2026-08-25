@@ -8,16 +8,14 @@
   "type": "tobacconistmod:create_tobacco_homogenizing",
   "ingredients": [
     {
-      "tag": "tobacconistmod:tobacco_leaves"
-    },
-    {
-      "tag": "tobacconistmod:tobacco_leaves"
+      "item": "tobacconistmod:tobacco_leaf_oriental_dry"
     }
   ],
   "results": [
     {
-      "id": "tobacconistmod:tobacco_leaf_wild_dry",
-      "count": 2
+      "id": "tobacconistmod:tobacco_leaf_oriental_dry",
+      "count": 64
     }
-  ]
+  ],
+  "processing_time": 100
 }

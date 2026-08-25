@@ -17,7 +17,7 @@ public class HookahHoseItem extends Item {
 
     @Override
     public void appendHoverText(ItemStack stack, Item.TooltipContext worldIn, List<Component> tooltip, TooltipFlag flagIn){
-        tooltip.add(Component.literal("Basic Hookah Hose").withStyle(ChatFormatting.AQUA));
+        tooltip.add(Component.translatable("tobacconistmod.tooltip.hose.basic").withStyle(ChatFormatting.AQUA));
 
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
     };

@@ -26,8 +26,8 @@ public class DirtyHookahWaterItem extends Item {
 
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.literal("Used hookah water").withStyle(ChatFormatting.GRAY));
-        tooltip.add(Component.literal("Smoking through it causes brief Nausea").withStyle(ChatFormatting.DARK_RED));
-        tooltip.add(Component.literal("Right-click to empty the bottle").withStyle(ChatFormatting.DARK_GRAY));
+        tooltip.add(Component.translatable("tobacconistmod.tooltip.dirty_hookah_water.used").withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable("tobacconistmod.tooltip.dirty_hookah_water.nausea").withStyle(ChatFormatting.DARK_RED));
+        tooltip.add(Component.translatable("tobacconistmod.tooltip.dirty_hookah_water.empty").withStyle(ChatFormatting.DARK_GRAY));
     }
 }

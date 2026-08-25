@@ -35,14 +35,17 @@ Depending on the item/process, Tobacconist tracks values such as:
 
 Recipes and Create integrations that transform tobacco copy or rebuild this data rather than returning generic stacks.
 
-## Averaging vs blending vs crating
+## Averaging vs homogenizing vs blending vs crating
 
 These systems solve different problems:
 
-- **Averaging/homogenizing:** standardizes quality for otherwise-compatible tobacco.
-- **Blending:** combines 2–3 distinct compatible tobacco components and records their identities.
+- **Crafting-grid averaging:** 2–8 compatible occupied slots; averages the participating slot qualities and rounds to the nearest whole value.
+- **Create bulk homogenizing:** standardizes one physical Basin batch at a time, requires visible quality variation, uses a count-weighted average rounded to the nearest whole value, and locks the selected inputs once mixing starts. Analog redstone received by either the Mixer or Basin controls continuous batch size; signal 15 finishes the current Basin once and accepts any lot of at least 2 leaves.
+- **Blending:** combines 2–3 distinct compatible loose-tobacco components and records their identities.
 - **Crating:** losslessly packages nine units of the same registry item even if their NBT/components differ; nothing is averaged.
+
+For Create grading, exact quality scores remain available and a 5-point Quality Band attribute provides tolerant ranges such as 46–50 and 51–55. Aged tobacco also exposes exact aged days plus `Aged at least 7/30/90/365 days` attributes for automated cellars. Factory Gauge/Frogport restocking remains quality-tier aware; exact/band stock should be separated into dedicated logistics networks when precision package requests are required.
 
 ## Finished-product quality
 
-Cigarettes, cigars, and Shisha store a 0–10 product score derived from tobacco quality plus the appropriateness of its cut. See `CUTTING_AND_PRODUCTS.md` for the exact cut modifiers/caps.
+Cigarettes, cigars, and Shisha store a 0–10 `ProductQuality` score. Leaf quality remains the dominant factor and cut suitability applies a modest preparation adjustment. Cigars use a **75% filler / 25% wrapper** component quality before the cut adjustment, so wrapper quality contributes directly to the finished cigar. The same stored score drives the tooltip, Create quality Attributes, Tobacco Box quality display, and quality-based smoking bonus. See `CUTTING_AND_PRODUCTS.md` for the exact adjustments and caps.

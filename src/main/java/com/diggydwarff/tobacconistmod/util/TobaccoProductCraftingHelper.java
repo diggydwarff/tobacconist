@@ -2,7 +2,6 @@ package com.diggydwarff.tobacconistmod.util;
 
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelBlockEntity;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
-import com.diggydwarff.tobacconistmod.datagen.items.custom.TobaccoLeafItem;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 
@@ -52,7 +51,7 @@ public final class TobaccoProductCraftingHelper {
         if (tobaccoStack.isEmpty()
                 || wrapperStack.isEmpty()
                 || !TobaccoCuringHelper.isLooseTobacco(tobaccoStack)
-                || !(wrapperStack.getItem() instanceof TobaccoLeafItem)) {
+                || !TobaccoCuringHelper.isDryTobaccoLeaf(wrapperStack)) {
             return ItemStack.EMPTY;
         }
 
@@ -76,7 +75,7 @@ public final class TobaccoProductCraftingHelper {
 
         int fillerAge = fillerTag != null ? fillerTag.getInt("AgedDays") : 0;
         int wrapperAge = wrapperTag != null ? wrapperTag.getInt("AgedDays") : 0;
-        int finalAge = Math.max(fillerAge, wrapperAge);
+        int finalAge = Math.round(fillerAge * 0.75f + wrapperAge * 0.25f);
         if (finalAge > 0) tag.putInt("AgedDays", finalAge);
 
         boolean fermented = TobaccoBarrelBlockEntity.isFermented(tobaccoStack)
@@ -87,10 +86,11 @@ public final class TobaccoProductCraftingHelper {
                 || TobaccoBarrelBlockEntity.isRuined(wrapperStack);
         if (ruined) tag.putBoolean("Ruined", true);
 
-        TobaccoProductQualityHelper.applyProductQualityToTag(
+        TobaccoProductQualityHelper.applyCigarProductQualityToTag(
                 tag,
                 tobaccoStack,
-                TobaccoProductQualityHelper.getCigarQuality(tobaccoStack)
+                wrapperStack,
+                TobaccoProductQualityHelper.getCigarQuality(tobaccoStack, wrapperStack)
         );
         return result;
     }

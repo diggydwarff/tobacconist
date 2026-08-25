@@ -39,18 +39,16 @@ public class TobaccoBoxItem extends Item {
 
         if (stored.isEmpty()) {
             if (!label.isEmpty()) {
-                return Component.literal(label + " Tobacco Box");
+                return Component.translatable("tobacconistmod.box.named_empty", label);
             }
             return Component.translatable("item.tobacconistmod.tobacco_box");
         }
 
-        String typeName = TobaccoBoxHelper.getContentPluralName(stored);
-
+        Component typeName = TobaccoBoxHelper.getContentPluralComponent(stored);
         if (!label.isEmpty()) {
-            return Component.literal("Box of " + label + " " + typeName);
+            return Component.translatable("tobacconistmod.box.named", label, typeName);
         }
-
-        return Component.literal("Box of " + typeName);
+        return Component.translatable("tobacconistmod.box.of", typeName);
     }
 
     @Override
@@ -233,25 +231,25 @@ public class TobaccoBoxItem extends Item {
         String label = TobaccoBoxHelper.getLabel(stack);
 
         if (!label.isEmpty()) {
-            tooltip.add(Component.literal("Label: " + label).withStyle(ChatFormatting.YELLOW));
+            tooltip.add(Component.translatable("tobacconistmod.ui.label", label).withStyle(ChatFormatting.YELLOW));
         }
 
         if (stored.isEmpty()) {
-            tooltip.add(Component.literal("Empty").withStyle(ChatFormatting.GRAY));
-            tooltip.add(Component.literal("Holds cigars, cigarettes, loose tobacco, or shisha")
+            tooltip.add(Component.translatable("tobacconistmod.ui.empty").withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable("tobacconistmod.tooltip.box.capacity")
                     .withStyle(ChatFormatting.DARK_GRAY));
             return;
         }
 
-        tooltip.add(Component.literal("Contents: " + TobaccoBoxHelper.getBoxContentsLine(stored))
+        tooltip.add(Component.translatable("tobacconistmod.ui.contents", TobaccoBoxHelper.getBoxContentsComponent(stored))
                 .withStyle(ChatFormatting.GRAY));
 
-        String blendLine = TobaccoBoxHelper.getBlendLine(stored);
-        if (!blendLine.isEmpty()) {
-            tooltip.add(Component.literal("Blend: " + blendLine).withStyle(ChatFormatting.DARK_GRAY));
+        Component blendLine = TobaccoBoxHelper.getBlendComponent(stored);
+        if (!blendLine.getString().isEmpty()) {
+            tooltip.add(Component.translatable("tobacconistmod.ui.blend", blendLine).withStyle(ChatFormatting.DARK_GRAY));
         }
 
-        tooltip.add(Component.literal("Stored: " + count + " / " + TobaccoBoxHelper.getCapacity(stored))
+        tooltip.add(Component.translatable("tobacconistmod.ui.stored", count, TobaccoBoxHelper.getCapacity(stored))
                 .withStyle(ChatFormatting.GRAY));
     }
 }

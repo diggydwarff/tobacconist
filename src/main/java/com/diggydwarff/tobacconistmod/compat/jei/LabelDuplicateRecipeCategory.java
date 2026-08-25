@@ -38,7 +38,7 @@ public class LabelDuplicateRecipeCategory implements IRecipeCategory<LabelDuplic
 
     @Override
     public Component getTitle() {
-        return Component.literal("Label Duplication");
+        return Component.translatable("tobacconistmod.jei.label_duplication");
     }
 
     @Override
@@ -72,6 +72,6 @@ public class LabelDuplicateRecipeCategory implements IRecipeCategory<LabelDuplic
         slot.draw(guiGraphics, 31, 19);
         slot.draw(guiGraphics, 85, 19);
 
-        guiGraphics.drawString(mc.font, "Named label + blank label", 4, 4, 0x404040, false);
+        guiGraphics.drawString(mc.font, Component.translatable("tobacconistmod.jei.named_label_plus_blank"), 4, 4, 0x404040, false);
     }
 }

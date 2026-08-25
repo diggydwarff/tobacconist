@@ -78,12 +78,9 @@ public class CigaretteItem extends SmokingItem {
         CompoundTag packed = TobaccoTooltipHelper.getPackedTobaccoData(stack);
         boolean blended = packed != null && !TobaccoBlendHelper.getComponentData(packed).isEmpty();
 
-        String productName;
-        if (blended) {
-            productName = flavored ? "Flavored Blended Cigarette" : "Blended Cigarette";
-        } else {
-            productName = flavored ? "Flavored Cigarette" : "Cigarette";
-        }
+        Component productName = Component.translatable(blended
+                ? (flavored ? "tobacconistmod.product.flavored_blended_cigarette" : "tobacconistmod.product.blended_cigarette")
+                : (flavored ? "tobacconistmod.product.flavored_cigarette" : "item.tobacconistmod.cigarette"));
 
         String label = TobaccoLabelHelper.getProductLabel(stack);
         if (!label.isEmpty()) {
@@ -92,14 +89,16 @@ public class CigaretteItem extends SmokingItem {
 
         String blendName = packed == null ? "" : packed.getString(TobaccoBlendHelper.TAG_BLEND_NAME);
         if (!blendName.isEmpty()) {
-            return Component.literal(blendName + " " + (flavored ? "Flavored Cigarette" : "Cigarette"));
+            Component cigaretteName = Component.translatable(flavored
+                    ? "tobacconistmod.product.flavored_cigarette"
+                    : "item.tobacconistmod.cigarette");
+            return Component.translatable("tobacconistmod.product.named", blendName, cigaretteName);
         }
 
-        if (blended || flavored) {
-            return Component.literal(productName);
-        }
+        if (blended || flavored) return productName;
         return super.getName(stack);
     }
+
 
     @Override
     public void appendHoverText(ItemStack stack, Item.TooltipContext worldIn, List<Component> tooltip, TooltipFlag flagIn) {
@@ -109,24 +108,25 @@ public class CigaretteItem extends SmokingItem {
             String tobacco = tag.getString("tobacco");
 
             if (!tobacco.isEmpty()) {
-                String summary = getCigaretteSummary(stack, tobacco, tag);
-                tooltip.add(Component.literal(summary).withStyle(ChatFormatting.GOLD));
+                tooltip.add(getCigaretteSummaryComponent(stack, tobacco, tag).copy().withStyle(ChatFormatting.GOLD));
                 int agedDays = TobaccoBarrelBlockEntity.getAgedDays(stack);
                 if (agedDays > 0) {
-                    tooltip.add(Component.literal(
-                            "Age: " + formatAge(agedDays) + " (" + getAgeLabel(agedDays) + ")"
+                    tooltip.add(Component.translatable(
+                            "tobacconistmod.ui.age_detailed",
+                            TobaccoText.ageDuration(agedDays),
+                            TobaccoText.ageLabel(agedDays)
                     ).withStyle(ChatFormatting.GOLD));
                 }
-
                 tooltip.add(Component.empty());
             } else {
-                tooltip.add(Component.literal("Creative Tobacco").withStyle(ChatFormatting.GOLD));
+                tooltip.add(Component.translatable("tobacconistmod.ui.creative_tobacco")
+                        .withStyle(ChatFormatting.GOLD));
             }
 
             if (TobacconistConfig.isQualitySystemEnabled()) {
                 int displayQuality = getDisplayQuality10(stack);
                 if (displayQuality >= 0) {
-                    tooltip.add(Component.literal("Quality: " + displayQuality + "/10")
+                    tooltip.add(Component.translatable("tobacconistmod.ui.quality_10", displayQuality)
                             .withStyle(ChatFormatting.GRAY));
                 }
             }
@@ -137,56 +137,44 @@ public class CigaretteItem extends SmokingItem {
 
             String cutType = TobaccoCuringHelper.getCutType(temp);
             if (!cutType.isEmpty()) {
-                tooltip.add(Component.literal("Cut: " + TobaccoCuringHelper.getCutDisplayName(cutType))
+                tooltip.add(Component.translatable("tobacconistmod.ui.cut", TobaccoText.cut(cutType))
                         .withStyle(ChatFormatting.GRAY));
             }
 
             String cureType = TobaccoCuringHelper.getCureType(temp);
             if (!cureType.isEmpty()) {
-                tooltip.add(Component.literal("Cure: " + TobaccoCuringHelper.getCureDisplayName(cureType))
+                tooltip.add(Component.translatable("tobacconistmod.ui.cure", TobaccoText.cure(cureType))
                         .withStyle(ChatFormatting.GRAY));
             }
 
             CompoundTag packedBlend = TobaccoTooltipHelper.getPackedTobaccoData(stack);
             boolean hasBlendComponents = packedBlend != null
                     && !TobaccoBlendHelper.getComponentData(packedBlend).isEmpty();
-            TobaccoAromaticHelper.AromaticProfile aromatic =
-                    TobaccoAromaticHelper.getProductAromaticProfile(stack);
+            TobaccoAromaticHelper.AromaticProfile aromatic = TobaccoAromaticHelper.getProductAromaticProfile(stack);
             if (aromatic.isAromatic() && !hasBlendComponents) {
-                tooltip.add(Component.literal(aromatic.tooltipLine())
-                        .withStyle(ChatFormatting.LIGHT_PURPLE));
+                tooltip.add(aromatic.tooltipComponent().copy().withStyle(ChatFormatting.LIGHT_PURPLE));
             }
 
             if (TobaccoBarrelBlockEntity.isRuined(stack)) {
-                tooltip.add(Component.literal("Ruined").withStyle(ChatFormatting.DARK_RED));
+                tooltip.add(Component.translatable("tobacconistmod.ui.ruined").withStyle(ChatFormatting.DARK_RED));
             }
 
-            // Keep the complete blend breakdown as the final normal metadata section.
             if (packedBlend != null) {
                 List<TobaccoBlendComponent> blendComponents = TobaccoBlendHelper.getComponentData(packedBlend);
                 if (!blendComponents.isEmpty()) {
                     String blendName = packedBlend.getString(TobaccoBlendHelper.TAG_BLEND_NAME);
-                    tooltip.add(Component.literal(blendName.isEmpty()
-                                    ? "Blend Components:"
-                                    : "Blend: " + blendName)
+                    tooltip.add((blendName.isEmpty()
+                            ? Component.translatable("tobacconistmod.ui.blend_components")
+                            : Component.translatable("tobacconistmod.ui.blend", blendName))
                             .withStyle(ChatFormatting.DARK_GRAY));
                     for (TobaccoBlendComponent component : blendComponents) {
-                        StringBuilder base = new StringBuilder("  ")
-                                .append(TobaccoBlendHelper.formatVariety(component.variety()));
-                        if (TobacconistConfig.isQualitySystemEnabled()) {
-                            base.append(" Q").append(component.quality());
-                        }
-                        if (!component.cure().isBlank()) {
-                            base.append(" • ").append(TobaccoCuringHelper.getCureDisplayName(component.cure()));
-                        }
-
-                        var line = Component.literal(base.toString()).withStyle(ChatFormatting.DARK_GRAY);
-                        String flavor = TobaccoAromaticHelper.formatFlavorId(component.flavorId());
-                        line.append(Component.literal(" • " + (flavor.isEmpty() ? "Plain" : flavor))
-                                .withStyle(flavor.isEmpty()
-                                        ? ChatFormatting.DARK_GRAY
-                                        : ChatFormatting.LIGHT_PURPLE));
-                        tooltip.add(line);
+                        Component flavor = component.flavorId().isBlank()
+                                ? Component.translatable("tobacconistmod.ui.plain")
+                                : TobaccoText.flavor(component.flavorId());
+                        Integer quality = TobacconistConfig.isQualitySystemEnabled() ? component.quality() : null;
+                        tooltip.add(TobaccoText.blendComponent(
+                                component.variety(), quality, component.cure(), flavor
+                        ).withStyle(ChatFormatting.DARK_GRAY));
                     }
                 }
             }
@@ -200,15 +188,17 @@ public class CigaretteItem extends SmokingItem {
             if (fermented || agedDays > 0) {
                 tooltip.add(Component.empty());
                 if (fermented) {
-                    tooltip.add(Component.literal("✿ Fermented").withStyle(ChatFormatting.DARK_GRAY));
+                    tooltip.add(Component.translatable("tobacconistmod.ui.fermented_marker")
+                            .withStyle(ChatFormatting.DARK_GRAY));
                 }
                 if (agedDays > 0) {
-                    tooltip.add(Component.literal("ᵐ Months aged, ʸ Years aged")
+                    tooltip.add(Component.translatable("tobacconistmod.ui.age_legend")
                             .withStyle(ChatFormatting.DARK_GRAY));
                 }
             }
         }
     }
+
 
     private int getDisplayQuality10(ItemStack stack) {
         int productQuality = TobaccoProductQualityHelper.getStoredProductQuality(stack);
@@ -235,49 +225,27 @@ public class CigaretteItem extends SmokingItem {
         return 6;
     }
 
-    private String getCigaretteSummary(ItemStack stack, String tobacco, CompoundTag tag) {
-        int quality100 = 60;
-
+    private Component getCigaretteSummaryComponent(ItemStack stack, String tobacco, CompoundTag tag) {
+        int quality = 60;
         CompoundTag packed = TobaccoTooltipHelper.getPackedTobaccoData(stack);
         if (packed != null) {
-            quality100 = packed.contains(TAG_QUALITY)
+            quality = packed.contains(TAG_QUALITY)
                     ? packed.getInt(TAG_QUALITY)
                     : packed.contains(TAG_GROWTH_QUALITY)
                     ? packed.getInt(TAG_GROWTH_QUALITY)
                     : 60;
         }
-
-        String qualityWord = TobaccoTooltipHelper.getQualityWord(quality100);
-
-        String cleaned = TobaccoTooltipHelper.cleanTobaccoName(tobacco)
-                .replace("Ribbon Cut ", "")
-                .replace("Shag Cut ", "")
-                .replace("Fine Cut ", "")
-                .replace("Flake Cut ", "")
-                .replace("Plug Cut ", "")
-                .trim();
-
-        String summary = qualityWord + " " + cleaned;
-        summary += TobaccoTooltipHelper.getProcessSuffix(tag);
-
-        return summary.trim();
+        String suffix = TobaccoTooltipHelper.getProcessSuffix(tag);
+        return Component.translatable(
+                "tobacconistmod.tooltip.cigarette_summary",
+                TobaccoText.qualityDescriptor(quality),
+                TobaccoText.varietyFromStoredName(tobacco),
+                suffix
+        );
     }
 
-    private String formatAge(int agedDays) {
-        int years = agedDays / 365;
-        int days = agedDays % 365;
 
-        if (years > 0) {
-            return years + "y " + days + "d";
-        }
-        return days + "d";
-    }
 
-    private String getAgeLabel(int agedDays) {
-        if (agedDays < 7) return "Fresh";
-        if (agedDays < 30) return "Light Aged";
-        if (agedDays < 90) return "Deep Aged";
-        if (agedDays < 365) return "Vintage";
-        return "Cellared";
-    }
+
+
 }

@@ -6,7 +6,10 @@
   "mixins": [
     "HarvesterMovementBehaviourMixin",
     "BeltDeployerCallbacksMixin",
-    "FactoryPanelTobaccoMatchingMixin"
+    "FactoryPanelTobaccoMatchingMixin",
+    "BasinRecipeHomogenizingMixin",
+    "BasinHomogenizationStateMixin",
+    "BasinInventoryHomogenizationMixin"
   ],
   "injectors": {
     "defaultRequire": 1
