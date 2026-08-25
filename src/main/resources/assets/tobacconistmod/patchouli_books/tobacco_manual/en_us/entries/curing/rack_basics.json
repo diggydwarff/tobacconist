@@ -26,6 +26,11 @@
     },
     {
       "type": "patchouli:text",
+      "title": "Industrial Drying Rack",
+      "text": "With $(thing)Create$() installed, the $(item)Industrial Drying Rack$() is a factory upgrade. It holds $(item)32$() matching leaves, cannot be loaded or unloaded by hand, and makes no curing progress without Create-assisted airflow. Its assisted Air/Sun and Fire/Flue curing is modestly faster than the wooden rack, with identical quality rules."
+    },
+    {
+      "type": "patchouli:text",
       "title": "Traditional Alternative",
       "text": "A Drying Rack is not required. Sneak-right-click the underside of a sturdy block while holding 16 matching raw or cured leaves to make a traditional hanging bunch. In Creative mode, one held leaf is enough to place the 16-leaf bunch. Raw bunches cure by the same methods; cured bunches can be hung for decoration/storage but expose no inventory automation or Display Link."
     },

@@ -52,6 +52,21 @@ A normal rack can Flue Cure when all of these are true:
 
 The Flue Firebox emits a small active smoke effect while lit.
 
+## Industrial Drying Rack
+
+The **Industrial Drying Rack** is the Create-era factory counterpart to the wooden rack. It holds **32 matching leaves** and deliberately cannot be loaded or unloaded by player right-clicks; use Funnels, Mechanical Arms, Packagers, or other validated item automation. Breaking the block still returns its stored contents.
+
+Unlike the wooden rack, the industrial rack makes **no curing progress without Create-assisted airflow**. It reuses the same four cure identities and quality calculation:
+
+- Plain Encased Fan airflow can drive Air Curing or an otherwise-valid Sun Cure. Sunlight is still required for Sun Curing.
+- Fan-blown Campfire smoke/heat drives Fire Curing.
+- Fan-blown Lava heat drives Flue Curing.
+- Passive campfires, passive flue-barn heat, sunlight alone, and ordinary air exposure do not cure an Industrial Rack.
+
+Assisted throughput is intentionally only modestly better than the wooden rack: plain fan Air/Sun progress runs at 5 curing ticks per game tick instead of 4, while heated Fire/Flue assistance runs at 7 instead of 6. There is **no quality bonus** for using the industrial block. Its advantages are doubled capacity, compact automated handling, and somewhat higher assisted throughput.
+
+The recipe is Create-gated and upgrades a normal Drying Rack using Iron Sheets, Brass Casing, Andesite Alloy, and a Precision Mechanism.
+
 ## Hanging Tobacco Bunches
 
 Sneak-use the underside of a sturdy block while holding at least 16 matching raw leaves. Exactly 16 leaves are stored in the bunch. In Creative mode, one held leaf is enough to place the decorative 16-leaf bunch.

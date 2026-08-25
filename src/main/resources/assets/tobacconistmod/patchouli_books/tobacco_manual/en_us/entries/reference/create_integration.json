@@ -11,7 +11,7 @@
     {
       "type": "patchouli:text",
       "title": "Harvest & Cure",
-      "text": "Mechanical Harvesters can harvest mature two-block tobacco without duplicating upper/lower drops. Encased Fan airflow accelerates Air Curing and an otherwise-valid Sun Cure at 4× progress. Fan-blown Campfire smoke/heat and Lava heat accelerate Fire/Flue progress at 6×."
+      "text": "Mechanical Harvesters collect mature two-block tobacco. Encased Fan airflow accelerates valid rack curing. The $(item)Industrial Drying Rack$() is the factory tier: 32 leaves, automation-only handling, no passive curing, and a modest extra speed bonus while fan-assisted. It uses the same Air/Sun/Fire/Flue quality rules."
     },
     {
       "type": "patchouli:text",

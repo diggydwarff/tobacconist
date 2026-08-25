@@ -40,7 +40,7 @@ final class DryingRackItemHandler implements IItemHandler {
             return stack;
         }
 
-        int space = TobaccoDryingRackBlockEntity.MAX_LEAVES - rack.getLeafCount();
+        int space = rack.getMaxLeaves() - rack.getLeafCount();
         int toInsert = Math.min(space, stack.getCount());
         if (toInsert <= 0) {
             return stack;
@@ -85,7 +85,7 @@ final class DryingRackItemHandler implements IItemHandler {
 
     @Override
     public int getSlotLimit(int slot) {
-        return slot == 0 ? TobaccoDryingRackBlockEntity.MAX_LEAVES : 0;
+        return slot == 0 ? rack.getMaxLeaves() : 0;
     }
 
     @Override

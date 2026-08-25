@@ -27,6 +27,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
@@ -78,11 +79,29 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
     private final IItemHandler unsidedItemHandler;
 
     public TobaccoDryingRackBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.TOBACCO_DRYING_RACK.get(), pos, state);
+        this(ModBlockEntities.TOBACCO_DRYING_RACK.get(), pos, state);
+    }
+
+    protected TobaccoDryingRackBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
         for (Direction direction : Direction.values()) {
             sidedItemHandlers.put(direction, new DryingRackItemHandler(this, direction));
         }
         unsidedItemHandler = new DryingRackItemHandler(this, null);
+    }
+
+    public int getMaxLeaves() {
+        return MAX_LEAVES;
+    }
+
+    /** Industrial racks override this so curing cannot progress without Create fan assistance. */
+    public boolean requiresCreateAssistance() {
+        return false;
+    }
+
+    /** Industrial racks apply a small throughput bonus only while Create assistance is active. */
+    protected int adjustCreateAssistedTickRate(int baseRate) {
+        return baseRate;
     }
 
     public IItemHandler getItemHandler(@Nullable Direction side) {
@@ -111,7 +130,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
     }
 
     public boolean isFull() {
-        return hasLeaves() && storedLeaf.getCount() >= MAX_LEAVES;
+        return hasLeaves() && storedLeaf.getCount() >= getMaxLeaves();
     }
 
     public boolean canAccept(ItemStack stack) {
@@ -131,7 +150,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             return false;
         }
 
-        if (storedLeaf.getCount() >= MAX_LEAVES) {
+        if (storedLeaf.getCount() >= getMaxLeaves()) {
             return false;
         }
 
@@ -219,8 +238,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
 
         storedLeaf = stack.copy();
 
-        if (storedLeaf.getCount() > MAX_LEAVES) {
-            storedLeaf.setCount(MAX_LEAVES);
+        if (storedLeaf.getCount() > getMaxLeaves()) {
+            storedLeaf.setCount(getMaxLeaves());
         }
 
         setChanged();
@@ -258,12 +277,12 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             return false;
         }
 
-        return storedLeaf.getCount() < MAX_LEAVES && !isBatchLocked();
+        return storedLeaf.getCount() < getMaxLeaves() && !isBatchLocked();
     }
 
     @Override
     public int getMaxStackSize() {
-        return MAX_LEAVES;
+        return getMaxLeaves();
     }
 
     @Override
@@ -398,18 +417,27 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         }
 
         CreateCompat.FanCuringAssist fanAssist = getCreateFanAssist();
+        if (requiresCreateAssistance()) {
+            if (fanAssist == CreateCompat.FanCuringAssist.FIRE
+                    || fanAssist == CreateCompat.FanCuringAssist.FLUE) {
+                return adjustCreateAssistedTickRate(CREATE_FAN_HEATED_TICK_RATE);
+            }
+            return fanAssist == CreateCompat.FanCuringAssist.AIR
+                    ? adjustCreateAssistedTickRate(CREATE_FAN_AIR_TICK_RATE)
+                    : 1;
+        }
         if (fanAssist == CreateCompat.FanCuringAssist.FIRE) {
-            return CREATE_FAN_HEATED_TICK_RATE;
+            return adjustCreateAssistedTickRate(CREATE_FAN_HEATED_TICK_RATE);
         }
         if (fanAssist == CreateCompat.FanCuringAssist.FLUE
                 && !isOverLitCampfire(level, worldPosition)) {
-            return CREATE_FAN_HEATED_TICK_RATE;
+            return adjustCreateAssistedTickRate(CREATE_FAN_HEATED_TICK_RATE);
         }
         if (fanAssist == CreateCompat.FanCuringAssist.AIR
                 && !isOverLitCampfire(level, worldPosition)
                 && !canFlueCure(level, worldPosition)) {
             // Plain airflow assists both Air Curing and an otherwise-valid Sun Cure.
-            return CREATE_FAN_AIR_TICK_RATE;
+            return adjustCreateAssistedTickRate(CREATE_FAN_AIR_TICK_RATE);
         }
         return 1;
     }
@@ -443,6 +471,26 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         CreateCompat.FanCuringAssist fanAssist = directRain
                 ? CreateCompat.FanCuringAssist.NONE
                 : getCreateFanAssist();
+
+        if (requiresCreateAssistance()) {
+            if (fanAssist == CreateCompat.FanCuringAssist.FIRE) {
+                return Component.translatable("tobacconistmod.cure_method.fire_create_smoke");
+            }
+            if (fanAssist == CreateCompat.FanCuringAssist.FLUE) {
+                return Component.translatable("tobacconistmod.cure_method.flue_create_heat");
+            }
+            if (fanAssist == CreateCompat.FanCuringAssist.AIR && hasDirectSunlight(level, worldPosition)) {
+                return Component.translatable(isGlassSunCure(level, worldPosition)
+                        ? "tobacconistmod.cure_method.sun_glass_create"
+                        : "tobacconistmod.cure_method.sun_create");
+            }
+            if (fanAssist == CreateCompat.FanCuringAssist.AIR) {
+                return Component.translatable("tobacconistmod.cure_method.air_create");
+            }
+            return Component.translatable(directRain
+                    ? "tobacconistmod.cure_method.paused_rain"
+                    : "tobacconistmod.cure_method.industrial_requires_create");
+        }
 
         if (isOverLitCampfire(level, worldPosition) || fanAssist == CreateCompat.FanCuringAssist.FIRE) {
             return Component.translatable(fanAssist == CreateCompat.FanCuringAssist.FIRE
@@ -484,6 +532,14 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
 
         CreateCompat.FanCuringAssist fanAssist = getCreateFanAssist();
         boolean directRain = level.isRainingAt(worldPosition.above()) && level.canSeeSky(worldPosition.above());
+
+        if (requiresCreateAssistance()) {
+            if (directRain) return false;
+            if (fanAssist == CreateCompat.FanCuringAssist.FIRE || fanAssist == CreateCompat.FanCuringAssist.FLUE) {
+                return true;
+            }
+            return fanAssist == CreateCompat.FanCuringAssist.AIR;
+        }
 
         return isOverLitCampfire(level, worldPosition)
                 || canFlueCure(level, worldPosition)
@@ -591,8 +647,31 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         boolean validDryingThisTick = false;
         int progressTicks = 0;
 
-        // Cure precedence is Fire, Flue, Sun, then Air. Plain fan airflow can accelerate a valid Sun cure.
-        if (overCampfire || fanAssist == CreateCompat.FanCuringAssist.FIRE) {
+        // Traditional racks may cure passively. Industrial racks require an actual Create fan
+        // assist and receive only a small assisted throughput bonus. Cure identity remains the
+        // same four-method system; the industrial block does not invent a fifth cure type.
+        if (rack.requiresCreateAssistance()) {
+            if (fanAssist == CreateCompat.FanCuringAssist.FIRE) {
+                validDryingThisTick = true;
+                rack.usedFireDrying = true;
+                progressTicks = rack.adjustCreateAssistedTickRate(CREATE_FAN_HEATED_TICK_RATE);
+                rack.fireTicks += progressTicks;
+            } else if (fanAssist == CreateCompat.FanCuringAssist.FLUE) {
+                validDryingThisTick = true;
+                rack.usedFlueDrying = true;
+                progressTicks = rack.adjustCreateAssistedTickRate(CREATE_FAN_HEATED_TICK_RATE);
+                rack.flueTicks += progressTicks;
+            } else if (fanAssist == CreateCompat.FanCuringAssist.AIR && inSun) {
+                validDryingThisTick = true;
+                progressTicks = rack.adjustCreateAssistedTickRate(CREATE_FAN_AIR_TICK_RATE);
+                rack.sunTicks += progressTicks;
+                rack.sunExposureTicks += progressTicks;
+            } else if (fanAssist == CreateCompat.FanCuringAssist.AIR) {
+                validDryingThisTick = true;
+                progressTicks = rack.adjustCreateAssistedTickRate(CREATE_FAN_AIR_TICK_RATE);
+                rack.airTicks += progressTicks;
+            }
+        } else if (overCampfire || fanAssist == CreateCompat.FanCuringAssist.FIRE) {
             validDryingThisTick = true;
             rack.usedFireDrying = true;
             progressTicks = fanAssist == CreateCompat.FanCuringAssist.FIRE
@@ -825,7 +904,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         }
 
         BlockState state = level.getBlockState(worldPosition);
-        if (!state.is(ModBlocks.TOBACCO_DRYING_RACK.get())) {
+        if (!(state.getBlock() instanceof TobaccoDryingRackBlock)) {
             return;
         }
 

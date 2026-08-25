@@ -117,6 +117,12 @@ public class TobacconistMod {
 
         event.registerBlockEntity(
                 Capabilities.ItemHandler.BLOCK,
+                ModBlockEntities.INDUSTRIAL_DRYING_RACK.get(),
+                (rack, side) -> rack.getItemHandler(side)
+        );
+
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
                 ModBlockEntities.TOBACCO_BARREL.get(),
                 (barrel, side) -> barrel.getItemHandler(side)
         );

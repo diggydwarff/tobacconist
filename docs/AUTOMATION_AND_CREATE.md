@@ -23,6 +23,12 @@ Create Encased Fans can assist Air Curing and an already-valid Sun Cure at 4× p
 
 Hanging Tobacco Bunches can receive environmental fan assistance but expose no item automation or Display Link source.
 
+### Industrial Drying Rack
+
+The **Industrial Drying Rack** is the dedicated factory tier. It holds **32 matching leaves**, rejects manual right-click loading/removal, and is intended to sit directly in Create logistics lines. Mechanical Arms, Funnels, Packagers/Stock Links, and the validated item capability can load raw leaves and remove only finished output. Display Links and Spectacles report the same cure/status information with the 32-leaf capacity.
+
+The industrial rack cannot cure passively. It must receive Create fan assistance: plain airflow for Air or an otherwise-valid Sun Cure, fan-blown Campfire smoke/heat for Fire, or fan-blown Lava heat for Flue. Its assisted progress is modestly faster than a fan-assisted wooden rack (5 vs 4 progress ticks for Air/Sun; 7 vs 6 for Fire/Flue), with no quality bonus. This keeps the wooden rack useful for traditional/passive curing while the industrial rack trades cost and infrastructure for density and throughput.
+
 ## Bulk quality homogenization
 
 A Mechanical Mixer over a Basin can homogenize otherwise-compatible raw or cured tobacco leaves that differ only in quality. Homogenization is physical and iterative: each Mixer cycle standardizes one Basin batch rather than scanning an external chest or logistics network. A cycle only runs when the selected batch contains at least two quality values.
@@ -59,7 +65,7 @@ Factory Gauge/Frogport tobacco requests use Tobacconist's tier-aware matching. D
 
 ## Display Links
 
-Display Links can report status from Drying Racks, Tobacco Barrels, Flue Fireboxes, and Hookahs. They also expose homogenization status/average from Create Basins and tobacco count/average quality from Item Vaults. Homogenizer status distinguishes continuous targets, filling/ready/processing states, uniform lots, incompatible tobacco, and whether signal 15 must be re-armed. Vault average quality is only reported as a single value when the stored leaf tobacco is one compatible homogenization lot.
+Display Links can report status from traditional and Industrial Drying Racks, Tobacco Barrels, Flue Fireboxes, and Hookahs. They also expose homogenization status/average from Create Basins and tobacco count/average quality from Item Vaults. Homogenizer status distinguishes continuous targets, filling/ready/processing states, uniform lots, incompatible tobacco, and whether signal 15 must be re-armed. Vault average quality is only reported as a single value when the stored leaf tobacco is one compatible homogenization lot.
 
 ## Smoke ventilation
 

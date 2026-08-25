@@ -137,6 +137,14 @@ public class TobacconistJeiPlugin implements IModPlugin {
                 Component.translatable("tobacconistmod.jei.info.rack.fire")
         );
 
+        if (com.diggydwarff.tobacconistmod.compat.create.CreateCompat.loaded()) {
+            registration.addIngredientInfo(
+                    java.util.List.of(new ItemStack(ModBlocks.INDUSTRIAL_DRYING_RACK.get().asItem())),
+                    mezz.jei.api.constants.VanillaTypes.ITEM_STACK,
+                    Component.translatable("tobacconistmod.jei.info.rack.industrial")
+            );
+        }
+
         registration.addIngredientInfo(
                 java.util.List.of(new ItemStack(ModItems.HOOKAH_HOSE.get())),
                 mezz.jei.api.constants.VanillaTypes.ITEM_STACK,
@@ -166,6 +174,9 @@ public class TobacconistJeiPlugin implements IModPlugin {
         registration.addRecipeCatalyst(new ItemStack(ModItems.NETHERITE_CHAVETA.get()), LeafCuttingRecipeCategory.TYPE);
 
         registration.addRecipeCatalyst(new ItemStack(ModBlocks.TOBACCO_DRYING_RACK.get().asItem()), DryingRackRecipeCategory.TYPE);
+        if (com.diggydwarff.tobacconistmod.compat.create.CreateCompat.loaded()) {
+            registration.addRecipeCatalyst(new ItemStack(ModBlocks.INDUSTRIAL_DRYING_RACK.get().asItem()), DryingRackRecipeCategory.TYPE);
+        }
 
         registration.addRecipeCatalyst(new ItemStack(ModItems.WILD_TOBACCO_LEAF.get()), DryingRackRecipeCategory.TYPE);
         registration.addRecipeCatalyst(new ItemStack(ModItems.VIRGINIA_TOBACCO_LEAF.get()), DryingRackRecipeCategory.TYPE);

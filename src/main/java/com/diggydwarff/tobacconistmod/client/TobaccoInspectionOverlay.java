@@ -59,8 +59,8 @@ public final class TobaccoInspectionOverlay {
         if (targeted instanceof TobaccoDryingRackBlockEntity rack
                 && !SpectaclesEquipmentHelper.isWearing(minecraft.player)) {
             drawPanel(graphics, minecraft.font, new Inspection(
-                    Component.translatable("block.tobacconistmod.tobacco_drying_rack_block"),
-                    List.of(new Line(Component.translatable("tobacconistmod.ui.leaves", rack.getLeafCount(), 16), TEXT))
+                    Component.translatable(rack.getBlockState().getBlock().getDescriptionId()),
+                    List.of(new Line(Component.translatable("tobacconistmod.ui.leaves", rack.getLeafCount(), rack.getMaxLeaves()), TEXT))
             ));
             return;
         }
@@ -131,9 +131,9 @@ public final class TobaccoInspectionOverlay {
         BlockEntity blockEntity = minecraft.level.getBlockEntity(pos);
         if (blockEntity instanceof TobaccoDryingRackBlockEntity rack) {
             List<Line> lines = new ArrayList<>();
-            lines.add(new Line(Component.translatable("tobacconistmod.ui.leaves", rack.getLeafCount(), 16), rack.hasLeaves() ? TEXT : MUTED));
+            lines.add(new Line(Component.translatable("tobacconistmod.ui.leaves", rack.getLeafCount(), rack.getMaxLeaves()), rack.hasLeaves() ? TEXT : MUTED));
             if (!rack.hasLeaves()) {
-                return new Inspection(Component.translatable("block.tobacconistmod.tobacco_drying_rack_block"), lines);
+                return new Inspection(Component.translatable(rack.getBlockState().getBlock().getDescriptionId()), lines);
             }
 
             ItemStack stack = rack.getStoredLeaf();

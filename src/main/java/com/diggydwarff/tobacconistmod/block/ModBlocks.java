@@ -91,6 +91,12 @@ public class ModBlocks {
     public static final Supplier<Block> TOBACCO_DRYING_RACK = registerBlock("tobacco_drying_rack_block",
             () -> new TobaccoDryingRackBlock(BlockBehaviour.Properties.of().strength(0.8F).sound(SoundType.WOOD).noOcclusion()));
 
+    public static final Supplier<Block> INDUSTRIAL_DRYING_RACK = registerBlock("industrial_drying_rack",
+            () -> new IndustrialDryingRackBlock(BlockBehaviour.Properties.of()
+                    .strength(2.5F, 6.0F)
+                    .sound(SoundType.METAL)
+                    .noOcclusion()));
+
     // Traditional hanging option: placed directly from a stack of 16 raw or cured leaves, so it has no BlockItem.
     public static final Supplier<Block> HANGING_TOBACCO_LEAVES = BLOCKS.register("hanging_tobacco_leaves",
             () -> new HangingTobaccoBlock(BlockBehaviour.Properties.of()

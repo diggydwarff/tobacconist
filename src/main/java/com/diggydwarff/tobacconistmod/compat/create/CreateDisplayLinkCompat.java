@@ -73,6 +73,9 @@ public final class CreateDisplayLinkCompat {
             DisplaySource.BY_BLOCK_ENTITY.add(ModBlockEntities.TOBACCO_DRYING_RACK.get(), DRYING_RACK_STATUS.get());
             DisplaySource.BY_BLOCK_ENTITY.add(ModBlockEntities.TOBACCO_DRYING_RACK.get(), DRYING_RACK_PROGRESS.get());
             DisplaySource.BY_BLOCK_ENTITY.add(ModBlockEntities.TOBACCO_DRYING_RACK.get(), DRYING_RACK_LEAF_COUNT.get());
+            DisplaySource.BY_BLOCK_ENTITY.add(ModBlockEntities.INDUSTRIAL_DRYING_RACK.get(), DRYING_RACK_STATUS.get());
+            DisplaySource.BY_BLOCK_ENTITY.add(ModBlockEntities.INDUSTRIAL_DRYING_RACK.get(), DRYING_RACK_PROGRESS.get());
+            DisplaySource.BY_BLOCK_ENTITY.add(ModBlockEntities.INDUSTRIAL_DRYING_RACK.get(), DRYING_RACK_LEAF_COUNT.get());
 
             DisplaySource.BY_BLOCK_ENTITY.add(ModBlockEntities.TOBACCO_BARREL.get(), BARREL_STATUS.get());
             DisplaySource.BY_BLOCK_ENTITY.add(ModBlockEntities.TOBACCO_BARREL.get(), BARREL_PROGRESS.get());
@@ -126,7 +129,7 @@ public final class CreateDisplayLinkCompat {
         @Override
         protected MutableComponent provideLine(DisplayLinkContext context, DisplayTargetStats stats) {
             TobaccoDryingRackBlockEntity rack = source(context, TobaccoDryingRackBlockEntity.class);
-            return rack == null ? EMPTY_LINE : Component.translatable("tobacconistmod.ui.leaf_count_short", rack.getLeafCount(), 16);
+            return rack == null ? EMPTY_LINE : Component.translatable("tobacconistmod.ui.leaf_count_short", rack.getLeafCount(), rack.getMaxLeaves());
         }
     }
 

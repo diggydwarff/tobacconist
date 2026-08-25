@@ -51,6 +51,7 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         this.dropSelf(ModBlocks.EMERALD_HOOKAH.get());
         this.dropSelf(ModBlocks.NETHERITE_HOOKAH.get());
         this.dropSelf(ModBlocks.TOBACCO_DRYING_RACK.get());
+        this.dropSelf(ModBlocks.INDUSTRIAL_DRYING_RACK.get());
         // No block item: the hanging bunch is placed from 16 raw leaves and its BE drops the batch.
         this.add(ModBlocks.HANGING_TOBACCO_LEAVES.get(), LootTable.lootTable());
         this.dropSelf(ModBlocks.TOBACCO_BARREL.get());

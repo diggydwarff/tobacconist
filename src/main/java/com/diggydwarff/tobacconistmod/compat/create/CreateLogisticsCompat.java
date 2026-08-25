@@ -37,6 +37,7 @@ public final class CreateLogisticsCompat {
 
     private static void registerLogisticsHandlers() {
         registerSingleInventory(ModBlocks.TOBACCO_DRYING_RACK.get());
+        registerSingleInventory(ModBlocks.INDUSTRIAL_DRYING_RACK.get());
         registerSingleInventory(ModBlocks.TOBACCO_BARREL.get());
         registerSingleInventory(ModBlocks.FLUE_FIREBOX.get());
         registerSingleInventory(ModBlocks.HOOKAH.get());
@@ -63,6 +64,10 @@ public final class CreateLogisticsCompat {
         // Use a custom rack unpacker because normal sided insertion rejects top/bottom faces.
         UnpackingHandler.REGISTRY.register(
                 ModBlocks.TOBACCO_DRYING_RACK.get(),
+                CreateLogisticsCompat::unpackDryingRack
+        );
+        UnpackingHandler.REGISTRY.register(
+                ModBlocks.INDUSTRIAL_DRYING_RACK.get(),
                 CreateLogisticsCompat::unpackDryingRack
         );
 

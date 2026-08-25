@@ -151,7 +151,7 @@ public class TobaccoDryingRackBlock extends BaseEntityBlock {
                         Component.translatable(
                                 "tobacconistmod.message.rack.inspect",
                                 rack.getLeafCount(),
-                                16,
+                                rack.getMaxLeaves(),
                                 rack.getRackStatusComponent()
                         ),
                         true

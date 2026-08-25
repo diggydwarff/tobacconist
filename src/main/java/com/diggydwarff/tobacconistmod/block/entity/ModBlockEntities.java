@@ -44,6 +44,13 @@ public class ModBlockEntities {
                             ModBlocks.TOBACCO_DRYING_RACK.get()
                     ).build(null));
 
+    public static final Supplier<BlockEntityType<IndustrialDryingRackBlockEntity>> INDUSTRIAL_DRYING_RACK =
+            BLOCK_ENTITIES.register("industrial_drying_rack", () ->
+                    BlockEntityType.Builder.of(
+                            IndustrialDryingRackBlockEntity::new,
+                            ModBlocks.INDUSTRIAL_DRYING_RACK.get()
+                    ).build(null));
+
     public static final Supplier<BlockEntityType<TobaccoCrateBlockEntity>> TOBACCO_CRATE =
             BLOCK_ENTITIES.register("tobacco_crate", () ->
                     BlockEntityType.Builder.of(

@@ -1,0 +1,8 @@
+{
+  "multipart": [
+    { "apply": { "model": "tobacconistmod:block/industrial_drying_rack_frame" } },
+    { "when": { "load_stage": "1" }, "apply": { "model": "tobacconistmod:block/industrial_drying_rack_load_1" } },
+    { "when": { "load_stage": "2" }, "apply": { "model": "tobacconistmod:block/industrial_drying_rack_load_2" } },
+    { "when": { "load_stage": "3" }, "apply": { "model": "tobacconistmod:block/industrial_drying_rack_load_3" } }
+  ]
+}

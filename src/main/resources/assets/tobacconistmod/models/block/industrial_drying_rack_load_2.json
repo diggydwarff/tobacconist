@@ -1,0 +1,11 @@
+{
+  "ambientocclusion": false,
+  "render_type": "minecraft:cutout",
+  "textures": {"leaf":"tobacconistmod:block/industrial_drying_rack_leaves_placeholder","particle":"tobacconistmod:block/industrial_drying_rack_leaves_placeholder"},
+  "elements": [
+    {"from":[3,6,5.75],"to":[13,12,6.25],"faces":{"north":{"texture":"#leaf"},"south":{"texture":"#leaf"}}},
+    {"from":[3,6,9.75],"to":[13,12,10.25],"faces":{"north":{"texture":"#leaf"},"south":{"texture":"#leaf"}}},
+    {"from":[3,16,5.75],"to":[13,22,6.25],"faces":{"north":{"texture":"#leaf"},"south":{"texture":"#leaf"}}},
+    {"from":[3,16,9.75],"to":[13,22,10.25],"faces":{"north":{"texture":"#leaf"},"south":{"texture":"#leaf"}}}
+  ]
+}

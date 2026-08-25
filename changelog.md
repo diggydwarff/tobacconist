@@ -49,6 +49,14 @@
   - A stationary box on a Depot can be filled over repeated Deployer cycles, enabling fully automatic boxing of non-stackable Cigars and Cigarettes
 
 ### Traditional Curing & Storage
+- Added the **Industrial Drying Rack**, a Create-focused factory curing tier
+  - Holds **32 matching leaves** versus 16 on the wooden rack
+  - Cannot be manually loaded or unloaded; it is intended for Funnels, Mechanical Arms, Packagers, and other validated automation
+  - Makes no curing progress without Create-assisted airflow
+  - Reuses normal Air/Sun/Fire/Flue cure identity and quality rules, with no industrial quality bonus
+  - Runs fan-assisted Air/Sun at 5 progress ticks per game tick and fan-assisted Fire/Flue at 7, a modest throughput increase over the wooden rack's 4/6 rates
+  - Adds Spectacles/Display Link/Stock Link/package support and ships with placeholder industrial models/textures pending final artwork
+  - Create-gated recipe upgrades a normal Drying Rack with Iron Sheets, Brass Casing, Andesite Alloy, and a Precision Mechanism
 - Rebuilt the **Drying Rack** visuals around four load levels (empty, low, medium, full) with live **X/16 leaf** inspection
 - Drying Rack leaves now change through visible cure stages and retain subtle tobacco-variety color differences from raw leaf through the finished cured batch
 - Added traditional **Hanging Tobacco Bunches**
