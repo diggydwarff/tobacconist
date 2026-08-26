@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#forge:foods/custards/plain",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/custard/plain",
+      "required": false
+    },
+    {
+      "id": "#forge:custards/plain",
+      "required": false
+    }
+  ]
+}

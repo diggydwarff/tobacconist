@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "tobacconistmod:tobacco_loose_wild",
+    "tobacconistmod:tobacco_loose_virginia",
+    "tobacconistmod:tobacco_loose_burley",
+    "tobacconistmod:tobacco_loose_oriental",
+    "tobacconistmod:tobacco_loose_dokha",
+    "tobacconistmod:tobacco_loose_shade",
+    "tobacconistmod:blended_tobacco"
+  ]
+}

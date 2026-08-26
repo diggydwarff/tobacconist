@@ -1,0 +1,37 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#forge:foods/caramel",
+      "required": false
+    },
+    {
+      "id": "#forge:caramel",
+      "required": false
+    },
+    {
+      "id": "#forge:caramel",
+      "required": false
+    },
+    {
+      "id": "croptopia:caramel",
+      "required": false
+    },
+    {
+      "id": "create_confectionery:bar_of_caramel",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/caramels",
+      "required": false
+    },
+    {
+      "id": "#forge:caramels",
+      "required": false
+    },
+    {
+      "id": "#forge:caramels",
+      "required": false
+    }
+  ]
+}

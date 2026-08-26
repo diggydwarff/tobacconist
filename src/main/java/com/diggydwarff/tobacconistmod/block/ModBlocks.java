@@ -116,7 +116,7 @@ public class ModBlocks {
 
     public static final Supplier<Block> WILD_FLOWERING_TOBACCO = registerBlock("wild_flowering_tobacco_block",
             () -> new FlowerBlock(MobEffects.CONFUSION, 5,
-                    BlockBehaviour.Properties.ofFullCopy(Blocks.ALLIUM).noOcclusion().noCollission()));
+                    BlockBehaviour.Properties.copy(Blocks.ALLIUM).noOcclusion().noCollission()));
 
     // No BlockItem: the normal Wild Flowering Tobacco item is what players place into a Flower Pot.
     public static final Supplier<Block> POTTED_WILD_FLOWERING_TOBACCO = BLOCKS.register(
@@ -124,26 +124,26 @@ public class ModBlocks {
             () -> new FlowerPotBlock(
                     () -> (FlowerPotBlock) Blocks.FLOWER_POT,
                     WILD_FLOWERING_TOBACCO,
-                    BlockBehaviour.Properties.ofFullCopy(Blocks.POTTED_ALLIUM).noOcclusion()
+                    BlockBehaviour.Properties.copy(Blocks.POTTED_ALLIUM).noOcclusion()
             )
     );
     public static final Supplier<Block> WILD_TOBACCO_CROP = BLOCKS.register("tobacco_crop_wild",
-            () -> new WildCropBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WHEAT).noOcclusion().noCollission()));
+            () -> new WildCropBlock(BlockBehaviour.Properties.copy(Blocks.WHEAT).noOcclusion().noCollission()));
 
     public static final Supplier<Block> VIRGINIA_TOBACCO_CROP = BLOCKS.register("tobacco_crop_virginia",
-            () -> new VirginiaCropBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WHEAT).noOcclusion().noCollission()));
+            () -> new VirginiaCropBlock(BlockBehaviour.Properties.copy(Blocks.WHEAT).noOcclusion().noCollission()));
 
     public static final Supplier<Block> BURLEY_TOBACCO_CROP = BLOCKS.register("tobacco_crop_burley",
-            () -> new BurleyCropBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WHEAT).noOcclusion().noCollission()));
+            () -> new BurleyCropBlock(BlockBehaviour.Properties.copy(Blocks.WHEAT).noOcclusion().noCollission()));
 
     public static final Supplier<Block> ORIENTAL_TOBACCO_CROP = BLOCKS.register("tobacco_crop_oriental",
-            () -> new OrientalCropBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WHEAT).noOcclusion().noCollission()));
+            () -> new OrientalCropBlock(BlockBehaviour.Properties.copy(Blocks.WHEAT).noOcclusion().noCollission()));
 
     public static final Supplier<Block> DOKHA_TOBACCO_CROP = BLOCKS.register("tobacco_crop_dokha",
-            () -> new DokhaCropBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WHEAT).noOcclusion().noCollission()));
+            () -> new DokhaCropBlock(BlockBehaviour.Properties.copy(Blocks.WHEAT).noOcclusion().noCollission()));
 
     public static final Supplier<Block> SHADE_TOBACCO_CROP = BLOCKS.register("tobacco_crop_shade",
-            () -> new ShadeCropBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WHEAT).noOcclusion().noCollission()));
+            () -> new ShadeCropBlock(BlockBehaviour.Properties.copy(Blocks.WHEAT).noOcclusion().noCollission()));
 
 
     public static final Supplier<Block> RAW_VIRGINIA_TOBACCO_CRATE = registerBlock("raw_virginia_tobacco_crate",

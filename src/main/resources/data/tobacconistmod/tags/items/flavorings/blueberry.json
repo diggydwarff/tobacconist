@@ -1,0 +1,65 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#forge:foods/fruits/blueberry",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/blueberry",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/blueberry",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/blueberry",
+      "required": false
+    },
+    {
+      "id": "fruitsdelight:blueberry",
+      "required": false
+    },
+    {
+      "id": "croptopia:blueberry",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/fruit/blueberry",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/blueberry",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/blueberry",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/berries/blueberry",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/berry/blueberry",
+      "required": false
+    },
+    {
+      "id": "#forge:berries/blueberry",
+      "required": false
+    },
+    {
+      "id": "#forge:berry/blueberry",
+      "required": false
+    },
+    {
+      "id": "#forge:berries/blueberry",
+      "required": false
+    },
+    {
+      "id": "#forge:berry/blueberry",
+      "required": false
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "name": "Create Integration",
+  "icon": "create:cogwheel",
+  "category": "tobacconistmod:reference",
+  "sortnum": 4,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "When $(thing)Create$() is installed, Tobacconist gains an optional industrial path. Hand-crafted workflows remain valid. Create processing preserves tobacco identity and metadata unless a recipe explicitly changes it."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Harvest & Cure",
+      "text": "Mechanical Harvesters collect mature two-block tobacco. The $(item)Industrial Drying Rack$() is a true two-block, 32-leaf factory tier with side automation on either level and top-down loading. It requires matching Air/Fire/Flue airflow across both tiers from two distinct Encased Fans; the same normal cure identity and quality rules still apply."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Bulk Homogenization",
+      "text": "Mechanical Mixers standardize compatible raw or cured leaf batches. A cycle requires at least two quality values, uses a count-weighted average rounded to the nearest whole quality, and locks the chosen inputs when mixing begins. Uniform tobacco waits instead of being remixed."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Homogenizer Control",
+      "text": "No signal uses 64 leaves. Power either the Mixer or Basin; if both are powered, the stronger signal wins. Signals 1–14 select 16/32/48/64/96/128/160/192/256/320/384/448/512/576. Signal 15 finishes the current Basin once. Keep Create's normal Basin Comparator/fullness signal separate from this control line."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Homogenizer Lines",
+      "text": "One Mixer can process an entire stream in repeated physical batches, but those batches may leave at nearby qualities. Use a larger downstream target than the primary target — e.g. 64/128 → 256/576 — so several first-stage grades are actually combined. Pulse 15 for the final remainder."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Safe Basin Logistics",
+      "text": "Homogenizer inputs are protected from generic extraction until processing or a finish flush claims them. Identical tobacco stacks can occupy multiple Basin slots while waiting for another quality. A completely full 576-leaf uniform Basin auto-passes unchanged so a continuous line cannot deadlock."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Grading & Filters",
+      "text": "Create Attribute Filters expose exact quality scores, quality tiers, 5-point Quality Bands such as 46–50 or 51–55, exact aged days, and aging thresholds at 7/30/90/365 days. Use grading to siphon exceptional low/high outliers before bulk homogenization."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Factory Gauges",
+      "text": "Factory Gauge/Frogport tobacco requests remain tier-aware: different numeric scores inside the same Tobacconist quality tier may satisfy the request. Factory Gauges do not accept Create Attribute Filter items. For exact-score or Quality-Band logistics, sort the tobacco first and keep those stocks on separate logistics networks."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Automated Barrels",
+      "text": "Tobacco Barrels now hold up to $(item)64$() compatible items. Funnels, Chutes, Packagers, and Mechanical Arms cannot extract an actively $(thing)Fermenting$() batch. Aging stays extractable so filtered logistics can release tobacco at 7/30/90/365-day thresholds. Display Links can report the current batch count out of 64."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Cut, Press & Blend",
+      "text": "A Deployer with a Chaveta advances $(item)Rough → Ribbon → Shag$(). The Chaveta is a reusable machine tool and loses no durability in automated cutting. A Press makes Flake from Rough and finishes supported cigarette/cigar assembly. Mixers handle metadata-aware blends."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Automatic Boxing",
+      "text": "A Deployer can pack Cigars, Cigarettes, Shisha or loose tobacco into a Tobacco Box while preserving exact metadata. For non-stackable Cigars/Cigarettes, use a box on a Depot so repeated Deployer cycles fill the same box. Smart Funnels can sort boxes by Empty / Partially Filled / Full attributes."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Flavor Factory",
+      "text": "Heated Mixers can produce Aqua Vitae and Flavoring Essences. Spouts apply 1000 mB Essence to loose tobacco for aromatic casing, while Mixers combine Essence with plain molasses and mix flavored molasses into Shisha."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Production Monitor",
+      "text": "Place the $(item)Production Monitor$() with its front face pointing at the adjacent transport it should read; it counts confirmed throughput without moving items. It supports Create Belts, Funnels and Chutes plus vanilla Hoppers. The ghost Filter can be set in the menu or directly on the operator-facing filter target: hover the target for a Create-style highlight, use an item/Create Filter/Attribute Filter to copy it without consuming the stack, or use an empty hand there to clear it. Items mode counts item quantity; Stacks measures Create-style 64-item stack-equivalents; Transfers counts successful transfer operations."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Monitor Targets & Output",
+      "text": "Set a numeric target, then choose Keep Counting, Stop Counting, or Reset Count. Reset Count preserves overflow. Output may be None, a Pulse per target crossing, or Hold until reset; Reset Count + Hold becomes Pulse. Manual Reset keeps the rolling rate, and optional External Reset reacts only to a rising redstone edge. A Comparator reports progress. Create Display Links can read Count/Target, rolling Rate, or Status and refresh those monitor values about once per second; Tobacconist's Spectacles/Create Goggles show the same live telemetry in-world."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Displays",
+      "text": "Display Links report Drying Rack, Tobacco Barrel, Flue Firebox, Hookah, and Production Monitor information. Barrels expose batch count; Hookahs expose Status, Fuel, Shisha, and Water, and either half of a tall Hookah can be targeted. Production Monitors expose Count/Target, rolling Rate, and Status at a 20-tick/1-second passive refresh. Other Tobacconist sources keep Create's normal 100-tick/5-second passive cadence. Create Basins expose homogenization state/average, while Item Vaults can report tobacco count and average quality for one compatible lot."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Ponder",
+      "text": "Ponder scenes cover curing, iterative bulk homogenization, cutting/pressing, blending/barrel work, Aqua Vitae/Essence/Shisha production, cigarette/cigar assembly, and factory logistics."
+    }
+  ],
+  "flag": "mod:create"
+}

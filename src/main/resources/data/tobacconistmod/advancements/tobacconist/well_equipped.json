@@ -1,0 +1,76 @@
+{
+  "parent": "tobacconistmod:tobacconist/tobacconists_eye",
+  "display": {
+    "icon": {
+      "id": "tobacconistmod:tobacco_pouch",
+      "count": 1
+    },
+    "title": {
+      "translate": "advancement.tobacconistmod.well_equipped"
+    },
+    "description": {
+      "translate": "advancement.tobacconistmod.well_equipped.desc"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "clay_pipe": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tobacconistmod:clay_smoking_pipe"
+          }
+        ]
+      }
+    },
+    "pouch": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tobacconistmod:tobacco_pouch"
+          }
+        ]
+      }
+    },
+    "box": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tobacconistmod:tobacco_box"
+          }
+        ]
+      }
+    },
+    "spectacles": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tobacconistmod:tobacconists_spectacles"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "clay_pipe"
+    ],
+    [
+      "pouch"
+    ],
+    [
+      "box"
+    ],
+    [
+      "spectacles"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

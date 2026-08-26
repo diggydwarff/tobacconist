@@ -1,0 +1,19 @@
+{
+  "forge:conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "type": "tobacconistmod:create_tobacco_assembly_pressing",
+  "ingredients": [
+    {
+      "item": "tobacconistmod:incomplete_cigar"
+    }
+  ],
+  "results": [
+    {
+      "item": "tobacconistmod:cigar"
+    }
+  ]
+}

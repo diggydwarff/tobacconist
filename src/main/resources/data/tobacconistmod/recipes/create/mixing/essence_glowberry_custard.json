@@ -1,0 +1,33 @@
+{
+  "forge:conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "create"
+    },
+    {
+      "type": "forge:not",
+      "value": {
+        "type": "forge:tag_empty",
+        "tag": "tobacconistmod:flavorings/glowberry_custard"
+      }
+    }
+  ],
+  "type": "create:mixing",
+  "heat_requirement": "heated",
+  "ingredients": [
+    {
+      "tag": "tobacconistmod:flavorings/glowberry_custard"
+    },
+    {
+      "amount": 1000,
+      "fluid": "tobacconistmod:aqua_vitae",
+      "nbt": {}
+    }
+  ],
+  "results": [
+    {
+      "amount": 1000,
+      "item": "tobacconistmod:essence_glowberry_custard"
+    }
+  ]
+}

@@ -196,7 +196,7 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
 
     @Override
     protected void saveAdditional(CompoundTag nbt) {
-        nbt.put("inventory", itemHandler.serializeNBT(registries));
+        nbt.put("inventory", itemHandler.serializeNBT());
         nbt.putInt("hookah.progress", this.progress);
         nbt.putInt("hookah.fuelTime", this.fuelTime);
         nbt.putInt("hookah.currentFuelMaxTime", this.currentFuelMaxTime);
@@ -208,7 +208,7 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
     @Override
     public void load(CompoundTag nbt) {
         super.load(nbt);
-        itemHandler.deserializeNBT(registries, nbt.getCompound("inventory"));
+        itemHandler.deserializeNBT(nbt.getCompound("inventory"));
         this.progress = nbt.getInt("hookah.progress");
         this.fuelTime = nbt.getInt("hookah.fuelTime");
         this.currentFuelMaxTime = nbt.getInt("hookah.currentFuelMaxTime");

@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "farmersdelight:melon_popsicle",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/popsicles/melon",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/popsicle/melon",
+      "required": false
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#forge:foods/fruits/fig",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/fig",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/fig",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/fig",
+      "required": false
+    },
+    {
+      "id": "fruitsdelight:fig",
+      "required": false
+    },
+    {
+      "id": "croptopia:fig",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/fruit/fig",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/fig",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/fig",
+      "required": false
+    }
+  ]
+}

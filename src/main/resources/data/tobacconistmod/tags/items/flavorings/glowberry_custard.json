@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "farmersdelight:glow_berry_custard",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/custards/glow_berry",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/custard/glow_berry",
+      "required": false
+    }
+  ]
+}

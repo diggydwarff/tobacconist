@@ -1,0 +1,27 @@
+{
+  "name": "Cross-Mod Flavor Ingredients",
+  "icon": "tobacconistmod:flavoring_essence_coffee",
+  "category": "tobacconistmod:hookah",
+  "sortnum": 8,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Flavoring Essence recipes use Tobacconist ingredient tags rather than depending on one specific food mod. Equivalent fruits, spices, herbs, coffee, and sweets from compatible mods can therefore make the same Essence in both the Brewing Stand and Create Mechanical Mixer."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "New Core Profiles",
+      "text": "Coffee, Vanilla, Strawberry, Banana, Mint, Lime, Grapefruit, Cherry, Grape, Coconut, Blackberry, Raspberry, Cinnamon, and Caramel are available whenever a matching tagged ingredient exists."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "More Aromatics",
+      "text": "Apricot, Plum, Dragonfruit, Marshmallow, Tea, Hibiscus, Lavender, Peanut, Brownie, and Custard are also supported. Mods and datapacks can extend any flavor by adding ingredients to $(thing)#tobacconistmod:flavorings/<flavor>$()."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Existing Fruits Too",
+      "text": "Existing Peach, Pear, Mango, Orange, Blueberry, Lemon, Pineapple, Cranberry, Fig, Kiwi and other profiles now use the same tag-first system. For example, a compatible Peach from another mod can make Peach Essence instead of requiring Fruits Delight specifically."
+    }
+  ]
+}

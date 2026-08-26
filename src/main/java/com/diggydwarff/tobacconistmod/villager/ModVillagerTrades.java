@@ -12,7 +12,6 @@ import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -57,7 +56,7 @@ public class ModVillagerTrades {
     public static void addWanderingTrades(WandererTradesEvent event) {
         event.getGenericTrades().add(sell(ModItems.WILD_TOBACCO_SEEDS, 1, 2, 8, 1));
         event.getRareTrades().add((trader, random) -> new MerchantOffer(
-                new ItemCost(Items.EMERALD, 3),
+                new ItemStack(Items.EMERALD, 3),
                 new ItemStack(com.diggydwarff.tobacconistmod.block.ModBlocks.WILD_FLOWERING_TOBACCO.get(), 1),
                 4, 1, 0.05F
         ));
@@ -68,7 +67,7 @@ public class ModVillagerTrades {
             RegionalProfile profile = profileFor(trader);
             Item seed = (secondary ? profile.secondarySeed() : profile.primarySeed()).get();
             return new MerchantOffer(
-                    new ItemCost(Items.EMERALD, 1),
+                    new ItemStack(Items.EMERALD, 1),
                     new ItemStack(seed, 1),
                     16, 1, 0.05F
             );
@@ -79,7 +78,7 @@ public class ModVillagerTrades {
         return (trader, random) -> {
             Item leaf = profileFor(trader).primaryRawLeaf().get();
             return new MerchantOffer(
-                    new ItemCost(leaf, 12),
+                    new ItemStack(leaf, 12),
                     new ItemStack(Items.EMERALD, 1),
                     12, 5, 0.05F
             );
@@ -88,7 +87,7 @@ public class ModVillagerTrades {
 
     private static VillagerTrades.ItemListing sell(Supplier<Item> item, int emeraldCost, int count, int maxUses, int xp) {
         return (trader, random) -> new MerchantOffer(
-                new ItemCost(Items.EMERALD, emeraldCost),
+                new ItemStack(Items.EMERALD, emeraldCost),
                 new ItemStack(item.get(), count),
                 maxUses, xp, 0.05F
         );

@@ -91,7 +91,7 @@ public class ShishaTobaccoRecipe extends CustomRecipe {
 
             BottledMolassesFlavors flavor = BottledMolassesFlavors.fromItem(stack.getItem());
             if (flavor != null && !flavor.isPlain()) {
-                if (essence != null || molasses.getContainerSize() >= 3) return null;
+                if (essence != null || molasses.size() >= 3) return null;
                 molasses.add(flavor);
                 continue;
             }

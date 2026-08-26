@@ -1,0 +1,25 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#forge:foods/brownie",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/brownies",
+      "required": false
+    },
+    {
+      "id": "#forge:brownies",
+      "required": false
+    },
+    {
+      "id": "croptopia:brownies",
+      "required": false
+    },
+    {
+      "id": "#forge:brownies",
+      "required": false
+    }
+  ]
+}

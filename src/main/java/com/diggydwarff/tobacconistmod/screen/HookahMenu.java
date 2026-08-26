@@ -80,7 +80,7 @@ public class HookahMenu extends AbstractContainerMenu {
                     // If already burning and fuel slot has something in it,
                     // only allow stacking the same fuel type.
                     if (data.get(2) > 0 && !current.isEmpty()) {
-                        return ItemStack.isSameItemSameComponents(current, stack);
+                        return ItemStack.isSameItemSameTags(current, stack);
                     }
 
                     return true;

@@ -1,0 +1,37 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#forge:foods/fruits/lime",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/lime",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/lime",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/lime",
+      "required": false
+    },
+    {
+      "id": "croptopia:lime",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/fruit/lime",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/lime",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/lime",
+      "required": false
+    }
+  ]
+}

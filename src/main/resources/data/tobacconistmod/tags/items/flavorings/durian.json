@@ -1,0 +1,37 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#forge:foods/fruits/durian",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/durian",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/durian",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/durian",
+      "required": false
+    },
+    {
+      "id": "fruitsdelight:durian",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/fruit/durian",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/durian",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/durian",
+      "required": false
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#forge:foods/fruits/banana",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/banana",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/banana",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/banana",
+      "required": false
+    },
+    {
+      "id": "croptopia:banana",
+      "required": false
+    },
+    {
+      "id": "neapolitan:banana",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/fruit/banana",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/banana",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/banana",
+      "required": false
+    }
+  ]
+}

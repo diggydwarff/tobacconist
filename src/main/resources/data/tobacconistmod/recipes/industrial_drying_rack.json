@@ -1,0 +1,36 @@
+{
+  "forge:conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IBI",
+    "APA",
+    "IRI"
+  ],
+  "key": {
+    "I": {
+      "item": "create:iron_sheet"
+    },
+    "B": {
+      "item": "create:brass_casing"
+    },
+    "A": {
+      "item": "create:andesite_alloy"
+    },
+    "P": {
+      "item": "create:precision_mechanism"
+    },
+    "R": {
+      "item": "tobacconistmod:tobacco_drying_rack_block"
+    }
+  },
+  "result": {
+    "item": "tobacconistmod:industrial_drying_rack",
+    "count": 1
+  }
+}

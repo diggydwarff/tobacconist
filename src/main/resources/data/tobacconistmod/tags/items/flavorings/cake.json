@@ -1,0 +1,22 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:cake",
+    {
+      "id": "#forge:foods/cake",
+      "required": false
+    },
+    {
+      "id": "#forge:cakes",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/cakes",
+      "required": false
+    },
+    {
+      "id": "#forge:cake",
+      "required": false
+    }
+  ]
+}

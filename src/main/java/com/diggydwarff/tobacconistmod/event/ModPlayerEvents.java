@@ -11,11 +11,11 @@ public class ModPlayerEvents {
 
     @SubscribeEvent
     public static void onBreakSpeed(PlayerEvent.BreakSpeed event) {
-        if (!event.getEntity().hasEffect(ModEffects.NICOTINE)) {
+        if (!event.getEntity().hasEffect(ModEffects.NICOTINE.get())) {
             return;
         }
 
-        MobEffectInstance effect = event.getEntity().getEffect(ModEffects.NICOTINE);
+        MobEffectInstance effect = event.getEntity().getEffect(ModEffects.NICOTINE.get());
         int amplifier = effect != null ? effect.getAmplifier() : 0;
 
         float multiplier;

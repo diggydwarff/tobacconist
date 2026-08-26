@@ -1,0 +1,43 @@
+{
+  "name": "Hanging Leaf Bunches",
+  "icon": "tobacconistmod:tobacco_leaf_virginia",
+  "category": "tobacconistmod:curing",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "For a traditional curing setup or decorative storage, tobacco can be hung in $(thing)16-leaf bunches$() instead of loaded into a Drying Rack. In Survival, hold at least $(item)16 identical raw or cured leaves$(), sneak, and right-click the $(thing)underside$() of a sturdy block. Exactly 16 leaves are stored. In Creative mode, one held leaf is sufficient to place the 16-leaf bunch. Already-cured leaves hang immediately and keep their cure, quality, and other processing data."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Same Tobacco Cure",
+      "text": "A hanging bunch uses the same base curing times, quality calculation, interruptions, rain damage, cure-color stages, and priority as the rack: $(thing)Fire → Flue → Sun → Air$(). Raw and finished bunches also keep visible variety-specific leaf coloration. Break either half to recover all 16 stored leaves with their processing data."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Pergola Sun Curing",
+      "text": "Because the bunch hangs under a support block, vertical sky above it is impossible. Sun Curing instead requires a horizontal neighboring $(item)air$() block beside either half that can see the sky and has sky light 14+ during daytime. This makes long $(item)beam / gap / beam / gap$() pergolas and slatted curing sheds valid."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Covered Air Curing",
+      "text": "With no qualifying side-sky opening, a dry covered bunch Air Cures. A lit Campfire directly below the bottom of the bunch enables Fire Curing. Clean Flue Curing requires a nearby lit Flue Firebox, no side rain, no direct campfire below, and no nearby fire/campfire smoke source. Once Fire has been used it remains the final priority over later exposure; Flue likewise remains above Sun/Air."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Traditional, Not Automated",
+      "text": "Hanging bunches are manual storage/curing blocks. They expose no hopper, funnel, Mechanical Arm, item capability, or Display Link source. Create fan airflow may still accelerate a valid curing environment. Use Drying Racks when item logistics and automated extraction matter."
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "tobacconistmod:curing/rack_basics",
+        "tobacconistmod:curing/air_curing",
+        "tobacconistmod:curing/sun_curing",
+        "tobacconistmod:curing/fire_curing",
+        "tobacconistmod:curing/flue_curing"
+      ],
+      "title": "Related Chapters"
+    }
+  ]
+}

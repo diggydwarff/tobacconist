@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "farmersdelight:chocolate_pie_slice",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/pies/chocolate",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/pie/chocolate",
+      "required": false
+    }
+  ]
+}

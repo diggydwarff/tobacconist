@@ -1,0 +1,41 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#forge:foods/fruits/persimmon",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/persimmon",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/persimmon",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/persimmon",
+      "required": false
+    },
+    {
+      "id": "fruitsdelight:persimmon",
+      "required": false
+    },
+    {
+      "id": "croptopia:persimmon",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/fruit/persimmon",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/persimmon",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/persimmon",
+      "required": false
+    }
+  ]
+}

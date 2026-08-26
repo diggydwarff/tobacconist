@@ -1,0 +1,41 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#forge:foods/fruits/mango",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/mango",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/mango",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/mango",
+      "required": false
+    },
+    {
+      "id": "fruitsdelight:mango",
+      "required": false
+    },
+    {
+      "id": "croptopia:mango",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/fruit/mango",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/mango",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/mango",
+      "required": false
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "forge:conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "type": "tobacconistmod:create_tobacco_pressing",
+  "ingredients": [
+    {
+      "item": "tobacconistmod:blended_tobacco"
+    }
+  ],
+  "results": [
+    {
+      "item": "tobacconistmod:blended_tobacco"
+    }
+  ]
+}

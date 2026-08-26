@@ -1,20 +1,19 @@
 package com.diggydwarff.tobacconistmod.datagen;
 
-import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
 
-import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 
-public class ModRecipeProvider extends RecipeProvider {
-
-    public ModRecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
-        super(output, lookupProvider);
+public class ModRecipeProvider extends RecipeProvider implements IConditionBuilder {
+    public ModRecipeProvider(PackOutput output) {
+        super(output);
     }
 
     @Override
-    protected void buildRecipes(RecipeOutput output) {
-        // Runtime recipe JSONs are already shipped under data/tobacconistmod/recipe.
+    protected void buildRecipes(Consumer<FinishedRecipe> output) {
+        // Runtime recipe JSONs are already shipped under data/tobacconistmod/recipes.
     }
 }

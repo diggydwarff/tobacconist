@@ -32,6 +32,7 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
 
@@ -63,17 +64,17 @@ public class DoubleHookahBlock extends BaseEntityBlock {
     }
 
     @Override
-    protected boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
+    public boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
         return true;
     }
 
     @Override
-    protected int getLightBlock(BlockState state, BlockGetter level, BlockPos pos) {
+    public int getLightBlock(BlockState state, BlockGetter level, BlockPos pos) {
         return 0;
     }
 
     @Override
-    protected float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos) {
+    public float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos) {
         return 1.0F;
     }
 
@@ -150,7 +151,7 @@ public class DoubleHookahBlock extends BaseEntityBlock {
     }
 
     @Override
-    public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         DoubleBlockHalf half = state.getValue(HALF);
         BlockPos lowerPos = half == DoubleBlockHalf.LOWER ? pos : pos.below();
 
@@ -162,7 +163,8 @@ public class DoubleHookahBlock extends BaseEntityBlock {
 
             // Let vanilla/NeoForge perform the Creative break exactly once. The event
             // guards suppress loot from both this half and the partner teardown.
-            return super.playerWillDestroy(level, pos, state, player);
+            super.playerWillDestroy(level, pos, state, player);
+            return;
         }
 
         BlockPos otherPos = half == DoubleBlockHalf.LOWER ? pos.above() : pos.below();
@@ -172,7 +174,7 @@ public class DoubleHookahBlock extends BaseEntityBlock {
             level.levelEvent(player, 2001, otherPos, Block.getId(otherState));
         }
 
-        return super.playerWillDestroy(level, pos, state, player);
+        super.playerWillDestroy(level, pos, state, player);
     }
 
     @Override
@@ -251,7 +253,7 @@ public class DoubleHookahBlock extends BaseEntityBlock {
             }
 
             if (entity instanceof HookahEntity) {
-                ((ServerPlayer) player).openMenu((HookahEntity) entity, buf -> buf.writeBlockPos(entityPos));
+                NetworkHooks.openScreen((ServerPlayer) player, (HookahEntity) entity, entityPos);
             } else {
                 throw new IllegalStateException("Our Container provider is missing!");
             }

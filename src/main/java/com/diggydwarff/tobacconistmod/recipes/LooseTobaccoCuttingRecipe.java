@@ -80,7 +80,7 @@ public class LooseTobaccoCuttingRecipe extends CustomRecipe {
     public NonNullList<ItemStack> getRemainingItems(CraftingContainer container) {
         NonNullList<ItemStack> remaining = NonNullList.withSize(container.getContainerSize(), ItemStack.EMPTY);
 
-        for (int i = 0; i < remaining.getContainerSize(); i++) {
+        for (int i = 0; i < remaining.size(); i++) {
             ItemStack stack = container.getItem(i);
             if (!stack.isEmpty() && TobaccoCuringHelper.isChaveta(stack)) {
                 remaining.set(i, stack.getCraftingRemainingItem());

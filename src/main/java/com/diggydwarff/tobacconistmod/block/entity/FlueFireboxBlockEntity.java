@@ -125,16 +125,6 @@ public class FlueFireboxBlockEntity extends BaseContainerBlockEntity implements 
     }
 
     @Override
-    protected NonNullList<ItemStack> getItems() {
-        return items;
-    }
-
-    @Override
-    protected void setItems(NonNullList<ItemStack> items) {
-        this.items = items;
-    }
-
-    @Override
     protected Component getDefaultName() {
         return Component.translatable("block.tobacconistmod.flue_firebox");
     }
@@ -202,7 +192,7 @@ public class FlueFireboxBlockEntity extends BaseContainerBlockEntity implements 
     @Override
     protected void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
-        ContainerHelper.saveAllItems(tag, items, registries);
+        ContainerHelper.saveAllItems(tag, items);
         tag.putInt("BurnTime", burnTime);
         tag.putInt("BurnTimeTotal", burnTimeTotal);
     }
@@ -211,7 +201,7 @@ public class FlueFireboxBlockEntity extends BaseContainerBlockEntity implements 
     public void load(CompoundTag tag) {
         super.load(tag);
         items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
-        ContainerHelper.loadAllItems(tag, items, registries);
+        ContainerHelper.loadAllItems(tag, items);
         burnTime = tag.getInt("BurnTime");
         burnTimeTotal = tag.getInt("BurnTimeTotal");
     }

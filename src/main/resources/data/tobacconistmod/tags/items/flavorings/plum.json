@@ -1,0 +1,37 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#forge:foods/fruits/plum",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/plum",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/plum",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/plum",
+      "required": false
+    },
+    {
+      "id": "croptopia:plum",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/fruit/plum",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/plum",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/plum",
+      "required": false
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "forge:conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "type": "tobacconistmod:create_tobacco_homogenizing",
+  "ingredients": [
+    {
+      "item": "tobacconistmod:tobacco_leaf_shade_dry"
+    }
+  ],
+  "results": [
+    {
+      "item": "tobacconistmod:tobacco_leaf_shade_dry",
+      "count": 64
+    }
+  ],
+  "processing_time": 100
+}

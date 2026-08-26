@@ -112,7 +112,7 @@ public class TobaccoDryingRackBlock extends BaseEntityBlock {
     }
 
     @Override
-    public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         if (state.getValue(HALF) == DoubleBlockHalf.LOWER) {
             // Clean up a legacy upper proxy if this rack was saved while the two-block version existed.
             BlockPos upperPos = pos.above();
@@ -122,7 +122,7 @@ public class TobaccoDryingRackBlock extends BaseEntityBlock {
                         Block.UPDATE_ALL | Block.UPDATE_SUPPRESS_DROPS);
             }
         }
-        return super.playerWillDestroy(level, pos, state, player);
+        super.playerWillDestroy(level, pos, state, player);
     }
 
     @Override
@@ -144,7 +144,7 @@ public class TobaccoDryingRackBlock extends BaseEntityBlock {
     }
 
     @Override
-    protected boolean isPathfindable(BlockState state, net.minecraft.world.level.pathfinder.PathComputationType type) {
+    public boolean isPathfindable(BlockState state, BlockGetter level, BlockPos pos, net.minecraft.world.level.pathfinder.PathComputationType type) {
         return false;
     }
 

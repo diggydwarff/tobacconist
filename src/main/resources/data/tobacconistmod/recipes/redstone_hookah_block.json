@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "RRR",
+    "RHR",
+    "RRR"
+  ],
+  "key": {
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "H": {
+      "item": "tobacconistmod:ornate_iron_hookah_block"
+    }
+  },
+  "result": {
+    "count": 1,
+    "item": "tobacconistmod:redstone_hookah_block"
+  }
+}

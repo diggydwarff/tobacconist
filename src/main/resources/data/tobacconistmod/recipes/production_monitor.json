@@ -1,0 +1,36 @@
+{
+  "forge:conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IEI",
+    "BPB",
+    "IRI"
+  ],
+  "key": {
+    "I": {
+      "item": "create:iron_sheet"
+    },
+    "E": {
+      "item": "create:electron_tube"
+    },
+    "B": {
+      "item": "create:brass_casing"
+    },
+    "P": {
+      "item": "create:precision_mechanism"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "result": {
+    "item": "tobacconistmod:production_monitor",
+    "count": 1
+  }
+}

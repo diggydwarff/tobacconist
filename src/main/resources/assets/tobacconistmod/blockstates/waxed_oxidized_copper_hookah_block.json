@@ -1,0 +1,176 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "facing": "north",
+        "half": "lower",
+        "lit": "false"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/oxidized_copper_hookah_block_lower"
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "half": "lower",
+        "lit": "false"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/oxidized_copper_hookah_block_lower",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "half": "lower",
+        "lit": "false"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/oxidized_copper_hookah_block_lower",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "half": "lower",
+        "lit": "false"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/oxidized_copper_hookah_block_lower",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "half": "lower",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/oxidized_copper_hookah_block_lower"
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "half": "lower",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/oxidized_copper_hookah_block_lower",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "half": "lower",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/oxidized_copper_hookah_block_lower",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "half": "lower",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/oxidized_copper_hookah_block_lower",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "half": "upper",
+        "lit": "false"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/oxidized_copper_hookah_block_upper"
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "half": "upper",
+        "lit": "false"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/oxidized_copper_hookah_block_upper",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "half": "upper",
+        "lit": "false"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/oxidized_copper_hookah_block_upper",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "half": "upper",
+        "lit": "false"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/oxidized_copper_hookah_block_upper",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "half": "upper",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/oxidized_copper_hookah_block_upper"
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "half": "upper",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/oxidized_copper_hookah_block_upper",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "half": "upper",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/oxidized_copper_hookah_block_upper",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "half": "upper",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/oxidized_copper_hookah_block_upper",
+        "y": 270
+      }
+    }
+  ]
+}

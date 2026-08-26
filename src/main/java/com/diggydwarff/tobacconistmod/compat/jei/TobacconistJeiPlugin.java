@@ -7,8 +7,6 @@ import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.ingredients.subtypes.ISubtypeInterpreter;
-import mezz.jei.api.ingredients.subtypes.UidContext;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
@@ -28,26 +26,15 @@ public class TobacconistJeiPlugin implements IModPlugin {
         return new ResourceLocation(TobacconistMod.MODID, "jei_plugin");
     }
 
-    private static final ISubtypeInterpreter<ItemStack> LOOSE_TOBACCO_SUBTYPE = new ISubtypeInterpreter<>() {
-        @Override
-        public Object getSubtypeData(ItemStack stack, UidContext context) {
-            return getLooseSubtype(stack);
-        }
-
-        @Override
-        public String getLegacyStringSubtypeInfo(ItemStack stack, UidContext context) {
-            return getLooseSubtype(stack);
-        }
-    };
 
     @Override
     public void registerItemSubtypes(ISubtypeRegistration registration) {
-        registration.registerSubtypeInterpreter(ModItems.TOBACCO_LOOSE_WILD.get(), LOOSE_TOBACCO_SUBTYPE);
-        registration.registerSubtypeInterpreter(ModItems.TOBACCO_LOOSE_VIRGINIA.get(), LOOSE_TOBACCO_SUBTYPE);
-        registration.registerSubtypeInterpreter(ModItems.TOBACCO_LOOSE_BURLEY.get(), LOOSE_TOBACCO_SUBTYPE);
-        registration.registerSubtypeInterpreter(ModItems.TOBACCO_LOOSE_ORIENTAL.get(), LOOSE_TOBACCO_SUBTYPE);
-        registration.registerSubtypeInterpreter(ModItems.TOBACCO_LOOSE_DOKHA.get(), LOOSE_TOBACCO_SUBTYPE);
-        registration.registerSubtypeInterpreter(ModItems.TOBACCO_LOOSE_SHADE.get(), LOOSE_TOBACCO_SUBTYPE);
+        registration.registerSubtypeInterpreter(ModItems.TOBACCO_LOOSE_WILD.get(), (stack, context) -> getLooseSubtype(stack));
+        registration.registerSubtypeInterpreter(ModItems.TOBACCO_LOOSE_VIRGINIA.get(), (stack, context) -> getLooseSubtype(stack));
+        registration.registerSubtypeInterpreter(ModItems.TOBACCO_LOOSE_BURLEY.get(), (stack, context) -> getLooseSubtype(stack));
+        registration.registerSubtypeInterpreter(ModItems.TOBACCO_LOOSE_ORIENTAL.get(), (stack, context) -> getLooseSubtype(stack));
+        registration.registerSubtypeInterpreter(ModItems.TOBACCO_LOOSE_DOKHA.get(), (stack, context) -> getLooseSubtype(stack));
+        registration.registerSubtypeInterpreter(ModItems.TOBACCO_LOOSE_SHADE.get(), (stack, context) -> getLooseSubtype(stack));
     }
 
     private static String getLooseSubtype(ItemStack stack) {

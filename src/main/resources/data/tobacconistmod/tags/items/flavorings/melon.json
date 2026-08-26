@@ -1,0 +1,46 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:melon_slice",
+    {
+      "id": "#forge:crops/melon",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/fruits/melon",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/melon",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/melon",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/melon",
+      "required": false
+    },
+    {
+      "id": "croptopia:cantaloupe",
+      "required": false
+    },
+    {
+      "id": "croptopia:honeydew",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/fruit/melon",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/melon",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/melon",
+      "required": false
+    }
+  ]
+}

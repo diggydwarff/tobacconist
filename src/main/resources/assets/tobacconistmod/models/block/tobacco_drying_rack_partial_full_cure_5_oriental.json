@@ -1,0 +1,6 @@
+{
+  "parent": "tobacconistmod:block/tobacco_drying_rack_partial_full",
+  "textures": {
+    "base": "tobacconistmod:block/tobacco_drying_rack_stage_2_cure_5_oriental"
+  }
+}

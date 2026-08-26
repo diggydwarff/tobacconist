@@ -144,7 +144,7 @@ public abstract class AbstractTallTobaccoCropBlock extends CropBlock {
         if (level.getRawBrightness(pos, 0) < 9) return;
 
         int currentAge = getEffectiveAge(level, pos, state);
-        float speed = getGrowthSpeed(state, level, pos);
+        float speed = getGrowthSpeed(this, level, pos);
 
         if (random.nextInt((int) (25.0F / speed) + 1) != 0) return;
 
@@ -182,9 +182,10 @@ public abstract class AbstractTallTobaccoCropBlock extends CropBlock {
     }
 
     @Override
-    public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         if (level.isClientSide) {
-            return super.playerWillDestroy(level, pos, state, player);
+            super.playerWillDestroy(level, pos, state, player);
+            return;
         }
 
         DoubleBlockHalf half = state.getValue(HALF);
@@ -200,7 +201,7 @@ public abstract class AbstractTallTobaccoCropBlock extends CropBlock {
             }
 
             level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
-            return state;
+            return;
         }
 
         BlockPos upperPos = pos.above();
@@ -218,11 +219,11 @@ public abstract class AbstractTallTobaccoCropBlock extends CropBlock {
             level.setBlock(upperPos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
         }
 
-        return super.playerWillDestroy(level, pos, state, player);
+        super.playerWillDestroy(level, pos, state, player);
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state) {
+    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state, boolean isClient) {
         if (state.getValue(HALF) == DoubleBlockHalf.UPPER) return false;
         return getEffectiveAge(level, pos, state) < getMaxAge();
     }

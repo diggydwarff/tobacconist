@@ -1,0 +1,45 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#forge:foods/fruits/dragonfruit",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/dragonfruit",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/dragonfruit",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/dragonfruit",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/fruits/dragon_fruit",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/dragon_fruit",
+      "required": false
+    },
+    {
+      "id": "croptopia:dragonfruit",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/fruit/dragonfruit",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/dragonfruit",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/dragonfruit",
+      "required": false
+    }
+  ]
+}

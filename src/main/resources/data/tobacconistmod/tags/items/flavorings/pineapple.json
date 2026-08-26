@@ -1,0 +1,41 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#forge:foods/fruits/pineapple",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/pineapple",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/pineapple",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/pineapple",
+      "required": false
+    },
+    {
+      "id": "fruitsdelight:pineapple",
+      "required": false
+    },
+    {
+      "id": "croptopia:pineapple",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/fruit/pineapple",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/pineapple",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/pineapple",
+      "required": false
+    }
+  ]
+}

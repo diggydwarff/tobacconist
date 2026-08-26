@@ -1,0 +1,21 @@
+{
+  "forge:conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "type": "tobacconistmod:create_tobacco_homogenizing",
+  "ingredients": [
+    {
+      "item": "tobacconistmod:tobacco_leaf_virginia"
+    }
+  ],
+  "results": [
+    {
+      "item": "tobacconistmod:tobacco_leaf_virginia",
+      "count": 64
+    }
+  ],
+  "processing_time": 100
+}

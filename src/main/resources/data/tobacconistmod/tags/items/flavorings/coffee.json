@@ -1,0 +1,81 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#forge:crops/coffee",
+      "required": false
+    },
+    {
+      "id": "#forge:crops/coffee_beans",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/coffee_beans",
+      "required": false
+    },
+    {
+      "id": "#forge:crops/coffee",
+      "required": false
+    },
+    {
+      "id": "#forge:crops/coffee_beans",
+      "required": false
+    },
+    {
+      "id": "croptopia:coffee_beans",
+      "required": false
+    },
+    {
+      "id": "rusticdelight:coffee_beans",
+      "required": false
+    },
+    {
+      "id": "rusticdelight:roasted_coffee_beans",
+      "required": false
+    },
+    {
+      "id": "rusticdelight:golden_coffee_beans",
+      "required": false
+    },
+    {
+      "id": "herbalbrews:coffee_beans",
+      "required": false
+    },
+    {
+      "id": "farmersrespite:coffee_beans",
+      "required": false
+    },
+    {
+      "id": "farmersrespite:coffee_berries",
+      "required": false
+    },
+    {
+      "id": "coffee_delight:coffee_berries",
+      "required": false
+    },
+    {
+      "id": "coffee_delight:coffee_beans",
+      "required": false
+    },
+    {
+      "id": "coffee_delight:roasted_coffee_beans",
+      "required": false
+    },
+    {
+      "id": "coffee_delight:cooked_coffee_beans",
+      "required": false
+    },
+    {
+      "id": "#forge:coffee_beans",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/coffee",
+      "required": false
+    },
+    {
+      "id": "#forge:coffee_beans",
+      "required": false
+    }
+  ]
+}

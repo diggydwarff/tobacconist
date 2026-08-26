@@ -83,11 +83,12 @@ public class TobaccoDryingRackRenderer implements BlockEntityRenderer<TobaccoDry
     private void vertex(VertexConsumer consumer, PoseStack.Pose pose,
                         float x, float y, float z, float u, float v,
                         float nx, float ny, float nz, int light) {
-        consumer.addVertex(pose, x, y, z)
-                .setColor(1.0F, 1.0F, 1.0F, 1.0F)
-                .setUv(u, v)
-                .setOverlay(OverlayTexture.NO_OVERLAY)
-                .setLight(light)
-                .setNormal(pose, nx, ny, nz);
+        consumer.vertex(pose.pose(), x, y, z)
+                .color(1.0F, 1.0F, 1.0F, 1.0F)
+                .uv(u, v)
+                .overlayCoords(OverlayTexture.NO_OVERLAY)
+                .uv2(light)
+                .normal(pose.normal(), nx, ny, nz)
+                .endVertex();
     }
 }

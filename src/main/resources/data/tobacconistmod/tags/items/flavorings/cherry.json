@@ -1,0 +1,37 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#forge:foods/fruits/cherry",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/cherry",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/cherry",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/cherry",
+      "required": false
+    },
+    {
+      "id": "croptopia:cherry",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/fruit/cherry",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/cherry",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/cherry",
+      "required": false
+    }
+  ]
+}

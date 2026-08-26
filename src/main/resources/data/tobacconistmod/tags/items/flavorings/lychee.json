@@ -1,0 +1,37 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#forge:foods/fruits/lychee",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/lychee",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/lychee",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/lychee",
+      "required": false
+    },
+    {
+      "id": "fruitsdelight:lychee",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/fruit/lychee",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/lychee",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/lychee",
+      "required": false
+    }
+  ]
+}

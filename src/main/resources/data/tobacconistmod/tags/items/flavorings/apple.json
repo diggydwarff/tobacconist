@@ -1,0 +1,34 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:apple",
+    {
+      "id": "#forge:foods/fruits/apple",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/apple",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/apple",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/apple",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/fruit/apple",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/apple",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/apple",
+      "required": false
+    }
+  ]
+}

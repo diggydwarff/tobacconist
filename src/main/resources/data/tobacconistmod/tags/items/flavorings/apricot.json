@@ -1,0 +1,37 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#forge:foods/fruits/apricot",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/apricot",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/apricot",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/apricot",
+      "required": false
+    },
+    {
+      "id": "croptopia:apricot",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/fruit/apricot",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/apricot",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/apricot",
+      "required": false
+    }
+  ]
+}

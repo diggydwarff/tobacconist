@@ -1,0 +1,180 @@
+{
+  "parent": "tobacconistmod:tobacconist/cloud_culture",
+  "display": {
+    "icon": {
+      "id": "tobacconistmod:ornate_diamond_hookah_block",
+      "count": 1
+    },
+    "title": {
+      "translate": "advancement.tobacconistmod.hookah_collector"
+    },
+    "description": {
+      "translate": "advancement.tobacconistmod.hookah_collector.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "hookah_block": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tobacconistmod:hookah_block"
+          }
+        ]
+      }
+    },
+    "tall_hookah_block": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tobacconistmod:tall_hookah_block"
+          }
+        ]
+      }
+    },
+    "ornate_copper_hookah_block": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tobacconistmod:ornate_copper_hookah_block"
+          }
+        ]
+      }
+    },
+    "ornate_iron_hookah_block": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tobacconistmod:ornate_iron_hookah_block"
+          }
+        ]
+      }
+    },
+    "redstone_hookah_block": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tobacconistmod:redstone_hookah_block"
+          }
+        ]
+      }
+    },
+    "lapis_hookah_block": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tobacconistmod:lapis_hookah_block"
+          }
+        ]
+      }
+    },
+    "obsidian_hookah_block": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tobacconistmod:obsidian_hookah_block"
+          }
+        ]
+      }
+    },
+    "ornate_gold_hookah_block": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tobacconistmod:ornate_gold_hookah_block"
+          }
+        ]
+      }
+    },
+    "ornate_amethyst_hookah_block": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tobacconistmod:ornate_amethyst_hookah_block"
+          }
+        ]
+      }
+    },
+    "ornate_diamond_hookah_block": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tobacconistmod:ornate_diamond_hookah_block"
+          }
+        ]
+      }
+    },
+    "emerald_hookah_block": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tobacconistmod:emerald_hookah_block"
+          }
+        ]
+      }
+    },
+    "netherite_hookah_block": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tobacconistmod:netherite_hookah_block"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "hookah_block"
+    ],
+    [
+      "tall_hookah_block"
+    ],
+    [
+      "ornate_copper_hookah_block"
+    ],
+    [
+      "ornate_iron_hookah_block"
+    ],
+    [
+      "redstone_hookah_block"
+    ],
+    [
+      "lapis_hookah_block"
+    ],
+    [
+      "obsidian_hookah_block"
+    ],
+    [
+      "ornate_gold_hookah_block"
+    ],
+    [
+      "ornate_amethyst_hookah_block"
+    ],
+    [
+      "ornate_diamond_hookah_block"
+    ],
+    [
+      "emerald_hookah_block"
+    ],
+    [
+      "netherite_hookah_block"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

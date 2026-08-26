@@ -31,6 +31,7 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
 
@@ -60,17 +61,17 @@ public class HookahBlock extends BaseEntityBlock {
     }
 
     @Override
-    protected boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
+    public boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
         return true;
     }
 
     @Override
-    protected int getLightBlock(BlockState state, BlockGetter level, BlockPos pos) {
+    public int getLightBlock(BlockState state, BlockGetter level, BlockPos pos) {
         return 0;
     }
 
     @Override
-    protected float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos) {
+    public float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos) {
         return 1.0F;
     }
 
@@ -105,7 +106,7 @@ public class HookahBlock extends BaseEntityBlock {
     }
 
     @Override
-    public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         if (!level.isClientSide && player.getAbilities().instabuild) {
             BlockEntity blockEntity = level.getBlockEntity(pos);
             if (blockEntity instanceof HookahEntity hookah) {
@@ -115,7 +116,7 @@ public class HookahBlock extends BaseEntityBlock {
 
         // Never remove the block manually from playerWillDestroy. The normal break
         // lifecycle must own removal; creative loot suppression is handled separately.
-        return super.playerWillDestroy(level, pos, state, player);
+        super.playerWillDestroy(level, pos, state, player);
     }
 
     @Override
@@ -198,7 +199,7 @@ public class HookahBlock extends BaseEntityBlock {
             }
 
             if(entity instanceof HookahEntity) {
-                ((ServerPlayer) pPlayer).openMenu((HookahEntity) entity, buf -> buf.writeBlockPos(pPos));
+                NetworkHooks.openScreen((ServerPlayer) pPlayer, (HookahEntity) entity, pPos);
             } else {
                 throw new IllegalStateException("Our Container provider is missing!");
             }

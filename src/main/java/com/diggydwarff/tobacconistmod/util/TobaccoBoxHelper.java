@@ -158,7 +158,7 @@ public class TobaccoBoxHelper {
         clearCustomProductName(aCopy);
         clearCustomProductName(bCopy);
 
-        return ItemStack.isSameItemSameComponents(aCopy, bCopy);
+        return ItemStack.isSameItemSameTags(aCopy, bCopy);
     }
 
     /**

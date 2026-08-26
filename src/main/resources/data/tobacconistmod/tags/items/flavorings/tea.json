@@ -1,0 +1,69 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#forge:crops/tea",
+      "required": false
+    },
+    {
+      "id": "#forge:tea_leaves",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/tea_leaves",
+      "required": false
+    },
+    {
+      "id": "#forge:crops/tea",
+      "required": false
+    },
+    {
+      "id": "croptopia:tea",
+      "required": false
+    },
+    {
+      "id": "croptopia:tea_leaves",
+      "required": false
+    },
+    {
+      "id": "herbalbrews:tea_blossoms",
+      "required": false
+    },
+    {
+      "id": "herbalbrews:dried_green_tea",
+      "required": false
+    },
+    {
+      "id": "herbalbrews:dried_black_tea",
+      "required": false
+    },
+    {
+      "id": "herbalbrews:dried_oolong_tea",
+      "required": false
+    },
+    {
+      "id": "herbalbrews:green_tea_leaf",
+      "required": false
+    },
+    {
+      "id": "farmersrespite:green_tea_leaves",
+      "required": false
+    },
+    {
+      "id": "farmersrespite:black_tea_leaves",
+      "required": false
+    },
+    {
+      "id": "farmersrespite:yellow_tea_leaves",
+      "required": false
+    },
+    {
+      "id": "#forge:tea",
+      "required": false
+    },
+    {
+      "id": "#forge:tea_leaves",
+      "required": false
+    }
+  ]
+}

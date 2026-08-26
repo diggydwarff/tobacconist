@@ -114,7 +114,7 @@ public abstract class SmokingItem extends Item {
 
         if (TobacconistConfig.areNicotineEffectsEnabled()) {
             player.addEffect(new MobEffectInstance(
-                    ModEffects.NICOTINE,
+                    ModEffects.NICOTINE.get(),
                     500,
                     0,
                     false,
@@ -137,11 +137,11 @@ public abstract class SmokingItem extends Item {
                 int duration = Integer.parseInt(parts[1].trim());
                 int amplifier = Integer.parseInt(parts[2].trim());
 
-                var effect = BuiltInRegistries.MOB_EFFECT.getHolder(new ResourceLocation(effectId));
-                if (effect.isEmpty()) continue;
+                var effect = BuiltInRegistries.MOB_EFFECT.get(new ResourceLocation(effectId));
+                if (effect == null) continue;
 
                 player.addEffect(new MobEffectInstance(
-                        effect.get(),
+                        effect,
                         duration,
                         amplifier,
                         false,

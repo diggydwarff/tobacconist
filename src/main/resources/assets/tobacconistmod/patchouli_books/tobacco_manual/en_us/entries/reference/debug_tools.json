@@ -1,0 +1,41 @@
+{
+  "name": "Debug & QA Tools",
+  "icon": "minecraft:command_block",
+  "category": "tobacconistmod:reference",
+  "sortnum": 6,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Tobacconist includes permission-level-2 operator commands for development and QA. $(item)/tobacconist debug$() inspects a targeted crop, Drying Rack, Hanging Tobacco Bunch, or Tobacco Barrel."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Curing Targets",
+      "text": "While looking at the one-block wooden Drying Rack, either half of an Industrial Drying Rack, or either half of a Hanging Tobacco Bunch, $(item)/tobacconist rack status$(), $(item)rack addtime <ticks>$(), and $(item)rack finish$() resolve the correct curing batch. Industrial and hanging targets resolve their shared lower/master batch from either physical half."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Hanging Alias",
+      "text": "The separate $(item)/tobacconist hanging status/addtime/finish$() commands remain available. Both command families call the same hanging-bunch debug methods."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Barrel Commands",
+      "text": "Use $(item)/tobacconist barrel ferment$(), $(item)barrel age <days>$(), or $(item)barrel ruin$() while targeting a Tobacco Barrel to force those QA states."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Test Items",
+      "text": "$(item)/tobacconist give help$() lists the metadata-aware QA item generator. It can create raw/cured leaves, loose tobacco, blends, Cigarettes, Cigars, and Shisha with controlled processing values."
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "tobacconistmod:curing/rack_basics",
+        "tobacconistmod:curing/hanging_bunches",
+        "tobacconistmod:reference/troubleshooting"
+      ],
+      "title": "Related Chapters"
+    }
+  ]
+}

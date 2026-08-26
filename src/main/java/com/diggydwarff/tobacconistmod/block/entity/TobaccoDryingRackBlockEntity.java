@@ -164,7 +164,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             return true;
         }
 
-        if (!ItemStack.isSameItemSameComponents(storedLeaf, stack)) {
+        if (!ItemStack.isSameItemSameTags(storedLeaf, stack)) {
             return false;
         }
 
@@ -309,7 +309,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             return true;
         }
 
-        if (!ItemStack.isSameItemSameComponents(storedLeaf, stack)) {
+        if (!ItemStack.isSameItemSameTags(storedLeaf, stack)) {
             return false;
         }
 
@@ -1301,7 +1301,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         super.load(tag);
 
         if (tag.contains("StoredLeaf")) {
-            storedLeaf = ItemStack.of(tag.getCompound("StoredLeaf")));
+            storedLeaf = ItemStack.of(tag.getCompound("StoredLeaf"));
         } else {
             storedLeaf = ItemStack.EMPTY;
         }

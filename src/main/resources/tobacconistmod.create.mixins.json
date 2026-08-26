@@ -1,0 +1,20 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.diggydwarff.tobacconistmod.compat.create.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "HarvesterMovementBehaviourMixin",
+    "BeltDeployerCallbacksMixin",
+    "FactoryPanelTobaccoMatchingMixin",
+    "BasinRecipeHomogenizingMixin",
+    "BasinHomogenizationStateMixin",
+    "BasinInventoryHomogenizationMixin",
+    "FunnelProductionMonitorMixin",
+    "ChuteProductionMonitorMixin",
+    "ProductionMonitorGoggleMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

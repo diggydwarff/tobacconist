@@ -39,7 +39,7 @@ public class CigarItem extends SmokingItem {
         this.triggerSmokingEffectPlayer(player, (ServerLevel) level, 0, stack);
 
         if (stack.getDamageValue() >= stack.getMaxDamage() - 1) {
-            stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
+            stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(hand));
         } else {
             stack.setDamageValue(stack.getDamageValue() + 1);
         }

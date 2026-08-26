@@ -28,6 +28,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
 public class FlueFireboxBlock extends BaseEntityBlock implements EntityBlock {
@@ -96,7 +97,7 @@ public class FlueFireboxBlock extends BaseEntityBlock implements EntityBlock {
         if (!level.isClientSide) {
             BlockEntity entity = level.getBlockEntity(pos);
             if (entity instanceof FlueFireboxBlockEntity firebox) {
-                ((ServerPlayer) player).openMenu(firebox, buf -> buf.writeBlockPos(pos));
+                NetworkHooks.openScreen((ServerPlayer) player, firebox, pos);
             }
         }
         return InteractionResult.sidedSuccess(level.isClientSide);

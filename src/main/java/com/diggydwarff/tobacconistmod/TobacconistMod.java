@@ -110,7 +110,7 @@ public class TobacconistMod {
             ComposterBlock.COMPOSTABLES.put(ModItems.ORIENTAL_TOBACCO_LEAF.get(), 0.50F);
             ComposterBlock.COMPOSTABLES.put(ModItems.DOKHA_TOBACCO_LEAF.get(), 0.50F);
             ComposterBlock.COMPOSTABLES.put(ModItems.SHADE_TOBACCO_LEAF.get(), 0.50F);
-            ComposterBlock.COMPOSTABLES.put(ModItems.WILD_FLOWERING_TOBACCO.get(), 0.65F);
+            ComposterBlock.COMPOSTABLES.put(ModBlocks.WILD_FLOWERING_TOBACCO.get().asItem(), 0.65F);
             ComposterBlock.COMPOSTABLES.put(ModItems.SPOILED_TOBACCO.get(), 1.00F);
 
             registerBrewingRecipes();

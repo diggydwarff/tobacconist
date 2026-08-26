@@ -1,0 +1,41 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#forge:foods/fruits/pear",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/pear",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/pear",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/pear",
+      "required": false
+    },
+    {
+      "id": "fruitsdelight:pear",
+      "required": false
+    },
+    {
+      "id": "croptopia:pear",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/fruit/pear",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/pear",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/pear",
+      "required": false
+    }
+  ]
+}

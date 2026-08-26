@@ -1,0 +1,61 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#forge:foods/fruits/raspberry",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/raspberry",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/raspberry",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/raspberry",
+      "required": false
+    },
+    {
+      "id": "croptopia:raspberry",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/fruit/raspberry",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/raspberry",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/raspberry",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/berries/raspberry",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/berry/raspberry",
+      "required": false
+    },
+    {
+      "id": "#forge:berries/raspberry",
+      "required": false
+    },
+    {
+      "id": "#forge:berry/raspberry",
+      "required": false
+    },
+    {
+      "id": "#forge:berries/raspberry",
+      "required": false
+    },
+    {
+      "id": "#forge:berry/raspberry",
+      "required": false
+    }
+  ]
+}

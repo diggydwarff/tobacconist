@@ -1,0 +1,6 @@
+{
+  "parent": "tobacconistmod:block/tobacco_drying_rack_partial_empty",
+  "textures": {
+    "base": "tobacconistmod:block/tobacco_drying_rack_stage_1_cure_5_burley"
+  }
+}

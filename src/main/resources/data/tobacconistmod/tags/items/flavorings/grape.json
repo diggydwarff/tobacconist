@@ -1,0 +1,37 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#forge:foods/fruits/grape",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/grape",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/grape",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/grape",
+      "required": false
+    },
+    {
+      "id": "croptopia:grape",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/fruit/grape",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/grape",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/grape",
+      "required": false
+    }
+  ]
+}

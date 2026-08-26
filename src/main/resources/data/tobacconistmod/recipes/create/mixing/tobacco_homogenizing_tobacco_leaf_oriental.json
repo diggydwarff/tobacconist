@@ -1,0 +1,21 @@
+{
+  "forge:conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "type": "tobacconistmod:create_tobacco_homogenizing",
+  "ingredients": [
+    {
+      "item": "tobacconistmod:tobacco_leaf_oriental"
+    }
+  ],
+  "results": [
+    {
+      "item": "tobacconistmod:tobacco_leaf_oriental",
+      "count": 64
+    }
+  ],
+  "processing_time": 100
+}

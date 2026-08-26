@@ -1,0 +1,50 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:cocoa_beans",
+    {
+      "id": "#forge:crops/cocoa_bean",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/cocoa",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/chocolate",
+      "required": false
+    },
+    {
+      "id": "#forge:crops/cocoa",
+      "required": false
+    },
+    {
+      "id": "croptopia:chocolate",
+      "required": false
+    },
+    {
+      "id": "create_confectionery:bar_of_chocolate",
+      "required": false
+    },
+    {
+      "id": "create_confectionery:bar_of_black_chocolate",
+      "required": false
+    },
+    {
+      "id": "create_confectionery:bar_of_white_chocolate",
+      "required": false
+    },
+    {
+      "id": "create_confectionery:bar_of_ruby_chocolate",
+      "required": false
+    },
+    {
+      "id": "#forge:chocolate",
+      "required": false
+    },
+    {
+      "id": "#forge:chocolate",
+      "required": false
+    }
+  ]
+}

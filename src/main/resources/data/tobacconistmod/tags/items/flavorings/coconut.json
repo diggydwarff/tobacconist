@@ -1,0 +1,37 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#forge:foods/fruits/coconut",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/coconut",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/coconut",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/coconut",
+      "required": false
+    },
+    {
+      "id": "croptopia:coconut",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/fruit/coconut",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/coconut",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/coconut",
+      "required": false
+    }
+  ]
+}

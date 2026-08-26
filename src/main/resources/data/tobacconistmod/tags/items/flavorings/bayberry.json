@@ -1,0 +1,61 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#forge:foods/fruits/bayberry",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/bayberry",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/bayberry",
+      "required": false
+    },
+    {
+      "id": "#forge:fruits/bayberry",
+      "required": false
+    },
+    {
+      "id": "fruitsdelight:bayberry",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/fruit/bayberry",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/bayberry",
+      "required": false
+    },
+    {
+      "id": "#forge:fruit/bayberry",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/berries/bayberry",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/berry/bayberry",
+      "required": false
+    },
+    {
+      "id": "#forge:berries/bayberry",
+      "required": false
+    },
+    {
+      "id": "#forge:berry/bayberry",
+      "required": false
+    },
+    {
+      "id": "#forge:berries/bayberry",
+      "required": false
+    },
+    {
+      "id": "#forge:berry/bayberry",
+      "required": false
+    }
+  ]
+}

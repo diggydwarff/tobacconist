@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "tobacconistmod:block/production_monitor" },
+    "facing=east": { "model": "tobacconistmod:block/production_monitor", "y": 90 },
+    "facing=south": { "model": "tobacconistmod:block/production_monitor", "y": 180 },
+    "facing=west": { "model": "tobacconistmod:block/production_monitor", "y": 270 }
+  }
+}

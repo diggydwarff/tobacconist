@@ -342,7 +342,7 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
             return Math.min(stack.getCount(), MAX_STACK);
         }
 
-        if (!ItemStack.isSameItemSameComponents(storedTobacco, stack)) {
+        if (!ItemStack.isSameItemSameTags(storedTobacco, stack)) {
             return 0;
         }
 
@@ -579,7 +579,7 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
         super.load(tag);
 
         if (tag.contains("StoredTobacco")) {
-            storedTobacco = ItemStack.of(tag.getCompound("StoredTobacco")));
+            storedTobacco = ItemStack.of(tag.getCompound("StoredTobacco"));
         } else {
             storedTobacco = ItemStack.EMPTY;
         }

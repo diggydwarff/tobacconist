@@ -1,0 +1,27 @@
+{
+  "forge:conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "amount": 1000,
+      "fluid": "tobacconistmod:molasses_plain",
+      "nbt": {}
+    },
+    {
+      "amount": 1000,
+      "fluid": "tobacconistmod:essence_goldenapple",
+      "nbt": {}
+    }
+  ],
+  "results": [
+    {
+      "amount": 1000,
+      "item": "tobacconistmod:molasses_goldenapple"
+    }
+  ]
+}

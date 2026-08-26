@@ -1,0 +1,5 @@
+{
+  "type": "minecraft:block",
+  "pools": [],
+  "random_sequence": "tobacconistmod:blocks/wild_tobacco_crate"
+}

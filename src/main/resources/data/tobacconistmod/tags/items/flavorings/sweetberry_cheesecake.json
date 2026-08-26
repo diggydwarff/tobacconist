@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "farmersdelight:sweet_berry_cheesecake_slice",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/cheesecakes/sweet_berry",
+      "required": false
+    },
+    {
+      "id": "#forge:foods/cheesecake/sweet_berry",
+      "required": false
+    }
+  ]
+}

@@ -14,7 +14,7 @@ public class ModEffects {
     public static final DeferredRegister<MobEffect> MOB_EFFECTS =
             DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, TobacconistMod.MODID);
 
-    public static final DeferredHolder<MobEffect, NicotineEffect> NICOTINE = MOB_EFFECTS.register(
+    public static final RegistryObject<NicotineEffect> NICOTINE = MOB_EFFECTS.register(
             "nicotine",
             () -> new NicotineEffect(MobEffectCategory.NEUTRAL, 2495014)
     );
