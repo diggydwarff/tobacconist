@@ -13,7 +13,7 @@
     }
   ],
   "type": "create:mixing",
-  "heat_requirement": "heated",
+  "heatRequirement": "heated",
   "ingredients": [
     {
       "tag": "tobacconistmod:flavorings/hawberry"
@@ -27,7 +27,7 @@
   "results": [
     {
       "amount": 1000,
-      "item": "tobacconistmod:essence_hawberry"
+      "fluid": "tobacconistmod:essence_hawberry"
     }
   ]
 }

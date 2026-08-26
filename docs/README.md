@@ -1,6 +1,6 @@
 # Tobacconist Gameplay Guides
 
-These guides document the Minecraft 1.21.1 NeoForge implementation in this source tree. Values and restrictions are taken from the current Java/resource code rather than older wiki text.
+These guides document the Minecraft 1.20.1 Forge backport of the 4.0 implementation in this source tree. Values and restrictions are taken from the current Java/resource code rather than older wiki text.
 
 - [Growing Tobacco](GROWING.md)
 - [Curing Tobacco](CURING.md)

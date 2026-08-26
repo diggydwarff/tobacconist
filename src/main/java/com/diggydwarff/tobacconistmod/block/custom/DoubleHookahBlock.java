@@ -161,7 +161,7 @@ public class DoubleHookahBlock extends BaseEntityBlock {
                 hookah.clearContentsForCreativeBreak();
             }
 
-            // Let vanilla/NeoForge perform the Creative break exactly once. The event
+            // Let vanilla/Forge perform the Creative break exactly once. The event
             // guards suppress loot from both this half and the partner teardown.
             super.playerWillDestroy(level, pos, state, player);
             return;

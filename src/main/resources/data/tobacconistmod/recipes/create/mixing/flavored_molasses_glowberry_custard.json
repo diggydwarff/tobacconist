@@ -21,7 +21,7 @@
   "results": [
     {
       "amount": 1000,
-      "item": "tobacconistmod:molasses_glowberry_custard"
+      "fluid": "tobacconistmod:molasses_glowberry_custard"
     }
   ]
 }

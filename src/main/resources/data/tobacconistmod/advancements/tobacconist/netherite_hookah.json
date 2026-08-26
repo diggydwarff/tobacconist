@@ -2,8 +2,7 @@
   "parent": "tobacconistmod:tobacconist/cloud_culture",
   "display": {
     "icon": {
-      "id": "tobacconistmod:netherite_hookah_block",
-      "count": 1
+      "item": "tobacconistmod:netherite_hookah_block"
     },
     "title": {
       "translate": "advancement.tobacconistmod.netherite_hookah"
@@ -22,7 +21,9 @@
       "conditions": {
         "items": [
           {
-            "items": "tobacconistmod:netherite_hookah_block"
+            "items": [
+              "tobacconistmod:netherite_hookah_block"
+            ]
           }
         ]
       }

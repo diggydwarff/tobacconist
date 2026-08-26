@@ -2,8 +2,7 @@
   "parent": "tobacconistmod:tobacconist/cloud_culture",
   "display": {
     "icon": {
-      "id": "tobacconistmod:ornate_diamond_hookah_block",
-      "count": 1
+      "item": "tobacconistmod:ornate_diamond_hookah_block"
     },
     "title": {
       "translate": "advancement.tobacconistmod.hookah_collector"
@@ -22,7 +21,9 @@
       "conditions": {
         "items": [
           {
-            "items": "tobacconistmod:hookah_block"
+            "items": [
+              "tobacconistmod:hookah_block"
+            ]
           }
         ]
       }
@@ -32,7 +33,9 @@
       "conditions": {
         "items": [
           {
-            "items": "tobacconistmod:tall_hookah_block"
+            "items": [
+              "tobacconistmod:tall_hookah_block"
+            ]
           }
         ]
       }
@@ -42,7 +45,9 @@
       "conditions": {
         "items": [
           {
-            "items": "tobacconistmod:ornate_copper_hookah_block"
+            "items": [
+              "tobacconistmod:ornate_copper_hookah_block"
+            ]
           }
         ]
       }
@@ -52,7 +57,9 @@
       "conditions": {
         "items": [
           {
-            "items": "tobacconistmod:ornate_iron_hookah_block"
+            "items": [
+              "tobacconistmod:ornate_iron_hookah_block"
+            ]
           }
         ]
       }
@@ -62,7 +69,9 @@
       "conditions": {
         "items": [
           {
-            "items": "tobacconistmod:redstone_hookah_block"
+            "items": [
+              "tobacconistmod:redstone_hookah_block"
+            ]
           }
         ]
       }
@@ -72,7 +81,9 @@
       "conditions": {
         "items": [
           {
-            "items": "tobacconistmod:lapis_hookah_block"
+            "items": [
+              "tobacconistmod:lapis_hookah_block"
+            ]
           }
         ]
       }
@@ -82,7 +93,9 @@
       "conditions": {
         "items": [
           {
-            "items": "tobacconistmod:obsidian_hookah_block"
+            "items": [
+              "tobacconistmod:obsidian_hookah_block"
+            ]
           }
         ]
       }
@@ -92,7 +105,9 @@
       "conditions": {
         "items": [
           {
-            "items": "tobacconistmod:ornate_gold_hookah_block"
+            "items": [
+              "tobacconistmod:ornate_gold_hookah_block"
+            ]
           }
         ]
       }
@@ -102,7 +117,9 @@
       "conditions": {
         "items": [
           {
-            "items": "tobacconistmod:ornate_amethyst_hookah_block"
+            "items": [
+              "tobacconistmod:ornate_amethyst_hookah_block"
+            ]
           }
         ]
       }
@@ -112,7 +129,9 @@
       "conditions": {
         "items": [
           {
-            "items": "tobacconistmod:ornate_diamond_hookah_block"
+            "items": [
+              "tobacconistmod:ornate_diamond_hookah_block"
+            ]
           }
         ]
       }
@@ -122,7 +141,9 @@
       "conditions": {
         "items": [
           {
-            "items": "tobacconistmod:emerald_hookah_block"
+            "items": [
+              "tobacconistmod:emerald_hookah_block"
+            ]
           }
         ]
       }
@@ -132,7 +153,9 @@
       "conditions": {
         "items": [
           {
-            "items": "tobacconistmod:netherite_hookah_block"
+            "items": [
+              "tobacconistmod:netherite_hookah_block"
+            ]
           }
         ]
       }

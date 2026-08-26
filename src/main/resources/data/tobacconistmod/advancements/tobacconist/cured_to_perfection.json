@@ -2,8 +2,7 @@
   "parent": "tobacconistmod:tobacconist/first_harvest",
   "display": {
     "icon": {
-      "id": "tobacconistmod:tobacco_leaf_virginia_dry",
-      "count": 1
+      "item": "tobacconistmod:tobacco_leaf_virginia_dry"
     },
     "title": {
       "translate": "advancement.tobacconistmod.cured_to_perfection"
@@ -22,7 +21,9 @@
       "conditions": {
         "items": [
           {
-            "items": "tobacconistmod:tobacco_leaf_wild_dry"
+            "items": [
+              "tobacconistmod:tobacco_leaf_wild_dry"
+            ]
           }
         ]
       }
@@ -32,7 +33,9 @@
       "conditions": {
         "items": [
           {
-            "items": "tobacconistmod:tobacco_leaf_virginia_dry"
+            "items": [
+              "tobacconistmod:tobacco_leaf_virginia_dry"
+            ]
           }
         ]
       }
@@ -42,7 +45,9 @@
       "conditions": {
         "items": [
           {
-            "items": "tobacconistmod:tobacco_leaf_burley_dry"
+            "items": [
+              "tobacconistmod:tobacco_leaf_burley_dry"
+            ]
           }
         ]
       }
@@ -52,7 +57,9 @@
       "conditions": {
         "items": [
           {
-            "items": "tobacconistmod:tobacco_leaf_oriental_dry"
+            "items": [
+              "tobacconistmod:tobacco_leaf_oriental_dry"
+            ]
           }
         ]
       }
@@ -62,7 +69,9 @@
       "conditions": {
         "items": [
           {
-            "items": "tobacconistmod:tobacco_leaf_dokha_dry"
+            "items": [
+              "tobacconistmod:tobacco_leaf_dokha_dry"
+            ]
           }
         ]
       }
@@ -72,7 +81,9 @@
       "conditions": {
         "items": [
           {
-            "items": "tobacconistmod:tobacco_leaf_shade_dry"
+            "items": [
+              "tobacconistmod:tobacco_leaf_shade_dry"
+            ]
           }
         ]
       }

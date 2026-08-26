@@ -1,8 +1,8 @@
 {
   "name": "The Tobacconist's Manual",
-  "landing_text": "A code-verified field guide to growing, curing, fermenting, aging, cutting, blending, flavoring, storage, smoking, hookahs, quality, and optional Create automation in Tobacconist for Minecraft 1.21.1.",
+  "landing_text": "A code-verified field guide to growing, curing, fermenting, aging, cutting, blending, flavoring, storage, smoking, hookahs, quality, and optional Create automation in Tobacconist for Minecraft 1.20.1.",
   "version": 2,
-  "subtitle": "Complete 1.21.1 Field Guide",
+  "subtitle": "Complete 1.20.1 Field Guide",
   "creative_tab": "tobacconistmod:tobacconistmod",
   "model": "tobacconistmod:tobacco_guide",
   "book_texture": "patchouli:textures/gui/book_green.png",

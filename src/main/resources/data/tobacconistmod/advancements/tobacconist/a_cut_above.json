@@ -2,8 +2,7 @@
   "parent": "tobacconistmod:tobacconist/cured_to_perfection",
   "display": {
     "icon": {
-      "id": "tobacconistmod:tobacco_loose_burley",
-      "count": 1
+      "item": "tobacconistmod:tobacco_loose_burley"
     },
     "title": {
       "translate": "advancement.tobacconistmod.a_cut_above"
@@ -22,7 +21,9 @@
       "conditions": {
         "items": [
           {
-            "items": "tobacconistmod:tobacco_loose_wild"
+            "items": [
+              "tobacconistmod:tobacco_loose_wild"
+            ]
           }
         ]
       }
@@ -32,7 +33,9 @@
       "conditions": {
         "items": [
           {
-            "items": "tobacconistmod:tobacco_loose_virginia"
+            "items": [
+              "tobacconistmod:tobacco_loose_virginia"
+            ]
           }
         ]
       }
@@ -42,7 +45,9 @@
       "conditions": {
         "items": [
           {
-            "items": "tobacconistmod:tobacco_loose_burley"
+            "items": [
+              "tobacconistmod:tobacco_loose_burley"
+            ]
           }
         ]
       }
@@ -52,7 +57,9 @@
       "conditions": {
         "items": [
           {
-            "items": "tobacconistmod:tobacco_loose_oriental"
+            "items": [
+              "tobacconistmod:tobacco_loose_oriental"
+            ]
           }
         ]
       }
@@ -62,7 +69,9 @@
       "conditions": {
         "items": [
           {
-            "items": "tobacconistmod:tobacco_loose_dokha"
+            "items": [
+              "tobacconistmod:tobacco_loose_dokha"
+            ]
           }
         ]
       }
@@ -72,7 +81,9 @@
       "conditions": {
         "items": [
           {
-            "items": "tobacconistmod:tobacco_loose_shade"
+            "items": [
+              "tobacconistmod:tobacco_loose_shade"
+            ]
           }
         ]
       }

@@ -1,3 +1,10 @@
+## Forge 1.20.1 Backport - 4.0.0
+
+- Backported the complete Tobacco Industry Update feature set to Minecraft 1.20.1 Forge/Create 6.0.8.
+- Preserved optional Create, Curios, JEI, Patchouli, and food-mod integrations using Forge 1.20.1 APIs and resource formats.
+- Converted 1.21 data-component storage to 1.20.1 stack NBT, NeoForge capabilities/networking/conditions to Forge equivalents, and the advancement/resource schemas required by 1.20.1.
+- Uses the same gameplay balance, automation behavior, assets, localization keys, Ponder content, and 4.0 documentation unless a loader/version-specific implementation differs.
+
 ## Update 4.0.0 - The Tobacco Industry Update
 
 ### Major Changes

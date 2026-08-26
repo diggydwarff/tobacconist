@@ -116,7 +116,7 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
     }
 
     /**
-     * Tall Hookahs expose a block entity on both occupied levels so normal NeoForge/Create
+     * Tall Hookahs expose a block entity on both occupied levels so normal Forge/Create
      * discovery works from either half. The upper entity is only a proxy; all inventory and
      * telemetry resolve to the lower master entity.
      */

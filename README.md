@@ -1,31 +1,26 @@
 # Minecraft Tobacconist
 
-Tobacconist is a mod that facilitates the cultivation and production of tobacco and related smokables for your Minecraft world. This mod supports Minecraft Forge `1.19.2` and `1.20.1`and there are plans to start supporting NeoForged for `1.21+`. 
+Tobacconist adds tobacco growing, curing, processing, storage, smoking, Hookahs, quality/aging systems, and optional factory automation. This branch is the **Tobacconist 4.0 Forge backport for Minecraft 1.20.1**.
 
-## Current Features
-Current features include:
-- Six varieties of tobacco including: Wild, Virginia, Burley, Dokha, Oriental, and Shade
-- Cigarettes (Can fill with any tobacco type)
-- Cigars (Can fill with any tobacco type and wrap with any leaf)
-- Pipes (Fill with any tobacco type, re-usable, can craft different types from different types of wood)
-- Shisha (Can use any tobacco type and create custom flavor combinations)
-- Hookah (To smoke your custom-blended shisha!) <br /><br />
-For a full list of features and help [visit the wiki](https://github.com/griffinpuc/tobacconist/wiki)<br />
-For a list of in-progress and to-do items [see here](https://github.com/griffinpuc/tobacconist/blob/master/TODO.md)
+## 4.0 highlights
 
-## Mod Compatibility
-This mod is compatible with the following mods (but are totally optional of course)
+- Six tobacco varieties with biome-aware seed/villager progression
+- Wooden and Industrial Drying Racks plus hanging tobacco curing
+- 64-item Tobacco Barrels, lossless Tobacco Crates, labels, pouches, and Tobacco Boxes
+- Cigarettes, Cigars, pipes, Shisha, Aqua Vitae, Flavoring Essences, aromatic casing, and broad flavor-tag compatibility
+- Expanded Hookah family including tall, copper-aging, mineral, redstone, obsidian, and netherite variants
+- Tobacconist's Spectacles, advancement progression, quality/nicotine configuration, and the in-game Manual
+- Optional Create 6 integration for harvesting, cutting, pressing, mixing, homogenization, filling, logistics, Display Links, Mechanical Arms, Ponder, and the Production Monitor
 
-### Farmer's Delight
-Adds compatbility to craft shisha flavors from foods and drink found in this mod including:
-*apple pie, sweet berry cheesecake, chocolate pie, cake, apple pie, sweet berry cookie, honey cookie, melon popsicle, glow berry custard, hot cocoa, apple cider*<br />
-[Download Farmers Delight from here](https://www.curseforge.com/minecraft/mc-mods/farmers-delight)
+## Optional integrations
 
-### Fruits Delight
-An extension of the *Farmers Delight* mod, this adds compatbility to craft shisha flavors from fruits found in this mod including: *peach, pear, mango, lychee, hawberry, orange, persimmon, blueberry, lemon, hamimelon, pineapple, mangosteen, cranberry, bayberry, fig, kiwi, durian*<br />
-[Download Fruits Delight here](https://www.curseforge.com/minecraft/mc-mods/fruits-delight)
+Create, Curios, JEI, Patchouli, and supported food/farming mods are optional. Tobacconist's normal gameplay remains available without Create; Spectacles fall back to the vanilla Head slot without Curios.
 
-### Compatibility Coming Soon:
-- Full JEI integration
-- Curios API armor slot (for holding/using cigar, cigarette, pipe)
-- Create Mod support for cigar and cigarette rolling
+## Documentation
+
+- [Gameplay guides](docs/README.md)
+- [Automation & Create](docs/AUTOMATION_AND_CREATE.md)
+- [Homogenization & Quality Grading](docs/HOMOGENIZATION_AND_GRADING.md)
+- [Configuration & Debug Tools](docs/CONFIGURATION_AND_DEBUG.md)
+- [Version history](changelog.md)
+- [GitHub wiki](https://github.com/diggydwarff/tobacconist/wiki)

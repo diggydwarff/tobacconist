@@ -6,7 +6,7 @@
     }
   ],
   "type": "create:mixing",
-  "heat_requirement": "heated",
+  "heatRequirement": "heated",
   "ingredients": [
     {
       "item": "minecraft:sugar"
@@ -23,7 +23,7 @@
   "results": [
     {
       "amount": 1000,
-      "item": "tobacconistmod:aqua_vitae"
+      "fluid": "tobacconistmod:aqua_vitae"
     }
   ]
 }

@@ -17,21 +17,19 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
-/** Counts the actual inventory delta when a vanilla Hopper successfully ejects items. */
+/** Counts the actual inventory delta when a Forge 1.20.1 Hopper successfully ejects items. */
 @Mixin(HopperBlockEntity.class)
 public abstract class HopperProductionMonitorMixin {
     @Unique
     private static final ThreadLocal<Deque<tobacconist$HopperSnapshot>> TOBACCONIST$HOPPER_SNAPSHOTS =
             ThreadLocal.withInitial(ArrayDeque::new);
 
-    @Inject(
-            method = {
-                    "ejectItems(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/entity/HopperBlockEntity;)Z",
-                    "m_155562_(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/entity/HopperBlockEntity;)Z"
-            },
-            at = @At("HEAD"),
-            remap = false
-    )
+    /*
+     * Forge patches vanilla's fourth ejectItems argument from Container to HopperBlockEntity.
+     * Target by mapped name only: Mixin can remap the stable method name to production SRG while
+     * the callback signature still matches Forge's patched runtime method.
+     */
+    @Inject(method = "ejectItems", at = @At("HEAD"))
     private static void tobacconist$captureHopperOutput(Level level, BlockPos pos, BlockState state, HopperBlockEntity hopper,
                                                         CallbackInfoReturnable<Boolean> cir) {
         List<ItemStack> before = new ArrayList<>(hopper.getContainerSize());
@@ -41,14 +39,7 @@ public abstract class HopperProductionMonitorMixin {
         TOBACCONIST$HOPPER_SNAPSHOTS.get().push(new tobacconist$HopperSnapshot(hopper, before));
     }
 
-    @Inject(
-            method = {
-                    "ejectItems(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/entity/HopperBlockEntity;)Z",
-                    "m_155562_(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/entity/HopperBlockEntity;)Z"
-            },
-            at = @At("RETURN"),
-            remap = false
-    )
+    @Inject(method = "ejectItems", at = @At("RETURN"))
     private static void tobacconist$recordHopperOutput(Level level, BlockPos pos, BlockState state, HopperBlockEntity hopper,
                                                        CallbackInfoReturnable<Boolean> cir) {
         Deque<tobacconist$HopperSnapshot> snapshots = TOBACCONIST$HOPPER_SNAPSHOTS.get();
@@ -71,8 +62,6 @@ public abstract class HopperProductionMonitorMixin {
             } else if (ItemStack.isSameItemSameTags(before, after)) {
                 moved = before.getCount() - after.getCount();
             } else {
-                // ejectItems does not normally replace a slot with another item, but if another
-                // integration does so during the same call, the original stack left this Hopper.
                 moved = before.getCount();
             }
 

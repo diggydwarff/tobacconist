@@ -2,8 +2,7 @@
   "parent": "tobacconistmod:tobacconist/a_cut_above",
   "display": {
     "icon": {
-      "id": "tobacconistmod:cigar",
-      "count": 1
+      "item": "tobacconistmod:cigar"
     },
     "title": {
       "translate": "advancement.tobacconistmod.fine_taste"
@@ -22,7 +21,9 @@
       "conditions": {
         "items": [
           {
-            "items": "tobacconistmod:cigar"
+            "items": [
+              "tobacconistmod:cigar"
+            ]
           }
         ]
       }

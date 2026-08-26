@@ -2,7 +2,9 @@
   "required": true,
   "minVersion": "0.8",
   "package": "com.diggydwarff.tobacconistmod.compat.create.mixin",
-  "compatibilityLevel": "JAVA_21",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "tobacconistmod.refmap.json",
+  "plugin": "com.diggydwarff.tobacconistmod.compat.create.mixin.TobacconistCreateMixinPlugin",
   "mixins": [
     "HarvesterMovementBehaviourMixin",
     "BeltDeployerCallbacksMixin",

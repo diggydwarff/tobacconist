@@ -6,7 +6,7 @@
     }
   ],
   "type": "create:mixing",
-  "heat_requirement": "heated",
+  "heatRequirement": "heated",
   "ingredients": [
     {
       "item": "minecraft:sugar_cane"
@@ -20,7 +20,7 @@
   "results": [
     {
       "amount": 1000,
-      "item": "tobacconistmod:molasses_plain"
+      "fluid": "tobacconistmod:molasses_plain"
     }
   ]
 }

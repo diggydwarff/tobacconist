@@ -21,7 +21,7 @@
   "results": [
     {
       "amount": 1000,
-      "item": "tobacconistmod:molasses_kiwi"
+      "fluid": "tobacconistmod:molasses_kiwi"
     }
   ]
 }

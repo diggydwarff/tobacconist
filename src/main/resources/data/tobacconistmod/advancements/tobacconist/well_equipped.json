@@ -2,8 +2,7 @@
   "parent": "tobacconistmod:tobacconist/tobacconists_eye",
   "display": {
     "icon": {
-      "id": "tobacconistmod:tobacco_pouch",
-      "count": 1
+      "item": "tobacconistmod:tobacco_pouch"
     },
     "title": {
       "translate": "advancement.tobacconistmod.well_equipped"
@@ -22,7 +21,9 @@
       "conditions": {
         "items": [
           {
-            "items": "tobacconistmod:clay_smoking_pipe"
+            "items": [
+              "tobacconistmod:clay_smoking_pipe"
+            ]
           }
         ]
       }
@@ -32,7 +33,9 @@
       "conditions": {
         "items": [
           {
-            "items": "tobacconistmod:tobacco_pouch"
+            "items": [
+              "tobacconistmod:tobacco_pouch"
+            ]
           }
         ]
       }
@@ -42,7 +45,9 @@
       "conditions": {
         "items": [
           {
-            "items": "tobacconistmod:tobacco_box"
+            "items": [
+              "tobacconistmod:tobacco_box"
+            ]
           }
         ]
       }
@@ -52,7 +57,9 @@
       "conditions": {
         "items": [
           {
-            "items": "tobacconistmod:tobacconists_spectacles"
+            "items": [
+              "tobacconistmod:tobacconists_spectacles"
+            ]
           }
         ]
       }

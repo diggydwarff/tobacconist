@@ -6,7 +6,7 @@ import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * NeoForge item capability adapter for the drying rack.
+ * Forge item capability adapter for the drying rack.
  *
  * <p>Horizontal faces are inputs on both rack tiers. The wooden rack keeps top and bottom insertion
  * closed, while the industrial rack permits top-down loading. Finished batches may be extracted
@@ -106,7 +106,7 @@ final class DryingRackItemHandler implements IItemHandler {
 
     private boolean canExtractFromSide() {
         // Vanilla hoppers still obey WorldlyContainer's bottom-only extraction rules.
-        // NeoForge capability consumers (including Create funnels) are allowed to pull a
+        // Forge capability consumers (including Create funnels) are allowed to pull a
         // finished batch from whichever face they use to address the rack.
         return true;
     }

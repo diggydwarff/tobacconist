@@ -13,7 +13,7 @@
     }
   ],
   "type": "create:mixing",
-  "heat_requirement": "heated",
+  "heatRequirement": "heated",
   "ingredients": [
     {
       "tag": "tobacconistmod:flavorings/apple"
@@ -30,7 +30,7 @@
   "results": [
     {
       "amount": 1000,
-      "item": "tobacconistmod:essence_two_apples"
+      "fluid": "tobacconistmod:essence_two_apples"
     }
   ]
 }

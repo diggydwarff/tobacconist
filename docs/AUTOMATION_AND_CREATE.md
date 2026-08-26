@@ -19,7 +19,7 @@ Vanilla sided inventory behavior:
 - Input must match the stored leaf item/components.
 - Insertion locks at 10% cure progress.
 
-NeoForge/Create capability-based consumers use the same validated item handler; completed output remains protected until the batch is finished.
+Forge/Create capability-based consumers use the same validated item handler; completed output remains protected until the batch is finished.
 
 Create Encased Fans can assist Air Curing and an already-valid Sun Cure at 4× progress. Smoke/heat airflow can assist Fire or Flue Curing at 6×. The wooden rack only needs one valid airflow path reaching the rack.
 

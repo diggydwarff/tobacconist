@@ -10,7 +10,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Rack automation still obeys batch rules: leaves must match the stored leaf’s exact item/components, the rack holds at most 16, and insertion is blocked once progress reaches 10%. A vanilla hopper pulls finished output from the bottom. NeoForge/Create capability consumers also pass through the rack’s validated finished-output handler.",
+      "text": "Rack automation still obeys batch rules: leaves must match the stored leaf’s exact item/components, the rack holds at most 16, and insertion is blocked once progress reaches 10%. A vanilla hopper pulls finished output from the bottom. Forge/Create capability consumers also pass through the rack’s validated finished-output handler.",
       "title": "Drying Rack"
     },
     {
@@ -30,7 +30,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "The $(thing)Hookah$() exposes its three-slot item handler to NeoForge/Create automation. Tall two-block Hookahs resolve both halves to the same lower master inventory, so Funnels, Hoppers, Mechanical Arms, Packagers/Stock Links, and Display Links can connect at either level. Inputs remain validated per slot: fuel, Shisha Tobacco, and Water/Dirty Hookah Water.",
+      "text": "The $(thing)Hookah$() exposes its three-slot item handler to Forge/Create automation. Tall two-block Hookahs resolve both halves to the same lower master inventory, so Funnels, Hoppers, Mechanical Arms, Packagers/Stock Links, and Display Links can connect at either level. Inputs remain validated per slot: fuel, Shisha Tobacco, and Water/Dirty Hookah Water.",
       "title": "Hookah"
     },
     {
@@ -41,7 +41,7 @@
     {
       "type": "patchouli:text",
       "title": "Other Processing Blocks",
-      "text": "The Drying Racks, Tobacco Barrel, Flue Firebox, and Hookah expose validated NeoForge/Create item automation where appropriate. Automation never bypasses the blocks' normal input, batch, curing, fuel, or slot rules."
+      "text": "The Drying Racks, Tobacco Barrel, Flue Firebox, and Hookah expose validated Forge/Create item automation where appropriate. Automation never bypasses the blocks' normal input, batch, curing, fuel, or slot rules."
     },
     {
       "type": "patchouli:text",

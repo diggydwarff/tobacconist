@@ -41,7 +41,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegisterEvent;
@@ -57,12 +56,14 @@ public class TobacconistMod {
         modEventBus.addListener(this::registerDynamicItems);
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::clientSetup);
-        modEventBus.addListener(this::enqueueIMC);
 
         ModMolassesFluids.register(modEventBus);
         ModExtractionFluids.register(modEventBus);
         ModParticles.register(modEventBus);
         CreateCompat.init(modEventBus);
+        if (ModList.get().isLoaded("curios")) {
+            CuriosCompat.register(modEventBus);
+        }
 
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
@@ -82,12 +83,6 @@ public class TobacconistMod {
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, TobacconistConfig.SERVER_SPEC);
 
         MinecraftForge.EVENT_BUS.register(this);
-    }
-
-    private void enqueueIMC(InterModEnqueueEvent event) {
-        if (ModList.get().isLoaded("curios")) {
-            CuriosCompat.init();
-        }
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {

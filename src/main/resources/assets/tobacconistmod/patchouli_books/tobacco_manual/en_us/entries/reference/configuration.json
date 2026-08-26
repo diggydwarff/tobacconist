@@ -25,7 +25,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Server configs are world/server-side settings; common and client configs live with the normal NeoForge configuration files. Exact filenames are generated from the mod ID and config type by NeoForge.",
+      "text": "Server configs are world/server-side settings; common and client configs live with the normal Forge configuration files. Exact filenames are generated from the mod ID and config type by Forge.",
       "title": "Where Settings Live"
     }
   ]

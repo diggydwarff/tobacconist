@@ -4,6 +4,7 @@ import com.diggydwarff.tobacconistmod.compat.create.CreateTobaccoHomogenization;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinInventory;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.items.ItemHandlerHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -26,7 +27,7 @@ public abstract class BasinInventoryHomogenizationMixin {
             method = "insertItem",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/world/item/ItemStack;isSameItemSameTags(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;)Z"
+                    target = "Lnet/minecraftforge/items/ItemHandlerHelper;canItemStacksStack(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;)Z"
             )
     )
     private boolean tobacconist$allowDuplicateHomogenizerStacks(ItemStack incoming, ItemStack existing) {
@@ -35,7 +36,7 @@ public abstract class BasinInventoryHomogenizationMixin {
                 && CreateTobaccoHomogenization.shouldAllowDuplicateInputStacks(blockEntity, incoming, existing)) {
             return false;
         }
-        return ItemStack.isSameItemSameTags(incoming, existing);
+        return ItemHandlerHelper.canItemStacksStack(incoming, existing);
     }
 
     /** Prevent generic output automation from stealing unprocessed homogenizer input. */
