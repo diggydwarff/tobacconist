@@ -42,6 +42,25 @@ Temperature values are Minecraft biome base-temperature values.
 - **Shade:** Jungle +20; Forest +10; Desert/Badlands/Savanna -15.
 - **Wild:** most biomes +10; Desert/Badlands -5.
 
+## Finding seeds and Tobacconist trades
+
+**Wild Tobacco** is the natural starting point. Flowering wild tobacco can generate in Forest, Birch Forest, and Dark Forest and can provide wild leaves and Wild Tobacco Seeds. Normal Tobacconist villagers do not sell Wild seeds; a Wandering Trader can occasionally provide Wild seeds or Wild Flowering Tobacco as a backup source.
+
+Cultivated varieties are obtained most reliably from **Tobacconist villagers**, whose workstation is a Hookah. When a villager takes the profession, its novice seed offers are chosen from the biome where it became a Tobacconist:
+
+| Region | Cultivated seed offers |
+| --- | --- |
+| Plains / default / unknown modded biome | Virginia + Burley |
+| Savanna | Virginia + Oriental |
+| Desert | Dokha + Oriental |
+| Badlands | Oriental + Dokha |
+| Jungle | Shade + Burley |
+| Forest | Burley + Shade |
+| Taiga | Burley + Shade |
+| Snowy | Burley + Virginia |
+
+Higher profession levels add a compact progression of practical trades: Apprentices buy raw leaf from the primary regional variety and sell Rolling Paper; Journeymen sell a Clay Smoking Pipe and Tobacco Pouch; Experts sell Bamboo Charcoal and Plain Molasses; Masters sell a Tobacco Box and Tobacconist's Spectacles. A single village is intentionally not expected to supply every cultivated variety, so collecting all seeds rewards visiting different climates.
+
 ## Harvesting and automation
 
 Breaking a mature tall crop handles the upper/lower halves as one plant so it does not duplicate drops. Create Mechanical Harvesters use the same quality generation and seed/drop rules as normal harvesting.

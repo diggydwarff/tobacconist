@@ -20,7 +20,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Flavoring ingredients are $(thing)tag-driven$(). Tobacconist accepts matching common ingredient tags plus optional items from Farmer's Delight, Fruits Delight, Croptopia, Neapolitan, HerbalBrews, Expanded Delight, Rustic Delight, Coffee Delight, Create Confectionery, and other correctly tagged food mods. These integrations never make those mods required.",
+      "text": "Flavoring ingredients are $(thing)tag-driven$(). Tobacconist accepts matching common ingredient tags plus optional items from Farmer's Delight, Fruits Delight, Croptopia, Neapolitan, HerbalBrews, Farmer's Respite, Expanded Delight, Rustic Delight, Coffee Delight, Create Confectionery, and other correctly tagged food mods. These integrations never make those mods required.",
       "title": "Flavor Compatibility"
     },
     {

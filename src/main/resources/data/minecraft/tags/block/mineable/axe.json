@@ -9,6 +9,12 @@
     "tobacconistmod:dokha_tobacco_crate",
     "tobacconistmod:shade_tobacco_crate",
     "tobacconistmod:wild_tobacco_crate",
-    "tobacconistmod:blended_tobacco_crate"
+    "tobacconistmod:blended_tobacco_crate",
+    "tobacconistmod:raw_virginia_tobacco_crate",
+    "tobacconistmod:raw_burley_tobacco_crate",
+    "tobacconistmod:raw_oriental_tobacco_crate",
+    "tobacconistmod:raw_dokha_tobacco_crate",
+    "tobacconistmod:raw_shade_tobacco_crate",
+    "tobacconistmod:raw_wild_tobacco_crate"
   ]
 }

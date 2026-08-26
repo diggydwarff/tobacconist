@@ -6,6 +6,14 @@
 - Expanded automation so Create factories preserve tobacco **variety, quality, cure, cut, aging, fermentation, flavor, blend identity, and other metadata** instead of producing generic replacement stacks
 - Added broad **tag-driven flavor compatibility** so matching ingredients from other food and farming mods can participate without becoming hard dependencies
 
+### Growing, Villagers & Progression
+- Reworked seed acquisition around exploration and the **Tobacconist villager**
+  - Wild Flowering Tobacco remains the natural source of Wild leaves/seeds in Forest, Birch Forest, and Dark Forest, with the Wandering Trader providing an occasional Wild-seed/flowering-plant backup
+  - New Tobacconists offer two cultivated seed varieties chosen from the biome where they take the profession: Virginia/Burley by default, Virginia/Oriental in Savanna, Dokha/Oriental in Desert, Oriental/Dokha in Badlands, Shade/Burley in Jungle, Burley/Shade in Forest or Taiga, and Burley/Virginia in snowy regions
+  - Higher trade levels add regional raw-leaf purchasing plus Rolling Paper, Clay Smoking Pipe, Tobacco Pouch, Bamboo Charcoal, Plain Molasses, Tobacco Box, and Spectacles without replacing the villager's seed role
+- Expanded the advancement tree with **Seeds of the World**, **Well Equipped**, **Smoke in Style**, and **Hookah Collector** milestones
+  - Hookah Collector covers the main Hookah styles without requiring every copper oxidation/waxed state
+
 ### Create Automation
 - Added **Mechanical Harvester** support for mature two-block tobacco crops
   - Preserves normal harvest quality and seed behavior
@@ -81,6 +89,14 @@
 - Cured leaf and loose tobacco use the matching cured-tobacco crate; Blended Tobacco has its own crate
 - A full 3x3 same-item grid is reserved for crating; quality averaging remains available with 2-8 compatible inputs
 
+### Hookahs & Smoking
+- Expanded the Hookah collection with the **Tall Hookah** plus Redstone, Lapis, Obsidian, Emerald, and Netherite designs alongside the existing ornate material styles
+- Added a complete copper-aging family for the ornate Copper Hookah: **Exposed, Weathered, Oxidized, and waxed variants**
+  - Honeycomb preserves the current finish; axes remove wax first and then scrape oxidation backward while preserving Hookah inventory/state
+- The short Hookah and Tall Hookah can be recolored in-world with dyes and made luminous with a Glow Ink Sac; the Netherite Hookah emits occasional subtle purple prestige particles
+- Expanded the **Tobacco Pouch** into 128-item exact-batch storage that preserves tobacco metadata, supports one-at-a-time withdrawal, can be freshly recolored with dyes, and gives pouch-packed pipes a small 1-5 puff packing bonus
+- Hookah water now lasts a random **2-5 completed Shisha loads** before becoming Dirty Hookah Water; dirty water remains usable but hose draws apply 6 seconds of Nausea
+
 ### Create Curing & Smoke
 - Encased Fan airflow can accelerate **Air Curing** and an otherwise-valid **Sun Cure** on Drying Racks and Hanging Tobacco Bunches
 - Fan-blown **Lava heat** can accelerate **Flue Curing**
@@ -155,7 +171,7 @@
 - Flavor ingredients now use shared **`tobacconistmod:flavorings/<flavor>` tags** for both Brewing Stand and Create Mixer recipes
 - Added support for common `c:` ingredient tags and compatible legacy `forge:` tags where useful
 - Existing flavors such as Peach, Lemon, Mango, Orange, Pineapple, Kiwi, Blueberry, Cranberry, Fig, Cocoa, Honey, Melon, and others can now accept equivalent ingredients from multiple mods instead of being tied to one provider
-- Added compatibility inputs for **Farmer's Delight, Fruits Delight, Croptopia, Neapolitan, HerbalBrews, Expanded Delight, Rustic Delight, Coffee Delight, Create Confectionery**, and other correctly tagged mods
+- Added compatibility inputs for **Farmer's Delight, Fruits Delight, Croptopia, Neapolitan, HerbalBrews, Farmer's Respite, Expanded Delight, Rustic Delight, Coffee Delight, Create Confectionery**, and other correctly tagged mods
 - All food-mod integrations remain optional
 
 - Added 24 new flavor profiles:
@@ -185,6 +201,7 @@
 - Reorganized the creative tab so **all Flavoring Essences appear together before all Molasses bottles**
 - Reordered the opening creative-tab rows into a clearer **grow → cure/process → cut/store → consume** progression
 - Updated The Tobacconist's Manual and code-verified Markdown guides to the final 4.0 specifications, including one-block wooden racks, dual-fan Industrial Racks, 64-item Barrels, Production Monitor modes/telemetry, tall-Hookah shared automation, and current Display Link behavior
+- Added a **Russian (`ru_ru`) localization scaffold** from the existing community translation and synchronized it to every current English localization key; newly added 4.0 strings remain English placeholders for the translator to complete
 
 ### Fixes & Compatibility
 - Prevented **Blended Tobacco** from entering the single-variety quality-averaging recipe, preserving blend component identity
@@ -195,6 +212,9 @@
 - Hardened Create classloading and resource conditions so **Tobacconist still launches and functions without Create installed**
 - Kept Curios, JEI, Patchouli, and supported food-mod integrations optional
 - Standardized Spectacles compatibility around the **Curios Head slot** with vanilla Head-slot fallback
+- Corrected the remaining Spectacles tooltip to say **Curios Head** rather than the obsolete Eyes-slot wording, and fixed English painting-title typos for Japanese Kiseru and Havana Cigar
+- Added proper mining-tool tags for the expanded Hookah collection and all six raw-leaf Tobacco Crates
+- Removed the final legacy plural `tags/items` Curios/Tobacconist tag copies now that the 1.21.1 singular `tags/item` resources are authoritative
 - Removed obsolete Forge/1.20 resource leftovers, stale generated resources, and orphan item models from the 1.21.1 source tree
 
 -----------------
