@@ -24,7 +24,7 @@ Join 2–3 components with `+` and prefix them with `Display Name=`. Cure or fla
 
 All `/tobacconist` debug commands require command permission level 2. `/tobacconist debug` inspects the targeted tobacco crop, Drying Rack, Hanging Tobacco Bunch, or Tobacco Barrel.
 
-The rack commands also recognize a targeted Hanging Tobacco Bunch (either half):
+The rack commands resolve the shared curing batch when either physical half of a wooden or Industrial Drying Rack is targeted. They also recognize a Hanging Tobacco Bunch from either half:
 
 - `/tobacconist rack status`
 - `/tobacconist rack addtime <ticks>`

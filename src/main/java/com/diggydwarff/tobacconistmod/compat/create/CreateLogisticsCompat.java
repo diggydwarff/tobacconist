@@ -4,6 +4,7 @@ import com.diggydwarff.tobacconistmod.TobacconistMod;
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
 import com.diggydwarff.tobacconistmod.block.custom.DoubleHookahBlock;
 import com.diggydwarff.tobacconistmod.block.custom.IndustrialDryingRackBlock;
+import com.diggydwarff.tobacconistmod.block.custom.TobaccoDryingRackBlock;
 import com.simibubi.create.api.packager.InventoryIdentifier;
 import com.simibubi.create.api.packager.unpacking.UnpackingHandler;
 import com.simibubi.create.content.logistics.stockTicker.PackageOrderWithCrafts;
@@ -37,8 +38,8 @@ public final class CreateLogisticsCompat {
     }
 
     private static void registerLogisticsHandlers() {
-        registerSingleInventory(ModBlocks.TOBACCO_DRYING_RACK.get());
-        registerIndustrialRack();
+        registerTallRack(ModBlocks.TOBACCO_DRYING_RACK.get());
+        registerTallRack(ModBlocks.INDUSTRIAL_DRYING_RACK.get());
         registerSingleInventory(ModBlocks.TOBACCO_BARREL.get());
         registerSingleInventory(ModBlocks.FLUE_FIREBOX.get());
         registerSingleInventory(ModBlocks.HOOKAH.get());
@@ -82,12 +83,12 @@ public final class CreateLogisticsCompat {
         );
     }
 
-    private static void registerIndustrialRack() {
+    private static void registerTallRack(Block block) {
         InventoryIdentifier.REGISTRY.register(
-                ModBlocks.INDUSTRIAL_DRYING_RACK.get(),
+                block,
                 (level, state, face) -> {
-                    BlockPos pos = state.hasProperty(IndustrialDryingRackBlock.HALF)
-                            && state.getValue(IndustrialDryingRackBlock.HALF) == DoubleBlockHalf.UPPER
+                    BlockPos pos = state.hasProperty(TobaccoDryingRackBlock.HALF)
+                            && state.getValue(TobaccoDryingRackBlock.HALF) == DoubleBlockHalf.UPPER
                             ? face.getPos().below()
                             : face.getPos();
                     return new InventoryIdentifier.Single(pos);
@@ -117,19 +118,20 @@ public final class CreateLogisticsCompat {
                                              boolean simulate) {
         BlockPos targetPos = pos;
         BlockState targetState = state;
-        if (state.hasProperty(IndustrialDryingRackBlock.HALF)
-                && state.getValue(IndustrialDryingRackBlock.HALF) == DoubleBlockHalf.UPPER) {
+        if (state.hasProperty(TobaccoDryingRackBlock.HALF)
+                && state.getValue(TobaccoDryingRackBlock.HALF) == DoubleBlockHalf.UPPER) {
             targetPos = pos.below();
             targetState = level.getBlockState(targetPos);
         }
 
-        // Traditional racks keep vertical capability insertion closed. Industrial racks accept
-        // top-down automation, but Packagers still normalize to a horizontal face for consistency.
-        Direction effectiveSide = side == Direction.UP || side == Direction.DOWN
-                ? Direction.NORTH
-                : side;
+        boolean industrial = targetState.getBlock() instanceof IndustrialDryingRackBlock;
+        if ((!industrial && (side == Direction.UP || side == Direction.DOWN))
+                || (industrial && side == Direction.DOWN)) {
+            return false;
+        }
+
         return UnpackingHandler.DEFAULT.unpack(
-                level, targetPos, targetState, effectiveSide, items, orderContext, simulate
+                level, targetPos, targetState, side, items, orderContext, simulate
         );
     }
 

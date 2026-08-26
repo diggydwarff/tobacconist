@@ -37,7 +37,7 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
     public static final String TAG_LAST_AGE_GAME_TIME = "LastAgeGameTime";
     public static final String TAG_LAST_FERMENT_GAME_TIME = "LastFermentGameTime";
 
-    public static final int MAX_STACK = 16;
+    public static final int MAX_STACK = 64;
 
     private static final int TICKS_PER_DAY = 24000;
     private static final int FERMENT_TIME = 48000;

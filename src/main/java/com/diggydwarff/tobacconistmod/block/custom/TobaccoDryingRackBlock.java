@@ -4,6 +4,7 @@ import com.mojang.serialization.MapCodec;
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoDryingRackBlockEntity;
 import com.diggydwarff.tobacconistmod.block.entity.ModBlockEntities;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.RandomSource;
 import net.minecraft.network.chat.Component;
@@ -11,18 +12,26 @@ import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -32,6 +41,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class TobaccoDryingRackBlock extends BaseEntityBlock {
 
+    public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
     public static final BooleanProperty HAS_LEAVES = BooleanProperty.create("has_leaves");
     public static final BooleanProperty OVER_CAMPFIRE = BooleanProperty.create("over_campfire");
     /**
@@ -44,8 +54,10 @@ public class TobaccoDryingRackBlock extends BaseEntityBlock {
     /** Tobacco variety tint, matching hanging bunches: 0 wild, 1 Virginia, 2 Burley, 3 Oriental, 4 Dokha, 5 Shade. */
     public static final IntegerProperty VARIETY = IntegerProperty.create("variety", 0, 5);
 
-    // Selection bounds cover the full 16x16x26.5-pixel model.
-    private static final VoxelShape OUTLINE_SHAPE = box(0.0, 0.0, 0.0, 16.0, 26.5, 16.0);
+    // The rendered model is ~1.65 blocks tall. The lower half still renders the complete model,
+    // while an invisible upper block provides correct placement, targeting and automation behavior.
+    private static final VoxelShape LOWER_OUTLINE_SHAPE = Shapes.block();
+    private static final VoxelShape UPPER_OUTLINE_SHAPE = box(0.0, 0.0, 0.0, 16.0, 10.5, 16.0);
 
     // Collision covers the frame only, leaving the rack center open for movement and smoke.
     private static final VoxelShape COLLISION_SHAPE = Shapes.or(
@@ -63,9 +75,20 @@ public class TobaccoDryingRackBlock extends BaseEntityBlock {
             box(1.945946, 24.0, 14.054054, 14.054054, 25.5, 15.351351)
     );
 
+    private static final VoxelShape UPPER_COLLISION_SHAPE = Shapes.or(
+            box(0.562162, 0.0, 0.562162, 2.032432, 10.0, 2.032432),
+            box(13.967568, 0.0, 0.562162, 15.437838, 10.0, 2.032432),
+            box(0.562162, 0.0, 13.967568, 2.032432, 10.0, 15.437838),
+            box(13.967568, 0.0, 13.967568, 15.437838, 10.0, 15.437838),
+            box(0.648649, 8.0, 0.648649, 1.945946, 9.5, 15.351351),
+            box(14.054054, 8.0, 0.648649, 15.351351, 9.5, 15.351351),
+            box(1.945946, 8.0, 0.648649, 14.054054, 9.5, 1.945946),
+            box(1.945946, 8.0, 14.054054, 14.054054, 9.5, 15.351351)
+    );
+
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return OUTLINE_SHAPE;
+        return state.getValue(HALF) == DoubleBlockHalf.UPPER ? UPPER_OUTLINE_SHAPE : LOWER_OUTLINE_SHAPE;
     }
 
     @Override
@@ -76,6 +99,7 @@ public class TobaccoDryingRackBlock extends BaseEntityBlock {
     public TobaccoDryingRackBlock(Properties properties) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any()
+                .setValue(HALF, DoubleBlockHalf.LOWER)
                 .setValue(HAS_LEAVES, false)
                 .setValue(OVER_CAMPFIRE, false)
                 .setValue(LOAD_STAGE, 0)
@@ -85,7 +109,55 @@ public class TobaccoDryingRackBlock extends BaseEntityBlock {
 
     @Override
     public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return COLLISION_SHAPE;
+        return state.getValue(HALF) == DoubleBlockHalf.UPPER ? UPPER_COLLISION_SHAPE : COLLISION_SHAPE;
+    }
+
+    @Nullable
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        BlockPos pos = context.getClickedPos();
+        Level level = context.getLevel();
+        if (pos.getY() >= level.getMaxBuildHeight() - 1 || !level.getBlockState(pos.above()).canBeReplaced(context)) {
+            return null;
+        }
+        return defaultBlockState().setValue(HALF, DoubleBlockHalf.LOWER);
+    }
+
+    @Override
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+        super.setPlacedBy(level, pos, state, placer, stack);
+        if (!level.isClientSide) {
+            level.setBlock(pos.above(), state.setValue(HALF, DoubleBlockHalf.UPPER), Block.UPDATE_ALL);
+        }
+    }
+
+    @Override
+    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
+                                  LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+        DoubleBlockHalf half = state.getValue(HALF);
+        if (half == DoubleBlockHalf.LOWER && direction == Direction.UP
+                && (!neighborState.is(this) || neighborState.getValue(HALF) != DoubleBlockHalf.UPPER)) {
+            // Keep old one-block racks intact during world migration; the lower ticker restores
+            // the proxy when the upper space is free. Player-breaking either half still removes both.
+            return state;
+        }
+        if (half == DoubleBlockHalf.UPPER && direction == Direction.DOWN
+                && (!neighborState.is(this) || neighborState.getValue(HALF) != DoubleBlockHalf.LOWER)) {
+            return Blocks.AIR.defaultBlockState();
+        }
+        return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
+    }
+
+    @Override
+    public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+        DoubleBlockHalf half = state.getValue(HALF);
+        BlockPos otherPos = half == DoubleBlockHalf.LOWER ? pos.above() : pos.below();
+        BlockState otherState = level.getBlockState(otherPos);
+        if (otherState.is(this) && otherState.getValue(HALF) != half) {
+            level.setBlock(otherPos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL | Block.UPDATE_SUPPRESS_DROPS);
+            level.levelEvent(player, 2001, otherPos, Block.getId(otherState));
+        }
+        return super.playerWillDestroy(level, pos, state, player);
     }
 
     @Override
@@ -140,9 +212,10 @@ public class TobaccoDryingRackBlock extends BaseEntityBlock {
         }
 
         BlockEntity be = level.getBlockEntity(pos);
-        if (!(be instanceof TobaccoDryingRackBlockEntity rack)) {
+        if (!(be instanceof TobaccoDryingRackBlockEntity rackAtPos)) {
             return InteractionResult.PASS;
         }
+        TobaccoDryingRackBlockEntity rack = rackAtPos.getMasterRack();
 
         if (player.isShiftKeyDown()) {
             if (!level.isClientSide) {
@@ -185,17 +258,7 @@ public class TobaccoDryingRackBlock extends BaseEntityBlock {
             }
         }
 
-        if (!held.isEmpty()) {
-            if (rack.canAccept(held)) {
-                if (!level.isClientSide) {
-                    boolean inserted = rack.addOneLeaf(held);
-                    if (inserted && !player.getAbilities().instabuild) {
-                        held.shrink(1);
-                    }
-                }
-                return InteractionResult.sidedSuccess(level.isClientSide);
-            }
-        } else {
+        if (held.isEmpty()) {
             if (rack.hasLeaves()) {
                 if (!level.isClientSide) {
                     ItemStack removed = rack.removeAllLeaves();
@@ -213,9 +276,11 @@ public class TobaccoDryingRackBlock extends BaseEntityBlock {
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
         if (!state.is(newState.getBlock())) {
-            BlockEntity be = level.getBlockEntity(pos);
-            if (be instanceof TobaccoDryingRackBlockEntity rack) {
-                rack.dropContents(level, pos);
+            if (state.getValue(HALF) == DoubleBlockHalf.LOWER) {
+                BlockEntity be = level.getBlockEntity(pos);
+                if (be instanceof TobaccoDryingRackBlockEntity rack) {
+                    rack.dropContents(level, pos);
+                }
             }
             super.onRemove(state, level, pos, newState, isMoving);
         }
@@ -230,12 +295,19 @@ public class TobaccoDryingRackBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return level.isClientSide ? null : createTickerHelper(type, ModBlockEntities.TOBACCO_DRYING_RACK.get(),
-                TobaccoDryingRackBlockEntity::serverTick);
+        if (level.isClientSide || state.getValue(HALF) == DoubleBlockHalf.UPPER) return null;
+        return createTickerHelper(type, ModBlockEntities.TOBACCO_DRYING_RACK.get(),
+                (tickLevel, tickPos, tickState, rack) -> {
+                    // Existing worlds may contain pre-proxy racks; restore the upper interaction block when possible.
+                    if (tickLevel.isEmptyBlock(tickPos.above())) {
+                        tickLevel.setBlock(tickPos.above(), tickState.setValue(HALF, DoubleBlockHalf.UPPER), Block.UPDATE_ALL);
+                    }
+                    TobaccoDryingRackBlockEntity.serverTick(tickLevel, tickPos, tickState, rack);
+                });
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<net.minecraft.world.level.block.Block, BlockState> builder) {
-        builder.add(HAS_LEAVES, OVER_CAMPFIRE, LOAD_STAGE, CURE_STAGE, VARIETY);
+        builder.add(HALF, HAS_LEAVES, OVER_CAMPFIRE, LOAD_STAGE, CURE_STAGE, VARIETY);
     }
 }

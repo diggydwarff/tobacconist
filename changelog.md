@@ -52,13 +52,17 @@
 - Added the **Industrial Drying Rack**, a Create-focused factory curing tier
   - Holds **32 matching leaves** versus 16 on the wooden rack
   - Cannot be manually loaded or unloaded; it is intended for Funnels, Mechanical Arms, Packagers, and other validated automation
-  - Makes no curing progress without Create-assisted airflow
+  - Makes no curing progress unless **both rack tiers receive matching airflow from two distinct Encased Fans**; one fan, one-sided airflow, or mismatched airflow is insufficient
   - Reuses normal Air/Sun/Fire/Flue cure identity and quality rules, with no industrial quality bonus
   - Runs fan-assisted Air/Sun at 5 progress ticks per game tick and fan-assisted Fire/Flue at 7, a modest throughput increase over the wooden rack's 4/6 rates
   - Adds Spectacles/Display Link/Stock Link/package support and ships with placeholder industrial models/textures pending final artwork
   - Create-gated recipe upgrades a normal Drying Rack with Iron Sheets, Brass Casing, Andesite Alloy, and a Precision Mechanism
+- Updated the wooden **Drying Rack** to occupy two real block levels while retaining its 16-leaf capacity
+  - Blocks now place naturally above the tall frame, and side Hoppers/Funnels can address either rack level
+  - Top and bottom insertion remain disabled; finished extraction remains available from beneath the lower half
 - Rebuilt the **Drying Rack** visuals around four load levels (empty, low, medium, full) with live **X/16 leaf** inspection
 - Drying Rack leaves now change through visible cure stages and retain subtle tobacco-variety color differences from raw leaf through the finished cured batch
+- Increased **Tobacco Barrel** fermentation/aging capacity from **16 to 64** compatible items
 - Added traditional **Hanging Tobacco Bunches**
   - Sneak-use the underside of a sturdy block with 16 matching raw leaves to hang a bunch
   - In Creative mode, one leaf is sufficient to place the decorative 16-leaf bunch
@@ -68,7 +72,7 @@
   - Hanging bunches do not expose hopper, funnel, Mechanical Arm, or Display Link inventory automation
 - Campfire smoke now passes visibly through the open Drying Rack structure
 - The **Flue Firebox** emits subtle active smoke while lit
-- Drying Rack debug curing commands also recognize Hanging Tobacco Bunches
+- Drying Rack debug curing commands resolve either physical half of wooden/Industrial racks and also recognize Hanging Tobacco Bunches
 
 ### Tobacco Crates
 - Added lossless **Tobacco Crates** crafted from a full 3x3 grid of nine units of the same tobacco item
@@ -160,12 +164,14 @@
 - Added a **zombie tobacconist villager profession texture**
 - Cleaned partial transparency artifacts from several tobacco item textures
 - Reorganized the creative tab so **all Flavoring Essences appear together before all Molasses bottles**
+- Reordered the opening creative-tab rows into a clearer **grow → cure/process → cut/store → consume** progression
 - Updated The Tobacconist's Manual and added code-verified Markdown guides for the mod's major gameplay systems
 
 ### Fixes & Compatibility
 - Prevented **Blended Tobacco** from entering the single-variety quality-averaging recipe, preserving blend component identity
 - Cleaned source comments so implementation notes describe only behavior, constraints, compatibility, or data-flow requirements
 - Fixed Double Apple, Double Golden Apple, and Double Royal Apple Create recipe selection/production
+- Fixed `/tobacconist rack finish` and `rack addtime` when targeting the upper half of a two-level rack so they always operate on the shared curing batch
 - Hardened Create classloading and resource conditions so **Tobacconist still launches and functions without Create installed**
 - Kept Curios, JEI, Patchouli, and supported food-mod integrations optional
 - Standardized Spectacles compatibility around the **Curios Head slot** with vanilla Head-slot fallback

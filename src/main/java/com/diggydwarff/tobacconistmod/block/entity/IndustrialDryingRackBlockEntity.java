@@ -13,8 +13,8 @@ import net.minecraft.world.level.block.state.BlockState;
 
 /**
  * High-throughput Create-only drying rack. It reuses the traditional rack's curing metadata and
- * quality rules, but doubles batch capacity and refuses to make curing progress without Create
- * fan assistance.
+ * quality rules, but doubles batch capacity and only advances when both rack tiers receive
+ * matching Create airflow from distinct Encased Fans.
  */
 public class IndustrialDryingRackBlockEntity extends TobaccoDryingRackBlockEntity {
     public static final int INDUSTRIAL_MAX_LEAVES = 32;

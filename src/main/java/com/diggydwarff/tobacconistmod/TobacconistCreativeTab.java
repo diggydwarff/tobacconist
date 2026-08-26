@@ -34,23 +34,17 @@ public class TobacconistCreativeTab {
             () -> CreativeModeTab.builder().icon(() -> new ItemStack(CIGAR.get()))
                     .title(Component.translatable("creativetab.tobacconistmod"))
                     .displayItems((displayParameters, output) -> {
+                        // Core progression: learn -> grow -> cure/process -> cut -> store -> consume.
                         output.accept(TOBACCO_GUIDE.get());
                         output.accept(TOBACCONISTS_SPECTACLES.get());
-                        output.accept(ROLLING_PAPER.get());
-                        output.accept(BAMBOO_CHARCOAL.get());
-                        output.accept(CIGAR.get());
-                        output.accept(CIGARETTE.get());
-                        output.accept(HOOKAH_HOSE.get());
-                        output.accept(SHISHA_TOBACCO.get());
-                        output.accept(DIRTY_HOOKAH_WATER.get());
 
-                        output.accept(TOBACCO_POUCH.get());
-                        output.accept(TOBACCO_BOX.get());
-                        output.accept(TOBACCO_LABEL.get());
-                        output.accept(BLENDED_TOBACCO.get());
-                        if (CreateCompat.loaded()) {
-                            output.accept(BRASS_NAME_TAG.get());
-                        }
+                        output.accept(WILD_TOBACCO_SEEDS.get());
+                        output.accept(VIRGINIA_TOBACCO_SEEDS.get());
+                        output.accept(BURLEY_TOBACCO_SEEDS.get());
+                        output.accept(ORIENTAL_TOBACCO_SEEDS.get());
+                        output.accept(DOKHA_TOBACCO_SEEDS.get());
+                        output.accept(SHADE_TOBACCO_SEEDS.get());
+                        output.accept(ModBlocks.WILD_FLOWERING_TOBACCO.get());
 
                         output.accept(creativeLeaf(new ItemStack(WILD_TOBACCO_LEAF.get()), false));
                         output.accept(creativeLeaf(new ItemStack(VIRGINIA_TOBACCO_LEAF.get()), false));
@@ -59,6 +53,13 @@ public class TobacconistCreativeTab {
                         output.accept(creativeLeaf(new ItemStack(DOKHA_TOBACCO_LEAF.get()), false));
                         output.accept(creativeLeaf(new ItemStack(SHADE_TOBACCO_LEAF.get()), false));
 
+                        output.accept(ModBlocks.TOBACCO_DRYING_RACK.get());
+                        if (CreateCompat.loaded()) {
+                            output.accept(ModBlocks.INDUSTRIAL_DRYING_RACK.get());
+                        }
+                        output.accept(ModBlocks.FLUE_FIREBOX.get());
+                        output.accept(ModBlocks.TOBACCO_BARREL.get());
+
                         output.accept(creativeLeaf(new ItemStack(WILD_TOBACCO_LEAF_DRY.get()), true));
                         output.accept(creativeLeaf(new ItemStack(VIRGINIA_TOBACCO_LEAF_DRY.get()), true));
                         output.accept(creativeLeaf(new ItemStack(BURLEY_TOBACCO_LEAF_DRY.get()), true));
@@ -66,21 +67,35 @@ public class TobacconistCreativeTab {
                         output.accept(creativeLeaf(new ItemStack(DOKHA_TOBACCO_LEAF_DRY.get()), true));
                         output.accept(creativeLeaf(new ItemStack(SHADE_TOBACCO_LEAF_DRY.get()), true));
 
+                        output.accept(STONE_CHAVETA.get());
+                        output.accept(IRON_CHAVETA.get());
+                        output.accept(COPPER_CHAVETA.get());
+                        output.accept(GOLD_CHAVETA.get());
+                        output.accept(DIAMOND_CHAVETA.get());
+                        output.accept(NETHERITE_CHAVETA.get());
+
                         addLooseVariants(output, new ItemStack(TOBACCO_LOOSE_WILD.get()));
                         addLooseVariants(output, new ItemStack(TOBACCO_LOOSE_VIRGINIA.get()));
                         addLooseVariants(output, new ItemStack(TOBACCO_LOOSE_BURLEY.get()));
                         addLooseVariants(output, new ItemStack(TOBACCO_LOOSE_ORIENTAL.get()));
                         addLooseVariants(output, new ItemStack(TOBACCO_LOOSE_DOKHA.get()));
                         addLooseVariants(output, new ItemStack(TOBACCO_LOOSE_SHADE.get()));
+                        output.accept(BLENDED_TOBACCO.get());
 
-                        output.accept(ModBlocks.WILD_FLOWERING_TOBACCO.get());
-
-                        output.accept(ModBlocks.TOBACCO_DRYING_RACK.get());
+                        output.accept(TOBACCO_POUCH.get());
+                        output.accept(TOBACCO_BOX.get());
+                        output.accept(TOBACCO_LABEL.get());
                         if (CreateCompat.loaded()) {
-                            output.accept(ModBlocks.INDUSTRIAL_DRYING_RACK.get());
+                            output.accept(BRASS_NAME_TAG.get());
                         }
-                        output.accept(ModBlocks.FLUE_FIREBOX.get());
-                        output.accept(ModBlocks.TOBACCO_BARREL.get());
+
+                        output.accept(ROLLING_PAPER.get());
+                        output.accept(CIGAR.get());
+                        output.accept(CIGARETTE.get());
+                        output.accept(SHISHA_TOBACCO.get());
+                        output.accept(HOOKAH_HOSE.get());
+                        output.accept(BAMBOO_CHARCOAL.get());
+                        output.accept(DIRTY_HOOKAH_WATER.get());
 
                         output.accept(ModBlocks.RAW_WILD_TOBACCO_CRATE.get());
                         output.accept(ModBlocks.RAW_VIRGINIA_TOBACCO_CRATE.get());
@@ -95,13 +110,6 @@ public class TobacconistCreativeTab {
                         output.accept(ModBlocks.DOKHA_TOBACCO_CRATE.get());
                         output.accept(ModBlocks.SHADE_TOBACCO_CRATE.get());
                         output.accept(ModBlocks.BLENDED_TOBACCO_CRATE.get());
-
-                        output.accept(WILD_TOBACCO_SEEDS.get());
-                        output.accept(VIRGINIA_TOBACCO_SEEDS.get());
-                        output.accept(BURLEY_TOBACCO_SEEDS.get());
-                        output.accept(ORIENTAL_TOBACCO_SEEDS.get());
-                        output.accept(DOKHA_TOBACCO_SEEDS.get());
-                        output.accept(SHADE_TOBACCO_SEEDS.get());
 
                         output.accept(ModBlocks.HOOKAH.get());
                         output.accept(ModBlocks.TALL_HOOKAH.get());
@@ -118,13 +126,6 @@ public class TobacconistCreativeTab {
                         output.accept(ModBlocks.ORNATE_DIAMOND_HOOKAH.get());
                         output.accept(ModBlocks.EMERALD_HOOKAH.get());
                         output.accept(ModBlocks.NETHERITE_HOOKAH.get());
-
-                        output.accept(STONE_CHAVETA.get());
-                        output.accept(IRON_CHAVETA.get());
-                        output.accept(COPPER_CHAVETA.get());
-                        output.accept(GOLD_CHAVETA.get());
-                        output.accept(DIAMOND_CHAVETA.get());
-                        output.accept(NETHERITE_CHAVETA.get());
 
                         output.accept(makePipe(Items.OAK_PLANKS));
                         output.accept(makePipe(Items.SPRUCE_PLANKS));

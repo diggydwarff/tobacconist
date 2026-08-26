@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "The $(thing)Drying Rack$() has explicit vanilla hopper rules. Horizontal sides can insert valid raw leaves. The top and bottom cannot insert. The bottom can extract only when the batch has completely finished curing."
+      "text": "The $(thing)Drying Rack$() occupies two physical block levels but exposes one shared inventory. Horizontal sides on either level can insert valid raw leaves. The top and bottom cannot insert. A hopper underneath the lower half can extract only when the batch has completely finished curing."
     },
     {
       "type": "patchouli:text",
@@ -16,7 +16,7 @@
     {
       "type": "patchouli:text",
       "title": "Industrial Rack",
-      "text": "The $(thing)Industrial Drying Rack$() is automation-only and occupies two real block levels. Funnels/Hoppers may connect to either level, and Chutes/Hoppers above can insert through the top. Both halves address the same 32-leaf inventory; external Create airflow still drives curing."
+      "text": "The $(thing)Industrial Drying Rack$() is automation-only and occupies two real block levels. Funnels/Hoppers may connect to either level, and Chutes/Hoppers above can insert through the top. Both halves address the same 32-leaf inventory. Both tiers must receive matching Create airflow from two distinct Encased Fans before curing progresses."
     },
     {
       "type": "patchouli:text",
@@ -25,7 +25,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "The $(thing)Tobacco Barrel$() exposes automation while still enforcing its normal batch rules. Valid cured or loose tobacco may be inserted when it matches the stored batch; extraction exposes the stored processed batch without discarding tobacco metadata. Manual right-click insertion/removal still works normally.",
+      "text": "The $(thing)Tobacco Barrel$() holds up to 64 compatible cured leaves or loose tobacco and exposes validated automation. Extraction preserves tobacco metadata; actively fermenting batches remain protected from premature automated extraction.",
       "title": "Barrel"
     },
     {

@@ -14,7 +14,7 @@ Only time spent under a valid curing condition advances that method. A Create fa
 
 ## Drying Rack
 
-A rack holds up to 16 matching raw leaves. Its visible fill level changes with inventory count, and looking at it reports `X/16 Leaves`. Once the cure reaches 10%, additional insertion is blocked so the batch cannot be changed mid-process.
+A wooden rack holds up to 16 matching raw leaves. Because the frame is taller than one block, it occupies two physical block levels while keeping one shared 16-leaf inventory. Side Hoppers/Funnels can address either level, top insertion remains closed, and blocks placed above the rack sit above its real upper half. Its visible fill level changes with inventory count, and looking at either half reports `X/16 Leaves`. Once the cure reaches 10%, additional insertion is blocked so the batch cannot be changed mid-process.
 
 Cure precedence per tick is **Fire → Flue → Sun → Air**.
 
@@ -30,7 +30,7 @@ Cure precedence per tick is **Fire → Flue → Sun → Air**.
 - Sky light above is at least 14.
 - At least two horizontal adjacent sides are open air.
 - No direct rain exposure.
-- Either the block above can see the sky or the block immediately above is glass/stained glass or a glass pane.
+- The exposure space immediately above the rack’s upper half can see the sky, or that exposure block is glass/stained glass or a glass pane.
 
 Glass shelter uses the 54,000-tick Sun time. Plain Create airflow accelerates an otherwise-valid Sun cure but does not create sunlight by itself.
 
@@ -45,7 +45,7 @@ A normal rack can Flue Cure when all of these are true:
 - No direct rain.
 - It is not directly over a lit campfire.
 - The rack does not have direct sky access above.
-- The first two blocks above the rack are clear.
+- The rack’s own upper half is ignored as an obstruction, and the open space immediately above the tall frame is clear.
 - A sturdy roof underside exists 3–5 blocks above the rack.
 - No fire, soul fire, campfire, or soul campfire is present in the nearby 3×3×3 smoke-contamination area.
 - At least one lit Flue Firebox is at the rack's level or one block below, within horizontal Manhattan distance 3.
@@ -56,11 +56,12 @@ The Flue Firebox emits a small active smoke effect while lit.
 
 The **Industrial Drying Rack** is the Create-era factory counterpart to the wooden rack. It holds **32 matching leaves** and deliberately cannot be loaded or unloaded by player right-clicks; use Funnels, Mechanical Arms, Packagers, or other validated item automation. Breaking the block still returns its stored contents. The rack has **no internal fan, motor, or power connector**: it is an open forced-air frame whose curing assistance must come from external Create machinery.
 
-Unlike the wooden rack, the industrial rack makes **no curing progress without Create-assisted airflow**. It reuses the same four cure identities and quality calculation:
+Unlike the wooden rack, the industrial rack makes **no curing progress without dual-tier Create airflow**. The lower and upper rack levels must each be reached by a **different Encased Fan**, and both airflow paths must resolve to the same cure type:
 
-- Plain Encased Fan airflow can drive Air Curing or an otherwise-valid Sun Cure. Sunlight is still required for Sun Curing.
-- Fan-blown Campfire smoke/heat drives Fire Curing.
-- Fan-blown Lava heat drives Flue Curing.
+- Plain airflow on both tiers can drive Air Curing or an otherwise-valid Sun Cure. Sunlight is still required for Sun Curing.
+- Matching fan-blown Campfire smoke/heat on both tiers drives Fire Curing.
+- Matching fan-blown Lava heat on both tiers drives Flue Curing.
+- One fan reaching both tiers, airflow on only one tier, or mismatched cure airflow pauses the Industrial Rack.
 - Passive campfires, passive flue-barn heat, sunlight alone, and ordinary air exposure do not cure an Industrial Rack.
 
 Assisted throughput is intentionally only modestly better than the wooden rack: plain fan Air/Sun progress runs at 5 curing ticks per game tick instead of 4, while heated Fire/Flue assistance runs at 7 instead of 6. There is **no quality bonus** for using the industrial block. Its advantages are doubled capacity, compact automated handling, and somewhat higher assisted throughput.

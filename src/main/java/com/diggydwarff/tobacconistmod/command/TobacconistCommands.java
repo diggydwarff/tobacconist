@@ -400,6 +400,6 @@ public class TobacconistCommands {
         }
 
         BlockEntity be = player.level().getBlockEntity(blockHit.getBlockPos());
-        return be instanceof TobaccoDryingRackBlockEntity rack ? rack : null;
+        return be instanceof TobaccoDryingRackBlockEntity rack ? rack.getMasterRack() : null;
     }
 }

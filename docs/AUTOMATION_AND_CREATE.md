@@ -8,26 +8,28 @@ Mechanical Harvesters can harvest mature two-block tobacco crops without duplica
 
 ## Drying Rack automation
 
+The wooden rack is a true two-level structure because its frame extends above one block. Both physical levels address the same 16-leaf inventory, and blocks placed above the rack sit above its real upper half rather than intersecting the model.
+
 Vanilla sided inventory behavior:
 
-- Horizontal faces can insert valid raw leaves.
-- Top and bottom cannot insert.
-- Bottom extraction is available only after the cure is finished.
-- Capacity is 16.
+- Horizontal faces on either rack level can insert valid raw leaves.
+- Top and bottom cannot insert; top-down loading is intentionally disabled because the wooden frame does not line up as an input surface.
+- Bottom extraction beneath the lower half is available only after the cure is finished.
+- Capacity remains 16.
 - Input must match the stored leaf item/components.
 - Insertion locks at 10% cure progress.
 
-NeoForge/Create capability-based consumers can query the rack's validated item handler; completed output remains protected until the batch is finished.
+NeoForge/Create capability-based consumers can query either rack level through the same validated item handler; completed output remains protected until the batch is finished.
 
-Create Encased Fans can assist Air Curing and an already-valid Sun Cure at 4× progress. Smoke/heat airflow can assist Fire or Flue Curing at 6×. The fan resolver checks the taller rack so airflow touching either its lower or upper section can count.
+Create Encased Fans can assist Air Curing and an already-valid Sun Cure at 4× progress. Smoke/heat airflow can assist Fire or Flue Curing at 6×. The wooden rack only needs valid airflow to reach one of its two vertical sections.
 
 Hanging Tobacco Bunches can receive environmental fan assistance but expose no item automation or Display Link source.
 
 ### Industrial Drying Rack
 
-The **Industrial Drying Rack** is the dedicated factory tier. It holds **32 matching leaves**, rejects manual right-click loading/removal, and is intended to sit directly in Create logistics lines. Mechanical Arms, Funnels, Packagers/Stock Links, and the validated item capability can load raw leaves and remove only finished output. Display Links and Spectacles report the same cure/status information with the 32-leaf capacity.
+The **Industrial Drying Rack** is the dedicated factory tier. It holds **32 matching leaves**, rejects manual right-click loading/removal, and is intended to sit directly in Create logistics lines. Both block levels expose the same inventory to side automation, and the industrial rack also permits top-down Chute/Hopper loading. Display Links and Spectacles report the same cure/status information with the 32-leaf capacity.
 
-The industrial rack cannot cure passively and contains **no internal fan or power input**. External Create airflow is the machine: plain airflow provides Air or an otherwise-valid Sun Cure, fan-blown Campfire smoke/heat provides Fire, and fan-blown Lava heat provides Flue. Its assisted progress is modestly faster than a fan-assisted wooden rack (5 vs 4 progress ticks for Air/Sun; 7 vs 6 for Fire/Flue), with no quality bonus. This keeps the wooden rack useful for traditional/passive curing while the industrial rack trades cost and infrastructure for density and throughput.
+The industrial rack cannot cure passively and contains **no internal fan or power input**. Both rack tiers must receive the **same valid airflow type from two distinct Encased Fans** before curing can advance. Plain airflow on both tiers provides Air or an otherwise-valid Sun Cure; matching fan-blown Campfire smoke/heat provides Fire; matching fan-blown Lava heat provides Flue. One fan reaching both levels, one-sided airflow, or mismatched airflow types do not run the machine. Its assisted progress remains 5 ticks for Air/Sun and 7 for Fire/Flue, with no quality bonus.
 
 ## Bulk quality homogenization
 
@@ -57,7 +59,7 @@ Large farms can run smaller primary homogenizers in parallel and combine their s
 
 Create Attribute Filters understand tobacco variety, cure, cut, exact quality score, quality tier, 5-point Quality Band, flavors, blends, labels, aging, supported finished-product metadata, and Tobacco Box fill state. Boxes expose `Empty`, `Partially Filled`, and `Full`, allowing filtered Funnels to feed fresh boxes to a packing Depot and remove completed boxes automatically. Quality Bands give farm sorters a tolerant option such as 46–50 or 51–55 rather than requiring a lane for every possible score. Aged tobacco also exposes its exact aged-day count plus `Aged at least 7/30/90/365 days` attributes for cellar automation.
 
-Tobacco Barrels protect active **fermentation** from every capability-based extractor, including Funnels, Chutes, Packagers, and Mechanical Arms. Aging remains extractable by design, allowing a Smart Funnel, Arm, or other filtered Create component to release stock at a chosen age threshold. Unfiltered extraction from an aging barrel can remove the tobacco immediately.
+Tobacco Barrels hold up to **64 compatible cured leaves or loose tobacco** per batch. They protect active **fermentation** from every capability-based extractor, including Funnels, Chutes, Packagers, and Mechanical Arms. Aging remains extractable by design, allowing a Smart Funnel, Arm, or other filtered Create component to release stock at a chosen age threshold. Unfiltered extraction from an aging barrel can remove the tobacco immediately.
 
 For automatic Tobacco Box packing, keep the box on a Depot beneath a Deployer and feed matching Cigars, Cigarettes, Shisha, or loose tobacco to the Deployer. This is especially important for non-stackable Cigars and Cigarettes: repeated Deployer cycles fill the same stationary box. Use `Box fill` Attribute Filters to supply empty boxes and extract full ones.
 

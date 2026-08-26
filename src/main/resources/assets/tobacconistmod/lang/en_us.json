@@ -1044,7 +1044,7 @@
   "tobacconistmod.display.batch_uniform": "Uniform: %1$s leaves at Q%2$s",
   "block.tobacconistmod.industrial_drying_rack": "Industrial Drying Rack",
   "tobacconistmod.message.industrial_rack.automation_only": "Industrial Drying Racks can only be loaded and unloaded by automation.",
-  "tobacconistmod.cure_method.industrial_requires_create": "Requires Create-assisted airflow",
-  "tobacconistmod.jei.info.rack.industrial": "Industrial Drying Rack: 32 leaves, automation-only, and requires Create-assisted curing.",
+  "tobacconistmod.cure_method.industrial_requires_create": "Requires matching Create airflow on both tiers",
+  "tobacconistmod.jei.info.rack.industrial": "Industrial Drying Rack: 32 leaves, automation-only, and requires matching Create airflow on both tiers from two distinct Encased Fans.",
   "block.tobacconistmod.glass_ashtray": "Glass Ashtray"
 }

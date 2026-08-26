@@ -8,8 +8,9 @@ import org.jetbrains.annotations.Nullable;
 /**
  * NeoForge item capability adapter for the drying rack.
  *
- * <p>Horizontal faces are inputs and the top is kept closed for insertion. Finished batches may
- * be extracted through any capability face. This is intentional: capability-driven logistics such
+ * <p>Horizontal faces are inputs on both rack tiers. The wooden rack keeps top and bottom insertion
+ * closed, while the industrial rack permits top-down loading. Finished batches may be extracted
+ * through any capability face. This is intentional: capability-driven logistics such
  * as Create funnels may query the attached inventory through a different logical face than vanilla
  * sided-container automation. The rack's finished-state check remains authoritative, so automation
  * still cannot pull an active curing batch.</p>

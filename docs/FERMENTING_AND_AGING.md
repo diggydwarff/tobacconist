@@ -2,7 +2,7 @@
 
 ## Tobacco Barrel
 
-The Tobacco Barrel holds up to 16 cured leaves or loose tobacco. Raw leaves and Spoiled Tobacco are rejected. Additional items must match the stored item and components exactly. Adding tobacco resets the current fermentation/aging cycle.
+The Tobacco Barrel holds up to **64** cured leaves or loose tobacco. Raw leaves and Spoiled Tobacco are rejected. Additional items must match the stored item and components exactly. Adding tobacco resets the current fermentation/aging cycle.
 
 The barrel automatically chooses a mode. **Fermentation has priority over aging** when both could otherwise be considered.
 

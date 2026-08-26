@@ -15,7 +15,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "A barrel holds up to $(item)16$() items. Additional tobacco must be exactly compatible with the existing stored stack, including its components/processing data. Adding more tobacco to a batch resets its current fermentation or aging progress.",
+      "text": "A barrel holds up to $(item)64$() items. Additional tobacco must be exactly compatible with the existing stored stack, including its components/processing data. Adding more tobacco to a batch resets its current fermentation or aging progress.",
       "title": "Batch Rules"
     },
     {

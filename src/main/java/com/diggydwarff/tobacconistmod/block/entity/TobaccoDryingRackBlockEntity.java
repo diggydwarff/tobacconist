@@ -4,7 +4,6 @@ import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
 
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
 import com.diggydwarff.tobacconistmod.block.custom.TobaccoDryingRackBlock;
-import com.diggydwarff.tobacconistmod.block.custom.IndustrialDryingRackBlock;
 import com.diggydwarff.tobacconistmod.compat.create.CreateCompat;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
@@ -96,6 +95,16 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         return MAX_LEAVES;
     }
 
+    /** Both physical rack levels address the lower block entity as one logical machine. */
+    public TobaccoDryingRackBlockEntity getMasterRack() {
+        if (level == null || !getBlockState().hasProperty(TobaccoDryingRackBlock.HALF)
+                || getBlockState().getValue(TobaccoDryingRackBlock.HALF) == DoubleBlockHalf.LOWER) {
+            return this;
+        }
+        BlockEntity below = level.getBlockEntity(worldPosition.below());
+        return below instanceof TobaccoDryingRackBlockEntity rack ? rack : this;
+    }
+
     /** Industrial racks override this so curing cannot progress without Create fan assistance. */
     public boolean requiresCreateAssistance() {
         return false;
@@ -107,19 +116,23 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
     }
 
     public IItemHandler getItemHandler(@Nullable Direction side) {
-        return side == null ? unsidedItemHandler : sidedItemHandlers.get(side);
+        TobaccoDryingRackBlockEntity master = getMasterRack();
+        return master == this ? (side == null ? unsidedItemHandler : sidedItemHandlers.get(side)) : master.getItemHandler(side);
     }
 
     public ItemStack getStoredLeaf() {
-        return storedLeaf;
+        TobaccoDryingRackBlockEntity master = getMasterRack();
+        return master == this ? storedLeaf : master.getStoredLeaf();
     }
 
     public boolean hasLeaves() {
-        return !storedLeaf.isEmpty() && storedLeaf.getCount() > 0;
+        TobaccoDryingRackBlockEntity master = getMasterRack();
+        return master == this ? !storedLeaf.isEmpty() && storedLeaf.getCount() > 0 : master.hasLeaves();
     }
 
     public int getLeafCount() {
-        return hasLeaves() ? storedLeaf.getCount() : 0;
+        TobaccoDryingRackBlockEntity master = getMasterRack();
+        return master == this ? (hasLeaves() ? storedLeaf.getCount() : 0) : master.getLeafCount();
     }
 
     /** Maps the 0..16 inventory count onto the four visual rack models. */
@@ -132,10 +145,14 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
     }
 
     public boolean isFull() {
+        TobaccoDryingRackBlockEntity master = getMasterRack();
+        if (master != this) return master.isFull();
         return hasLeaves() && storedLeaf.getCount() >= getMaxLeaves();
     }
 
     public boolean canAccept(ItemStack stack) {
+        TobaccoDryingRackBlockEntity master = getMasterRack();
+        if (master != this) return master.canAccept(stack);
         if (stack.isEmpty() || !isValidLeaf(stack)) {
             return false;
         }
@@ -160,6 +177,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
     }
 
     public boolean addOneLeaf(ItemStack stack) {
+        TobaccoDryingRackBlockEntity master = getMasterRack();
+        if (master != this) return master.addOneLeaf(stack);
         if (!canAccept(stack)) {
             return false;
         }
@@ -189,21 +208,29 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
 
     @Override
     public int getContainerSize() {
+        TobaccoDryingRackBlockEntity master = getMasterRack();
+        if (master != this) return master.getContainerSize();
         return 1;
     }
 
     @Override
     public boolean isEmpty() {
+        TobaccoDryingRackBlockEntity master = getMasterRack();
+        if (master != this) return master.isEmpty();
         return storedLeaf.isEmpty();
     }
 
     @Override
     public ItemStack getItem(int slot) {
+        TobaccoDryingRackBlockEntity master = getMasterRack();
+        if (master != this) return master.getItem(slot);
         return slot == 0 ? storedLeaf : ItemStack.EMPTY;
     }
 
     @Override
     public ItemStack removeItem(int slot, int amount) {
+        TobaccoDryingRackBlockEntity master = getMasterRack();
+        if (master != this) return master.removeItem(slot, amount);
         if (slot != 0 || amount <= 0 || storedLeaf.isEmpty() || !isFinished()) {
             return ItemStack.EMPTY;
         }
@@ -221,6 +248,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
 
     @Override
     public ItemStack removeItemNoUpdate(int slot) {
+        TobaccoDryingRackBlockEntity master = getMasterRack();
+        if (master != this) return master.removeItemNoUpdate(slot);
         if (slot != 0 || storedLeaf.isEmpty()) {
             return ItemStack.EMPTY;
         }
@@ -236,6 +265,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
 
     @Override
     public void setItem(int slot, ItemStack stack) {
+        TobaccoDryingRackBlockEntity master = getMasterRack();
+        if (master != this) { master.setItem(slot, stack); return; }
         if (slot != 0) return;
 
         storedLeaf = stack.copy();
@@ -251,6 +282,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
 
     @Override
     public int[] getSlotsForFace(Direction side) {
+        TobaccoDryingRackBlockEntity master = getMasterRack();
+        if (master != this) return master.getSlotsForFace(side);
         if (side == Direction.DOWN) {
             return SLOTS_FOR_BOTTOM;
         }
@@ -264,6 +297,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
 
     @Override
     public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction side) {
+        TobaccoDryingRackBlockEntity master = getMasterRack();
+        if (master != this) return master.canPlaceItemThroughFace(slot, stack, side);
         if (slot != 0) return false;
         if (side == Direction.UP) return false;
         if (side == Direction.DOWN) return false;
@@ -289,6 +324,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
 
     @Override
     public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction side) {
+        TobaccoDryingRackBlockEntity master = getMasterRack();
+        if (master != this) return master.canTakeItemThroughFace(slot, stack, side);
         if (slot != 0) return false;
         if (side != Direction.DOWN) return false;
 
@@ -308,6 +345,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
 
     @Override
     public void clearContent() {
+        TobaccoDryingRackBlockEntity master = getMasterRack();
+        if (master != this) { master.clearContent(); return; }
         storedLeaf = ItemStack.EMPTY;
         setChanged();
         syncRackState();
@@ -335,6 +374,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
     }
 
     public int getDryProgressPercent() {
+        TobaccoDryingRackBlockEntity master = getMasterRack();
+        if (master != this) return master.getDryProgressPercent();
         if (!hasLeaves()) {
             return 0;
         }
@@ -367,6 +408,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
     }
 
     public int getEstimatedTicksRemaining() {
+        TobaccoDryingRackBlockEntity master = getMasterRack();
+        if (master != this) return master.getEstimatedTicksRemaining();
         if (!hasLeaves() || isFinished()) return 0;
         int pct = getDryProgressPercent();
         int required = getRequiredDryingTime();
@@ -377,6 +420,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
     }
 
     public int getVisualCureStage() {
+        TobaccoDryingRackBlockEntity master = getMasterRack();
+        if (master != this) return master.getVisualCureStage();
         if (!hasLeaves()) {
             return 0;
         }
@@ -444,6 +489,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
     }
 
     public MutableComponent getRackStatusComponent() {
+        TobaccoDryingRackBlockEntity master = getMasterRack();
+        if (master != this) return master.getRackStatusComponent();
         if (!hasLeaves()) {
             return Component.translatable("tobacconistmod.ui.empty");
         }
@@ -461,6 +508,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
     }
 
     public MutableComponent getCurrentCureMethodComponent() {
+        TobaccoDryingRackBlockEntity master = getMasterRack();
+        if (master != this) return master.getCurrentCureMethodComponent();
         if (level == null || !hasLeaves()) {
             return Component.translatable("tobacconistmod.ui.empty");
         }
@@ -517,7 +566,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             if (fanAssist == CreateCompat.FanCuringAssist.AIR) {
                 return Component.translatable("tobacconistmod.cure_method.air_create");
             }
-            return Component.translatable(!level.canSeeSky(worldPosition.above())
+            return Component.translatable(!level.canSeeSky(getExposurePos(level, worldPosition))
                     ? "tobacconistmod.cure_method.air_cover"
                     : "tobacconistmod.cure_method.air_open");
         }
@@ -527,6 +576,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
     }
 
     public boolean isDryingActive() {
+        TobaccoDryingRackBlockEntity master = getMasterRack();
+        if (master != this) return master.isDryingActive();
         if (level == null || !hasLeaves() || isFinished()) {
             return false;
         }
@@ -550,6 +601,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
     }
 
     public boolean isFinished() {
+        TobaccoDryingRackBlockEntity master = getMasterRack();
+        if (master != this) return master.isFinished();
         if (storedLeaf.isEmpty()) {
             return false;
         }
@@ -560,6 +613,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
     }
 
     public ItemStack removeAllLeaves() {
+        TobaccoDryingRackBlockEntity master = getMasterRack();
+        if (master != this) return master.removeAllLeaves();
         if (storedLeaf.isEmpty()) {
             return ItemStack.EMPTY;
         }
@@ -572,6 +627,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
     }
 
     public void dropContents(Level level, BlockPos pos) {
+        TobaccoDryingRackBlockEntity master = getMasterRack();
+        if (master != this) { master.dropContents(level, pos); return; }
         if (!storedLeaf.isEmpty()) {
             Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), storedLeaf);
             clearRack();
@@ -733,6 +790,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
     }
 
     public void debugAddTime(int ticks) {
+        TobaccoDryingRackBlockEntity master = getMasterRack();
+        if (master != this) { master.debugAddTime(ticks); return; }
         if (ticks <= 0 || !hasLeaves() || isFinished()) {
             return;
         }
@@ -780,6 +839,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
     }
 
     public void debugFinishNow() {
+        TobaccoDryingRackBlockEntity master = getMasterRack();
+        if (master != this) { master.debugFinishNow(); return; }
         if (!hasLeaves() || isFinished() || level == null || level.isClientSide) {
             return;
         }
@@ -950,6 +1011,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
     }
 
     public boolean isBatchLocked() {
+        TobaccoDryingRackBlockEntity master = getMasterRack();
+        if (master != this) return master.isBatchLocked();
         return !storedLeaf.isEmpty() && !isFinished() && getDryProgressPercent() >= 10;
     }
 
@@ -976,13 +1039,13 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
 
     private static BlockPos getExposurePos(Level level, BlockPos pos) {
         BlockState state = level.getBlockState(pos);
-        if (state.getBlock() instanceof IndustrialDryingRackBlock
-                && state.hasProperty(IndustrialDryingRackBlock.HALF)
-                && state.getValue(IndustrialDryingRackBlock.HALF) == DoubleBlockHalf.LOWER) {
+        if (state.getBlock() instanceof TobaccoDryingRackBlock
+                && state.hasProperty(TobaccoDryingRackBlock.HALF)
+                && state.getValue(TobaccoDryingRackBlock.HALF) == DoubleBlockHalf.LOWER) {
             BlockState upper = level.getBlockState(pos.above());
             if (upper.is(state.getBlock())
-                    && upper.hasProperty(IndustrialDryingRackBlock.HALF)
-                    && upper.getValue(IndustrialDryingRackBlock.HALF) == DoubleBlockHalf.UPPER) {
+                    && upper.hasProperty(TobaccoDryingRackBlock.HALF)
+                    && upper.getValue(TobaccoDryingRackBlock.HALF) == DoubleBlockHalf.UPPER) {
                 return pos.above(2);
             }
         }
@@ -1059,7 +1122,11 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             BlockPos checkPos = pos.above(y);
             BlockState state = level.getBlockState(checkPos);
 
-            if (!state.isAir()) {
+            boolean ownUpperProxy = y == 1
+                    && state.getBlock() instanceof TobaccoDryingRackBlock
+                    && state.hasProperty(TobaccoDryingRackBlock.HALF)
+                    && state.getValue(TobaccoDryingRackBlock.HALF) == DoubleBlockHalf.UPPER;
+            if (!state.isAir() && !ownUpperProxy) {
                 return false;
             }
         }
@@ -1255,6 +1322,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
     }
 
     public List<Component> getFullDebugLines() {
+        TobaccoDryingRackBlockEntity master = getMasterRack();
+        if (master != this) return master.getFullDebugLines();
         Component itemName = storedLeaf.isEmpty()
                 ? Component.translatable("tobacconistmod.ui.empty")
                 : Component.translatable("tobacconistmod.ui.item_count", storedLeaf.getHoverName(), storedLeaf.getCount());

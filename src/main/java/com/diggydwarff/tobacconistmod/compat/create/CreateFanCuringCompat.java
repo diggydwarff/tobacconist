@@ -1,5 +1,7 @@
 package com.diggydwarff.tobacconistmod.compat.create;
 
+import com.diggydwarff.tobacconistmod.block.custom.IndustrialDryingRackBlock;
+import com.diggydwarff.tobacconistmod.block.custom.TobaccoDryingRackBlock;
 import com.simibubi.create.content.kinetics.fan.AirCurrent;
 import com.simibubi.create.content.kinetics.fan.EncasedFanBlockEntity;
 import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
@@ -8,6 +10,12 @@ import com.simibubi.create.infrastructure.config.AllConfigs;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+
+import java.util.EnumMap;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Create-side resolver for fan-assisted Drying Rack curing.
@@ -28,17 +36,41 @@ public final class CreateFanCuringCompat {
             return CreateCompat.FanCuringAssist.NONE;
         }
 
-        // Probe both vertical sections of the tall rack for fan airflow.
-        CreateCompat.FanCuringAssist lower = resolveAssistAtProbe(level, rackPos);
-        CreateCompat.FanCuringAssist upper = resolveAssistAtProbe(level, rackPos.above());
-        return upper.priority() > lower.priority() ? upper : lower;
+        BlockState rackState = level.getBlockState(rackPos);
+        if (rackState.getBlock() instanceof IndustrialDryingRackBlock
+                && rackState.hasProperty(TobaccoDryingRackBlock.HALF)
+                && rackState.getValue(TobaccoDryingRackBlock.HALF) == DoubleBlockHalf.UPPER) {
+            rackPos = rackPos.below();
+            rackState = level.getBlockState(rackPos);
+        }
+
+        ProbeCandidates lower = resolveCandidatesAtProbe(level, rackPos);
+        ProbeCandidates upper = resolveCandidatesAtProbe(level, rackPos.above());
+
+        if (rackState.getBlock() instanceof IndustrialDryingRackBlock) {
+            // The factory rack deliberately costs more infrastructure: both tiers need matching
+            // airflow from two distinct Encased Fans. One fan reaching both probes is insufficient.
+            for (CreateCompat.FanCuringAssist assist : new CreateCompat.FanCuringAssist[]{
+                    CreateCompat.FanCuringAssist.FIRE,
+                    CreateCompat.FanCuringAssist.FLUE,
+                    CreateCompat.FanCuringAssist.AIR}) {
+                if (hasDistinctPair(lower.sources(assist), upper.sources(assist))) {
+                    return assist;
+                }
+            }
+            return CreateCompat.FanCuringAssist.NONE;
+        }
+
+        // Wooden racks keep the lighter requirement: airflow reaching either vertical section is enough.
+        CreateCompat.FanCuringAssist lowerBest = lower.best();
+        CreateCompat.FanCuringAssist upperBest = upper.best();
+        return upperBest.priority() > lowerBest.priority() ? upperBest : lowerBest;
     }
 
-    private static CreateCompat.FanCuringAssist resolveAssistAtProbe(Level level, BlockPos probePos) {
+    private static ProbeCandidates resolveCandidatesAtProbe(Level level, BlockPos probePos) {
         int searchDistance = getConfiguredSearchDistance();
-        CreateCompat.FanCuringAssist best = CreateCompat.FanCuringAssist.NONE;
+        ProbeCandidates candidates = new ProbeCandidates();
 
-        // Search cardinal axes outward from the probe position.
         for (Direction fanFacing : Direction.values()) {
             for (int distance = 1; distance <= searchDistance; distance++) {
                 BlockPos fanPos = probePos.relative(fanFacing.getOpposite(), distance);
@@ -55,26 +87,49 @@ public final class CreateFanCuringCompat {
                     continue;
                 }
 
-                // Create queries belt/depot processing at offset (block distance - 1).
-                // Reuse that coordinate so AirCurrent's obstruction/catalyst segments remain
-                // authoritative for both the lower and upper rack probes.
                 float airflowOffset = distance - 1.0f;
                 if (airflowOffset > current.maxDistance + 1.0e-3f) {
                     continue;
                 }
 
                 CreateCompat.FanCuringAssist assist = classify(current.getTypeAt(airflowOffset));
-                if (assist.priority() > best.priority()) {
-                    best = assist;
-                }
-
-                if (best == CreateCompat.FanCuringAssist.FIRE) {
-                    return best;
+                if (assist != CreateCompat.FanCuringAssist.NONE) {
+                    candidates.add(assist, fanPos);
                 }
             }
         }
 
-        return best;
+        return candidates;
+    }
+
+    private static boolean hasDistinctPair(Set<BlockPos> lower, Set<BlockPos> upper) {
+        for (BlockPos lowerFan : lower) {
+            for (BlockPos upperFan : upper) {
+                if (!lowerFan.equals(upperFan)) return true;
+            }
+        }
+        return false;
+    }
+
+    private static final class ProbeCandidates {
+        private final EnumMap<CreateCompat.FanCuringAssist, Set<BlockPos>> sources =
+                new EnumMap<>(CreateCompat.FanCuringAssist.class);
+
+        private void add(CreateCompat.FanCuringAssist assist, BlockPos source) {
+            sources.computeIfAbsent(assist, ignored -> new HashSet<>()).add(source.immutable());
+        }
+
+        private Set<BlockPos> sources(CreateCompat.FanCuringAssist assist) {
+            return sources.getOrDefault(assist, Set.of());
+        }
+
+        private CreateCompat.FanCuringAssist best() {
+            CreateCompat.FanCuringAssist best = CreateCompat.FanCuringAssist.NONE;
+            for (CreateCompat.FanCuringAssist assist : sources.keySet()) {
+                if (assist.priority() > best.priority()) best = assist;
+            }
+            return best;
+        }
     }
 
     private static CreateCompat.FanCuringAssist classify(FanProcessingType processingType) {
