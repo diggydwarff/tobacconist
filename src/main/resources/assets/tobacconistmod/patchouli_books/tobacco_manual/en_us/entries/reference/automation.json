@@ -16,7 +16,7 @@
     {
       "type": "patchouli:text",
       "title": "Industrial Rack",
-      "text": "The $(thing)Industrial Drying Rack$() is automation-only: players cannot insert or remove tobacco by right-clicking. It holds 32 matching leaves and works with Funnels, Mechanical Arms, Packagers and item handlers. It has no internal fan or power connector; external Create airflow drives curing."
+      "text": "The $(thing)Industrial Drying Rack$() is automation-only and occupies two real block levels. Funnels/Hoppers may connect to either level, and Chutes/Hoppers above can insert through the top. Both halves address the same 32-leaf inventory; external Create airflow still drives curing."
     },
     {
       "type": "patchouli:text",

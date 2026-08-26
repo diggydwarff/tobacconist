@@ -11,7 +11,7 @@
     {
       "type": "patchouli:text",
       "title": "Harvest & Cure",
-      "text": "Mechanical Harvesters collect mature two-block tobacco. The $(item)Industrial Drying Rack$() is the 32-leaf automation-only factory tier. It has no internal fan or power input; external Encased Fan airflow is required. It cures modestly faster than the wooden rack while using the same Air/Sun/Fire/Flue quality rules."
+      "text": "Mechanical Harvesters collect mature two-block tobacco. The $(item)Industrial Drying Rack$() is a true two-block, 32-leaf factory tier: both levels accept side automation and top-down Chutes/Hoppers can load it. External Encased Fan airflow remains required, with the same Air/Sun/Fire/Flue quality rules."
     },
     {
       "type": "patchouli:text",

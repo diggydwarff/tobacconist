@@ -3,6 +3,7 @@ package com.diggydwarff.tobacconistmod.compat.create;
 import com.diggydwarff.tobacconistmod.TobacconistMod;
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
 import com.diggydwarff.tobacconistmod.block.custom.DoubleHookahBlock;
+import com.diggydwarff.tobacconistmod.block.custom.IndustrialDryingRackBlock;
 import com.simibubi.create.api.packager.InventoryIdentifier;
 import com.simibubi.create.api.packager.unpacking.UnpackingHandler;
 import com.simibubi.create.content.logistics.stockTicker.PackageOrderWithCrafts;
@@ -37,7 +38,7 @@ public final class CreateLogisticsCompat {
 
     private static void registerLogisticsHandlers() {
         registerSingleInventory(ModBlocks.TOBACCO_DRYING_RACK.get());
-        registerSingleInventory(ModBlocks.INDUSTRIAL_DRYING_RACK.get());
+        registerIndustrialRack();
         registerSingleInventory(ModBlocks.TOBACCO_BARREL.get());
         registerSingleInventory(ModBlocks.FLUE_FIREBOX.get());
         registerSingleInventory(ModBlocks.HOOKAH.get());
@@ -81,6 +82,19 @@ public final class CreateLogisticsCompat {
         );
     }
 
+    private static void registerIndustrialRack() {
+        InventoryIdentifier.REGISTRY.register(
+                ModBlocks.INDUSTRIAL_DRYING_RACK.get(),
+                (level, state, face) -> {
+                    BlockPos pos = state.hasProperty(IndustrialDryingRackBlock.HALF)
+                            && state.getValue(IndustrialDryingRackBlock.HALF) == DoubleBlockHalf.UPPER
+                            ? face.getPos().below()
+                            : face.getPos();
+                    return new InventoryIdentifier.Single(pos);
+                }
+        );
+    }
+
     private static void registerDoubleHookah(Block block) {
         InventoryIdentifier.REGISTRY.register(block, CreateLogisticsCompat::identifyDoubleHookah);
         UnpackingHandler.REGISTRY.register(block, CreateLogisticsCompat::unpackDoubleHookah);
@@ -101,13 +115,21 @@ public final class CreateLogisticsCompat {
                                              List<ItemStack> items,
                                              @Nullable PackageOrderWithCrafts orderContext,
                                              boolean simulate) {
-        // DryingRackItemHandler treats horizontal faces identically. Normalize vertical Packager
-        // access to a horizontal face so the default unpacker can validate capacity and metadata.
+        BlockPos targetPos = pos;
+        BlockState targetState = state;
+        if (state.hasProperty(IndustrialDryingRackBlock.HALF)
+                && state.getValue(IndustrialDryingRackBlock.HALF) == DoubleBlockHalf.UPPER) {
+            targetPos = pos.below();
+            targetState = level.getBlockState(targetPos);
+        }
+
+        // Traditional racks keep vertical capability insertion closed. Industrial racks accept
+        // top-down automation, but Packagers still normalize to a horizontal face for consistency.
         Direction effectiveSide = side == Direction.UP || side == Direction.DOWN
                 ? Direction.NORTH
                 : side;
         return UnpackingHandler.DEFAULT.unpack(
-                level, pos, state, effectiveSide, items, orderContext, simulate
+                level, targetPos, targetState, effectiveSide, items, orderContext, simulate
         );
     }
 

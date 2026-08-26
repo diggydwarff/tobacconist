@@ -8,6 +8,7 @@ import com.diggydwarff.tobacconistmod.block.entity.TobaccoDryingRackBlockEntity;
 import com.diggydwarff.tobacconistmod.block.entity.HangingTobaccoBlockEntity;
 import com.diggydwarff.tobacconistmod.block.custom.HangingTobaccoBlock;
 import com.diggydwarff.tobacconistmod.compat.SpectaclesEquipmentHelper;
+import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.compat.create.CreateCompat;
 import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
 import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
@@ -32,8 +33,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class TobaccoInspectionOverlay {
-    private static final int BACKGROUND = 0xD0101010;
-    private static final int BORDER = 0xFF8A633A;
+    private static final int BACKGROUND_TOP = 0xF0100010;
+    private static final int BACKGROUND_BOTTOM = 0xF0100010;
+    private static final int BORDER_LIGHT = 0x505000FF;
+    private static final int BORDER_DARK = 0x5028007F;
     private static final int TITLE = 0xFFFFD27A;
     private static final int TEXT = 0xFFF0F0F0;
     private static final int MUTED = 0xFFB7B7B7;
@@ -271,14 +274,19 @@ public final class TobaccoInspectionOverlay {
     }
 
     private static void drawPanel(GuiGraphics graphics, Font font, Inspection inspection) {
-        int width = font.width(inspection.title());
+        int iconSize = 14;
+        int iconPadding = 3;
+        int titleOffsetX = iconSize + iconPadding + 2;
+
+        int width = font.width(inspection.title()) + titleOffsetX;
         for (Line line : inspection.lines()) {
             width = Math.max(width, font.width(line.text()));
         }
         width += 12;
 
         int lineHeight = 10;
-        int height = 8 + lineHeight * (inspection.lines().size() + 1);
+        int headerHeight = 14;
+        int height = 8 + headerHeight + lineHeight * inspection.lines().size();
         int x = graphics.guiWidth() / 2 + 14;
         int y = graphics.guiHeight() / 2 - height / 2;
 
@@ -287,21 +295,38 @@ public final class TobaccoInspectionOverlay {
         }
         y = Math.max(4, Math.min(y, graphics.guiHeight() - height - 4));
 
-        graphics.fill(x, y, x + width, y + height, BACKGROUND);
-        graphics.fill(x, y, x + width, y + 1, BORDER);
-        graphics.fill(x, y + height - 1, x + width, y + height, BORDER);
-        graphics.fill(x, y, x + 1, y + height, BORDER);
-        graphics.fill(x + width - 1, y, x + width, y + height, BORDER);
+        drawTooltipFrame(graphics, x, y, width, height);
+        renderSpectaclesIcon(graphics, x + 3, y + 2);
 
-        int textX = x + 6;
+        int textX = x + 6 + titleOffsetX;
         int textY = y + 5;
         graphics.drawString(font, inspection.title(), textX, textY, TITLE, false);
-        textY += lineHeight;
+        textY = y + 5 + headerHeight;
 
         for (Line line : inspection.lines()) {
-            graphics.drawString(font, line.text(), textX, textY, line.color(), false);
+            graphics.drawString(font, line.text(), x + 6, textY, line.color(), false);
             textY += lineHeight;
         }
+    }
+
+    private static void drawTooltipFrame(GuiGraphics graphics, int x, int y, int width, int height) {
+        graphics.fillGradient(x, y, x + width, y + height, BACKGROUND_TOP, BACKGROUND_BOTTOM);
+        graphics.fill(x, y - 1, x + width, y, BORDER_LIGHT);
+        graphics.fill(x, y + height, x + width, y + height + 1, BORDER_DARK);
+        graphics.fill(x - 1, y, x, y + height, BORDER_LIGHT);
+        graphics.fill(x + width, y, x + width + 1, y + height, BORDER_DARK);
+        graphics.fillGradient(x, y, x + 1, y + height, BORDER_LIGHT, BORDER_DARK);
+        graphics.fillGradient(x + width - 1, y, x + width, y + height, BORDER_LIGHT, BORDER_DARK);
+        graphics.fill(x, y, x + width, y + 1, BORDER_LIGHT);
+        graphics.fill(x, y + height - 1, x + width, y + height, BORDER_DARK);
+    }
+
+    private static void renderSpectaclesIcon(GuiGraphics graphics, int x, int y) {
+        graphics.pose().pushPose();
+        graphics.pose().translate(x, y, 0);
+        graphics.pose().scale(1.0F, 1.0F, 1.0F);
+        graphics.renderItem(new ItemStack(ModItems.TOBACCONISTS_SPECTACLES.get()), 0, 0);
+        graphics.pose().popPose();
     }
 
     private static int conditionColor(int environmentScore) {

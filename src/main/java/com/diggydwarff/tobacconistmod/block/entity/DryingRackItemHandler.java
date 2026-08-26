@@ -94,7 +94,13 @@ final class DryingRackItemHandler implements IItemHandler {
     }
 
     private boolean canInsertFromSide() {
-        return side == null || (side != Direction.UP && side != Direction.DOWN);
+        if (side == null) return true;
+        if (rack instanceof IndustrialDryingRackBlockEntity) {
+            // The industrial rack is a true two-block machine: horizontal automation can address
+            // either level, and Chutes/Hoppers above feed through the upper half's top face.
+            return side != Direction.DOWN;
+        }
+        return side != Direction.UP && side != Direction.DOWN;
     }
 
     private boolean canExtractFromSide() {

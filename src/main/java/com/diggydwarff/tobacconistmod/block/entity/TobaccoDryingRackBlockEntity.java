@@ -4,6 +4,7 @@ import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
 
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
 import com.diggydwarff.tobacconistmod.block.custom.TobaccoDryingRackBlock;
+import com.diggydwarff.tobacconistmod.block.custom.IndustrialDryingRackBlock;
 import com.diggydwarff.tobacconistmod.compat.create.CreateCompat;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
@@ -29,6 +30,7 @@ import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumMap;
@@ -410,8 +412,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             return 1;
         }
 
-        boolean directRain = level.isRainingAt(worldPosition.above())
-                && level.canSeeSky(worldPosition.above());
+        boolean directRain = isDirectRain(level, worldPosition);
         if (directRain) {
             return 1;
         }
@@ -467,7 +468,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             return TobaccoText.cure(TobaccoCuringHelper.getCureType(storedLeaf));
         }
 
-        boolean directRain = level.isRainingAt(worldPosition.above()) && level.canSeeSky(worldPosition.above());
+        boolean directRain = isDirectRain(level, worldPosition);
         CreateCompat.FanCuringAssist fanAssist = directRain
                 ? CreateCompat.FanCuringAssist.NONE
                 : getCreateFanAssist();
@@ -531,7 +532,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         }
 
         CreateCompat.FanCuringAssist fanAssist = getCreateFanAssist();
-        boolean directRain = level.isRainingAt(worldPosition.above()) && level.canSeeSky(worldPosition.above());
+        boolean directRain = isDirectRain(level, worldPosition);
 
         if (requiresCreateAssistance()) {
             if (directRain) return false;
@@ -623,7 +624,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             return;
         }
 
-        boolean directRain = level.isRainingAt(pos.above()) && level.canSeeSky(pos.above());
+        boolean directRain = isDirectRain(level, pos);
 
         if (directRain) {
             rack.directRainExposureTicks++;
@@ -744,8 +745,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         boolean flueCure = canFlueCure(level, worldPosition);
         boolean inSun = hasDirectSunlight(level, worldPosition);
         boolean airDry = canAirDry(level, worldPosition);
-        boolean directRain = level.isRainingAt(worldPosition.above())
-                && level.canSeeSky(worldPosition.above());
+        boolean directRain = isDirectRain(level, worldPosition);
         CreateCompat.FanCuringAssist fanAssist = directRain
                 ? CreateCompat.FanCuringAssist.NONE
                 : getCreateFanAssist();
@@ -784,8 +784,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             return;
         }
 
-        boolean directRain = level.isRainingAt(worldPosition.above())
-                && level.canSeeSky(worldPosition.above());
+        boolean directRain = isDirectRain(level, worldPosition);
         CreateCompat.FanCuringAssist fanAssist = directRain
                 ? CreateCompat.FanCuringAssist.NONE
                 : getCreateFanAssist();
@@ -975,16 +974,37 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
                 && belowState.getValue(CampfireBlock.LIT);
     }
 
+    private static BlockPos getExposurePos(Level level, BlockPos pos) {
+        BlockState state = level.getBlockState(pos);
+        if (state.getBlock() instanceof IndustrialDryingRackBlock
+                && state.hasProperty(IndustrialDryingRackBlock.HALF)
+                && state.getValue(IndustrialDryingRackBlock.HALF) == DoubleBlockHalf.LOWER) {
+            BlockState upper = level.getBlockState(pos.above());
+            if (upper.is(state.getBlock())
+                    && upper.hasProperty(IndustrialDryingRackBlock.HALF)
+                    && upper.getValue(IndustrialDryingRackBlock.HALF) == DoubleBlockHalf.UPPER) {
+                return pos.above(2);
+            }
+        }
+        return pos.above();
+    }
+
+    private static boolean isDirectRain(Level level, BlockPos pos) {
+        BlockPos exposure = getExposurePos(level, pos);
+        return level.isRainingAt(exposure) && level.canSeeSky(exposure);
+    }
+
     private static boolean canAirDry(Level level, BlockPos pos) {
-        if (level.isRainingAt(pos.above())) {
+        BlockPos abovePos = getExposurePos(level, pos);
+        if (level.isRainingAt(abovePos)) {
             return false;
         }
 
-        return level.getBrightness(LightLayer.SKY, pos.above()) >= 8;
+        return level.getBrightness(LightLayer.SKY, abovePos) >= 8;
     }
 
     private static boolean hasDirectSunlight(Level level, BlockPos pos) {
-        BlockPos abovePos = pos.above();
+        BlockPos abovePos = getExposurePos(level, pos);
 
         if (level.isRainingAt(abovePos) && level.canSeeSky(abovePos)) {
             return false;
@@ -1006,7 +1026,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
     }
 
     private static boolean canFlueCure(Level level, BlockPos pos) {
-        if (level.isRainingAt(pos.above())) {
+        BlockPos abovePos = getExposurePos(level, pos);
+        if (level.isRainingAt(abovePos)) {
             return false;
         }
 
@@ -1014,7 +1035,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             return false;
         }
 
-        if (level.canSeeSky(pos.above())) {
+        if (level.canSeeSky(abovePos)) {
             return false;
         }
 
@@ -1170,7 +1191,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
     }
 
     private static boolean isGlassSunCure(Level level, BlockPos pos) {
-        BlockPos abovePos = pos.above();
+        BlockPos abovePos = getExposurePos(level, pos);
         return !level.canSeeSky(abovePos) && isGlassRoof(level.getBlockState(abovePos)) && isOpenAirSunStructure(level, pos);
     }
 
@@ -1238,8 +1259,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
                 ? Component.translatable("tobacconistmod.ui.empty")
                 : Component.translatable("tobacconistmod.ui.item_count", storedLeaf.getHoverName(), storedLeaf.getCount());
 
-        int light = level != null ? level.getBrightness(LightLayer.SKY, worldPosition.above()) : 0;
-        boolean raining = level != null && level.isRainingAt(worldPosition.above());
+        int light = level != null ? level.getBrightness(LightLayer.SKY, getExposurePos(level, worldPosition)) : 0;
+        boolean raining = level != null && level.isRainingAt(getExposurePos(level, worldPosition));
         boolean glassSun = level != null && isGlassSunCure(level, worldPosition);
         boolean openAirSun = level != null && isOpenAirSunStructure(level, worldPosition);
 
