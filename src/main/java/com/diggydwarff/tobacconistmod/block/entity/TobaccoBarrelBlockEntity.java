@@ -1,13 +1,17 @@
 package com.diggydwarff.tobacconistmod.block.entity;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
+import com.diggydwarff.tobacconistmod.util.TobaccoText;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -17,6 +21,8 @@ import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.items.IItemHandler;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -30,10 +36,10 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
     public static final String TAG_LAST_AGE_GAME_TIME = "LastAgeGameTime";
     public static final String TAG_LAST_FERMENT_GAME_TIME = "LastFermentGameTime";
 
-    public static final int MAX_STACK = 16;
+    public static final int MAX_STACK = 64;
 
     private static final int TICKS_PER_DAY = 24000;
-    private static final int FERMENT_TIME = 48000; // 2 in-game days
+    private static final int FERMENT_TIME = 48000;
     private static final int MAX_BARREL_HUMIDITY = 100;
     private static final int MIN_FERMENT_HUMIDITY = 25;
 
@@ -50,9 +56,14 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
     private long lastFermentGameTime = -1L;
 
     private TobaccoBarrelMode mode = TobaccoBarrelMode.IDLE;
+    private final IItemHandler itemHandler = new TobaccoBarrelItemHandler(this);
 
     public TobaccoBarrelBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.TOBACCO_BARREL.get(), pos, state);
+    }
+
+    public IItemHandler getItemHandler(@Nullable Direction side) {
+        return itemHandler;
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, TobaccoBarrelBlockEntity barrel) {
@@ -227,7 +238,7 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
     private void finishFermentation() {
         processTicks = 0;
 
-        CompoundTag tag = storedTobacco.getOrCreateTag();
+        CompoundTag tag = LegacyItemTags.getOrCreateTag(storedTobacco);
         tag.putBoolean(TAG_FERMENTED, true);
 
         int q = TobaccoCuringHelper.getQuality(storedTobacco);
@@ -238,7 +249,7 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
     }
 
     private void advanceAgingDay() {
-        CompoundTag tag = storedTobacco.getOrCreateTag();
+        CompoundTag tag = LegacyItemTags.getOrCreateTag(storedTobacco);
 
         int agedDays = tag.getInt(TAG_AGED_DAYS) + 1;
         tag.putInt(TAG_AGED_DAYS, agedDays);
@@ -297,11 +308,11 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
 
         ItemStack spoiled = new ItemStack(ModItems.SPOILED_TOBACCO.get(), count);
 
-        if (storedTobacco.hasTag()) {
-            spoiled.setTag(storedTobacco.getTag().copy());
+        if (LegacyItemTags.hasTag(storedTobacco)) {
+            LegacyItemTags.setTag(spoiled, LegacyItemTags.getTag(storedTobacco).copy());
         }
 
-        CompoundTag tag = spoiled.getOrCreateTag();
+        CompoundTag tag = LegacyItemTags.getOrCreateTag(spoiled);
         tag.putBoolean(TAG_RUINED, true);
         tag.putInt(TobaccoCuringHelper.TAG_QUALITY, ruinedQuality);
         tag.putString(
@@ -317,40 +328,80 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
     }
 
     public int tryInsertTobacco(ItemStack stack) {
-        if (stack.isEmpty()) return 0;
-        if (!isValidTobacco(stack)) return 0;
+        return insertTobacco(stack, true);
+    }
+
+    public int tryInsertTobaccoAutomated(ItemStack stack) {
+        return insertTobacco(stack, false);
+    }
+
+    public int getInsertableAmount(ItemStack stack) {
+        if (stack.isEmpty() || !isValidTobacco(stack)) return 0;
 
         if (storedTobacco.isEmpty()) {
-            int move = Math.min(stack.getCount(), MAX_STACK);
+            return Math.min(stack.getCount(), MAX_STACK);
+        }
+
+        if (!ItemStack.isSameItemSameComponents(storedTobacco, stack)) {
+            return 0;
+        }
+
+        return Math.min(stack.getCount(), Math.max(0, MAX_STACK - storedTobacco.getCount()));
+    }
+
+    private int insertTobacco(ItemStack stack, boolean playSound) {
+        int move = getInsertableAmount(stack);
+        if (move <= 0) return 0;
+
+        if (storedTobacco.isEmpty()) {
             storedTobacco = stack.copyWithCount(move);
             processTicks = 0;
             overheatTicks = 0;
             mode = TobaccoBarrelMode.IDLE;
             lastAgeGameTime = -1L;
             lastFermentGameTime = -1L;
+        } else {
+            storedTobacco.grow(move);
+            lastAgeGameTime = -1L;
+            lastFermentGameTime = -1L;
+            processTicks = 0;
+            mode = TobaccoBarrelMode.IDLE;
+        }
+
+        if (playSound) {
             playBarrelSound(SoundEvents.BARREL_OPEN);
-            setChanged();
-            return move;
+        }
+        setChanged();
+        syncToClient();
+        return move;
+    }
+
+    public ItemStack extractTobaccoAutomated(int amount, boolean simulate) {
+        if (amount <= 0 || storedTobacco.isEmpty() || isAutomatedExtractionLocked()) {
+            return ItemStack.EMPTY;
         }
 
-        if (!ItemStack.isSameItemSameTags(storedTobacco, stack)) {
-            return 0;
+        int move = Math.min(amount, storedTobacco.getCount());
+        if (simulate) {
+            return storedTobacco.copyWithCount(move);
         }
 
-        if (storedTobacco.getCount() >= MAX_STACK) {
-            return 0;
+        ItemStack out = storedTobacco.split(move);
+        if (storedTobacco.isEmpty()) {
+            storedTobacco = ItemStack.EMPTY;
+            barrelHumidity = 0;
+            overheatTicks = 0;
         }
 
-        int space = MAX_STACK - storedTobacco.getCount();
-        int move = Math.min(space, stack.getCount());
-        storedTobacco.grow(move);
-        lastAgeGameTime = -1L;
-        lastFermentGameTime = -1L;
+        // Disturbing a batch discards only its partial current-cycle progress. Metadata already
+        // earned by fermentation/aging remains on both the extracted and remaining stacks.
         processTicks = 0;
         mode = TobaccoBarrelMode.IDLE;
-        playBarrelSound(SoundEvents.BARREL_OPEN);
+        lastAgeGameTime = -1L;
+        lastFermentGameTime = -1L;
         setChanged();
-        return move;
+        syncToClient();
+        return out;
     }
 
     public ItemStack getStoredTobaccoCopy() {
@@ -390,75 +441,70 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
         }
 
         if (stack.getItem() instanceof com.diggydwarff.tobacconistmod.datagen.items.custom.TobaccoLeafItem) {
-            return stack.hasTag() && stack.getTag().contains(TobaccoCuringHelper.TAG_CURE_TYPE);
+            return LegacyItemTags.hasTag(stack) && LegacyItemTags.getTag(stack).contains(TobaccoCuringHelper.TAG_CURE_TYPE);
         }
 
         return false;
     }
 
     public Component[] getStatusMessage() {
-        String itemName = storedTobacco.isEmpty()
-                ? "Empty"
-                : storedTobacco.getHoverName().getString() + " x" + storedTobacco.getCount();
+        Component itemName = storedTobacco.isEmpty()
+                ? Component.translatable("tobacconistmod.ui.empty")
+                : Component.translatable("tobacconistmod.ui.item_count", storedTobacco.getHoverName(), storedTobacco.getCount());
 
         int warmth = level != null ? BarrelEnvironmentHelper.getWarmth(level, worldPosition) : 0;
         int humidity = level != null ? BarrelEnvironmentHelper.getHumidity(level, worldPosition) : 0;
         int blockLight = level != null ? level.getBrightness(LightLayer.BLOCK, worldPosition.above()) : 0;
         boolean coolDark = level != null && BarrelEnvironmentHelper.isCoolDarkStorage(level, worldPosition);
-
         int agedDays = getAgedDays(storedTobacco);
-        int years = agedDays / 365;
-        int remDays = agedDays % 365;
 
-        String ageLabel = getAgeDisplayLabel(agedDays);
+        Component line1 = Component.translatable(
+                "tobacconistmod.barrel.status.line1",
+                itemName,
+                TobaccoText.barrelMode(mode).withStyle(ChatFormatting.GOLD)
+        );
 
-        String progressText = "";
-        String progressLabel = "";
+        MutableComponent line2 = Component.translatable(
+                "tobacconistmod.barrel.status.line2",
+                warmth,
+                humidity,
+                barrelHumidity,
+                blockLight,
+                Component.translatable(coolDark ? "tobacconistmod.ui.yes" : "tobacconistmod.ui.no"),
+                TobaccoText.ageDuration(agedDays),
+                TobaccoText.ageLabel(agedDays)
+        );
 
         if (mode == TobaccoBarrelMode.FERMENTING) {
             double pct = Math.min(100.0, processTicks * 100.0 / FERMENT_TIME);
-            progressLabel = "Ferment";
-            progressText = String.format("%.1f%%", pct);
+            line2.append(Component.translatable("tobacconistmod.barrel.status.ferment_progress", String.format("%.1f", pct)));
         } else if (mode == TobaccoBarrelMode.AGING) {
             double pct = Math.min(100.0, processTicks * 100.0 / TICKS_PER_DAY);
-            progressLabel = "Aging";
-            progressText = String.format("%.1f%%", pct);
+            line2.append(Component.translatable("tobacconistmod.barrel.status.aging_progress", String.format("%.1f", pct)));
         }
-
-        Component line1 = Component.literal("Tobacco Barrel | Stored: " + itemName + " | Mode: ")
-                .append(Component.literal(getModeDisplayName()).withStyle(ChatFormatting.GOLD));
-
-        Component line2 = Component.literal(
-                "Warmth: " + warmth +
-                        " | Humidity: " + humidity +
-                        " | Barrel Humidity: " + barrelHumidity +
-                        " | Light: " + blockLight +
-                        " | Cool/Dark: " + coolDark +
-                        " | Age: " + years + "y " + remDays + "d (" + ageLabel + ")" +
-                        (progressText.isEmpty() ? "" : " | " + progressLabel + ": " + progressText)
-        );
 
         return new Component[]{line1, line2};
     }
 
-    private String getAgeDisplayLabel(int agedDays) {
-        if (agedDays < 7) return "Fresh";
-        if (agedDays < 30) return "Light Aged";
-        if (agedDays < 90) return "Deep Aged";
-        if (agedDays < 365) return "Vintage";
-        return "Cellared";
+    public MutableComponent getModeComponent() {
+        return TobaccoText.barrelMode(mode);
     }
 
-    private String getModeDisplayName() {
-        return switch (mode) {
-            case FERMENTING -> "Fermenting";
-            case AGING -> "Aging";
-            default -> "Idle";
-        };
+    public String getModeNameForInspection() {
+        return getModeComponent().getString();
     }
 
     public TobaccoBarrelMode getMode() {
         return mode;
+    }
+
+    /**
+     * Fermentation is a finite protected batch process. Generic automation must not
+     * pull from the barrel until it completes. Aging remains extractable so Create
+     * Attribute Filters can release tobacco at a player-selected age threshold.
+     */
+    public boolean isAutomatedExtractionLocked() {
+        return mode == TobaccoBarrelMode.FERMENTING;
     }
 
     public int getProcessTicks() {
@@ -474,15 +520,15 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
     }
 
     public static boolean isFermented(ItemStack stack) {
-        return stack.hasTag() && stack.getTag().getBoolean(TAG_FERMENTED);
+        return LegacyItemTags.hasTag(stack) && LegacyItemTags.getTag(stack).getBoolean(TAG_FERMENTED);
     }
 
     public static int getAgedDays(ItemStack stack) {
-        return stack.hasTag() ? stack.getTag().getInt(TAG_AGED_DAYS) : 0;
+        return LegacyItemTags.hasTag(stack) ? LegacyItemTags.getTag(stack).getInt(TAG_AGED_DAYS) : 0;
     }
 
     public static boolean isRuined(ItemStack stack) {
-        return stack.hasTag() && stack.getTag().getBoolean(TAG_RUINED);
+        return LegacyItemTags.hasTag(stack) && LegacyItemTags.getTag(stack).getBoolean(TAG_RUINED);
     }
 
     public int getProcessProgressPercent() {
@@ -493,10 +539,6 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
         };
     }
 
-    public String getModeNameForInspection() {
-        return getModeDisplayName();
-    }
-
     @Override
     public CompoundTag getUpdateTag() {
         CompoundTag tag = new CompoundTag();
@@ -505,20 +547,8 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
     }
 
     @Override
-    public void handleUpdateTag(CompoundTag tag) {
-        load(tag);
-    }
-
-    @Override
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
         return ClientboundBlockEntityDataPacket.create(this);
-    }
-
-    @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
-        if (pkt.getTag() != null) {
-            load(pkt.getTag());
-        }
     }
 
     private void syncToClient() {
@@ -549,7 +579,7 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
         super.load(tag);
 
         if (tag.contains("StoredTobacco")) {
-            storedTobacco = ItemStack.of(tag.getCompound("StoredTobacco"));
+            storedTobacco = ItemStack.of(tag.getCompound("StoredTobacco")));
         } else {
             storedTobacco = ItemStack.EMPTY;
         }
@@ -568,49 +598,42 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
     }
 
     public List<Component> getFullDebugLines() {
-        String itemName = storedTobacco.isEmpty()
-                ? "Empty"
-                : storedTobacco.getHoverName().getString() + " x" + storedTobacco.getCount();
+        Component itemName = storedTobacco.isEmpty()
+                ? Component.translatable("tobacconistmod.ui.empty")
+                : Component.translatable("tobacconistmod.ui.item_count", storedTobacco.getHoverName(), storedTobacco.getCount());
 
         int warmth = level != null ? BarrelEnvironmentHelper.getWarmth(level, worldPosition) : 0;
         int humidity = level != null ? BarrelEnvironmentHelper.getHumidity(level, worldPosition) : 0;
         int blockLight = level != null ? level.getBrightness(LightLayer.BLOCK, worldPosition.above()) : 0;
         boolean coolDark = level != null && BarrelEnvironmentHelper.isCoolDarkStorage(level, worldPosition);
-
         int agedDays = getAgedDays(storedTobacco);
-        int years = agedDays / 365;
-        int remDays = agedDays % 365;
 
-        String progress = "None";
-
+        Component progress = Component.translatable("tobacconistmod.ui.none");
         if (mode == TobaccoBarrelMode.FERMENTING) {
             double pct = Math.min(100.0, processTicks * 100.0 / FERMENT_TIME);
-            progress = "Ferment: " + String.format("%.1f%%", pct);
+            progress = Component.translatable("tobacconistmod.debug.ferment_progress", String.format("%.1f", pct));
         } else if (mode == TobaccoBarrelMode.AGING) {
             double pct = Math.min(100.0, processTicks * 100.0 / TICKS_PER_DAY);
-            progress = "Aging: " + String.format("%.1f%%", pct);
+            progress = Component.translatable("tobacconistmod.debug.aging_progress", String.format("%.1f", pct));
         }
 
         return List.of(
-                Component.literal("=== Tobacco Barrel Debug ===").withStyle(ChatFormatting.GOLD),
-                Component.literal("Stored: " + itemName),
-                Component.literal("Mode: " + getModeDisplayName()),
-
-                Component.literal("Warmth: " + warmth),
-                Component.literal("Humidity: " + humidity),
-                Component.literal("Barrel Humidity: " + barrelHumidity),
-
-                Component.literal("Light: " + blockLight),
-                Component.literal("Cool/Dark: " + coolDark),
-
-                Component.literal("Age: " + years + "y " + remDays + "d"),
-                Component.literal(progress),
-
-                Component.literal("Overheat Ticks: " + overheatTicks),
-                Component.literal("Ruined: " + isRuined(storedTobacco)),
-                Component.literal("Fermented: " + isFermented(storedTobacco))
+                Component.translatable("tobacconistmod.debug.tobacco_barrel_title").withStyle(ChatFormatting.GOLD),
+                Component.translatable("tobacconistmod.debug.stored", itemName),
+                Component.translatable("tobacconistmod.debug.mode", getModeComponent()),
+                Component.translatable("tobacconistmod.debug.warmth", warmth),
+                Component.translatable("tobacconistmod.debug.humidity", humidity),
+                Component.translatable("tobacconistmod.debug.barrel_humidity", barrelHumidity),
+                Component.translatable("tobacconistmod.debug.light", blockLight),
+                Component.translatable("tobacconistmod.debug.cool_dark", TobaccoText.yesNo(coolDark)),
+                Component.translatable("tobacconistmod.debug.age", TobaccoText.ageDuration(agedDays)),
+                progress,
+                Component.translatable("tobacconistmod.debug.overheat_ticks", overheatTicks),
+                Component.translatable("tobacconistmod.debug.ruined", TobaccoText.yesNo(isRuined(storedTobacco))),
+                Component.translatable("tobacconistmod.debug.fermented", TobaccoText.yesNo(isFermented(storedTobacco)))
         );
     }
+
 
     public void forceFinishFermentation() {
         if (storedTobacco.isEmpty()) return;

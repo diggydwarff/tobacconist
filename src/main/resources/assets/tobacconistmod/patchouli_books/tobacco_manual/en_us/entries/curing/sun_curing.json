@@ -2,7 +2,7 @@
   "name": "Sun Curing",
   "icon": "minecraft:sunflower",
   "category": "tobacconistmod:curing",
-  "sortnum": 2,
+  "sortnum": 3,
   "pages": [
     {
       "type": "patchouli:text",
@@ -12,6 +12,16 @@
       "type": "patchouli:text",
       "text": "With direct sky access, sun curing takes $(item)48,000 ticks$(), about $(item)2 Minecraft days$(). A glass or stained-glass block/pane immediately above the rack may replace direct sky access, but that covered-glass method takes $(item)54,000 ticks$() (2.25 days).",
       "title": "Direct vs. Glass Sun"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "When $(thing)Create$() is installed, plain Encased Fan airflow that reaches either the lower or upper part of the taller rack accelerates an otherwise-valid Sun Cure. The batch remains $(item)Sun Cured$(); airflow is only an assist and does not change the cure method. This works with direct-sky and glass-sheltered sun curing.",
+      "title": "Fan-Assisted Sun Cure"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Hanging / Pergola Sun",
+      "text": "Hanging bunches use a different sun check because their attachment block always blocks the sky above them. They Sun Cure when an adjacent horizontal air column can see strong daytime sky light. Alternating $(item)beam / gap / beam / gap$() rows therefore work as a pergola; a continuous solid roof with no side skylight becomes Air Curing."
     },
     {
       "type": "patchouli:text",

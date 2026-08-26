@@ -1,5 +1,7 @@
 package com.diggydwarff.tobacconistmod.datagen.items.custom;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import com.diggydwarff.tobacconistmod.util.TobaccoBoxHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoLabelHelper;
 import net.minecraft.ChatFormatting;
@@ -37,18 +39,16 @@ public class TobaccoBoxItem extends Item {
 
         if (stored.isEmpty()) {
             if (!label.isEmpty()) {
-                return Component.literal(label + " Tobacco Box");
+                return Component.translatable("tobacconistmod.box.named_empty", label);
             }
             return Component.translatable("item.tobacconistmod.tobacco_box");
         }
 
-        String typeName = TobaccoBoxHelper.getContentPluralName(stored);
-
+        Component typeName = TobaccoBoxHelper.getContentPluralComponent(stored);
         if (!label.isEmpty()) {
-            return Component.literal("Box of " + label + " " + typeName);
+            return Component.translatable("tobacconistmod.box.named", label, typeName);
         }
-
-        return Component.literal("Box of " + typeName);
+        return Component.translatable("tobacconistmod.box.of", typeName);
     }
 
     @Override
@@ -58,9 +58,9 @@ public class TobaccoBoxItem extends Item {
         if (level.isClientSide) return;
         if (!(entity instanceof Player player)) return;
 
-        int cooldown = stack.getOrCreateTag().getInt(TAG_USE_COOLDOWN);
+        int cooldown = LegacyItemTags.getOrCreateTag(stack).getInt(TAG_USE_COOLDOWN);
         if (cooldown > 0) {
-            stack.getOrCreateTag().putInt(TAG_USE_COOLDOWN, cooldown - 1);
+            LegacyItemTags.getOrCreateTag(stack).putInt(TAG_USE_COOLDOWN, cooldown - 1);
         }
 
         ItemStack offhand = player.getOffhandItem();
@@ -69,12 +69,12 @@ public class TobaccoBoxItem extends Item {
         if (offhand != stack) return;
         if (!mainhand.isEmpty()) return;
         if (!player.swinging && !player.isUsingItem()) return;
-        if (stack.getOrCreateTag().getInt(TAG_USE_COOLDOWN) > 0) return;
+        if (LegacyItemTags.getOrCreateTag(stack).getInt(TAG_USE_COOLDOWN) > 0) return;
 
         ItemStack extracted = tryExtract(stack, player);
         if (!extracted.isEmpty()) {
             player.setItemInHand(InteractionHand.MAIN_HAND, extracted);
-            stack.getOrCreateTag().putInt(TAG_USE_COOLDOWN, 6);
+            LegacyItemTags.getOrCreateTag(stack).putInt(TAG_USE_COOLDOWN, 6);
         }
     }
 
@@ -174,14 +174,15 @@ public class TobaccoBoxItem extends Item {
             return false;
         }
 
+        // Branding belongs to the box, not the compatibility identity of its contents.
+        // A labeled box may accept the same unlabeled product, and an unlabeled box adopts
+        // the label of a matching named product being returned to it.
         if (!boxLabel.isEmpty()) {
-            if (incomingLabel.isEmpty() || !boxLabel.equals(incomingLabel)) {
+            if (!incomingLabel.isEmpty() && !boxLabel.equals(incomingLabel)) {
                 return false;
             }
-        } else {
-            if (!incomingLabel.isEmpty()) {
-                return false;
-            }
+        } else if (!incomingLabel.isEmpty()) {
+            TobaccoBoxHelper.setLabel(box, incomingLabel);
         }
 
         int cap = TobaccoBoxHelper.getCapacity(stored);
@@ -224,31 +225,31 @@ public class TobaccoBoxItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
         ItemStack stored = TobaccoBoxHelper.getStoredItem(stack);
         int count = TobaccoBoxHelper.getStoredCount(stack);
         String label = TobaccoBoxHelper.getLabel(stack);
 
         if (!label.isEmpty()) {
-            tooltip.add(Component.literal("Label: " + label).withStyle(ChatFormatting.YELLOW));
+            tooltip.add(Component.translatable("tobacconistmod.ui.label", label).withStyle(ChatFormatting.YELLOW));
         }
 
         if (stored.isEmpty()) {
-            tooltip.add(Component.literal("Empty").withStyle(ChatFormatting.GRAY));
-            tooltip.add(Component.literal("Holds cigars, cigarettes, loose tobacco, or shisha")
+            tooltip.add(Component.translatable("tobacconistmod.ui.empty").withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable("tobacconistmod.tooltip.box.capacity")
                     .withStyle(ChatFormatting.DARK_GRAY));
             return;
         }
 
-        tooltip.add(Component.literal("Contents: " + TobaccoBoxHelper.getBoxContentsLine(stored))
+        tooltip.add(Component.translatable("tobacconistmod.ui.contents", TobaccoBoxHelper.getBoxContentsComponent(stored))
                 .withStyle(ChatFormatting.GRAY));
 
-        String blendLine = TobaccoBoxHelper.getBlendLine(stored);
-        if (!blendLine.isEmpty()) {
-            tooltip.add(Component.literal("Blend: " + blendLine).withStyle(ChatFormatting.DARK_GRAY));
+        Component blendLine = TobaccoBoxHelper.getBlendComponent(stored);
+        if (!blendLine.getString().isEmpty()) {
+            tooltip.add(Component.translatable("tobacconistmod.ui.blend", blendLine).withStyle(ChatFormatting.DARK_GRAY));
         }
 
-        tooltip.add(Component.literal("Stored: " + count + " / " + TobaccoBoxHelper.getCapacity(stored))
+        tooltip.add(Component.translatable("tobacconistmod.ui.stored", count, TobaccoBoxHelper.getCapacity(stored))
                 .withStyle(ChatFormatting.GRAY));
     }
 }

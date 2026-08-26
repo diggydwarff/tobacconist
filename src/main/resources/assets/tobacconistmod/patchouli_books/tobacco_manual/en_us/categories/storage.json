@@ -1,6 +1,6 @@
 {
   "name": "Storage & Labels",
-  "description": "Store matching tobacco products in Tobacco Boxes and create named product labels.",
+  "description": "Store exact batches in Pouches and Tobacco Boxes, package tobacco losslessly in Crates, and apply product labels.",
   "icon": "tobacconistmod:tobacco_box",
   "sortnum": 7
 }

@@ -7,8 +7,12 @@
     "LLL"
   ],
   "key": {
-    "L": { "item": "minecraft:leather" },
-    "C": { "item": "minecraft:chest" }
+    "L": {
+      "item": "minecraft:leather"
+    },
+    "C": {
+      "item": "minecraft:chest"
+    }
   },
   "result": {
     "item": "tobacconistmod:tobacco_box"

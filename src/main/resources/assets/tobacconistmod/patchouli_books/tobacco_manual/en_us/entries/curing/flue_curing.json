@@ -2,7 +2,7 @@
   "name": "Flue Curing",
   "icon": "tobacconistmod:flue_firebox",
   "category": "tobacconistmod:curing",
-  "sortnum": 4,
+  "sortnum": 5,
   "pages": [
     {
       "type": "patchouli:text",
@@ -16,6 +16,11 @@
     },
     {
       "type": "patchouli:text",
+      "title": "Hanging Bunches",
+      "text": "Hanging bunches can also Flue Cure from nearby lit Flue Fireboxes. Direct fire or smoke contamination still disqualifies clean flue curing; the bunch itself is already considered covered because it must be attached beneath a support."
+    },
+    {
+      "type": "patchouli:text",
       "text": "A flue rack must:$(br2)- not be rained on$(br)- have no direct sky access$(br)- have 2 air blocks immediately above it$(br)- have a sturdy roof underside 3–5 blocks above$(br)- have no nearby fire/campfire contamination$(br)- have at least 1 lit Flue Firebox nearby",
       "title": "Rack Requirements"
     },
@@ -26,7 +31,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Any normal fire, soul fire, campfire, or soul campfire within the 3×3×3 area centered around the rack blocks flue curing. This is intentional: flue curing is meant to be heated without direct smoke contamination.",
+      "text": "Any normal fire, soul fire, campfire, or soul campfire within the 3×3×3 area centered around the rack blocks flue curing. Flue curing requires indirect heat without direct smoke contamination.",
       "title": "No Smoke Contamination"
     },
     {

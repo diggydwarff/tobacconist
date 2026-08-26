@@ -1,19 +1,24 @@
 package com.diggydwarff.tobacconistmod.handlers;
 
+import net.minecraftforge.fml.common.Mod;
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import com.diggydwarff.tobacconistmod.TobacconistMod;
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
 import com.diggydwarff.tobacconistmod.block.custom.HookahBlock;
+import com.diggydwarff.tobacconistmod.block.custom.DyeableDoubleHookahBlock;
+import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.recipes.WoodenPipeRecipe;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.DyeableLeatherItem;
 import net.minecraft.world.level.EmptyBlockGetter;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = TobacconistMod.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientColorHandlers {
@@ -21,23 +26,19 @@ public class ClientColorHandlers {
     @SubscribeEvent
     public static void onBlockColors(RegisterColorHandlersEvent.Block event) {
         event.register((state, level, pos, tintIndex) -> {
-            if (tintIndex != 0) return 0xFFFFFF;
-
-            DyeColor color = state.getValue(HookahBlock.COLOR);
-            int c = color.getTextColor();
-
-            int r = (c >> 16) & 255;
-            int g = (c >> 8) & 255;
-            int b = c & 255;
-
-            float strength = 0.6f; // lower = less intense
-
-            r = (int)(255 * (1 - strength) + r * strength);
-            g = (int)(255 * (1 - strength) + g * strength);
-            b = (int)(255 * (1 - strength) + b * strength);
-
-            return (r << 16) | (g << 8) | b;
+            if (tintIndex != 0) return 0xFFFFFFFF;
+            return vanillaDyeRgb(state.getValue(HookahBlock.COLOR));
         }, ModBlocks.HOOKAH.get());
+        event.register((state, level, pos, tintIndex) -> {
+            if (tintIndex != 0) return 0xFFFFFFFF;
+            return vanillaDyeRgb(state.getValue(DyeableDoubleHookahBlock.COLOR));
+        }, ModBlocks.TALL_HOOKAH.get());
+
+        event.register((state, level, pos, tintIndex) -> {
+            // Cure colors are baked into dedicated rack textures. White preserves those pixels
+            // exactly and avoids Minecraft's multiplicative tint turning brown targets olive.
+            return 0xFFFFFFFF;
+        }, ModBlocks.TOBACCO_DRYING_RACK.get());
     }
 
     @SubscribeEvent
@@ -46,11 +47,11 @@ public class ClientColorHandlers {
         event.register((stack, tintIndex) -> {
 
             // Only tint layer0
-            if (tintIndex != 0) return 0xFFFFFF;
+            if (tintIndex != 0) return 0xFFFFFFFF;
 
-            var tag = stack.getTag();
+            var tag = LegacyItemTags.getTag(stack);
             if (tag == null || !tag.contains(WoodenPipeRecipe.NBT_WOOD_PLANK))
-                return 0xFFFFFF;
+                return 0xFFFFFFFF;
 
             ResourceLocation id =
                     new ResourceLocation(tag.getString(WoodenPipeRecipe.NBT_WOOD_PLANK));
@@ -79,19 +80,51 @@ public class ClientColorHandlers {
                 g = clamp((int)(g * darken));
                 b = clamp((int)(b * darken));
 
-                return (r << 16) | (g << 8) | b;
+                return 0xFF000000 | (r << 16) | (g << 8) | b;
             }
 
-            return 0xFFFFFF;
+            return 0xFFFFFFFF;
 
         }, BuiltInRegistries.ITEM.get(new ResourceLocation("tobacconistmod", "wooden_smoking_pipe")));
 
         event.register((stack, tintIndex) -> {
-            if (tintIndex != 0) return 0xFFFFFF;
+            if (tintIndex != 0) return 0xFFFFFFFF;
 
             // default inventory color for undyed/base hookah item
-            return 0xB0B0B0;
+            return 0xFFB0B0B0;
         }, ModBlocks.HOOKAH.get());
+
+        event.register((stack, tintIndex) -> tintIndex == 0 ? 0xFFB0B0B0 : 0xFFFFFFFF, ModBlocks.TALL_HOOKAH.get());
+
+        event.register((stack, tintIndex) -> {
+            // layer0 is the leather body; layer1 contains the untinted tobacco/cord details.
+            if (tintIndex != 0) return 0xFFFFFFFF;
+            int rgb = ((DyeableLeatherItem) stack.getItem()).getColor(stack);
+            return 0xFF000000 | rgb;
+        }, ModItems.TOBACCO_POUCH.get());
+    }
+
+    /** Vanilla-style dye diffuse colors shared by one-block and tall Hookahs. */
+    private static int vanillaDyeRgb(DyeColor color) {
+        int rgb = switch (color) {
+            case WHITE -> 0xF9FFFE;
+            case ORANGE -> 0xF9801D;
+            case MAGENTA -> 0xC74EBD;
+            case LIGHT_BLUE -> 0x3AB3DA;
+            case YELLOW -> 0xFED83D;
+            case LIME -> 0x80C71F;
+            case PINK -> 0xF38BAA;
+            case GRAY -> 0x474F52;
+            case LIGHT_GRAY -> 0x9D9D97;
+            case CYAN -> 0x169C9C;
+            case PURPLE -> 0x8932B8;
+            case BLUE -> 0x3C44AA;
+            case BROWN -> 0x835432;
+            case GREEN -> 0x5E7C16;
+            case RED -> 0xB02E26;
+            case BLACK -> 0x1D1D21;
+        };
+        return 0xFF000000 | rgb;
     }
 
     private static int clamp(int v) {

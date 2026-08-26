@@ -2,10 +2,10 @@ package com.diggydwarff.tobacconistmod.block.custom;
 
 import com.diggydwarff.tobacconistmod.block.entity.HookahEntity;
 import com.diggydwarff.tobacconistmod.block.entity.ModBlockEntities;
+import com.diggydwarff.tobacconistmod.datagen.items.SmokingItem;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.HookahHoseItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -29,13 +29,10 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Random;
 
 import static com.diggydwarff.tobacconistmod.block.ModBlocks.BLOCKS;
 
@@ -44,7 +41,6 @@ public class HookahBlock extends BaseEntityBlock {
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
     public static final BooleanProperty GLOWING = BooleanProperty.create("glowing");
     public static final EnumProperty<DyeColor> COLOR = EnumProperty.create("color", DyeColor.class);
-
     public HookahBlock(Properties properties) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any()
@@ -54,12 +50,28 @@ public class HookahBlock extends BaseEntityBlock {
                 .setValue(GLOWING, false));
     }
 
+    // Match the visible model instead of behaving like a full opaque cube.
     private static final VoxelShape SHAPE =
-            Block.box(0, 0, 0, 16, 10, 16);
+            Block.box(4, 0, 4, 12, 16, 12);
 
     @Override
     public VoxelShape getShape(BlockState p_60555_, BlockGetter p_60556_, BlockPos p_60557_, CollisionContext p_60558_) {
         return SHAPE;
+    }
+
+    @Override
+    protected boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
+        return true;
+    }
+
+    @Override
+    protected int getLightBlock(BlockState state, BlockGetter level, BlockPos pos) {
+        return 0;
+    }
+
+    @Override
+    protected float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos) {
+        return 1.0F;
     }
 
     @Override
@@ -93,6 +105,30 @@ public class HookahBlock extends BaseEntityBlock {
     }
 
     @Override
+    public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+        if (!level.isClientSide && player.getAbilities().instabuild) {
+            BlockEntity blockEntity = level.getBlockEntity(pos);
+            if (blockEntity instanceof HookahEntity hookah) {
+                hookah.clearContentsForCreativeBreak();
+            }
+        }
+
+        // Never remove the block manually from playerWillDestroy. The normal break
+        // lifecycle must own removal; creative loot suppression is handled separately.
+        return super.playerWillDestroy(level, pos, state, player);
+    }
+
+    @Override
+    public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state,
+                              @Nullable BlockEntity blockEntity, ItemStack tool) {
+        // Skip loot generation for Creative breaks.
+        if (player.getAbilities().instabuild) {
+            return;
+        }
+        super.playerDestroy(level, player, pos, state, blockEntity, tool);
+    }
+
+    @Override
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
         if (pState.getBlock() != pNewState.getBlock()) {
             BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
@@ -102,9 +138,12 @@ public class HookahBlock extends BaseEntityBlock {
         }
         super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
     }
-
     @Override
-    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos,
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        return handleUse(state, level, pos, player, hand, hit);
+    }
+
+    private InteractionResult handleUse(BlockState pState, Level pLevel, BlockPos pPos,
                                  Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
 
         BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
@@ -143,34 +182,23 @@ public class HookahBlock extends BaseEntityBlock {
             if (blockEntity instanceof HookahEntity hookah && hookah.progress > 0) {
                 for (ItemStack stack : pPlayer.getHandSlots()) {
                     if (stack.getItem() instanceof HookahHoseItem) {
-                        Vec3 look = pPlayer.getLookAngle()
-                                .multiply(0.3D, 0.3D, 0.3D)
-                                .multiply(0.066D, 0.066D, 0.066D);
-
-                        Random rand = new Random();
-                        for (int i = 0; i < 5; ++i) {
-                            Vec3 newVec = new Vec3(
-                                    rand.nextDouble() - 0.5D,
-                                    rand.nextDouble() - 0.5D,
-                                    rand.nextDouble() - 0.5D
-                            ).multiply(0.01D, 0.01D, 0.01D);
-                            Vec3 mergeVec = look.add(newVec);
-                            ((ServerLevel) pLevel).sendParticles(
-                                    ParticleTypes.CAMPFIRE_COSY_SMOKE,
-                                    pPlayer.getX() + mergeVec.x,
-                                    pPlayer.getY() + 1.4 + mergeVec.y,
-                                    pPlayer.getZ() + mergeVec.z,
-                                    1, 0, 0, 0, 0
-                            );
+                        if (pPlayer.getCooldowns().isOnCooldown(stack.getItem())) {
+                            return InteractionResult.sidedSuccess(false);
                         }
 
+                        ItemStack shisha = hookah.getShishaForSmoking();
+                        if (shisha.isEmpty()) return InteractionResult.PASS;
+
+                        SmokingItem.applyHookahSmokingEffects(pPlayer, (ServerLevel) pLevel, shisha);
+                        hookah.applyDirtyWaterPenalty(pPlayer);
+                        pPlayer.getCooldowns().addCooldown(stack.getItem(), 20);
                         return InteractionResult.sidedSuccess(false);
                     }
                 }
             }
 
             if(entity instanceof HookahEntity) {
-                NetworkHooks.openScreen(((ServerPlayer)pPlayer), (HookahEntity)entity, pPos);
+                ((ServerPlayer) pPlayer).openMenu((HookahEntity) entity, buf -> buf.writeBlockPos(pPos));
             } else {
                 throw new IllegalStateException("Our Container provider is missing!");
             }

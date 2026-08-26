@@ -10,7 +10,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "$(thing)Curios$() is optional. With it installed, you gain the Eyes and Mouth accessory slots. Without it, Spectacles use the vanilla head slot and smoking still works through ordinary right-click use.",
+      "text": "$(thing)Curios$() is optional. With it installed, you gain the Head and Mouth accessory slots. Without it, Spectacles use the vanilla head slot and smoking still works through ordinary right-click use.",
       "title": "Curios"
     },
     {
@@ -20,8 +20,13 @@
     },
     {
       "type": "patchouli:text",
-      "text": "$(thing)Farmer's Delight$() and $(thing)Fruits Delight$() add extra flavored-molasses recipes when installed. Their dedicated flavor entries appear in the Shisha & Hookahs category only when the matching mod is loaded.",
-      "title": "Food Mod Integrations"
+      "text": "Flavoring ingredients are $(thing)tag-driven$(). Tobacconist accepts matching common ingredient tags plus optional items from Farmer's Delight, Fruits Delight, Croptopia, Neapolitan, HerbalBrews, Farmer's Respite, Expanded Delight, Rustic Delight, Coffee Delight, Create Confectionery, and other correctly tagged food mods. These integrations never make those mods required.",
+      "title": "Flavor Compatibility"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Tobacco Item Tags",
+      "text": "Tobacconist groups its own seeds, raw leaves, cured leaves, loose tobacco, and smoking pipes into item tags so recipes and integrations do not need hardcoded item lists. It also publishes $(item)c:seeds/tobacco$() and $(item)c:crops/tobacco$() for simple cross-mod/datapack compatibility. Players do not need to manage these tags manually."
     }
   ]
 }

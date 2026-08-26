@@ -3,6 +3,7 @@ package com.diggydwarff.tobacconistmod.compat.jei;
 import com.diggydwarff.tobacconistmod.TobacconistMod;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
+import com.diggydwarff.tobacconistmod.util.TobaccoText;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
@@ -50,7 +51,7 @@ public class LeafCuttingRecipeCategory implements IRecipeCategory<LeafCuttingJei
 
     @Override
     public Component getTitle() {
-        return Component.literal("Leaf Cutting");
+        return Component.translatable("tobacconistmod.jei.leaf_cutting");
     }
 
     @Override
@@ -89,7 +90,7 @@ public class LeafCuttingRecipeCategory implements IRecipeCategory<LeafCuttingJei
         slot.draw(guiGraphics, 93, 29);
 
         guiGraphics.drawString(mc.font,
-                Component.literal(TobaccoCuringHelper.getCutDisplayName(recipe.cutType())),
+                TobaccoText.cut(recipe.cutType()),
                 4, 4, 0x404040, false);
     }
 

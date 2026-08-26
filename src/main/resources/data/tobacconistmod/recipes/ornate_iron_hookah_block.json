@@ -1,26 +1,21 @@
 {
   "type": "minecraft:crafting_shaped",
   "category": "misc",
-  "pattern":
-  [
+  "pattern": [
     "III",
     "IHI",
     "III"
   ],
-  "key":
-  {
-    "I":
-    {
+  "key": {
+    "I": {
       "item": "minecraft:iron_ingot"
     },
-    "H":
-    {
+    "H": {
       "item": "tobacconistmod:hookah_block"
     }
   },
-  "result":
-  {
-    "item": "tobacconistmod:ornate_iron_hookah_block",
-    "count": 1
+  "result": {
+    "count": 1,
+    "item": "tobacconistmod:ornate_iron_hookah_block"
   }
 }

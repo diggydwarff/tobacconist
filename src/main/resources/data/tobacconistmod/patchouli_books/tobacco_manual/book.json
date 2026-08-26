@@ -1,8 +1,8 @@
 {
   "name": "The Tobacconist's Manual",
-  "landing_text": "A complete field guide to Tobacconist for Minecraft 1.20.1. Start with Getting Started, then use the chapter categories as a full reference for growing, curing, cutting, fermentation, aging, smoking, shisha, storage, automation, and configuration.$(br2)The normal gameplay inspection tool is the Tobacconist's Spectacles; no debug command is required for ordinary play.",
+  "landing_text": "A code-verified field guide to growing, curing, fermenting, aging, cutting, blending, flavoring, storage, smoking, hookahs, quality, and optional Create automation in Tobacconist for Minecraft 1.21.1.",
   "version": 2,
-  "subtitle": "Complete 1.20.1 Field Guide",
+  "subtitle": "Complete 1.21.1 Field Guide",
   "creative_tab": "tobacconistmod:tobacconistmod",
   "model": "tobacconistmod:tobacco_guide",
   "book_texture": "patchouli:textures/gui/book_green.png",

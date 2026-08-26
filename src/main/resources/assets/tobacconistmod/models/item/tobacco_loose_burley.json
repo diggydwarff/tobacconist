@@ -2,5 +2,25 @@
   "parent": "item/generated",
   "textures": {
     "layer0": "tobacconistmod:item/tobacco_loose_burley"
-  }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "tobacconistmod:shag_cut": 1.0
+      },
+      "model": "tobacconistmod:item/tobacco_loose_burley_shag"
+    },
+    {
+      "predicate": {
+        "tobacconistmod:rough_cut": 1.0
+      },
+      "model": "tobacconistmod:item/tobacco_loose_burley_rough"
+    },
+    {
+      "predicate": {
+        "tobacconistmod:flake_cut": 1.0
+      },
+      "model": "tobacconistmod:item/tobacco_loose_burley_flake"
+    }
+  ]
 }

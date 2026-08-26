@@ -113,6 +113,8 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
+    maven { url = "https://maven.createmod.net" }
+    maven { url = "https://maven.tterrag.com/" }
     maven { url = "https://maven.theillusivec4.top/" } // Curios
     maven { url 'https://maven.blamejared.com' } // Patchouli
     maven { url "https://modmaven.dev" } // JEI
@@ -120,6 +122,13 @@ repositories {
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+
+    // Create 6 stack (Forge 1.20.1)
+    implementation fg.deobf("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
+    implementation fg.deobf("net.createmod.ponder:Ponder-Forge-${minecraft_version}:${ponder_version}")
+    compileOnly fg.deobf("dev.engine-room.flywheel:flywheel-forge-api-${minecraft_version}:${flywheel_version}")
+    runtimeOnly fg.deobf("dev.engine-room.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}")
+    implementation fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
 
     // Patchouli
     implementation fg.deobf("vazkii.patchouli:Patchouli:1.20.1-84-FORGE")

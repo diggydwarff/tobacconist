@@ -6,5 +6,7 @@
   "ingredient": {
     "item": "minecraft:bamboo"
   },
-  "result": "tobacconistmod:bamboo_charcoal"
+  "result": {
+    "item": "tobacconistmod:bamboo_charcoal"
+  }
 }

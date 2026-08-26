@@ -17,11 +17,11 @@ public class SpoiledTobaccoItem extends Item {
 
     @Override
     public void appendHoverText(ItemStack stack,
-                                @Nullable Level level,
+                                Level level,
                                 List<Component> tooltip,
                                 TooltipFlag flag) {
 
-        tooltip.add(Component.literal("Spoiled tobacco. Useless for smoking."));
-        tooltip.add(Component.literal("Can be composted."));
+        tooltip.add(Component.translatable("tobacconistmod.tooltip.spoiled_tobacco.useless"));
+        tooltip.add(Component.translatable("tobacconistmod.tooltip.spoiled_tobacco.compost"));
     }
 }

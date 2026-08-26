@@ -6,17 +6,28 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "The basic $(thing)Wooden Smoking Pipe$() is a custom 3\u00d73 recipe. Use any two Planks and two Sticks in this exact pattern:$(br2)$(item)__P$()$(br)$(item)_PS$()$(br)$(item)S__$()$(br2)P = any Plank, S = Stick, _ = empty. The pipe remembers the first plank type and uses it in the pipe's name/appearance."
+      "text": "The basic $(thing)Wooden Smoking Pipe$() is a custom 3×3 recipe. Use any two Planks and two Sticks in this exact pattern:$(br2)$(item)__P$()$(br)$(item)_PS$()$(br)$(item)S__$()$(br2)P = any Plank, S = Stick, _ = empty. The pipe remembers the first plank type and uses it in the pipe's name/appearance."
     },
     {
       "type": "patchouli:text",
-      "text": "To pack a pipe, hold an $(thing)empty pipe in your offhand$() and $(thing)loose tobacco in your main hand$(), then right-click with the tobacco. One loose tobacco is consumed and the pipe receives $(item)40 puffs$().",
+      "text": "To pack a pipe, hold an $(thing)empty pipe in your offhand$() and $(thing)loose tobacco in your main hand$(), then right-click with the tobacco. One loose tobacco is consumed and a hand-packed pipe receives $(item)40 puffs$(). Packing from a filled Tobacco Pouch is slightly more efficient, granting $(item)41–45 puffs$().",
       "title": "Packing"
     },
     {
       "type": "patchouli:text",
       "text": "Right-click a packed pipe to take one puff. When its 40 puffs are exhausted, the pipe becomes empty and can be packed again. The durability-style bar and tooltip show how much tobacco remains.",
       "title": "Smoking"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:clay_smoking_pipe",
+      "recipe2": "tobacconistmod:tobacco_pouch",
+      "title": "Clay Pipe & Pouch"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Tobacco Pouch",
+      "text": "Loose tobacco stacks normally to $(item)64$(). A Tobacco Pouch stores up to $(item)128$() units of one exact loose-tobacco batch—two full stacks in one slot—while preserving all processing data. Hold it in your offhand and use loose tobacco to load as much as will fit; an empty main-hand pipe can then pack directly from the pouch with a small 1–5 puff packing bonus. Sneak-right-click the pouch in your main hand to withdraw one tobacco. Craft a Pouch with one dye to set a predictable new color, or combine several dyes in the same craft to blend a custom color. Re-dyeing starts fresh from the new dye selection instead of blending with the Pouch's previous color."
     },
     {
       "type": "patchouli:crafting",
@@ -50,7 +61,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "The decorative pipe variants use the same packing/smoking behavior as the wooden pipe unless their tooltip says otherwise. Loose tobacco processing data is copied into the packed pipe so quality/aging bonuses can still be evaluated when smoked.",
+      "text": "Clay, metal, decorative, and wooden pipes use the same basic packing and smoking behavior. Packed tobacco keeps its variety, quality, cure, cut, flavor, fermentation, and age data so the correct smoking bonuses are evaluated when you take a puff.",
       "title": "Shared Behavior"
     },
     {

@@ -1,34 +1,57 @@
 {
-  "name": "Ornate Hookahs",
+  "name": "Hookah Collection",
   "icon": "tobacconistmod:ornate_gold_hookah_block",
   "category": "tobacconistmod:hookah",
   "sortnum": 5,
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Ornate hookahs are two-block-tall decorative versions of the hookah. They use the same HookahEntity inventory, fuel rules, shisha rules, water requirement, and hose interaction as the basic hookah."
+      "text": "The Hookah collection now includes a short dyeable Hookah, a roughly 1.5-block-tall $(thing)Tall Hookah$(), and a range of similarly tall material designs. These taller Hookahs reserve the block above them for clean placement. Their two occupied levels resolve to one lower/master inventory for Hoppers, Create logistics, and Display Links. All use the same fuel, shisha, water, hose, quality, and Dirty Water rules; material choice is cosmetic."
     },
     {
       "type": "patchouli:crafting",
       "recipe": "tobacconistmod:ornate_copper_hookah_block",
       "recipe2": "tobacconistmod:ornate_iron_hookah_block",
-      "title": "Copper & Iron Ornate Hookahs"
+      "title": "Copper & Iron"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:tall_hookah_block",
+      "recipe2": "tobacconistmod:redstone_hookah_block",
+      "title": "Tall & Redstone"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:lapis_hookah_block",
+      "recipe2": "tobacconistmod:obsidian_hookah_block",
+      "title": "Lapis & Obsidian"
     },
     {
       "type": "patchouli:crafting",
       "recipe": "tobacconistmod:ornate_gold_hookah_block",
-      "recipe2": "tobacconistmod:ornate_diamond_hookah_block",
-      "title": "Gold & Diamond Ornate Hookahs"
+      "recipe2": "tobacconistmod:ornate_amethyst_hookah_block",
+      "title": "Gold & Amethyst"
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "tobacconistmod:ornate_amethyst_hookah_block",
-      "title": "Amethyst Ornate Hookah"
+      "recipe": "tobacconistmod:ornate_diamond_hookah_block",
+      "recipe2": "tobacconistmod:emerald_hookah_block",
+      "title": "Diamond & Emerald"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:netherite_hookah_block",
+      "title": "Netherite Hookah"
     },
     {
       "type": "patchouli:text",
-      "text": "The basic single-block Hookah has an extra cosmetic feature: right-click it with any Dye to change its color, or with a Glow Ink Sac to enable its glowing state. Those cosmetic state controls belong to the basic Hookah block, not the ornate two-block variants.",
-      "title": "Basic Hookah Decoration"
+      "title": "Copper Ages",
+      "text": "The $(thing)Copper Hookah$() naturally oxidizes through Exposed, Weathered, and Oxidized appearances. Right-click any unwaxed stage with Honeycomb to preserve that finish. An axe removes wax first, then scrapes oxidation backward one stage. Its inventory and active Hookah state are preserved while the block changes."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Decoration",
+      "text": "The short Hookah and Tall Hookah can both be recolored in-world with any Dye and made luminous with a Glow Ink Sac. The Netherite Hookah also gives off an occasional subtle purple ambient particle as a purely cosmetic prestige effect."
     }
   ]
 }

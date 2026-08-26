@@ -1,7 +1,6 @@
 package com.diggydwarff.tobacconistmod.datagen.items.custom;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -18,12 +17,12 @@ public class ShishaFlavoringItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, level, tooltip, flag);
 
         if (stack.isDamageableItem()) {
             int usesLeft = stack.getMaxDamage() - stack.getDamageValue();
-            tooltip.add(Component.literal("Uses Left: " + usesLeft + "/4").withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable("tobacconistmod.tooltip.uses_left", usesLeft, 4).withStyle(ChatFormatting.GRAY));
         }
     }
 

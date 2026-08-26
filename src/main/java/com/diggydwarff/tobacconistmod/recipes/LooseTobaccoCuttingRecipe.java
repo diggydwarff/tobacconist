@@ -1,12 +1,13 @@
 package com.diggydwarff.tobacconistmod.recipes;
 
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
+import com.diggydwarff.tobacconistmod.util.TobaccoProcessingHelper;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
@@ -23,7 +24,7 @@ public class LooseTobaccoCuttingRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer container, RegistryAccess registryAccess) {
+    public ItemStack assemble(CraftingContainer container, RegistryAccess registries) {
         int leafSlot = -1;
         int chavetaSlot = -1;
         int nonEmpty = 0;
@@ -72,21 +73,14 @@ public class LooseTobaccoCuttingRecipe extends CustomRecipe {
         }
 
         ItemStack leaf = container.getItem(leafSlot);
-        ItemStack result = TobaccoCuringHelper.getLooseTobaccoForDryLeaf(leaf, 3);
-        if (result.isEmpty()) {
-            return ItemStack.EMPTY;
-        }
-
-        TobaccoCuringHelper.copyTobaccoProcessingData(leaf, result);
-        TobaccoCuringHelper.setCutType(result, cutType);
-        return result;
+        return TobaccoProcessingHelper.cutDryLeaf(leaf, cutType, 3);
     }
 
     @Override
     public NonNullList<ItemStack> getRemainingItems(CraftingContainer container) {
         NonNullList<ItemStack> remaining = NonNullList.withSize(container.getContainerSize(), ItemStack.EMPTY);
 
-        for (int i = 0; i < remaining.size(); i++) {
+        for (int i = 0; i < remaining.getContainerSize(); i++) {
             ItemStack stack = container.getItem(i);
             if (!stack.isEmpty() && TobaccoCuringHelper.isChaveta(stack)) {
                 remaining.set(i, stack.getCraftingRemainingItem());

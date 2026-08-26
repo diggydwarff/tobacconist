@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "A $(thing)Tobacco Box$() stores one exact type/batch of finished or loose tobacco while preserving its metadata. Supported contents are Cigars, Cigarettes, Shisha Tobacco, and all six Loose Tobacco varieties."
+      "text": "A $(thing)Tobacco Box$() stores one exact type/batch of finished or loose tobacco while preserving its metadata. Supported contents are Cigars, Cigarettes, Shisha Tobacco, all six Loose Tobacco varieties, and Blended Tobacco."
     },
     {
       "type": "patchouli:crafting",
@@ -29,9 +29,15 @@
       "title": "Extracting"
     },
     {
+      "type": "patchouli:text",
+      "title": "Create Auto-Packing",
+      "text": "With Create, keep a Tobacco Box on a $(item)Depot$() beneath a Deployer and feed matching finished products into the Deployer. Each application packs the box without losing metadata. Attribute Filters expose $(thing)Box fill: Empty / Partially Filled / Full$(), so filtered Funnels can feed empty boxes and remove full ones automatically."
+    },
+    {
       "type": "patchouli:relations",
       "entries": [
         "tobacconistmod:storage/labels",
+        "tobacconistmod:storage/tobacco_crates",
         "tobacconistmod:processing/averaging"
       ],
       "title": "Related Chapters"

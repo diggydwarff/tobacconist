@@ -1,5 +1,7 @@
 package com.diggydwarff.tobacconistmod.compat.jei;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import com.diggydwarff.tobacconistmod.TobacconistMod;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.recipes.WoodenPipeRecipe;
@@ -39,7 +41,7 @@ public class WoodenPipeFillRecipeCategory implements IRecipeCategory<WoodenPipeF
 
     @Override
     public Component getTitle() {
-        return Component.literal("Fill Wooden Pipe");
+        return Component.translatable("tobacconistmod.jei.fill_wooden_pipe");
     }
 
     @Override
@@ -74,18 +76,18 @@ public class WoodenPipeFillRecipeCategory implements IRecipeCategory<WoodenPipeF
         slot.draw(guiGraphics, 85, 19);
 
         guiGraphics.drawString(mc.font,
-                Component.literal("Tobacco + pipe"),
+                Component.translatable("tobacconistmod.jei.tobacco_plus_pipe"),
                 4, 4, 0x404040, false);
 
         guiGraphics.drawString(mc.font,
-                Component.literal("Offhand use"),
+                Component.translatable("tobacconistmod.jei.offhand_use"),
                 4, 44, 0x808080, false);
     }
 
     private static ItemStack makeWoodPipe(String plankId) {
         ItemStack pipe = new ItemStack(ModItems.WOODEN_SMOKING_PIPE.get());
 
-        pipe.getOrCreateTag().putString(
+        LegacyItemTags.getOrCreateTag(pipe).putString(
                 WoodenPipeRecipe.NBT_WOOD_PLANK,
                 plankId
         );

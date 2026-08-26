@@ -1,5 +1,7 @@
 package com.diggydwarff.tobacconistmod.recipes;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import com.diggydwarff.tobacconistmod.TobacconistMod;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.LooseTobaccoItem;
@@ -15,23 +17,14 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 
 public class CigarRecipe extends CustomRecipe {
-
-    private final ResourceLocation id;
-    private final ItemStack output;
-    private final NonNullList<Ingredient> recipeItems;
-
-    public CigarRecipe(ResourceLocation id, ItemStack output, NonNullList<Ingredient> recipeItems) {
-        super(id, CraftingBookCategory.MISC);
-        this.id = id;
-        this.output = output;
-        this.recipeItems = recipeItems;
+    public CigarRecipe(ResourceLocation id, CraftingBookCategory category) {
+        super(id, category);
     }
 
     @Override
@@ -46,7 +39,7 @@ public class CigarRecipe extends CustomRecipe {
             if (itemstack.getItem() instanceof LooseTobaccoItem) {
                 if (!tobaccoStack.isEmpty()) return false;
                 tobaccoStack = itemstack;
-            } else if (itemstack.getItem() instanceof TobaccoLeafItem) {
+            } else if (TobaccoCuringHelper.isDryTobaccoLeaf(itemstack)) {
                 if (!tobaccoLeafStack.isEmpty()) return false;
                 tobaccoLeafStack = itemstack;
             } else {
@@ -58,7 +51,7 @@ public class CigarRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer craftingContainer, RegistryAccess registryAccess) {
+    public ItemStack assemble(CraftingContainer craftingContainer, RegistryAccess registries) {
         ItemStack tobaccoStack = ItemStack.EMPTY;
         ItemStack tobaccoLeafStack = ItemStack.EMPTY;
 
@@ -68,7 +61,7 @@ public class CigarRecipe extends CustomRecipe {
 
             if (itemstack.getItem() instanceof LooseTobaccoItem) {
                 tobaccoStack = itemstack;
-            } else if (itemstack.getItem() instanceof TobaccoLeafItem) {
+            } else if (TobaccoCuringHelper.isDryTobaccoLeaf(itemstack)) {
                 tobaccoLeafStack = itemstack;
             }
         }
@@ -77,53 +70,7 @@ public class CigarRecipe extends CustomRecipe {
             return ItemStack.EMPTY;
         }
 
-        ItemStack returnStack = new ItemStack(ModItems.CIGAR.get(), 1);
-        CompoundTag tag = returnStack.getOrCreateTag();
-
-        CompoundTag wrapperData = tobaccoLeafStack.getTag();
-        if (wrapperData != null) {
-            tag.put("WrapperLeafData", wrapperData.copy());
-        }
-
-        tag.putString("tobacco", TobaccoProductQualityHelper.getShortTobaccoLabel(tobaccoStack));
-        tag.putString("wrapper", tobaccoLeafStack.getDisplayName().getString());
-
-        TobaccoDataHelper.applyTobaccoMetadata(returnStack, tobaccoStack);
-
-        CompoundTag fillerTag = tobaccoStack.getTag();
-        CompoundTag wrapperTag = tobaccoLeafStack.getTag();
-
-        int fillerAge = fillerTag != null ? fillerTag.getInt("AgedDays") : 0;
-        int wrapperAge = wrapperTag != null ? wrapperTag.getInt("AgedDays") : 0;
-        int finalAge = Math.max(fillerAge, wrapperAge);
-
-        if (finalAge > 0) {
-            tag.putInt("AgedDays", finalAge);
-        }
-
-        boolean fermented =
-                (fillerTag != null && fillerTag.getBoolean("Fermented")) ||
-                        (wrapperTag != null && wrapperTag.getBoolean("Fermented"));
-
-        if (fermented) {
-            tag.putBoolean("Fermented", true);
-        }
-
-        boolean ruined =
-                (fillerTag != null && fillerTag.getBoolean("Ruined")) ||
-                        (wrapperTag != null && wrapperTag.getBoolean("Ruined"));
-
-        if (ruined) {
-            tag.putBoolean("Ruined", true);
-        }
-
-        TobaccoProductQualityHelper.applyProductQualityToTag(
-                tag,
-                tobaccoStack,
-                TobaccoProductQualityHelper.getCigarQuality(tobaccoStack)
-        );
-
-        return returnStack;
+        return com.diggydwarff.tobacconistmod.util.TobaccoProductCraftingHelper.makeCigar(tobaccoStack, tobaccoLeafStack);
     }
 
     @Override
@@ -136,45 +83,7 @@ public class CigarRecipe extends CustomRecipe {
         return ModRecipes.CIGAR_RECIPE_SERIALIZER.get();
     }
 
-    public static class Type implements RecipeType<CigarRecipe> {
-        private Type() {}
-        public static final Type INSTANCE = new Type();
-        public static final String ID = "crafting_special_cigar";
-    }
 
-    public static class Serializer implements RecipeSerializer<CigarRecipe> {
-        public static final Serializer INSTANCE = new Serializer();
-        public static final ResourceLocation ID =
-                new ResourceLocation(TobacconistMod.MODID, "crafting_special_cigar");
 
-        @Override
-        public CigarRecipe fromJson(ResourceLocation id, JsonObject json) {
-            ItemStack output = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "output"));
-            JsonArray ingredients = GsonHelper.getAsJsonArray(json, "ingredients");
-            NonNullList<Ingredient> inputs = NonNullList.withSize(1, Ingredient.EMPTY);
-            for (int i = 0; i < inputs.size(); i++) {
-                inputs.set(i, Ingredient.fromJson(ingredients.get(i)));
-            }
-            return new CigarRecipe(id, output, inputs);
-        }
 
-        @Override
-        public CigarRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buf) {
-            NonNullList<Ingredient> inputs = NonNullList.withSize(buf.readInt(), Ingredient.EMPTY);
-            for (int i = 0; i < inputs.size(); i++) {
-                inputs.set(i, Ingredient.fromNetwork(buf));
-            }
-            ItemStack output = buf.readItem();
-            return new CigarRecipe(id, output, inputs);
-        }
-
-        @Override
-        public void toNetwork(FriendlyByteBuf buf, CigarRecipe recipe) {
-            buf.writeInt(recipe.getIngredients().size());
-            for (Ingredient ing : recipe.getIngredients()) {
-                ing.toNetwork(buf);
-            }
-            buf.writeItemStack(recipe.getResultItem(null), false);
-        }
-    }
 }

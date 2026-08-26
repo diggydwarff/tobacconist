@@ -4,6 +4,7 @@ import com.diggydwarff.tobacconistmod.block.ModBlocks;
 import com.diggydwarff.tobacconistmod.block.custom.*;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
@@ -21,35 +22,65 @@ import net.minecraftforge.registries.RegistryObject;
 import java.util.Set;
 
 public class ModBlockLootTables extends BlockLootSubProvider {
-    public ModBlockLootTables() {
-        super(Set.of(), FeatureFlags.REGISTRY.allFlags());
+    public ModBlockLootTables(HolderLookup.Provider registries) {
+        super(Set.of(), FeatureFlags.REGISTRY.allFlags(), registries);
     }
 
     @Override
     protected void generate() {
 
+        // Utility/placeable blocks should drop themselves. Their block entities
+        // handle dropping any stored contents separately.
         this.dropSelf(ModBlocks.HOOKAH.get());
         this.dropSelf(ModBlocks.ORNATE_COPPER_HOOKAH.get());
         this.dropSelf(ModBlocks.ORNATE_GOLD_HOOKAH.get());
         this.dropSelf(ModBlocks.ORNATE_DIAMOND_HOOKAH.get());
         this.dropSelf(ModBlocks.ORNATE_IRON_HOOKAH.get());
         this.dropSelf(ModBlocks.ORNATE_AMETHYST_HOOKAH.get());
+        this.dropSelf(ModBlocks.TALL_HOOKAH.get());
+        this.dropSelf(ModBlocks.EXPOSED_COPPER_HOOKAH.get());
+        this.dropSelf(ModBlocks.WEATHERED_COPPER_HOOKAH.get());
+        this.dropSelf(ModBlocks.OXIDIZED_COPPER_HOOKAH.get());
+        this.dropSelf(ModBlocks.WAXED_COPPER_HOOKAH.get());
+        this.dropSelf(ModBlocks.WAXED_EXPOSED_COPPER_HOOKAH.get());
+        this.dropSelf(ModBlocks.WAXED_WEATHERED_COPPER_HOOKAH.get());
+        this.dropSelf(ModBlocks.WAXED_OXIDIZED_COPPER_HOOKAH.get());
+        this.dropSelf(ModBlocks.REDSTONE_HOOKAH.get());
+        this.dropSelf(ModBlocks.LAPIS_HOOKAH.get());
+        this.dropSelf(ModBlocks.OBSIDIAN_HOOKAH.get());
+        this.dropSelf(ModBlocks.EMERALD_HOOKAH.get());
+        this.dropSelf(ModBlocks.NETHERITE_HOOKAH.get());
         this.dropSelf(ModBlocks.TOBACCO_DRYING_RACK.get());
+        this.dropSelf(ModBlocks.INDUSTRIAL_DRYING_RACK.get());
+        this.dropSelf(ModBlocks.PRODUCTION_MONITOR.get());
+        // No block item: the hanging bunch is placed from 16 raw leaves and its BE drops the batch.
+        this.add(ModBlocks.HANGING_TOBACCO_LEAVES.get(), LootTable.lootTable());
         this.dropSelf(ModBlocks.TOBACCO_BARREL.get());
         this.dropSelf(ModBlocks.FLUE_FIREBOX.get());
 
-        this.add(ModBlocks.SHADE_TOBACCO_CRATE.get(), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
-                .add(LootItem.lootTableItem(ModItems.TOBACCO_LOOSE_SHADE.get()).apply(SetItemCountFunction.setCount(ConstantValue.exactly(9.0f))))));
-        this.add(ModBlocks.DOKHA_TOBACCO_CRATE.get(), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
-                .add(LootItem.lootTableItem(ModItems.TOBACCO_LOOSE_DOKHA.get()).apply(SetItemCountFunction.setCount(ConstantValue.exactly(9.0f))))));
-        this.add(ModBlocks.ORIENTAL_TOBACCO_CRATE.get(), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
-                .add(LootItem.lootTableItem(ModItems.TOBACCO_LOOSE_ORIENTAL.get()).apply(SetItemCountFunction.setCount(ConstantValue.exactly(9.0f))))));
-        this.add(ModBlocks.BURLEY_TOBACCO_CRATE.get(), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
-                .add(LootItem.lootTableItem(ModItems.TOBACCO_LOOSE_BURLEY.get()).apply(SetItemCountFunction.setCount(ConstantValue.exactly(9.0f))))));
-        this.add(ModBlocks.VIRGINIA_TOBACCO_CRATE.get(), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
-                .add(LootItem.lootTableItem(ModItems.TOBACCO_LOOSE_VIRGINIA.get()).apply(SetItemCountFunction.setCount(ConstantValue.exactly(9.0f))))));
-        this.add(ModBlocks.WILD_TOBACCO_CRATE.get(), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
-                .add(LootItem.lootTableItem(ModItems.TOBACCO_LOOSE_WILD.get()).apply(SetItemCountFunction.setCount(ConstantValue.exactly(9.0f))))));
+        // Potted plants drop both the vanilla pot and the plant used to fill it.
+        this.add(ModBlocks.POTTED_WILD_FLOWERING_TOBACCO.get(),
+                LootTable.lootTable()
+                        .withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
+                                .add(LootItem.lootTableItem(net.minecraft.world.item.Items.FLOWER_POT)))
+                        .withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
+                                .add(LootItem.lootTableItem(ModBlocks.WILD_FLOWERING_TOBACCO.get()))));
+
+        // TobaccoCrateBlockEntity owns crate drops so the exact nine input stacks (including
+        // all quality/cure/cut/aromatic NBT/components) are restored instead of flattened.
+        this.add(ModBlocks.SHADE_TOBACCO_CRATE.get(), LootTable.lootTable());
+        this.add(ModBlocks.RAW_SHADE_TOBACCO_CRATE.get(), LootTable.lootTable());
+        this.add(ModBlocks.DOKHA_TOBACCO_CRATE.get(), LootTable.lootTable());
+        this.add(ModBlocks.RAW_DOKHA_TOBACCO_CRATE.get(), LootTable.lootTable());
+        this.add(ModBlocks.ORIENTAL_TOBACCO_CRATE.get(), LootTable.lootTable());
+        this.add(ModBlocks.RAW_ORIENTAL_TOBACCO_CRATE.get(), LootTable.lootTable());
+        this.add(ModBlocks.BURLEY_TOBACCO_CRATE.get(), LootTable.lootTable());
+        this.add(ModBlocks.RAW_BURLEY_TOBACCO_CRATE.get(), LootTable.lootTable());
+        this.add(ModBlocks.VIRGINIA_TOBACCO_CRATE.get(), LootTable.lootTable());
+        this.add(ModBlocks.RAW_VIRGINIA_TOBACCO_CRATE.get(), LootTable.lootTable());
+        this.add(ModBlocks.WILD_TOBACCO_CRATE.get(), LootTable.lootTable());
+        this.add(ModBlocks.RAW_WILD_TOBACCO_CRATE.get(), LootTable.lootTable());
+        this.add(ModBlocks.BLENDED_TOBACCO_CRATE.get(), LootTable.lootTable());
 
         LootItemCondition.Builder wildBuilder = LootItemBlockStatePropertyCondition
                 .hasBlockStateProperties(ModBlocks.WILD_TOBACCO_CROP.get())
@@ -247,6 +278,8 @@ public class ModBlockLootTables extends BlockLootSubProvider {
                                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0f, 4.0f)))))
         );
 
+        // Flowering wild tobacco uses direct plant drops rather than crop-age predicates.
+        // Always drop one leaf plus one or two seeds.
         this.add(ModBlocks.WILD_FLOWERING_TOBACCO.get(),
                 LootTable.lootTable()
                         .withPool(LootPool.lootPool()
@@ -255,14 +288,13 @@ public class ModBlockLootTables extends BlockLootSubProvider {
                         .withPool(LootPool.lootPool()
                                 .setRolls(ConstantValue.exactly(1))
                                 .add(LootItem.lootTableItem(ModItems.WILD_TOBACCO_SEEDS.get())
-                                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0f, 2.0f)))))
-        );
+                                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0f, 2.0f))))));
 
     }
 
 
     @Override
     protected Iterable<Block> getKnownBlocks() {
-        return ModBlocks.BLOCKS.getEntries().stream().map(RegistryObject::get)::iterator;
+        return ModBlocks.BLOCKS.getEntries().stream().map(holder -> (Block) holder.get())::iterator;
     }
 }

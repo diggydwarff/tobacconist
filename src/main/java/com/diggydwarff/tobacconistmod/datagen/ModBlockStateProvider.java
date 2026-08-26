@@ -13,6 +13,7 @@ import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.function.Supplier;
 import java.util.function.Function;
 
 public class ModBlockStateProvider extends BlockStateProvider {
@@ -32,6 +33,12 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
         simpleBlockWithItem(ModBlocks.WILD_FLOWERING_TOBACCO.get(), models().cross(blockTexture(ModBlocks.WILD_FLOWERING_TOBACCO.get()).getPath(),
                 blockTexture(ModBlocks.WILD_FLOWERING_TOBACCO.get())).renderType("cutout"));
+
+        simpleBlock(ModBlocks.POTTED_WILD_FLOWERING_TOBACCO.get(),
+                models().withExistingParent("potted_wild_flowering_tobacco",
+                                new ResourceLocation("minecraft", "block/flower_pot_cross"))
+                        .texture("plant", blockTexture(ModBlocks.WILD_FLOWERING_TOBACCO.get()))
+                        .renderType("cutout"));
 
     }
 
@@ -73,7 +80,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         return models;
     }
 
-    private void blockWithItem(RegistryObject<Block> blockRegistryObject) {
+    private void blockWithItem(Supplier<Block> blockRegistryObject) {
         simpleBlockWithItem(blockRegistryObject.get(), cubeAll(blockRegistryObject.get()));
     }
 

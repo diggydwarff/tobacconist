@@ -2,7 +2,7 @@
   "name": "Air Curing",
   "icon": "tobacconistmod:tobacco_drying_rack_block",
   "category": "tobacconistmod:curing",
-  "sortnum": 1,
+  "sortnum": 2,
   "pages": [
     {
       "type": "patchouli:text",
@@ -12,6 +12,11 @@
       "type": "patchouli:text",
       "text": "Air curing requires $(item)72,000 ticks$(), or about $(item)3 Minecraft days$() of valid air-curing time. The timer only advances while the requirements remain valid.",
       "title": "Time"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Hanging Bunches",
+      "text": "Traditional hanging bunches naturally Air Cure under a continuous roof when no side opening qualifies for Sun Curing. Their support block above does not need to expose the bunch to vertical sky."
     },
     {
       "type": "patchouli:text",

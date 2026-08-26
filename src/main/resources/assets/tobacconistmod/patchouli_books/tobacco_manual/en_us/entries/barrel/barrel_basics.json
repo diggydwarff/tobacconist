@@ -15,7 +15,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "A barrel holds up to $(item)16$() items. Additional tobacco must be exactly compatible with the existing stored stack, including its components/processing data. Adding more tobacco to a batch resets its current fermentation or aging progress.",
+      "text": "A barrel holds up to $(item)64$() items. Additional tobacco must be exactly compatible with the existing stored stack, including its components/processing data. Adding more tobacco to a batch resets its current fermentation or aging progress.",
       "title": "Batch Rules"
     },
     {
@@ -27,6 +27,11 @@
       "type": "patchouli:text",
       "text": "The barrel automatically chooses a mode from its environment. Fermentation takes priority when its requirements are met. Otherwise the barrel ages if aging conditions are valid. If neither set of conditions is valid, the barrel remains Idle.",
       "title": "Automatic Modes"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Create Extraction",
+      "text": "Create automation treats fermentation and aging differently. Fermenting is a protected finite batch, so automated extraction waits until it finishes. Aging has no universal endpoint, so it remains extractable; use an aging Attribute Filter when you want an automated cellar to wait for a specific age."
     },
     {
       "type": "patchouli:relations",

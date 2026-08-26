@@ -2,7 +2,7 @@
   "name": "Fire Curing",
   "icon": "minecraft:campfire",
   "category": "tobacconistmod:curing",
-  "sortnum": 3,
+  "sortnum": 4,
   "pages": [
     {
       "type": "patchouli:text",
@@ -12,6 +12,11 @@
       "type": "patchouli:text",
       "text": "Fire curing takes $(item)24,000 ticks$(), about $(item)1 Minecraft day$(), making it the fastest curing method. Because Fire has highest method priority, a lit campfire directly below the rack overrides flue, sun, and air conditions.",
       "title": "Time and Priority"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Hanging Bunches",
+      "text": "A hanging bunch Fire Cures when a lit Campfire is directly below its lower half. Fire keeps the same highest curing priority and timing as the Drying Rack."
     },
     {
       "type": "patchouli:text",

@@ -6,10 +6,12 @@
     "P "
   ],
   "key": {
-    "P": { "item": "minecraft:paper" }
+    "P": {
+      "item": "minecraft:paper"
+    }
   },
   "result": {
-    "item": "tobacconistmod:tobacco_label",
-    "count": 2
+    "count": 2,
+    "item": "tobacconistmod:tobacco_label"
   }
 }

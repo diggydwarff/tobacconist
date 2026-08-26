@@ -38,7 +38,7 @@ public class HookahLoadRecipeCategory implements IRecipeCategory<HookahLoadJeiRe
 
     @Override
     public Component getTitle() {
-        return Component.literal("Hookah Loading");
+        return Component.translatable("tobacconistmod.jei.hookah_loading");
     }
 
     @Override

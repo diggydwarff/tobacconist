@@ -6,22 +6,52 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "The $(thing)Drying Rack$() has explicit hopper rules. Horizontal sides can insert valid raw leaves. The top and bottom cannot insert. The bottom can extract only when the batch has completely finished curing."
+      "text": "The $(thing)Drying Rack$() is one block tall and holds one 16-leaf inventory. Horizontal sides can insert valid raw leaves. The top and bottom cannot insert, and a hopper underneath can extract only when the batch has completely finished curing."
     },
     {
       "type": "patchouli:text",
-      "text": "Rack automation still obeys batch rules: leaves must match the stored leaf's exact item/components, the rack holds at most 16, and insertion is blocked once progress reaches 10%. A hopper pulling from the bottom extracts only the requested amount rather than vacuuming the entire batch.",
+      "text": "Rack automation still obeys batch rules: leaves must match the stored leaf’s exact item/components, the rack holds at most 16, and insertion is blocked once progress reaches 10%. A vanilla hopper pulls finished output from the bottom. NeoForge/Create capability consumers also pass through the rack’s validated finished-output handler.",
       "title": "Drying Rack"
     },
     {
       "type": "patchouli:text",
-      "text": "The $(thing)Hookah$() exposes its three-slot item handler to Forge automation. Automated insertion is still validated per slot: fuel in slot 0, Shisha Tobacco in slot 1, and a Water Potion in slot 2.",
+      "title": "Industrial Rack",
+      "text": "The $(thing)Industrial Drying Rack$() is automation-only and occupies two real block levels. Funnels/Hoppers may connect to either level, and Chutes/Hoppers above can insert through the top. Both halves address the same 32-leaf inventory. Both tiers must receive matching Create airflow from two distinct Encased Fans before curing progresses."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Production Monitor",
+      "text": "Place the $(item)Production Monitor$() with its front face pointing at the adjacent transport it should read; it counts confirmed throughput without moving items. It supports Create Belts, Funnels and Chutes plus vanilla Hoppers. The ghost Filter can be set in the menu or directly on the operator-facing filter target: hover the target for a Create-style highlight, use an item/Create Filter/Attribute Filter to copy it without consuming the stack, or use an empty hand there to clear it. Items mode counts item quantity; Stacks measures Create-style 64-item stack-equivalents; Transfers counts successful transfer operations."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Monitor Targets & Output",
+      "text": "Set a numeric target, then choose Keep Counting, Stop Counting, or Reset Count. Reset Count preserves overflow. Output may be None, a Pulse per target crossing, or Hold until reset; Reset Count + Hold becomes Pulse. Manual Reset keeps the rolling rate, and optional External Reset reacts only to a rising redstone edge. A Comparator reports progress. Create Display Links can read Count/Target, rolling Rate, or Status and refresh those monitor values about once per second; Tobacconist's Spectacles/Create Goggles show the same live telemetry in-world."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The $(thing)Hookah$() exposes its three-slot item handler to NeoForge/Create automation. Tall two-block Hookahs resolve both halves to the same lower master inventory, so Funnels, Hoppers, Mechanical Arms, Packagers/Stock Links, and Display Links can connect at either level. Inputs remain validated per slot: fuel, Shisha Tobacco, and Water/Dirty Hookah Water.",
       "title": "Hookah"
     },
     {
       "type": "patchouli:text",
-      "text": "The $(thing)Tobacco Barrel$() is intentionally interaction-driven rather than exposing a general item-handler capability. Insert and remove its batch by right-clicking the block.",
+      "text": "The $(thing)Tobacco Barrel$() holds up to 64 compatible cured leaves or loose tobacco and exposes validated automation. Extraction preserves tobacco metadata; actively fermenting batches remain protected from premature automated extraction. Display Links can also report the current batch count out of 64.",
       "title": "Barrel"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Other Processing Blocks",
+      "text": "The Drying Racks, Tobacco Barrel, Flue Firebox, and Hookah expose validated NeoForge/Create item automation where appropriate. Automation never bypasses the blocks' normal input, batch, curing, fuel, or slot rules."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Hanging Tobacco",
+      "text": "Traditional hanging 16-leaf bunches are not inventory machines. Hoppers, funnels, Mechanical Arms, and Display Links cannot insert, extract, or read them. Break the bunch to recover its leaves. Environmental Create fan assistance can still accelerate a valid cure."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Tobacco Crates",
+      "text": "Tobacco Crates are packaged blocks rather than live inventories. Their nine stored units are recovered by breaking the crate; individual contents are not exposed to hopper/Create logistics."
     }
   ]
 }

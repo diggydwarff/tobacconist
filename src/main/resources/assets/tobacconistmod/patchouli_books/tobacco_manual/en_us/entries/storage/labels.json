@@ -16,7 +16,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Craft a $(thing)Tobacco Box + named Label$() to apply that label to the box. A labeled box will only accept incoming products whose product label matches the box; an unlabeled product cannot be mixed into a labeled batch.",
+      "text": "Craft a $(thing)Tobacco Box + named Label$() to apply that label to the box. A labeled box accepts the same matching product whether the incoming stack is unlabeled or carries that same label; a differently labeled product is rejected. An unlabeled box adopts the label of a matching branded product inserted into it.",
       "title": "Applying a Label"
     },
     {

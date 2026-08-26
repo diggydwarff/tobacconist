@@ -2,7 +2,8 @@
   "parent": "tobacconistmod:tobacconist/a_cut_above",
   "display": {
     "icon": {
-      "item": "tobacconistmod:cigarette"
+      "id": "tobacconistmod:cigarette",
+      "count": 1
     },
     "title": {
       "translate": "advancement.tobacconistmod.roll_your_own"
@@ -21,9 +22,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "tobacconistmod:cigarette"
-            ]
+            "items": "tobacconistmod:cigarette"
           }
         ]
       }

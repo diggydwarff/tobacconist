@@ -12,12 +12,19 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = TobacconistMod.MODID, value = Dist.CLIENT)
 public final class ClientKeyInput {
     private ClientKeyInput() {}
+
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase != TickEvent.Phase.END) return;
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.player == null || minecraft.level == null) return;
-        if (ModList.get().isLoaded("curios")) ClientSmokingParticles.tick(minecraft);
-        while (ClientKeyMappings.SMOKE_MOUTH_ITEM.consumeClick()) TobacconistNetwork.sendSmokeRequest();
+
+        if (ModList.get().isLoaded("curios")) {
+            ClientSmokingParticles.tick(minecraft);
+        }
+
+        while (ClientKeyMappings.SMOKE_MOUTH_ITEM.consumeClick()) {
+            TobacconistNetwork.sendSmokeRequest();
+        }
     }
 }

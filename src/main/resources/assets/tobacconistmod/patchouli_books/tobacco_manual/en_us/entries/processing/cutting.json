@@ -15,13 +15,13 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Cuts matter to finished-product quality:$(br2)$(thing)Cigarette:$() Shag best, Ribbon second$(br)$(thing)Cigar:$() Flake best, Rough second$(br)$(thing)Shisha:$() Rough best, Ribbon second$(br2)Poor matches can cap a product well below 10/10 even when the tobacco itself is excellent.",
+      "text": "Cuts matter to finished-product quality, but they refine rather than replace leaf quality:$(br2)$(thing)Cigarette:$() Shag ideal, Ribbon strong$(br)$(thing)Cigar:$() Rough ideal, Ribbon strong$(br)$(thing)Shisha:$() Rough ideal, Ribbon strong$(br2)Flake/Shag mismatches lower the score more noticeably.",
       "title": "Best Uses"
     },
     {
       "type": "patchouli:text",
-      "text": "Exact product caps by cut:$(br2)Cigarette — Shag 10, Ribbon 9, Rough 6, Flake 5$(br)Cigar — Flake 10, Rough 9, Ribbon 7, Shag 4$(br)Shisha — Rough 10, Ribbon 8, Flake 7, Shag 4",
-      "title": "Quality Caps"
+      "text": "Finished-product quality starts from the tobacco itself. Cigars additionally use $(item)75% filler + 25% wrapper$(). Cut suitability then applies a modest adjustment and only clearly unsuitable cuts impose a ceiling. The displayed score is also the score used for quality-based smoking bonuses.",
+      "title": "Quality Logic"
     },
     {
       "type": "patchouli:relations",

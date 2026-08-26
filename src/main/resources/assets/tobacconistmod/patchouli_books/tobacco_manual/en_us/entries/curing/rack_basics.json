@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "The $(thing)Tobacco Drying Rack$() turns raw leaf into cured leaf. A rack holds up to $(item)16$() identical raw leaves. Leaves in one rack must be the same item with the same components/quality data."
+      "text": "The $(thing)Tobacco Drying Rack$() turns raw leaf into cured leaf. A rack holds up to $(item)16$() identical raw leaves. The wooden frame now fits completely inside one block again, while keeping the same shared $(item)16-leaf$() capacity. Blocks can be placed normally directly above it, and inspection shows the live $(item)X/16 Leaves$() count."
     },
     {
       "type": "patchouli:crafting",
@@ -16,22 +16,33 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Right-click the rack with raw tobacco to add one leaf. Empty-hand right-click removes the batch. Sneak-right-click reports the rack status. Once curing reaches $(item)10%$(), the batch locks and no more leaves may be added until it is removed or finished.",
+      "text": "Right-click the rack with raw tobacco to add one leaf. Empty-hand right-click removes the batch. Sneak-right-click reports detailed status. The visible rack progresses through empty, low, medium, and full load models. Once curing reaches $(item)10%$(), the batch locks and no more leaves may be added until it is removed or finished.",
       "title": "Loading the Rack"
     },
     {
       "type": "patchouli:text",
-      "text": "The rack automatically chooses the strongest valid method each tick in this order: $(thing)Fire → Flue → Sun → Air$(). You do not select a mode in a menu; the structure and environment select it for you.",
+      "text": "The rack automatically chooses the strongest valid method each tick in this order: $(thing)Fire → Flue → Sun → Air$(). You do not select a mode in a menu; the structure and environment select it for you. With Create installed, one fan airflow path reaching the rack can assist a valid wooden-rack cure.",
       "title": "Automatic Method"
     },
     {
       "type": "patchouli:text",
-      "text": "Hoppers can automate racks. Insert raw leaves from a horizontal side. The top and bottom cannot insert. A hopper underneath can extract only after curing is complete.",
+      "title": "Industrial Drying Rack",
+      "text": "With $(thing)Create$() installed, the $(item)Industrial Drying Rack$() is a true two-block, 32-leaf automation-only factory rack. Both levels expose one inventory and top-down loading is allowed. Curing requires matching airflow across $(thing)both$() rack levels from two distinct Encased Fans; one fan or one-sided airflow is not enough."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Traditional Alternative",
+      "text": "A Drying Rack is not required. Sneak-right-click the underside of a sturdy block while holding 16 matching raw or cured leaves to make a traditional hanging bunch. In Creative mode, one held leaf is enough to place the 16-leaf bunch. Raw bunches cure by the same methods; cured bunches can be hung for decoration/storage but expose no inventory automation or Display Link."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Vanilla hoppers can automate the wooden rack from its horizontal sides. Top and bottom cannot insert. A hopper underneath can extract only after curing is complete, and the rack now leaves the block space directly above it completely free.",
       "title": "Automation"
     },
     {
       "type": "patchouli:relations",
       "entries": [
+        "tobacconistmod:curing/hanging_bunches",
         "tobacconistmod:curing/air_curing",
         "tobacconistmod:curing/sun_curing",
         "tobacconistmod:curing/fire_curing",

@@ -2,7 +2,8 @@
   "parent": "tobacconistmod:tobacconist/root",
   "display": {
     "icon": {
-      "item": "tobacconistmod:tobacconists_spectacles"
+      "id": "tobacconistmod:tobacconists_spectacles",
+      "count": 1
     },
     "title": {
       "translate": "advancement.tobacconistmod.tobacconists_eye"
@@ -21,9 +22,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "tobacconistmod:tobacconists_spectacles"
-            ]
+            "items": "tobacconistmod:tobacconists_spectacles"
           }
         ]
       }

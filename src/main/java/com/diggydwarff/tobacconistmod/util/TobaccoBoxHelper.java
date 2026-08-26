@@ -1,9 +1,15 @@
 package com.diggydwarff.tobacconistmod.util;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
+import com.diggydwarff.tobacconistmod.datagen.items.ModTags;
 import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
@@ -19,12 +25,7 @@ public class TobaccoBoxHelper {
         return item == ModItems.CIGAR.get()
                 || item == ModItems.CIGARETTE.get()
                 || item == ModItems.SHISHA_TOBACCO.get()
-                || item == ModItems.TOBACCO_LOOSE_WILD.get()
-                || item == ModItems.TOBACCO_LOOSE_VIRGINIA.get()
-                || item == ModItems.TOBACCO_LOOSE_BURLEY.get()
-                || item == ModItems.TOBACCO_LOOSE_ORIENTAL.get()
-                || item == ModItems.TOBACCO_LOOSE_DOKHA.get()
-                || item == ModItems.TOBACCO_LOOSE_SHADE.get();
+                || stack.is(ModTags.Items.LOOSE_TOBACCO);
     }
 
     public static int getCapacity(ItemStack content) {
@@ -35,34 +36,88 @@ public class TobaccoBoxHelper {
     }
 
     public static boolean hasStoredItem(ItemStack box) {
-        CompoundTag tag = box.getTag();
+        CompoundTag tag = LegacyItemTags.getTag(box);
         return tag != null && tag.contains(TAG_STORED);
     }
 
     public static ItemStack getStoredItem(ItemStack box) {
-        CompoundTag tag = box.getTag();
+        CompoundTag tag = LegacyItemTags.getTag(box);
         if (tag == null || !tag.contains(TAG_STORED)) {
             return ItemStack.EMPTY;
         }
-        return ItemStack.of(tag.getCompound(TAG_STORED));
+        return readStoredStack(tag.getCompound(TAG_STORED));
     }
 
     public static int getStoredCount(ItemStack box) {
-        CompoundTag tag = box.getTag();
+        CompoundTag tag = LegacyItemTags.getTag(box);
         return tag == null ? 0 : tag.getInt(TAG_COUNT);
     }
 
     public static void setStored(ItemStack box, ItemStack content, int count) {
-        CompoundTag tag = box.getOrCreateTag();
+        CompoundTag tag = LegacyItemTags.getOrCreateTag(box);
         ItemStack copy = content.copy();
         copy.setCount(1);
         clearCustomProductName(copy);
-        tag.put(TAG_STORED, copy.save(new CompoundTag()));
+        tag.put(TAG_STORED, writeStoredStack(copy));
         tag.putInt(TAG_COUNT, count);
     }
 
+    /**
+     * The 1.21 ItemStack NBT codec requires registry access. Tobacco boxes are item-only
+     * helpers with no Level/RegistryAccess parameter, so persist the small subset this mod
+     * actually needs: registry id, damage and custom tobacco data. The reader also accepts
+     * the 1.20.1 ItemStack compound layout for world migration.
+     */
+    private static CompoundTag writeStoredStack(ItemStack stack) {
+        CompoundTag stored = new CompoundTag();
+        ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
+        stored.putString("id", id.toString());
+        if (stack.getDamageValue() > 0) {
+            stored.putInt("Damage", stack.getDamageValue());
+        }
+        CompoundTag custom = LegacyItemTags.getTag(stack);
+        if (custom != null && !custom.isEmpty()) {
+            stored.put("CustomData", custom.copy());
+        }
+        return stored;
+    }
+
+    private static ItemStack readStoredStack(CompoundTag stored) {
+        if (!stored.contains("id")) return ItemStack.EMPTY;
+
+        ResourceLocation id = ResourceLocation.tryParse(stored.getString("id"));
+        if (id == null) return ItemStack.EMPTY;
+
+        Item item = BuiltInRegistries.ITEM.get(id);
+        if (item == null || item == net.minecraft.world.item.Items.AIR) return ItemStack.EMPTY;
+
+        ItemStack result = new ItemStack(item);
+
+        // New 1.21 helper layout.
+        if (stored.contains("CustomData")) {
+            LegacyItemTags.setTag(result, stored.getCompound("CustomData").copy());
+        }
+
+        // Old 1.20.1 ItemStack layout: {id, Count, tag:{...}}.
+        if (stored.contains("tag")) {
+            CompoundTag legacy = stored.getCompound("tag").copy();
+            if (legacy.contains("Damage")) {
+                result.setDamageValue(legacy.getInt("Damage"));
+                legacy.remove("Damage");
+            }
+            if (!legacy.isEmpty()) {
+                LegacyItemTags.setTag(result, legacy);
+            }
+        }
+
+        if (stored.contains("Damage")) {
+            result.setDamageValue(stored.getInt("Damage"));
+        }
+        return result;
+    }
+
     public static void clearStored(ItemStack box) {
-        CompoundTag tag = box.getTag();
+        CompoundTag tag = LegacyItemTags.getTag(box);
         if (tag == null) return;
 
         tag.remove(TAG_STORED);
@@ -70,18 +125,20 @@ public class TobaccoBoxHelper {
         tag.remove(TAG_LABEL);
 
         if (tag.isEmpty()) {
-            box.setTag(null);
+            LegacyItemTags.setTag(box, null);
+        } else {
+            LegacyItemTags.setTag(box, tag);
         }
     }
 
     public static String getLabel(ItemStack stack) {
-        CompoundTag tag = stack.getTag();
+        CompoundTag tag = LegacyItemTags.getTag(stack);
         return tag == null ? "" : tag.getString(TAG_LABEL);
     }
 
     public static void setLabel(ItemStack stack, String label) {
         if (label == null || label.isBlank()) return;
-        stack.getOrCreateTag().putString(TAG_LABEL, label.trim());
+        LegacyItemTags.getOrCreateTag(stack).putString(TAG_LABEL, label.trim());
     }
 
     public static boolean canAccept(ItemStack box, ItemStack incoming) {
@@ -101,14 +158,34 @@ public class TobaccoBoxHelper {
         clearCustomProductName(aCopy);
         clearCustomProductName(bCopy);
 
-        return ItemStack.isSameItemSameTags(aCopy, bCopy);
+        return ItemStack.isSameItemSameComponents(aCopy, bCopy);
     }
 
+    /**
+     * Box compatibility is based on the tobacco/product itself, not branding. Strip both the
+     * Tobacconist ProductLabel and vanilla 1.21 custom names before comparing stacks. Also
+     * remove legacy ProductLabel data so named aromatic or blended products remain compatible
+     * with their stored batch.
+     */
     public static void clearCustomProductName(ItemStack stack) {
-        CompoundTag tag = stack.getTag();
+        stack.resetHoverName();
+
+        CompoundTag tag = LegacyItemTags.getTag(stack);
         if (tag == null) return;
 
         tag.remove(TAG_PRODUCT_LABEL);
+
+        if (tag.contains("PackedTobaccoData")) {
+            CompoundTag packed = tag.getCompound("PackedTobaccoData");
+            packed.remove(TAG_PRODUCT_LABEL);
+            if (packed.contains("display")) {
+                CompoundTag packedDisplay = packed.getCompound("display");
+                packedDisplay.remove("Name");
+                if (packedDisplay.isEmpty()) packed.remove("display");
+                else packed.put("display", packedDisplay);
+            }
+            tag.put("PackedTobaccoData", packed);
+        }
 
         if (tag.contains("display")) {
             CompoundTag display = tag.getCompound("display");
@@ -121,7 +198,9 @@ public class TobaccoBoxHelper {
         }
 
         if (tag.isEmpty()) {
-            stack.setTag(null);
+            LegacyItemTags.setTag(stack, null);
+        } else {
+            LegacyItemTags.setTag(stack, tag);
         }
     }
 
@@ -134,7 +213,7 @@ public class TobaccoBoxHelper {
 
         String label = getLabel(box);
         if (!label.isEmpty()) {
-            out.getOrCreateTag().putString(TAG_PRODUCT_LABEL, label);
+            LegacyItemTags.getOrCreateTag(out).putString(TAG_PRODUCT_LABEL, label);
         }
 
         return out;
@@ -181,21 +260,21 @@ public class TobaccoBoxHelper {
     }
 
     private static String getProductDescriptor(ItemStack stack) {
-        CompoundTag tag = stack.getTag();
+        CompoundTag tag = LegacyItemTags.getTag(stack);
         if (tag == null) return "";
 
         StringBuilder out = new StringBuilder();
 
-        // Label first, if present
+        // Product labels are displayed before processing descriptors.
         String label = tag.getString("ProductLabel");
         if (!label.isEmpty()) {
             out.append(label);
         }
 
-        // These keys are examples. Replace with your real stored keys/helper calls.
+
         String cutType = tag.getString("CutType");
         String cureType = tag.getString("CureType");
-        int quality = tag.contains("Quality") ? tag.getInt("Quality") : -1;
+        int quality = getDisplayQuality100(stack);
 
         String qualityWord = getQualityWord(quality);
         String tobaccoWord = resolveTobaccoTypeDisplay(stack);
@@ -235,8 +314,7 @@ public class TobaccoBoxHelper {
     public static String getBlendLine(ItemStack stored) {
         if (stored.isEmpty()) return "";
 
-        int quality100 = TobaccoCuringHelper.getQuality(stored);
-        int quality10 = quality100 >= 0 ? Math.max(1, Math.round(quality100 / 10.0f)) : -1;
+        int quality10 = getDisplayQuality10(stored);
 
         String cut = TobaccoCuringHelper.getCutDisplayName(TobaccoCuringHelper.getCutType(stored));
         String cure = TobaccoCuringHelper.getCureDisplayName(TobaccoCuringHelper.getCureType(stored));
@@ -267,6 +345,20 @@ public class TobaccoBoxHelper {
     }
 
     private static String resolveTobaccoTypeDisplay(ItemStack stack) {
+        if (stack.is(ModItems.BLENDED_TOBACCO.get())) {
+            String intrinsicName = TobaccoBlendHelper.getIntrinsicBlendName(stack);
+            if (!intrinsicName.isEmpty()) return intrinsicName;
+
+            java.util.List<String> components = TobaccoBlendHelper.getComponents(stack);
+            if (!components.isEmpty()) {
+                return components.stream()
+                        .map(TobaccoBlendHelper::formatVariety)
+                        .reduce((a, b) -> a + "/" + b)
+                        .orElse("") + " Blend";
+            }
+            return "Blend";
+        }
+
         String raw = resolveTobaccoTypeId(stack);
         return formatTobaccoType(raw);
     }
@@ -274,7 +366,7 @@ public class TobaccoBoxHelper {
     private static String resolveTobaccoTypeId(ItemStack stack) {
         if (stack.isEmpty()) return "";
 
-        CompoundTag tag = stack.getTag();
+        CompoundTag tag = LegacyItemTags.getTag(stack);
 
         if (tag != null) {
             String direct = normalizeTobaccoType(tag.getString("TobaccoType"));
@@ -287,9 +379,14 @@ public class TobaccoBoxHelper {
             }
 
             if (tag.contains("TobaccoStack")) {
-                ItemStack nested = ItemStack.of(tag.getCompound("TobaccoStack"));
-                String nestedType = resolveTobaccoTypeId(nested);
+                CompoundTag nestedStack = tag.getCompound("TobaccoStack");
+                CompoundTag nestedTag = nestedStack.contains("tag") ? nestedStack.getCompound("tag") : nestedStack;
+                String nestedType = normalizeTobaccoType(nestedTag.getString("TobaccoType"));
                 if (!nestedType.isEmpty()) return nestedType;
+                if (nestedTag.contains("PackedTobaccoData")) {
+                    String packedType = normalizeTobaccoType(nestedTag.getCompound("PackedTobaccoData").getString("TobaccoType"));
+                    if (!packedType.isEmpty()) return packedType;
+                }
             }
 
             String tobaccoLabel = normalizeTobaccoType(tag.getString("tobacco"));
@@ -353,18 +450,88 @@ public class TobaccoBoxHelper {
         return out.toString();
     }
 
+
+    /** Product displays use the same final 1-10 score shown on the item itself. */
+    private static int getDisplayQuality10(ItemStack stack) {
+        int productQuality = TobaccoProductQualityHelper.getStoredProductQuality(stack);
+        if (productQuality >= 0) return productQuality;
+        int quality100 = TobaccoCuringHelper.getQuality(stack);
+        return quality100 >= 0 ? Math.max(1, Math.round(quality100 / 10.0f)) : -1;
+    }
+
+    private static int getDisplayQuality100(ItemStack stack) {
+        int productQuality = TobaccoProductQualityHelper.getStoredProductQuality(stack);
+        if (productQuality >= 0) return productQuality * 10;
+
+        CompoundTag tag = LegacyItemTags.getTag(stack);
+        CompoundTag packed = TobaccoTooltipHelper.getPackedTobaccoData(stack);
+        if (packed != null && packed.contains(TobaccoCuringHelper.TAG_QUALITY)) {
+            return TobaccoCuringHelper.clampQuality(packed.getInt(TobaccoCuringHelper.TAG_QUALITY));
+        }
+        if (tag != null && tag.contains(TobaccoCuringHelper.TAG_QUALITY)) {
+            return TobaccoCuringHelper.clampQuality(tag.getInt(TobaccoCuringHelper.TAG_QUALITY));
+        }
+        return TobaccoCuringHelper.getQuality(stack);
+    }
+
+    public static Component getBoxContentsComponent(ItemStack stored) {
+        if (stored.isEmpty()) return Component.translatable("tobacconistmod.ui.empty");
+
+        int quality100 = getDisplayQuality100(stored);
+
+        MutableComponent out = Component.empty();
+        if (TobacconistConfig.isQualitySystemEnabled()) {
+            out.append(TobaccoText.qualityDescriptor(quality100)).append(" ");
+        }
+        return out.append(getContentPluralComponent(stored));
+    }
+
+    public static Component getBlendComponent(ItemStack stored) {
+        if (stored.isEmpty()) return Component.empty();
+
+        int quality10 = getDisplayQuality10(stored);
+        String cut = TobaccoCuringHelper.getCutType(stored);
+        String cure = TobaccoCuringHelper.getCureType(stored);
+        MutableComponent out = Component.empty();
+
+        if (TobacconistConfig.isQualitySystemEnabled() && quality10 >= 0) {
+            out.append(Component.literal(quality10 + "/10"));
+        }
+        if (!cut.isEmpty()) {
+            if (!out.getString().isEmpty()) out.append(" ");
+            out.append(TobaccoText.cut(cut));
+        }
+        if (!cure.isEmpty()) {
+            if (!out.getString().isEmpty()) out.append(" ");
+            out.append(TobaccoText.cure(cure));
+        }
+
+        String typeId = resolveTobaccoTypeId(stored);
+        if (!typeId.isEmpty()) {
+            if (!out.getString().isEmpty()) out.append(" ");
+            out.append(TobaccoText.variety(typeId));
+        } else if (stored.is(ModItems.BLENDED_TOBACCO.get())) {
+            String intrinsicName = TobaccoBlendHelper.getIntrinsicBlendName(stored);
+            if (!out.getString().isEmpty()) out.append(" ");
+            if (!intrinsicName.isEmpty()) out.append(Component.literal(intrinsicName));
+            else out.append(Component.translatable("tobacconistmod.content.blend"));
+        }
+
+        return out;
+    }
+
+    public static Component getContentPluralComponent(ItemStack content) {
+        if (content.is(ModItems.CIGAR.get())) return Component.translatable("tobacconistmod.content.cigars");
+        if (content.is(ModItems.CIGARETTE.get())) return Component.translatable("tobacconistmod.content.cigarettes");
+        if (content.is(ModItems.SHISHA_TOBACCO.get())) return Component.translatable("tobacconistmod.content.shisha_tobacco");
+        if (content.is(ModItems.BLENDED_TOBACCO.get())) return Component.translatable("tobacconistmod.content.blended_tobacco");
+        return Component.translatable("tobacconistmod.content.loose_tobacco");
+    }
+
     public static String getBoxContentsLine(ItemStack stored) {
         if (stored.isEmpty()) return "Empty";
 
-        CompoundTag tag = stored.getTag();
-        int quality100 = 60;
-
-        CompoundTag packed = TobaccoTooltipHelper.getPackedTobaccoData(stored);
-        if (packed != null && packed.contains(TobaccoCuringHelper.TAG_QUALITY)) {
-            quality100 = packed.getInt(TobaccoCuringHelper.TAG_QUALITY);
-        } else if (tag != null && tag.contains(TobaccoCuringHelper.TAG_QUALITY)) {
-            quality100 = tag.getInt(TobaccoCuringHelper.TAG_QUALITY);
-        }
+        int quality100 = getDisplayQuality100(stored);
 
         String qualityWord = TobaccoTooltipHelper.getQualityWord(quality100);
         String typeName = getContentPluralName(stored);
@@ -440,6 +607,7 @@ public class TobaccoBoxHelper {
         if (content.is(ModItems.CIGAR.get())) return "Cigars";
         if (content.is(ModItems.CIGARETTE.get())) return "Cigarettes";
         if (content.is(ModItems.SHISHA_TOBACCO.get())) return "Shisha Tobacco";
+        if (content.is(ModItems.BLENDED_TOBACCO.get())) return "Blended Tobacco";
         return "Loose Tobacco";
     }
 
@@ -447,6 +615,7 @@ public class TobaccoBoxHelper {
         if (content.is(ModItems.CIGAR.get())) return "Cigar";
         if (content.is(ModItems.CIGARETTE.get())) return "Cigarette";
         if (content.is(ModItems.SHISHA_TOBACCO.get())) return "Shisha Tobacco";
+        if (content.is(ModItems.BLENDED_TOBACCO.get())) return "Blended Tobacco";
         return "Loose Tobacco";
     }
 
@@ -457,12 +626,12 @@ public class TobaccoBoxHelper {
         }
 
         String label = getLabel(box);
-        String plural = getContentPluralName(stored);
+        Component plural = getContentPluralComponent(stored);
 
         if (!label.isEmpty()) {
-            return Component.literal("Box of " + label + " " + plural);
+            return Component.translatable("tobacconistmod.box.named", label, plural);
         }
 
-        return Component.literal("Box of " + plural);
+        return Component.translatable("tobacconistmod.box.of", plural);
     }
 }

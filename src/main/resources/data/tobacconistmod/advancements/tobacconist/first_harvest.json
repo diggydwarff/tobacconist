@@ -2,7 +2,8 @@
   "parent": "tobacconistmod:tobacconist/root",
   "display": {
     "icon": {
-      "item": "tobacconistmod:tobacco_leaf_wild"
+      "id": "tobacconistmod:tobacco_leaf_wild",
+      "count": 1
     },
     "title": {
       "translate": "advancement.tobacconistmod.first_harvest"
@@ -21,9 +22,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "tobacconistmod:tobacco_leaf_wild"
-            ]
+            "items": "tobacconistmod:tobacco_leaf_wild"
           }
         ]
       }
@@ -33,9 +32,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "tobacconistmod:tobacco_leaf_virginia"
-            ]
+            "items": "tobacconistmod:tobacco_leaf_virginia"
           }
         ]
       }
@@ -45,9 +42,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "tobacconistmod:tobacco_leaf_burley"
-            ]
+            "items": "tobacconistmod:tobacco_leaf_burley"
           }
         ]
       }
@@ -57,9 +52,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "tobacconistmod:tobacco_leaf_oriental"
-            ]
+            "items": "tobacconistmod:tobacco_leaf_oriental"
           }
         ]
       }
@@ -69,9 +62,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "tobacconistmod:tobacco_leaf_dokha"
-            ]
+            "items": "tobacconistmod:tobacco_leaf_dokha"
           }
         ]
       }
@@ -81,9 +72,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "tobacconistmod:tobacco_leaf_shade"
-            ]
+            "items": "tobacconistmod:tobacco_leaf_shade"
           }
         ]
       }

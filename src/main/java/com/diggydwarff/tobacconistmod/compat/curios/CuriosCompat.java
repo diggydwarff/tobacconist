@@ -2,7 +2,8 @@ package com.diggydwarff.tobacconistmod.compat.curios;
 
 import net.minecraftforge.fml.ModList;
 
-public class CuriosCompat {
+public final class CuriosCompat {
+    private CuriosCompat() {}
 
     public static boolean loaded() {
         return ModList.get().isLoaded("curios");

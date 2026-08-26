@@ -1,5 +1,7 @@
 package com.diggydwarff.tobacconistmod.datagen.items.custom;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -26,7 +28,7 @@ public class LabelItem extends Item {
     }
 
     public static String getLabelName(ItemStack stack) {
-        CompoundTag tag = stack.getTag();
+        CompoundTag tag = LegacyItemTags.getTag(stack);
         if (tag != null && tag.contains(TAG_LABEL_NAME)) {
             return tag.getString(TAG_LABEL_NAME);
         }
@@ -42,8 +44,8 @@ public class LabelItem extends Item {
 
         String name = stack.getHoverName().getString();
 
-        // store our clean label
-        stack.getOrCreateTag().putString(TAG_LABEL_NAME, name);
+        // Store the normalized label text.
+        LegacyItemTags.getOrCreateTag(stack).putString(TAG_LABEL_NAME, name);
 
         // remove the italic vanilla name
         stack.resetHoverName();
@@ -60,7 +62,7 @@ public class LabelItem extends Item {
 
     public static void setLabelName(ItemStack stack, String name) {
         if (name == null || name.isBlank()) return;
-        stack.getOrCreateTag().putString(TAG_LABEL_NAME, name.trim());
+        LegacyItemTags.getOrCreateTag(stack).putString(TAG_LABEL_NAME, name.trim());
     }
 
     @Override
@@ -74,12 +76,12 @@ public class LabelItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
         String name = getLabelName(stack);
         if (!name.isEmpty()) {
             tooltip.add(Component.literal(name).withStyle(ChatFormatting.GOLD));
         } else {
-            tooltip.add(Component.literal("Rename in an anvil").withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable("tobacconistmod.tooltip.rename_in_anvil").withStyle(ChatFormatting.GRAY));
         }
     }
 }

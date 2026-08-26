@@ -6,11 +6,11 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "All six cultivated tobacco varieties use the same basic crop rules. Plant tobacco seeds on $(item)farmland$(). Natural growth requires local raw brightness of at least $(item)9$(). Bonemeal can advance the lower half of a plant until the crop is mature."
+      "text": "All six tobacco varieties use the same basic crop rules. Plant tobacco seeds on $(item)farmland$(). Natural growth requires local raw brightness of at least $(item)9$(). Bonemeal can advance the lower half of a plant until the crop is mature."
     },
     {
       "type": "patchouli:text",
-      "text": "Tobacco has stages $(item)0 through 7$(). Stages 0\u20133 occupy one block. From stage 4 onward the plant becomes two blocks tall, with the upper half carrying the later growth stage. Stage 7 is fully mature.",
+      "text": "Tobacco has stages $(item)0 through 7$(). Stages 0–3 occupy one block. From stage 4 onward the plant becomes two blocks tall, with the upper half carrying the later growth stage. Stage 7 is fully mature.",
       "title": "Growth Stages"
     },
     {
@@ -22,6 +22,11 @@
       "type": "patchouli:text",
       "text": "Sneak-right-click a growing tobacco plant for a short qualitative message even without Spectacles. For exact growth percentage, environment rating, and potential-quality range, wear Tobacconist's Spectacles.",
       "title": "Inspection"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Composting",
+      "text": "Tobacco now works with the vanilla Composter. Seeds have a 30% fill chance, raw leaves 50%, and Wild Flowering Tobacco 65%. $(item)Spoiled Tobacco always fills one composting layer$(), giving failed batches a simple use instead of making them pure waste."
     },
     {
       "type": "patchouli:relations",

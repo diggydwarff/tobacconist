@@ -11,17 +11,27 @@
     {
       "type": "patchouli:text",
       "title": "Core Progression",
-      "text": "$(thing)A New Leaf$() — obtain any tobacco seed.$(br)$(thing)Homegrown$() — obtain a fresh tobacco leaf.$(br)$(thing)Cured to Perfection$() — obtain a cured leaf.$(br)$(thing)A Cut Above$() — obtain loose cut tobacco."
+      "text": "$(thing)A New Leaf$() \u2014 obtain any tobacco seed.$(br)$(thing)Homegrown$() \u2014 obtain a fresh tobacco leaf.$(br)$(thing)Cured to Perfection$() \u2014 obtain a cured leaf.$(br)$(thing)A Cut Above$() \u2014 obtain loose cut tobacco."
     },
     {
       "type": "patchouli:text",
       "title": "Specialties",
-      "text": "$(thing)Tobacconist’s Eye$() — obtain the Spectacles.$(br)$(thing)Roll Your Own$() — make a cigarette.$(br)$(thing)Fine Taste$() — make a cigar.$(br)$(thing)Cloud Culture$() — prepare shisha tobacco."
+      "text": "$(thing)Tobacconist\u2019s Eye$() \u2014 obtain the Spectacles.$(br)$(thing)Roll Your Own$() \u2014 make a cigarette.$(br)$(thing)Fine Taste$() \u2014 make a cigar.$(br)$(thing)Cloud Culture$() \u2014 prepare shisha tobacco."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Exploration Goals",
+      "text": "$(thing)Seeds of the World$() \u2014 obtain all six tobacco seed varieties. Regional Tobacconist trades make this an exploration challenge.$(br2)$(thing)Well Equipped$() \u2014 obtain a Clay Smoking Pipe, Tobacco Pouch, Tobacco Box, and Tobacconist's Spectacles."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Hookah Goals",
+      "text": "$(thing)Smoke in Style$() \u2014 obtain a Netherite Hookah.$(br2)$(thing)Hookah Collector$() \u2014 obtain every main Hookah style. Copper oxidation and waxed states are deliberately not required."
     },
     {
       "type": "patchouli:text",
       "title": "Master Tobacconist",
-      "text": "The final goal remembers your progress over time. Obtain Tobacconist’s Spectacles, a wooden smoking pipe, a cigarette, a cigar, shisha tobacco, and a Tobacco Barrel. You do $(bold)not$() need to carry all six at once."
+      "text": "The final goal remembers your progress over time. Obtain Tobacconist\u2019s Spectacles, a wooden smoking pipe, a cigarette, a cigar, shisha tobacco, and a Tobacco Barrel. You do $(bold)not$() need to carry all six at once."
     }
   ]
 }

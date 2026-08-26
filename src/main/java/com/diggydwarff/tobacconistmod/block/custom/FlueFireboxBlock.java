@@ -4,15 +4,18 @@ import com.diggydwarff.tobacconistmod.block.entity.FlueFireboxBlockEntity;
 import com.diggydwarff.tobacconistmod.block.entity.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.util.RandomSource;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.Containers;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.Containers;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.Mirror;
@@ -25,11 +28,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
 public class FlueFireboxBlock extends BaseEntityBlock implements EntityBlock {
-
     public FlueFireboxBlock(Properties properties) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any()
@@ -63,12 +64,39 @@ public class FlueFireboxBlock extends BaseEntityBlock implements EntityBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        if (!state.getValue(BlockStateProperties.LIT)) {
+            return;
+        }
+
+        // Emit sparse furnace-style smoke from the front opening while lit.
+        if (random.nextFloat() < 0.32F) {
+            Direction facing = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
+            double sideways = random.nextDouble() * 0.42D - 0.21D;
+            double x = pos.getX() + 0.5D + facing.getStepX() * 0.52D;
+            double y = pos.getY() + 0.56D + random.nextDouble() * 0.20D;
+            double z = pos.getZ() + 0.5D + facing.getStepZ() * 0.52D;
+
+            if (facing.getAxis() == Direction.Axis.X) {
+                z += sideways;
+            } else {
+                x += sideways;
+            }
+
+            level.addParticle(ParticleTypes.SMOKE, x, y, z, 0.0D, 0.015D, 0.0D);
+        }
+    }
+    @Override
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        return handleUse(state, level, pos, player, hand, hit);
+    }
+
+    private InteractionResult handleUse(BlockState state, Level level, BlockPos pos, Player player,
                                  InteractionHand hand, BlockHitResult hit) {
         if (!level.isClientSide) {
             BlockEntity entity = level.getBlockEntity(pos);
             if (entity instanceof FlueFireboxBlockEntity firebox) {
-                NetworkHooks.openScreen((ServerPlayer) player, firebox, pos);
+                ((ServerPlayer) player).openMenu(firebox, buf -> buf.writeBlockPos(pos));
             }
         }
         return InteractionResult.sidedSuccess(level.isClientSide);

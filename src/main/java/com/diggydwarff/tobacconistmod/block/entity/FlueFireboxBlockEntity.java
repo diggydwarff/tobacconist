@@ -3,6 +3,7 @@ package com.diggydwarff.tobacconistmod.block.entity;
 import com.diggydwarff.tobacconistmod.screen.FlueFireboxMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
@@ -19,7 +20,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.Nullable;
 
 public class FlueFireboxBlockEntity extends BaseContainerBlockEntity implements MenuProvider, net.minecraft.world.WorldlyContainer {
@@ -27,6 +28,7 @@ public class FlueFireboxBlockEntity extends BaseContainerBlockEntity implements 
 
     private int burnTime = 0;
     private int burnTimeTotal = 0;
+    private final IItemHandler itemHandler = new FlueFireboxItemHandler(this);
 
     private static final int[] SLOTS_FOR_ALL_SIDES = new int[]{0};
 
@@ -38,7 +40,7 @@ public class FlueFireboxBlockEntity extends BaseContainerBlockEntity implements 
     @Override
     public boolean canPlaceItemThroughFace(int slot, net.minecraft.world.item.ItemStack stack, @org.jetbrains.annotations.Nullable net.minecraft.core.Direction side) {
         return slot == 0
-                && net.minecraftforge.common.ForgeHooks.getBurnTime(stack, net.minecraft.world.item.crafting.RecipeType.SMELTING) > 0;
+                && stack.getBurnTime(RecipeType.SMELTING) > 0;
     }
 
     @Override
@@ -84,7 +86,7 @@ public class FlueFireboxBlockEntity extends BaseContainerBlockEntity implements 
         ItemStack fuelStack = be.items.get(0);
 
         if (be.burnTime <= 0 && !fuelStack.isEmpty()) {
-            int fuel = ForgeHooks.getBurnTime(fuelStack, RecipeType.SMELTING);
+            int fuel = fuelStack.getBurnTime(RecipeType.SMELTING);
             if (fuel > 0) {
                 be.burnTime = fuel;
                 be.burnTimeTotal = fuel;
@@ -108,6 +110,28 @@ public class FlueFireboxBlockEntity extends BaseContainerBlockEntity implements 
 
     public boolean isLit() {
         return burnTime > 0;
+    }
+
+    public IItemHandler getItemHandler(@Nullable Direction side) {
+        return itemHandler;
+    }
+
+    public int getBurnTime() {
+        return burnTime;
+    }
+
+    public int getBurnTimeTotal() {
+        return burnTimeTotal;
+    }
+
+    @Override
+    protected NonNullList<ItemStack> getItems() {
+        return items;
+    }
+
+    @Override
+    protected void setItems(NonNullList<ItemStack> items) {
+        this.items = items;
     }
 
     @Override
@@ -162,7 +186,7 @@ public class FlueFireboxBlockEntity extends BaseContainerBlockEntity implements 
 
     @Override
     public boolean canPlaceItem(int slot, ItemStack stack) {
-        return ForgeHooks.getBurnTime(stack, RecipeType.SMELTING) > 0;
+        return stack.getBurnTime(RecipeType.SMELTING) > 0;
     }
 
     @Override
@@ -178,7 +202,7 @@ public class FlueFireboxBlockEntity extends BaseContainerBlockEntity implements 
     @Override
     protected void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
-        ContainerHelper.saveAllItems(tag, items);
+        ContainerHelper.saveAllItems(tag, items, registries);
         tag.putInt("BurnTime", burnTime);
         tag.putInt("BurnTimeTotal", burnTimeTotal);
     }
@@ -187,7 +211,7 @@ public class FlueFireboxBlockEntity extends BaseContainerBlockEntity implements 
     public void load(CompoundTag tag) {
         super.load(tag);
         items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
-        ContainerHelper.loadAllItems(tag, items);
+        ContainerHelper.loadAllItems(tag, items, registries);
         burnTime = tag.getInt("BurnTime");
         burnTimeTotal = tag.getInt("BurnTimeTotal");
     }

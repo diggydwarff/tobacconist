@@ -12,32 +12,43 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.ModList;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+/**
+ * Opens the Tobacconist manual when Patchouli is installed.
+ */
 public class TobaccoGuideItem extends Item {
-    public TobaccoGuideItem(Properties properties) { super(properties); }
+    public TobaccoGuideItem(Properties properties) {
+        super(properties);
+    }
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
+
         if (!level.isClientSide) {
             if (ModList.get().isLoaded("patchouli") && player instanceof ServerPlayer serverPlayer) {
                 PatchouliCompat.openManual(serverPlayer);
             } else {
-                player.displayClientMessage(Component.literal("Patchouli is required to open the Tobacconist's Manual.")
-                        .withStyle(ChatFormatting.RED), true);
+                player.displayClientMessage(
+                        Component.translatable("tobacconistmod.message.manual.requires_patchouli")
+                                .withStyle(ChatFormatting.RED),
+                        true
+                );
             }
         }
+
         return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-        super.appendHoverText(stack, level, tooltip, flag);
-        tooltip.add(Component.literal(ModList.get().isLoaded("patchouli")
-                ? "Right-click to open the manual" : "Requires Patchouli to open")
-                .withStyle(ModList.get().isLoaded("patchouli") ? ChatFormatting.GRAY : ChatFormatting.DARK_GRAY));
+    public void appendHoverText(ItemStack stack, Level context, List<Component> tooltip, TooltipFlag flag) {
+        super.appendHoverText(stack, context, tooltip, flag);
+        if (ModList.get().isLoaded("patchouli")) {
+            tooltip.add(Component.translatable("tobacconistmod.tooltip.manual.open").withStyle(ChatFormatting.GRAY));
+        } else {
+            tooltip.add(Component.translatable("tobacconistmod.tooltip.manual.requires_patchouli").withStyle(ChatFormatting.DARK_GRAY));
+        }
     }
 }

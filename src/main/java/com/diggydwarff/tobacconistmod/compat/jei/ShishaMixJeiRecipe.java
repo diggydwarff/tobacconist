@@ -1,5 +1,7 @@
 package com.diggydwarff.tobacconistmod.compat.jei;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import net.minecraft.world.item.ItemStack;
 
@@ -12,12 +14,16 @@ public record ShishaMixJeiRecipe(
 ) {
     public static List<ShishaMixJeiRecipe> createAll() {
         ItemStack output = new ItemStack(ModItems.SHISHA_TOBACCO.get());
-        output.getOrCreateTag().putString("tobacco", "Virginia");
-        output.getOrCreateTag().putString("flavor1", "Molasses");
-        output.getOrCreateTag().putInt("Quality", 60);
+        LegacyItemTags.getOrCreateTag(output).putString("tobacco", "Virginia");
+        LegacyItemTags.getOrCreateTag(output).putString("flavor1", "Apple");
+        LegacyItemTags.getOrCreateTag(output).putInt("Quality", 60);
+
+        java.util.ArrayList<ItemStack> sources = new java.util.ArrayList<>(JeiItemLists.getAllLooseTobaccos());
+        ItemStack remixable = output.copy();
+        sources.add(remixable);
 
         return List.of(new ShishaMixJeiRecipe(
-                JeiItemLists.getAllLooseTobaccos(),
+                List.copyOf(sources),
                 JeiItemLists.getAllShishaFlavorings(),
                 output
         ));

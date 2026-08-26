@@ -5,7 +5,6 @@ import com.diggydwarff.tobacconistmod.datagen.items.custom.LabelItem;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
@@ -39,7 +38,7 @@ public class LabelDuplicateRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer inv, RegistryAccess registryAccess) {
+    public ItemStack assemble(CraftingContainer inv, RegistryAccess registries) {
         ItemStack named = ItemStack.EMPTY;
 
         for (int i = 0; i < inv.getContainerSize(); i++) {
@@ -72,21 +71,5 @@ public class LabelDuplicateRecipe extends CustomRecipe {
         return ModRecipes.LABEL_DUPLICATE_RECIPE_SERIALIZER.get();
     }
 
-    public static class Serializer implements RecipeSerializer<LabelDuplicateRecipe> {
-        public static final Serializer INSTANCE = new Serializer();
 
-        @Override
-        public LabelDuplicateRecipe fromJson(ResourceLocation id, com.google.gson.JsonObject json) {
-            return new LabelDuplicateRecipe(id, CraftingBookCategory.MISC);
-        }
-
-        @Override
-        public LabelDuplicateRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buf) {
-            return new LabelDuplicateRecipe(id, CraftingBookCategory.MISC);
-        }
-
-        @Override
-        public void toNetwork(FriendlyByteBuf buf, LabelDuplicateRecipe recipe) {
-        }
-    }
 }

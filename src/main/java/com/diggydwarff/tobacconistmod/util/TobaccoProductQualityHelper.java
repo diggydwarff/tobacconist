@@ -7,21 +7,45 @@ import net.minecraft.world.item.ItemStack;
 public final class TobaccoProductQualityHelper {
     public static final String TAG_PRODUCT_QUALITY = "ProductQuality";
     public static final String TAG_INPUT_TOBACCO_QUALITY = "InputTobaccoQuality";
+    public static final String TAG_INPUT_WRAPPER_QUALITY = "InputWrapperQuality";
     public static final String TAG_INPUT_CUT_TYPE = "InputCutType";
     public static final String TAG_INPUT_CURE_TYPE = "InputCureType";
 
     private TobaccoProductQualityHelper() {}
 
     public static int getCigaretteQuality(ItemStack tobacco) {
-        return score(tobacco, ProductType.CIGARETTE);
+        return scoreSingleTobacco(tobacco, ProductType.CIGARETTE);
     }
 
+    /**
+     * Cigar quality is a product score, not just the filler leaf score. Filler carries most of
+     * the cigar, while the wrapper still contributes meaningfully to burn/construction quality.
+     */
+    public static int getCigarQuality(ItemStack filler, ItemStack wrapper) {
+        int fillerQuality = TobaccoCuringHelper.getQuality(filler);
+        int wrapperQuality = wrapper == null || wrapper.isEmpty()
+                ? fillerQuality
+                : TobaccoCuringHelper.getQuality(wrapper);
+        int compositeQuality = Math.round(fillerQuality * 0.75f + wrapperQuality * 0.25f);
+        return scoreQuality(compositeQuality, TobaccoCuringHelper.getCutType(filler), ProductType.CIGAR);
+    }
+
+    /** Backward-compatible filler-only fallback for callers that do not have wrapper data. */
     public static int getCigarQuality(ItemStack tobacco) {
-        return score(tobacco, ProductType.CIGAR);
+        return getCigarQuality(tobacco, ItemStack.EMPTY);
     }
 
     public static int getShishaQuality(ItemStack tobacco) {
-        return score(tobacco, ProductType.SHISHA);
+        return scoreSingleTobacco(tobacco, ProductType.SHISHA);
+    }
+
+    /**
+     * Finished products use the displayed ProductQuality for smoking-quality effects so the
+     * tooltip, Create filters, Tobacco Boxes, and actual smoking bonus all describe one score.
+     */
+    public static int getEffectiveSmokingQuality(ItemStack stack) {
+        int productQuality = getStoredProductQuality(stack);
+        return productQuality >= 0 ? productQuality * 10 : TobaccoCuringHelper.getQuality(stack);
     }
 
     public static String getShortTobaccoLabel(ItemStack tobaccoStack) {
@@ -69,45 +93,67 @@ public final class TobaccoProductQualityHelper {
         }
     }
 
+    public static void applyCigarProductQualityToTag(
+            CompoundTag tag,
+            ItemStack filler,
+            ItemStack wrapper,
+            int score
+    ) {
+        applyProductQualityToTag(tag, filler, score);
+        if (wrapper != null && !wrapper.isEmpty()) {
+            tag.putInt(TAG_INPUT_WRAPPER_QUALITY, TobaccoCuringHelper.getQuality(wrapper));
+        }
+    }
+
     public static int getStoredProductQuality(ItemStack stack) {
-        if (!stack.hasTag()) return -1;
-        CompoundTag tag = stack.getTag();
+        if (!LegacyItemTags.hasTag(stack)) return -1;
+        CompoundTag tag = LegacyItemTags.getTag(stack);
         if (!tag.contains(TAG_PRODUCT_QUALITY)) return -1;
         return clampTen(tag.getInt(TAG_PRODUCT_QUALITY));
     }
 
-    private static int score(ItemStack tobacco, ProductType type) {
-        int base = Math.round(TobaccoCuringHelper.getQuality(tobacco) / 10.0f);
-        String cutType = TobaccoCuringHelper.getCutType(tobacco);
-
-        int modifier = getModifier(type, cutType);
-        int cap = getCap(type, cutType);
-
-        return Math.min(cap, clampTen(base + modifier));
+    private static int scoreSingleTobacco(ItemStack tobacco, ProductType type) {
+        return scoreQuality(
+                TobaccoCuringHelper.getQuality(tobacco),
+                TobaccoCuringHelper.getCutType(tobacco),
+                type
+        );
     }
 
-    private static int getModifier(ProductType type, String cutType) {
+    /**
+     * Leaf quality remains the dominant factor. Cut choice is a modest preparation modifier,
+     * with only obviously unsuitable preparations imposing a ceiling. This avoids turning an
+     * excellent leaf into a mediocre product solely because it used a reasonable second-choice cut.
+     */
+    private static int scoreQuality(int quality100, String cutType, ProductType type) {
+        int adjusted = TobaccoCuringHelper.clampQuality(quality100) + getQualityPointModifier(type, cutType);
+        int score = Math.round(Math.max(0, adjusted) / 10.0f);
+        return Math.min(getCap(type, cutType), clampTen(score));
+    }
+
+    private static int getQualityPointModifier(ProductType type, String cutType) {
         return switch (type) {
             case CIGARETTE -> switch (cutType) {
                 case TobaccoCuringHelper.CUT_SHAG -> 0;
-                case TobaccoCuringHelper.CUT_RIBBON -> -1;
-                case TobaccoCuringHelper.CUT_ROUGH -> -3;
-                case TobaccoCuringHelper.CUT_FLAKE -> -4;
-                default -> -5;
+                case TobaccoCuringHelper.CUT_RIBBON -> -3;
+                case TobaccoCuringHelper.CUT_ROUGH -> -12;
+                case TobaccoCuringHelper.CUT_FLAKE -> -20;
+                default -> -25;
             };
             case CIGAR -> switch (cutType) {
-                case TobaccoCuringHelper.CUT_FLAKE -> 0;
-                case TobaccoCuringHelper.CUT_ROUGH -> -1;
-                case TobaccoCuringHelper.CUT_RIBBON -> -2;
-                case TobaccoCuringHelper.CUT_SHAG -> -4;
-                default -> -5;
+                // Rough is the closest Tobacconist preparation to conventional cigar filler.
+                case TobaccoCuringHelper.CUT_ROUGH -> 0;
+                case TobaccoCuringHelper.CUT_RIBBON -> -3;
+                case TobaccoCuringHelper.CUT_FLAKE -> -8;
+                case TobaccoCuringHelper.CUT_SHAG -> -15;
+                default -> -20;
             };
             case SHISHA -> switch (cutType) {
                 case TobaccoCuringHelper.CUT_ROUGH -> 0;
-                case TobaccoCuringHelper.CUT_RIBBON -> -1;
-                case TobaccoCuringHelper.CUT_FLAKE -> -2;
-                case TobaccoCuringHelper.CUT_SHAG -> -4;
-                default -> -5;
+                case TobaccoCuringHelper.CUT_RIBBON -> -3;
+                case TobaccoCuringHelper.CUT_FLAKE -> -10;
+                case TobaccoCuringHelper.CUT_SHAG -> -15;
+                default -> -20;
             };
         };
     }
@@ -115,25 +161,22 @@ public final class TobaccoProductQualityHelper {
     private static int getCap(ProductType type, String cutType) {
         return switch (type) {
             case CIGARETTE -> switch (cutType) {
-                case TobaccoCuringHelper.CUT_SHAG -> 10;
-                case TobaccoCuringHelper.CUT_RIBBON -> 9;
-                case TobaccoCuringHelper.CUT_ROUGH -> 6;
-                case TobaccoCuringHelper.CUT_FLAKE -> 5;
-                default -> 3;
+                case TobaccoCuringHelper.CUT_SHAG, TobaccoCuringHelper.CUT_RIBBON -> 10;
+                case TobaccoCuringHelper.CUT_ROUGH -> 8;
+                case TobaccoCuringHelper.CUT_FLAKE -> 7;
+                default -> 6;
             };
             case CIGAR -> switch (cutType) {
-                case TobaccoCuringHelper.CUT_FLAKE -> 10;
-                case TobaccoCuringHelper.CUT_ROUGH -> 9;
-                case TobaccoCuringHelper.CUT_RIBBON -> 7;
-                case TobaccoCuringHelper.CUT_SHAG -> 4;
-                default -> 3;
+                case TobaccoCuringHelper.CUT_ROUGH, TobaccoCuringHelper.CUT_RIBBON -> 10;
+                case TobaccoCuringHelper.CUT_FLAKE -> 9;
+                case TobaccoCuringHelper.CUT_SHAG -> 8;
+                default -> 7;
             };
             case SHISHA -> switch (cutType) {
-                case TobaccoCuringHelper.CUT_ROUGH -> 10;
-                case TobaccoCuringHelper.CUT_RIBBON -> 8;
-                case TobaccoCuringHelper.CUT_FLAKE -> 7;
-                case TobaccoCuringHelper.CUT_SHAG -> 4;
-                default -> 3;
+                case TobaccoCuringHelper.CUT_ROUGH, TobaccoCuringHelper.CUT_RIBBON -> 10;
+                case TobaccoCuringHelper.CUT_FLAKE -> 9;
+                case TobaccoCuringHelper.CUT_SHAG -> 8;
+                default -> 7;
             };
         };
     }

@@ -38,7 +38,7 @@ public class TobaccoBoxLabelRecipeCategory implements IRecipeCategory<TobaccoBox
 
     @Override
     public Component getTitle() {
-        return Component.literal("Tobacco Box Labeling");
+        return Component.translatable("tobacconistmod.jei.tobacco_box_labeling");
     }
 
     @Override
@@ -72,6 +72,6 @@ public class TobaccoBoxLabelRecipeCategory implements IRecipeCategory<TobaccoBox
         slot.draw(guiGraphics, 31, 19);
         slot.draw(guiGraphics, 85, 19);
 
-        guiGraphics.drawString(mc.font, "Filled box + named label", 4, 4, 0x404040, false);
+        guiGraphics.drawString(mc.font, Component.translatable("tobacconistmod.jei.filled_box_plus_named_label"), 4, 4, 0x404040, false);
     }
 }

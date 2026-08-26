@@ -5,7 +5,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.curios.api.CuriosApi;
 
-/** Curios-only spectacles lookup. Never call unless Curios is loaded. */
+/** Curios-only spectacles lookup for the 1.20.1 Eyes slot. */
 public final class CuriosSpectaclesHelper {
     private CuriosSpectaclesHelper() {}
 
@@ -19,5 +19,9 @@ public final class CuriosSpectaclesHelper {
             }
             return ItemStack.EMPTY;
         }).orElse(ItemStack.EMPTY);
+    }
+
+    public static boolean isWearing(Player player) {
+        return !findWorn(player).isEmpty();
     }
 }

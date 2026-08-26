@@ -41,7 +41,7 @@ public class HookahStationRecipeCategory implements IRecipeCategory<HookahStatio
 
     @Override
     public Component getTitle() {
-        return Component.literal("Hookah Station");
+        return Component.translatable("tobacconistmod.jei.hookah_station");
     }
 
     @Override
@@ -79,8 +79,8 @@ public class HookahStationRecipeCategory implements IRecipeCategory<HookahStatio
 
         slot.draw(guiGraphics, 17, 35);
 
-        guiGraphics.drawString(mc.font, "Load hookah with fuel, water,", 8, -44, 0x404040, false);
-        guiGraphics.drawString(mc.font, "and shisha.", 8, -36, 0x404040, false);
-        guiGraphics.drawString(mc.font, "Then right-click to smoke.", 8, -24, 0x808080, false);
+        guiGraphics.drawString(mc.font, Component.translatable("tobacconistmod.jei.hookah_station.line1"), 8, -44, 0x404040, false);
+        guiGraphics.drawString(mc.font, Component.translatable("tobacconistmod.jei.hookah_station.line2"), 8, -36, 0x404040, false);
+        guiGraphics.drawString(mc.font, Component.translatable("tobacconistmod.jei.hookah_station.line3"), 8, -24, 0x808080, false);
     }
 }

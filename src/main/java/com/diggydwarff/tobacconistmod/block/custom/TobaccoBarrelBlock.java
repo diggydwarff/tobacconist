@@ -20,7 +20,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
 public class TobaccoBarrelBlock extends BaseEntityBlock {
-
     public TobaccoBarrelBlock(Properties props) {
         super(props);
     }
@@ -55,9 +54,12 @@ public class TobaccoBarrelBlock extends BaseEntityBlock {
                 level.isClientSide ? TobaccoBarrelBlockEntity::clientTick : TobaccoBarrelBlockEntity::serverTick
         );
     }
-
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos,
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        return handleUse(state, level, pos, player, hand, hit);
+    }
+
+    private InteractionResult handleUse(BlockState state, Level level, BlockPos pos,
                                  Player player, InteractionHand hand, BlockHitResult hit) {
         BlockEntity be = level.getBlockEntity(pos);
         if (!(be instanceof TobaccoBarrelBlockEntity barrel)) {
@@ -97,7 +99,7 @@ public class TobaccoBarrelBlock extends BaseEntityBlock {
                     held.shrink(inserted);
                 }
             } else {
-                player.displayClientMessage(Component.literal("Cannot insert that tobacco batch."), true);
+                player.displayClientMessage(Component.translatable("tobacconistmod.message.barrel.invalid_batch"), true);
             }
         }
 

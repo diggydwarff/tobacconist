@@ -20,6 +20,11 @@
     },
     {
       "type": "patchouli:text",
+      "title": "Automation Safety",
+      "text": "While a barrel is actively $(thing)Fermenting$(), automated extraction is locked for Funnels, Chutes, Packagers, and Mechanical Arms. This prevents a normal output line from stealing a batch before its finite fermentation cycle finishes. Manual removal can still deliberately disturb the batch."
+    },
+    {
+      "type": "patchouli:text",
       "text": "Barrel Humidity is an internal reservoir that builds over time. Warm, humid surroundings fill it more quickly. The Spectacles show the environmental warmth/humidity; sneak-right-clicking the barrel also reports Barrel Humidity itself.",
       "title": "Humidity Charge"
     },

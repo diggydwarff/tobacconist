@@ -15,7 +15,7 @@
     }
   },
   "result": {
-    "item": "tobacconistmod:flue_firebox",
-    "count": 1
+    "count": 1,
+    "item": "tobacconistmod:flue_firebox"
   }
 }

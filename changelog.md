@@ -1,39 +1,310 @@
-## Update 3.1.0 — The Refinement Update (1.20.1 Forge Backport)
+## Update 4.0.0 - The Tobacco Industry Update
 
-This release backports the gameplay features, fixes, and content from the 1.21.1 NeoForge 3.1.0 release while retaining the Minecraft 1.20.1 Forge implementation.
+### Major Changes
+- Added extensive **Create 6 integration** for industrial-scale tobacco production while keeping Create fully optional
+- Reworked tobacco flavoring into a complete **Aqua Vitae → Flavoring Essence → Aromatic Tobacco / Flavored Molasses → Shisha** production chain
+- Expanded automation so Create factories preserve tobacco **variety, quality, cure, cut, aging, fermentation, flavor, blend identity, and other metadata** instead of producing generic replacement stacks
+- Added broad **tag-driven flavor compatibility** so matching ingredients from other food and farming mods can participate without becoming hard dependencies
+
+### Growing, Villagers & Progression
+- Reworked seed acquisition around exploration and the **Tobacconist villager**
+  - Wild Flowering Tobacco remains the natural source of Wild leaves/seeds in Forest, Birch Forest, and Dark Forest, with the Wandering Trader providing an occasional Wild-seed/flowering-plant backup
+  - New Tobacconists offer two cultivated seed varieties chosen from the biome where they take the profession: Virginia/Burley by default, Virginia/Oriental in Savanna, Dokha/Oriental in Desert, Oriental/Dokha in Badlands, Shade/Burley in Jungle, Burley/Shade in Forest or Taiga, and Burley/Virginia in snowy regions
+  - Higher trade levels add regional raw-leaf purchasing plus Rolling Paper, Clay Smoking Pipe, Tobacco Pouch, Bamboo Charcoal, Plain Molasses, Tobacco Box, and Spectacles without replacing the villager's seed role
+- Expanded the advancement tree with **Seeds of the World**, **Well Equipped**, **Smoke in Style**, and **Hookah Collector** milestones
+  - Hookah Collector covers the main Hookah styles without requiring every copper oxidation/waxed state
+
+### Create Automation
+- Added **Mechanical Harvester** support for mature two-block tobacco crops
+  - Preserves normal harvest quality and seed behavior
+  - Handles tall crops without duplicating upper/lower drops
+
+- Added **Deployer + Chaveta** tobacco cutting
+  - Cured Leaf → Rough Cut → Ribbon Cut → Shag Cut
+  - Supports normal Chaveta processing while preserving tobacco metadata
+
+- Added **Mechanical Press** processing
+  - Rough Cut tobacco can be pressed into **Flake**
+  - Cigarette and Cigar assembly can be mechanically finished without losing product metadata
+
+- Added **Mechanical Mixer** processing
+  - Blend two or three compatible loose tobaccos into metadata-aware blends
+  - Preserve blend composition and secret blend identity
+  - Automate Aqua Vitae, Flavoring Essence, flavored molasses, aromatic casing, and Shisha production
+
+- Added **bulk leaf-quality homogenization** with the Mechanical Mixer and Basin
+  - Homogenization is Basin-local and iterative: one Mixer cycle standardizes one physical batch rather than scanning external storage or logistics networks
+  - A cycle requires at least **two visible quality values**; already-uniform tobacco is not pointlessly remixed
+  - No signal defaults to continuous **64-leaf** lots; signals 1–14 select 16/32/48/64/96/128/160/192/256/320/384/448/512/576-leaf continuous targets
+  - Homogenizer control can power either the **Mechanical Mixer or Basin**; if both receive redstone, the stronger signal wins
+  - A **rising signal 15** finishes the compatible tobacco currently in the Basin once with a **2-leaf minimum**; mixed tobacco is homogenized and uniform tobacco is passed through unchanged
+  - Repeated same-quality tobacco stacks may occupy multiple Mixer Basin slots, preventing long runs of one quality from blocking later quality variants from entering
+  - A completely full **576-leaf uniform Basin** automatically passes through unchanged to prevent continuous-factory deadlock
+  - Homogenizer Basin inputs are protected from generic extraction so Chutes, Hoppers, Funnels, and similar automation cannot pull unprocessed leaves through before mixing
+  - The selected batch is count-proportional across available qualities, uses a count-weighted average rounded to the **nearest** whole quality, is snapshotted when processing begins, and returns the same item count at one standardized quality
+  - Homogenizers are intentionally chainable: use smaller primary targets feeding larger downstream targets (for example **64/128 → 256/576**) so multiple first-stage grades are combined; signal 15 can finish the final remainder
+  - Existing Create quality Attributes can siphon low/high outliers away before homogenization for cheap-product, normal bulk, or premium lines
+  - Large outputs are split into normal stacks and can drain through the Basin's native horizontal output with Create backpressure
+  - Inputs must be the same leaf item/raw-or-cured stage and match all non-quality metadata
+
+- Added automated **Cigarette and Cigar assembly** using Deployers and the Mechanical Press
+  - Manual and Create Cigar assembly now both require a **dry cured Tobacco Leaf** wrapper
+  - Reworked finished-product quality so leaf quality remains dominant and cut choice acts as a preparation adjustment rather than an excessive penalty
+  - Cigar quality now uses **75% filler + 25% wrapper quality**, with overall cigar age weighted the same way
+  - Unified finished `ProductQuality` across tooltips, Create Attributes, Tobacco Box displays, and quality-based smoking bonuses
+- Added automated **Tobacco Box packing** and reusable **Brass Label** application
+  - Tobacco Boxes expose **Empty / Partially Filled / Full** Create Attributes for filtered automation
+  - A stationary box on a Depot can be filled over repeated Deployer cycles, enabling fully automatic boxing of non-stackable Cigars and Cigarettes
+
+### Traditional Curing & Storage
+- Added the **Industrial Drying Rack**, a Create-focused factory curing tier
+  - Holds **32 matching leaves** versus 16 on the wooden rack
+  - Cannot be manually loaded or unloaded; it is intended for Funnels, Mechanical Arms, Packagers, and other validated automation
+  - Makes no curing progress unless **both rack tiers receive matching airflow from two distinct Encased Fans**; one fan, one-sided airflow, or mismatched airflow is insufficient
+  - Reuses normal Air/Sun/Fire/Flue cure identity and quality rules, with no industrial quality bonus
+  - Runs fan-assisted Air/Sun at 5 progress ticks per game tick and fan-assisted Fire/Flue at 7, a modest throughput increase over the wooden rack's 4/6 rates
+  - Adds Spectacles/Display Link/Stock Link/package support and uses the final two-tier steel factory model with a dedicated steel-grey item sprite
+  - Create-gated recipe upgrades a normal Drying Rack with Iron Sheets, Brass Casing, Andesite Alloy, and a Precision Mechanism
+- Reworked the wooden **Drying Rack** back into a true one-block-tall frame while retaining its 16-leaf capacity
+  - The frame now ends at one full block of height, so blocks can be placed normally directly above it without an upper proxy
+  - Horizontal Hoppers/Funnels can insert; top and bottom insertion remain disabled, and finished extraction remains available from beneath the rack
+- Rebuilt the **Drying Rack** visuals around four load levels (empty, low, medium, full) with live **X/16 leaf** inspection
+- Drying Rack leaves now change through visible cure stages and retain subtle tobacco-variety color differences from raw leaf through the finished cured batch
+- Increased **Tobacco Barrel** fermentation/aging capacity from **16 to 64** compatible items
+- Added traditional **Hanging Tobacco Bunches**
+  - Sneak-use the underside of a sturdy block with 16 matching raw leaves to hang a bunch
+  - In Creative mode, one leaf is sufficient to place the decorative 16-leaf bunch
+  - Hanging bunches use the same base Air, direct-Sun, Fire, and Flue curing times and quality rules as an unsheltered rack; the rack-only glass Sun method remains 54,000 ticks
+  - Hanging Sun Curing uses side skylight, allowing slatted/pergola structures where the attachment block necessarily blocks vertical sky
+  - Already-cured leaves can also be hung for decoration/storage and keep their processing metadata
+  - Hanging bunches do not expose hopper, funnel, Mechanical Arm, or Display Link inventory automation
+- Campfire smoke now passes visibly through the open Drying Rack structure
+- The **Flue Firebox** emits subtle active smoke while lit
+- Drying Rack debug curing commands target the one-block wooden rack directly, resolve Industrial Rack upper/lower halves correctly, and also recognize either half of Hanging Tobacco Bunches
+
+### Tobacco Crates
+- Added lossless **Tobacco Crates** crafted from a full 3x3 grid of nine units of the same tobacco item
+- Crates preserve each input unit separately, so quality, cure, cut, flavor, age, fermentation, blend, and other stack data are restored when the crate is broken
+- Added distinct raw-leaf crates with uncured green contents for all six varieties
+- Cured leaf and loose tobacco use the matching cured-tobacco crate; Blended Tobacco has its own crate
+- A full 3x3 same-item grid is reserved for crating; quality averaging remains available with 2-8 compatible inputs
+
+### Hookahs & Smoking
+- Expanded the Hookah collection with the **Tall Hookah** plus Redstone, Lapis, Obsidian, Emerald, and Netherite designs alongside the existing ornate material styles
+- Added a complete copper-aging family for the ornate Copper Hookah: **Exposed, Weathered, Oxidized, and waxed variants**
+  - Honeycomb preserves the current finish; axes remove wax first and then scrape oxidation backward while preserving Hookah inventory/state
+- The short Hookah and Tall Hookah can be recolored in-world with dyes and made luminous with a Glow Ink Sac; the Netherite Hookah emits occasional subtle purple prestige particles
+- Expanded the **Tobacco Pouch** into 128-item exact-batch storage that preserves tobacco metadata, supports one-at-a-time withdrawal, can be freshly recolored with dyes, and gives pouch-packed pipes a small 1-5 puff packing bonus
+- Hookah water now lasts a random **2-5 completed Shisha loads** before becoming Dirty Hookah Water; dirty water remains usable but hose draws apply 6 seconds of Nausea
+
+### Create Curing & Smoke
+- Encased Fan airflow can accelerate **Air Curing** and an otherwise-valid **Sun Cure** on Drying Racks and Hanging Tobacco Bunches
+- Fan-blown **Lava heat** can accelerate **Flue Curing**
+- Fan-blown **Campfire smoke and heat** can accelerate **Fire Curing**
+- Fan assistance does not create sunlight: Sun Curing still requires its normal rack or hanging-bunch light conditions
+- Added Create-aware tobacco smoke ventilation
+  - Encased Fans can push and pull nearby tobacco smoke
+  - Indoor smoke can travel along ceilings toward extraction airflow
+  - Smoke is consumed at fan intakes and resumes normal upward behavior after being exhausted outdoors
+
+### Create Logistics
+- Added native **Mechanical Arm** interaction support for Tobacconist processing blocks
+  - Drying Racks accept raw leaves and expose only completed cured output
+  - Tobacco Barrels respect batch compatibility and processing rules
+  - Flue Fireboxes accept valid fuel
+  - Hookahs route valid fuel, Shisha, and water-slot inputs
+  - Tall two-block Hookahs now expose one shared lower-master inventory from either half, closing capability/Mechanical Arm/Funnel/Hopper/Packager/Stock Link inconsistencies without duplicating contents
+
+- Added Create logistics support for **Stock Links, Packagers, Funnels, Chutes, Belts, Depots, and filtered automation**
+- Added the **Production Monitor**, a directional factory throughput counter
+  - Monitors adjacent Create **Belts, Funnels, and Chutes** plus vanilla **Hoppers** without moving or storing items
+  - Count Mode supports **Items**, **Stacks** (Create-style 64-item stack-equivalents, including partial-stack progress), or successful **Transfers**, with an approximately 60-second rolling rate
+  - Supports ghost item filters plus Create Filter/Attribute Filter matching
+  - Configurable target behavior can keep counting, stop at target, or reset batches while preserving overflow
+  - Provides target-crossing Pulse/Hold redstone output, rising-edge external reset, and comparator progress
+  - Fixed the Production Monitor GUI texture scaling and reversed the block artwork so its front face now points toward the transport it reads
+  - Refined the external ghost-filter target to match Create value boxes more closely: centered scale/depth/lighting, a smaller native-style item presentation, and a hover highlight over the interactive target area
+  - Right-click the external target with an item/Create Filter/Attribute Filter to set it without consuming the stack, or use an empty hand to clear it
+  - Fixed menu bootstrap synchronization so reopening a Production Monitor immediately shows its persisted target, modes, output/reset settings, count/filter state, and current rolling rate instead of temporary defaults
+  - Added native **Display Link** sources for Production Monitor **Count/Target**, rolling **Rate**, and **Status**, with a dedicated **20-tick / 1-second** passive refresh cadence for responsive Nixie/Display Board telemetry
+  - Added live Production Monitor **Spectacles and Create Goggle** telemetry for filter, count/target, rolling rate, and status with low-rate client synchronization
+- Added package import routing for Drying Racks, Tobacco Barrels, Flue Fireboxes, and Hookahs
+- Added **Factory Gauge quality-tier matching**
+  - Different numeric quality values can satisfy a request when they belong to the same Tobacconist quality tier
+  - Meaningful tobacco identity and metadata still remain part of matching
+- Expanded **Create Attribute Filter** support for tobacco variety, cure, cut, quality, flavor, blends, labels, downstream products, aging thresholds, and Tobacco Box fill state
+- Added **Display Link** information for Drying Racks, Tobacco Barrels, Flue Fireboxes, Hookahs, and Production Monitors; slower-changing Tobacconist sources use Create's normal **100-tick / 5-second** passive cadence while Production Monitor live telemetry refreshes every second
+  - Tobacco Barrels now expose **Count/64** in addition to status/progress/humidity/age
+  - Hookahs now expose separate **Status, Fuel, Shisha, and Water** sources; either half of a tall Hookah can be targeted
+- Completely redesigned the **Hookah GUI** around a Create-style machine-panel layout
+  - Fuel, Shisha, and water slots are arranged as a readable process diagram around baked Hookah artwork
+  - Player inventory renders as a separate panel, and the vertical ember gauge fills bottom-to-top from the live fuel reserve
+  - Added contextual empty-slot and fuel-percentage tooltips while preserving the existing three-slot Hookah behavior and JEI artwork
+
+### Aqua Vitae, Essences & Shisha
+- Added **Aqua Vitae** as a dedicated extraction/crafting spirit
+  - Brewing Stand: Mundane Potion + Wheat → Aqua Vitae
+  - Create: Water + Sugar + Wheat in a heated Mechanical Mixer → Aqua Vitae
+
+- Added **Flavoring Essences** for all supported flavor profiles
+  - Aqua Vitae + a matching flavor ingredient → Flavoring Essence
+  - Essences are full **single-use** bottles
+  - Create fluid containers represent **1000 mB** per Essence bottle
+
+- Added **Aromatic Tobacco**
+  - Apply one Flavoring Essence directly to suitable loose tobacco for a light casing
+  - Create Spouts can apply the same treatment using 1000 mB Essence
+  - Original tobacco cut and processing metadata are preserved
+
+- Reworked **Flavored Molasses**
+  - Plain Molasses + one full Flavoring Essence → one full flavored Molasses bottle
+  - Create equivalent uses 1000 mB Plain Molasses + 1000 mB Essence
+  - Used processing bottles return normal vanilla Glass Bottles
+
+- Reworked **Shisha** production
+  - Shisha is no longer restricted to Rough Cut tobacco
+  - Any suitable loose cut or blend can be used, with cut choice still affecting quality
+  - Full flavored Molasses acts as the heavy wet treatment
+  - Multi-flavor Shisha remains supported
+
+### Flavor Compatibility
+- Flavor ingredients now use shared **`tobacconistmod:flavorings/<flavor>` tags** for both Brewing Stand and Create Mixer recipes
+- Added support for common `c:` ingredient tags and compatible legacy `forge:` tags where useful
+- Existing flavors such as Peach, Lemon, Mango, Orange, Pineapple, Kiwi, Blueberry, Cranberry, Fig, Cocoa, Honey, Melon, and others can now accept equivalent ingredients from multiple mods instead of being tied to one provider
+- Added compatibility inputs for **Farmer's Delight, Fruits Delight, Croptopia, Neapolitan, HerbalBrews, Farmer's Respite, Expanded Delight, Rustic Delight, Coffee Delight, Create Confectionery**, and other correctly tagged mods
+- All food-mod integrations remain optional
+
+- Added 24 new flavor profiles:
+  - **Coffee, Vanilla, Strawberry, Banana, Mint, Lime, Grapefruit, Cherry, Grape, Coconut, Blackberry, Raspberry**
+  - **Cinnamon, Caramel, Apricot, Plum, Dragonfruit, Marshmallow, Tea, Hibiscus, Lavender, Peanut, Brownie, Custard**
+
+### Create Ponder
+- Added Tobacconist **Ponder scenes** for Create-enabled factories
+- Added curing demonstrations for:
+  - Air curing and fan-assisted Air curing
+  - Sun curing
+  - Campfire Fire curing and fan-blown smoke curing
+  - Flue Firebox curing and fan-blown Lava heat curing
+- Added Ponders for tobacco cutting/pressing, blending/barrel processing, Aqua Vitae/Essence/Shisha production, Cigarette/Cigar assembly, and factory logistics
+- Raw and cured leaves link directly to the relevant curing/processing tutorials
+
+### Visuals & Quality of Life
+- Added subtle per-flavor **Flavoring Essence bottle colors** while retaining the vanilla-style bottle appearance
+- Added dedicated item textures for **Ribbon, Shag, Rough, and Flake** cuts, color-graded per tobacco variety
+- Refreshed item art for loose/blended tobacco, Shisha, Tobacco Pouch, Tobacco Box, Drying Rack, Spectacles, Hookah Hose, Kiseru, and decorative pipes
+- Updated Drying Rack and Hanging Tobacco leaf colors to reflect both cure progression and tobacco variety
+- Rebuilt **Hanging Tobacco Bunch** visuals around the new dense no-stick bundle model while retaining the established raw/cured variety palettes
+- Replaced the Industrial Drying Rack placeholder art with its final two-tier steel factory model and matching cure/variety leaf colors; cleaned the upper profile, extended the lower slats, and added a dedicated steel-grey 16x16 item sprite
+- Deferred the **Glass Ashtray** to a later visual-polish update; its implementation scaffold remains in source but it is not obtainable in 4.0.0
+- Added a **zombie tobacconist villager profession texture**
+- Cleaned partial transparency artifacts from several tobacco item textures
+- Reorganized the creative tab so **all Flavoring Essences appear together before all Molasses bottles**
+- Reordered the opening creative-tab rows into a clearer **grow → cure/process → cut/store → consume** progression
+- Updated The Tobacconist's Manual and code-verified Markdown guides to the final 4.0 specifications, including one-block wooden racks, dual-fan Industrial Racks, 64-item Barrels, Production Monitor modes/telemetry, tall-Hookah shared automation, and current Display Link behavior
+- Added a **Russian (`ru_ru`) localization scaffold** from the existing community translation and synchronized it to every current English localization key; newly added 4.0 strings remain English placeholders for the translator to complete
+
+### Fixes & Compatibility
+- Prevented **Blended Tobacco** from entering the single-variety quality-averaging recipe, preserving blend component identity
+- Cleaned source comments so implementation notes describe only behavior, constraints, compatibility, or data-flow requirements
+- Fixed Double Apple, Double Golden Apple, and Double Royal Apple Create recipe selection/production
+- Fixed `/tobacconist rack finish` and `rack addtime` when targeting the upper half of an Industrial Drying Rack so they always operate on the shared curing batch
+- Fixed adjacent **Industrial Drying Racks** repeatedly tearing down/recreating their upper halves and producing runaway drops after neighbor updates; the industrial two-block lifecycle now overrides the wooden rack's legacy upper-proxy migration behavior
+- Hardened Create classloading and resource conditions so **Tobacconist still launches and functions without Create installed**
+- Kept Curios, JEI, Patchouli, and supported food-mod integrations optional
+- Standardized Spectacles compatibility around the **Curios Head slot** with vanilla Head-slot fallback
+- Corrected the remaining Spectacles tooltip to say **Curios Head** rather than the obsolete Eyes-slot wording, and fixed English painting-title typos for Japanese Kiseru and Havana Cigar
+- Added proper mining-tool tags for the expanded Hookah collection and all six raw-leaf Tobacco Crates
+- Removed the final legacy plural `tags/items` Curios/Tobacconist tag copies now that the 1.21.1 singular `tags/item` resources are authoritative
+- Removed obsolete Forge/1.20 resource leftovers, stale generated resources, and orphan item models from the 1.21.1 source tree
+
+-----------------
+
+## Update 3.1.0 - The Refinement Update
+
+### Major Changes
+- Updated Tobacconist to **Minecraft 1.21.1**
+- Migrated from **Forge to NeoForge**
+- Preserved existing item and block registry IDs where possible for world compatibility
 
 ### New Features
-- Added **Tobacconist's Spectacles** with crop/processing inspection, Curios Eyes support, and vanilla Head-slot fallback.
-- Added **Mouth Slot Smoking Hotkey** for equipped pipes, cigars, and cigarettes.
-- Added the nine-step **Tobacconist advancement tree**.
-- Expanded **The Tobacconist's Manual** and added normal crafting recipes/JEI visibility.
+- Added **Tobacconist's Spectacles**
+  - Inspect tobacco crops and processing blocks in-world
+  - View crop growth, growing conditions, potential quality, curing progress, barrel status, aging/fermentation information, and more
+  - Can be worn in the **Curios Head slot**
+  - Falls back to the vanilla **Head slot** when Curios is not installed
+
+- Added **Mouth Slot Smoking Hotkey**
+  - Smoke pipes, cigars, and cigarettes directly while equipped in the Curios Mouth slot
+  - Added action-bar feedback for empty, invalid, or exhausted smoking items
+
+- Added a new **Tobacconist advancement tree**
+  - A New Leaf
+  - Homegrown
+  - Cured to Perfection
+  - A Cut Above
+  - Tobacconist's Eye
+  - Roll Your Own
+  - Fine Taste
+  - Cloud Culture
+  - Master Tobacconist
+
+- Completely expanded **The Tobacconist's Manual**
+  - Updated to accurately document the current mod
+  - Covers growing, curing, cutting, fermentation, aging, quality, smoking, hookahs, automation, Spectacles, compatibility, and more
+  - Added normal crafting recipes and JEI visibility for the Manual
 
 ### Configuration
-- Added server option to disable the **Tobacco Quality System** while preserving stored quality data.
-- Added server option to disable **Nicotine effects**.
+- Added option to **disable the Tobacco Quality System**
+  - Processing mechanics remain available when quality is disabled
+  - Existing quality data is preserved if the system is re-enabled
 
-### Quality of Life / Balance
-- Improved optional Curios support, Spectacles rendering, crop/environment inspection, Drying Rack and Barrel status information, hopper automation, creative-tab organization, and smoke particles.
-- Product cut quality now prefers **Shag for cigarettes**, **Flake for cigars**, and **Rough for shisha**.
-- Added a short server-side cooldown to mouth-slot smoking.
+- Added option to **disable Nicotine effects**
+
+### Quality of Life
+- Improved Curios integration while keeping **Curios fully optional**
+- Improved Spectacles rendering and positioning
+- Spectacles now use the same forehead appearance whether equipped through Curios or the vanilla Head slot
+- Improved crop inspection so **environmental conditions are evaluated separately from crop maturity**
+- Added improved processing information for Drying Racks and Tobacco Barrels
+- Improved hopper and automation support
+- Removed misleading/outdated tooltips and debug instructions
+- Cleaned up the Tobacconist creative tab
+- Restored the Moroccan Hookah painting to normal painting selection
+
+### Gameplay & Balance
+- Cigarettes now correctly use the intended tobacco cut-quality system
+  - **Shag** is best for cigarettes
+  - **Flake** is best for cigars
+  - **Rough** is best for shisha
+
+- Added a short server-side cooldown to Mouth-slot smoking to prevent packet/effect spam
+- Improved smoke particle behavior when manually smoking
 
 ### Fixes
-- Fixed incorrect crop loot predicates and duplicate tall-crop seed drops.
-- Fixed several block hardness/tool requirements.
-- Fixed Drying Rack partial extraction behavior.
-- Fixed Hookah slot validation, water-slot processing, and smoke-position calculations.
-- Fixed Tobacco Barrel client synchronization.
-- Fixed Tobacco Box quality thresholds.
-- Restored the Moroccan Hookah painting to normal painting selection.
-- Cleaned recipes, models, loot tables, tags, and obsolete resources.
-- Fixed a wild-tobacco configured-feature namespace typo, missing lit Flue Firebox top texture, Flue Firebox fuel loss on break, and duplicate plain-molasses registration.
+- Fixed several tobacco crop loot tables incorrectly checking Burley crop states
+- Fixed duplicate seed drops from tall tobacco crops
+- Fixed several incorrect block hardness and tool requirements
+- Fixed Drying Racks allowing hoppers to extract an entire batch when only one item was requested
+- Fixed Hookah slots accepting invalid items
+- Fixed incorrect Hookah processing logic involving the water slot
+- Fixed Hookah smoke-position calculations
+- Fixed Tobacco Barrel client synchronization
+- Fixed Tobacco Box quality grades using outdated quality thresholds
+- Fixed wooden pipe colors rendering incorrectly after the 1.21 rendering changes
+- Fixed Tobacconist's Spectacles rendering twice when equipped in the vanilla Head slot
+- Fixed Moroccan Hookah painting data and placement
+- Fixed and cleaned up several recipes, models, loot tables, tags, and obsolete resources
 
-### 1.20.1-specific note
-- The 1.21-only wooden-pipe ARGB tint fix is not used on 1.20.1; the existing 1.20.1 RGB tint path is retained.
+### Compatibility
+- Improved **JEI 1.21.1 compatibility**
+- Improved **Patchouli 1.21.1 integration**
+- Improved **Curios 1.21.1 integration**
+- Hardened optional Curios support so Tobacconist can run without Curios installed
+- Maintained optional Farmer's Delight and Fruits Delight integration
 
-----------------------------------------------------------------------------
+-----------------
 
-## Update 3.0.0 — The Processing Update
+## Update 3.0.0 - The Processing Update
 
 ### Major Additions
 - **Complete Tobacco Processing System**
@@ -97,11 +368,11 @@ This release backports the gameplay features, fixes, and content from the 1.21.1
 ## Update 2.3.0
 ##### New Features:
 - NEW! Added additional types of ornate double-high hookahs
-    - Ornate Copper hookah
-    - Ornate Iron Hookah
-    - Ornate Gold Hookah
-    - Ornate Diamond Hookah
-    - Ornate Amethyst Hookah
+  - Ornate Copper hookah
+  - Ornate Iron Hookah
+  - Ornate Gold Hookah
+  - Ornate Diamond Hookah
+  - Ornate Amethyst Hookah
 #### Changes:
 - Base hookah is now colorless and can be dyed with any dye (including glow ink sacs)
 
@@ -110,18 +381,18 @@ This release backports the gameplay features, fixes, and content from the 1.21.1
 ## Update 2.2.0
 ##### New Features:
 - NEW! Curious API Integration!
-    - Wear your pipes, cigars, and cigarettes in your mouth when using the Curious API mod!
+  - Wear your pipes, cigars, and cigarettes in your mouth when using the Curious API mod!
 - NEW! Added bamboo charcoals and support for charcoal in hookah
-    - Smelt bamboo in a furnace/blast furnace to produce bamboo charcoals
-    - From best to worst hookah fuel: bamboo charcoals > normal charcoals > coal
+  - Smelt bamboo in a furnace/blast furnace to produce bamboo charcoals
+  - From best to worst hookah fuel: bamboo charcoals > normal charcoals > coal
 - NEW! Added new types of smoking pipes (visual differences only, just for fun)
-    - Gold smoking pipe
-    - Netherite smoking pipe
-    - Diamond-encrusted smoking pipe
-    - Emerald-encrusted smoking pipe
-    - Lapis-encrusted smoking pipe
-    - Gem-encrusted smoking pipe
-    - Emerald Aztec smoking pipe
+  - Gold smoking pipe
+  - Netherite smoking pipe
+  - Diamond-encrusted smoking pipe
+  - Emerald-encrusted smoking pipe
+  - Lapis-encrusted smoking pipe
+  - Gem-encrusted smoking pipe
+  - Emerald Aztec smoking pipe
 ##### Changes:
 - Updated some item textures
 - Upped pipe uses from 20 to 40 per tobacco

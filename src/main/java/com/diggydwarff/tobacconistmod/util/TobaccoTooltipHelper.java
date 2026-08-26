@@ -1,6 +1,8 @@
 package com.diggydwarff.tobacconistmod.util;
 
 import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 
@@ -97,7 +99,7 @@ public class TobaccoTooltipHelper {
     }
 
     public static CompoundTag getPackedTobaccoData(ItemStack stack) {
-        CompoundTag tag = stack.getTag();
+        CompoundTag tag = LegacyItemTags.getTag(stack);
         if (tag == null || !tag.contains("PackedTobaccoData")) {
             return null;
         }
@@ -108,7 +110,7 @@ public class TobaccoTooltipHelper {
         CompoundTag packed = getPackedTobaccoData(stack);
         if (packed == null) return "";
 
-        String name = stack.getTag() != null ? stack.getTag().getString("tobacco") : "";
+        String name = LegacyItemTags.getTag(stack) != null ? LegacyItemTags.getTag(stack).getString("tobacco") : "";
         if (name.isEmpty()) return "";
 
         String qualityWord = getQualityWord(

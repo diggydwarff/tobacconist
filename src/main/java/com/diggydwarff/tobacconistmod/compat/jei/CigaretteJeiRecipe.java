@@ -1,5 +1,7 @@
 package com.diggydwarff.tobacconistmod.compat.jei;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import net.minecraft.world.item.Item;
@@ -29,15 +31,15 @@ public record CigaretteJeiRecipe(
     private static void add(List<CigaretteJeiRecipe> recipes, Item looseItem) {
         ItemStack tobacco = new ItemStack(looseItem);
 
-        tobacco.getOrCreateTag().putInt(TobaccoCuringHelper.TAG_QUALITY, 60);
-        tobacco.getOrCreateTag().putString(
+        LegacyItemTags.getOrCreateTag(tobacco).putInt(TobaccoCuringHelper.TAG_QUALITY, 60);
+        LegacyItemTags.getOrCreateTag(tobacco).putString(
                 TobaccoCuringHelper.TAG_QUALITY_TIER,
                 TobaccoCuringHelper.getQualityTierId(60)
         );
         TobaccoCuringHelper.setCutType(tobacco, TobaccoCuringHelper.CUT_RIBBON);
 
         ItemStack paper = new ItemStack(ModItems.ROLLING_PAPER.get());
-        ItemStack output = new ItemStack(ModItems.CIGARETTE.get());
+        ItemStack output = com.diggydwarff.tobacconistmod.util.TobaccoProductCraftingHelper.makeCigarette(tobacco);
 
         recipes.add(new CigaretteJeiRecipe(tobacco, paper, output));
     }

@@ -8,7 +8,6 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
@@ -65,7 +64,7 @@ public class TobaccoBoxFillRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer inv, RegistryAccess registryAccess) {
+    public ItemStack assemble(CraftingContainer inv, RegistryAccess registries) {
         ItemStack box = ItemStack.EMPTY;
         ItemStack content = ItemStack.EMPTY;
         int incomingCount = 0;
@@ -110,21 +109,5 @@ public class TobaccoBoxFillRecipe extends CustomRecipe {
         return ModRecipes.TOBACCO_BOX_FILL_RECIPE_SERIALIZER.get();
     }
 
-    public static class Serializer implements RecipeSerializer<TobaccoBoxFillRecipe> {
-        public static final Serializer INSTANCE = new Serializer();
 
-        @Override
-        public TobaccoBoxFillRecipe fromJson(ResourceLocation id, com.google.gson.JsonObject json) {
-            return new TobaccoBoxFillRecipe(id, CraftingBookCategory.MISC);
-        }
-
-        @Override
-        public TobaccoBoxFillRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buf) {
-            return new TobaccoBoxFillRecipe(id, CraftingBookCategory.MISC);
-        }
-
-        @Override
-        public void toNetwork(FriendlyByteBuf buf, TobaccoBoxFillRecipe recipe) {
-        }
-    }
 }

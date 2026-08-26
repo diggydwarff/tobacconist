@@ -1,5 +1,7 @@
 package com.diggydwarff.tobacconistmod.datagen.items.custom;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelBlockEntity;
 import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
 import com.diggydwarff.tobacconistmod.datagen.items.SmokingItem;
@@ -10,7 +12,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
@@ -35,7 +39,7 @@ public class CigarItem extends SmokingItem {
         this.triggerSmokingEffectPlayer(player, (ServerLevel) level, 0, stack);
 
         if (stack.getDamageValue() >= stack.getMaxDamage() - 1) {
-            stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(hand));
+            stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
         } else {
             stack.setDamageValue(stack.getDamageValue() + 1);
         }
@@ -50,6 +54,7 @@ public class CigarItem extends SmokingItem {
         }
 
         this.triggerSmokingEffectPlayer(player, level, 0, stack);
+
         int nextDamage = stack.getDamageValue() + 1;
         if (nextDamage >= stack.getMaxDamage()) {
             stack.shrink(1);
@@ -66,35 +71,46 @@ public class CigarItem extends SmokingItem {
 
     @Override
     public Component getName(ItemStack stack) {
+        boolean flavored = TobaccoAromaticHelper.getProductAromaticProfile(stack).isAromatic();
+        CompoundTag packed = TobaccoTooltipHelper.getPackedTobaccoData(stack);
+        boolean blended = packed != null && !TobaccoBlendHelper.getComponentData(packed).isEmpty();
+
+        Component productName = Component.translatable(blended
+                ? (flavored ? "tobacconistmod.product.flavored_blended_cigar" : "tobacconistmod.product.blended_cigar")
+                : (flavored ? "tobacconistmod.product.flavored_cigar" : "item.tobacconistmod.cigar"));
+
         String label = TobaccoLabelHelper.getProductLabel(stack);
         if (!label.isEmpty()) {
-            return TobaccoLabelHelper.buildNamedProduct(label, "Cigar");
+            return TobaccoLabelHelper.buildNamedProduct(label, productName);
         }
+
+        String blendName = packed == null ? "" : packed.getString(TobaccoBlendHelper.TAG_BLEND_NAME);
+        if (!blendName.isEmpty()) {
+            Component cigarName = Component.translatable(flavored
+                    ? "tobacconistmod.product.flavored_cigar"
+                    : "item.tobacconistmod.cigar");
+            return Component.translatable("tobacconistmod.product.named", blendName, cigarName);
+        }
+
+        if (blended || flavored) return productName;
         return super.getName(stack);
     }
 
+
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-        CompoundTag tag = stack.getTag();
+    public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+        CompoundTag tag = LegacyItemTags.getTag(stack);
 
         if (tag != null) {
-            String wrapper = TobaccoTooltipHelper.cleanTobaccoName(tag.getString("wrapper"));
-            String filler = TobaccoTooltipHelper.getPackedLeafName(stack);
-
-            if (wrapper.isEmpty()) {
-                wrapper = "Unknown";
-            }
-            if (filler.isEmpty()) {
-                filler = "Unknown";
-            }
-
             tooltip.add(Component.empty());
-            tooltip.add(Component.literal(getCigarSummary(stack)).withStyle(ChatFormatting.GOLD));
+            tooltip.add(getCigarSummaryComponent(stack).copy().withStyle(ChatFormatting.GOLD));
 
             int agedDays = TobaccoBarrelBlockEntity.getAgedDays(stack);
             if (agedDays > 0) {
-                tooltip.add(Component.literal(
-                        "Age: " + formatAge(agedDays) + " (" + getAgeLabel(agedDays) + ")"
+                tooltip.add(Component.translatable(
+                        "tobacconistmod.ui.age_detailed",
+                        TobaccoText.ageDuration(agedDays),
+                        TobaccoText.ageLabel(agedDays)
                 ).withStyle(ChatFormatting.GOLD));
             }
             tooltip.add(Component.empty());
@@ -102,96 +118,97 @@ public class CigarItem extends SmokingItem {
             if (TobacconistConfig.isQualitySystemEnabled()) {
                 int displayQuality = getDisplayQuality10(stack);
                 if (displayQuality >= 0) {
-                    tooltip.add(Component.literal("Quality: " + displayQuality + "/10")
+                    tooltip.add(Component.translatable("tobacconistmod.ui.quality_10", displayQuality)
                             .withStyle(ChatFormatting.GRAY));
                 }
             }
 
-            tooltip.add(Component.literal("Filler: " + getFillerLine(stack)).withStyle(ChatFormatting.GRAY));
-            tooltip.add(Component.literal("Wrapper: " + getWrapperLine(stack)).withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable("tobacconistmod.ui.filler", getFillerComponent(stack))
+                    .withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable("tobacconistmod.ui.wrapper", getWrapperComponent(stack))
+                    .withStyle(ChatFormatting.GRAY));
+
+            CompoundTag packedBlend = TobaccoTooltipHelper.getPackedTobaccoData(stack);
+            boolean hasBlendComponents = packedBlend != null
+                    && !TobaccoBlendHelper.getComponentData(packedBlend).isEmpty();
+            TobaccoAromaticHelper.AromaticProfile aromatic =
+                    TobaccoAromaticHelper.getProductAromaticProfile(stack);
+            if (aromatic.isAromatic() && !hasBlendComponents) {
+                tooltip.add(aromatic.tooltipComponent().copy().withStyle(ChatFormatting.LIGHT_PURPLE));
+            }
 
             if (TobaccoBarrelBlockEntity.isRuined(stack)) {
-                tooltip.add(Component.literal("Ruined").withStyle(ChatFormatting.DARK_RED));
+                tooltip.add(Component.translatable("tobacconistmod.ui.ruined").withStyle(ChatFormatting.DARK_RED));
+            }
+
+            if (packedBlend != null) {
+                List<TobaccoBlendComponent> blendComponents = TobaccoBlendHelper.getComponentData(packedBlend);
+                if (!blendComponents.isEmpty()) {
+                    String blendName = packedBlend.getString(TobaccoBlendHelper.TAG_BLEND_NAME);
+                    tooltip.add((blendName.isEmpty()
+                            ? Component.translatable("tobacconistmod.ui.filler_blend_components")
+                            : Component.translatable("tobacconistmod.ui.filler_blend", blendName))
+                            .withStyle(ChatFormatting.DARK_GRAY));
+                    for (TobaccoBlendComponent component : blendComponents) {
+                        Component flavor = component.flavorId().isBlank()
+                                ? Component.translatable("tobacconistmod.ui.plain")
+                                : TobaccoText.flavor(component.flavorId());
+                        Integer quality = TobacconistConfig.isQualitySystemEnabled() ? component.quality() : null;
+                        tooltip.add(TobaccoText.blendComponent(
+                                component.variety(), quality, component.cure(), flavor
+                        ).withStyle(ChatFormatting.DARK_GRAY));
+                    }
+                }
             }
         }
 
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
 
         if (flagIn.isAdvanced()) {
-            tooltip.add(Component.empty());
-            tooltip.add(Component.literal("✿ Fermented").withStyle(ChatFormatting.DARK_GRAY));
-            tooltip.add(Component.literal("ᵐ Months aged, ʸ Years aged").withStyle(ChatFormatting.DARK_GRAY));
+            boolean fermented = TobaccoBarrelBlockEntity.isFermented(stack);
+            int agedDays = TobaccoBarrelBlockEntity.getAgedDays(stack);
+            if (fermented || agedDays > 0) {
+                tooltip.add(Component.empty());
+                if (fermented) {
+                    tooltip.add(Component.translatable("tobacconistmod.ui.fermented_marker")
+                            .withStyle(ChatFormatting.DARK_GRAY));
+                }
+                if (agedDays > 0) {
+                    tooltip.add(Component.translatable("tobacconistmod.ui.age_legend")
+                            .withStyle(ChatFormatting.DARK_GRAY));
+                }
+            }
         }
     }
 
-    private String getFillerLine(ItemStack stack) {
+
+    private Component getFillerComponent(ItemStack stack) {
         CompoundTag packed = TobaccoTooltipHelper.getPackedTobaccoData(stack);
+        String storedName = TobaccoTooltipHelper.getPackedLeafName(stack);
         if (packed == null) {
-            // build default legacy filler
-            String prefix = TobacconistConfig.isQualitySystemEnabled()
-                    ? "Standard Air-Cured Ribbon Cut "
-                    : "Air-Cured Ribbon Cut ";
-            return prefix + TobaccoTooltipHelper.cleanTobaccoName(
-                    TobaccoTooltipHelper.getPackedLeafName(stack)
+            return TobaccoText.processedDescription(
+                    60,
+                    TobaccoCuringHelper.CURE_AIR,
+                    TobaccoCuringHelper.CUT_RIBBON,
+                    storedName,
+                    ""
             );
         }
 
-        int quality100 = packed.contains(TobaccoCuringHelper.TAG_QUALITY)
+        int quality = packed.contains(TobaccoCuringHelper.TAG_QUALITY)
                 ? packed.getInt(TobaccoCuringHelper.TAG_QUALITY)
                 : 60;
-
-        String qualityWord = TobaccoTooltipHelper.getQualityWord(quality100);
-
-        ItemStack temp = new ItemStack(stack.getItem());
-        temp.setTag(packed.copy());
-
-        String cureType = TobaccoCuringHelper.getCureType(temp);
-        String cutType = TobaccoCuringHelper.getCutType(temp);
-
-        String cureWord = TobaccoCuringHelper.getCureDisplayName(cureType);
-        String cutWord = TobaccoCuringHelper.getCutDisplayName(cutType);
-
-        String leaf = TobaccoTooltipHelper.cleanTobaccoName(
-                        TobaccoTooltipHelper.getPackedLeafName(stack)
-                )
-                .replace("Premium ", "")
-                .replace("Fine ", "")
-                .replace("Standard ", "")
-                .replace("Harsh ", "")
-                .replace("Poor ", "")
-                .replace("Flue-Cured ", "")
-                .replace("Fire-Cured ", "")
-                .replace("Air-Cured ", "")
-                .replace("Sun-Cured ", "")
-                .replace("Ribbon Cut ", "")
-                .replace("Shag Cut ", "")
-                .replace("Fine Cut ", "")
-                .replace("Flake Cut ", "")
-                .replace("Plug Cut ", "")
-                .replace("Rough Cut ", "")
-                .replace("Loose ", "")
-                .trim();
-
-        StringBuilder out = new StringBuilder();
-        if (!qualityWord.isEmpty()) {
-            out.append(qualityWord);
-        }
-
-        if (!cureWord.isEmpty()) {
-            out.append(" ").append(cureWord);
-        }
-
-        if (!cutWord.isEmpty() && !cutWord.equals("Uncut")) {
-            out.append(" ").append(cutWord);
-        }
-
-        if (!leaf.isEmpty()) {
-            out.append(" ").append(leaf);
-        }
-
-        out.append(TobaccoTooltipHelper.getProcessSuffix(packed));
-        return out.toString().trim();
+        String cure = packed.contains(TobaccoCuringHelper.TAG_CURE_TYPE)
+                ? packed.getString(TobaccoCuringHelper.TAG_CURE_TYPE)
+                : TobaccoCuringHelper.CURE_AIR;
+        String cut = packed.contains(TobaccoCuringHelper.TAG_CUT_TYPE)
+                ? packed.getString(TobaccoCuringHelper.TAG_CUT_TYPE)
+                : TobaccoCuringHelper.CUT_RIBBON;
+        return TobaccoText.processedDescription(
+                quality, cure, cut, storedName, TobaccoTooltipHelper.getProcessSuffix(packed)
+        );
     }
+
 
     private int getDisplayQuality10(ItemStack stack) {
         int productQuality = TobaccoProductQualityHelper.getStoredProductQuality(stack);
@@ -210,7 +227,7 @@ public class CigarItem extends SmokingItem {
             return Math.max(1, Math.round(quality / 10.0f));
         }
 
-        CompoundTag tag = stack.getTag();
+        CompoundTag tag = LegacyItemTags.getTag(stack);
         if (tag != null && tag.contains(TobaccoCuringHelper.TAG_QUALITY)) {
             return Math.max(1, Math.round(tag.getInt(TobaccoCuringHelper.TAG_QUALITY) / 10.0f));
         }
@@ -218,119 +235,37 @@ public class CigarItem extends SmokingItem {
         return 6;
     }
 
-    private String getCigarSummary(ItemStack stack) {
-        CompoundTag tag = stack.getTag();
+    private Component getCigarSummaryComponent(ItemStack stack) {
+        CompoundTag tag = LegacyItemTags.getTag(stack);
         if (tag == null) {
-            return "Unknown Blend";
+            return Component.translatable("tobacconistmod.ui.unknown_blend");
         }
-
-        String wrapper = TobaccoTooltipHelper.cleanTobaccoName(tag.getString("wrapper"))
-                .replace("Premium ", "")
-                .replace("Fine ", "")
-                .replace("Standard ", "")
-                .replace("Harsh ", "")
-                .replace("Poor ", "")
-                .replace("Flue-Cured ", "")
-                .replace("Fire-Cured ", "")
-                .replace("Air-Cured ", "")
-                .replace("Sun-Cured ", "")
-                .replace("Loose ", "")
-                .trim();
-
-        String filler = TobaccoTooltipHelper.cleanTobaccoName(tag.getString("tobacco"))
-                .replace("Premium ", "")
-                .replace("Fine ", "")
-                .replace("Standard ", "")
-                .replace("Harsh ", "")
-                .replace("Poor ", "")
-                .replace("Flue-Cured ", "")
-                .replace("Fire-Cured ", "")
-                .replace("Air-Cured ", "")
-                .replace("Sun-Cured ", "")
-                .replace("Loose ", "")
-                .trim();
-
-        if (wrapper.isEmpty()) wrapper = "Unknown";
-        if (filler.isEmpty()) filler = "Unknown";
-
-        return wrapper + " Wrapper - " + filler;
+        Component wrapper = TobaccoText.varietyFromStoredName(tag.getString("wrapper"));
+        Component filler = TobaccoText.varietyFromStoredName(tag.getString("tobacco"));
+        return Component.translatable("tobacconistmod.tooltip.cigar_summary", wrapper, filler);
     }
 
-    private String getWrapperLine(ItemStack stack) {
-        CompoundTag tag = stack.getTag();
-        if (tag == null) {
-            return "Unknown";
-        }
+
+    private Component getWrapperComponent(ItemStack stack) {
+        CompoundTag tag = LegacyItemTags.getTag(stack);
+        if (tag == null) return Component.translatable("tobacconistmod.ui.unknown");
 
         CompoundTag wrapperData = tag.contains("WrapperLeafData")
                 ? tag.getCompound("WrapperLeafData")
                 : null;
-
-        String wrapperName = TobaccoTooltipHelper.cleanTobaccoName(tag.getString("wrapper"))
-                .replace("Premium ", "")
-                .replace("Fine ", "")
-                .replace("Standard ", "")
-                .replace("Harsh ", "")
-                .replace("Poor ", "")
-                .replace("Flue-Cured ", "")
-                .replace("Fire-Cured ", "")
-                .replace("Air-Cured ", "")
-                .replace("Sun-Cured ", "")
-                .replace("Loose ", "")
-                .trim();
-
-        if (wrapperName.isEmpty()) {
-            wrapperName = "Unknown";
-        }
-
-        int quality100 = 60;
-        String cureType = "";
-
-        if (wrapperData != null) {
-            if (wrapperData.contains(TobaccoCuringHelper.TAG_QUALITY)) {
-                quality100 = wrapperData.getInt(TobaccoCuringHelper.TAG_QUALITY);
-            }
-            if (wrapperData.contains(TobaccoCuringHelper.TAG_CURE_TYPE)) {
-                cureType = wrapperData.getString(TobaccoCuringHelper.TAG_CURE_TYPE);
-            }
-        }
-
-        String qualityWord = TobaccoTooltipHelper.getQualityWord(quality100);
-        String cureWord = TobaccoCuringHelper.getCureDisplayName(cureType);
-
-        StringBuilder out = new StringBuilder();
-        if (!qualityWord.isEmpty()) {
-            out.append(qualityWord);
-        }
-
-        if (!cureWord.isEmpty()) {
-            out.append(" ").append(cureWord);
-        }
-
-        out.append(" ").append(wrapperName);
-
-        if (wrapperData != null) {
-            out.append(TobaccoTooltipHelper.getProcessSuffix(wrapperData));
-        }
-
-        return out.toString().trim();
+        String wrapperName = tag.getString("wrapper");
+        int quality = wrapperData != null && wrapperData.contains(TobaccoCuringHelper.TAG_QUALITY)
+                ? wrapperData.getInt(TobaccoCuringHelper.TAG_QUALITY)
+                : 60;
+        String cure = wrapperData != null && wrapperData.contains(TobaccoCuringHelper.TAG_CURE_TYPE)
+                ? wrapperData.getString(TobaccoCuringHelper.TAG_CURE_TYPE)
+                : TobaccoCuringHelper.CURE_AIR;
+        String suffix = wrapperData == null ? "" : TobaccoTooltipHelper.getProcessSuffix(wrapperData);
+        return TobaccoText.leafDescription(quality, cure, wrapperName, suffix);
     }
 
-    private String formatAge(int agedDays) {
-        int years = agedDays / 365;
-        int days = agedDays % 365;
 
-        if (years > 0) {
-            return years + "y " + days + "d";
-        }
-        return days + "d";
-    }
 
-    private String getAgeLabel(int agedDays) {
-        if (agedDays < 7) return "Fresh";
-        if (agedDays < 30) return "Light Aged";
-        if (agedDays < 90) return "Deep Aged";
-        if (agedDays < 365) return "Vintage";
-        return "Cellared";
-    }
+
+
 }

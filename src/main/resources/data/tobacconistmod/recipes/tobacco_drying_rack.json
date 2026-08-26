@@ -15,7 +15,7 @@
     }
   },
   "result": {
-    "item": "tobacconistmod:tobacco_drying_rack_block",
-    "count": 1
+    "count": 1,
+    "item": "tobacconistmod:tobacco_drying_rack_block"
   }
 }

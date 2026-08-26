@@ -2,7 +2,8 @@
   "parent": "tobacconistmod:tobacconist/a_cut_above",
   "display": {
     "icon": {
-      "item": "tobacconistmod:shisha_tobacco"
+      "id": "tobacconistmod:shisha_tobacco",
+      "count": 1
     },
     "title": {
       "translate": "advancement.tobacconistmod.cloud_culture"
@@ -21,9 +22,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "tobacconistmod:shisha_tobacco"
-            ]
+            "items": "tobacconistmod:shisha_tobacco"
           }
         ]
       }

@@ -1,6 +1,9 @@
 package com.diggydwarff.tobacconistmod.util;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.BiomeTags;
@@ -30,7 +33,7 @@ public final class TobaccoGrowthHelper {
     private TobaccoGrowthHelper() {}
 
     public static void applyGrowthQuality(ItemStack stack, int quality) {
-        CompoundTag tag = stack.getOrCreateTag();
+        CompoundTag tag = LegacyItemTags.getOrCreateTag(stack);
         int clamped = Math.max(0, Math.min(70, quality));
 
         tag.putInt(TobaccoCuringHelper.TAG_GROWTH_QUALITY, clamped);
@@ -43,17 +46,12 @@ public final class TobaccoGrowthHelper {
 
     public static int calculateGrowthQuality(Level level, BlockPos pos, Variety variety, int age, int maxAge) {
         int base = calculateGrowthPotential(level, pos, variety, age, maxAge);
-        int rng = level.random.nextInt(11); // 0–10
+        int rng = level.getRandom().nextInt(11); // 0–10
         int quality = base + rng;
         return Math.max(0, Math.min(70, quality));
     }
 
-    /**
-     * Scores only the growing environment (biome, light, temperature), deliberately
-     * excluding crop age/harvest timing. This is used by the spectacles so a healthy
-     * young crop is not described as having poor conditions merely because it is young.
-     * Typical range is roughly -20 to +22.
-     */
+    /** Scores biome, light, and temperature without including crop maturity. */
     public static int calculateEnvironmentConditionScore(Level level, BlockPos pos, Variety variety) {
         int biome = biomeScore(level, pos, variety);
         int light = lightScore(level, pos, variety);
@@ -62,9 +60,7 @@ public final class TobaccoGrowthHelper {
         return (biome / 2) + ((light * 3) / 5) + ((temp * 3) / 5);
     }
 
-    /**
-     * Deterministic quality before the 0-10 harvest roll. Useful for inspection UI.
-     */
+    /** Returns deterministic growth potential before the 0-10 harvest roll. */
     public static int calculateGrowthPotential(Level level, BlockPos pos, Variety variety, int age, int maxAge) {
         int biome = biomeScore(level, pos, variety);
         int light = lightScore(level, pos, variety);
@@ -81,7 +77,7 @@ public final class TobaccoGrowthHelper {
         return Math.max(0, Math.min(70, base));
     }
 
-    public static String getInspectionMessage(Level level, BlockPos pos, Variety variety, int effectiveAge, int maxAge) {
+    public static Component getInspectionMessage(Level level, BlockPos pos, Variety variety, int effectiveAge, int maxAge) {
         int biome = biomeScore(level, pos, variety);
         int light = lightScore(level, pos, variety);
         int temp = temperatureScore(level, pos, variety);
@@ -150,173 +146,173 @@ public final class TobaccoGrowthHelper {
         return worst;
     }
 
-    private static String strongPositiveMessage(Level level, Variety variety, Factor factor, int age, int maxAge) {
+    private static Component strongPositiveMessage(Level level, Variety variety, Factor factor, int age, int maxAge) {
         String[] pool = switch (factor) {
             case BIOME -> switch (variety) {
                 case VIRGINIA -> new String[]{
-                        "These plants seem perfectly at home in this open land.",
-                        "The broad country seems to suit them beautifully."
+                        "tobacconistmod.growth.inspect.001",
+                        "tobacconistmod.growth.inspect.002"
                 };
                 case BURLEY -> new String[]{
-                        "They seem deeply settled in this mild ground.",
-                        "This land seems to suit them very well."
+                        "tobacconistmod.growth.inspect.003",
+                        "tobacconistmod.growth.inspect.004"
                 };
                 case ORIENTAL -> new String[]{
-                        "They seem to relish this harsh, dry land.",
-                        "These plants look right at home in this barren ground."
+                        "tobacconistmod.growth.inspect.005",
+                        "tobacconistmod.growth.inspect.006"
                 };
                 case DOKHA -> new String[]{
-                        "The fierce land seems to suit them perfectly.",
-                        "They look vigorous in this unforgiving ground."
+                        "tobacconistmod.growth.inspect.007",
+                        "tobacconistmod.growth.inspect.008"
                 };
                 case SHADE -> new String[]{
-                        "They seem deeply comfortable in this lush place.",
-                        "This humid land seems to favor them."
+                        "tobacconistmod.growth.inspect.009",
+                        "tobacconistmod.growth.inspect.010"
                 };
                 case WILD -> new String[]{
-                        "Wild as they are, they seem to have taken well to this land.",
-                        "These plants seem to have settled in naturally."
+                        "tobacconistmod.growth.inspect.011",
+                        "tobacconistmod.growth.inspect.012"
                 };
             };
             case LIGHT -> switch (variety) {
                 case SHADE -> new String[]{
-                        "The seedlings seem to be thriving in the partial shade.",
-                        "The sheltering light seems to suit them well."
+                        "tobacconistmod.growth.inspect.013",
+                        "tobacconistmod.growth.inspect.014"
                 };
                 case ORIENTAL, DOKHA -> new String[]{
-                        "They seem to drink in the fierce sun.",
-                        "The strong light seems to please them."
+                        "tobacconistmod.growth.inspect.015",
+                        "tobacconistmod.growth.inspect.016"
                 };
                 default -> new String[]{
-                        "The light seems just right for them.",
-                        "These leaves look happy in the sun."
+                        "tobacconistmod.growth.inspect.017",
+                        "tobacconistmod.growth.inspect.018"
                 };
             };
             case TEMPERATURE -> switch (variety) {
                 case ORIENTAL -> new String[]{
-                        "The dry heat seems to please these plants.",
-                        "They seem to thrive in the heat."
+                        "tobacconistmod.growth.inspect.019",
+                        "tobacconistmod.growth.inspect.020"
                 };
                 case DOKHA -> new String[]{
-                        "The intense heat seems to suit them perfectly.",
-                        "These plants seem to crave the brutal warmth."
+                        "tobacconistmod.growth.inspect.021",
+                        "tobacconistmod.growth.inspect.022"
                 };
                 case SHADE -> new String[]{
-                        "The warm, heavy air seems kind to them.",
-                        "They seem content in this humid warmth."
+                        "tobacconistmod.growth.inspect.023",
+                        "tobacconistmod.growth.inspect.024"
                 };
                 default -> new String[]{
-                        "The air seems to suit them very well.",
-                        "They seem comfortable in this weather."
+                        "tobacconistmod.growth.inspect.025",
+                        "tobacconistmod.growth.inspect.026"
                 };
             };
             case HARVEST -> new String[]{
-                    "The leaves seem full and nearly perfect.",
-                    "The plants look ripe and in fine health."
+                    "tobacconistmod.growth.inspect.027",
+                    "tobacconistmod.growth.inspect.028"
             };
         };
 
-        return pool[level.random.nextInt(pool.length)];
+        return Component.translatable(pool[level.random.nextInt(pool.length)]);
     }
 
-    private static String mildPositiveMessage(Level level, Variety variety, Factor factor, int age, int maxAge) {
+    private static Component mildPositiveMessage(Level level, Variety variety, Factor factor, int age, int maxAge) {
         String[] pool = switch (factor) {
             case BIOME -> new String[]{
-                    "They seem comfortable in this ground.",
-                    "This land seems to agree with them."
+                    "tobacconistmod.growth.inspect.029",
+                    "tobacconistmod.growth.inspect.030"
             };
             case LIGHT -> new String[]{
-                    "The light seems to suit them well enough.",
-                    "They seem fairly content with the light here."
+                    "tobacconistmod.growth.inspect.031",
+                    "tobacconistmod.growth.inspect.032"
             };
             case TEMPERATURE -> new String[]{
-                    "The air seems agreeable to them.",
-                    "They seem to like the weather well enough."
+                    "tobacconistmod.growth.inspect.033",
+                    "tobacconistmod.growth.inspect.034"
             };
             case HARVEST -> new String[]{
-                    "The leaves seem to be coming along nicely.",
-                    "They look healthy and nearly ready."
+                    "tobacconistmod.growth.inspect.035",
+                    "tobacconistmod.growth.inspect.036"
             };
         };
 
-        return pool[level.random.nextInt(pool.length)];
+        return Component.translatable(pool[level.random.nextInt(pool.length)]);
     }
 
-    private static String neutralMessage(Level level, Variety variety, Factor best, Factor worst, int age, int maxAge) {
+    private static Component neutralMessage(Level level, Variety variety, Factor best, Factor worst, int age, int maxAge) {
         if (worst == Factor.HARVEST && age < maxAge) {
             String[] pool = {
-                    "The plants seem healthy enough, but they are not ready yet.",
-                    "They seem to be doing well, though the leaves still need time."
+                    "tobacconistmod.growth.inspect.037",
+                    "tobacconistmod.growth.inspect.038"
             };
-            return pool[level.random.nextInt(pool.length)];
+            return Component.translatable(pool[level.random.nextInt(pool.length)]);
         }
 
         String[] pool = switch (worst) {
             case BIOME -> new String[]{
-                    "They seem to be surviving, though this land may not quite suit them.",
-                    "The crop looks passable, but the ground does not seem ideal."
+                    "tobacconistmod.growth.inspect.039",
+                    "tobacconistmod.growth.inspect.040"
             };
             case LIGHT -> new String[]{
-                    "They seem to be getting by, though the light feels wrong for them.",
-                    "The leaves look serviceable, but they do not seem pleased by the light."
+                    "tobacconistmod.growth.inspect.041",
+                    "tobacconistmod.growth.inspect.042"
             };
             case TEMPERATURE -> new String[]{
-                    "They seem to be enduring the air, if not enjoying it.",
-                    "The plants appear stable enough, though the weather does not quite suit them."
+                    "tobacconistmod.growth.inspect.043",
+                    "tobacconistmod.growth.inspect.044"
             };
             case HARVEST -> new String[]{
-                    "The crop seems sound enough, but it still needs time.",
-                    "They seem to be doing alright, though not yet ready."
+                    "tobacconistmod.growth.inspect.045",
+                    "tobacconistmod.growth.inspect.046"
             };
         };
 
-        return pool[level.random.nextInt(pool.length)];
+        return Component.translatable(pool[level.random.nextInt(pool.length)]);
     }
 
-    private static String mildNegativeMessage(Level level, Variety variety, Factor factor, int age, int maxAge) {
+    private static Component mildNegativeMessage(Level level, Variety variety, Factor factor, int age, int maxAge) {
         String[] pool = switch (factor) {
             case BIOME -> new String[]{
-                    "They seem alive enough, but this land does not suit them.",
-                    "The plants seem uneasy in this ground."
+                    "tobacconistmod.growth.inspect.047",
+                    "tobacconistmod.growth.inspect.048"
             };
             case LIGHT -> new String[]{
-                    "They seem to be surviving, but the light is against them.",
-                    "These leaves look strained, as if wanting for better light."
+                    "tobacconistmod.growth.inspect.049",
+                    "tobacconistmod.growth.inspect.050"
             };
             case TEMPERATURE -> new String[]{
-                    "The air does not seem to agree with them.",
-                    "They seem to be struggling with the weather."
+                    "tobacconistmod.growth.inspect.051",
+                    "tobacconistmod.growth.inspect.052"
             };
             case HARVEST -> new String[]{
-                    "The leaves are too young yet to judge well.",
-                    "It is still too early for these plants to show their best."
+                    "tobacconistmod.growth.inspect.053",
+                    "tobacconistmod.growth.inspect.054"
             };
         };
 
-        return pool[level.random.nextInt(pool.length)];
+        return Component.translatable(pool[level.random.nextInt(pool.length)]);
     }
 
-    private static String strongNegativeMessage(Level level, Variety variety, Factor factor, int age, int maxAge) {
+    private static Component strongNegativeMessage(Level level, Variety variety, Factor factor, int age, int maxAge) {
         String[] pool = switch (factor) {
             case BIOME -> new String[]{
-                    "These plants do not seem meant for this place.",
-                    "The land seems wholly wrong for them."
+                    "tobacconistmod.growth.inspect.055",
+                    "tobacconistmod.growth.inspect.056"
             };
             case LIGHT -> new String[]{
-                    "These leaves look weak, as if starved for proper light.",
-                    "The light seems badly wrong for them."
+                    "tobacconistmod.growth.inspect.057",
+                    "tobacconistmod.growth.inspect.058"
             };
             case TEMPERATURE -> new String[]{
-                    "The weather seems cruel to these plants.",
-                    "They look deeply unhappy in this air."
+                    "tobacconistmod.growth.inspect.059",
+                    "tobacconistmod.growth.inspect.060"
             };
             case HARVEST -> new String[]{
-                    "These plants are far too young to tell much from yet.",
-                    "The leaves have not come close to readiness."
+                    "tobacconistmod.growth.inspect.061",
+                    "tobacconistmod.growth.inspect.062"
             };
         };
 
-        return pool[level.random.nextInt(pool.length)];
+        return Component.translatable(pool[level.random.nextInt(pool.length)]);
     }
 
     private static int biomeScore(Level level, BlockPos pos, Variety variety) {

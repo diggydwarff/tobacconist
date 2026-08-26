@@ -1,11 +1,15 @@
 package com.diggydwarff.tobacconistmod.datagen.items.custom;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelBlockEntity;
+import com.diggydwarff.tobacconistmod.datagen.items.ModTags;
 import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
+import com.diggydwarff.tobacconistmod.util.TobaccoAromaticHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
+import com.diggydwarff.tobacconistmod.util.TobaccoText;
 import com.diggydwarff.tobacconistmod.util.TobaccoLabelHelper;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -14,9 +18,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -36,14 +38,12 @@ public class LooseTobaccoItem extends Item {
 
     @Override
     public Component getName(ItemStack stack) {
-        TobaccoCuringHelper.ensureDefaultTobaccoData(stack);
-
-        CompoundTag tag = stack.getTag();
+        CompoundTag tag = LegacyItemTags.getTag(stack);
         String label = TobaccoLabelHelper.getProductLabel(stack);
 
         Component baseName;
         if (!label.isEmpty()) {
-            baseName = TobaccoLabelHelper.buildNamedProduct(label, "Loose Tobacco");
+            baseName = TobaccoLabelHelper.buildNamedProduct(label, Component.translatable("tobacconistmod.product.loose_tobacco"));
         } else {
             baseName = super.getName(stack);
         }
@@ -57,56 +57,59 @@ public class LooseTobaccoItem extends Item {
             return baseName;
         }
 
-        return Component.literal(TobaccoCuringHelper.getCutDisplayName(cutType) + " ")
-                .append(baseName);
+        return Component.empty().append(TobaccoText.cut(cutType)).append(" ").append(baseName);
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-        TobaccoCuringHelper.ensureDefaultTobaccoData(stack);
+    public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, level, tooltip, flag);
 
         String productLabel = TobaccoLabelHelper.getProductLabel(stack);
         if (!productLabel.isEmpty()) {
-            tooltip.add(Component.literal("Label: " + productLabel).withStyle(ChatFormatting.YELLOW));
+            tooltip.add(Component.translatable("tobacconistmod.ui.label", productLabel).withStyle(ChatFormatting.YELLOW));
         }
 
         if (TobacconistConfig.isQualitySystemEnabled()) {
             int quality = TobaccoCuringHelper.getQuality(stack);
             if (quality > 0) {
-                tooltip.add(Component.literal(
-                        "Quality: " + quality + " (" + capitalize(TobaccoCuringHelper.getQualityTier(quality)) + ")"
+                tooltip.add(Component.translatable(
+                        "tobacconistmod.ui.quality", quality, TobaccoText.qualityTier(quality)
                 ).withStyle(ChatFormatting.GRAY));
             }
         }
 
         String cureType = TobaccoCuringHelper.getCureType(stack);
         if (!cureType.isEmpty()) {
-            tooltip.add(Component.literal(
-                    "Cure: " + TobaccoCuringHelper.getCureDisplayName(cureType)
+            tooltip.add(Component.translatable(
+                    "tobacconistmod.ui.cure", TobaccoText.cure(cureType)
             ).withStyle(ChatFormatting.GRAY));
         }
 
         String cutType = TobaccoCuringHelper.getCutType(stack);
         if (!cutType.isEmpty()) {
-            tooltip.add(Component.literal(
-                    "Cut: " + TobaccoCuringHelper.getCutDisplayName(cutType)
+            tooltip.add(Component.translatable(
+                    "tobacconistmod.ui.cut", TobaccoText.cut(cutType)
             ).withStyle(ChatFormatting.GRAY));
         }
 
+        TobaccoAromaticHelper.AromaticProfile aromatic = TobaccoAromaticHelper.getAromaticProfile(stack);
+        if (aromatic.isAromatic() && !(this instanceof BlendedTobaccoItem)) {
+            tooltip.add(aromatic.tooltipComponent().copy().withStyle(ChatFormatting.LIGHT_PURPLE));
+        }
+
         if (TobaccoBarrelBlockEntity.isFermented(stack)) {
-            tooltip.add(Component.literal("Fermented").withStyle(ChatFormatting.GOLD));
+            tooltip.add(Component.translatable("tobacconistmod.ui.fermented").withStyle(ChatFormatting.GOLD));
         }
 
         int agedDays = TobaccoBarrelBlockEntity.getAgedDays(stack);
         if (agedDays > 0) {
-            tooltip.add(Component.literal(
-                    "Age: " + formatAge(agedDays) + " (" + getAgeLabel(agedDays) + ")"
+            tooltip.add(Component.translatable(
+                    "tobacconistmod.ui.age_detailed", TobaccoText.ageDuration(agedDays), TobaccoText.ageLabel(agedDays)
             ).withStyle(ChatFormatting.GOLD));
         }
 
         if (TobaccoBarrelBlockEntity.isRuined(stack)) {
-            tooltip.add(Component.literal("Ruined").withStyle(ChatFormatting.RED));
+            tooltip.add(Component.translatable("tobacconistmod.ui.ruined").withStyle(ChatFormatting.RED));
         }
     }
 
@@ -119,7 +122,15 @@ public class LooseTobaccoItem extends Item {
         ItemStack tobacco = player.getItemInHand(hand);
         ItemStack offhand = player.getOffhandItem();
 
-        if (!(offhand.getItem() instanceof WoodenSmokingPipeItem)) {
+        if (offhand.getItem() instanceof TobaccoPouchItem) {
+            if (level.isClientSide()) return InteractionResultHolder.success(tobacco);
+            return TobaccoPouchItem.storeFromStack(player, offhand, tobacco)
+                    ? InteractionResultHolder.sidedSuccess(tobacco, false)
+                    : InteractionResultHolder.pass(tobacco);
+        }
+
+        if (!(offhand.getItem() instanceof WoodenSmokingPipeItem pipeItem)
+                || !tobacco.is(ModTags.Items.LOOSE_TOBACCO)) {
             return InteractionResultHolder.pass(tobacco);
         }
 
@@ -127,24 +138,11 @@ public class LooseTobaccoItem extends Item {
             return InteractionResultHolder.success(tobacco);
         }
 
-        CompoundTag pipeTag = offhand.getOrCreateTag();
-        int puffsLeft = pipeTag.getInt(NBT_PUFFS);
-        if (puffsLeft > 0) {
+        if (!pipeItem.packFromTobacco(offhand, tobacco)) {
             return InteractionResultHolder.pass(tobacco);
         }
 
-        pipeTag.putString(NBT_TOBACCO, BuiltInRegistries.ITEM.getKey(tobacco.getItem()).toString());
-        pipeTag.putInt(NBT_PUFFS, this.maxPuffs);
-
-        CompoundTag tobaccoData = tobacco.getTag();
-        if (tobaccoData != null) {
-            pipeTag.put("PackedTobaccoData", tobaccoData.copy());
-        }
-
-        if (!player.getAbilities().instabuild) {
-            tobacco.shrink(1);
-        }
-
+        if (!player.getAbilities().instabuild) tobacco.shrink(1);
         return InteractionResultHolder.sidedSuccess(tobacco, false);
     }
 
@@ -156,26 +154,4 @@ public class LooseTobaccoItem extends Item {
         return maxPuffs;
     }
 
-    private String formatAge(int agedDays) {
-        int years = agedDays / 365;
-        int days = agedDays % 365;
-
-        if (years > 0) {
-            return years + "y " + days + "d";
-        }
-        return days + "d";
-    }
-
-    private String getAgeLabel(int agedDays) {
-        if (agedDays < 7) return "Fresh";
-        if (agedDays < 30) return "Light Aged";
-        if (agedDays < 90) return "Deep Aged";
-        if (agedDays < 365) return "Vintage";
-        return "Cellared";
-    }
-
-    private String capitalize(String s) {
-        if (s == null || s.isEmpty()) return s;
-        return Character.toUpperCase(s.charAt(0)) + s.substring(1);
-    }
 }

@@ -1,7 +1,10 @@
 package com.diggydwarff.tobacconistmod.compat.jei;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
@@ -11,8 +14,8 @@ import java.util.List;
 public record DryingRackJeiRecipe(
         ItemStack input,
         ItemStack output,
-        String line1,
-        String line2
+        Component line1,
+        Component line2
 ) {
     public static List<DryingRackJeiRecipe> createAll() {
         List<DryingRackJeiRecipe> recipes = new ArrayList<>();
@@ -32,29 +35,29 @@ public record DryingRackJeiRecipe(
             recipes.add(new DryingRackJeiRecipe(
                     rawLeaf,
                     makeDryLeaf(pair.dryLeaf(), TobaccoCuringHelper.CURE_AIR, 60),
-                    "Shade or indirect light",
-                    "Slow air curing"
+                    Component.translatable("tobacconistmod.jei.rack.air_condition"),
+                    Component.translatable("tobacconistmod.jei.rack.air_result")
             ));
 
             recipes.add(new DryingRackJeiRecipe(
                     rawLeaf.copy(),
                     makeDryLeaf(pair.dryLeaf(), TobaccoCuringHelper.CURE_SUN, 60),
-                    "Direct sunlight",
-                    "Faster sun curing"
+                    Component.translatable("tobacconistmod.jei.rack.sun_condition"),
+                    Component.translatable("tobacconistmod.jei.rack.sun_result")
             ));
 
             recipes.add(new DryingRackJeiRecipe(
                     rawLeaf.copy(),
                     makeDryLeaf(pair.dryLeaf(), TobaccoCuringHelper.CURE_FLUE, 60),
-                    "Hot dry enclosed heat",
-                    "Flue curing"
+                    Component.translatable("tobacconistmod.jei.rack.flue_condition"),
+                    Component.translatable("tobacconistmod.jei.rack.flue_result")
             ));
 
             recipes.add(new DryingRackJeiRecipe(
                     rawLeaf.copy(),
                     makeDryLeaf(pair.dryLeaf(), TobaccoCuringHelper.CURE_FIRE, 60),
-                    "Smoke and low heat",
-                    "Fire curing"
+                    Component.translatable("tobacconistmod.jei.rack.fire_condition"),
+                    Component.translatable("tobacconistmod.jei.rack.fire_result")
             ));
         }
 
@@ -63,8 +66,8 @@ public record DryingRackJeiRecipe(
 
     private static ItemStack makeRawLeaf(Item rawLeafItem) {
         ItemStack stack = new ItemStack(rawLeafItem);
-        stack.getOrCreateTag().putInt(TobaccoCuringHelper.TAG_QUALITY, 60);
-        stack.getOrCreateTag().putString(
+        LegacyItemTags.getOrCreateTag(stack).putInt(TobaccoCuringHelper.TAG_QUALITY, 60);
+        LegacyItemTags.getOrCreateTag(stack).putString(
                 TobaccoCuringHelper.TAG_QUALITY_TIER,
                 TobaccoCuringHelper.getQualityTierId(60)
         );

@@ -4,11 +4,19 @@ import com.diggydwarff.tobacconistmod.block.AbstractTallTobaccoCropBlock;
 import com.diggydwarff.tobacconistmod.block.entity.BarrelEnvironmentHelper;
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelBlockEntity;
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelMode;
+import com.diggydwarff.tobacconistmod.block.entity.ProductionMonitorBlockEntity;
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoDryingRackBlockEntity;
+import com.diggydwarff.tobacconistmod.block.entity.HangingTobaccoBlockEntity;
+import com.diggydwarff.tobacconistmod.block.custom.HangingTobaccoBlock;
 import com.diggydwarff.tobacconistmod.compat.SpectaclesEquipmentHelper;
+import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
+import com.diggydwarff.tobacconistmod.compat.create.CreateCompat;
 import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoGrowthHelper;
+import com.diggydwarff.tobacconistmod.util.TobaccoText;
+import net.minecraft.network.chat.Component;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -20,13 +28,16 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraftforge.client.gui.overlay.ForgeGui;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public final class TobaccoInspectionOverlay {
-    private static final int BACKGROUND = 0xD0101010;
-    private static final int BORDER = 0xFF8A633A;
+    private static final int BACKGROUND_TOP = 0xF0100010;
+    private static final int BACKGROUND_BOTTOM = 0xF0100010;
+    private static final int BORDER_LIGHT = 0x505000FF;
+    private static final int BORDER_DARK = 0x5028007F;
     private static final int TITLE = 0xFFFFD27A;
     private static final int TEXT = 0xFFF0F0F0;
     private static final int MUTED = 0xFFB7B7B7;
@@ -36,121 +47,383 @@ public final class TobaccoInspectionOverlay {
 
     private TobaccoInspectionOverlay() {}
 
-    public static void render(GuiGraphics graphics) {
+    public static void render(ForgeGui gui, GuiGraphics graphics, float partialTick, int screenWidth, int screenHeight) {
         Minecraft minecraft = Minecraft.getInstance();
-        if (minecraft.player == null || minecraft.level == null || minecraft.screen != null) return;
-        if (!SpectaclesEquipmentHelper.isWearing(minecraft.player)) return;
+        if (minecraft.player == null || minecraft.level == null) return;
+        if (minecraft.screen != null) return;
+
         HitResult hit = minecraft.hitResult;
         if (!(hit instanceof BlockHitResult blockHit) || hit.getType() != HitResult.Type.BLOCK) return;
+
         BlockPos pos = blockHit.getBlockPos();
-        Inspection inspection = inspect(minecraft, pos, minecraft.level.getBlockState(pos));
+        BlockState state = minecraft.level.getBlockState(pos);
+        BlockEntity targeted = minecraft.level.getBlockEntity(pos);
+
+        // Rack capacity is visible without Spectacles; cure diagnostics still require Spectacles.
+        if (targeted instanceof TobaccoDryingRackBlockEntity rack
+                && !SpectaclesEquipmentHelper.isWearing(minecraft.player)) {
+            drawPanel(graphics, minecraft.font, new Inspection(
+                    Component.translatable(rack.getBlockState().getBlock().getDescriptionId()),
+                    List.of(new Line(Component.translatable("tobacconistmod.ui.leaves", rack.getLeafCount(), rack.getMaxLeaves()), TEXT))
+            ));
+            return;
+        }
+
+        if (!SpectaclesEquipmentHelper.isWearing(minecraft.player)) return;
+
+        Inspection inspection = inspect(minecraft, pos, state);
         if (inspection == null || inspection.lines().isEmpty()) return;
+
         drawPanel(graphics, minecraft.font, inspection);
     }
 
     private static Inspection inspect(Minecraft minecraft, BlockPos pos, BlockState state) {
         if (state.getBlock() instanceof AbstractTallTobaccoCropBlock crop) {
-            BlockPos basePos = state.getValue(AbstractTallTobaccoCropBlock.HALF) == DoubleBlockHalf.UPPER ? pos.below() : pos;
+            BlockPos basePos = state.getValue(AbstractTallTobaccoCropBlock.HALF) == DoubleBlockHalf.UPPER
+                    ? pos.below()
+                    : pos;
             BlockState baseState = minecraft.level.getBlockState(basePos);
             int age = crop.getEffectiveAge(minecraft.level, basePos, baseState);
             int maxAge = crop.getMaxAge();
             int pct = Math.min(100, Math.round((age / (float) maxAge) * 100.0F));
-            int potential = TobaccoGrowthHelper.calculateGrowthPotential(minecraft.level, basePos, crop.getInspectionVariety(), age, maxAge);
-            int environment = TobaccoGrowthHelper.calculateEnvironmentConditionScore(minecraft.level, basePos, crop.getInspectionVariety());
+            int potential = TobaccoGrowthHelper.calculateGrowthPotential(
+                    minecraft.level, basePos, crop.getInspectionVariety(), age, maxAge
+            );
+            int environment = TobaccoGrowthHelper.calculateEnvironmentConditionScore(
+                    minecraft.level, basePos, crop.getInspectionVariety()
+            );
+
             List<Line> lines = new ArrayList<>();
-            lines.add(new Line("Growth: " + pct + "%", age >= maxAge ? GOOD : TEXT));
-            lines.add(new Line("Conditions: " + conditionName(environment), conditionColor(environment)));
+            lines.add(new Line(Component.translatable("tobacconistmod.ui.growth", pct), age >= maxAge ? GOOD : TEXT));
+            lines.add(new Line(Component.translatable("tobacconistmod.ui.conditions", TobaccoText.condition(environment)), conditionColor(environment)));
             if (TobacconistConfig.isQualitySystemEnabled()) {
                 int maxPotential = Math.min(70, potential + 10);
-                lines.add(new Line("Potential quality: " + potential + "-" + maxPotential, MUTED));
+                lines.add(new Line(Component.translatable("tobacconistmod.ui.potential_quality", potential, maxPotential), MUTED));
             }
-            if (age >= maxAge) lines.add(new Line("Ready to harvest", GOOD));
-            return new Inspection(crop.getDisplayName(), lines);
+            if (age >= maxAge) {
+                lines.add(new Line(Component.translatable("tobacconistmod.ui.ready_to_harvest"), GOOD));
+            }
+            return new Inspection(Component.translatable(state.getBlock().getDescriptionId()), lines);
+        }
+
+        if (state.getBlock() instanceof HangingTobaccoBlock) {
+            BlockPos upperPos = state.getValue(HangingTobaccoBlock.HALF) == DoubleBlockHalf.UPPER
+                    ? pos
+                    : pos.above();
+            BlockEntity hangingEntity = minecraft.level.getBlockEntity(upperPos);
+            if (hangingEntity instanceof HangingTobaccoBlockEntity hanging) {
+                List<Line> lines = new ArrayList<>();
+                ItemStack stack = hanging.getStoredLeaf();
+                lines.add(new Line(Component.translatable("tobacconistmod.ui.leaves", hanging.getLeafCount(), 16), TEXT));
+                if (!stack.isEmpty()) {
+                    lines.add(new Line(stack.getHoverName(), TEXT));
+                    lines.add(new Line(Component.translatable("tobacconistmod.ui.method", hanging.getCurrentCureMethodComponent()), hanging.isDryingActive() ? GOOD : WARN));
+                    lines.add(new Line(Component.translatable("tobacconistmod.ui.progress", hanging.getDryProgressPercent()), TEXT));
+                    if (hanging.isFinished()) {
+                        lines.add(new Line(Component.translatable("tobacconistmod.ui.finished"), GOOD));
+                    } else if (hanging.isDryingActive()) {
+                        lines.add(new Line(Component.translatable("tobacconistmod.ui.estimated_remaining", formatTicks(hanging.getEstimatedTicksRemaining())), MUTED));
+                    } else {
+                        lines.add(new Line(Component.translatable("tobacconistmod.ui.processing_paused"), WARN));
+                    }
+                    addQualityLine(lines, stack);
+                }
+                return new Inspection(Component.translatable("tobacconistmod.inspection.hanging_tobacco_bunch"), lines);
+            }
         }
 
         BlockEntity blockEntity = minecraft.level.getBlockEntity(pos);
         if (blockEntity instanceof TobaccoDryingRackBlockEntity rack) {
             List<Line> lines = new ArrayList<>();
+            lines.add(new Line(Component.translatable("tobacconistmod.ui.leaves", rack.getLeafCount(), rack.getMaxLeaves()), rack.hasLeaves() ? TEXT : MUTED));
             if (!rack.hasLeaves()) {
-                lines.add(new Line("Empty", MUTED));
-                return new Inspection("Tobacco Drying Rack", lines);
+                return new Inspection(Component.translatable(rack.getBlockState().getBlock().getDescriptionId()), lines);
             }
+
             ItemStack stack = rack.getStoredLeaf();
-            lines.add(new Line(stack.getHoverName().getString() + " x" + rack.getLeafCount(), TEXT));
-            lines.add(new Line("Method: " + rack.getCurrentCureMethod(), rack.isDryingActive() ? GOOD : WARN));
-            lines.add(new Line("Progress: " + rack.getDryProgressPercent() + "%", TEXT));
-            if (rack.isFinished()) lines.add(new Line("Finished", GOOD));
-            else if (rack.isDryingActive()) lines.add(new Line("Est. remaining: " + formatTicks(rack.getEstimatedTicksRemaining()), MUTED));
-            else lines.add(new Line("Processing paused", WARN));
+            lines.add(new Line(stack.getHoverName(), TEXT));
+            lines.add(new Line(Component.translatable("tobacconistmod.ui.method", rack.getCurrentCureMethodComponent()), rack.isDryingActive() ? GOOD : WARN));
+            lines.add(new Line(Component.translatable("tobacconistmod.ui.progress", rack.getDryProgressPercent()), TEXT));
+
+            if (rack.isFinished()) {
+                lines.add(new Line(Component.translatable("tobacconistmod.ui.finished"), GOOD));
+            } else if (rack.isDryingActive()) {
+                lines.add(new Line(Component.translatable("tobacconistmod.ui.estimated_remaining", formatTicks(rack.getEstimatedTicksRemaining())), MUTED));
+            } else {
+                lines.add(new Line(Component.translatable("tobacconistmod.ui.processing_paused"), WARN));
+            }
+
             addQualityLine(lines, stack);
-            return new Inspection("Tobacco Drying Rack", lines);
+            return new Inspection(Component.translatable("block.tobacconistmod.tobacco_drying_rack_block"), lines);
+        }
+
+        CreateCompat.HomogenizationStatus homogenization = CreateCompat.getHomogenizationStatus(minecraft.level, pos);
+        if (homogenization.relevant()) {
+            List<Line> lines = new ArrayList<>();
+            if (homogenization.finishMode()) {
+                lines.add(new Line(Component.translatable(
+                        "tobacconistmod.ui.homogenization_finish_batch",
+                        homogenization.count()), TEXT));
+            } else {
+                lines.add(new Line(Component.translatable(
+                        "tobacconistmod.ui.homogenization_batch",
+                        homogenization.count(),
+                        homogenization.target()), TEXT));
+            }
+
+            lines.add(new Line(Component.translatable(
+                    "tobacconistmod.ui.current_average_quality",
+                    String.format(java.util.Locale.ROOT, "%.1f", homogenization.averageQuality())), MUTED));
+            lines.add(new Line(Component.translatable(
+                    "tobacconistmod.ui.predicted_output_quality",
+                    homogenization.predictedQuality()), TEXT));
+
+            Component control;
+            if (homogenization.signalStrength() == 0) {
+                control = Component.translatable("tobacconistmod.homogenization.control.default");
+            } else if (homogenization.signalStrength() == 15) {
+                control = Component.translatable("tobacconistmod.homogenization.control.finish");
+            } else {
+                control = Component.translatable(
+                        "tobacconistmod.homogenization.control.signal",
+                        homogenization.signalStrength(),
+                        homogenization.target());
+            }
+            lines.add(new Line(Component.translatable("tobacconistmod.ui.homogenization_control", control), MUTED));
+
+            if (homogenization.incompatibleCount() > 0) {
+                lines.add(new Line(Component.translatable(
+                        "tobacconistmod.ui.homogenization_incompatible",
+                        homogenization.incompatibleCount()), WARN));
+            }
+
+            Component status;
+            int color;
+            if (homogenization.processing()) {
+                status = Component.translatable("tobacconistmod.homogenization.status.processing");
+                color = GOOD;
+            } else if (homogenization.finishMode() && !homogenization.finishArmed()) {
+                status = Component.translatable("tobacconistmod.homogenization.status.rearm_finish");
+                color = WARN;
+            } else if (homogenization.uniform()) {
+                status = Component.translatable("tobacconistmod.homogenization.status.uniform");
+                color = MUTED;
+            } else if (homogenization.ready()) {
+                status = Component.translatable(homogenization.finishMode()
+                        ? "tobacconistmod.homogenization.status.finish_ready"
+                        : "tobacconistmod.homogenization.status.ready");
+                color = GOOD;
+            } else {
+                status = Component.translatable("tobacconistmod.homogenization.status.filling");
+                color = homogenization.signalStrength() == 0 ? MUTED : WARN;
+            }
+            lines.add(new Line(Component.translatable("tobacconistmod.ui.status", status), color));
+            return new Inspection(Component.translatable("tobacconistmod.inspection.homogenization"), lines);
+        }
+
+        if (blockEntity instanceof ProductionMonitorBlockEntity monitor) {
+            List<Line> lines = new ArrayList<>();
+            ItemStack filter = monitor.getFilter();
+            lines.add(new Line(filter.isEmpty()
+                    ? Component.translatable("tobacconistmod.ui.monitor_filter_all")
+                    : Component.translatable("tobacconistmod.ui.monitor_filter", filter.getHoverName()), MUTED));
+
+            String count;
+            String target;
+            String rate = formatMonitorDecimal(monitor.getRollingRate());
+            Component countLine;
+            Component rateLine;
+            switch (monitor.getCountMode()) {
+                case STACKS -> {
+                    count = formatMonitorDecimal(monitor.getCount() / 64.0D);
+                    target = formatMonitorDecimal(monitor.getTarget() / 64.0D);
+                    countLine = Component.translatable("tobacconistmod.display.production_monitor_count.stacks", count, target);
+                    rateLine = Component.translatable("tobacconistmod.display.production_monitor_rate.stacks", rate);
+                }
+                case TRANSFERS -> {
+                    count = formatMonitorWhole(monitor.getCount());
+                    target = formatMonitorWhole(monitor.getTarget());
+                    countLine = Component.translatable("tobacconistmod.display.production_monitor_count.transfers", count, target);
+                    rateLine = Component.translatable("tobacconistmod.display.production_monitor_rate.transfers", rate);
+                }
+                default -> {
+                    count = formatMonitorWhole(monitor.getCount());
+                    target = formatMonitorWhole(monitor.getTarget());
+                    countLine = Component.translatable("tobacconistmod.display.production_monitor_count.items", count, target);
+                    rateLine = Component.translatable("tobacconistmod.display.production_monitor_rate.items", rate);
+                }
+            }
+            lines.add(new Line(countLine, TEXT));
+            lines.add(new Line(rateLine, MUTED));
+
+            Component status;
+            int statusColor;
+            if (!monitor.isTargetValid()) {
+                status = Component.translatable("tobacconistmod.display.production_monitor_no_target");
+                statusColor = WARN;
+            } else if (monitor.getAtTargetMode() != ProductionMonitorBlockEntity.AtTargetMode.RESET_COUNT
+                    && monitor.getCount() >= monitor.getTarget()) {
+                status = Component.translatable("tobacconistmod.display.production_monitor_target_reached");
+                statusColor = GOOD;
+            } else {
+                status = Component.translatable("tobacconistmod.display.production_monitor_counting");
+                statusColor = GOOD;
+            }
+            lines.add(new Line(Component.translatable("tobacconistmod.ui.status", status), statusColor));
+            return new Inspection(Component.translatable(state.getBlock().getDescriptionId()), lines);
         }
 
         if (blockEntity instanceof TobaccoBarrelBlockEntity barrel) {
             List<Line> lines = new ArrayList<>();
             ItemStack stack = barrel.getStoredTobacco();
             if (stack.isEmpty()) {
-                lines.add(new Line("Empty", MUTED));
-                return new Inspection("Tobacco Barrel", lines);
+                lines.add(new Line(Component.translatable("tobacconistmod.ui.empty"), MUTED));
+                return new Inspection(Component.translatable("block.tobacconistmod.tobacco_barrel"), lines);
             }
-            lines.add(new Line(stack.getHoverName().getString() + " x" + stack.getCount(), TEXT));
-            lines.add(new Line("Mode: " + barrel.getModeNameForInspection(), barrel.getMode() == TobaccoBarrelMode.IDLE ? MUTED : GOOD));
-            if (barrel.getMode() != TobaccoBarrelMode.IDLE) lines.add(new Line("Progress: " + barrel.getProcessProgressPercent() + "%", TEXT));
+
+            lines.add(new Line(Component.translatable("tobacconistmod.ui.item_count", stack.getHoverName(), stack.getCount()), TEXT));
+            lines.add(new Line(Component.translatable("tobacconistmod.ui.mode", TobaccoText.barrelMode(barrel.getMode())), barrel.getMode() == TobaccoBarrelMode.IDLE ? MUTED : GOOD));
+
+            if (barrel.getMode() != TobaccoBarrelMode.IDLE) {
+                lines.add(new Line(Component.translatable("tobacconistmod.ui.progress", barrel.getProcessProgressPercent()), TEXT));
+            }
+
             int agedDays = TobaccoBarrelBlockEntity.getAgedDays(stack);
-            if (agedDays > 0) lines.add(new Line("Age: " + formatAge(agedDays), MUTED));
-            if (TobaccoBarrelBlockEntity.isRuined(stack)) lines.add(new Line("Ruined", BAD));
-            else if (TobaccoBarrelBlockEntity.isFermented(stack)) lines.add(new Line("Fermented", GOOD));
+            if (agedDays > 0) {
+                lines.add(new Line(Component.translatable("tobacconistmod.ui.age", TobaccoText.ageDuration(agedDays)), MUTED));
+            }
+
+            if (TobaccoBarrelBlockEntity.isRuined(stack)) {
+                lines.add(new Line(Component.translatable("tobacconistmod.ui.ruined"), BAD));
+            } else if (TobaccoBarrelBlockEntity.isFermented(stack)) {
+                lines.add(new Line(Component.translatable("tobacconistmod.ui.fermented"), GOOD));
+            }
+
             int warmth = BarrelEnvironmentHelper.getWarmth(minecraft.level, pos);
             int humidity = BarrelEnvironmentHelper.getHumidity(minecraft.level, pos);
-            lines.add(new Line("Environment: warmth " + warmth + " / humidity " + humidity, MUTED));
+            lines.add(new Line(Component.translatable("tobacconistmod.ui.environment", warmth, humidity), MUTED));
             addQualityLine(lines, stack);
-            return new Inspection("Tobacco Barrel", lines);
+            return new Inspection(Component.translatable("block.tobacconistmod.tobacco_barrel"), lines);
         }
+
         return null;
     }
 
     private static void addQualityLine(List<Line> lines, ItemStack stack) {
         if (!TobacconistConfig.isQualitySystemEnabled() || stack.isEmpty()) return;
-        CompoundTag tag = stack.getTag();
+
+        CompoundTag tag = LegacyItemTags.getTag(stack);
         if (TobaccoCuringHelper.isRawTobaccoLeaf(stack) && tag != null && tag.contains(TobaccoCuringHelper.TAG_GROWTH_QUALITY)) {
             int quality = Math.max(0, Math.min(70, tag.getInt(TobaccoCuringHelper.TAG_GROWTH_QUALITY)));
-            lines.add(new Line("Growth quality: " + quality, qualityColor(quality, 70)));
+            lines.add(new Line(Component.translatable("tobacconistmod.ui.growth_quality_value", quality), qualityColor(quality, 70)));
             return;
         }
+
         int quality = TobaccoCuringHelper.getQuality(stack);
-        lines.add(new Line("Quality: " + quality + " (" + TobaccoCuringHelper.getQualityTier(quality) + ")", qualityColor(quality, 100)));
+        lines.add(new Line(
+                Component.translatable("tobacconistmod.ui.quality", quality, TobaccoText.qualityTier(quality)),
+                qualityColor(quality, 100)
+        ));
     }
 
     private static void drawPanel(GuiGraphics graphics, Font font, Inspection inspection) {
-        int width = font.width(inspection.title());
-        for (Line line : inspection.lines()) width = Math.max(width, font.width(line.text()));
+        int iconSize = 14;
+        int iconPadding = 3;
+        int titleOffsetX = iconSize + iconPadding + 2;
+
+        int width = font.width(inspection.title()) + titleOffsetX;
+        for (Line line : inspection.lines()) {
+            width = Math.max(width, font.width(line.text()));
+        }
         width += 12;
+
         int lineHeight = 10;
-        int height = 8 + lineHeight * (inspection.lines().size() + 1);
+        int headerHeight = 14;
+        int height = 8 + headerHeight + lineHeight * inspection.lines().size();
         int x = graphics.guiWidth() / 2 + 14;
         int y = graphics.guiHeight() / 2 - height / 2;
-        if (x + width > graphics.guiWidth() - 4) x = graphics.guiWidth() / 2 - width - 14;
+
+        if (x + width > graphics.guiWidth() - 4) {
+            x = graphics.guiWidth() / 2 - width - 14;
+        }
         y = Math.max(4, Math.min(y, graphics.guiHeight() - height - 4));
-        graphics.fill(x, y, x + width, y + height, BACKGROUND);
-        graphics.fill(x, y, x + width, y + 1, BORDER);
-        graphics.fill(x, y + height - 1, x + width, y + height, BORDER);
-        graphics.fill(x, y, x + 1, y + height, BORDER);
-        graphics.fill(x + width - 1, y, x + width, y + height, BORDER);
-        int textX = x + 6;
+
+        drawTooltipFrame(graphics, x, y, width, height);
+        renderSpectaclesIcon(graphics, x + 3, y + 2);
+
+        int textX = x + 6 + titleOffsetX;
         int textY = y + 5;
         graphics.drawString(font, inspection.title(), textX, textY, TITLE, false);
-        textY += lineHeight;
+        textY = y + 5 + headerHeight;
+
         for (Line line : inspection.lines()) {
-            graphics.drawString(font, line.text(), textX, textY, line.color(), false);
+            graphics.drawString(font, line.text(), x + 6, textY, line.color(), false);
             textY += lineHeight;
         }
     }
 
-    private static String conditionName(int score) { if (score >= 18) return "Excellent"; if (score >= 10) return "Good"; if (score >= 0) return "Fair"; return "Poor"; }
-    private static int conditionColor(int score) { if (score >= 18) return GOOD; if (score >= 10) return 0xFFC5E88A; if (score >= 0) return WARN; return BAD; }
-    private static int qualityColor(int quality, int max) { float pct = max <= 0 ? 0 : quality / (float) max; if (pct >= .75F) return GOOD; if (pct >= .5F) return WARN; return BAD; }
-    private static String formatTicks(int ticks) { int sec=Math.max(0,ticks/20); return (sec/60) + ":" + String.format("%02d", sec%60); }
-    private static String formatAge(int days) { return days >= 365 ? (days/365) + "y " + (days%365) + "d" : days + "d"; }
-    private record Inspection(String title, List<Line> lines) {}
-    private record Line(String text, int color) {}
+    private static void drawTooltipFrame(GuiGraphics graphics, int x, int y, int width, int height) {
+        graphics.fillGradient(x, y, x + width, y + height, BACKGROUND_TOP, BACKGROUND_BOTTOM);
+        graphics.fill(x, y - 1, x + width, y, BORDER_LIGHT);
+        graphics.fill(x, y + height, x + width, y + height + 1, BORDER_DARK);
+        graphics.fill(x - 1, y, x, y + height, BORDER_LIGHT);
+        graphics.fill(x + width, y, x + width + 1, y + height, BORDER_DARK);
+        graphics.fillGradient(x, y, x + 1, y + height, BORDER_LIGHT, BORDER_DARK);
+        graphics.fillGradient(x + width - 1, y, x + width, y + height, BORDER_LIGHT, BORDER_DARK);
+        graphics.fill(x, y, x + width, y + 1, BORDER_LIGHT);
+        graphics.fill(x, y + height - 1, x + width, y + height, BORDER_DARK);
+    }
+
+    private static void renderSpectaclesIcon(GuiGraphics graphics, int x, int y) {
+        graphics.pose().pushPose();
+        graphics.pose().translate(x, y, 0);
+        graphics.pose().scale(1.0F, 1.0F, 1.0F);
+        graphics.renderItem(new ItemStack(ModItems.TOBACCONISTS_SPECTACLES.get()), 0, 0);
+        graphics.pose().popPose();
+    }
+
+    private static int conditionColor(int environmentScore) {
+        if (environmentScore >= 18) return GOOD;
+        if (environmentScore >= 10) return 0xFFC5E88A;
+        if (environmentScore >= 0) return WARN;
+        return BAD;
+    }
+
+    private static int qualityColor(int quality, int max) {
+        float pct = max <= 0 ? 0.0F : quality / (float) max;
+        if (pct >= 0.75F) return GOOD;
+        if (pct >= 0.5F) return WARN;
+        return BAD;
+    }
+
+    private static String formatMonitorWhole(long value) {
+        if (value < 1_000L) return Long.toString(value);
+        if (value < 1_000_000L) return formatMonitorCompact(value, 1_000.0D, "k");
+        if (value < 1_000_000_000L) return formatMonitorCompact(value, 1_000_000.0D, "M");
+        return formatMonitorCompact(value, 1_000_000_000.0D, "B");
+    }
+
+    private static String formatMonitorDecimal(double value) {
+        if (value >= 1_000.0D) return formatMonitorWhole(Math.round(value));
+        if (Math.abs(value - Math.rint(value)) < 0.0001D) return Long.toString(Math.round(value));
+        return String.format(java.util.Locale.ROOT, "%.1f", value);
+    }
+
+    private static String formatMonitorCompact(long value, double divisor, String suffix) {
+        double scaled = value / divisor;
+        String number = scaled >= 100.0D
+                ? Long.toString(Math.round(scaled))
+                : String.format(java.util.Locale.ROOT, "%.1f", scaled).replace(".0", "");
+        return number + suffix;
+    }
+
+    private static String formatTicks(int ticks) {
+        int seconds = Math.max(0, ticks / 20);
+        int minutes = seconds / 60;
+        int remainder = seconds % 60;
+        return minutes + ":" + String.format("%02d", remainder);
+    }
+
+    private record Inspection(Component title, List<Line> lines) {}
+    private record Line(Component text, int color) {}
 }

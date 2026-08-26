@@ -2,7 +2,7 @@
   "name": "Curing Quality",
   "icon": "tobacconistmod:tobacco_leaf_virginia_dry",
   "category": "tobacconistmod:curing",
-  "sortnum": 5,
+  "sortnum": 6,
   "pages": [
     {
       "type": "patchouli:text",
@@ -20,7 +20,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Direct rain is dangerous. Every 200 ticks of direct rain exposure adds wet damage. At $(bad)1,200 ticks$() of continuous direct rain—about $(bad)60 seconds$()—the batch is ruined into Spoiled Tobacco. Once sheltered, the rain-exposure counter recovers gradually.",
+      "text": "Direct rain is dangerous. Every 200 ticks of direct rain exposure adds wet damage. When the rain-exposure counter reaches $(bad)1,200 ticks$()—60 seconds at uninterrupted exposure—the batch is ruined into Spoiled Tobacco. Once sheltered, the counter falls by $(item)5 ticks per game tick$().",
       "title": "Rain Damage"
     },
     {

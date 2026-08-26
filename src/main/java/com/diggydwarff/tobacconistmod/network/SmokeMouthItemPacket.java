@@ -31,9 +31,9 @@ public final class SmokeMouthItemPacket {
             long now = player.serverLevel().getGameTime();
             long last = LAST_SMOKE_TICK.getOrDefault(player.getUUID(), Long.MIN_VALUE / 2);
             if (now - last < COOLDOWN_TICKS) return;
-            String failure = CuriosSmokingHelper.trySmokeMouthItem(player);
+            Component failure = CuriosSmokingHelper.trySmokeMouthItem(player);
             if (failure == null) LAST_SMOKE_TICK.put(player.getUUID(), now);
-            else player.displayClientMessage(Component.literal(failure), true);
+            else player.displayClientMessage(failure, true);
         });
         context.setPacketHandled(true);
     }

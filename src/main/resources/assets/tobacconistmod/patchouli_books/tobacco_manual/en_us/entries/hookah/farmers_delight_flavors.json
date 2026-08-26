@@ -1,35 +1,22 @@
 {
-  "name": "Farmer's Delight Flavors",
-  "icon": "tobacconistmod:bottled_molasses_applepie_flavor",
+  "name": "Farmer's Delight Essences",
+  "icon": "tobacconistmod:flavoring_essence_applepie",
   "category": "tobacconistmod:hookah",
   "sortnum": 6,
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "When Farmer's Delight is installed, additional dessert ingredients can flavor plain molasses. These entries appear only while Farmer's Delight is loaded."
+      "text": "When Farmer's Delight is installed, its foods can be brewed into Aqua Vitae to make additional Flavoring Essences. The flavored molasses step is unchanged: one essence bottle flavors one full bottle of plain molasses."
     },
     {
-      "type": "patchouli:crafting",
-      "recipe": "tobacconistmod:compat/farmersdelight/bottled_molasses_applepie_flavor",
-      "recipe2": "tobacconistmod:compat/farmersdelight/bottled_molasses_sweetberry_cheesecake_flavor",
-      "title": "Apple Pie & Cheesecake"
+      "type": "patchouli:text",
+      "title": "Dessert Essences",
+      "text": "$(item)Apple Pie Slice$() → Apple Pie$(br)$(item)Sweet Berry Cheesecake Slice$() → Sweet Berry Cheesecake$(br)$(item)Chocolate Pie Slice$() → Chocolate Pie$(br)$(item)Sweet Berry Cookie$() → Sweet Berry Cookie"
     },
     {
-      "type": "patchouli:crafting",
-      "recipe": "tobacconistmod:compat/farmersdelight/bottled_molasses_chocolatepie_flavor",
-      "recipe2": "tobacconistmod:compat/farmersdelight/bottled_molasses_sweetberry_cookie_flavor",
-      "title": "Chocolate Pie & Berry Cookie"
-    },
-    {
-      "type": "patchouli:crafting",
-      "recipe": "tobacconistmod:compat/farmersdelight/bottled_molasses_honeycookie_flavor",
-      "recipe2": "tobacconistmod:compat/farmersdelight/bottled_molasses_melonpopsicle_flavor",
-      "title": "Honey Cookie & Melon Popsicle"
-    },
-    {
-      "type": "patchouli:crafting",
-      "recipe": "tobacconistmod:compat/farmersdelight/bottled_molasses_glowberry_custard_flavor",
-      "title": "Glow Berry Custard"
+      "type": "patchouli:text",
+      "title": "More Desserts",
+      "text": "$(item)Honey Cookie$() → Honey Cookie$(br)$(item)Melon Popsicle$() → Melon Popsicle$(br)$(item)Glow Berry Custard$() → Glow Berry Custard"
     }
   ],
   "flag": "mod:farmersdelight"

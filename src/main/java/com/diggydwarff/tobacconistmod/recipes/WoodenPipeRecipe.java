@@ -1,14 +1,17 @@
 package com.diggydwarff.tobacconistmod.recipes;
 
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
@@ -18,8 +21,8 @@ public class WoodenPipeRecipe extends CustomRecipe {
 
     public static final String NBT_WOOD_PLANK = "WoodPlank";
 
-    public WoodenPipeRecipe(ResourceLocation id, CraftingBookCategory cat) {
-        super(id, cat);
+    public WoodenPipeRecipe(ResourceLocation id, CraftingBookCategory category) {
+        super(id, category);
     }
 
     @Override
@@ -48,7 +51,7 @@ public class WoodenPipeRecipe extends CustomRecipe {
 
 
     @Override
-    public ItemStack assemble(CraftingContainer inv, net.minecraft.core.RegistryAccess regs) {
+    public ItemStack assemble(CraftingContainer inv, RegistryAccess registries) {
         ItemStack out = new ItemStack(
                 BuiltInRegistries.ITEM.get(new ResourceLocation("tobacconistmod", "wooden_smoking_pipe"))
         );
@@ -61,7 +64,7 @@ public class WoodenPipeRecipe extends CustomRecipe {
         }
 
         if (!plank.isEmpty()) {
-            CompoundTag tag = out.getOrCreateTag();
+            CompoundTag tag = LegacyItemTags.getOrCreateTag(out);
             ResourceLocation plankId = BuiltInRegistries.ITEM.getKey(plank.getItem());
             tag.putString(NBT_WOOD_PLANK, plankId.toString());
         }
@@ -79,20 +82,5 @@ public class WoodenPipeRecipe extends CustomRecipe {
         return ModRecipeSerializers.WOODEN_PIPE.get();
     }
 
-    public static class Serializer implements RecipeSerializer<WoodenPipeRecipe> {
-        @Override
-        public WoodenPipeRecipe fromJson(ResourceLocation id, com.google.gson.JsonObject json) {
-            return new WoodenPipeRecipe(id, CraftingBookCategory.MISC);
-        }
 
-        @Override
-        public WoodenPipeRecipe fromNetwork(ResourceLocation id, net.minecraft.network.FriendlyByteBuf buf) {
-            return new WoodenPipeRecipe(id, CraftingBookCategory.MISC);
-        }
-
-        @Override
-        public void toNetwork(net.minecraft.network.FriendlyByteBuf buf, WoodenPipeRecipe recipe) {
-            // no extra data
-        }
-    }
 }
