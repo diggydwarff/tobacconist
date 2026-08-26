@@ -56,6 +56,7 @@ public class TobacconistCreativeTab {
                         output.accept(ModBlocks.TOBACCO_DRYING_RACK.get());
                         if (CreateCompat.loaded()) {
                             output.accept(ModBlocks.INDUSTRIAL_DRYING_RACK.get());
+                            output.accept(ModBlocks.PRODUCTION_MONITOR.get());
                         }
                         output.accept(ModBlocks.FLUE_FIREBOX.get());
                         output.accept(ModBlocks.TOBACCO_BARREL.get());

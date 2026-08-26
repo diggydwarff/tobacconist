@@ -57,9 +57,9 @@
   - Runs fan-assisted Air/Sun at 5 progress ticks per game tick and fan-assisted Fire/Flue at 7, a modest throughput increase over the wooden rack's 4/6 rates
   - Adds Spectacles/Display Link/Stock Link/package support and ships with placeholder industrial models/textures pending final artwork
   - Create-gated recipe upgrades a normal Drying Rack with Iron Sheets, Brass Casing, Andesite Alloy, and a Precision Mechanism
-- Updated the wooden **Drying Rack** to occupy two real block levels while retaining its 16-leaf capacity
-  - Blocks now place naturally above the tall frame, and side Hoppers/Funnels can address either rack level
-  - Top and bottom insertion remain disabled; finished extraction remains available from beneath the lower half
+- Reworked the wooden **Drying Rack** back into a true one-block-tall frame while retaining its 16-leaf capacity
+  - The frame now ends at one full block of height, so blocks can be placed normally directly above it without an upper proxy
+  - Horizontal Hoppers/Funnels can insert; top and bottom insertion remain disabled, and finished extraction remains available from beneath the rack
 - Rebuilt the **Drying Rack** visuals around four load levels (empty, low, medium, full) with live **X/16 leaf** inspection
 - Drying Rack leaves now change through visible cure stages and retain subtle tobacco-variety color differences from raw leaf through the finished cured batch
 - Increased **Tobacco Barrel** fermentation/aging capacity from **16 to 64** compatible items
@@ -72,7 +72,7 @@
   - Hanging bunches do not expose hopper, funnel, Mechanical Arm, or Display Link inventory automation
 - Campfire smoke now passes visibly through the open Drying Rack structure
 - The **Flue Firebox** emits subtle active smoke while lit
-- Drying Rack debug curing commands resolve either physical half of wooden/Industrial racks and also recognize Hanging Tobacco Bunches
+- Drying Rack debug curing commands resolve the Industrial Rack upper/lower halves correctly and also recognize Hanging Tobacco Bunches
 
 ### Tobacco Crates
 - Added lossless **Tobacco Crates** crafted from a full 3x3 grid of nine units of the same tobacco item
@@ -99,6 +99,16 @@
   - Hookahs route valid fuel, Shisha, and water-slot inputs
 
 - Added Create logistics support for **Stock Links, Packagers, Funnels, Chutes, Belts, Depots, and filtered automation**
+- Added the **Production Monitor**, a directional factory throughput counter
+  - Monitors adjacent Create **Belts, Funnels, and Chutes** plus vanilla **Hoppers** without moving or storing items
+  - Count Mode supports **Items**, **Stacks** (Create-style 64-item stack-equivalents, including partial-stack progress), or successful **Transfers**, with an approximately 60-second rolling rate
+  - Supports ghost item filters plus Create Filter/Attribute Filter matching
+  - Configurable target behavior can keep counting, stop at target, or reset batches while preserving overflow
+  - Provides target-crossing Pulse/Hold redstone output, rising-edge external reset, and comparator progress
+  - Fixed the Production Monitor GUI texture scaling and reversed the block artwork so its front face now points toward the transport it reads
+  - Refined the external ghost-filter target to match Create value boxes more closely: centered scale/depth/lighting, a smaller native-style item presentation, and a hover highlight over the interactive target area
+  - Right-click the external target with an item/Create Filter/Attribute Filter to set it without consuming the stack, or use an empty hand to clear it
+  - Fixed menu bootstrap synchronization so reopening a Production Monitor immediately shows its persisted target, modes, output/reset settings, count/filter state, and current rolling rate instead of temporary defaults
 - Added package import routing for Drying Racks, Tobacco Barrels, Flue Fireboxes, and Hookahs
 - Added **Factory Gauge quality-tier matching**
   - Different numeric quality values can satisfy a request when they belong to the same Tobacconist quality tier
@@ -171,7 +181,8 @@
 - Prevented **Blended Tobacco** from entering the single-variety quality-averaging recipe, preserving blend component identity
 - Cleaned source comments so implementation notes describe only behavior, constraints, compatibility, or data-flow requirements
 - Fixed Double Apple, Double Golden Apple, and Double Royal Apple Create recipe selection/production
-- Fixed `/tobacconist rack finish` and `rack addtime` when targeting the upper half of a two-level rack so they always operate on the shared curing batch
+- Fixed `/tobacconist rack finish` and `rack addtime` when targeting the upper half of an Industrial Drying Rack so they always operate on the shared curing batch
+- Fixed adjacent **Industrial Drying Racks** repeatedly tearing down/recreating their upper halves and producing runaway drops after neighbor updates; the industrial two-block lifecycle now overrides the wooden rack's legacy upper-proxy migration behavior
 - Hardened Create classloading and resource conditions so **Tobacconist still launches and functions without Create installed**
 - Kept Curios, JEI, Patchouli, and supported food-mod integrations optional
 - Standardized Spectacles compatibility around the **Curios Head slot** with vanilla Head-slot fallback

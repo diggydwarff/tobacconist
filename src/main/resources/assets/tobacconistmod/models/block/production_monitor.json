@@ -1,0 +1,25 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "front": "tobacconistmod:block/production_monitor_front",
+    "back": "tobacconistmod:block/production_monitor_back",
+    "side": "tobacconistmod:block/production_monitor_side",
+    "top": "tobacconistmod:block/production_monitor_top",
+    "bottom": "tobacconistmod:block/production_monitor_bottom",
+    "particle": "tobacconistmod:block/production_monitor_side"
+  },
+  "elements": [
+    {
+      "from": [0, 0, 0],
+      "to": [16, 16, 16],
+      "faces": {
+        "down": { "texture": "#bottom", "cullface": "down" },
+        "up": { "texture": "#top", "cullface": "up" },
+        "north": { "texture": "#front", "cullface": "north" },
+        "south": { "texture": "#back", "cullface": "south" },
+        "west": { "texture": "#side", "cullface": "west" },
+        "east": { "texture": "#side", "cullface": "east" }
+      }
+    }
+  ]
+}

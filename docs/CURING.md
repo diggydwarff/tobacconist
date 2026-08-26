@@ -14,7 +14,7 @@ Only time spent under a valid curing condition advances that method. A Create fa
 
 ## Drying Rack
 
-A wooden rack holds up to 16 matching raw leaves. Because the frame is taller than one block, it occupies two physical block levels while keeping one shared 16-leaf inventory. Side Hoppers/Funnels can address either level, top insertion remains closed, and blocks placed above the rack sit above its real upper half. Its visible fill level changes with inventory count, and looking at either half reports `X/16 Leaves`. Once the cure reaches 10%, additional insertion is blocked so the batch cannot be changed mid-process.
+A wooden rack holds up to 16 matching raw leaves and now fits completely inside one block. Horizontal Hoppers/Funnels can insert from the rack sides, top and bottom insertion remain closed, and a hopper underneath can extract only after curing is complete. Blocks can be placed normally directly above the rack. Its visible fill level changes with inventory count, and inspection reports `X/16 Leaves`. Once the cure reaches 10%, additional insertion is blocked so the batch cannot be changed mid-process.
 
 Cure precedence per tick is **Fire → Flue → Sun → Air**.
 
@@ -30,7 +30,7 @@ Cure precedence per tick is **Fire → Flue → Sun → Air**.
 - Sky light above is at least 14.
 - At least two horizontal adjacent sides are open air.
 - No direct rain exposure.
-- The exposure space immediately above the rack’s upper half can see the sky, or that exposure block is glass/stained glass or a glass pane.
+- The exposure space immediately above the rack can see the sky, or that exposure block is glass/stained glass or a glass pane.
 
 Glass shelter uses the 54,000-tick Sun time. Plain Create airflow accelerates an otherwise-valid Sun cure but does not create sunlight by itself.
 
@@ -45,7 +45,7 @@ A normal rack can Flue Cure when all of these are true:
 - No direct rain.
 - It is not directly over a lit campfire.
 - The rack does not have direct sky access above.
-- The rack’s own upper half is ignored as an obstruction, and the open space immediately above the tall frame is clear.
+- The open space immediately above the rack is clear.
 - A sturdy roof underside exists 3–5 blocks above the rack.
 - No fire, soul fire, campfire, or soul campfire is present in the nearby 3×3×3 smoke-contamination area.
 - At least one lit Flue Firebox is at the rack's level or one block below, within horizontal Manhattan distance 3.

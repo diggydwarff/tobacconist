@@ -91,6 +91,13 @@ public class ModBlockEntities {
                             ModBlocks.TOBACCO_BARREL.get()
                     ).build(null));
 
+    public static final Supplier<BlockEntityType<ProductionMonitorBlockEntity>> PRODUCTION_MONITOR =
+            BLOCK_ENTITIES.register("production_monitor",
+                    () -> BlockEntityType.Builder.of(
+                            ProductionMonitorBlockEntity::new,
+                            ModBlocks.PRODUCTION_MONITOR.get()
+                    ).build(null));
+
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);
     }

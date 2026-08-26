@@ -65,6 +65,16 @@
     },
     {
       "type": "patchouli:text",
+      "title": "Production Monitor",
+      "text": "Place the $(item)Production Monitor$() with its front face pointing at the adjacent transport it should read; it counts confirmed throughput without moving items. It supports Create Belts, Funnels and Chutes plus vanilla Hoppers. The ghost Filter can be set in the menu or directly on the operator-facing filter target: hover the target for a Create-style highlight, use an item/Create Filter/Attribute Filter to copy it without consuming the stack, or use an empty hand there to clear it. Items mode counts item quantity; Stacks measures Create-style 64-item stack-equivalents; Transfers counts successful transfer operations."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Monitor Targets & Output",
+      "text": "Set a numeric target, then choose Keep Counting, Stop Counting, or Reset Count. Reset Count preserves overflow. Output may be None, a Pulse per target crossing, or Hold until reset; Reset Count + Hold becomes Pulse. Manual Reset keeps the rolling rate, and optional External Reset reacts only to a rising redstone edge. A Comparator reports progress."
+    },
+    {
+      "type": "patchouli:text",
       "title": "Displays",
       "text": "Display Links report Drying Rack, Tobacco Barrel, Flue Firebox, and Hookah status. Create Basins expose homogenization count, target, average, predicted output, uniform/waiting state, and incompatible tobacco. Item Vaults can report tobacco count and average quality for one compatible lot."
     },

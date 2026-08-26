@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "The $(thing)Drying Rack$() occupies two physical block levels but exposes one shared inventory. Horizontal sides on either level can insert valid raw leaves. The top and bottom cannot insert. A hopper underneath the lower half can extract only when the batch has completely finished curing."
+      "text": "The $(thing)Drying Rack$() is one block tall and holds one 16-leaf inventory. Horizontal sides can insert valid raw leaves. The top and bottom cannot insert, and a hopper underneath can extract only when the batch has completely finished curing."
     },
     {
       "type": "patchouli:text",
@@ -17,6 +17,16 @@
       "type": "patchouli:text",
       "title": "Industrial Rack",
       "text": "The $(thing)Industrial Drying Rack$() is automation-only and occupies two real block levels. Funnels/Hoppers may connect to either level, and Chutes/Hoppers above can insert through the top. Both halves address the same 32-leaf inventory. Both tiers must receive matching Create airflow from two distinct Encased Fans before curing progresses."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Production Monitor",
+      "text": "Place the $(item)Production Monitor$() with its front face pointing at the adjacent transport it should read; it counts confirmed throughput without moving items. It supports Create Belts, Funnels and Chutes plus vanilla Hoppers. The ghost Filter can be set in the menu or directly on the operator-facing filter target: hover the target for a Create-style highlight, use an item/Create Filter/Attribute Filter to copy it without consuming the stack, or use an empty hand there to clear it. Items mode counts item quantity; Stacks measures Create-style 64-item stack-equivalents; Transfers counts successful transfer operations."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Monitor Targets & Output",
+      "text": "Set a numeric target, then choose Keep Counting, Stop Counting, or Reset Count. Reset Count preserves overflow. Output may be None, a Pulse per target crossing, or Hold until reset; Reset Count + Hold becomes Pulse. Manual Reset keeps the rolling rate, and optional External Reset reacts only to a rising redstone edge. A Comparator reports progress."
     },
     {
       "type": "patchouli:text",

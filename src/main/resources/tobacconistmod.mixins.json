@@ -4,7 +4,8 @@
   "package": "com.diggydwarff.tobacconistmod.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "ArmorDyeRecipeMixin"
+    "ArmorDyeRecipeMixin",
+    "HopperProductionMonitorMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "The $(thing)Tobacco Drying Rack$() turns raw leaf into cured leaf. A rack holds up to $(item)16$() identical raw leaves. The tall wooden frame now occupies two block levels for placement and automation, but both halves are one shared rack inventory. Looking at either half shows the live $(item)X/16 Leaves$() count."
+      "text": "The $(thing)Tobacco Drying Rack$() turns raw leaf into cured leaf. A rack holds up to $(item)16$() identical raw leaves. The wooden frame now fits completely inside one block again, while keeping the same shared $(item)16-leaf$() capacity. Blocks can be placed normally directly above it, and inspection shows the live $(item)X/16 Leaves$() count."
     },
     {
       "type": "patchouli:crafting",
@@ -21,7 +21,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "The rack automatically chooses the strongest valid method each tick in this order: $(thing)Fire → Flue → Sun → Air$(). You do not select a mode in a menu; the structure and environment select it for you. With Create installed, one fan airflow path reaching either rack level can assist a valid wooden-rack cure.",
+      "text": "The rack automatically chooses the strongest valid method each tick in this order: $(thing)Fire → Flue → Sun → Air$(). You do not select a mode in a menu; the structure and environment select it for you. With Create installed, one fan airflow path reaching the rack can assist a valid wooden-rack cure.",
       "title": "Automatic Method"
     },
     {
@@ -36,7 +36,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Vanilla hoppers can automate the wooden rack from either physical level. Insert raw leaves from a horizontal side; top and bottom cannot insert. A hopper underneath the lower half can extract only after curing is complete. The upper proxy also makes placing a block above the tall rack behave like a normal two-level structure.",
+      "text": "Vanilla hoppers can automate the wooden rack from its horizontal sides. Top and bottom cannot insert. A hopper underneath can extract only after curing is complete, and the rack now leaves the block space directly above it completely free.",
       "title": "Automation"
     },
     {

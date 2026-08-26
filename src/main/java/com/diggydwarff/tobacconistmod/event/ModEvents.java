@@ -4,6 +4,7 @@ import com.diggydwarff.tobacconistmod.TobacconistMod;
 import com.diggydwarff.tobacconistmod.screen.FlueFireboxScreen;
 import com.diggydwarff.tobacconistmod.screen.HookahScreen;
 import com.diggydwarff.tobacconistmod.screen.ModMenuTypes;
+import com.diggydwarff.tobacconistmod.screen.ProductionMonitorScreen;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -15,5 +16,6 @@ public class ModEvents {
     public static void registerScreens(RegisterMenuScreensEvent event) {
         event.register(ModMenuTypes.HOOKAH_MENU.get(), HookahScreen::new);
         event.register(ModMenuTypes.FLUE_FIREBOX_MENU.get(), FlueFireboxScreen::new);
+        event.register(ModMenuTypes.PRODUCTION_MONITOR_MENU.get(), ProductionMonitorScreen::new);
     }
 }

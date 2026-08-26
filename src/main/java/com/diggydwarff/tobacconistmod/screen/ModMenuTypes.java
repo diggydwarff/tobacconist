@@ -21,6 +21,9 @@ public class ModMenuTypes {
     public static final Supplier<MenuType<FlueFireboxMenu>> FLUE_FIREBOX_MENU =
             registerMenuType(FlueFireboxMenu::new, "flue_firebox_menu");
 
+    public static final Supplier<MenuType<ProductionMonitorMenu>> PRODUCTION_MONITOR_MENU =
+            registerMenuType(ProductionMonitorMenu::new, "production_monitor_menu");
+
     private static <T extends AbstractContainerMenu> Supplier<MenuType<T>> registerMenuType(
             IContainerFactory<T> factory, String name) {
         return MENUS.register(name, () -> IMenuTypeExtension.create(factory));

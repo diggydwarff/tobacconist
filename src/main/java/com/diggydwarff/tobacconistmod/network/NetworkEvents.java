@@ -2,6 +2,8 @@ package com.diggydwarff.tobacconistmod.network;
 
 import com.diggydwarff.tobacconistmod.TobacconistMod;
 import com.diggydwarff.tobacconistmod.compat.curios.CuriosSmokingHelper;
+import com.diggydwarff.tobacconistmod.block.entity.ProductionMonitorBlockEntity;
+import com.diggydwarff.tobacconistmod.screen.ProductionMonitorMenu;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -22,7 +24,8 @@ public final class NetworkEvents {
 
     @SubscribeEvent
     public static void registerPayloads(RegisterPayloadHandlersEvent event) {
-        event.registrar("1").playToServer(
+        var registrar = event.registrar("1");
+        registrar.playToServer(
                 SmokeMouthItemPayload.TYPE,
                 SmokeMouthItemPayload.STREAM_CODEC,
                 (payload, context) -> {
@@ -44,6 +47,41 @@ public final class NetworkEvents {
                         LAST_MANUAL_SMOKE_TICK.put(player.getUUID(), now);
                     } else {
                         player.displayClientMessage(failure, true);
+                    }
+                }
+        );
+
+        registrar.playToServer(
+                ProductionMonitorConfigPayload.TYPE,
+                ProductionMonitorConfigPayload.STREAM_CODEC,
+                (payload, context) -> {
+                    if (!(context.player() instanceof ServerPlayer player)
+                            || !(player.containerMenu instanceof ProductionMonitorMenu menu)
+                            || !menu.getBlockPos().equals(payload.pos())
+                            || player.distanceToSqr(payload.pos().getX() + 0.5D, payload.pos().getY() + 0.5D,
+                                    payload.pos().getZ() + 0.5D) > 64.0D) {
+                        return;
+                    }
+                    if (player.serverLevel().getBlockEntity(payload.pos()) instanceof ProductionMonitorBlockEntity monitor) {
+                        monitor.applyConfiguration(payload.target(), payload.countMode(), payload.atTarget(),
+                                payload.output(), payload.externalReset(), payload.filter());
+                    }
+                }
+        );
+
+        registrar.playToServer(
+                ProductionMonitorResetPayload.TYPE,
+                ProductionMonitorResetPayload.STREAM_CODEC,
+                (payload, context) -> {
+                    if (!(context.player() instanceof ServerPlayer player)
+                            || !(player.containerMenu instanceof ProductionMonitorMenu menu)
+                            || !menu.getBlockPos().equals(payload.pos())
+                            || player.distanceToSqr(payload.pos().getX() + 0.5D, payload.pos().getY() + 0.5D,
+                                    payload.pos().getZ() + 0.5D) > 64.0D) {
+                        return;
+                    }
+                    if (player.serverLevel().getBlockEntity(payload.pos()) instanceof ProductionMonitorBlockEntity monitor) {
+                        monitor.resetAccumulatedCount();
                     }
                 }
         );

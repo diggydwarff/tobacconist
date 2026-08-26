@@ -9,7 +9,9 @@
     "FactoryPanelTobaccoMatchingMixin",
     "BasinRecipeHomogenizingMixin",
     "BasinHomogenizationStateMixin",
-    "BasinInventoryHomogenizationMixin"
+    "BasinInventoryHomogenizationMixin",
+    "FunnelProductionMonitorMixin",
+    "ChuteProductionMonitorMixin"
   ],
   "injectors": {
     "defaultRequire": 1

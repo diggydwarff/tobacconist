@@ -1,7 +1,9 @@
 package com.diggydwarff.tobacconistmod.compat.create;
 
 import com.diggydwarff.tobacconistmod.TobacconistMod;
+import com.diggydwarff.tobacconistmod.block.entity.ProductionMonitorBlockEntity;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.IEventBus;
@@ -41,6 +43,8 @@ public final class CreateCompat {
             "com.diggydwarff.tobacconistmod.compat.create.CreatePonderCompat";
     private static final String HOMOGENIZATION_COMPAT_CLASS =
             "com.diggydwarff.tobacconistmod.compat.create.CreateHomogenizationCompat";
+    private static final String PRODUCTION_MONITOR_COMPAT_CLASS =
+            "com.diggydwarff.tobacconistmod.compat.create.CreateProductionMonitorCompat";
 
     private static BiFunction<Level, BlockPos, FanCuringAssist> fanCuringResolver =
             (level, pos) -> FanCuringAssist.NONE;
@@ -48,6 +52,7 @@ public final class CreateCompat {
             (level, pos) -> SmokeAirflow.NONE;
     private static BiFunction<Level, BlockPos, HomogenizationStatus> homogenizationStatusResolver =
             (level, pos) -> HomogenizationStatus.NONE;
+    private static ProductionMonitorBridge productionMonitorBridge = ProductionMonitorBridge.NONE;
 
     private CreateCompat() {}
 
@@ -72,6 +77,7 @@ public final class CreateCompat {
         registerCreateIntegration(LOGISTICS_COMPAT_CLASS, modEventBus);
         registerCreateIntegration(SMOKE_CLEARING_COMPAT_CLASS);
         registerCreateIntegration(HOMOGENIZATION_COMPAT_CLASS);
+        registerCreateIntegration(PRODUCTION_MONITOR_COMPAT_CLASS);
         TobacconistMod.LOGGER.info("Create detected; Tobacconist Create compatibility enabled.");
     }
 
@@ -169,6 +175,35 @@ public final class CreateCompat {
     static void installHomogenizationStatusResolver(
             BiFunction<Level, BlockPos, HomogenizationStatus> resolver) {
         homogenizationStatusResolver = Objects.requireNonNull(resolver);
+    }
+
+    public interface ProductionMonitorBridge {
+        ProductionMonitorBridge NONE = new ProductionMonitorBridge() {};
+
+        default boolean isSupportedTarget(Level level, BlockPos pos) { return false; }
+        default void observe(ProductionMonitorBlockEntity monitor, BlockPos targetPos) {}
+        default boolean isCreateFilter(ItemStack filter) { return false; }
+        default boolean matchesFilter(Level level, ItemStack filter, ItemStack candidate) { return false; }
+    }
+
+    public static boolean isProductionMonitorTarget(Level level, BlockPos pos) {
+        return loaded() && level != null && pos != null && productionMonitorBridge.isSupportedTarget(level, pos);
+    }
+
+    public static void observeProductionMonitor(ProductionMonitorBlockEntity monitor, BlockPos targetPos) {
+        if (loaded() && monitor != null && targetPos != null) productionMonitorBridge.observe(monitor, targetPos);
+    }
+
+    public static boolean isCreateProductionMonitorFilter(ItemStack filter) {
+        return loaded() && filter != null && !filter.isEmpty() && productionMonitorBridge.isCreateFilter(filter);
+    }
+
+    public static boolean matchesProductionMonitorFilter(Level level, ItemStack filter, ItemStack candidate) {
+        return loaded() && productionMonitorBridge.matchesFilter(level, filter, candidate);
+    }
+
+    static void installProductionMonitorBridge(ProductionMonitorBridge bridge) {
+        productionMonitorBridge = Objects.requireNonNull(bridge);
     }
 
     private static void registerCreateIntegration(String className, IEventBus modEventBus) {

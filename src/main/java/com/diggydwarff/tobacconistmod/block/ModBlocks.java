@@ -239,6 +239,11 @@ public class ModBlocks {
     public static final Supplier<Block> TOBACCO_BARREL = registerBlock("tobacco_barrel",
             () -> new TobaccoBarrelBlock(BlockBehaviour.Properties.of().strength(1.2F).sound(SoundType.WOOD)));
 
+    public static final Supplier<Block> PRODUCTION_MONITOR = registerBlock("production_monitor",
+            () -> new ProductionMonitorBlock(BlockBehaviour.Properties.of()
+                    .strength(2.0F, 6.0F)
+                    .sound(SoundType.METAL)));
+
     private static <T extends Block> Supplier<T> registerBlock(String name, Supplier<T> block) {
         Supplier<T> toReturn = BLOCKS.register(name, block);
         registerBlockItem(name, toReturn);

@@ -8,20 +8,20 @@ Mechanical Harvesters can harvest mature two-block tobacco crops without duplica
 
 ## Drying Rack automation
 
-The wooden rack is a true two-level structure because its frame extends above one block. Both physical levels address the same 16-leaf inventory, and blocks placed above the rack sit above its real upper half rather than intersecting the model.
+The wooden rack is a one-block-tall, 16-leaf traditional curing block. Its frame and interaction volume are fully contained inside that block, so the space directly above it is available for normal building.
 
 Vanilla sided inventory behavior:
 
-- Horizontal faces on either rack level can insert valid raw leaves.
-- Top and bottom cannot insert; top-down loading is intentionally disabled because the wooden frame does not line up as an input surface.
-- Bottom extraction beneath the lower half is available only after the cure is finished.
+- Horizontal faces can insert valid raw leaves.
+- Top and bottom cannot insert; top-down loading remains intentionally disabled.
+- Bottom extraction is available only after the cure is finished.
 - Capacity remains 16.
 - Input must match the stored leaf item/components.
 - Insertion locks at 10% cure progress.
 
-NeoForge/Create capability-based consumers can query either rack level through the same validated item handler; completed output remains protected until the batch is finished.
+NeoForge/Create capability-based consumers use the same validated item handler; completed output remains protected until the batch is finished.
 
-Create Encased Fans can assist Air Curing and an already-valid Sun Cure at 4× progress. Smoke/heat airflow can assist Fire or Flue Curing at 6×. The wooden rack only needs valid airflow to reach one of its two vertical sections.
+Create Encased Fans can assist Air Curing and an already-valid Sun Cure at 4× progress. Smoke/heat airflow can assist Fire or Flue Curing at 6×. The wooden rack only needs one valid airflow path reaching the rack.
 
 Hanging Tobacco Bunches can receive environmental fan assistance but expose no item automation or Display Link source.
 
@@ -29,7 +29,15 @@ Hanging Tobacco Bunches can receive environmental fan assistance but expose no i
 
 The **Industrial Drying Rack** is the dedicated factory tier. It holds **32 matching leaves**, rejects manual right-click loading/removal, and is intended to sit directly in Create logistics lines. Both block levels expose the same inventory to side automation, and the industrial rack also permits top-down Chute/Hopper loading. Display Links and Spectacles report the same cure/status information with the 32-leaf capacity.
 
-The industrial rack cannot cure passively and contains **no internal fan or power input**. Both rack tiers must receive the **same valid airflow type from two distinct Encased Fans** before curing can advance. Plain airflow on both tiers provides Air or an otherwise-valid Sun Cure; matching fan-blown Campfire smoke/heat provides Fire; matching fan-blown Lava heat provides Flue. One fan reaching both levels, one-sided airflow, or mismatched airflow types do not run the machine. Its assisted progress remains 5 ticks for Air/Sun and 7 for Fire/Flue, with no quality bonus.
+The industrial rack cannot cure passively and contains **no internal fan or power input**. Both rack tiers must receive the **same valid airflow type from two distinct Encased Fans** before curing can advance. Plain airflow on both tiers provides Air or an otherwise-valid Sun Cure; matching fan-blown Campfire smoke/heat provides Fire; matching fan-blown Lava heat provides Flue. One fan reaching both levels, one-sided airflow, or mismatched airflow types do not run the machine. Its assisted progress remains 5 ticks for Air/Sun and 7 for Fire/Flue, with no quality bonus. The two industrial halves are maintained as one paired structure; placing racks directly beside one another does not cause either upper tier to tear down or recreate.
+
+## Production Monitor
+
+The **Production Monitor** is a directional throughput counter for factory lines. Place it directly beside a supported transport with the monitor’s front face pointing at the transport it should read; the opposite face remains outward toward the operator. V1 supports Create Belts, Funnels, and Chutes plus vanilla Hoppers. The monitor only observes confirmed movement; it never stores, extracts, or inserts items itself.
+
+Its ghost Filter may be empty (count everything), a normal item, or a Create Filter/Attribute Filter. The same ghost filter can be set Create-style from the **operator-facing side of the block**: hover the center target to highlight its value-box area, right-click it with an item/filter to copy it without consuming the stack, or right-click it with an empty hand to clear it. The rendered ghost item now follows Create's centered value-box scale, depth, and lighting conventions. **Items** mode adds the number of items moved, **Stacks** mode measures the same confirmed item flow in Create-style 64-item stack-equivalents (including partial-stack progress), and **Transfers** mode adds one per successful transfer operation. The rolling rate covers approximately the last 60 seconds and continues even when the accumulated count is stopped at its target. Changing the filter or Count Mode clears both the accumulated count and rolling-rate samples; changing the numeric target does not. All saved monitor settings are sent in the menu-open snapshot, so reopening the screen immediately reflects the block's real persisted configuration.
+
+At the target, **Keep Counting** continues upward, **Stop Counting** caps the accumulated count while rate telemetry continues, and **Reset Count** starts the next batch while preserving overflow from a large transfer. Redstone output can be None, one **Pulse** per target crossing, or **Hold** until reset. Reset Count + Hold is automatically coerced to Pulse. Manual Reset clears only count/latch/output state; when External Reset is enabled, a rising redstone edge performs that same reset without repeatedly firing while power stays on. Comparator output reports progress toward the configured target. If the block is not facing a supported transport, the GUI keeps the count visible and reports **No valid target**.
 
 ## Bulk quality homogenization
 
