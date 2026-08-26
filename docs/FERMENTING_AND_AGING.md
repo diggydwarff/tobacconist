@@ -21,7 +21,7 @@ Internal Barrel Humidity is a stored reservoir that changes with the environment
 
 ### Automated fermentation safety
 
-While a barrel is actively **FERMENTING**, its item-handler extraction is locked. Funnels, Chutes, Packagers, hoppers/capability consumers, and Mechanical Arms cannot pull the batch out early. This makes a normal `curing → barrel → output logistics` line safe without requiring an external redstone lock around the finite fermentation cycle.
+While a barrel is actively **FERMENTING**, its item-handler extraction is locked. Funnels, Chutes, Packagers, hoppers/capability consumers, and Mechanical Arms cannot pull the batch out early. This makes a normal `curing → barrel → output logistics` line safe without requiring an external redstone lock around the finite fermentation cycle. Create Display Links expose Status, Progress, internal Humidity, Age, and current **Count/64**; barrel telemetry uses Create's normal 100-tick passive refresh.
 
 ## Aging
 

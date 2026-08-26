@@ -11,7 +11,8 @@
     "BasinHomogenizationStateMixin",
     "BasinInventoryHomogenizationMixin",
     "FunnelProductionMonitorMixin",
-    "ChuteProductionMonitorMixin"
+    "ChuteProductionMonitorMixin",
+    "ProductionMonitorGoggleMixin"
   ],
   "injectors": {
     "defaultRequire": 1

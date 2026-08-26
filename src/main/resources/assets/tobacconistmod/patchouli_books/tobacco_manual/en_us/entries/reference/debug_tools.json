@@ -11,7 +11,7 @@
     {
       "type": "patchouli:text",
       "title": "Curing Targets",
-      "text": "While looking at either half of a wooden or Industrial Drying Rack, or either half of a Hanging Tobacco Bunch, $(item)/tobacconist rack status$(), $(item)rack addtime <ticks>$(), and $(item)rack finish$() resolve the correct curing batch. The command resolves the shared rack correctly no matter which physical half you target."
+      "text": "While looking at the one-block wooden Drying Rack, either half of an Industrial Drying Rack, or either half of a Hanging Tobacco Bunch, $(item)/tobacconist rack status$(), $(item)rack addtime <ticks>$(), and $(item)rack finish$() resolve the correct curing batch. Industrial and hanging targets resolve their shared lower/master batch from either physical half."
     },
     {
       "type": "patchouli:text",

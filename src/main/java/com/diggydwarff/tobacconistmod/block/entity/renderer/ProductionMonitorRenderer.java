@@ -47,8 +47,11 @@ public class ProductionMonitorRenderer implements BlockEntityRenderer<Production
             }
         }
 
-        // Mirrors Create ValueBoxTransform.Sided + ValueBoxRenderer.renderItemIntoValueBox.
-        poseStack.mulPose(Axis.YP.rotationDegrees(operatorFace.toYRot() + 180.0F));
+        // Face the rendered item's local front outward on every cardinal side. Create's
+        // TransformStack horizontal rotation convention is opposite Minecraft Axis.YP here;
+        // using +toYRot mirrored EAST/WEST and pushed flat filter items into the solid block.
+        float outwardYaw = 180.0F - operatorFace.toYRot();
+        poseStack.mulPose(Axis.YP.rotationDegrees(outwardYaw));
         poseStack.scale(VALUE_BOX_SCALE, VALUE_BOX_SCALE, VALUE_BOX_SCALE);
 
         BakedModel model = itemRenderer.getModel(filter, null, null, 0);

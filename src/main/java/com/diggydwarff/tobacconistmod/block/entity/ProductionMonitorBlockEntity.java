@@ -87,6 +87,10 @@ public class ProductionMonitorBlockEntity extends BlockEntity implements MenuPro
     private int queuedPulses;
 
     private final Deque<RateSample> rateSamples = new ArrayDeque<>();
+    private double clientRollingRate;
+    private long lastTelemetrySyncCount = Long.MIN_VALUE;
+    private int lastTelemetrySyncRateHundredths = Integer.MIN_VALUE;
+    private boolean lastTelemetrySyncTargetValid;
 
     private final ContainerData menuData = new ContainerData() {
         @Override
@@ -146,6 +150,12 @@ public class ProductionMonitorBlockEntity extends BlockEntity implements MenuPro
         if (valid != monitor.targetValid) {
             monitor.targetValid = valid;
             monitor.setChanged();
+        }
+
+        // Spectacles inspection is client-side. Keep its live count/rate/status current without
+        // emitting a block-entity packet for every factory transfer.
+        if (now % 20L == 0L) {
+            monitor.syncClientTelemetryIfChanged();
         }
 
         if (CreateCompat.loaded()) {
@@ -327,6 +337,7 @@ public class ProductionMonitorBlockEntity extends BlockEntity implements MenuPro
     }
 
     public double getRollingRate() {
+        if (level != null && level.isClientSide) return clientRollingRate;
         if (level == null || rateSamples.isEmpty()) return 0.0D;
         long now = level.getGameTime();
         trimRateSamples(now);
@@ -376,6 +387,20 @@ public class ProductionMonitorBlockEntity extends BlockEntity implements MenuPro
         return value + add;
     }
 
+    private void syncClientTelemetryIfChanged() {
+        if (level == null || level.isClientSide) return;
+        int rateHundredths = (int) Math.min(Integer.MAX_VALUE, Math.round(getRollingRate() * 100.0D));
+        if (count == lastTelemetrySyncCount
+                && rateHundredths == lastTelemetrySyncRateHundredths
+                && targetValid == lastTelemetrySyncTargetValid) {
+            return;
+        }
+        lastTelemetrySyncCount = count;
+        lastTelemetrySyncRateHundredths = rateHundredths;
+        lastTelemetrySyncTargetValid = targetValid;
+        level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
+    }
+
     private void notifyRedstoneNeighbors() {
         if (level != null && !level.isClientSide) {
             level.updateNeighborsAt(worldPosition, getBlockState().getBlock());
@@ -414,12 +439,16 @@ public class ProductionMonitorBlockEntity extends BlockEntity implements MenuPro
         externalReset = tag.getBoolean("ExternalReset");
         targetLatch = tag.getBoolean("TargetLatch");
         filter = tag.contains("Filter") ? ItemStack.parseOptional(registries, tag.getCompound("Filter")) : ItemStack.EMPTY;
+        if (tag.contains("ClientRollingRate")) clientRollingRate = tag.getDouble("ClientRollingRate");
+        if (tag.contains("TargetValid")) targetValid = tag.getBoolean("TargetValid");
     }
 
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         CompoundTag tag = new CompoundTag();
         saveAdditional(tag, registries);
+        tag.putDouble("ClientRollingRate", getRollingRate());
+        tag.putBoolean("TargetValid", targetValid);
         return tag;
     }
 

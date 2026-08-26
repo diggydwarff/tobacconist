@@ -55,7 +55,7 @@
   - Makes no curing progress unless **both rack tiers receive matching airflow from two distinct Encased Fans**; one fan, one-sided airflow, or mismatched airflow is insufficient
   - Reuses normal Air/Sun/Fire/Flue cure identity and quality rules, with no industrial quality bonus
   - Runs fan-assisted Air/Sun at 5 progress ticks per game tick and fan-assisted Fire/Flue at 7, a modest throughput increase over the wooden rack's 4/6 rates
-  - Adds Spectacles/Display Link/Stock Link/package support and ships with placeholder industrial models/textures pending final artwork
+  - Adds Spectacles/Display Link/Stock Link/package support and uses the final two-tier steel factory model with a dedicated steel-grey item sprite
   - Create-gated recipe upgrades a normal Drying Rack with Iron Sheets, Brass Casing, Andesite Alloy, and a Precision Mechanism
 - Reworked the wooden **Drying Rack** back into a true one-block-tall frame while retaining its 16-leaf capacity
   - The frame now ends at one full block of height, so blocks can be placed normally directly above it without an upper proxy
@@ -72,7 +72,7 @@
   - Hanging bunches do not expose hopper, funnel, Mechanical Arm, or Display Link inventory automation
 - Campfire smoke now passes visibly through the open Drying Rack structure
 - The **Flue Firebox** emits subtle active smoke while lit
-- Drying Rack debug curing commands resolve the Industrial Rack upper/lower halves correctly and also recognize Hanging Tobacco Bunches
+- Drying Rack debug curing commands target the one-block wooden rack directly, resolve Industrial Rack upper/lower halves correctly, and also recognize either half of Hanging Tobacco Bunches
 
 ### Tobacco Crates
 - Added lossless **Tobacco Crates** crafted from a full 3x3 grid of nine units of the same tobacco item
@@ -97,6 +97,7 @@
   - Tobacco Barrels respect batch compatibility and processing rules
   - Flue Fireboxes accept valid fuel
   - Hookahs route valid fuel, Shisha, and water-slot inputs
+  - Tall two-block Hookahs now expose one shared lower-master inventory from either half, closing capability/Mechanical Arm/Funnel/Hopper/Packager/Stock Link inconsistencies without duplicating contents
 
 - Added Create logistics support for **Stock Links, Packagers, Funnels, Chutes, Belts, Depots, and filtered automation**
 - Added the **Production Monitor**, a directional factory throughput counter
@@ -109,12 +110,16 @@
   - Refined the external ghost-filter target to match Create value boxes more closely: centered scale/depth/lighting, a smaller native-style item presentation, and a hover highlight over the interactive target area
   - Right-click the external target with an item/Create Filter/Attribute Filter to set it without consuming the stack, or use an empty hand to clear it
   - Fixed menu bootstrap synchronization so reopening a Production Monitor immediately shows its persisted target, modes, output/reset settings, count/filter state, and current rolling rate instead of temporary defaults
+  - Added native **Display Link** sources for Production Monitor **Count/Target**, rolling **Rate**, and **Status**, with a dedicated **20-tick / 1-second** passive refresh cadence for responsive Nixie/Display Board telemetry
+  - Added live Production Monitor **Spectacles and Create Goggle** telemetry for filter, count/target, rolling rate, and status with low-rate client synchronization
 - Added package import routing for Drying Racks, Tobacco Barrels, Flue Fireboxes, and Hookahs
 - Added **Factory Gauge quality-tier matching**
   - Different numeric quality values can satisfy a request when they belong to the same Tobacconist quality tier
   - Meaningful tobacco identity and metadata still remain part of matching
 - Expanded **Create Attribute Filter** support for tobacco variety, cure, cut, quality, flavor, blends, labels, downstream products, aging thresholds, and Tobacco Box fill state
-- Added **Display Link** information for Drying Racks, Tobacco Barrels, Flue Fireboxes, and Hookahs
+- Added **Display Link** information for Drying Racks, Tobacco Barrels, Flue Fireboxes, Hookahs, and Production Monitors; slower-changing Tobacconist sources use Create's normal **100-tick / 5-second** passive cadence while Production Monitor live telemetry refreshes every second
+  - Tobacco Barrels now expose **Count/64** in addition to status/progress/humidity/age
+  - Hookahs now expose separate **Status, Fuel, Shisha, and Water** sources; either half of a tall Hookah can be targeted
 
 ### Aqua Vitae, Essences & Shisha
 - Added **Aqua Vitae** as a dedicated extraction/crafting spirit
@@ -175,7 +180,7 @@
 - Cleaned partial transparency artifacts from several tobacco item textures
 - Reorganized the creative tab so **all Flavoring Essences appear together before all Molasses bottles**
 - Reordered the opening creative-tab rows into a clearer **grow → cure/process → cut/store → consume** progression
-- Updated The Tobacconist's Manual and added code-verified Markdown guides for the mod's major gameplay systems
+- Updated The Tobacconist's Manual and code-verified Markdown guides to the final 4.0 specifications, including one-block wooden racks, dual-fan Industrial Racks, 64-item Barrels, Production Monitor modes/telemetry, tall-Hookah shared automation, and current Display Link behavior
 
 ### Fixes & Compatibility
 - Prevented **Blended Tobacco** from entering the single-variety quality-averaging recipe, preserving blend component identity

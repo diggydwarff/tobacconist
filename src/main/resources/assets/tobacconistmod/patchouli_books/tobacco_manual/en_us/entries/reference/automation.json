@@ -26,16 +26,16 @@
     {
       "type": "patchouli:text",
       "title": "Monitor Targets & Output",
-      "text": "Set a numeric target, then choose Keep Counting, Stop Counting, or Reset Count. Reset Count preserves overflow. Output may be None, a Pulse per target crossing, or Hold until reset; Reset Count + Hold becomes Pulse. Manual Reset keeps the rolling rate, and optional External Reset reacts only to a rising redstone edge. A Comparator reports progress."
+      "text": "Set a numeric target, then choose Keep Counting, Stop Counting, or Reset Count. Reset Count preserves overflow. Output may be None, a Pulse per target crossing, or Hold until reset; Reset Count + Hold becomes Pulse. Manual Reset keeps the rolling rate, and optional External Reset reacts only to a rising redstone edge. A Comparator reports progress. Create Display Links can read Count/Target, rolling Rate, or Status and refresh those monitor values about once per second; Tobacconist's Spectacles/Create Goggles show the same live telemetry in-world."
     },
     {
       "type": "patchouli:text",
-      "text": "The $(thing)Hookah$() exposes its three-slot item handler to NeoForge automation. Automated insertion is still validated per slot: fuel in slot 0, Shisha Tobacco in slot 1, and a Water Potion or Dirty Hookah Water in slot 2.",
+      "text": "The $(thing)Hookah$() exposes its three-slot item handler to NeoForge/Create automation. Tall two-block Hookahs resolve both halves to the same lower master inventory, so Funnels, Hoppers, Mechanical Arms, Packagers/Stock Links, and Display Links can connect at either level. Inputs remain validated per slot: fuel, Shisha Tobacco, and Water/Dirty Hookah Water.",
       "title": "Hookah"
     },
     {
       "type": "patchouli:text",
-      "text": "The $(thing)Tobacco Barrel$() holds up to 64 compatible cured leaves or loose tobacco and exposes validated automation. Extraction preserves tobacco metadata; actively fermenting batches remain protected from premature automated extraction.",
+      "text": "The $(thing)Tobacco Barrel$() holds up to 64 compatible cured leaves or loose tobacco and exposes validated automation. Extraction preserves tobacco metadata; actively fermenting batches remain protected from premature automated extraction. Display Links can also report the current batch count out of 64.",
       "title": "Barrel"
     },
     {

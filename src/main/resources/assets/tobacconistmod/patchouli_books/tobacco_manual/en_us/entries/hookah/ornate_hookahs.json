@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "The Hookah collection now includes a short dyeable Hookah, a roughly 1.5-block-tall $(thing)Tall Hookah$(), and a range of similarly tall material designs. These taller Hookahs reserve the block above them for clean placement. All use the same fuel, shisha, water, hose, quality, and Dirty Water rules; material choice is cosmetic."
+      "text": "The Hookah collection now includes a short dyeable Hookah, a roughly 1.5-block-tall $(thing)Tall Hookah$(), and a range of similarly tall material designs. These taller Hookahs reserve the block above them for clean placement. Their two occupied levels resolve to one lower/master inventory for Hoppers, Create logistics, and Display Links. All use the same fuel, shisha, water, hose, quality, and Dirty Water rules; material choice is cosmetic."
     },
     {
       "type": "patchouli:crafting",

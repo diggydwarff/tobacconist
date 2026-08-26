@@ -4,6 +4,7 @@ import com.diggydwarff.tobacconistmod.TobacconistMod;
 import com.diggydwarff.tobacconistmod.block.entity.FlueFireboxBlockEntity;
 import com.diggydwarff.tobacconistmod.block.entity.HookahEntity;
 import com.diggydwarff.tobacconistmod.block.entity.ModBlockEntities;
+import com.diggydwarff.tobacconistmod.block.entity.ProductionMonitorBlockEntity;
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelBlockEntity;
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoDryingRackBlockEntity;
 import com.diggydwarff.tobacconistmod.util.TobaccoText;
@@ -46,12 +47,26 @@ public final class CreateDisplayLinkCompat {
             DISPLAY_SOURCES.register("tobacco_barrel_humidity", BarrelHumiditySource::new);
     private static final DeferredHolder<DisplaySource, BarrelAgeSource> BARREL_AGE =
             DISPLAY_SOURCES.register("tobacco_barrel_age", BarrelAgeSource::new);
+    private static final DeferredHolder<DisplaySource, BarrelCountSource> BARREL_COUNT =
+            DISPLAY_SOURCES.register("tobacco_barrel_count", BarrelCountSource::new);
     private static final DeferredHolder<DisplaySource, FlueFireboxStatusSource> FLUE_FIREBOX_STATUS =
             DISPLAY_SOURCES.register("flue_firebox_status", FlueFireboxStatusSource::new);
     private static final DeferredHolder<DisplaySource, FlueFireboxFuelSource> FLUE_FIREBOX_FUEL =
             DISPLAY_SOURCES.register("flue_firebox_fuel", FlueFireboxFuelSource::new);
     private static final DeferredHolder<DisplaySource, HookahStatusSource> HOOKAH_STATUS =
             DISPLAY_SOURCES.register("hookah_status", HookahStatusSource::new);
+    private static final DeferredHolder<DisplaySource, HookahFuelSource> HOOKAH_FUEL =
+            DISPLAY_SOURCES.register("hookah_fuel", HookahFuelSource::new);
+    private static final DeferredHolder<DisplaySource, HookahShishaSource> HOOKAH_SHISHA =
+            DISPLAY_SOURCES.register("hookah_shisha", HookahShishaSource::new);
+    private static final DeferredHolder<DisplaySource, HookahWaterSource> HOOKAH_WATER =
+            DISPLAY_SOURCES.register("hookah_water", HookahWaterSource::new);
+    private static final DeferredHolder<DisplaySource, ProductionMonitorCountSource> PRODUCTION_MONITOR_COUNT =
+            DISPLAY_SOURCES.register("production_monitor_count", ProductionMonitorCountSource::new);
+    private static final DeferredHolder<DisplaySource, ProductionMonitorRateSource> PRODUCTION_MONITOR_RATE =
+            DISPLAY_SOURCES.register("production_monitor_rate", ProductionMonitorRateSource::new);
+    private static final DeferredHolder<DisplaySource, ProductionMonitorStatusSource> PRODUCTION_MONITOR_STATUS =
+            DISPLAY_SOURCES.register("production_monitor_status", ProductionMonitorStatusSource::new);
     private static final DeferredHolder<DisplaySource, HomogenizationStatusSource> HOMOGENIZATION_STATUS =
             DISPLAY_SOURCES.register("homogenization_status", HomogenizationStatusSource::new);
     private static final DeferredHolder<DisplaySource, HomogenizationAverageSource> HOMOGENIZATION_AVERAGE =
@@ -81,10 +96,17 @@ public final class CreateDisplayLinkCompat {
             DisplaySource.BY_BLOCK_ENTITY.add(ModBlockEntities.TOBACCO_BARREL.get(), BARREL_PROGRESS.get());
             DisplaySource.BY_BLOCK_ENTITY.add(ModBlockEntities.TOBACCO_BARREL.get(), BARREL_HUMIDITY.get());
             DisplaySource.BY_BLOCK_ENTITY.add(ModBlockEntities.TOBACCO_BARREL.get(), BARREL_AGE.get());
+            DisplaySource.BY_BLOCK_ENTITY.add(ModBlockEntities.TOBACCO_BARREL.get(), BARREL_COUNT.get());
 
             DisplaySource.BY_BLOCK_ENTITY.add(ModBlockEntities.FLUE_FIREBOX.get(), FLUE_FIREBOX_STATUS.get());
             DisplaySource.BY_BLOCK_ENTITY.add(ModBlockEntities.FLUE_FIREBOX.get(), FLUE_FIREBOX_FUEL.get());
             DisplaySource.BY_BLOCK_ENTITY.add(ModBlockEntities.HOOKAH.get(), HOOKAH_STATUS.get());
+            DisplaySource.BY_BLOCK_ENTITY.add(ModBlockEntities.HOOKAH.get(), HOOKAH_FUEL.get());
+            DisplaySource.BY_BLOCK_ENTITY.add(ModBlockEntities.HOOKAH.get(), HOOKAH_SHISHA.get());
+            DisplaySource.BY_BLOCK_ENTITY.add(ModBlockEntities.HOOKAH.get(), HOOKAH_WATER.get());
+            DisplaySource.BY_BLOCK_ENTITY.add(ModBlockEntities.PRODUCTION_MONITOR.get(), PRODUCTION_MONITOR_COUNT.get());
+            DisplaySource.BY_BLOCK_ENTITY.add(ModBlockEntities.PRODUCTION_MONITOR.get(), PRODUCTION_MONITOR_RATE.get());
+            DisplaySource.BY_BLOCK_ENTITY.add(ModBlockEntities.PRODUCTION_MONITOR.get(), PRODUCTION_MONITOR_STATUS.get());
             DisplaySource.BY_BLOCK_ENTITY.add(AllBlockEntityTypes.BASIN.get(), HOMOGENIZATION_STATUS.get());
             DisplaySource.BY_BLOCK_ENTITY.add(AllBlockEntityTypes.BASIN.get(), HOMOGENIZATION_AVERAGE.get());
             DisplaySource.BY_BLOCK_ENTITY.add(AllBlockEntityTypes.ITEM_VAULT.get(), VAULT_TOBACCO_COUNT.get());
@@ -96,11 +118,6 @@ public final class CreateDisplayLinkCompat {
         @Override
         protected boolean allowsLabeling(DisplayLinkContext context) {
             return true;
-        }
-
-        @Override
-        public int getPassiveRefreshTicks() {
-            return 20;
         }
 
         protected <T extends BlockEntity> T source(DisplayLinkContext context, Class<T> type) {
@@ -179,6 +196,18 @@ public final class CreateDisplayLinkCompat {
         }
     }
 
+    private static final class BarrelCountSource extends TobacconistSingleLineSource {
+        @Override
+        protected MutableComponent provideLine(DisplayLinkContext context, DisplayTargetStats stats) {
+            TobaccoBarrelBlockEntity barrel = source(context, TobaccoBarrelBlockEntity.class);
+            if (barrel == null) return EMPTY_LINE;
+            return Component.translatable(
+                    "tobacconistmod.display.tobacco_barrel_count",
+                    barrel.getStoredTobacco().getCount(),
+                    TobaccoBarrelBlockEntity.MAX_STACK);
+        }
+    }
+
     private static final class FlueFireboxStatusSource extends TobacconistSingleLineSource {
         @Override
         protected MutableComponent provideLine(DisplayLinkContext context, DisplayTargetStats stats) {
@@ -195,6 +224,94 @@ public final class CreateDisplayLinkCompat {
             int total = firebox.getBurnTimeTotal();
             int percent = total <= 0 ? 0 : Math.min(100, firebox.getBurnTime() * 100 / total);
             return Component.translatable("tobacconistmod.ui.percent", percent);
+        }
+    }
+
+    private abstract static class ProductionMonitorSource extends TobacconistSingleLineSource {
+        /** Live throughput telemetry should feel responsive without updating every game tick. */
+        @Override
+        public int getPassiveRefreshTicks() {
+            return 20;
+        }
+
+        protected ProductionMonitorBlockEntity monitor(DisplayLinkContext context) {
+            return source(context, ProductionMonitorBlockEntity.class);
+        }
+
+        protected String formatWhole(long value) {
+            if (value < 1_000L) return Long.toString(value);
+            if (value < 1_000_000L) return compact(value, 1_000.0D, "k");
+            if (value < 1_000_000_000L) return compact(value, 1_000_000.0D, "M");
+            return compact(value, 1_000_000_000.0D, "B");
+        }
+
+        protected String formatDecimal(double value) {
+            if (value >= 1_000.0D) return formatWhole(Math.round(value));
+            if (Math.abs(value - Math.rint(value)) < 0.0001D) return Long.toString(Math.round(value));
+            return String.format(java.util.Locale.ROOT, "%.1f", value);
+        }
+
+        private String compact(long value, double divisor, String suffix) {
+            double scaled = value / divisor;
+            String number = scaled >= 100.0D
+                    ? Long.toString(Math.round(scaled))
+                    : String.format(java.util.Locale.ROOT, "%.1f", scaled).replace(".0", "");
+            return number + suffix;
+        }
+    }
+
+    private static final class ProductionMonitorCountSource extends ProductionMonitorSource {
+        @Override
+        protected MutableComponent provideLine(DisplayLinkContext context, DisplayTargetStats stats) {
+            ProductionMonitorBlockEntity monitor = monitor(context);
+            if (monitor == null) return EMPTY_LINE;
+
+            return switch (monitor.getCountMode()) {
+                case ITEMS -> Component.translatable(
+                        "tobacconistmod.display.production_monitor_count.items",
+                        formatWhole(monitor.getCount()), formatWhole(monitor.getTarget()));
+                case TRANSFERS -> Component.translatable(
+                        "tobacconistmod.display.production_monitor_count.transfers",
+                        formatWhole(monitor.getCount()), formatWhole(monitor.getTarget()));
+                case STACKS -> Component.translatable(
+                        "tobacconistmod.display.production_monitor_count.stacks",
+                        formatDecimal(monitor.getCount() / 64.0D),
+                        formatDecimal(monitor.getTarget() / 64.0D));
+            };
+        }
+    }
+
+    private static final class ProductionMonitorRateSource extends ProductionMonitorSource {
+        @Override
+        protected MutableComponent provideLine(DisplayLinkContext context, DisplayTargetStats stats) {
+            ProductionMonitorBlockEntity monitor = monitor(context);
+            if (monitor == null) return EMPTY_LINE;
+            if (!monitor.isTargetValid()) {
+                return Component.translatable("tobacconistmod.display.production_monitor_no_target");
+            }
+
+            String rate = formatDecimal(monitor.getRollingRate());
+            return switch (monitor.getCountMode()) {
+                case ITEMS -> Component.translatable("tobacconistmod.display.production_monitor_rate.items", rate);
+                case TRANSFERS -> Component.translatable("tobacconistmod.display.production_monitor_rate.transfers", rate);
+                case STACKS -> Component.translatable("tobacconistmod.display.production_monitor_rate.stacks", rate);
+            };
+        }
+    }
+
+    private static final class ProductionMonitorStatusSource extends ProductionMonitorSource {
+        @Override
+        protected MutableComponent provideLine(DisplayLinkContext context, DisplayTargetStats stats) {
+            ProductionMonitorBlockEntity monitor = monitor(context);
+            if (monitor == null) return EMPTY_LINE;
+            if (!monitor.isTargetValid()) {
+                return Component.translatable("tobacconistmod.display.production_monitor_no_target");
+            }
+            if (monitor.getAtTargetMode() != ProductionMonitorBlockEntity.AtTargetMode.RESET_COUNT
+                    && monitor.getCount() >= monitor.getTarget()) {
+                return Component.translatable("tobacconistmod.display.production_monitor_target_reached");
+            }
+            return Component.translatable("tobacconistmod.display.production_monitor_counting");
         }
     }
 
@@ -275,10 +392,17 @@ public final class CreateDisplayLinkCompat {
         }
     }
 
-    private static final class HookahStatusSource extends TobacconistSingleLineSource {
+    private abstract static class HookahSource extends TobacconistSingleLineSource {
+        protected HookahEntity hookah(DisplayLinkContext context) {
+            HookahEntity hookah = source(context, HookahEntity.class);
+            return hookah == null ? null : hookah.getMasterEntity();
+        }
+    }
+
+    private static final class HookahStatusSource extends HookahSource {
         @Override
         protected MutableComponent provideLine(DisplayLinkContext context, DisplayTargetStats stats) {
-            HookahEntity hookah = source(context, HookahEntity.class);
+            HookahEntity hookah = hookah(context);
             if (hookah == null) return EMPTY_LINE;
 
             if (hookah.getBlockState().hasProperty(BlockStateProperties.LIT)
@@ -290,8 +414,50 @@ public final class CreateDisplayLinkCompat {
             if (hookah.isUsingDirtyWater()) return Component.translatable("tobacconistmod.hookah.status.dirty_water");
             if (hookah.getItemHandler().getStackInSlot(1).isEmpty()) return Component.translatable("tobacconistmod.hookah.status.needs_shisha");
             if (hookah.getItemHandler().getStackInSlot(2).isEmpty()) return Component.translatable("tobacconistmod.hookah.status.needs_water");
-            if (hookah.getItemHandler().getStackInSlot(0).isEmpty()) return Component.translatable("tobacconistmod.hookah.status.needs_fuel");
+            if (hookah.getItemHandler().getStackInSlot(0).isEmpty() && hookah.getFuelTime() <= 0) {
+                return Component.translatable("tobacconistmod.hookah.status.needs_fuel");
+            }
             return Component.translatable("tobacconistmod.ui.ready");
+        }
+    }
+
+    private static final class HookahFuelSource extends HookahSource {
+        @Override
+        protected MutableComponent provideLine(DisplayLinkContext context, DisplayTargetStats stats) {
+            HookahEntity hookah = hookah(context);
+            if (hookah == null) return EMPTY_LINE;
+            if (hookah.getFuelTime() > 0) {
+                return Component.translatable("tobacconistmod.display.hookah_fuel_active", hookah.getFuelRemainingPercent());
+            }
+            ItemStack fuel = hookah.getItemHandler().getStackInSlot(0);
+            return fuel.isEmpty()
+                    ? Component.translatable("tobacconistmod.display.hookah_no_fuel")
+                    : Component.translatable("tobacconistmod.display.hookah_fuel_queued", fuel.getHoverName(), fuel.getCount());
+        }
+    }
+
+    private static final class HookahShishaSource extends HookahSource {
+        @Override
+        protected MutableComponent provideLine(DisplayLinkContext context, DisplayTargetStats stats) {
+            HookahEntity hookah = hookah(context);
+            if (hookah == null) return EMPTY_LINE;
+            ItemStack shisha = hookah.getItemHandler().getStackInSlot(1);
+            return shisha.isEmpty()
+                    ? Component.translatable("tobacconistmod.display.hookah_no_shisha")
+                    : Component.translatable("tobacconistmod.display.hookah_shisha_remaining", hookah.getShishaRemainingPercent());
+        }
+    }
+
+    private static final class HookahWaterSource extends HookahSource {
+        @Override
+        protected MutableComponent provideLine(DisplayLinkContext context, DisplayTargetStats stats) {
+            HookahEntity hookah = hookah(context);
+            if (hookah == null) return EMPTY_LINE;
+            ItemStack water = hookah.getItemHandler().getStackInSlot(2);
+            if (water.isEmpty()) return Component.translatable("tobacconistmod.display.hookah_no_water");
+            return Component.translatable(hookah.isUsingDirtyWater()
+                    ? "tobacconistmod.display.hookah_water_dirty"
+                    : "tobacconistmod.display.hookah_water_clean");
         }
     }
 

@@ -278,9 +278,10 @@ public class DoubleHookahBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return state.getValue(HALF) == DoubleBlockHalf.LOWER
-                ? new HookahEntity(pos, state)
-                : null;
+        // Both halves expose the same BE type so capabilities/Display Links/Mechanical Arms can
+        // discover a tall Hookah from either level. HookahEntity delegates upper-half access to
+        // the lower master; only the lower half receives a ticker.
+        return new HookahEntity(pos, state);
     }
 
     @Nullable

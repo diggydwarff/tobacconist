@@ -140,4 +140,4 @@ Create Display Links can report:
 - tobacco count in an Item Vault,
 - average leaf quality in a Vault when its tobacco is one compatible lot.
 
-A Vault containing multiple incompatible tobacco lots reports that condition instead of presenting a misleading combined average.
+A Vault containing multiple incompatible tobacco lots reports that condition instead of presenting a misleading combined average. Basin and Vault Display Link telemetry uses Create's normal 100-tick passive refresh; only the live Production Monitor sources intentionally use the faster 20-tick cadence.

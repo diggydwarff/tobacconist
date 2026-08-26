@@ -33,6 +33,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
@@ -112,11 +113,53 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
-        return new HookahMenu(id, inventory, this, this.data);
+        HookahEntity master = getMasterEntity();
+        return new HookahMenu(id, inventory, master, master.data);
+    }
+
+    /**
+     * Tall Hookahs expose a block entity on both occupied levels so normal NeoForge/Create
+     * discovery works from either half. The upper entity is only a proxy; all inventory and
+     * telemetry resolve to the lower master entity.
+     */
+    public HookahEntity getMasterEntity() {
+        if (level == null) return this;
+        BlockState state = getBlockState();
+        if (!(state.getBlock() instanceof DoubleHookahBlock)
+                || !state.hasProperty(DoubleHookahBlock.HALF)
+                || state.getValue(DoubleHookahBlock.HALF) != DoubleBlockHalf.UPPER) {
+            return this;
+        }
+        BlockEntity below = level.getBlockEntity(worldPosition.below());
+        return below instanceof HookahEntity hookah ? hookah : this;
     }
 
     public IItemHandler getItemHandler() {
-        return itemHandler;
+        HookahEntity master = getMasterEntity();
+        return master == this ? itemHandler : master.itemHandler;
+    }
+
+    public int getFuelTime() {
+        HookahEntity master = getMasterEntity();
+        return master == this ? fuelTime : master.fuelTime;
+    }
+
+    public int getCurrentFuelMaxTime() {
+        HookahEntity master = getMasterEntity();
+        return master == this ? currentFuelMaxTime : master.currentFuelMaxTime;
+    }
+
+    public int getFuelRemainingPercent() {
+        int total = getCurrentFuelMaxTime();
+        return total <= 0 ? 0 : Math.min(100, Math.max(0, getFuelTime() * 100 / total));
+    }
+
+    public int getShishaRemainingPercent() {
+        ItemStack shisha = getItemHandler().getStackInSlot(1);
+        if (shisha.isEmpty()) return 0;
+        int max = shisha.getMaxDamage();
+        if (max <= 0) return 100;
+        return Math.min(100, Math.max(0, (max - shisha.getDamageValue()) * 100 / max));
     }
 
     /** Preserve inventory/timers while copper Hookahs change oxidation or wax state. */
@@ -132,12 +175,12 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
     }
 
     public ItemStack getShishaForSmoking() {
-        ItemStack shisha = itemHandler.getStackInSlot(1);
+        ItemStack shisha = getItemHandler().getStackInSlot(1);
         return shisha.isEmpty() ? ItemStack.EMPTY : shisha.copy();
     }
 
     public boolean isUsingDirtyWater() {
-        return itemHandler.getStackInSlot(2).is(ModItems.DIRTY_HOOKAH_WATER.get());
+        return getItemHandler().getStackInSlot(2).is(ModItems.DIRTY_HOOKAH_WATER.get());
     }
 
     /** Applies the Nausea penalty for drawing through Dirty Hookah Water. */

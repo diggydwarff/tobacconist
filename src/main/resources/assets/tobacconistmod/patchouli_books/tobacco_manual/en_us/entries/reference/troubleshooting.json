@@ -30,7 +30,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "$(thing)Spectacles show nothing:$() equip them in the vanilla head slot, or in Curios Head if Curios is installed, then look directly at a tobacco crop, Drying Rack, hanging tobacco bunch, or Tobacco Barrel with no other GUI open.",
+      "text": "$(thing)Spectacles show nothing:$() equip them in the vanilla head slot, or in Curios Head if Curios is installed, then look directly at a supported tobacco crop/processing block such as a Drying Rack, hanging tobacco bunch, Tobacco Barrel, or Production Monitor with no other GUI open.",
       "title": "Spectacles"
     }
   ]

@@ -41,4 +41,4 @@ After a random 2–5 completed Shisha loads, a Water Potion becomes Dirty Hookah
 
 ## Blocks and variants
 
-Base/tall hookahs and material/ornate variants share the same core inventory and smoking behavior. Copper variants preserve block-entity data across oxidation/wax transitions. Breaking hookahs in Creative mode suppresses both the block drop and stored-content drops.
+Base/tall hookahs and material/ornate variants share the same core inventory and smoking behavior. Tall/material Hookahs occupy two block levels, but both levels resolve to the same lower/master inventory for Hoppers, Funnels, Mechanical Arms, Packagers/Stock Links, and Display Links; only the lower master ticks and owns stored contents. Hookah Display Links expose Status, Fuel, Shisha, and Water using Create's normal 100-tick passive refresh. Copper variants preserve block-entity data across oxidation/wax transitions. Breaking hookahs in Creative mode suppresses both the block drop and stored-content drops.

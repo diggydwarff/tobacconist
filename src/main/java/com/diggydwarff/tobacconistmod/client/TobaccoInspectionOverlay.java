@@ -4,6 +4,7 @@ import com.diggydwarff.tobacconistmod.block.AbstractTallTobaccoCropBlock;
 import com.diggydwarff.tobacconistmod.block.entity.BarrelEnvironmentHelper;
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelBlockEntity;
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelMode;
+import com.diggydwarff.tobacconistmod.block.entity.ProductionMonitorBlockEntity;
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoDryingRackBlockEntity;
 import com.diggydwarff.tobacconistmod.block.entity.HangingTobaccoBlockEntity;
 import com.diggydwarff.tobacconistmod.block.custom.HangingTobaccoBlock;
@@ -220,6 +221,58 @@ public final class TobaccoInspectionOverlay {
             return new Inspection(Component.translatable("tobacconistmod.inspection.homogenization"), lines);
         }
 
+        if (blockEntity instanceof ProductionMonitorBlockEntity monitor) {
+            List<Line> lines = new ArrayList<>();
+            ItemStack filter = monitor.getFilter();
+            lines.add(new Line(filter.isEmpty()
+                    ? Component.translatable("tobacconistmod.ui.monitor_filter_all")
+                    : Component.translatable("tobacconistmod.ui.monitor_filter", filter.getHoverName()), MUTED));
+
+            String count;
+            String target;
+            String rate = formatMonitorDecimal(monitor.getRollingRate());
+            Component countLine;
+            Component rateLine;
+            switch (monitor.getCountMode()) {
+                case STACKS -> {
+                    count = formatMonitorDecimal(monitor.getCount() / 64.0D);
+                    target = formatMonitorDecimal(monitor.getTarget() / 64.0D);
+                    countLine = Component.translatable("tobacconistmod.display.production_monitor_count.stacks", count, target);
+                    rateLine = Component.translatable("tobacconistmod.display.production_monitor_rate.stacks", rate);
+                }
+                case TRANSFERS -> {
+                    count = formatMonitorWhole(monitor.getCount());
+                    target = formatMonitorWhole(monitor.getTarget());
+                    countLine = Component.translatable("tobacconistmod.display.production_monitor_count.transfers", count, target);
+                    rateLine = Component.translatable("tobacconistmod.display.production_monitor_rate.transfers", rate);
+                }
+                default -> {
+                    count = formatMonitorWhole(monitor.getCount());
+                    target = formatMonitorWhole(monitor.getTarget());
+                    countLine = Component.translatable("tobacconistmod.display.production_monitor_count.items", count, target);
+                    rateLine = Component.translatable("tobacconistmod.display.production_monitor_rate.items", rate);
+                }
+            }
+            lines.add(new Line(countLine, TEXT));
+            lines.add(new Line(rateLine, MUTED));
+
+            Component status;
+            int statusColor;
+            if (!monitor.isTargetValid()) {
+                status = Component.translatable("tobacconistmod.display.production_monitor_no_target");
+                statusColor = WARN;
+            } else if (monitor.getAtTargetMode() != ProductionMonitorBlockEntity.AtTargetMode.RESET_COUNT
+                    && monitor.getCount() >= monitor.getTarget()) {
+                status = Component.translatable("tobacconistmod.display.production_monitor_target_reached");
+                statusColor = GOOD;
+            } else {
+                status = Component.translatable("tobacconistmod.display.production_monitor_counting");
+                statusColor = GOOD;
+            }
+            lines.add(new Line(Component.translatable("tobacconistmod.ui.status", status), statusColor));
+            return new Inspection(Component.translatable(state.getBlock().getDescriptionId()), lines);
+        }
+
         if (blockEntity instanceof TobaccoBarrelBlockEntity barrel) {
             List<Line> lines = new ArrayList<>();
             ItemStack stack = barrel.getStoredTobacco();
@@ -341,6 +394,27 @@ public final class TobaccoInspectionOverlay {
         if (pct >= 0.75F) return GOOD;
         if (pct >= 0.5F) return WARN;
         return BAD;
+    }
+
+    private static String formatMonitorWhole(long value) {
+        if (value < 1_000L) return Long.toString(value);
+        if (value < 1_000_000L) return formatMonitorCompact(value, 1_000.0D, "k");
+        if (value < 1_000_000_000L) return formatMonitorCompact(value, 1_000_000.0D, "M");
+        return formatMonitorCompact(value, 1_000_000_000.0D, "B");
+    }
+
+    private static String formatMonitorDecimal(double value) {
+        if (value >= 1_000.0D) return formatMonitorWhole(Math.round(value));
+        if (Math.abs(value - Math.rint(value)) < 0.0001D) return Long.toString(Math.round(value));
+        return String.format(java.util.Locale.ROOT, "%.1f", value);
+    }
+
+    private static String formatMonitorCompact(long value, double divisor, String suffix) {
+        double scaled = value / divisor;
+        String number = scaled >= 100.0D
+                ? Long.toString(Math.round(scaled))
+                : String.format(java.util.Locale.ROOT, "%.1f", scaled).replace(".0", "");
+        return number + suffix;
     }
 
     private static String formatTicks(int ticks) {

@@ -46,7 +46,7 @@
     {
       "type": "patchouli:text",
       "title": "Automated Barrels",
-      "text": "Tobacco Barrels now hold up to $(item)64$() compatible items. Funnels, Chutes, Packagers, and Mechanical Arms cannot extract an actively $(thing)Fermenting$() batch. Aging stays extractable so filtered logistics can release tobacco at 7/30/90/365-day thresholds."
+      "text": "Tobacco Barrels now hold up to $(item)64$() compatible items. Funnels, Chutes, Packagers, and Mechanical Arms cannot extract an actively $(thing)Fermenting$() batch. Aging stays extractable so filtered logistics can release tobacco at 7/30/90/365-day thresholds. Display Links can report the current batch count out of 64."
     },
     {
       "type": "patchouli:text",
@@ -71,12 +71,12 @@
     {
       "type": "patchouli:text",
       "title": "Monitor Targets & Output",
-      "text": "Set a numeric target, then choose Keep Counting, Stop Counting, or Reset Count. Reset Count preserves overflow. Output may be None, a Pulse per target crossing, or Hold until reset; Reset Count + Hold becomes Pulse. Manual Reset keeps the rolling rate, and optional External Reset reacts only to a rising redstone edge. A Comparator reports progress."
+      "text": "Set a numeric target, then choose Keep Counting, Stop Counting, or Reset Count. Reset Count preserves overflow. Output may be None, a Pulse per target crossing, or Hold until reset; Reset Count + Hold becomes Pulse. Manual Reset keeps the rolling rate, and optional External Reset reacts only to a rising redstone edge. A Comparator reports progress. Create Display Links can read Count/Target, rolling Rate, or Status and refresh those monitor values about once per second; Tobacconist's Spectacles/Create Goggles show the same live telemetry in-world."
     },
     {
       "type": "patchouli:text",
       "title": "Displays",
-      "text": "Display Links report Drying Rack, Tobacco Barrel, Flue Firebox, and Hookah status. Create Basins expose homogenization count, target, average, predicted output, uniform/waiting state, and incompatible tobacco. Item Vaults can report tobacco count and average quality for one compatible lot."
+      "text": "Display Links report Drying Rack, Tobacco Barrel, Flue Firebox, Hookah, and Production Monitor information. Barrels expose batch count; Hookahs expose Status, Fuel, Shisha, and Water, and either half of a tall Hookah can be targeted. Production Monitors expose Count/Target, rolling Rate, and Status at a 20-tick/1-second passive refresh. Other Tobacconist sources keep Create's normal 100-tick/5-second passive cadence. Create Basins expose homogenization state/average, while Item Vaults can report tobacco count and average quality for one compatible lot."
     },
     {
       "type": "patchouli:text",
