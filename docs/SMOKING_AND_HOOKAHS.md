@@ -21,6 +21,8 @@ Hookahs use three validated slots:
 2. Shisha Tobacco.
 3. Water Potion or Dirty Hookah Water.
 
+The in-game Hookah menu uses a Create-pattern split layout: a dedicated machine panel diagrams the fuel, Shisha, and water inputs around the Hookah, with a separate player-inventory panel below. The vertical ember gauge shows the currently burning fuel reserve and can be hovered for its remaining percentage.
+
 The hookah becomes active only while Shisha and usable water are present and fuel time remains. Hold a Hookah Hose and use the active hookah to draw from it; hose draws have a 20-tick interaction cooldown.
 
 ## Fuel duration

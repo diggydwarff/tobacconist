@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "A working hookah needs $(item)fuel$(), $(item)Shisha Tobacco$(), and either a vanilla $(item)Water Potion/Water Bottle$() or $(item)Dirty Hookah Water$() in its three GUI slots. Slot validation prevents unrelated items from being inserted."
+      "text": "A working hookah needs $(item)fuel$(), $(item)Shisha Tobacco$(), and either a vanilla $(item)Water Potion/Water Bottle$() or $(item)Dirty Hookah Water$() in its three GUI slots. The Hookah menu diagrams those three inputs around the machine; its vertical ember gauge shows the live fuel reserve. Slot validation prevents unrelated items from being inserted."
     },
     {
       "type": "patchouli:crafting",

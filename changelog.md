@@ -120,6 +120,10 @@
 - Added **Display Link** information for Drying Racks, Tobacco Barrels, Flue Fireboxes, Hookahs, and Production Monitors; slower-changing Tobacconist sources use Create's normal **100-tick / 5-second** passive cadence while Production Monitor live telemetry refreshes every second
   - Tobacco Barrels now expose **Count/64** in addition to status/progress/humidity/age
   - Hookahs now expose separate **Status, Fuel, Shisha, and Water** sources; either half of a tall Hookah can be targeted
+- Completely redesigned the **Hookah GUI** around a Create-style machine-panel layout
+  - Fuel, Shisha, and water slots are arranged as a readable process diagram around baked Hookah artwork
+  - Player inventory renders as a separate panel, and the vertical ember gauge fills bottom-to-top from the live fuel reserve
+  - Added contextual empty-slot and fuel-percentage tooltips while preserving the existing three-slot Hookah behavior and JEI artwork
 
 ### Aqua Vitae, Essences & Shisha
 - Added **Aqua Vitae** as a dedicated extraction/crafting spirit

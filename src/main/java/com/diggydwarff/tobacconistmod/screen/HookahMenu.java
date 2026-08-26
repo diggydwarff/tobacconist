@@ -19,6 +19,20 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.SlotItemHandler;
 
 public class HookahMenu extends AbstractContainerMenu {
+    public static final int GUI_WIDTH = 200;
+    public static final int GUI_HEIGHT = 215;
+
+    public static final int FUEL_SLOT_X = 20;
+    public static final int FUEL_SLOT_Y = 52;
+    public static final int SHISHA_SLOT_X = 74;
+    public static final int SHISHA_SLOT_Y = 31;
+    public static final int WATER_SLOT_X = 74;
+    public static final int WATER_SLOT_Y = 73;
+
+    public static final int PLAYER_INVENTORY_X = 20;
+    public static final int PLAYER_INVENTORY_Y = 125;
+    public static final int PLAYER_HOTBAR_Y = 183;
+
     public final HookahEntity blockEntity;
     private final Level level;
     private final ContainerData data;
@@ -31,6 +45,10 @@ public class HookahMenu extends AbstractContainerMenu {
     private static final int VANILLA_FIRST_SLOT_INDEX = 0;
     private static final int TE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
     private static final int TE_INVENTORY_SLOT_COUNT = 3;
+
+    public static final int FUEL_MENU_SLOT_INDEX = TE_INVENTORY_FIRST_SLOT_INDEX;
+    public static final int SHISHA_MENU_SLOT_INDEX = TE_INVENTORY_FIRST_SLOT_INDEX + 1;
+    public static final int WATER_MENU_SLOT_INDEX = TE_INVENTORY_FIRST_SLOT_INDEX + 2;
 
     public HookahMenu(int id, Inventory inv, RegistryFriendlyByteBuf extraData) {
         this(id, inv, inv.player.level().getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(4));
@@ -50,7 +68,7 @@ public class HookahMenu extends AbstractContainerMenu {
         var handler = this.blockEntity.getItemHandler();
         {
             // Fuel slot
-            this.addSlot(new SlotItemHandler(handler, 0, 53, 36) {
+            this.addSlot(new SlotItemHandler(handler, 0, FUEL_SLOT_X, FUEL_SLOT_Y) {
                 @Override
                 public boolean mayPlace(ItemStack stack) {
                     if (!HookahFuelHelper.isFuel(stack)) {
@@ -83,10 +101,10 @@ public class HookahMenu extends AbstractContainerMenu {
             });
 
             // Shisha slot
-            this.addSlot(new SlotItemHandler(handler, 1, 86, 15));
+            this.addSlot(new SlotItemHandler(handler, 1, SHISHA_SLOT_X, SHISHA_SLOT_Y));
 
             // Water slot
-            this.addSlot(new SlotItemHandler(handler, 2, 86, 60));
+            this.addSlot(new SlotItemHandler(handler, 2, WATER_SLOT_X, WATER_SLOT_Y));
         }
 
         addDataSlots(data);
@@ -104,15 +122,7 @@ public class HookahMenu extends AbstractContainerMenu {
     }
 
     public int getScaledFuelLevel() {
-        int fuelLevel = this.data.get(2);
-        int maxFuelLevel = this.data.get(3);
-        int pixelHeight = 63;
-
-        if (maxFuelLevel == 0 || fuelLevel == 0) {
-            return 0;
-        }
-
-        return fuelLevel * pixelHeight / maxFuelLevel;
+        return getFuelProgressScaled(63);
     }
 
     public boolean isBurning() {
@@ -128,6 +138,14 @@ public class HookahMenu extends AbstractContainerMenu {
         }
 
         return Math.max(1, fuelTime * pixels / maxFuelTime);
+    }
+
+    public int getFuelPercent() {
+        int maxFuelTime = this.data.get(3);
+        if (maxFuelTime <= 0) {
+            return 0;
+        }
+        return Math.max(0, Math.min(100, this.data.get(2) * 100 / maxFuelTime));
     }
 
     @Override
@@ -207,14 +225,14 @@ public class HookahMenu extends AbstractContainerMenu {
     private void addPlayerInventory(Inventory playerInventory) {
         for (int row = 0; row < 3; ++row) {
             for (int col = 0; col < 9; ++col) {
-                this.addSlot(new Slot(playerInventory, col + row * 9 + 9, 8 + col * 18, 86 + row * 18));
+                this.addSlot(new Slot(playerInventory, col + row * 9 + 9, PLAYER_INVENTORY_X + col * 18, PLAYER_INVENTORY_Y + row * 18));
             }
         }
     }
 
     private void addPlayerHotbar(Inventory playerInventory) {
         for (int col = 0; col < 9; ++col) {
-            this.addSlot(new Slot(playerInventory, col, 8 + col * 18, 144));
+            this.addSlot(new Slot(playerInventory, col, PLAYER_INVENTORY_X + col * 18, PLAYER_HOTBAR_Y));
         }
     }
 }
