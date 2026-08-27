@@ -28,7 +28,15 @@ public final class TobacconistPonderScenes {
                         id(ModItems.DOKHA_TOBACCO_LEAF_DRY.get()),
                         id(ModItems.SHADE_TOBACCO_LEAF_DRY.get())
                 )
-                .addStoryBoard("tobacco/curing", TobacconistPonderStoryboards::curing);
+                .addStoryBoard("tobacco/curing_air", TobacconistPonderStoryboards::curingSun)
+                .addStoryBoard("tobacco/curing_sun", TobacconistPonderStoryboards::curingAir)
+                .addStoryBoard("tobacco/curing_fire", TobacconistPonderStoryboards::curingFire)
+                .addStoryBoard("tobacco/curing_flue", TobacconistPonderStoryboards::curingFlue);
+
+        helper.forComponents(id(ModBlocks.TOBACCO_DRYING_RACK.get()))
+                .addStoryBoard("tobacco/wooden_automation_hoppers", TobacconistPonderStoryboards::woodenAutomationHoppers)
+                .addStoryBoard("tobacco/wooden_automation_funnels", TobacconistPonderStoryboards::woodenAutomationFunnels)
+                .addStoryBoard("tobacco/wooden_automation_arm", TobacconistPonderStoryboards::woodenAutomationArm);
 
         helper.forComponents(id(ModBlocks.INDUSTRIAL_DRYING_RACK.get()))
                 .addStoryBoard("tobacco/industrial_curing", TobacconistPonderStoryboards::industrialCuring);
