@@ -4,6 +4,7 @@ import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
 
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoGrowthHelper;
+import com.diggydwarff.tobacconistmod.util.TobaccoProcessingHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoCrateHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoBlendHelper;
 import net.minecraft.core.NonNullList;
@@ -115,7 +116,7 @@ public class AverageTobaccoLeavesRecipe extends CustomRecipe {
         String cutType = "";
 
         int usedItems = 0;
-        int totalQuality = 0;
+        long totalQuality = 0L;
 
         for (int i = 0; i < container.size(); i++) {
             ItemStack stack = container.getItem(i);
@@ -143,7 +144,14 @@ public class AverageTobaccoLeavesRecipe extends CustomRecipe {
             return ItemStack.EMPTY;
         }
 
-        int avgQuality = Math.round((float) totalQuality / usedItems);
+        // The result preserves one output item per occupied input slot. Because a stack can only
+        // carry one integer quality value, a fractional average must round down; rounding up would
+        // create quality points and enable lossless repeated upcycling.
+        int avgQuality = TobaccoProcessingHelper.getConservativeAverageQuality(
+                totalQuality,
+                usedItems,
+                mode == Mode.RAW_LEAF
+        );
 
         ItemStack result = new ItemStack(first.getItem(), usedItems);
 
@@ -188,7 +196,8 @@ public class AverageTobaccoLeavesRecipe extends CustomRecipe {
     private static int getStackQuality(ItemStack stack, Mode mode) {
         if (mode == Mode.RAW_LEAF) {
             if (LegacyItemTags.hasTag(stack) && LegacyItemTags.getTag(stack).contains(TobaccoCuringHelper.TAG_GROWTH_QUALITY)) {
-                return TobaccoCuringHelper.clampQuality(LegacyItemTags.getTag(stack).getInt(TobaccoCuringHelper.TAG_GROWTH_QUALITY));
+                return Math.max(0, Math.min(70,
+                        LegacyItemTags.getTag(stack).getInt(TobaccoCuringHelper.TAG_GROWTH_QUALITY)));
             }
             return 50;
         }

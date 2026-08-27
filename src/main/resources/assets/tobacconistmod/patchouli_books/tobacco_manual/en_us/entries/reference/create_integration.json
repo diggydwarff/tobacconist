@@ -16,7 +16,7 @@
     {
       "type": "patchouli:text",
       "title": "Bulk Homogenization",
-      "text": "Mechanical Mixers standardize compatible raw or cured leaf batches. A cycle requires at least two quality values, uses a count-weighted average rounded to the nearest whole quality, and locks the chosen inputs when mixing begins. Uniform tobacco waits instead of being remixed."
+      "text": "Mechanical Mixers standardize compatible raw or cured leaf batches. A cycle requires at least two quality values, uses a count-weighted average rounded down to a whole quality so processing can never create quality points, and locks the chosen inputs when mixing begins. Uniform tobacco waits instead of being remixed."
     },
     {
       "type": "patchouli:text",

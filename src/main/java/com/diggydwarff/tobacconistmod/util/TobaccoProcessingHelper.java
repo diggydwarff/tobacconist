@@ -305,6 +305,33 @@ public final class TobaccoProcessingHelper {
                 && getHomogenizingQuality(first) != getHomogenizingQuality(second);
     }
 
+    /**
+     * Returns the highest whole-number quality that cannot create quality points.
+     *
+     * <p>A homogenized stack can only carry one integer quality value for every item. When the
+     * exact average is fractional, rounding to nearest can manufacture quality (for example,
+     * 50 + 51 -> two 51-quality leaves). Flooring the exact point total is therefore intentional:
+     * item count is preserved and at most the unavoidable fractional remainder is discarded.</p>
+     */
+    public static int getConservativeAverageQuality(long qualityPoints, int itemCount, boolean rawLeaf) {
+        if (itemCount <= 0) return 0;
+
+        long average = Math.floorDiv(Math.max(0L, qualityPoints), itemCount);
+        if (rawLeaf) {
+            return (int) Math.max(0L, Math.min(70L, average));
+        }
+        return TobaccoCuringHelper.clampQuality((int) Math.min(Integer.MAX_VALUE, average));
+    }
+
+    /** Convenience overload for leaf homogenization, deriving the raw/cured range from the template. */
+    public static int getConservativeHomogenizedQuality(ItemStack template, long qualityPoints, int itemCount) {
+        return getConservativeAverageQuality(
+                qualityPoints,
+                itemCount,
+                TobaccoCuringHelper.isRawTobaccoLeaf(template)
+        );
+    }
+
     /** Returns the quality value used by bulk homogenization. */
     public static int getHomogenizingQuality(ItemStack stack) {
         if (TobaccoCuringHelper.isRawTobaccoLeaf(stack)) {

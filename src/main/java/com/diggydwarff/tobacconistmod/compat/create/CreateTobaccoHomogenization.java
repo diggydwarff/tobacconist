@@ -167,7 +167,9 @@ public final class CreateTobaccoHomogenization {
         if (count == 0) return InventoryQualitySummary.EMPTY;
         double average = qualityPoints / (double) count;
         return new InventoryQualitySummary(
-                true, count, average, roundQuality(first, average), compatible, first
+                true, count, average,
+                TobaccoProcessingHelper.getConservativeHomogenizedQuality(first, qualityPoints, count),
+                compatible, first
         );
     }
 
@@ -295,7 +297,8 @@ public final class CreateTobaccoHomogenization {
         if (selectedCount != batchSize || batchSize <= 0) return null;
 
         double average = qualityPoints / (double) batchSize;
-        int outputQuality = roundQuality(template, average);
+        int outputQuality = TobaccoProcessingHelper.getConservativeHomogenizedQuality(
+                template, qualityPoints, batchSize);
         ItemStack outputTemplate = TobaccoProcessingHelper.buildHomogenizedLeafBatch(
                 template, outputQuality, 1);
         if (outputTemplate.isEmpty()) return null;
@@ -503,15 +506,9 @@ public final class CreateTobaccoHomogenization {
         }
         if (selected == 0) return new QualityPreview(0.0D, 0);
         double average = qualityPoints / (double) selected;
-        return new QualityPreview(average, roundQuality(template, average));
-    }
-
-    private static int roundQuality(ItemStack template, double average) {
-        int rounded = (int) Math.round(average);
-        if (TobaccoCuringHelper.isRawTobaccoLeaf(template)) {
-            return Math.max(0, Math.min(70, rounded));
-        }
-        return TobaccoCuringHelper.clampQuality(rounded);
+        int outputQuality = TobaccoProcessingHelper.getConservativeHomogenizedQuality(
+                template, qualityPoints, selected);
+        return new QualityPreview(average, outputQuality);
     }
 
     private static boolean containsSnapshot(IItemHandler inventory, List<ExactStackCount> inputs) {

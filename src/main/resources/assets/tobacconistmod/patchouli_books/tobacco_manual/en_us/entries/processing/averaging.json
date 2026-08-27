@@ -11,7 +11,7 @@
     {
       "type": "patchouli:text",
       "title": "Crafting Averaging",
-      "text": "All inputs must be the same tobacco item and compatible processing state. Raw leaf averages with the same raw leaf. Cured leaf must share its cure type. Single-variety loose tobacco must share cure and cut. The result averages occupied crafting slots and rounds to the nearest whole quality value."
+      "text": "All inputs must be the same tobacco item and compatible processing state. Raw leaf averages with the same raw leaf. Cured leaf must share its cure type. Single-variety loose tobacco must share cure and cut. The result averages occupied crafting slots and rounds down to the whole quality value. This preserves item count while ensuring averaging can never create quality points."
     },
     {
       "type": "patchouli:text",
@@ -21,7 +21,7 @@
     {
       "type": "patchouli:text",
       "title": "Batch Quality",
-      "text": "Create homogenization uses a $(thing)count-weighted average$() and rounds to the $(thing)nearest$() whole quality. Every leaf in that Mixer cycle leaves at the same quality. Already-uniform tobacco is not pointlessly remixed."
+      "text": "Create homogenization uses a $(thing)count-weighted average$() and rounds $(thing)down$() to a whole quality so a Mixer can never manufacture quality points. Every leaf in that Mixer cycle leaves at the same quality. Already-uniform tobacco is not pointlessly remixed."
     },
     {
       "type": "patchouli:text",
