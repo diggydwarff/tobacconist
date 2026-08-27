@@ -61,7 +61,7 @@
     {
       "type": "patchouli:text",
       "title": "Flavor Factory",
-      "text": "Heated Mixers can produce Aqua Vitae and Flavoring Essences. Spouts apply 1000 mB Essence to loose tobacco for aromatic casing, while Mixers combine Essence with plain molasses and mix flavored molasses into Shisha."
+      "text": "Heated Mixers can produce Aqua Vitae and Flavoring Essences. Spouts apply 250 mB Essence to loose tobacco for aromatic casing, while Mixers combine Essence with plain molasses and mix flavored molasses into Shisha."
     },
     {
       "type": "patchouli:text",

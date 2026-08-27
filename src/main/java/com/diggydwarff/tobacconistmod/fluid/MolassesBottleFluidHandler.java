@@ -7,10 +7,10 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
 
-/** A molasses bottle is one full 1000 mB batch; flavored bottles are consumed whole by Shisha. */
+/** A molasses bottle is one full 250 mB batch; flavored bottles are consumed whole by Shisha. */
 public final class MolassesBottleFluidHandler implements IFluidHandlerItem {
-    public static final int CAPACITY = 1000;
-    public static final int DOSE = 250;
+    public static final int CAPACITY = TobacconistFluidAmounts.BOTTLE;
+    public static final int DOSE = TobacconistFluidAmounts.BOTTLE;
 
     private ItemStack container;
     private final BottledMolassesFlavors flavor;

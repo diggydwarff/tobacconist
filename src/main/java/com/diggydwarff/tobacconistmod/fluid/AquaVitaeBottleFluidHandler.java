@@ -7,9 +7,9 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
 
-/** One Bottle of Aqua Vitae equals one 1000 mB factory-fluid container. */
+/** One Bottle of Aqua Vitae equals one 250 mB factory-fluid container. */
 public final class AquaVitaeBottleFluidHandler implements IFluidHandlerItem {
-    public static final int CAPACITY = 1000;
+    public static final int CAPACITY = TobacconistFluidAmounts.BOTTLE;
     private ItemStack container;
 
     public AquaVitaeBottleFluidHandler(ItemStack container) { this.container = container; }

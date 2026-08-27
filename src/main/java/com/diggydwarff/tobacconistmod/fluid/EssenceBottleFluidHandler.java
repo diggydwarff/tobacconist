@@ -7,10 +7,10 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
 
-/** Single-use 1000 mB fluid container backing every Flavoring Essence bottle. */
+/** Single-use 250 mB fluid container backing every Flavoring Essence bottle. */
 public final class EssenceBottleFluidHandler implements IFluidHandlerItem {
-    public static final int CAPACITY = 1000;
-    public static final int DOSE = 1000;
+    public static final int CAPACITY = TobacconistFluidAmounts.BOTTLE;
+    public static final int DOSE = TobacconistFluidAmounts.BOTTLE;
 
     private ItemStack container;
     private final BottledMolassesFlavors flavor;

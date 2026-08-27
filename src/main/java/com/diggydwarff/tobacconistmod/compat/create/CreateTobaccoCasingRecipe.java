@@ -2,6 +2,7 @@ package com.diggydwarff.tobacconistmod.compat.create;
 
 import com.diggydwarff.tobacconistmod.datagen.items.custom.BottledMolassesFlavors;
 import com.diggydwarff.tobacconistmod.fluid.ModExtractionFluids;
+import com.diggydwarff.tobacconistmod.fluid.TobacconistFluidAmounts;
 import com.diggydwarff.tobacconistmod.util.TobaccoAromaticHelper;
 import com.simibubi.create.content.fluids.transfer.FillingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeParams;
@@ -14,7 +15,7 @@ import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 
 /** Dynamic Spout recipe that preserves the exact loose-tobacco metadata while applying one full essence bottle. */
 public final class CreateTobaccoCasingRecipe extends FillingRecipe {
-    private static final int ESSENCE_DOSE = 1000;
+    private static final int ESSENCE_DOSE = TobacconistFluidAmounts.BOTTLE;
     private final BottledMolassesFlavors flavor;
 
     public CreateTobaccoCasingRecipe(ProcessingRecipeParams params) {

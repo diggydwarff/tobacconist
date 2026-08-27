@@ -2,6 +2,7 @@ package com.diggydwarff.tobacconistmod.compat.create;
 
 import com.diggydwarff.tobacconistmod.datagen.items.custom.BottledMolassesFlavors;
 import com.diggydwarff.tobacconistmod.fluid.ModMolassesFluids;
+import com.diggydwarff.tobacconistmod.fluid.TobacconistFluidAmounts;
 import com.diggydwarff.tobacconistmod.util.TobaccoProcessingHelper;
 import com.simibubi.create.content.kinetics.mixer.MixingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeParams;
@@ -13,9 +14,9 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 
 
-/** Dynamic Create mixing recipe: any loose tobacco/unused Shisha + 1000 mB flavored molasses -> Shisha. */
+/** Dynamic Create mixing recipe: any loose tobacco/unused Shisha + one 250 mB molasses bottle -> Shisha. */
 public final class CreateTobaccoMixingRecipe extends MixingRecipe {
-    private static final int FLAVOR_PROBE_AMOUNT = 1000;
+    private static final int FLAVOR_PROBE_AMOUNT = TobacconistFluidAmounts.BOTTLE;
 
     private final BottledMolassesFlavors flavor;
     private ItemStack immediateContinuationGuard = ItemStack.EMPTY;

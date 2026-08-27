@@ -348,7 +348,7 @@
   "tobacconistmod.ponder.tobacconist_flavoring.header": "Aqua Vitae, Essences and Shisha",
   "tobacconistmod.ponder.tobacconist_flavoring.text_1": "With heat, the Mechanical Mixer combines water, sugar and wheat into Aqua Vitae",
   "tobacconistmod.ponder.tobacconist_flavoring.text_2": "Aqua Vitae plus a flavor ingredient produces the corresponding Flavoring Essence",
-  "tobacconistmod.ponder.tobacconist_flavoring.text_3": "A Spout can apply a full 1000 mB Essence to loose tobacco for a light aromatic casing",
+  "tobacconistmod.ponder.tobacconist_flavoring.text_3": "A Spout can apply a full 250 mB Essence to loose tobacco for a light aromatic casing",
   "tobacconistmod.ponder.tobacconist_flavoring.text_4": "Flavored Molasses mixed heavily with suitable loose tobacco produces Shisha",
   "tobacconistmod.ponder.tobacconist_assembly.header": "Automating Cigarettes and Cigars",
   "tobacconistmod.ponder.tobacconist_assembly.text_1": "Deployers assemble tobacco with the required paper or wrapper into metadata-carrying intermediates",

@@ -9,18 +9,18 @@
   "ingredients": [
     {
       "type": "neoforge:single",
-      "amount": 1000,
+      "amount": 250,
       "fluid": "tobacconistmod:molasses_plain"
     },
     {
       "type": "neoforge:single",
-      "amount": 1000,
+      "amount": 250,
       "fluid": "tobacconistmod:essence_strawberry"
     }
   ],
   "results": [
     {
-      "amount": 1000,
+      "amount": 250,
       "id": "tobacconistmod:molasses_strawberry"
     }
   ]

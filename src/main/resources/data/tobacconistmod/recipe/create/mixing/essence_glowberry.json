@@ -20,13 +20,13 @@
     },
     {
       "type": "neoforge:single",
-      "amount": 1000,
+      "amount": 250,
       "fluid": "tobacconistmod:aqua_vitae"
     }
   ],
   "results": [
     {
-      "amount": 1000,
+      "amount": 250,
       "id": "tobacconistmod:essence_glowberry"
     }
   ]

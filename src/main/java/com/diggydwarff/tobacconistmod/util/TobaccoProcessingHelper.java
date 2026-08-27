@@ -206,7 +206,7 @@ public final class TobaccoProcessingHelper {
         return canMechanicallyMixToShisha(stack) || canAddShishaFlavor(stack, flavorName);
     }
 
-    /** Applies one full 1000 mB flavored-molasses batch to loose tobacco or unused Shisha. */
+    /** Applies one full 250 mB flavored-molasses bottle to loose tobacco or unused Shisha. */
     public static ItemStack mechanicallyFlavorShisha(ItemStack stack, String flavorName) {
         if (!canMechanicallyFlavorShisha(stack, flavorName)) {
             return ItemStack.EMPTY;

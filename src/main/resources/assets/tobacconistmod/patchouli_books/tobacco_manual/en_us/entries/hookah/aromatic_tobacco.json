@@ -16,7 +16,7 @@
     {
       "type": "patchouli:text",
       "title": "Create Spout",
-      "text": "With Create installed, a Spout applies the same casing using $(item)1000 mB$() of the matching Flavoring Essence fluid.",
+      "text": "With Create installed, a Spout applies the same casing using $(item)250 mB$() of the matching Flavoring Essence fluid.",
       "flag": "mod:create"
     },
     {
