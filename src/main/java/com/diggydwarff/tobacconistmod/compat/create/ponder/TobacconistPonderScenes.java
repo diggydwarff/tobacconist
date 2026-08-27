@@ -30,6 +30,9 @@ public final class TobacconistPonderScenes {
                 )
                 .addStoryBoard("tobacco/curing", TobacconistPonderStoryboards::curing);
 
+        helper.forComponents(id(ModBlocks.INDUSTRIAL_DRYING_RACK.get()))
+                .addStoryBoard("tobacco/industrial_curing", TobacconistPonderStoryboards::industrialCuring);
+
         helper.forComponents(
                         id(ModItems.WILD_TOBACCO_LEAF.get()),
                         id(ModItems.VIRGINIA_TOBACCO_LEAF.get()),
@@ -48,6 +51,11 @@ public final class TobacconistPonderScenes {
 
         helper.forComponents(
                         id(ModItems.STONE_CHAVETA.get()),
+                        id(ModItems.COPPER_CHAVETA.get()),
+                        id(ModItems.IRON_CHAVETA.get()),
+                        id(ModItems.GOLD_CHAVETA.get()),
+                        id(ModItems.DIAMOND_CHAVETA.get()),
+                        id(ModItems.NETHERITE_CHAVETA.get()),
                         id(ModItems.WILD_TOBACCO_LEAF_DRY.get()),
                         id(ModItems.VIRGINIA_TOBACCO_LEAF_DRY.get()),
                         id(ModItems.BURLEY_TOBACCO_LEAF_DRY.get()),
@@ -76,6 +84,9 @@ public final class TobacconistPonderScenes {
                         id(ModItems.CIGAR.get())
                 )
                 .addStoryBoard("tobacco/assembly", TobacconistPonderStoryboards::assembly);
+
+        helper.forComponents(id(ModBlocks.PRODUCTION_MONITOR.get()))
+                .addStoryBoard("tobacco/production_monitor", TobacconistPonderStoryboards::productionMonitor);
 
         // Register the logistics tutorial on automatable processing blocks.
         helper.forComponents(

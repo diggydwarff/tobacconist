@@ -8,21 +8,34 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
-import net.minecraft.world.item.crafting.CustomRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.world.item.crafting.ShapedRecipePattern;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.common.Tags;
 
-public class WoodenPipeRecipe extends CustomRecipe {
+import java.util.Optional;
+
+public class WoodenPipeRecipe extends ShapedRecipe {
 
     public static final String NBT_WOOD_PLANK = "WoodPlank";
 
     public WoodenPipeRecipe(CraftingBookCategory category) {
-        super(category);
+        super("", category, displayPattern(), new ItemStack(ModItems.WOODEN_SMOKING_PIPE.get()));
+    }
+
+    private static ShapedRecipePattern displayPattern() {
+        NonNullList<Ingredient> ingredients = NonNullList.withSize(9, Ingredient.EMPTY);
+        ingredients.set(2, Ingredient.of(ItemTags.PLANKS));
+        ingredients.set(4, Ingredient.of(ItemTags.PLANKS));
+        ingredients.set(5, Ingredient.of(Items.STICK));
+        ingredients.set(6, Ingredient.of(Items.STICK));
+        return new ShapedRecipePattern(3, 3, ingredients, Optional.empty());
     }
 
     @Override

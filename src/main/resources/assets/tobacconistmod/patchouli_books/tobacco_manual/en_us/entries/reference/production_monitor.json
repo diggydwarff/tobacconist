@@ -1,0 +1,48 @@
+{
+  "name": "Production Monitor",
+  "icon": "tobacconistmod:production_monitor",
+  "category": "tobacconistmod:reference",
+  "sortnum": 3,
+  "pages": [
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:production_monitor",
+      "title": "Production Monitor",
+      "text": "The Production Monitor is a non-invasive throughput counter for factory lines. It observes confirmed transfers through one adjacent supported transport without inserting, extracting, or buffering the items itself."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Placement & Direction",
+      "text": "Stand behind the monitor and place it while facing the transport you want to observe. The monitor’s front face points at that adjacent target. Supported targets are Create Belts, Funnels and Chutes, plus vanilla Hoppers. If the pointed-at block is not supported, the monitor reports an invalid target and does not count it."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Filter & Counting",
+      "text": "Open the monitor to configure its ghost Filter, or set the filter directly on the operator-facing target without consuming the item. Normal items match exact item/components; Create Filters and Attribute Filters are supported when Create can evaluate them. $(thing)Items$() counts item quantity, $(thing)Stacks$() displays quantity as 64-item stack-equivalents, and $(thing)Transfers$() counts successful transfer operations."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Targets & Output",
+      "text": "Set a numeric Target and choose what happens when it is reached: Keep Counting, Stop Counting, or Reset Count while preserving overflow. Output can be None, a short Pulse, or Hold until reset. A Comparator reports target progress. Optional External Reset responds to a rising redstone edge; manual reset clears the accumulated count without erasing the rolling-rate history."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Reading the Monitor",
+      "text": "The menu exposes Count/Target, rolling Rate, target validity, count mode, and output state. Tobacconist’s Spectacles/Create Goggles expose the same live telemetry in-world. Create Display Links can report $(thing)Count/Target$(), $(thing)Rate$(), or $(thing)Status$() and the monitor refreshes those values about once per second."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Example",
+      "text": "For a simple packing line, place a Monitor beside the Hopper, Funnel, Chute, or Belt that performs the final transfer into storage. Point the Monitor at that transport, optionally filter it to the product, then set a target such as 64. Every confirmed matching transfer advances the count; use the comparator/redstone output or a Display Link to signal that the production target has been reached."
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "tobacconistmod:reference/automation",
+        "tobacconistmod:reference/create_integration"
+      ],
+      "title": "Related Automation"
+    }
+  ],
+  "flag": "mod:create"
+}

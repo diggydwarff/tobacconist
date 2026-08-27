@@ -81,7 +81,14 @@
     {
       "type": "patchouli:text",
       "title": "Ponder",
-      "text": "Ponder scenes cover curing, iterative bulk homogenization, cutting/pressing, blending/barrel work, Aqua Vitae/Essence/Shisha production, cigarette/cigar assembly, and factory logistics."
+      "text": "Ponder scenes cover curing, the Industrial Drying Rack’s two-fan setup, iterative bulk homogenization, cutting/pressing, blending/barrel work, Aqua Vitae/Essence/Shisha production, cigarette/cigar assembly, Production Monitor setup, and factory logistics."
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "tobacconistmod:reference/production_monitor"
+      ],
+      "title": "Production Monitor"
     }
   ],
   "flag": "mod:create"

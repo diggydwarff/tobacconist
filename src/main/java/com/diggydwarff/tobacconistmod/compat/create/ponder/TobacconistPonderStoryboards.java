@@ -2,6 +2,7 @@ package com.diggydwarff.tobacconistmod.compat.create.ponder;
 
 import com.google.common.collect.ImmutableList;
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
+import com.diggydwarff.tobacconistmod.block.custom.IndustrialDryingRackBlock;
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoDryingRackBlockEntity;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.BottledMolassesFlavors;
@@ -32,6 +33,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 
 /** Animated Ponder scenes covering Tobacconist Create workflows. */
 public final class TobacconistPonderStoryboards {
@@ -187,6 +189,63 @@ public final class TobacconistPonderStoryboards {
                 .pointAt(util.vector().centerOf(utilitySpot))
                 .text(Component.translatable("tobacconistmod.ponder.tobacconist_curing.text_8").getString());
         scene.idle(95);
+    }
+
+    public static void industrialCuring(SceneBuilder builder, SceneBuildingUtil util) {
+        CreateSceneBuilder scene = begin(builder, "tobacconist_industrial_curing");
+
+        BlockPos lowerRack = util.grid().at(4, 1, 3);
+        BlockPos upperRack = lowerRack.above();
+        BlockPos lowerFan = util.grid().at(1, 1, 3);
+        BlockPos upperFan = util.grid().at(1, 2, 3);
+        BlockPos lowerShaft = util.grid().at(0, 1, 3);
+        BlockPos upperShaft = util.grid().at(0, 2, 3);
+
+        BlockState lowerState = ModBlocks.INDUSTRIAL_DRYING_RACK.get().defaultBlockState()
+                .setValue(IndustrialDryingRackBlock.HALF, DoubleBlockHalf.LOWER);
+        BlockState upperState = lowerState.setValue(IndustrialDryingRackBlock.HALF, DoubleBlockHalf.UPPER);
+        scene.world().setBlock(lowerRack, lowerState, false);
+        scene.world().setBlock(upperRack, upperState, false);
+        scene.world().showSection(util.select().position(lowerRack).add(util.select().position(upperRack)), Direction.DOWN);
+
+        ItemStack rawLeaves = new ItemStack(ModItems.VIRGINIA_TOBACCO_LEAF.get(), 32);
+        scene.overlay().showControls(util.vector().topOf(lowerRack), Pointing.DOWN, 35).withItem(rawLeaves);
+        scene.overlay().showText(85)
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().centerOf(lowerRack))
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_industrial_curing.text_1").getString());
+        scene.idle(95);
+
+        scene.world().setBlock(lowerFan, AllBlocks.ENCASED_FAN.get().defaultBlockState()
+                .setValue(BlockStateProperties.FACING, Direction.EAST), false);
+        scene.world().setBlock(upperFan, AllBlocks.ENCASED_FAN.get().defaultBlockState()
+                .setValue(BlockStateProperties.FACING, Direction.EAST), false);
+        scene.world().setBlock(lowerShaft, AllBlocks.SHAFT.get().defaultBlockState()
+                .setValue(ShaftBlock.AXIS, Direction.Axis.X), false);
+        scene.world().setBlock(upperShaft, AllBlocks.SHAFT.get().defaultBlockState()
+                .setValue(ShaftBlock.AXIS, Direction.Axis.X), false);
+
+        Selection airflow = util.select().position(lowerFan).add(util.select().position(upperFan))
+                .add(util.select().position(lowerShaft)).add(util.select().position(upperShaft));
+        scene.world().showSection(airflow, Direction.EAST);
+        scene.world().setKineticSpeed(airflow, 32);
+        scene.effects().rotationDirectionIndicator(lowerShaft);
+        scene.effects().rotationDirectionIndicator(upperShaft);
+        scene.overlay().showText(100)
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().centerOf(upperFan))
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_industrial_curing.text_2").getString());
+        scene.idle(110);
+
+        scene.overlay().showText(100)
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().centerOf(lowerRack))
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_industrial_curing.text_3").getString());
+        scene.effects().indicateSuccess(lowerRack);
+        scene.idle(110);
     }
 
     public static void processing(SceneBuilder builder, SceneBuildingUtil util) {
@@ -581,6 +640,54 @@ public final class TobacconistPonderStoryboards {
         scene.overlay().showControls(util.vector().topOf(pressDepot).add(.5, 0, 0), Pointing.DOWN, 45)
                 .withItem(new ItemStack(ModItems.CIGAR.get()));
         scene.idle(70);
+    }
+
+    public static void productionMonitor(SceneBuilder builder, SceneBuildingUtil util) {
+        CreateSceneBuilder scene = begin(builder, "tobacconist_production_monitor");
+
+        BlockPos chest = util.grid().at(3, 1, 3);
+        BlockPos hopper = util.grid().at(3, 2, 3);
+        BlockPos monitor = util.grid().at(4, 2, 3);
+        BlockPos comparator = util.grid().at(5, 2, 3);
+
+        scene.world().setBlock(chest, Blocks.CHEST.defaultBlockState(), false);
+        scene.world().setBlock(hopper, Blocks.HOPPER.defaultBlockState(), false);
+        scene.world().showSection(util.select().position(chest).add(util.select().position(hopper)), Direction.DOWN);
+        scene.overlay().showText(85)
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().centerOf(hopper))
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_production_monitor.text_1").getString());
+        scene.idle(95);
+
+        scene.world().setBlock(monitor, ModBlocks.PRODUCTION_MONITOR.get().defaultBlockState()
+                .setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.WEST), false);
+        reveal(scene, util, monitor);
+        scene.overlay().showText(100)
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().centerOf(monitor))
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_production_monitor.text_2").getString());
+        scene.idle(110);
+
+        ItemStack leaves = new ItemStack(ModItems.VIRGINIA_TOBACCO_LEAF_DRY.get(), 16);
+        scene.overlay().showControls(util.vector().topOf(hopper), Pointing.DOWN, 40).withItem(leaves);
+        scene.effects().indicateSuccess(monitor);
+        scene.overlay().showText(100)
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().centerOf(hopper))
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_production_monitor.text_3").getString());
+        scene.idle(110);
+
+        scene.world().setBlock(comparator, Blocks.COMPARATOR.defaultBlockState(), false);
+        reveal(scene, util, comparator);
+        scene.overlay().showText(110)
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().centerOf(comparator))
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_production_monitor.text_4").getString());
+        scene.idle(120);
     }
 
     public static void logistics(SceneBuilder builder, SceneBuildingUtil util) {

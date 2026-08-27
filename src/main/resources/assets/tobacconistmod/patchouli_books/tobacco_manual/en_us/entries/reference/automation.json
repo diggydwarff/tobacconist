@@ -52,6 +52,14 @@
       "type": "patchouli:text",
       "title": "Tobacco Crates",
       "text": "Tobacco Crates are packaged blocks rather than live inventories. Their nine stored units are recovered by breaking the crate; individual contents are not exposed to hopper/Create logistics."
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "tobacconistmod:reference/production_monitor"
+      ],
+      "title": "Production Monitor",
+      "flag": "mod:create"
     }
   ]
 }

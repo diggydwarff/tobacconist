@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "The hookah accepts three fuel types with very different burn reserves:$(br2)$(2)Bamboo Charcoal:$() 25,000 active ticks$(br)$(item)Charcoal:$() 12,500 active ticks$(br)$(bad)Coal:$() 2,500 active ticks$(br2)Fuel time only counts down while the hookah can actively process shisha and water."
+      "text": "The hookah accepts three fuel types with very different burn reserves:$(br2)$(2)Bamboo Charcoal:$() 25,000 active ticks$(br)$(item)Charcoal:$() 12,500 active ticks$(br)$(4)Coal:$() 2,500 active ticks$(br2)Fuel time only counts down while the hookah can actively process shisha and water."
     },
     {
       "type": "patchouli:text",

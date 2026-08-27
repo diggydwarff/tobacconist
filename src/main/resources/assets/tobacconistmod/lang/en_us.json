@@ -1109,5 +1109,14 @@
   "tobacconistmod.ui.secret_blend": "Secret Blend",
   "tobacconistmod.ui.secret_cut_blend": "Secret %s Blend",
   "tobacconistmod.ui.legendary_bonus_after": "Bonus builds over %s draws:",
-  "tobacconistmod.ui.legendary_bonus_effect": "• %s"
+  "tobacconistmod.ui.legendary_bonus_effect": "• %s",
+  "tobacconistmod.ponder.tobacconist_industrial_curing.header": "Industrial Tobacco Curing",
+  "tobacconistmod.ponder.tobacconist_industrial_curing.text_1": "The Industrial Drying Rack is a two-block, automation-only rack sharing one 32-leaf inventory across both tiers",
+  "tobacconistmod.ponder.tobacconist_industrial_curing.text_2": "Curing only progresses when two distinct Encased Fans provide matching qualifying airflow across both rack levels",
+  "tobacconistmod.ponder.tobacconist_industrial_curing.text_3": "Both tiers use the normal Air, Fire or Flue cure rules; the second fan increases capacity without bypassing cure identity or quality rules",
+  "tobacconistmod.ponder.tobacconist_production_monitor.header": "Monitoring Factory Throughput",
+  "tobacconistmod.ponder.tobacconist_production_monitor.text_1": "Production Monitors observe confirmed transfers through an adjacent supported transport without moving or storing the items themselves",
+  "tobacconistmod.ponder.tobacconist_production_monitor.text_2": "Point the Monitor’s front face at a Hopper, Belt, Funnel or Chute; its menu configures filters, counting mode, target behavior and output",
+  "tobacconistmod.ponder.tobacconist_production_monitor.text_3": "In this simple example, matching leaves transferred by the Hopper advance Count and the rolling Rate only after a real transfer succeeds",
+  "tobacconistmod.ponder.tobacconist_production_monitor.text_4": "A Comparator reports target progress; the Monitor can also pulse or hold redstone at the target, while Display Links expose Count/Target, Rate and Status"
 }

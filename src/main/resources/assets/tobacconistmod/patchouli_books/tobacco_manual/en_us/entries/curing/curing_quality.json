@@ -10,7 +10,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Processed-tobacco tiers are:$(br2)$(bad)0–30 Poor$()$(br)31–60 Common$(br)61–80 Good$(br)81–89 Excellent$(br)$(2)90–100 Perfect$()$(br)$(2)101–120 Exceptional$()$(br2)Exceptional scores are reached later through fermentation/aging; the curing step itself caps at 100.",
+      "text": "Processed-tobacco tiers are:$(br2)$(4)0–30 Poor$()$(br)31–60 Common$(br)61–80 Good$(br)81–89 Excellent$(br)$(2)90–100 Perfect$()$(br)$(2)101–120 Exceptional$()$(br2)Exceptional scores are reached later through fermentation/aging; the curing step itself caps at 100.",
       "title": "Quality Tiers"
     },
     {
@@ -20,7 +20,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Direct rain is dangerous. Every 200 ticks of direct rain exposure adds wet damage. When the rain-exposure counter reaches $(bad)1,200 ticks$()—60 seconds at uninterrupted exposure—the batch is ruined into Spoiled Tobacco. Once sheltered, the counter falls by $(item)5 ticks per game tick$().",
+      "text": "Direct rain is dangerous. Every 200 ticks of direct rain exposure adds wet damage. When the rain-exposure counter reaches $(4)1,200 ticks$()—60 seconds at uninterrupted exposure—the batch is ruined into Spoiled Tobacco. Once sheltered, the counter falls by $(item)5 ticks per game tick$().",
       "title": "Rain Damage"
     },
     {

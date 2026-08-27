@@ -10,12 +10,12 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Raw-leaf tiers use the 0–70 scale:$(br2)$(bad)0–15 Poor$()$(br)16–30 Common$(br)31–45 Good$(br)46–59 Excellent$(br)$(2)60–70 Perfect$()",
+      "text": "Raw-leaf tiers use the 0–70 scale:$(br2)$(4)0–15 Poor$()$(br)16–30 Common$(br)31–45 Good$(br)46–59 Excellent$(br)$(2)60–70 Perfect$()",
       "title": "Raw Leaf Tiers"
     },
     {
       "type": "patchouli:text",
-      "text": "The Spectacles' environmental Conditions rating ignores age: $(2)Excellent$() at 18+, $(2)Good$() at 10–17, $(item)Fair$() at 0–9, and $(bad)Poor$() below 0. This tells you whether the farm site is good, not whether the crop is ready.",
+      "text": "The Spectacles' environmental Conditions rating ignores age: $(2)Excellent$() at 18+, $(2)Good$() at 10–17, $(item)Fair$() at 0–9, and $(4)Poor$() below 0. This tells you whether the farm site is good, not whether the crop is ready.",
       "title": "Conditions Rating"
     },
     {

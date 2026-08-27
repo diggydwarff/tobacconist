@@ -25,7 +25,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "$(bad)Overheating:$() Warmth 7 or higher starts an overheat counter. If it remains that hot for $(bad)6,000 ticks$()—5 real minutes—the batch is ruined and loses 25 quality. Cooling the barrel makes the counter decay.",
+      "text": "$(4)Overheating:$() Warmth 7 or higher starts an overheat counter. If it remains that hot for $(4)6,000 ticks$()—5 real minutes—the batch is ruined and loses 25 quality. Cooling the barrel makes the counter decay.",
       "title": "Overheat Warning"
     },
     {
