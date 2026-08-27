@@ -1,33 +1,40 @@
 {
-  "forge:conditions": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "type": "forge:mod_loaded",
-      "modid": "create"
-    },
-    {
-      "type": "forge:not",
-      "value": {
-        "type": "forge:tag_empty",
-        "tag": "tobacconistmod:flavorings/honey"
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "create"
+        },
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:tag_empty",
+            "tag": "tobacconistmod:flavorings/honey"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "create:mixing",
+        "heatRequirement": "heated",
+        "ingredients": [
+          {
+            "tag": "tobacconistmod:flavorings/honey"
+          },
+          {
+            "amount": 1000,
+            "fluid": "tobacconistmod:aqua_vitae",
+            "nbt": {}
+          }
+        ],
+        "results": [
+          {
+            "amount": 1000,
+            "fluid": "tobacconistmod:essence_honey"
+          }
+        ]
       }
-    }
-  ],
-  "type": "create:mixing",
-  "heatRequirement": "heated",
-  "ingredients": [
-    {
-      "tag": "tobacconistmod:flavorings/honey"
-    },
-    {
-      "amount": 1000,
-      "fluid": "tobacconistmod:aqua_vitae",
-      "nbt": {}
-    }
-  ],
-  "results": [
-    {
-      "amount": 1000,
-      "fluid": "tobacconistmod:essence_honey"
     }
   ]
 }

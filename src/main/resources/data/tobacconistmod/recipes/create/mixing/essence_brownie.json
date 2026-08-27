@@ -1,33 +1,40 @@
 {
-  "forge:conditions": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "type": "forge:mod_loaded",
-      "modid": "create"
-    },
-    {
-      "type": "forge:not",
-      "value": {
-        "type": "forge:tag_empty",
-        "tag": "tobacconistmod:flavorings/brownie"
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "create"
+        },
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:tag_empty",
+            "tag": "tobacconistmod:flavorings/brownie"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "create:mixing",
+        "heatRequirement": "heated",
+        "ingredients": [
+          {
+            "tag": "tobacconistmod:flavorings/brownie"
+          },
+          {
+            "amount": 1000,
+            "fluid": "tobacconistmod:aqua_vitae",
+            "nbt": {}
+          }
+        ],
+        "results": [
+          {
+            "amount": 1000,
+            "fluid": "tobacconistmod:essence_brownie"
+          }
+        ]
       }
-    }
-  ],
-  "type": "create:mixing",
-  "heatRequirement": "heated",
-  "ingredients": [
-    {
-      "tag": "tobacconistmod:flavorings/brownie"
-    },
-    {
-      "amount": 1000,
-      "fluid": "tobacconistmod:aqua_vitae",
-      "nbt": {}
-    }
-  ],
-  "results": [
-    {
-      "amount": 1000,
-      "fluid": "tobacconistmod:essence_brownie"
     }
   ]
 }

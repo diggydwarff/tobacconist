@@ -1,21 +1,28 @@
 {
-  "forge:conditions": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "type": "forge:mod_loaded",
-      "modid": "create"
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "create"
+        }
+      ],
+      "recipe": {
+        "type": "tobacconistmod:create_tobacco_homogenizing",
+        "ingredients": [
+          {
+            "item": "tobacconistmod:tobacco_leaf_dokha_dry"
+          }
+        ],
+        "results": [
+          {
+            "item": "tobacconistmod:tobacco_leaf_dokha_dry",
+            "count": 64
+          }
+        ],
+        "processing_time": 100
+      }
     }
-  ],
-  "type": "tobacconistmod:create_tobacco_homogenizing",
-  "ingredients": [
-    {
-      "item": "tobacconistmod:tobacco_leaf_dokha_dry"
-    }
-  ],
-  "results": [
-    {
-      "item": "tobacconistmod:tobacco_leaf_dokha_dry",
-      "count": 64
-    }
-  ],
-  "processing_time": 100
+  ]
 }

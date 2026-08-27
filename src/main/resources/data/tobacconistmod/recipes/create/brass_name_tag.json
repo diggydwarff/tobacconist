@@ -1,31 +1,38 @@
 {
-  "forge:conditions": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "type": "forge:mod_loaded",
-      "modid": "create"
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "create"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "minecraft:name_tag"
+          },
+          {
+            "item": "create:brass_ingot"
+          },
+          {
+            "item": "create:brass_ingot"
+          },
+          {
+            "item": "create:precision_mechanism"
+          },
+          {
+            "item": "create:polished_rose_quartz"
+          }
+        ],
+        "result": {
+          "item": "tobacconistmod:brass_name_tag",
+          "count": 1
+        }
+      }
     }
-  ],
-  "type": "minecraft:crafting_shapeless",
-  "category": "misc",
-  "ingredients": [
-    {
-      "item": "minecraft:name_tag"
-    },
-    {
-      "item": "create:brass_ingot"
-    },
-    {
-      "item": "create:brass_ingot"
-    },
-    {
-      "item": "create:precision_mechanism"
-    },
-    {
-      "item": "create:polished_rose_quartz"
-    }
-  ],
-  "result": {
-    "item": "tobacconistmod:brass_name_tag",
-    "count": 1
-  }
+  ]
 }

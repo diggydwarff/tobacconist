@@ -1,27 +1,34 @@
 {
-  "forge:conditions": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "type": "forge:mod_loaded",
-      "modid": "create"
-    }
-  ],
-  "type": "create:mixing",
-  "ingredients": [
-    {
-      "amount": 1000,
-      "fluid": "tobacconistmod:molasses_plain",
-      "nbt": {}
-    },
-    {
-      "amount": 1000,
-      "fluid": "tobacconistmod:essence_sweetberry",
-      "nbt": {}
-    }
-  ],
-  "results": [
-    {
-      "amount": 1000,
-      "fluid": "tobacconistmod:molasses_sweetberry"
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "create"
+        }
+      ],
+      "recipe": {
+        "type": "create:mixing",
+        "ingredients": [
+          {
+            "amount": 1000,
+            "fluid": "tobacconistmod:molasses_plain",
+            "nbt": {}
+          },
+          {
+            "amount": 1000,
+            "fluid": "tobacconistmod:essence_sweetberry",
+            "nbt": {}
+          }
+        ],
+        "results": [
+          {
+            "amount": 1000,
+            "fluid": "tobacconistmod:molasses_sweetberry"
+          }
+        ]
+      }
     }
   ]
 }

@@ -1,24 +1,31 @@
 {
-  "forge:conditions": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "type": "forge:mod_loaded",
-      "modid": "create"
-    }
-  ],
-  "type": "tobacconistmod:create_tobacco_mixing",
-  "ingredients": [
-    {
-      "tag": "tobacconistmod:loose_tobacco"
-    },
-    {
-      "amount": 1000,
-      "fluid": "tobacconistmod:molasses_two_goldenapples",
-      "nbt": {}
-    }
-  ],
-  "results": [
-    {
-      "item": "tobacconistmod:shisha_tobacco"
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "create"
+        }
+      ],
+      "recipe": {
+        "type": "tobacconistmod:create_tobacco_mixing",
+        "ingredients": [
+          {
+            "tag": "tobacconistmod:loose_tobacco"
+          },
+          {
+            "amount": 1000,
+            "fluid": "tobacconistmod:molasses_two_goldenapples",
+            "nbt": {}
+          }
+        ],
+        "results": [
+          {
+            "item": "tobacconistmod:shisha_tobacco"
+          }
+        ]
+      }
     }
   ]
 }

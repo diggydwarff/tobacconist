@@ -1,33 +1,40 @@
 {
-  "forge:conditions": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "type": "forge:mod_loaded",
-      "modid": "create"
-    },
-    {
-      "type": "forge:not",
-      "value": {
-        "type": "forge:tag_empty",
-        "tag": "tobacconistmod:flavorings/tea"
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "create"
+        },
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:tag_empty",
+            "tag": "tobacconistmod:flavorings/tea"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "create:mixing",
+        "heatRequirement": "heated",
+        "ingredients": [
+          {
+            "tag": "tobacconistmod:flavorings/tea"
+          },
+          {
+            "amount": 1000,
+            "fluid": "tobacconistmod:aqua_vitae",
+            "nbt": {}
+          }
+        ],
+        "results": [
+          {
+            "amount": 1000,
+            "fluid": "tobacconistmod:essence_tea"
+          }
+        ]
       }
-    }
-  ],
-  "type": "create:mixing",
-  "heatRequirement": "heated",
-  "ingredients": [
-    {
-      "tag": "tobacconistmod:flavorings/tea"
-    },
-    {
-      "amount": 1000,
-      "fluid": "tobacconistmod:aqua_vitae",
-      "nbt": {}
-    }
-  ],
-  "results": [
-    {
-      "amount": 1000,
-      "fluid": "tobacconistmod:essence_tea"
     }
   ]
 }

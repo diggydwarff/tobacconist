@@ -1,23 +1,30 @@
 {
-  "forge:conditions": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "type": "forge:mod_loaded",
-      "modid": "create"
-    }
-  ],
-  "type": "tobacconistmod:create_tobacco_blending",
-  "ingredients": [
-    {
-      "tag": "tobacconistmod:loose_tobacco"
-    },
-    {
-      "tag": "tobacconistmod:loose_tobacco"
-    }
-  ],
-  "results": [
-    {
-      "item": "tobacconistmod:blended_tobacco",
-      "count": 2
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "create"
+        }
+      ],
+      "recipe": {
+        "type": "tobacconistmod:create_tobacco_blending",
+        "ingredients": [
+          {
+            "tag": "tobacconistmod:loose_tobacco"
+          },
+          {
+            "tag": "tobacconistmod:loose_tobacco"
+          }
+        ],
+        "results": [
+          {
+            "item": "tobacconistmod:blended_tobacco",
+            "count": 2
+          }
+        ]
+      }
     }
   ]
 }

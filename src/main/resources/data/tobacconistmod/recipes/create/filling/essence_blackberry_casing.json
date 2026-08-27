@@ -1,24 +1,31 @@
 {
-  "forge:conditions": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "type": "forge:mod_loaded",
-      "modid": "create"
-    }
-  ],
-  "type": "tobacconistmod:create_tobacco_casing",
-  "ingredients": [
-    {
-      "tag": "tobacconistmod:loose_tobacco"
-    },
-    {
-      "amount": 1000,
-      "fluid": "tobacconistmod:essence_blackberry",
-      "nbt": {}
-    }
-  ],
-  "results": [
-    {
-      "item": "tobacconistmod:tobacco_loose_wild"
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "create"
+        }
+      ],
+      "recipe": {
+        "type": "tobacconistmod:create_tobacco_casing",
+        "ingredients": [
+          {
+            "tag": "tobacconistmod:loose_tobacco"
+          },
+          {
+            "amount": 1000,
+            "fluid": "tobacconistmod:essence_blackberry",
+            "nbt": {}
+          }
+        ],
+        "results": [
+          {
+            "item": "tobacconistmod:tobacco_loose_wild"
+          }
+        ]
+      }
     }
   ]
 }
