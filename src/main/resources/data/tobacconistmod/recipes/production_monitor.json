@@ -1,36 +1,43 @@
 {
-  "forge:conditions": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "type": "forge:mod_loaded",
-      "modid": "create"
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "create"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "pattern": [
+          "IEI",
+          "BPB",
+          "IRI"
+        ],
+        "key": {
+          "I": {
+            "item": "create:iron_sheet"
+          },
+          "E": {
+            "item": "create:electron_tube"
+          },
+          "B": {
+            "item": "create:brass_casing"
+          },
+          "P": {
+            "item": "create:precision_mechanism"
+          },
+          "R": {
+            "item": "minecraft:redstone"
+          }
+        },
+        "result": {
+          "item": "tobacconistmod:production_monitor",
+          "count": 1
+        }
+      }
     }
-  ],
-  "type": "minecraft:crafting_shaped",
-  "category": "misc",
-  "pattern": [
-    "IEI",
-    "BPB",
-    "IRI"
-  ],
-  "key": {
-    "I": {
-      "item": "create:iron_sheet"
-    },
-    "E": {
-      "item": "create:electron_tube"
-    },
-    "B": {
-      "item": "create:brass_casing"
-    },
-    "P": {
-      "item": "create:precision_mechanism"
-    },
-    "R": {
-      "item": "minecraft:redstone"
-    }
-  },
-  "result": {
-    "item": "tobacconistmod:production_monitor",
-    "count": 1
-  }
+  ]
 }
