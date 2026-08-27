@@ -5,6 +5,7 @@ import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelBlockEntity;
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoDryingRackBlockEntity;
 import com.diggydwarff.tobacconistmod.block.entity.HangingTobaccoBlockEntity;
 import com.diggydwarff.tobacconistmod.block.custom.HangingTobaccoBlock;
+import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
 import com.diggydwarff.tobacconistmod.util.TobaccoCropDebugHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoTestItemFactory;
 import com.mojang.brigadier.CommandDispatcher;
@@ -38,6 +39,19 @@ public class TobacconistCommands {
                                 .executes(ctx -> showGiveHelp(ctx.getSource()))
                                 .then(Commands.literal("help")
                                         .executes(ctx -> showGiveHelp(ctx.getSource())))
+                                .then(Commands.literal("secret")
+                                        .executes(ctx -> showSecretBlendHelp(ctx.getSource()))
+                                        .then(Commands.argument("name", StringArgumentType.greedyString())
+                                                .suggests((ctx, builder) -> SharedSuggestionProvider.suggest(
+                                                        TobacconistConfig.getSecretBlendDefinitions().stream()
+                                                                .map(TobacconistConfig.SecretBlendDefinition::name)
+                                                                .toArray(String[]::new),
+                                                        builder
+                                                ))
+                                                .executes(ctx -> giveSecretBlend(
+                                                        ctx.getSource(),
+                                                        StringArgumentType.getString(ctx, "name")
+                                                ))))
                                 .then(Commands.argument("type", StringArgumentType.word())
                                         .suggests((ctx, builder) -> SharedSuggestionProvider.suggest(
                                                 new String[] {
@@ -98,6 +112,34 @@ public class TobacconistCommands {
         source.sendSuccess(() -> Component.translatable("tobacconistmod.command.give_example"), false);
         source.sendSuccess(() -> Component.translatable("tobacconistmod.command.blend_example"), false);
         return 1;
+    }
+
+    private static int showSecretBlendHelp(CommandSourceStack source) {
+        source.sendSuccess(() -> Component.translatable("tobacconistmod.command.secret_blend_help"), false);
+        return 1;
+    }
+
+    private static int giveSecretBlend(CommandSourceStack source, String name) throws CommandSyntaxException {
+        ServerPlayer player = source.getPlayerOrException();
+
+        final ItemStack stack;
+        try {
+            stack = TobaccoTestItemFactory.createSecretBlend(name);
+        } catch (IllegalArgumentException ex) {
+            source.sendFailure(Component.translatable("tobacconistmod.command.unknown_secret_blend", name));
+            return 0;
+        }
+
+        ItemStack given = stack.copy();
+        if (!player.addItem(given)) {
+            player.drop(given, false);
+        }
+
+        source.sendSuccess(
+                () -> Component.translatable("tobacconistmod.command.gave_item", stack.getCount(), stack.getHoverName()),
+                false
+        );
+        return stack.getCount();
     }
 
     private static int giveTestItem(CommandSourceStack source, String type, String options) throws CommandSyntaxException {

@@ -21,6 +21,12 @@
         "tobacconistmod:flake_cut": 1.0
       },
       "model": "tobacconistmod:item/blended_tobacco_flake"
+    },
+    {
+      "predicate": {
+        "tobacconistmod:legendary_secret": 1.0
+      },
+      "model": "tobacconistmod:item/blended_tobacco_legendary"
     }
   ]
 }

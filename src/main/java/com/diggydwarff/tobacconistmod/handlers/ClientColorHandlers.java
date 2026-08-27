@@ -1,6 +1,5 @@
 package com.diggydwarff.tobacconistmod.handlers;
 
-import net.minecraftforge.fml.common.Mod;
 import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
 
 import com.diggydwarff.tobacconistmod.TobacconistMod;
@@ -9,6 +8,7 @@ import com.diggydwarff.tobacconistmod.block.custom.HookahBlock;
 import com.diggydwarff.tobacconistmod.block.custom.DyeableDoubleHookahBlock;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.recipes.WoodenPipeRecipe;
+import com.diggydwarff.tobacconistmod.util.TobaccoBlendHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -19,6 +19,7 @@ import net.minecraft.world.level.EmptyBlockGetter;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = TobacconistMod.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientColorHandlers {
@@ -102,6 +103,22 @@ public class ClientColorHandlers {
             int rgb = ((DyeableLeatherItem) stack.getItem()).getColor(stack);
             return 0xFF000000 | rgb;
         }, ModItems.TOBACCO_POUCH.get());
+
+        // Secret blends get a subtle palette shift derived from their component makeup and identity.
+        event.register((stack, tintIndex) -> secretBlendTint(stack, tintIndex),
+                ModItems.BLENDED_TOBACCO.get(),
+                ModItems.CIGARETTE.get(),
+                ModItems.CIGAR.get(),
+                ModItems.SHISHA_TOBACCO.get());
+    }
+
+
+    private static int secretBlendTint(net.minecraft.world.item.ItemStack stack, int tintIndex) {
+        if (tintIndex == 0) return TobaccoBlendHelper.getSecretBlendTintArgb(stack);
+        if (tintIndex == 1 && TobaccoBlendHelper.isLegendarySecretBlend(stack)) {
+            return TobaccoBlendHelper.getLegendaryOverlayArgb(stack);
+        }
+        return 0xFFFFFFFF;
     }
 
     /** Vanilla-style dye diffuse colors shared by one-block and tall Hookahs. */

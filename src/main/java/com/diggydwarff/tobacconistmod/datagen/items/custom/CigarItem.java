@@ -89,7 +89,11 @@ public class CigarItem extends SmokingItem {
             Component cigarName = Component.translatable(flavored
                     ? "tobacconistmod.product.flavored_cigar"
                     : "item.tobacconistmod.cigar");
-            return Component.translatable("tobacconistmod.product.named", blendName, cigarName);
+            return Component.translatable(
+                    "tobacconistmod.product.named",
+                    TobaccoBlendHelper.getIntrinsicBlendNameComponent(packed),
+                    cigarName
+            );
         }
 
         if (blended || flavored) return productName;
@@ -147,8 +151,14 @@ public class CigarItem extends SmokingItem {
                     String blendName = packedBlend.getString(TobaccoBlendHelper.TAG_BLEND_NAME);
                     tooltip.add((blendName.isEmpty()
                             ? Component.translatable("tobacconistmod.ui.filler_blend_components")
-                            : Component.translatable("tobacconistmod.ui.filler_blend", blendName))
+                            : Component.translatable(
+                                    "tobacconistmod.ui.filler_blend",
+                                    TobaccoBlendHelper.getIntrinsicBlendNameComponent(packedBlend)
+                            ))
                             .withStyle(ChatFormatting.DARK_GRAY));
+                    if (!blendName.isEmpty()) {
+                        TobaccoBlendHelper.appendLegendarySecretTooltip(stack, tooltip);
+                    }
                     for (TobaccoBlendComponent component : blendComponents) {
                         Component flavor = component.flavorId().isBlank()
                                 ? Component.translatable("tobacconistmod.ui.plain")

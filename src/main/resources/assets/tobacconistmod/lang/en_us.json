@@ -846,6 +846,8 @@
   "tobacconistmod.command.give_help": "Types: raw, leaf, loose, blend, cigarette, cigar, shisha. Options use key=value, e.g. variety=virginia quality=90 cure=flue cut=shag flavor=berry fermented=true age=365 ruined=false count=16. Blends may use components=virginia:95:flue:none,burley:90:air:berry,shade:88:sun:none.",
   "tobacconistmod.command.give_example": "Example: /tobacconist give loose variety=virginia quality=90 cure=flue cut=shag flavor=berry fermented=true age=365",
   "tobacconistmod.command.blend_example": "Blend example: /tobacconist give blend components=virginia:95:flue:none,burley:90:air:berry,shade:88:sun:none cut=shag",
+  "tobacconistmod.command.secret_blend_help": "Secret blend: /tobacconist give secret <name>. Tab-complete the configured secret blend name.",
+  "tobacconistmod.command.unknown_secret_blend": "Unknown configured secret blend: %s",
   "tobacconistmod.command.invalid_test_item": "Could not create the requested test item. Check the command syntax.",
   "tobacconistmod.command.gave_item": "Gave %1$sx %2$s",
   "tobacconistmod.command.no_block": "No block in sight.",
@@ -1103,5 +1105,9 @@
   "gui.tobacconistmod.production_monitor.option.output.1": "Pulse",
   "gui.tobacconistmod.production_monitor.option.output.2": "Hold",
   "gui.tobacconistmod.production_monitor.option.external_reset.0": "Off",
-  "gui.tobacconistmod.production_monitor.option.external_reset.1": "On"
+  "gui.tobacconistmod.production_monitor.option.external_reset.1": "On",
+  "tobacconistmod.ui.secret_blend": "Secret Blend",
+  "tobacconistmod.ui.secret_cut_blend": "Secret %s Blend",
+  "tobacconistmod.ui.legendary_bonus_after": "Bonus builds over %s draws:",
+  "tobacconistmod.ui.legendary_bonus_effect": "• %s"
 }
