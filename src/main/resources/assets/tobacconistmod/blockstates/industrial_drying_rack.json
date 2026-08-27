@@ -10,6 +10,14 @@
     },
     {
       "when": {
+        "half": "upper"
+      },
+      "apply": {
+        "model": "tobacconistmod:block/industrial_drying_rack_upper_proxy"
+      }
+    },
+    {
+      "when": {
         "half": "lower",
         "load_stage": "1",
         "cure_stage": "0",

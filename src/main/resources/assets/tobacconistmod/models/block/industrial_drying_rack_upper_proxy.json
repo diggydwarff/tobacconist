@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "tobacconistmod:block/industrial_drying_rack"
+  }
+}
