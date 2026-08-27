@@ -12,7 +12,7 @@
       "type": "patchouli:crafting",
       "recipe": "tobacconistmod:flue_firebox",
       "title": "Flue Firebox",
-      "text": "A lit Flue Firebox supplies the heat source used by nearby racks."
+      "text": "A lit Flue Firebox supplies the heat source used by nearby racks. Redstone power pauses the Firebox without consuming its remaining burn time; remove the signal to resume."
     },
     {
       "type": "patchouli:text",

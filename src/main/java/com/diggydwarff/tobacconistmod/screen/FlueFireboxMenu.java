@@ -17,13 +17,13 @@ public class FlueFireboxMenu extends AbstractContainerMenu {
     private final ContainerData data;
 
     public FlueFireboxMenu(int windowId, Inventory playerInventory, RegistryFriendlyByteBuf buf) {
-        this(windowId, playerInventory, getBlockEntityContainer(playerInventory, buf), new SimpleContainerData(2));
+        this(windowId, playerInventory, getBlockEntityContainer(playerInventory, buf), new SimpleContainerData(3));
     }
 
     public FlueFireboxMenu(int windowId, Inventory playerInventory, Container container, ContainerData data) {
         super(ModMenuTypes.FLUE_FIREBOX_MENU.get(), windowId);
         checkContainerSize(container, 1);
-        checkContainerDataCount(data, 2);
+        checkContainerDataCount(data, 3);
 
         this.container = container;
         this.data = data;
@@ -59,7 +59,11 @@ public class FlueFireboxMenu extends AbstractContainerMenu {
     }
 
     public boolean isLit() {
-        return data.get(0) > 0;
+        return data.get(0) > 0 && data.get(2) == 0;
+    }
+
+    public boolean isRedstonePaused() {
+        return data.get(2) != 0;
     }
 
     public int getBurnProgress() {
