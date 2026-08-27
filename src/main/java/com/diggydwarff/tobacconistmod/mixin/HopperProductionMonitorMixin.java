@@ -1,11 +1,11 @@
 package com.diggydwarff.tobacconistmod.mixin;
 
 import com.diggydwarff.tobacconistmod.util.ProductionMonitorTransferHooks;
-import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.HopperBlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -13,65 +13,59 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Deque;
-import java.util.List;
 
-/** Counts the actual inventory delta when a Forge 1.20.1 Hopper successfully ejects items. */
+/**
+ * Tracks hopper transfers into vanilla Container destinations through HopperBlockEntity#addItem.
+ *
+ * Forge patches HopperBlockEntity#ejectItems with a different descriptor that has no matching
+ * vanilla obfuscation entry. Hooking addItem instead keeps this mixin normally remappable and
+ * still observes the actual amount accepted by vanilla-container destinations.
+ */
 @Mixin(HopperBlockEntity.class)
 public abstract class HopperProductionMonitorMixin {
     @Unique
-    private static final ThreadLocal<Deque<tobacconist$HopperSnapshot>> TOBACCONIST$HOPPER_SNAPSHOTS =
+    private static final ThreadLocal<Deque<tobacconist$TransferSnapshot>> TOBACCONIST$TRANSFERS =
             ThreadLocal.withInitial(ArrayDeque::new);
 
-    /*
-     * Forge patches vanilla's fourth ejectItems argument from Container to HopperBlockEntity.
-     * Target by mapped name only: Mixin can remap the stable method name to production SRG while
-     * the callback signature still matches Forge's patched runtime method.
-     */
-    @Inject(method = "ejectItems", at = @At("HEAD"))
-    private static void tobacconist$captureHopperOutput(Level level, BlockPos pos, BlockState state, HopperBlockEntity hopper,
-                                                        CallbackInfoReturnable<Boolean> cir) {
-        List<ItemStack> before = new ArrayList<>(hopper.getContainerSize());
-        for (int slot = 0; slot < hopper.getContainerSize(); slot++) {
-            before.add(hopper.getItem(slot).copy());
+    @Inject(
+            method = "addItem(Lnet/minecraft/world/Container;Lnet/minecraft/world/Container;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/core/Direction;)Lnet/minecraft/world/item/ItemStack;",
+            at = @At("HEAD")
+    )
+    private static void tobacconist$captureHopperOutput(Container source, Container destination, ItemStack stack,
+                                                        Direction direction, CallbackInfoReturnable<ItemStack> cir) {
+        if (source instanceof HopperBlockEntity hopper) {
+            TOBACCONIST$TRANSFERS.get().push(new tobacconist$TransferSnapshot(hopper, stack.copy()));
         }
-        TOBACCONIST$HOPPER_SNAPSHOTS.get().push(new tobacconist$HopperSnapshot(hopper, before));
     }
 
-    @Inject(method = "ejectItems", at = @At("RETURN"))
-    private static void tobacconist$recordHopperOutput(Level level, BlockPos pos, BlockState state, HopperBlockEntity hopper,
-                                                       CallbackInfoReturnable<Boolean> cir) {
-        Deque<tobacconist$HopperSnapshot> snapshots = TOBACCONIST$HOPPER_SNAPSHOTS.get();
-        if (snapshots.isEmpty()) return;
-        tobacconist$HopperSnapshot snapshot = snapshots.pop();
-        if (snapshots.isEmpty()) TOBACCONIST$HOPPER_SNAPSHOTS.remove();
+    @Inject(
+            method = "addItem(Lnet/minecraft/world/Container;Lnet/minecraft/world/Container;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/core/Direction;)Lnet/minecraft/world/item/ItemStack;",
+            at = @At("RETURN")
+    )
+    private static void tobacconist$recordHopperOutput(Container source, Container destination, ItemStack stack,
+                                                       Direction direction, CallbackInfoReturnable<ItemStack> cir) {
+        if (!(source instanceof HopperBlockEntity)) return;
 
-        if (!cir.getReturnValue() || level == null || level.isClientSide) return;
+        Deque<tobacconist$TransferSnapshot> transfers = TOBACCONIST$TRANSFERS.get();
+        if (transfers.isEmpty()) return;
+        tobacconist$TransferSnapshot snapshot = transfers.pop();
+        if (transfers.isEmpty()) TOBACCONIST$TRANSFERS.remove();
 
-        HopperBlockEntity capturedHopper = snapshot.hopper();
-        int slots = Math.min(snapshot.before().size(), capturedHopper.getContainerSize());
-        for (int slot = 0; slot < slots; slot++) {
-            ItemStack before = snapshot.before().get(slot);
-            if (before.isEmpty()) continue;
+        ItemStack before = snapshot.before();
+        ItemStack remainder = cir.getReturnValue();
+        int remaining = remainder == null || remainder.isEmpty() ? 0 : remainder.getCount();
+        int moved = before.getCount() - remaining;
+        if (moved <= 0) return;
 
-            ItemStack after = capturedHopper.getItem(slot);
-            int moved;
-            if (after.isEmpty()) {
-                moved = before.getCount();
-            } else if (ItemStack.isSameItemSameTags(before, after)) {
-                moved = before.getCount() - after.getCount();
-            } else {
-                moved = before.getCount();
-            }
+        HopperBlockEntity hopper = snapshot.hopper();
+        Level level = hopper.getLevel();
+        if (level == null || level.isClientSide) return;
 
-            if (moved > 0) {
-                ProductionMonitorTransferHooks.notifySuccessfulTransfer(
-                        level, capturedHopper.getBlockPos(), before.copyWithCount(moved));
-            }
-        }
+        ProductionMonitorTransferHooks.notifySuccessfulTransfer(
+                level, hopper.getBlockPos(), before.copyWithCount(moved));
     }
 
     @Unique
-    private record tobacconist$HopperSnapshot(HopperBlockEntity hopper, List<ItemStack> before) {}
+    private record tobacconist$TransferSnapshot(HopperBlockEntity hopper, ItemStack before) {}
 }

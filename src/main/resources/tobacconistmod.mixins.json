@@ -6,7 +6,8 @@
   "refmap": "tobacconistmod.refmap.json",
   "mixins": [
     "ArmorDyeRecipeMixin",
-    "HopperProductionMonitorMixin"
+    "HopperProductionMonitorMixin",
+    "ForgeHopperProductionMonitorMixin"
   ],
   "injectors": {
     "defaultRequire": 1
