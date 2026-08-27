@@ -39,7 +39,10 @@ public final class TobacconistPonderScenes {
                 .addStoryBoard("tobacco/wooden_automation_arm", TobacconistPonderStoryboards::woodenAutomationArm);
 
         helper.forComponents(id(ModBlocks.INDUSTRIAL_DRYING_RACK.get()))
-                .addStoryBoard("tobacco/industrial_curing", TobacconistPonderStoryboards::industrialCuring);
+                .addStoryBoard("tobacco/industrial_curing_air", TobacconistPonderStoryboards::industrialAirCuring)
+                .addStoryBoard("tobacco/industrial_curing_fire", TobacconistPonderStoryboards::industrialFireCuring)
+                .addStoryBoard("tobacco/industrial_curing_flue", TobacconistPonderStoryboards::industrialFlueCuring)
+                .addStoryBoard("tobacco/industrial_curing_array", TobacconistPonderStoryboards::industrialRackArray);
 
         helper.forComponents(
                         id(ModItems.WILD_TOBACCO_LEAF.get()),

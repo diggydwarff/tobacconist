@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
 import com.diggydwarff.tobacconistmod.block.custom.IndustrialDryingRackBlock;
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoDryingRackBlockEntity;
+import com.diggydwarff.tobacconistmod.block.entity.IndustrialDryingRackBlockEntity;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.BottledMolassesFlavors;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
@@ -373,6 +374,259 @@ public final class TobacconistPonderStoryboards {
                 .pointAt(util.vector().centerOf(depot))
                 .text(Component.translatable("tobacconistmod.ponder.tobacconist_wooden_automation_arm.text_3").getString());
         scene.idle(105);
+    }
+
+    public static void industrialAirCuring(SceneBuilder builder, SceneBuildingUtil util) {
+        CreateSceneBuilder scene = beginSized(builder, "tobacconist_industrial_curing_air", 10, 0.90f, 270);
+        BlockPos lowerRack = util.grid().at(1, 1, 4);
+        BlockPos upperRack = util.grid().at(1, 2, 4);
+        BlockPos lowerFan = util.grid().at(1, 1, 2);
+        BlockPos upperFan = util.grid().at(1, 2, 2);
+        BlockPos lowerShaft = util.grid().at(1, 1, 1);
+        BlockPos upperShaft = util.grid().at(1, 2, 1);
+        BlockPos lowerChute = util.grid().at(1, 3, 4);
+        BlockPos upperChute = util.grid().at(1, 4, 4);
+        BlockPos outputFunnel = util.grid().at(1, 2, 5);
+        BlockPos outputBelt = util.grid().at(1, 1, 8);
+
+        Selection rackAssembly = util.select().position(lowerRack)
+                .add(util.select().position(upperRack))
+                .add(util.select().position(lowerChute))
+                .add(util.select().position(upperChute));
+        Selection airflow = util.select().position(lowerFan)
+                .add(util.select().position(upperFan))
+                .add(util.select().position(lowerShaft))
+                .add(util.select().position(upperShaft));
+        Selection beltLine = util.select().fromTo(1, 1, 5, 3, 2, 9);
+
+        ItemStack raw = new ItemStack(ModItems.VIRGINIA_TOBACCO_LEAF.get(), 32);
+        ItemStack cured = new ItemStack(ModItems.VIRGINIA_TOBACCO_LEAF_DRY.get(), 32);
+        TobaccoCuringHelper.applyCureData(cured, TobaccoCuringHelper.CURE_AIR, 75);
+
+        scene.world().showSection(rackAssembly, Direction.DOWN);
+        scene.overlay().showControls(util.vector().topOf(upperChute), Pointing.DOWN, 35).withItem(raw);
+        scene.overlay().showText(95)
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().centerOf(lowerRack))
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_industrial_curing_air.text_1").getString());
+        scene.world().modifyBlockEntity(lowerRack, IndustrialDryingRackBlockEntity.class, be -> be.setItem(0, raw.copy()));
+        scene.idle(105);
+
+        scene.world().showSection(airflow, Direction.SOUTH);
+        scene.world().setKineticSpeed(airflow, 32);
+        scene.effects().rotationDirectionIndicator(lowerShaft);
+        scene.effects().rotationDirectionIndicator(upperShaft);
+        scene.overlay().showText(105)
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().centerOf(upperFan))
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_industrial_curing_air.text_2").getString());
+        scene.idle(115);
+
+        scene.world().showSection(beltLine, Direction.DOWN);
+        scene.world().setKineticSpeed(beltLine, 32);
+        scene.world().modifyBlockEntity(lowerRack, IndustrialDryingRackBlockEntity.class, be -> be.setItem(0, cured.copy()));
+        scene.world().createItemOnBeltLike(outputBelt, Direction.UP, cured.copyWithCount(8));
+        scene.effects().indicateSuccess(outputFunnel);
+        scene.effects().indicateSuccess(lowerRack);
+        scene.overlay().showText(105)
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().centerOf(outputFunnel))
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_industrial_curing_air.text_3").getString());
+        scene.idle(120);
+    }
+
+    public static void industrialFireCuring(SceneBuilder builder, SceneBuildingUtil util) {
+        CreateSceneBuilder scene = beginSized(builder, "tobacconist_industrial_curing_fire", 10, 0.90f, 270);
+        BlockPos lowerRack = util.grid().at(1, 1, 4);
+        BlockPos upperRack = util.grid().at(1, 2, 4);
+        BlockPos lowerFan = util.grid().at(1, 1, 2);
+        BlockPos upperFan = util.grid().at(1, 2, 2);
+        BlockPos lowerShaft = util.grid().at(1, 1, 1);
+        BlockPos upperShaft = util.grid().at(1, 2, 1);
+        BlockPos lowerCampfire = util.grid().at(1, 1, 3);
+        BlockPos upperCampfire = util.grid().at(1, 2, 3);
+        BlockPos lowerChute = util.grid().at(1, 3, 4);
+        BlockPos upperChute = util.grid().at(1, 4, 4);
+        BlockPos outputFunnel = util.grid().at(1, 2, 5);
+        BlockPos outputBelt = util.grid().at(1, 1, 8);
+
+        Selection rackAssembly = util.select().position(lowerRack)
+                .add(util.select().position(upperRack))
+                .add(util.select().position(lowerChute))
+                .add(util.select().position(upperChute));
+        Selection heat = util.select().position(lowerCampfire).add(util.select().position(upperCampfire));
+        Selection airflow = util.select().position(lowerFan)
+                .add(util.select().position(upperFan))
+                .add(util.select().position(lowerShaft))
+                .add(util.select().position(upperShaft));
+        Selection beltLine = util.select().fromTo(1, 1, 5, 4, 2, 9);
+
+        ItemStack raw = new ItemStack(ModItems.BURLEY_TOBACCO_LEAF.get(), 32);
+        ItemStack cured = new ItemStack(ModItems.BURLEY_TOBACCO_LEAF_DRY.get(), 32);
+        TobaccoCuringHelper.applyCureData(cured, TobaccoCuringHelper.CURE_FIRE, 75);
+
+        scene.world().showSection(rackAssembly, Direction.DOWN);
+        scene.overlay().showControls(util.vector().topOf(upperChute), Pointing.DOWN, 35).withItem(raw);
+        scene.overlay().showText(95)
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().centerOf(lowerRack))
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_industrial_curing_fire.text_1").getString());
+        scene.world().modifyBlockEntity(lowerRack, IndustrialDryingRackBlockEntity.class, be -> be.setItem(0, raw.copy()));
+        scene.idle(100);
+
+        scene.world().showSection(heat, Direction.SOUTH);
+        scene.world().showSection(airflow, Direction.SOUTH);
+        scene.world().setKineticSpeed(airflow, 32);
+        scene.effects().rotationDirectionIndicator(lowerShaft);
+        scene.effects().rotationDirectionIndicator(upperShaft);
+        scene.overlay().showText(110)
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().centerOf(upperCampfire))
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_industrial_curing_fire.text_2").getString());
+        scene.idle(120);
+
+        scene.world().showSection(beltLine, Direction.DOWN);
+        scene.world().setKineticSpeed(beltLine, 32);
+        scene.world().modifyBlockEntity(lowerRack, IndustrialDryingRackBlockEntity.class, be -> be.setItem(0, cured.copy()));
+        scene.world().createItemOnBeltLike(outputBelt, Direction.UP, cured.copyWithCount(8));
+        scene.effects().indicateSuccess(outputFunnel);
+        scene.effects().indicateSuccess(lowerRack);
+        scene.overlay().showText(105)
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().centerOf(outputFunnel))
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_industrial_curing_fire.text_3").getString());
+        scene.idle(120);
+    }
+
+    public static void industrialFlueCuring(SceneBuilder builder, SceneBuildingUtil util) {
+        CreateSceneBuilder scene = beginSized(builder, "tobacconist_industrial_curing_flue", 10, 0.90f, 270);
+        BlockPos lowerRack = util.grid().at(1, 1, 4);
+        BlockPos upperRack = util.grid().at(1, 2, 4);
+        BlockPos lowerFan = util.grid().at(1, 1, 2);
+        BlockPos upperFan = util.grid().at(1, 2, 2);
+        BlockPos lowerShaft = util.grid().at(1, 1, 1);
+        BlockPos upperShaft = util.grid().at(1, 2, 1);
+        BlockPos lowerLava = util.grid().at(1, 1, 3);
+        BlockPos upperLava = util.grid().at(1, 2, 3);
+        BlockPos lowerChute = util.grid().at(1, 3, 4);
+        BlockPos upperChute = util.grid().at(1, 4, 4);
+        BlockPos outputFunnel = util.grid().at(1, 2, 5);
+        BlockPos outputBelt = util.grid().at(1, 1, 8);
+
+        Selection rackAssembly = util.select().position(lowerRack)
+                .add(util.select().position(upperRack))
+                .add(util.select().position(lowerChute))
+                .add(util.select().position(upperChute));
+        Selection heat = util.select().position(lowerLava).add(util.select().position(upperLava));
+        Selection airflow = util.select().position(lowerFan)
+                .add(util.select().position(upperFan))
+                .add(util.select().position(lowerShaft))
+                .add(util.select().position(upperShaft));
+        Selection beltLine = util.select().fromTo(1, 1, 5, 1, 2, 9);
+
+        ItemStack raw = new ItemStack(ModItems.VIRGINIA_TOBACCO_LEAF.get(), 32);
+        ItemStack cured = new ItemStack(ModItems.VIRGINIA_TOBACCO_LEAF_DRY.get(), 32);
+        TobaccoCuringHelper.applyCureData(cured, TobaccoCuringHelper.CURE_FLUE, 75);
+
+        scene.world().showSection(rackAssembly, Direction.DOWN);
+        scene.overlay().showControls(util.vector().topOf(upperChute), Pointing.DOWN, 35).withItem(raw);
+        scene.overlay().showText(95)
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().centerOf(lowerRack))
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_industrial_curing_flue.text_1").getString());
+        scene.world().modifyBlockEntity(lowerRack, IndustrialDryingRackBlockEntity.class, be -> be.setItem(0, raw.copy()));
+        scene.idle(100);
+
+        scene.world().showSection(heat, Direction.SOUTH);
+        scene.world().showSection(airflow, Direction.SOUTH);
+        scene.world().setKineticSpeed(airflow, 32);
+        scene.effects().rotationDirectionIndicator(lowerShaft);
+        scene.effects().rotationDirectionIndicator(upperShaft);
+        scene.overlay().showText(110)
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().centerOf(upperLava))
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_industrial_curing_flue.text_2").getString());
+        scene.idle(120);
+
+        scene.world().showSection(beltLine, Direction.DOWN);
+        scene.world().setKineticSpeed(beltLine, 32);
+        scene.world().modifyBlockEntity(lowerRack, IndustrialDryingRackBlockEntity.class, be -> be.setItem(0, cured.copy()));
+        scene.world().createItemOnBeltLike(outputBelt, Direction.UP, cured.copyWithCount(8));
+        scene.effects().indicateSuccess(outputFunnel);
+        scene.effects().indicateSuccess(lowerRack);
+        scene.overlay().showText(105)
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().centerOf(outputFunnel))
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_industrial_curing_flue.text_3").getString());
+        scene.idle(120);
+    }
+
+    public static void industrialRackArray(SceneBuilder builder, SceneBuildingUtil util) {
+        CreateSceneBuilder scene = beginSized(builder, "tobacconist_industrial_curing_array", 7, 0.98f, 270);
+        BlockPos firstRack = util.grid().at(3, 1, 3);
+        BlockPos secondRack = util.grid().at(4, 1, 3);
+        BlockPos thirdRack = util.grid().at(5, 1, 3);
+        BlockPos firstFan = util.grid().at(3, 2, 1);
+        BlockPos firstCampfire = util.grid().at(3, 2, 2);
+        BlockPos beltOutput = util.grid().at(2, 1, 4);
+
+        Selection firstLane = util.select().fromTo(3, 1, 1, 3, 4, 4);
+        Selection secondLane = util.select().fromTo(4, 1, 1, 4, 4, 4);
+        Selection thirdLane = util.select().fromTo(5, 1, 1, 5, 4, 4);
+        Selection beltDrive = util.select().fromTo(1, 1, 2, 5, 1, 4);
+        Selection allFans = util.select().fromTo(3, 1, 1, 5, 2, 1);
+
+        ItemStack raw = new ItemStack(ModItems.BURLEY_TOBACCO_LEAF.get(), 32);
+        ItemStack cured = new ItemStack(ModItems.BURLEY_TOBACCO_LEAF_DRY.get(), 32);
+        TobaccoCuringHelper.applyCureData(cured, TobaccoCuringHelper.CURE_FIRE, 75);
+
+        scene.world().showSection(firstLane, Direction.DOWN);
+        scene.world().setKineticSpeed(allFans, 32);
+        scene.overlay().showControls(util.vector().topOf(firstRack.above(3)), Pointing.DOWN, 35).withItem(raw);
+        scene.overlay().showText(100)
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().centerOf(firstRack))
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_industrial_curing_array.text_1").getString());
+        scene.world().modifyBlockEntity(firstRack, IndustrialDryingRackBlockEntity.class, be -> be.setItem(0, raw.copy()));
+        scene.effects().rotationDirectionIndicator(firstFan);
+        scene.idle(110);
+
+        scene.world().showSection(secondLane, Direction.DOWN);
+        scene.world().showSection(thirdLane, Direction.DOWN);
+        scene.world().modifyBlockEntity(secondRack, IndustrialDryingRackBlockEntity.class, be -> be.setItem(0, raw.copy()));
+        scene.world().modifyBlockEntity(thirdRack, IndustrialDryingRackBlockEntity.class, be -> be.setItem(0, raw.copy()));
+        scene.overlay().showText(110)
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().centerOf(firstCampfire))
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_industrial_curing_array.text_2").getString());
+        scene.idle(120);
+
+        scene.world().showSection(beltDrive, Direction.DOWN);
+        scene.world().setKineticSpeed(beltDrive, 32);
+        scene.world().modifyBlockEntity(firstRack, IndustrialDryingRackBlockEntity.class, be -> be.setItem(0, cured.copy()));
+        scene.world().modifyBlockEntity(secondRack, IndustrialDryingRackBlockEntity.class, be -> be.setItem(0, cured.copy()));
+        scene.world().modifyBlockEntity(thirdRack, IndustrialDryingRackBlockEntity.class, be -> be.setItem(0, cured.copy()));
+        scene.world().createItemOnBeltLike(beltOutput, Direction.UP, cured.copyWithCount(8));
+        scene.effects().indicateSuccess(firstRack);
+        scene.effects().indicateSuccess(secondRack);
+        scene.effects().indicateSuccess(thirdRack);
+        scene.overlay().showText(110)
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().topOf(beltOutput))
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_industrial_curing_array.text_3").getString());
+        scene.idle(125);
     }
 
     public static void industrialCuring(SceneBuilder builder, SceneBuildingUtil util) {
