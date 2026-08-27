@@ -8,6 +8,7 @@ import com.diggydwarff.tobacconistmod.block.custom.HookahBlock;
 import com.diggydwarff.tobacconistmod.block.custom.DyeableDoubleHookahBlock;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.recipes.WoodenPipeRecipe;
+import com.diggydwarff.tobacconistmod.util.TobaccoBlendHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -102,6 +103,22 @@ public class ClientColorHandlers {
             int rgb = DyedItemColor.getOrDefault(stack, DyedItemColor.LEATHER_COLOR);
             return 0xFF000000 | rgb;
         }, ModItems.TOBACCO_POUCH.get());
+
+        // Secret blends get a subtle palette shift derived from their component makeup and identity.
+        event.register((stack, tintIndex) -> secretBlendTint(stack, tintIndex),
+                ModItems.BLENDED_TOBACCO.get(),
+                ModItems.CIGARETTE.get(),
+                ModItems.CIGAR.get(),
+                ModItems.SHISHA_TOBACCO.get());
+    }
+
+
+    private static int secretBlendTint(net.minecraft.world.item.ItemStack stack, int tintIndex) {
+        if (tintIndex == 0) return TobaccoBlendHelper.getSecretBlendTintArgb(stack);
+        if (tintIndex == 1 && TobaccoBlendHelper.isLegendarySecretBlend(stack)) {
+            return TobaccoBlendHelper.getLegendaryOverlayArgb(stack);
+        }
+        return 0xFFFFFFFF;
     }
 
     /** Vanilla-style dye diffuse colors shared by one-block and tall Hookahs. */

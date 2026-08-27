@@ -134,6 +134,10 @@ public class ShishaTobaccoItem extends SmokingProduct {
                 tooltip.add(Component.translatable("tobacconistmod.ui.ruined").withStyle(ChatFormatting.DARK_RED));
             }
 
+            if (!TobaccoBlendHelper.getSecretBlendName(stack).isEmpty()) {
+                TobaccoBlendHelper.appendLegendarySecretTooltip(stack, tooltip);
+            }
+
             for (String shishaFlavor : Arrays.asList(
                     tag.getString("flavor1"),
                     tag.getString("flavor2"),

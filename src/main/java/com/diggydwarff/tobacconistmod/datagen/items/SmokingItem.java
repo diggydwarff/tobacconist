@@ -4,9 +4,11 @@ import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelBlockEntity;
 import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
 import com.diggydwarff.tobacconistmod.effect.ModEffects;
 import com.diggydwarff.tobacconistmod.util.SmokeParticleHelper;
+import com.diggydwarff.tobacconistmod.util.TobaccoBlendHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoProductQualityHelper;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -124,7 +126,54 @@ public abstract class SmokingItem extends Item {
         }
 
         applyQualityHealthBonus(player, tobaccoStack);
+        applySecretBlendLegendaryBonus(player, tobaccoStack);
         applyConfiguredAdditionalEffects(player);
+    }
+
+    private static void applySecretBlendLegendaryBonus(Player player, ItemStack tobaccoStack) {
+        if (player == null || tobaccoStack == null || tobaccoStack.isEmpty()) return;
+
+        String blendName = TobaccoBlendHelper.getSecretBlendName(tobaccoStack);
+        if (blendName.isEmpty()) return;
+
+        TobacconistConfig.SecretBlendBonusDefinition bonus = TobacconistConfig.getSecretBlendBonus(blendName);
+        if (bonus == null || bonus.effects().isEmpty()) return;
+
+        CompoundTag persistent = player.getPersistentData();
+        CompoundTag root = persistent.getCompound("tobacconistmod_secret_blend_bonus");
+        String key = sanitizeSecretBlendKey(blendName);
+        int next = root.getInt(key) + 1;
+
+        if (next < bonus.threshold()) {
+            root.putInt(key, next);
+            persistent.put("tobacconistmod_secret_blend_bonus", root);
+            return;
+        }
+
+        root.putInt(key, 0);
+        persistent.put("tobacconistmod_secret_blend_bonus", root);
+
+        for (TobacconistConfig.ConfiguredSmokingEffect configured : bonus.effects()) {
+            try {
+                var effect = BuiltInRegistries.MOB_EFFECT.getHolder(ResourceLocation.parse(configured.effectId()));
+                if (effect.isEmpty()) continue;
+                player.addEffect(new MobEffectInstance(
+                        effect.get(),
+                        configured.duration(),
+                        configured.amplifier(),
+                        false,
+                        false,
+                        true
+                ));
+            } catch (Exception ignored) {
+                // ignore malformed legendary secret entries
+            }
+        }
+    }
+
+    private static String sanitizeSecretBlendKey(String blendName) {
+        String normalized = blendName == null ? "" : blendName.trim().toLowerCase(java.util.Locale.ROOT);
+        return normalized.replaceAll("[^a-z0-9]+", "_");
     }
 
     private static void applyConfiguredAdditionalEffects(Player player) {

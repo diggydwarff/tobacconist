@@ -29,13 +29,13 @@ public class BlendedTobaccoItem extends LooseTobaccoItem {
         if (!productLabel.isEmpty()) {
             base = TobaccoLabelHelper.buildNamedProduct(productLabel, Component.translatable("item.tobacconistmod.blended_tobacco"));
         } else if (!blendName.isEmpty()) {
-            base = Component.literal(blendName);
+            base = TobaccoBlendHelper.getIntrinsicBlendNameComponent(stack);
         } else {
             base = Component.translatable("item.tobacconistmod.blended_tobacco");
         }
 
         String cut = TobaccoCuringHelper.getCutType(stack);
-        if (cut.isEmpty()) return base;
+        if (cut.isEmpty() || !blendName.isEmpty()) return base;
         return Component.translatable("tobacconistmod.product.cut_named", TobaccoText.cut(cut), base);
     }
 
@@ -45,6 +45,14 @@ public class BlendedTobaccoItem extends LooseTobaccoItem {
 
         List<TobaccoBlendComponent> components = TobaccoBlendHelper.getComponentData(stack);
         if (components.isEmpty()) return;
+
+        if (!TobaccoBlendHelper.getIntrinsicBlendName(stack).isEmpty()) {
+            tooltip.add(Component.translatable(
+                    "tobacconistmod.ui.secret_cut_blend",
+                    TobaccoText.cut(TobaccoCuringHelper.getCutType(stack))
+            ).withStyle(style -> style.withColor(0xD4B96A)));
+            TobaccoBlendHelper.appendLegendarySecretTooltip(stack, tooltip);
+        }
 
         tooltip.add(Component.translatable("tobacconistmod.ui.blend_components").withStyle(ChatFormatting.DARK_GRAY));
         for (TobaccoBlendComponent component : components) {

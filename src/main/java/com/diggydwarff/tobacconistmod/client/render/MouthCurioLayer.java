@@ -1,5 +1,6 @@
 package com.diggydwarff.tobacconistmod.client.render;
 
+import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.CigarItem;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.CigaretteItem;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.WoodenSmokingPipeItem;
@@ -50,7 +51,20 @@ public class MouthCurioLayer extends RenderLayer<AbstractClientPlayer, PlayerMod
                     this.getParentModel().head.translateAndRotate(poseStack);
 
                     if (stack.getItem() instanceof WoodenSmokingPipeItem) {
-                        poseStack.translate(0.175F, 0.000F, -0.30F);
+                        float x = 0.175F;
+                        float y = 0.000F;
+                        float z = -0.30F;
+
+                        // The Emerald-Aztec pipe and Kiseru sit visually lower in the mouth slot because
+                        // their sprites have more empty/weighted pixels below the stem. Lift them slightly
+                        // so the mouthpiece actually reaches the lips like the other smoking items.
+                        if (stack.is(ModItems.EMERALD_AZTEC_SMOKING_PIPE.get())) {
+                            y = -0.070F;
+                        } else if (stack.is(ModItems.KISERU_SMOKING_PIPE.get())) {
+                            y = -0.085F;
+                        }
+
+                        poseStack.translate(x, y, z);
 
                         poseStack.mulPose(Axis.XP.rotationDegrees(90F));
                         poseStack.mulPose(Axis.ZP.rotationDegrees(65F)); // Pull out from flat a bit towards viewer

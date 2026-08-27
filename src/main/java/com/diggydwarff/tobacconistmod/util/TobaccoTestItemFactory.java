@@ -1,6 +1,7 @@
 package com.diggydwarff.tobacconistmod.util;
 
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelBlockEntity;
+import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.BottledMolassesFlavors;
 import net.minecraft.nbt.CompoundTag;
@@ -64,6 +65,58 @@ public final class TobaccoTestItemFactory {
                 + "Options use key=value, e.g. variety=virginia quality=90 cure=flue cut=shag "
                 + "flavor=berry fermented=true age=365 ruined=false count=16. "
                 + "Blends may use components=virginia:95:flue:none,burley:90:air:berry,shade:88:sun:none.";
+    }
+
+    /**
+     * Builds one configured secret blend at exactly its minimum qualifying qualities.
+     *
+     * <p>This intentionally constructs the metadata directly, so compatibility-flavor secrets can
+     * always be spawned by administrators even when the mod that normally supplies the tagged
+     * flavoring ingredient is not installed.</p>
+     */
+    public static ItemStack createSecretBlend(String blendName) {
+        TobacconistConfig.SecretBlendDefinition definition =
+                TobacconistConfig.findSecretBlendByName(blendName);
+        if (definition == null) {
+            throw new IllegalArgumentException("Unknown secret blend: " + blendName);
+        }
+
+        List<ItemStack> components = new ArrayList<>();
+        for (TobacconistConfig.SecretBlendRequirement requirement : definition.requirements()) {
+            String variety = validateVariety(requirement.variety());
+            int quality = Math.max(75, requirement.minQuality());
+
+            String cure = requirement.cure();
+            if (cure.equals("*") || cure.equals("any")) cure = TobaccoCuringHelper.CURE_AIR;
+            else cure = validateCure(cure);
+
+            String flavor = requirement.flavor();
+            if (flavor.equals("*") || flavor.equals("none")) flavor = "";
+            else flavor = normalizeFlavor(flavor);
+
+            ItemStack component = new ItemStack(looseItem(variety));
+            applyProcessedMetadata(
+                    component,
+                    quality,
+                    cure,
+                    TobaccoCuringHelper.CUT_RIBBON,
+                    flavor,
+                    Map.of()
+            );
+            components.add(component);
+        }
+
+        ItemStack result = TobaccoBlendHelper.blend(components);
+        if (result.isEmpty()) {
+            throw new IllegalArgumentException("Configured secret blend cannot be constructed: " + blendName);
+        }
+
+        // A custom server config can contain overlapping wildcard definitions. The command names
+        // a specific definition, so preserve that requested identity instead of whichever wildcard
+        // happened to appear first in config order.
+        CompoundTag tag = LegacyItemTags.getOrCreateTag(result);
+        tag.putString(TobaccoBlendHelper.TAG_BLEND_NAME, definition.name());
+        return result;
     }
 
     private static ItemStack makeRaw(Map<String, String> options) {
