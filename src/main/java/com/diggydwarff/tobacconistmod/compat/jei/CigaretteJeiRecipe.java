@@ -24,23 +24,21 @@ public record CigaretteJeiRecipe(
         add(recipes, ModItems.TOBACCO_LOOSE_ORIENTAL.get());
         add(recipes, ModItems.TOBACCO_LOOSE_DOKHA.get());
         add(recipes, ModItems.TOBACCO_LOOSE_SHADE.get());
+        add(recipes, ModItems.BLENDED_TOBACCO.get());
 
         return recipes;
     }
 
     private static void add(List<CigaretteJeiRecipe> recipes, Item looseItem) {
-        ItemStack tobacco = new ItemStack(looseItem);
-
-        LegacyItemTags.getOrCreateTag(tobacco).putInt(TobaccoCuringHelper.TAG_QUALITY, 60);
-        LegacyItemTags.getOrCreateTag(tobacco).putString(
-                TobaccoCuringHelper.TAG_QUALITY_TIER,
-                TobaccoCuringHelper.getQualityTierId(60)
-        );
-        TobaccoCuringHelper.setCutType(tobacco, TobaccoCuringHelper.CUT_RIBBON);
-
-        ItemStack paper = new ItemStack(ModItems.ROLLING_PAPER.get());
-        ItemStack output = com.diggydwarff.tobacconistmod.util.TobaccoProductCraftingHelper.makeCigarette(tobacco);
-
-        recipes.add(new CigaretteJeiRecipe(tobacco, paper, output));
+        for (ItemStack tobacco : JeiItemLists.getAllCuts(looseItem)) {
+            LegacyItemTags.getOrCreateTag(tobacco).putInt(TobaccoCuringHelper.TAG_QUALITY, 60);
+            LegacyItemTags.getOrCreateTag(tobacco).putString(
+                    TobaccoCuringHelper.TAG_QUALITY_TIER,
+                    TobaccoCuringHelper.getQualityTierId(60)
+            );
+            ItemStack paper = new ItemStack(ModItems.ROLLING_PAPER.get());
+            ItemStack output = com.diggydwarff.tobacconistmod.util.TobaccoProductCraftingHelper.makeCigarette(tobacco);
+            recipes.add(new CigaretteJeiRecipe(tobacco, paper, output));
+        }
     }
 }

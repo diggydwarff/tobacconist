@@ -15,14 +15,7 @@ public record WoodenPipeFillJeiRecipe(
         List<ItemStack> filledPipes
 ) {
     public static List<WoodenPipeFillJeiRecipe> createAll() {
-        List<ItemStack> tobaccos = List.of(
-                new ItemStack(ModItems.TOBACCO_LOOSE_WILD.get()),
-                new ItemStack(ModItems.TOBACCO_LOOSE_VIRGINIA.get()),
-                new ItemStack(ModItems.TOBACCO_LOOSE_BURLEY.get()),
-                new ItemStack(ModItems.TOBACCO_LOOSE_ORIENTAL.get()),
-                new ItemStack(ModItems.TOBACCO_LOOSE_DOKHA.get()),
-                new ItemStack(ModItems.TOBACCO_LOOSE_SHADE.get())
-        );
+        List<ItemStack> tobaccos = JeiItemLists.getAllLooseTobaccos();
 
         List<ItemStack> pipes = new ArrayList<>();
 

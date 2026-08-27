@@ -4,19 +4,23 @@ import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoGrowthHelper;
+import com.diggydwarff.tobacconistmod.util.TobaccoProcessingHelper;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public record AverageLeavesJeiRecipe(
-        ItemStack inputA,
-        ItemStack inputB,
+/** Accurate JEI examples for Create's count-preserving, quality-averaging homogenizer. */
+public record HomogenizationJeiRecipe(
+        ItemStack lowQuality,
+        ItemStack highQuality,
         ItemStack output
 ) {
-    public static List<AverageLeavesJeiRecipe> createAll() {
-        List<AverageLeavesJeiRecipe> recipes = new ArrayList<>();
+    private static final int EXAMPLE_HALF_BATCH = 8;
+
+    public static List<HomogenizationJeiRecipe> createAll() {
+        List<HomogenizationJeiRecipe> recipes = new ArrayList<>();
 
         addRaw(recipes, ModItems.WILD_TOBACCO_LEAF.get());
         addRaw(recipes, ModItems.VIRGINIA_TOBACCO_LEAF.get());
@@ -24,38 +28,35 @@ public record AverageLeavesJeiRecipe(
         addRaw(recipes, ModItems.ORIENTAL_TOBACCO_LEAF.get());
         addRaw(recipes, ModItems.DOKHA_TOBACCO_LEAF.get());
         addRaw(recipes, ModItems.SHADE_TOBACCO_LEAF.get());
+
         addCured(recipes, ModItems.WILD_TOBACCO_LEAF_DRY.get());
         addCured(recipes, ModItems.VIRGINIA_TOBACCO_LEAF_DRY.get());
         addCured(recipes, ModItems.BURLEY_TOBACCO_LEAF_DRY.get());
         addCured(recipes, ModItems.ORIENTAL_TOBACCO_LEAF_DRY.get());
         addCured(recipes, ModItems.DOKHA_TOBACCO_LEAF_DRY.get());
         addCured(recipes, ModItems.SHADE_TOBACCO_LEAF_DRY.get());
+
         return List.copyOf(recipes);
     }
 
-    private static void addRaw(List<AverageLeavesJeiRecipe> recipes, Item leafItem) {
-        ItemStack a = new ItemStack(leafItem);
-        ItemStack b = new ItemStack(leafItem);
-        ItemStack out = new ItemStack(leafItem, 2);
-        TobaccoGrowthHelper.applyGrowthQuality(a, 40);
-        TobaccoGrowthHelper.applyGrowthQuality(b, 60);
-        TobaccoGrowthHelper.applyGrowthQuality(out, 50);
-        recipes.add(new AverageLeavesJeiRecipe(a, b, out));
+    private static void addRaw(List<HomogenizationJeiRecipe> recipes, Item item) {
+        ItemStack low = new ItemStack(item, EXAMPLE_HALF_BATCH);
+        ItemStack high = new ItemStack(item, EXAMPLE_HALF_BATCH);
+        TobaccoGrowthHelper.applyGrowthQuality(low, 40);
+        TobaccoGrowthHelper.applyGrowthQuality(high, 60);
+        ItemStack output = TobaccoProcessingHelper.buildHomogenizedLeafBatch(low, 50, EXAMPLE_HALF_BATCH * 2);
+        recipes.add(new HomogenizationJeiRecipe(low, high, output));
     }
 
-    private static void addCured(List<AverageLeavesJeiRecipe> recipes, Item leafItem) {
-        ItemStack a = new ItemStack(leafItem);
-        ItemStack b = new ItemStack(leafItem);
-        ItemStack out = new ItemStack(leafItem, 2);
-
-        TobaccoCuringHelper.applyCreativeLeafDefaults(a, true);
-        TobaccoCuringHelper.applyCreativeLeafDefaults(b, true);
-        TobaccoCuringHelper.applyCreativeLeafDefaults(out, true);
-
-        setQuality(a, 40);
-        setQuality(b, 80);
-        setQuality(out, 60);
-        recipes.add(new AverageLeavesJeiRecipe(a, b, out));
+    private static void addCured(List<HomogenizationJeiRecipe> recipes, Item item) {
+        ItemStack low = new ItemStack(item, EXAMPLE_HALF_BATCH);
+        ItemStack high = new ItemStack(item, EXAMPLE_HALF_BATCH);
+        TobaccoCuringHelper.applyCreativeLeafDefaults(low, true);
+        TobaccoCuringHelper.applyCreativeLeafDefaults(high, true);
+        setQuality(low, 40);
+        setQuality(high, 80);
+        ItemStack output = TobaccoProcessingHelper.buildHomogenizedLeafBatch(low, 60, EXAMPLE_HALF_BATCH * 2);
+        recipes.add(new HomogenizationJeiRecipe(low, high, output));
     }
 
     private static void setQuality(ItemStack stack, int quality) {
