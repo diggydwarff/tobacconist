@@ -1,16 +1,21 @@
 package com.diggydwarff.tobacconistmod.compat.jei;
 
+import com.diggydwarff.tobacconistmod.compat.FlavorCompatibility;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.BottledMolassesFlavors;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.LabelItem;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.WoodenSmokingPipeItem;
+import com.diggydwarff.tobacconistmod.fluid.ModExtractionFluids;
+import com.diggydwarff.tobacconistmod.fluid.ModMolassesFluids;
+import com.diggydwarff.tobacconistmod.fluid.TobacconistFluidAmounts;
 import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
 import com.diggydwarff.tobacconistmod.util.TobaccoBoxHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.material.Fluid;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,28 +84,25 @@ public final class JeiItemLists {
         return List.copyOf(out);
     }
 
-    public static boolean isFlavorAvailable(BottledMolassesFlavors flavor) {
-        if (flavor.isPlain()) return true;
+    /**
+     * Hide the registered factory-fluid counterparts of unavailable flavor items from JEI too.
+     * Fluids remain registered for save compatibility; this only removes dead ingredients from browsing.
+     */
+    public static List<FluidStack> getUnavailableFlavorFluids() {
+        List<FluidStack> out = new ArrayList<>();
+        for (BottledMolassesFlavors flavor : BottledMolassesFlavors.values()) {
+            if (flavor.isPlain() || isFlavorAvailable(flavor)) continue;
 
-        return switch (flavor) {
-            case BOTTLED_MOLASSES_TWO_APPLES_FLAVOR ->
-                    hasFlavoringIngredient(BottledMolassesFlavors.BOTTLED_MOLASSES_APPLE_FLAVOR);
-            case BOTTLED_MOLASSES_TWO_GOLDENAPPLES_FLAVOR ->
-                    hasFlavoringIngredient(BottledMolassesFlavors.BOTTLED_MOLASSES_GOLDENAPPLE_FLAVOR);
-            case BOTTLED_MOLASSES_TWO_ROYALAPPLES_FLAVOR ->
-                    hasFlavoringIngredient(BottledMolassesFlavors.BOTTLED_MOLASSES_ROYALAPPLE_FLAVOR);
-            case BOTTLED_MOLASSES_BERRY_FLAVOR ->
-                    hasFlavoringIngredient(BottledMolassesFlavors.BOTTLED_MOLASSES_SWEETBERRY_FLAVOR)
-                            && hasFlavoringIngredient(BottledMolassesFlavors.BOTTLED_MOLASSES_GLOWBERRY_FLAVOR);
-            default -> hasFlavoringIngredient(flavor);
-        };
+            addFluidIfPresent(out, ModMolassesFluids.source(flavor));
+            addFluidIfPresent(out, ModMolassesFluids.flowing(flavor));
+            addFluidIfPresent(out, ModExtractionFluids.essence(flavor));
+            addFluidIfPresent(out, ModExtractionFluids.flowingEssence(flavor));
+        }
+        return List.copyOf(out);
     }
 
-    private static boolean hasFlavoringIngredient(BottledMolassesFlavors flavor) {
-        TagKey<Item> tag = flavor.getFlavoringIngredientTag();
-        return BuiltInRegistries.ITEM.getTag(tag)
-                .map(holders -> holders.size() > 0)
-                .orElse(false);
+    public static boolean isFlavorAvailable(BottledMolassesFlavors flavor) {
+        return FlavorCompatibility.isFlavorAvailable(flavor);
     }
 
     public static List<ItemStack> getAllTobaccoBoxSupportedContents() {
@@ -133,6 +135,12 @@ public final class JeiItemLists {
         ItemStack box = makeFilledBox(stored, count);
         TobaccoBoxHelper.setLabel(box, label);
         return box;
+    }
+
+    private static void addFluidIfPresent(List<FluidStack> out, Fluid fluid) {
+        if (fluid != null) {
+            out.add(new FluidStack(fluid, TobacconistFluidAmounts.BOTTLE));
+        }
     }
 
     private static void addAllCuts(List<ItemStack> out, Item item) {

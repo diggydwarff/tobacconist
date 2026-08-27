@@ -13,6 +13,7 @@ import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
+import mezz.jei.api.neoforge.NeoForgeTypes;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.runtime.IJeiRuntime;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -22,6 +23,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 import java.util.List;
 
@@ -84,8 +86,7 @@ public class TobacconistJeiPlugin implements IModPlugin {
                 new TobaccoBarrelRecipeCategory(guiHelper),
                 new DryingRackRecipeCategory(guiHelper),
                 new HookahStationRecipeCategory(guiHelper),
-                new HookahUseRecipeCategory(guiHelper),
-                new FlavorMolassesRecipeCategory(guiHelper)
+                new HookahUseRecipeCategory(guiHelper)
         );
 
         if (com.diggydwarff.tobacconistmod.compat.create.CreateCompat.loaded()) {
@@ -101,7 +102,7 @@ public class TobacconistJeiPlugin implements IModPlugin {
         registration.addRecipes(CigaretteRecipeCategory.TYPE, CigaretteJeiRecipe.createAll());
         registration.addRecipes(CigarRecipeCategory.TYPE, CigarJeiRecipe.createAll());
         registration.addRecipes(WoodenPipeFillRecipeCategory.TYPE, WoodenPipeFillJeiRecipe.createAll());
-        registration.addRecipes(FlavorMolassesRecipeCategory.TYPE, FlavorMolassesJeiRecipe.createAll());
+        registration.addRecipes(mezz.jei.api.constants.RecipeTypes.CRAFTING, FlavorMolassesCraftingJeiRecipe.createAll());
 
         if (com.diggydwarff.tobacconistmod.compat.create.CreateCompat.loaded()) {
             registration.addRecipes(HomogenizationRecipeCategory.TYPE, HomogenizationJeiRecipe.createAll());
@@ -186,6 +187,14 @@ public class TobacconistJeiPlugin implements IModPlugin {
                     unavailableFlavorItems
             );
         }
+
+        List<FluidStack> unavailableFlavorFluids = JeiItemLists.getUnavailableFlavorFluids();
+        if (!unavailableFlavorFluids.isEmpty()) {
+            registration.getIngredientManager().removeIngredientsAtRuntime(
+                    NeoForgeTypes.FLUID_STACK,
+                    unavailableFlavorFluids
+            );
+        }
     }
 
     @Override
@@ -210,7 +219,6 @@ public class TobacconistJeiPlugin implements IModPlugin {
                 registration.addRecipeCatalyst(pipe, WoodenPipeFillRecipeCategory.TYPE)
         );
 
-        registration.addRecipeCatalyst(new ItemStack(Items.CRAFTING_TABLE), FlavorMolassesRecipeCategory.TYPE);
 
         registration.addRecipeCatalyst(new ItemStack(ModItems.SHISHA_TOBACCO.get()), ShishaMixRecipeCategory.TYPE);
         registration.addRecipeCatalyst(new ItemStack(ModItems.TOBACCO_BOX.get()), TobaccoBoxFillRecipeCategory.TYPE);

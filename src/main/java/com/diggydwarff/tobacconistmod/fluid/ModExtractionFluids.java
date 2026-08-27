@@ -56,6 +56,11 @@ public final class ModExtractionFluids {
         return entry == null ? null : entry.source.get();
     }
 
+    public static Fluid flowingEssence(BottledMolassesFlavors flavor) {
+        Entry entry = ESSENCES.get(flavor);
+        return entry == null ? null : entry.flowing.get();
+    }
+
     public static Optional<BottledMolassesFlavors> findEssenceFlavor(Fluid fluid) {
         if (fluid == null) return Optional.empty();
         for (Map.Entry<BottledMolassesFlavors, Entry> candidate : ESSENCES.entrySet()) {

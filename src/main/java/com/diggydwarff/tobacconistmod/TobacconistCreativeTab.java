@@ -5,6 +5,7 @@ import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.BottledMolassesFlavors;
+import com.diggydwarff.tobacconistmod.compat.FlavorCompatibility;
 import com.diggydwarff.tobacconistmod.compat.create.CreateCompat;
 import com.diggydwarff.tobacconistmod.recipes.WoodenPipeRecipe;
 import com.diggydwarff.tobacconistmod.util.PaintingTabHelper;
@@ -194,14 +195,14 @@ public class TobacconistCreativeTab {
 
     private static void addAllEssences(CreativeModeTab.Output output) {
         for (BottledMolassesFlavors flavor : BottledMolassesFlavors.values()) {
-            if (flavor.isPlain()) continue;
+            if (flavor.isPlain() || !FlavorCompatibility.isFlavorAvailable(flavor)) continue;
             output.accept(flavor.getEssenceItem());
         }
     }
 
     private static void addAllFlavoredMolasses(CreativeModeTab.Output output) {
         for (BottledMolassesFlavors flavor : BottledMolassesFlavors.values()) {
-            if (flavor.isPlain()) continue;
+            if (flavor.isPlain() || !FlavorCompatibility.isFlavorAvailable(flavor)) continue;
             output.accept(flavor.getItem());
         }
     }

@@ -22,6 +22,7 @@ repositories {
     // artifact non-transitively and resolve only its required dev libraries.
     maven { url = 'https://maven.createmod.net' } // Create, Ponder, Flywheel
     maven { url = 'https://maven.ithundxr.dev/snapshots' } // Registrate
+    maven { url = 'https://www.cursemaven.com' } // Optional Croptopia dev runtime
 }
 
 runs {
@@ -52,6 +53,15 @@ dependencies {
 
     compileOnly "vazkii.patchouli:Patchouli:${patchouli_version}:api"
     localRuntime "vazkii.patchouli:Patchouli:${patchouli_version}"
+
+    // Development-only Croptopia compatibility runtime. This does not make Croptopia a
+    // production dependency of Tobacconist. Disable with -Pcroptopia_runtime_enabled=false.
+    def croptopiaRuntimeEnabled = providers.gradleProperty('croptopia_runtime_enabled')
+        .orElse('true').get().toBoolean()
+    if (croptopiaRuntimeEnabled) {
+        localRuntime "curse.maven:croptopia-415438:7958876"
+        localRuntime "curse.maven:epherolib-885449:5872111"
+    }
 
     // Create is optional for production, but when enabled in the dev runtime it must use
     // Create's documented development dependency layout so NeoForge actually loads it.
