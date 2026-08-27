@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "When $(thing)Create$() is installed, Tobacconist gains an optional industrial path. Hand-crafted workflows remain valid. Create processing preserves tobacco identity and metadata unless a recipe explicitly changes it."
+      "text": "When $(thing)Create$() is installed, Tobacconist gains an optional industrial path. Hand-crafted workflows remain valid. Dedicated Tobacconist Create processing preserves tobacco identity, metadata, and full product quality unless a recipe explicitly changes it."
     },
     {
       "type": "patchouli:text",
@@ -51,7 +51,12 @@
     {
       "type": "patchouli:text",
       "title": "Cut, Press & Blend",
-      "text": "A Deployer with a Chaveta advances $(item)Rough → Ribbon → Shag$(). The Chaveta is a reusable machine tool and loses no durability in automated cutting. A Press makes Flake from Rough and finishes supported cigarette/cigar assembly. Mixers handle metadata-aware blends."
+      "text": "A Deployer with a Chaveta advances $(item)Rough → Ribbon → Shag$(). The Chaveta is a reusable machine tool and loses no durability in automated cutting. For Cigarettes and Cigars, the dedicated full-quality factory route uses a Deployer to create the existing Incomplete product, then a Mechanical Press to stamp and finish it. Mixers handle metadata-aware blends."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Crafting Automation",
+      "text": "Hand rolling and the dedicated $(thing)Deployer → Incomplete Product → Mechanical Press$() route preserve full Cigarette/Cigar quality. While Create is installed, generic recipe automation such as the vanilla Crafter or Create Mechanical Crafter instead loses $(item)10 raw quality points$() by default on the underlying 0–120 scale. Servers can configure this value or set it to 0."
     },
     {
       "type": "patchouli:text",
@@ -81,7 +86,7 @@
     {
       "type": "patchouli:text",
       "title": "Ponder",
-      "text": "Ponder scenes cover curing, the Industrial Drying Rack’s two-fan setup, iterative bulk homogenization, cutting/pressing, blending/barrel work, Aqua Vitae/Essence/Shisha production, cigarette/cigar assembly, Production Monitor setup, and factory logistics."
+      "text": "Ponder scenes cover curing, the Industrial Drying Rack’s two-fan setup, iterative bulk homogenization, cutting/pressing, blending/barrel work, Aqua Vitae/Essence/Shisha production, complete Cigarette and Cigar production from cutting through rolling and pressing, Production Monitor setup, and factory logistics."
     },
     {
       "type": "patchouli:relations",

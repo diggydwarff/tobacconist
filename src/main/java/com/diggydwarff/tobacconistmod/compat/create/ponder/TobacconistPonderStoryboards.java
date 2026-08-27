@@ -562,132 +562,335 @@ public final class TobacconistPonderStoryboards {
         scene.idle(70);
     }
 
-    public static void assembly(SceneBuilder builder, SceneBuildingUtil util) {
-        CreateSceneBuilder scene = begin(builder, "tobacconist_assembly");
+    public static void cigaretteProduction(SceneBuilder builder, SceneBuildingUtil util) {
+        CreateSceneBuilder scene = beginLarge(builder, "tobacconist_cigarette_production");
 
-        BlockPos depot = util.grid().at(2, 1, 3);
-        BlockPos deployer = util.grid().at(2, 3, 3);
-        BlockPos deployerShaft = util.grid().at(2, 3, 4);
-        BlockPos deployerDrive = util.grid().at(2, 3, 5);
-        BlockPos pressDepot = util.grid().at(5, 1, 3);
-        BlockPos press = util.grid().at(5, 3, 3);
-        BlockPos pressShaft = util.grid().at(5, 3, 4);
-        BlockPos pressDrive = util.grid().at(5, 3, 5);
+        BlockPos inputBelt = util.grid().at(3, 1, 0);
+        BlockPos firstCutBelt = util.grid().at(3, 1, 1);
+        BlockPos secondCutBelt = util.grid().at(3, 1, 2);
+        BlockPos rollingBelt = util.grid().at(3, 1, 3);
+        BlockPos cornerBelt = util.grid().at(3, 1, 4);
+        BlockPos pressBelt = util.grid().at(5, 1, 4);
+        BlockPos outputBelt = util.grid().at(6, 1, 4);
+        BlockPos firstCutDeployer = util.grid().at(3, 3, 1);
+        BlockPos secondCutDeployer = util.grid().at(3, 3, 2);
+        BlockPos rollingDeployer = util.grid().at(3, 3, 3);
+        BlockPos press = util.grid().at(5, 3, 4);
+        BlockPos outputBarrel = util.grid().at(7, 2, 4);
 
-        scene.world().setBlock(depot, AllBlocks.DEPOT.get().defaultBlockState(), false);
-        scene.world().setBlock(deployer, AllBlocks.DEPLOYER.get().defaultBlockState()
-                .setValue(BlockStateProperties.FACING, Direction.DOWN), false);
-        scene.world().setBlock(deployerShaft, AllBlocks.SHAFT.get().defaultBlockState()
-                .setValue(ShaftBlock.AXIS, Direction.Axis.Z), false);
-        scene.world().setBlock(deployerDrive, AllBlocks.COGWHEEL.get().defaultBlockState()
-                .setValue(ShaftBlock.AXIS, Direction.Axis.Z), false);
-        scene.world().setBlock(pressDepot, AllBlocks.DEPOT.get().defaultBlockState(), false);
-        scene.world().setBlock(press, AllBlocks.MECHANICAL_PRESS.get().defaultBlockState(), false);
-        scene.world().setBlock(pressShaft, AllBlocks.SHAFT.get().defaultBlockState()
-                .setValue(ShaftBlock.AXIS, Direction.Axis.Z), false);
-        scene.world().setBlock(pressDrive, AllBlocks.COGWHEEL.get().defaultBlockState()
-                .setValue(ShaftBlock.AXIS, Direction.Axis.Z), false);
+        Selection factory = util.select().fromTo(0, 0, 0, 7, 4, 7);
+        scene.world().showSection(factory, Direction.DOWN);
+        scene.world().setKineticSpeed(factory, 32);
+        scene.effects().rotationDirectionIndicator(util.grid().at(0, 3, 1));
+        scene.effects().rotationDirectionIndicator(util.grid().at(5, 3, 6));
+        scene.idle(20);
 
-        Selection deployerAssembly = util.select().position(depot).add(util.select().position(deployer))
-                .add(util.select().position(deployerShaft)).add(util.select().position(deployerDrive));
-        scene.world().showSection(deployerAssembly, Direction.DOWN);
-        scene.world().setKineticSpeed(util.select().position(deployer).add(util.select().position(deployerShaft))
-                .add(util.select().position(deployerDrive)), 32);
-        scene.effects().rotationDirectionIndicator(deployerDrive);
+        ItemStack chaveta = new ItemStack(ModItems.STONE_CHAVETA.get());
+        scene.world().modifyBlockEntityNBT(util.select().position(firstCutDeployer), DeployerBlockEntity.class,
+                nbt -> nbt.put("HeldItem", chaveta.saveOptional(scene.world().getHolderLookupProvider())));
+        scene.world().modifyBlockEntityNBT(util.select().position(secondCutDeployer), DeployerBlockEntity.class,
+                nbt -> nbt.put("HeldItem", chaveta.saveOptional(scene.world().getHolderLookupProvider())));
 
-        ItemStack loose = new ItemStack(ModItems.TOBACCO_LOOSE_VIRGINIA.get());
         ItemStack paper = new ItemStack(ModItems.ROLLING_PAPER.get());
-        ItemStack incomplete = new ItemStack(ModItems.INCOMPLETE_CIGARETTE.get());
-        scene.world().modifyBlockEntityNBT(util.select().position(deployer), DeployerBlockEntity.class,
+        scene.world().modifyBlockEntityNBT(util.select().position(rollingDeployer), DeployerBlockEntity.class,
                 nbt -> nbt.put("HeldItem", paper.saveOptional(scene.world().getHolderLookupProvider())));
-        scene.world().createItemOnBeltLike(depot, Direction.UP, loose);
-        scene.overlay().showText(95)
-                .attachKeyFrame()
-                .placeNearTarget()
-                .pointAt(util.vector().topOf(depot))
-                .text(Component.translatable("tobacconistmod.ponder.tobacconist_assembly.text_1").getString());
-        scene.idle(35);
-        scene.world().moveDeployer(deployer, 1, 25);
-        scene.idle(26);
-        scene.world().removeItemsFromBelt(depot);
-        scene.world().createItemOnBeltLike(depot, Direction.UP, incomplete);
-        scene.world().moveDeployer(deployer, -1, 25);
-        scene.effects().indicateSuccess(depot);
-        scene.idle(45);
 
-        Selection pressAssembly = util.select().position(pressDepot).add(util.select().position(press))
-                .add(util.select().position(pressShaft)).add(util.select().position(pressDrive));
-        scene.world().showSection(pressAssembly, Direction.DOWN);
-        scene.world().setKineticSpeed(util.select().position(press).add(util.select().position(pressShaft))
-                .add(util.select().position(pressDrive)), 32);
-        scene.effects().rotationDirectionIndicator(pressDrive);
-        scene.world().createItemOnBeltLike(pressDepot, Direction.UP, incomplete);
+        ItemStack cured = new ItemStack(ModItems.VIRGINIA_TOBACCO_LEAF_DRY.get());
+        ItemStack rough = new ItemStack(ModItems.TOBACCO_LOOSE_VIRGINIA.get());
+        TobaccoCuringHelper.setCutType(rough, TobaccoCuringHelper.CUT_ROUGH);
+        ItemStack shag = rough.copy();
+        TobaccoCuringHelper.setCutType(shag, TobaccoCuringHelper.CUT_SHAG);
+        ItemStack incomplete = new ItemStack(ModItems.INCOMPLETE_CIGARETTE.get());
+        ItemStack cigarette = new ItemStack(ModItems.CIGARETTE.get());
+
+        scene.world().createItemOnBeltLike(inputBelt, Direction.UP, cured);
         scene.overlay().showText(90)
                 .attachKeyFrame()
                 .placeNearTarget()
-                .pointAt(util.vector().centerOf(press))
-                .text(Component.translatable("tobacconistmod.ponder.tobacconist_assembly.text_2").getString());
+                .pointAt(util.vector().topOf(firstCutBelt))
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_cigarette_production.text_1").getString());
+        scene.idle(35);
+        scene.world().removeItemsFromBelt(inputBelt);
+        scene.world().createItemOnBeltLike(firstCutBelt, Direction.UP, cured);
+        runDeployerStep(scene, firstCutBelt, firstCutDeployer, rough);
+        scene.idle(20);
+
+        scene.world().createItemOnBeltLike(secondCutBelt, Direction.UP, rough);
+        scene.overlay().showText(100)
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().topOf(secondCutBelt))
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_cigarette_production.text_2").getString());
+        scene.idle(25);
+        runDeployerStep(scene, secondCutBelt, secondCutDeployer, shag);
+        scene.idle(25);
+
+        scene.world().createItemOnBeltLike(rollingBelt, Direction.UP, shag);
+        scene.overlay().showControls(util.vector().topOf(rollingDeployer), Pointing.DOWN, 40).withItem(paper);
+        scene.overlay().showText(100)
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().topOf(rollingBelt))
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_cigarette_production.text_3").getString());
         scene.idle(30);
+        runDeployerStep(scene, rollingBelt, rollingDeployer, incomplete);
+        scene.idle(20);
+
+        scene.world().createItemOnBeltLike(cornerBelt, Direction.UP, incomplete);
+        scene.idle(20);
+        scene.world().removeItemsFromBelt(cornerBelt);
+        scene.world().createItemOnBeltLike(pressBelt, Direction.UP, incomplete);
+        scene.overlay().showText(95)
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().centerOf(press))
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_cigarette_production.text_4").getString());
+        scene.idle(30);
+        runPressStep(scene, pressBelt, press, cigarette);
+        scene.idle(25);
+
+        scene.world().removeItemsFromBelt(pressBelt);
+        scene.world().createItemOnBeltLike(outputBelt, Direction.UP, cigarette);
+        scene.effects().indicateSuccess(outputBarrel);
+        scene.overlay().showText(115)
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().topOf(outputBelt))
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_cigarette_production.text_5").getString());
+        scene.overlay().showControls(util.vector().topOf(outputBelt), Pointing.DOWN, 55).withItem(cigarette);
+        scene.idle(125);
+    }
+
+    public static void cigarProduction(SceneBuilder builder, SceneBuildingUtil util) {
+        CreateSceneBuilder scene = beginLarge(builder, "tobacconist_cigar_production");
+
+        BlockPos inputBelt = util.grid().at(3, 1, 0);
+        BlockPos cutBelt = util.grid().at(3, 1, 1);
+        BlockPos wrapperBelt = util.grid().at(3, 1, 2);
+        BlockPos travelBelt = util.grid().at(3, 1, 3);
+        BlockPos cornerBelt = util.grid().at(3, 1, 4);
+        BlockPos pressBelt = util.grid().at(5, 1, 4);
+        BlockPos outputBelt = util.grid().at(6, 1, 4);
+        BlockPos cutDeployer = util.grid().at(3, 3, 1);
+        BlockPos wrapperDeployer = util.grid().at(3, 3, 2);
+        BlockPos press = util.grid().at(5, 3, 4);
+        BlockPos outputBarrel = util.grid().at(7, 2, 4);
+
+        Selection factory = util.select().fromTo(0, 0, 0, 7, 4, 7);
+        scene.world().showSection(factory, Direction.DOWN);
+        scene.world().setKineticSpeed(factory, 32);
+        scene.effects().rotationDirectionIndicator(util.grid().at(0, 3, 1));
+        scene.effects().rotationDirectionIndicator(util.grid().at(5, 3, 6));
+        scene.idle(20);
+
+        ItemStack chaveta = new ItemStack(ModItems.STONE_CHAVETA.get());
+        scene.world().modifyBlockEntityNBT(util.select().position(cutDeployer), DeployerBlockEntity.class,
+                nbt -> nbt.put("HeldItem", chaveta.saveOptional(scene.world().getHolderLookupProvider())));
+
+        ItemStack wrapper = new ItemStack(ModItems.VIRGINIA_TOBACCO_LEAF_DRY.get());
+        scene.world().modifyBlockEntityNBT(util.select().position(wrapperDeployer), DeployerBlockEntity.class,
+                nbt -> nbt.put("HeldItem", wrapper.saveOptional(scene.world().getHolderLookupProvider())));
+
+        ItemStack cured = new ItemStack(ModItems.VIRGINIA_TOBACCO_LEAF_DRY.get());
+        ItemStack rough = new ItemStack(ModItems.TOBACCO_LOOSE_VIRGINIA.get());
+        TobaccoCuringHelper.setCutType(rough, TobaccoCuringHelper.CUT_ROUGH);
+        ItemStack incomplete = new ItemStack(ModItems.INCOMPLETE_CIGAR.get());
+        ItemStack cigar = new ItemStack(ModItems.CIGAR.get());
+
+        scene.world().createItemOnBeltLike(inputBelt, Direction.UP, cured);
+        scene.overlay().showText(95)
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().topOf(cutBelt))
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_cigar_production.text_1").getString());
+        scene.idle(35);
+        scene.world().removeItemsFromBelt(inputBelt);
+        scene.world().createItemOnBeltLike(cutBelt, Direction.UP, cured);
+        runDeployerStep(scene, cutBelt, cutDeployer, rough);
+        scene.idle(25);
+
+        scene.world().createItemOnBeltLike(wrapperBelt, Direction.UP, rough);
+        scene.overlay().showControls(util.vector().topOf(wrapperDeployer), Pointing.DOWN, 45).withItem(wrapper);
+        scene.overlay().showText(105)
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().topOf(wrapperBelt))
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_cigar_production.text_2").getString());
+        scene.idle(35);
+        runDeployerStep(scene, wrapperBelt, wrapperDeployer, incomplete);
+        scene.idle(25);
+
+        scene.world().createItemOnBeltLike(travelBelt, Direction.UP, incomplete);
+        scene.idle(15);
+        scene.world().removeItemsFromBelt(travelBelt);
+        scene.world().createItemOnBeltLike(cornerBelt, Direction.UP, incomplete);
+        scene.idle(15);
+        scene.world().removeItemsFromBelt(cornerBelt);
+        scene.world().createItemOnBeltLike(pressBelt, Direction.UP, incomplete);
+        scene.overlay().showText(95)
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().centerOf(press))
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_cigar_production.text_3").getString());
+        scene.idle(30);
+        runPressStep(scene, pressBelt, press, cigar);
+        scene.idle(30);
+
+        scene.overlay().showText(110)
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().topOf(pressBelt))
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_cigar_production.text_4").getString());
+        scene.idle(115);
+
+        scene.world().removeItemsFromBelt(pressBelt);
+        scene.world().createItemOnBeltLike(outputBelt, Direction.UP, cigar);
+        scene.effects().indicateSuccess(outputBarrel);
+        scene.overlay().showText(115)
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().topOf(outputBelt))
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_cigar_production.text_5").getString());
+        scene.overlay().showControls(util.vector().topOf(outputBelt), Pointing.DOWN, 55).withItem(cigar);
+        scene.idle(125);
+    }
+
+    private static void runDeployerStep(CreateSceneBuilder scene, BlockPos depot, BlockPos deployer, ItemStack result) {
+        scene.world().moveDeployer(deployer, 1, 20);
+        scene.idle(21);
+        scene.world().removeItemsFromBelt(depot);
+        scene.world().createItemOnBeltLike(depot, Direction.UP, result);
+        scene.world().moveDeployer(deployer, -1, 20);
+        scene.effects().indicateSuccess(depot);
+        scene.idle(22);
+        scene.world().removeItemsFromBelt(depot);
+    }
+
+    private static void runPressStep(CreateSceneBuilder scene, BlockPos depot, BlockPos press, ItemStack result) {
         scene.world().modifyBlockEntity(press, MechanicalPressBlockEntity.class,
                 pte -> pte.getPressingBehaviour().start(Mode.BELT));
         scene.idle(30);
-        scene.world().removeItemsFromBelt(pressDepot);
-        scene.world().createItemOnBeltLike(pressDepot, Direction.UP, new ItemStack(ModItems.CIGARETTE.get()));
-        scene.effects().indicateSuccess(pressDepot);
-        scene.idle(25);
-        scene.overlay().showControls(util.vector().topOf(pressDepot), Pointing.DOWN, 45)
-                .withItem(new ItemStack(ModItems.CIGARETTE.get()));
-        scene.overlay().showControls(util.vector().topOf(pressDepot).add(.5, 0, 0), Pointing.DOWN, 45)
-                .withItem(new ItemStack(ModItems.CIGAR.get()));
-        scene.idle(70);
+        scene.world().removeItemsFromBelt(depot);
+        scene.world().createItemOnBeltLike(depot, Direction.UP, result);
+        scene.effects().indicateSuccess(depot);
     }
 
     public static void productionMonitor(SceneBuilder builder, SceneBuildingUtil util) {
         CreateSceneBuilder scene = begin(builder, "tobacconist_production_monitor");
 
-        BlockPos chest = util.grid().at(3, 1, 3);
-        BlockPos hopper = util.grid().at(3, 2, 3);
-        BlockPos monitor = util.grid().at(4, 2, 3);
-        BlockPos comparator = util.grid().at(5, 2, 3);
+        BlockPos lowerBarrel = util.grid().at(1, 1, 2);
+        BlockPos hopper = util.grid().at(1, 2, 2);
+        BlockPos monitor = util.grid().at(2, 2, 2);
+        BlockPos lamp = util.grid().at(3, 2, 2);
+        BlockPos displayLink = util.grid().at(2, 2, 3);
+        BlockPos displayBacking = util.grid().at(1, 3, 2);
+        BlockPos nixie = util.grid().at(1, 4, 2);
 
-        scene.world().setBlock(chest, Blocks.CHEST.defaultBlockState(), false);
-        scene.world().setBlock(hopper, Blocks.HOPPER.defaultBlockState(), false);
-        scene.world().showSection(util.select().position(chest).add(util.select().position(hopper)), Direction.DOWN);
-        scene.overlay().showText(85)
+        Selection transport = util.select().position(lowerBarrel).add(util.select().position(hopper));
+        scene.world().showSection(transport, Direction.DOWN);
+        scene.overlay().showText(90)
                 .attachKeyFrame()
                 .placeNearTarget()
                 .pointAt(util.vector().centerOf(hopper))
                 .text(Component.translatable("tobacconistmod.ponder.tobacconist_production_monitor.text_1").getString());
-        scene.idle(95);
+        scene.idle(100);
 
-        scene.world().setBlock(monitor, ModBlocks.PRODUCTION_MONITOR.get().defaultBlockState()
-                .setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.WEST), false);
-        reveal(scene, util, monitor);
-        scene.overlay().showText(100)
+        scene.world().showSection(util.select().position(monitor), Direction.DOWN);
+        scene.overlay().showText(105)
                 .attachKeyFrame()
                 .placeNearTarget()
                 .pointAt(util.vector().centerOf(monitor))
                 .text(Component.translatable("tobacconistmod.ponder.tobacconist_production_monitor.text_2").getString());
-        scene.idle(110);
+        scene.idle(115);
 
         ItemStack leaves = new ItemStack(ModItems.VIRGINIA_TOBACCO_LEAF_DRY.get(), 16);
-        scene.overlay().showControls(util.vector().topOf(hopper), Pointing.DOWN, 40).withItem(leaves);
+        scene.overlay().showControls(util.vector().topOf(hopper), Pointing.DOWN, 45).withItem(leaves);
         scene.effects().indicateSuccess(monitor);
-        scene.overlay().showText(100)
+        scene.idle(45);
+
+        Selection display = util.select().position(displayLink)
+                .add(util.select().position(displayBacking))
+                .add(util.select().position(nixie));
+        scene.world().showSection(display, Direction.DOWN);
+        scene.overlay().showText(115)
                 .attachKeyFrame()
                 .placeNearTarget()
-                .pointAt(util.vector().centerOf(hopper))
+                .pointAt(util.vector().centerOf(nixie))
                 .text(Component.translatable("tobacconistmod.ponder.tobacconist_production_monitor.text_3").getString());
-        scene.idle(110);
+        scene.idle(125);
 
-        scene.world().setBlock(comparator, Blocks.COMPARATOR.defaultBlockState(), false);
-        reveal(scene, util, comparator);
+        scene.world().showSection(util.select().position(lamp), Direction.DOWN);
+        scene.world().setBlock(lamp, Blocks.REDSTONE_LAMP.defaultBlockState()
+                .setValue(BlockStateProperties.LIT, true), false);
+        scene.effects().indicateRedstone(lamp);
+        scene.overlay().showText(115)
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().centerOf(lamp))
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_production_monitor.text_4").getString());
+        scene.idle(125);
+    }
+
+    public static void productionMonitorBelt(SceneBuilder builder, SceneBuildingUtil util) {
+        CreateSceneBuilder scene = begin(builder, "tobacconist_production_monitor_belt");
+
+        BlockPos beltStart = util.grid().at(5, 1, 2);
+        BlockPos beltMonitorPoint = util.grid().at(3, 1, 2);
+        BlockPos beltOutput = util.grid().at(1, 1, 2);
+        BlockPos monitor = util.grid().at(3, 1, 3);
+        BlockPos repeater = util.grid().at(3, 1, 4);
+        BlockPos lamp = util.grid().at(3, 1, 5);
+        BlockPos outputBarrel = util.grid().at(0, 2, 2);
+        BlockPos outputFunnel = util.grid().at(1, 2, 2);
+
+        Selection beltLine = util.select().fromTo(0, 0, 0, 5, 4, 2)
+                .add(util.select().position(outputBarrel))
+                .add(util.select().position(outputFunnel));
+        scene.world().showSection(beltLine, Direction.DOWN);
+        scene.world().setKineticSpeed(beltLine, 32);
+        scene.effects().rotationDirectionIndicator(util.grid().at(5, 1, 0));
+        scene.overlay().showText(95)
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().topOf(beltMonitorPoint))
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_production_monitor_belt.text_1").getString());
+        scene.idle(105);
+
+        Selection control = util.select().position(monitor)
+                .add(util.select().position(repeater))
+                .add(util.select().position(lamp));
+        scene.world().showSection(control, Direction.DOWN);
+        scene.overlay().showText(105)
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().centerOf(monitor))
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_production_monitor_belt.text_2").getString());
+        scene.idle(70);
+
+        ItemStack tobacco = new ItemStack(ModItems.TOBACCO_LOOSE_VIRGINIA.get(), 16);
+        scene.world().createItemOnBeltLike(beltStart, Direction.UP, tobacco);
+        scene.idle(25);
+        scene.world().removeItemsFromBelt(beltStart);
+        scene.world().createItemOnBeltLike(beltMonitorPoint, Direction.UP, tobacco);
+        scene.effects().indicateSuccess(monitor);
         scene.overlay().showText(110)
                 .attachKeyFrame()
                 .placeNearTarget()
-                .pointAt(util.vector().centerOf(comparator))
-                .text(Component.translatable("tobacconistmod.ponder.tobacconist_production_monitor.text_4").getString());
-        scene.idle(120);
+                .pointAt(util.vector().topOf(beltMonitorPoint))
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_production_monitor_belt.text_3").getString());
+        scene.idle(65);
+
+        scene.world().removeItemsFromBelt(beltMonitorPoint);
+        scene.world().createItemOnBeltLike(beltOutput, Direction.UP, tobacco);
+        scene.world().setBlock(lamp, Blocks.REDSTONE_LAMP.defaultBlockState()
+                .setValue(BlockStateProperties.LIT, true), false);
+        scene.effects().indicateRedstone(lamp);
+        scene.overlay().showText(115)
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().centerOf(lamp))
+                .text(Component.translatable("tobacconistmod.ponder.tobacconist_production_monitor_belt.text_4").getString());
+        scene.idle(125);
     }
 
     public static void logistics(SceneBuilder builder, SceneBuildingUtil util) {
@@ -778,6 +981,18 @@ public final class TobacconistPonderStoryboards {
     private static void clearBasinResult(CreateSceneBuilder scene, SceneBuildingUtil util, BlockPos basin) {
         scene.world().modifyBlockEntityNBT(util.select().position(basin), BasinBlockEntity.class,
                 nbt -> nbt.remove("VisualizedItems"));
+    }
+
+    private static CreateSceneBuilder beginLarge(SceneBuilder builder, String id) {
+        CreateSceneBuilder scene = new CreateSceneBuilder(builder);
+        scene.title(id, Component.translatable("tobacconistmod.ponder." + id + ".header").getString());
+        scene.configureBasePlate(0, 0, 8);
+        scene.scaleSceneView(0.90f);
+        scene.setSceneOffsetY(-1);
+        scene.rotateCameraY(180);
+        scene.showBasePlate();
+        scene.idle(10);
+        return scene;
     }
 
     private static CreateSceneBuilder begin(SceneBuilder builder, String id) {

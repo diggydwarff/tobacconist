@@ -81,12 +81,20 @@ public final class TobacconistPonderScenes {
 
         helper.forComponents(
                         id(ModItems.CIGARETTE.get()),
-                        id(ModItems.CIGAR.get())
+                        id(ModItems.INCOMPLETE_CIGARETTE.get()),
+                        id(ModItems.ROLLING_PAPER.get())
                 )
-                .addStoryBoard("tobacco/assembly", TobacconistPonderStoryboards::assembly);
+                .addStoryBoard("tobacco/cigarette_production", TobacconistPonderStoryboards::cigaretteProduction);
+
+        helper.forComponents(
+                        id(ModItems.CIGAR.get()),
+                        id(ModItems.INCOMPLETE_CIGAR.get())
+                )
+                .addStoryBoard("tobacco/cigar_production", TobacconistPonderStoryboards::cigarProduction);
 
         helper.forComponents(id(ModBlocks.PRODUCTION_MONITOR.get()))
-                .addStoryBoard("tobacco/production_monitor", TobacconistPonderStoryboards::productionMonitor);
+                .addStoryBoard("tobacco/production_monitor", TobacconistPonderStoryboards::productionMonitor)
+                .addStoryBoard("tobacco/production_monitor_belt", TobacconistPonderStoryboards::productionMonitorBelt);
 
         // Register the logistics tutorial on automatable processing blocks.
         helper.forComponents(

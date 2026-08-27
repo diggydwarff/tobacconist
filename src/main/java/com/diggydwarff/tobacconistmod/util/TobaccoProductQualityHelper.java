@@ -1,6 +1,8 @@
 package com.diggydwarff.tobacconistmod.util;
 
+import com.diggydwarff.tobacconistmod.compat.create.CreateCompat;
 import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
+import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 
@@ -110,6 +112,58 @@ public final class TobaccoProductQualityHelper {
         CompoundTag tag = LegacyItemTags.getTag(stack);
         if (!tag.contains(TAG_PRODUCT_QUALITY)) return -1;
         return clampTen(tag.getInt(TAG_PRODUCT_QUALITY));
+    }
+
+    /**
+     * Applies the server-configured quality cost for generic crafting automation.
+     *
+     * <p>The dedicated Create route (Deployer -> Incomplete Cigarette/Cigar -> Mechanical Press)
+     * never calls this method, so it retains the same score as hand crafting. Recalculation uses
+     * the original stored input qualities, making this operation idempotent if two automation
+     * hooks happen to observe the same craft.</p>
+     */
+    public static boolean applyGenericAutomationPenalty(ItemStack stack) {
+        if (stack == null || stack.isEmpty() || !CreateCompat.loaded()) {
+            return false;
+        }
+
+        int penalty = TobacconistConfig.getGenericAutomationQualityPenalty();
+        if (penalty <= 0) {
+            return false;
+        }
+
+        CompoundTag tag = LegacyItemTags.getTag(stack);
+        if (tag == null || !tag.contains(TAG_INPUT_TOBACCO_QUALITY)) {
+            return false;
+        }
+
+        String cutType = tag.getString(TAG_INPUT_CUT_TYPE);
+        int fillerQuality = TobaccoCuringHelper.clampQuality(tag.getInt(TAG_INPUT_TOBACCO_QUALITY));
+        int penalizedScore;
+
+        if (stack.is(ModItems.CIGARETTE.get())) {
+            penalizedScore = scoreQuality(
+                    Math.max(0, fillerQuality - penalty),
+                    cutType,
+                    ProductType.CIGARETTE
+            );
+        } else if (stack.is(ModItems.CIGAR.get())) {
+            int wrapperQuality = tag.contains(TAG_INPUT_WRAPPER_QUALITY)
+                    ? TobaccoCuringHelper.clampQuality(tag.getInt(TAG_INPUT_WRAPPER_QUALITY))
+                    : fillerQuality;
+            int compositeQuality = Math.round(fillerQuality * 0.75f + wrapperQuality * 0.25f);
+            penalizedScore = scoreQuality(
+                    Math.max(0, compositeQuality - penalty),
+                    cutType,
+                    ProductType.CIGAR
+            );
+        } else {
+            return false;
+        }
+
+        tag.putInt(TAG_PRODUCT_QUALITY, penalizedScore);
+        LegacyItemTags.setTag(stack, tag);
+        return true;
     }
 
     private static int scoreSingleTobacco(ItemStack tobacco, ProductType type) {

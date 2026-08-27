@@ -1,6 +1,7 @@
 package com.diggydwarff.tobacconistmod.event;
 
 import com.diggydwarff.tobacconistmod.effect.ModEffects;
+import com.diggydwarff.tobacconistmod.util.TobaccoProductQualityHelper;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -8,6 +9,16 @@ import net.neoforged.fml.common.EventBusSubscriber;
 
 @EventBusSubscriber(modid = "tobacconistmod")
 public class ModPlayerEvents {
+
+    @SubscribeEvent
+    public static void onItemCrafted(PlayerEvent.ItemCraftedEvent event) {
+        // Genuine players are hand-rolling and keep full quality. Fake-player crafting is
+        // automation, so it follows the same rule as the Vanilla/Create crafter hooks.
+        if (event.getEntity().level().isClientSide() || !event.getEntity().isFakePlayer()) {
+            return;
+        }
+        TobaccoProductQualityHelper.applyGenericAutomationPenalty(event.getCrafting());
+    }
 
     @SubscribeEvent
     public static void onBreakSpeed(PlayerEvent.BreakSpeed event) {

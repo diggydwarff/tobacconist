@@ -180,6 +180,14 @@ public class TobacconistConfig {
         }
     }
 
+    public static int getGenericAutomationQualityPenalty() {
+        try {
+            return SERVER.genericAutomationQualityPenalty.get();
+        } catch (IllegalStateException ignored) {
+            return 10;
+        }
+    }
+
     /**
      * Resolves the complete hidden-blend definition from per-component requirements.
      */
@@ -513,6 +521,7 @@ public class TobacconistConfig {
     public static class Server {
         public final ModConfigSpec.BooleanValue enableQualitySystem;
         public final ModConfigSpec.BooleanValue enableNicotineEffects;
+        public final ModConfigSpec.IntValue genericAutomationQualityPenalty;
         public final ModConfigSpec.ConfigValue<List<? extends String>> secretBlends;
         public final ModConfigSpec.ConfigValue<List<? extends String>> secretBlendVisuals;
         public final ModConfigSpec.ConfigValue<List<? extends String>> secretBlendBonuses;
@@ -528,6 +537,13 @@ public class TobacconistConfig {
                     .comment("Apply Tobacconist's nicotine status effect when tobacco is smoked.")
                     .comment("Disabling this does not disable configured additional smoking effects.")
                     .define("enableNicotineEffects", true);
+
+            genericAutomationQualityPenalty = builder
+                    .comment("Raw tobacco-quality points removed when a Cigarette or Cigar is made by generic crafting automation while Create is installed.")
+                    .comment("Hand crafting and Tobacconist's dedicated Create Deployer -> Incomplete Product -> Mechanical Press route keep full quality.")
+                    .comment("The quality system uses an underlying 0-120 scale; the default penalty of 10 is usually about one displayed Product Quality level.")
+                    .comment("Set to 0 to disable this automation penalty.")
+                    .defineInRange("genericAutomationQualityPenalty", 10, 0, 50);
             builder.pop();
 
             builder.push("blending");
