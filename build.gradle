@@ -55,9 +55,9 @@ dependencies {
     localRuntime "vazkii.patchouli:Patchouli:${patchouli_version}"
 
     // Development-only Croptopia compatibility runtime. This does not make Croptopia a
-    // production dependency of Tobacconist. Disable with -Pcroptopia_runtime_enabled=false.
+    // production dependency of Tobacconist. Enable with -Pcroptopia_runtime_enabled=true.
     def croptopiaRuntimeEnabled = providers.gradleProperty('croptopia_runtime_enabled')
-        .orElse('true').get().toBoolean()
+        .orElse('false').get().toBoolean()
     if (croptopiaRuntimeEnabled) {
         localRuntime "curse.maven:croptopia-415438:7958876"
         localRuntime "curse.maven:epherolib-885449:5872111"
