@@ -24,22 +24,23 @@ public record CigarJeiRecipe(
         add(recipes, ModItems.TOBACCO_LOOSE_ORIENTAL.get(), ModItems.ORIENTAL_TOBACCO_LEAF_DRY.get());
         add(recipes, ModItems.TOBACCO_LOOSE_DOKHA.get(), ModItems.DOKHA_TOBACCO_LEAF_DRY.get());
         add(recipes, ModItems.TOBACCO_LOOSE_SHADE.get(), ModItems.SHADE_TOBACCO_LEAF_DRY.get());
+        add(recipes, ModItems.BLENDED_TOBACCO.get(), ModItems.VIRGINIA_TOBACCO_LEAF_DRY.get());
 
         return recipes;
     }
 
     private static void add(List<CigarJeiRecipe> recipes, Item looseItem, Item leafItem) {
-        ItemStack tobacco = new ItemStack(looseItem);
-        LegacyItemTags.getOrCreateTag(tobacco).putInt(TobaccoCuringHelper.TAG_QUALITY, 60);
-        LegacyItemTags.getOrCreateTag(tobacco).putString(TobaccoCuringHelper.TAG_QUALITY_TIER, TobaccoCuringHelper.getQualityTierId(60));
-        TobaccoCuringHelper.setCutType(tobacco, TobaccoCuringHelper.CUT_RIBBON);
-        LegacyItemTags.getOrCreateTag(tobacco).putString(TobaccoCuringHelper.TAG_CURE_TYPE, TobaccoCuringHelper.CURE_AIR);
-
-        ItemStack wrapperLeaf = new ItemStack(leafItem);
-        TobaccoCuringHelper.applyCreativeLeafDefaults(wrapperLeaf, true);
-
-        ItemStack output = com.diggydwarff.tobacconistmod.util.TobaccoProductCraftingHelper.makeCigar(tobacco, wrapperLeaf);
-
-        recipes.add(new CigarJeiRecipe(tobacco, wrapperLeaf, output));
+        for (ItemStack tobacco : JeiItemLists.getAllCuts(looseItem)) {
+            LegacyItemTags.getOrCreateTag(tobacco).putInt(TobaccoCuringHelper.TAG_QUALITY, 60);
+            LegacyItemTags.getOrCreateTag(tobacco).putString(
+                    TobaccoCuringHelper.TAG_QUALITY_TIER,
+                    TobaccoCuringHelper.getQualityTierId(60)
+            );
+            LegacyItemTags.getOrCreateTag(tobacco).putString(TobaccoCuringHelper.TAG_CURE_TYPE, TobaccoCuringHelper.CURE_AIR);
+            ItemStack wrapperLeaf = new ItemStack(leafItem);
+            TobaccoCuringHelper.applyCreativeLeafDefaults(wrapperLeaf, true);
+            ItemStack output = com.diggydwarff.tobacconistmod.util.TobaccoProductCraftingHelper.makeCigar(tobacco, wrapperLeaf);
+            recipes.add(new CigarJeiRecipe(tobacco, wrapperLeaf, output));
+        }
     }
 }

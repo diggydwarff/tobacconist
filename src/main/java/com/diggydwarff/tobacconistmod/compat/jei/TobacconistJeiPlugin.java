@@ -7,14 +7,20 @@ import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.forge.ForgeTypes;
+import mezz.jei.api.recipe.RecipeType;
+import mezz.jei.api.runtime.IJeiRuntime;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraftforge.fluids.FluidStack;
 
 import java.util.List;
 
@@ -35,6 +41,7 @@ public class TobacconistJeiPlugin implements IModPlugin {
         registration.registerSubtypeInterpreter(ModItems.TOBACCO_LOOSE_ORIENTAL.get(), (stack, context) -> getLooseSubtype(stack));
         registration.registerSubtypeInterpreter(ModItems.TOBACCO_LOOSE_DOKHA.get(), (stack, context) -> getLooseSubtype(stack));
         registration.registerSubtypeInterpreter(ModItems.TOBACCO_LOOSE_SHADE.get(), (stack, context) -> getLooseSubtype(stack));
+        registration.registerSubtypeInterpreter(ModItems.BLENDED_TOBACCO.get(), (stack, context) -> getLooseSubtype(stack));
     }
 
     private static String getLooseSubtype(ItemStack stack) {
@@ -67,6 +74,10 @@ public class TobacconistJeiPlugin implements IModPlugin {
                 new HookahStationRecipeCategory(guiHelper),
                 new HookahUseRecipeCategory(guiHelper)
         );
+
+        if (com.diggydwarff.tobacconistmod.compat.create.CreateCompat.loaded()) {
+            registration.addRecipeCategories(new HomogenizationRecipeCategory(guiHelper));
+        }
     }
 
     @Override
@@ -77,6 +88,11 @@ public class TobacconistJeiPlugin implements IModPlugin {
         registration.addRecipes(CigaretteRecipeCategory.TYPE, CigaretteJeiRecipe.createAll());
         registration.addRecipes(CigarRecipeCategory.TYPE, CigarJeiRecipe.createAll());
         registration.addRecipes(WoodenPipeFillRecipeCategory.TYPE, WoodenPipeFillJeiRecipe.createAll());
+        registration.addRecipes(mezz.jei.api.constants.RecipeTypes.CRAFTING, FlavorMolassesCraftingJeiRecipe.createAll());
+
+        if (com.diggydwarff.tobacconistmod.compat.create.CreateCompat.loaded()) {
+            registration.addRecipes(HomogenizationRecipeCategory.TYPE, HomogenizationJeiRecipe.createAll());
+        }
 
         registration.addRecipes(ShishaMixRecipeCategory.TYPE, ShishaMixJeiRecipe.createAll());
         registration.addRecipes(TobaccoBoxFillRecipeCategory.TYPE, TobaccoBoxFillJeiRecipe.createAll());
@@ -149,6 +165,16 @@ public class TobacconistJeiPlugin implements IModPlugin {
 
         registration.addRecipes(HookahStationRecipeCategory.TYPE, HookahStationJeiRecipe.createAll());
         registration.addRecipes(HookahUseRecipeCategory.TYPE, HookahUseJeiRecipe.createAll());
+
+        List<ItemStack> unavailableFlavorItems = JeiItemLists.getUnavailableFlavorItems();
+        if (!unavailableFlavorItems.isEmpty()) {
+            registration.getIngredientManager().removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK, unavailableFlavorItems);
+        }
+
+        List<FluidStack> unavailableFlavorFluids = JeiItemLists.getUnavailableFlavorFluids();
+        if (!unavailableFlavorFluids.isEmpty()) {
+            registration.getIngredientManager().removeIngredientsAtRuntime(ForgeTypes.FLUID_STACK, unavailableFlavorFluids);
+        }
     }
 
     @Override
@@ -163,25 +189,17 @@ public class TobacconistJeiPlugin implements IModPlugin {
         registration.addRecipeCatalyst(new ItemStack(ModBlocks.TOBACCO_DRYING_RACK.get().asItem()), DryingRackRecipeCategory.TYPE);
         if (com.diggydwarff.tobacconistmod.compat.create.CreateCompat.loaded()) {
             registration.addRecipeCatalyst(new ItemStack(ModBlocks.INDUSTRIAL_DRYING_RACK.get().asItem()), DryingRackRecipeCategory.TYPE);
+            addCreateCatalyst(registration, "mechanical_mixer", HomogenizationRecipeCategory.TYPE);
+            addCreateCatalyst(registration, "basin", HomogenizationRecipeCategory.TYPE);
         }
 
-        registration.addRecipeCatalyst(new ItemStack(ModItems.WILD_TOBACCO_LEAF.get()), DryingRackRecipeCategory.TYPE);
-        registration.addRecipeCatalyst(new ItemStack(ModItems.VIRGINIA_TOBACCO_LEAF.get()), DryingRackRecipeCategory.TYPE);
-        registration.addRecipeCatalyst(new ItemStack(ModItems.BURLEY_TOBACCO_LEAF.get()), DryingRackRecipeCategory.TYPE);
-        registration.addRecipeCatalyst(new ItemStack(ModItems.ORIENTAL_TOBACCO_LEAF.get()), DryingRackRecipeCategory.TYPE);
-        registration.addRecipeCatalyst(new ItemStack(ModItems.DOKHA_TOBACCO_LEAF.get()), DryingRackRecipeCategory.TYPE);
-        registration.addRecipeCatalyst(new ItemStack(ModItems.SHADE_TOBACCO_LEAF.get()), DryingRackRecipeCategory.TYPE);
 
         registration.addRecipeCatalyst(new ItemStack(ModBlocks.TOBACCO_BARREL.get().asItem()), TobaccoBarrelRecipeCategory.TYPE);
-        JeiItemLists.getAllDryLeaves().forEach(stack ->
-                registration.addRecipeCatalyst(stack, TobaccoBarrelRecipeCategory.TYPE)
-        );
 
         JeiItemLists.getAllSmokingPipes().forEach(pipe ->
                 registration.addRecipeCatalyst(pipe, WoodenPipeFillRecipeCategory.TYPE)
         );
 
-        registration.addRecipeCatalyst(new ItemStack(ModBlocks.TOBACCO_DRYING_RACK.get().asItem()), DryingRackRecipeCategory.TYPE);
 
         registration.addRecipeCatalyst(new ItemStack(ModItems.SHISHA_TOBACCO.get()), ShishaMixRecipeCategory.TYPE);
         registration.addRecipeCatalyst(new ItemStack(ModItems.TOBACCO_BOX.get()), TobaccoBoxFillRecipeCategory.TYPE);
@@ -204,6 +222,39 @@ public class TobacconistJeiPlugin implements IModPlugin {
         registration.addRecipeCatalyst(new ItemStack(Items.COAL), HookahStationRecipeCategory.TYPE);
         registration.addRecipeCatalyst(new ItemStack(Items.CHARCOAL), HookahStationRecipeCategory.TYPE);
         registration.addRecipeCatalyst(new ItemStack(ModItems.SHISHA_TOBACCO.get()), HookahStationRecipeCategory.TYPE);
+    }
+
+    private static void addCreateCatalyst(IRecipeCatalystRegistration registration, String path, RecipeType<?> type) {
+        Item item = BuiltInRegistries.ITEM.get(new ResourceLocation("create", path));
+        if (item != Items.AIR) {
+            registration.addRecipeCatalyst(new ItemStack(item), type);
+        }
+    }
+
+    @Override
+    public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
+        if (!com.diggydwarff.tobacconistmod.compat.create.CreateCompat.loaded()) return;
+
+        jeiRuntime.getRecipeManager()
+                .getRecipeType(new ResourceLocation("create", "mixing"))
+                .ifPresent(type -> hideCreateHomogenizationMarkers(jeiRuntime, type));
+    }
+
+    private static <T> void hideCreateHomogenizationMarkers(IJeiRuntime jeiRuntime, RecipeType<T> recipeType) {
+        List<T> markers = jeiRuntime.getRecipeManager()
+                .createRecipeLookup(recipeType)
+                .includeHidden()
+                .get()
+                .filter(TobacconistJeiPlugin::isCreateHomogenizationMarker)
+                .toList();
+        if (!markers.isEmpty()) {
+            jeiRuntime.getRecipeManager().hideRecipes(recipeType, markers);
+        }
+    }
+
+    private static boolean isCreateHomogenizationMarker(Object recipe) {
+        return recipe != null && recipe.getClass().getName().equals(
+                "com.diggydwarff.tobacconistmod.compat.create.CreateTobaccoHomogenizingRecipe");
     }
 
 }

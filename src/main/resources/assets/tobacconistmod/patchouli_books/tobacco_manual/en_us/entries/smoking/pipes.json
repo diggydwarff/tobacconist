@@ -5,8 +5,10 @@
   "sortnum": 0,
   "pages": [
     {
-      "type": "patchouli:text",
-      "text": "The basic $(thing)Wooden Smoking Pipe$() is a custom 3×3 recipe. Use any two Planks and two Sticks in this exact pattern:$(br2)$(item)__P$()$(br)$(item)_PS$()$(br)$(item)S__$()$(br2)P = any Plank, S = Stick, _ = empty. The pipe remembers the first plank type and uses it in the pipe's name/appearance."
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:wooden_smoking_pipe",
+      "title": "Wooden Smoking Pipe",
+      "text": "Use any two $(item)Planks$() and two $(item)Sticks$() in the shown 3×3 pattern. The pipe remembers the first plank type used and reflects that wood in its name and appearance."
     },
     {
       "type": "patchouli:text",
@@ -15,7 +17,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Right-click a packed pipe to take one puff. When its 40 puffs are exhausted, the pipe becomes empty and can be packed again. The durability-style bar and tooltip show how much tobacco remains.",
+      "text": "Right-click a packed pipe to take one puff. When its stored puffs are exhausted, the pipe becomes empty and can be packed again. The durability-style bar and tooltip show how much tobacco remains.",
       "title": "Smoking"
     },
     {

@@ -14,7 +14,8 @@
     "BasinInventoryHomogenizationMixin",
     "FunnelProductionMonitorMixin",
     "ChuteProductionMonitorMixin",
-    "ProductionMonitorGoggleMixin"
+    "ProductionMonitorGoggleMixin",
+    "RecipeGridAutomationQualityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -12,7 +12,12 @@
       "type": "patchouli:crafting",
       "recipe": "tobacconistmod:flue_firebox",
       "title": "Flue Firebox",
-      "text": "A lit Flue Firebox supplies the heat source used by nearby racks."
+      "text": "A lit Flue Firebox supplies the heat source used by nearby racks. Redstone power pauses the Firebox without consuming its remaining burn time; remove the signal to resume."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Fan-Assisted Flue Cure",
+      "text": "With $(thing)Create$(), an Encased Fan blowing through $(item)Lava$() produces blasting, smoke-free heat that can Flue Cure a nearby wooden rack faster. This assisted route does not require a nearby Flue Firebox; a direct Campfire still takes Fire-Curing priority."
     },
     {
       "type": "patchouli:text",

@@ -1,21 +1,34 @@
 package com.diggydwarff.tobacconistmod.compat.jei;
 
-import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
-
+import com.diggydwarff.tobacconistmod.compat.FlavorCompatibility;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
-import com.diggydwarff.tobacconistmod.datagen.items.custom.LabelItem;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.BottledMolassesFlavors;
+import com.diggydwarff.tobacconistmod.datagen.items.custom.LabelItem;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.WoodenSmokingPipeItem;
+import com.diggydwarff.tobacconistmod.fluid.ModExtractionFluids;
+import com.diggydwarff.tobacconistmod.fluid.ModMolassesFluids;
+import com.diggydwarff.tobacconistmod.fluid.TobacconistFluidAmounts;
+import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
 import com.diggydwarff.tobacconistmod.util.TobaccoBoxHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
 public final class JeiItemLists {
+
+    private static final List<String> LOOSE_CUTS = List.of(
+            TobaccoCuringHelper.CUT_ROUGH,
+            TobaccoCuringHelper.CUT_RIBBON,
+            TobaccoCuringHelper.CUT_SHAG,
+            TobaccoCuringHelper.CUT_FLAKE
+    );
 
     private JeiItemLists() {}
 
@@ -26,43 +39,80 @@ public final class JeiItemLists {
                 .toList();
     }
 
+    /** All JEI-visible loose tobacco variants, including cut metadata used by subtype lookup. */
     public static List<ItemStack> getAllLooseTobaccos() {
         List<ItemStack> out = new ArrayList<>();
 
-        out.add(makeLoose(ModItems.TOBACCO_LOOSE_WILD.get()));
-        out.add(makeLoose(ModItems.TOBACCO_LOOSE_VIRGINIA.get()));
-        out.add(makeLoose(ModItems.TOBACCO_LOOSE_BURLEY.get()));
-        out.add(makeLoose(ModItems.TOBACCO_LOOSE_ORIENTAL.get()));
-        out.add(makeLoose(ModItems.TOBACCO_LOOSE_DOKHA.get()));
-        out.add(makeLoose(ModItems.TOBACCO_LOOSE_SHADE.get()));
-        out.add(makeLoose(ModItems.BLENDED_TOBACCO.get()));
+        addAllCuts(out, ModItems.TOBACCO_LOOSE_WILD.get());
+        addAllCuts(out, ModItems.TOBACCO_LOOSE_VIRGINIA.get());
+        addAllCuts(out, ModItems.TOBACCO_LOOSE_BURLEY.get());
+        addAllCuts(out, ModItems.TOBACCO_LOOSE_ORIENTAL.get());
+        addAllCuts(out, ModItems.TOBACCO_LOOSE_DOKHA.get());
+        addAllCuts(out, ModItems.TOBACCO_LOOSE_SHADE.get());
+        addAllCuts(out, ModItems.BLENDED_TOBACCO.get());
+        return List.copyOf(out);
+    }
 
-        return out;
+    public static List<ItemStack> getAllCuts(Item item) {
+        List<ItemStack> out = new ArrayList<>(LOOSE_CUTS.size());
+        addAllCuts(out, item);
+        return List.copyOf(out);
     }
 
     public static List<ItemStack> getAllShishaFlavorings() {
         List<ItemStack> out = new ArrayList<>();
         for (BottledMolassesFlavors flavor : BottledMolassesFlavors.values()) {
-            if (!flavor.isPlain()) out.add(flavor.getStack());
+            if (!flavor.isPlain() && isFlavorAvailable(flavor)) {
+                out.add(flavor.getStack());
+            }
         }
         return List.copyOf(out);
     }
 
-    public static List<ItemStack> getAllTobaccoBoxSupportedContents() {
+    /**
+     * Hide registered flavor bottles/essences whose ingredient tag has no installed provider.
+     * Registration stays intact for world compatibility; this only removes unusable entries from JEI.
+     */
+    public static List<ItemStack> getUnavailableFlavorItems() {
         List<ItemStack> out = new ArrayList<>();
+        for (BottledMolassesFlavors flavor : BottledMolassesFlavors.values()) {
+            if (flavor.isPlain() || isFlavorAvailable(flavor)) continue;
+            out.add(flavor.getStack());
+            ItemStack essence = flavor.getEssenceStack();
+            if (!essence.isEmpty()) out.add(essence);
+        }
+        return List.copyOf(out);
+    }
 
-        out.add(makeLoose(ModItems.TOBACCO_LOOSE_WILD.get()));
-        out.add(makeLoose(ModItems.TOBACCO_LOOSE_VIRGINIA.get()));
-        out.add(makeLoose(ModItems.TOBACCO_LOOSE_BURLEY.get()));
-        out.add(makeLoose(ModItems.TOBACCO_LOOSE_ORIENTAL.get()));
-        out.add(makeLoose(ModItems.TOBACCO_LOOSE_DOKHA.get()));
-        out.add(makeLoose(ModItems.TOBACCO_LOOSE_SHADE.get()));
+    /**
+     * Hide the registered factory-fluid counterparts of unavailable flavor items from JEI too.
+     * Fluids remain registered for save compatibility; this only removes dead ingredients from browsing.
+     */
+    public static List<FluidStack> getUnavailableFlavorFluids() {
+        List<FluidStack> out = new ArrayList<>();
+        for (BottledMolassesFlavors flavor : BottledMolassesFlavors.values()) {
+            if (flavor.isPlain() || isFlavorAvailable(flavor)) continue;
+
+            addFluidIfPresent(out, ModMolassesFluids.source(flavor));
+            addFluidIfPresent(out, ModMolassesFluids.flowing(flavor));
+            addFluidIfPresent(out, ModExtractionFluids.essence(flavor));
+            addFluidIfPresent(out, ModExtractionFluids.flowingEssence(flavor));
+        }
+        return List.copyOf(out);
+    }
+
+    public static boolean isFlavorAvailable(BottledMolassesFlavors flavor) {
+        return FlavorCompatibility.isFlavorAvailable(flavor);
+    }
+
+    public static List<ItemStack> getAllTobaccoBoxSupportedContents() {
+        List<ItemStack> out = new ArrayList<>(getAllLooseTobaccos());
 
         out.add(makeCigarette());
         out.add(makeCigar());
         out.add(makeShisha());
 
-        return out;
+        return List.copyOf(out);
     }
 
     public static ItemStack makeNamedLabel(String name) {
@@ -87,10 +137,22 @@ public final class JeiItemLists {
         return box;
     }
 
-    private static ItemStack makeLoose(net.minecraft.world.item.Item item) {
+    private static void addFluidIfPresent(List<FluidStack> out, Fluid fluid) {
+        if (fluid != null) {
+            out.add(new FluidStack(fluid, TobacconistFluidAmounts.BOTTLE));
+        }
+    }
+
+    private static void addAllCuts(List<ItemStack> out, Item item) {
+        for (String cut : LOOSE_CUTS) {
+            out.add(makeLoose(item, cut));
+        }
+    }
+
+    private static ItemStack makeLoose(Item item, String cut) {
         ItemStack stack = new ItemStack(item);
         TobaccoCuringHelper.applyCureData(stack, TobaccoCuringHelper.CURE_AIR, 60);
-        TobaccoCuringHelper.setCutType(stack, TobaccoCuringHelper.CUT_RIBBON);
+        TobaccoCuringHelper.setCutType(stack, cut);
         return stack;
     }
 
@@ -120,14 +182,4 @@ public final class JeiItemLists {
         return stack;
     }
 
-    public static List<ItemStack> getAllDryLeaves() {
-        return List.of(
-                new ItemStack(ModItems.WILD_TOBACCO_LEAF_DRY.get()),
-                new ItemStack(ModItems.VIRGINIA_TOBACCO_LEAF_DRY.get()),
-                new ItemStack(ModItems.BURLEY_TOBACCO_LEAF_DRY.get()),
-                new ItemStack(ModItems.ORIENTAL_TOBACCO_LEAF_DRY.get()),
-                new ItemStack(ModItems.DOKHA_TOBACCO_LEAF_DRY.get()),
-                new ItemStack(ModItems.SHADE_TOBACCO_LEAF_DRY.get())
-        );
-    }
 }

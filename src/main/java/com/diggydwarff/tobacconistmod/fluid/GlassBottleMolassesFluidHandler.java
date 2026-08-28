@@ -34,7 +34,7 @@ public final class GlassBottleMolassesFluidHandler implements IFluidHandlerItem 
         };
     }
 
-    @Override public int getTankCapacity(int tank) { return tank == 0 ? 1000 : 0; }
+    @Override public int getTankCapacity(int tank) { return tank == 0 ? TobacconistFluidAmounts.BOTTLE : 0; }
 
     @Override
     public boolean isFluidValid(int tank, FluidStack stack) {
@@ -53,8 +53,8 @@ public final class GlassBottleMolassesFluidHandler implements IFluidHandlerItem 
             return 0;
         }
 
-        int increment = 1000;
-        int fillable = Math.min(1000 - amount, resource.getAmount());
+        int increment = TobacconistFluidAmounts.BOTTLE;
+        int fillable = Math.min(TobacconistFluidAmounts.BOTTLE - amount, resource.getAmount());
         fillable -= fillable % increment;
         if (fillable <= 0) return 0;
 

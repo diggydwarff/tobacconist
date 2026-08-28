@@ -26,7 +26,7 @@
     {
       "type": "patchouli:text",
       "title": "Create Mixer",
-      "text": "With Create installed, mix $(item)1000 mB flavored molasses$() with loose tobacco in a Mechanical Mixer. The same metadata-preserving route can add another full flavored-molasses treatment to unused shisha.",
+      "text": "With Create installed, mix $(item)250 mB flavored molasses$() with loose tobacco in a Mechanical Mixer. The same metadata-preserving route can add another full flavored-molasses treatment to unused shisha.",
       "flag": "mod:create"
     },
     {

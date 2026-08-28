@@ -15,6 +15,11 @@
     },
     {
       "type": "patchouli:text",
+      "title": "Fan-Assisted Fire Cure",
+      "text": "With $(thing)Create$(), an Encased Fan blowing through a lit Campfire produces smoky airflow that can Fire Cure a nearby wooden rack and advances the cure faster. The rack does not need to sit directly over that Campfire for this assisted route."
+    },
+    {
+      "type": "patchouli:text",
       "title": "Hanging Bunches",
       "text": "A hanging bunch Fire Cures when a lit Campfire is directly below its lower half. Fire keeps the same highest curing priority and timing as the Drying Rack."
     },

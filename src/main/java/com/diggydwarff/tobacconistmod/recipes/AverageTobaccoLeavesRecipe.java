@@ -4,6 +4,7 @@ import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
 
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoGrowthHelper;
+import com.diggydwarff.tobacconistmod.util.TobaccoProcessingHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoCrateHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoBlendHelper;
 import net.minecraft.core.NonNullList;
@@ -115,7 +116,7 @@ public class AverageTobaccoLeavesRecipe extends CustomRecipe {
         String cutType = "";
 
         int usedItems = 0;
-        int totalQuality = 0;
+        long totalQuality = 0L;
 
         for (int i = 0; i < container.getContainerSize(); i++) {
             ItemStack stack = container.getItem(i);
@@ -143,7 +144,10 @@ public class AverageTobaccoLeavesRecipe extends CustomRecipe {
             return ItemStack.EMPTY;
         }
 
-        int avgQuality = Math.round((float) totalQuality / usedItems);
+        // One integer quality is stored for the whole output stack. Floor fractional averages so
+        // homogenization can never manufacture total quality points through repeated crafting.
+        int avgQuality = TobaccoProcessingHelper.getConservativeAverageQuality(
+                totalQuality, usedItems, mode == Mode.RAW_LEAF);
 
         ItemStack result = new ItemStack(first.getItem(), usedItems);
 

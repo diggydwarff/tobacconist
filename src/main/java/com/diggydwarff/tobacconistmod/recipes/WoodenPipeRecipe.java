@@ -12,17 +12,35 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.inventory.CraftingContainer;
-import net.minecraft.world.item.crafting.CustomRecipe;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.Tags;
 
-public class WoodenPipeRecipe extends CustomRecipe {
+public class WoodenPipeRecipe extends ShapedRecipe {
 
     public static final String NBT_WOOD_PLANK = "WoodPlank";
 
     public WoodenPipeRecipe(ResourceLocation id, CraftingBookCategory category) {
-        super(id, category);
+        super(
+                id,
+                "",
+                category,
+                3,
+                3,
+                displayIngredients(),
+                new ItemStack(ModItems.WOODEN_SMOKING_PIPE.get())
+        );
+    }
+
+    private static NonNullList<Ingredient> displayIngredients() {
+        NonNullList<Ingredient> ingredients = NonNullList.withSize(9, Ingredient.EMPTY);
+        ingredients.set(2, Ingredient.of(ItemTags.PLANKS));
+        ingredients.set(4, Ingredient.of(ItemTags.PLANKS));
+        ingredients.set(5, Ingredient.of(Items.STICK));
+        ingredients.set(6, Ingredient.of(Items.STICK));
+        return ingredients;
     }
 
     @Override

@@ -16,14 +16,14 @@
             "item": "minecraft:sugar_cane"
           },
           {
-            "amount": 1000,
+            "amount": 250,
             "fluid": "minecraft:water",
             "nbt": {}
           }
         ],
         "results": [
           {
-            "amount": 1000,
+            "amount": 250,
             "fluid": "tobacconistmod:molasses_plain"
           }
         ]

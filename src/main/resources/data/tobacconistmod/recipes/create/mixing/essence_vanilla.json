@@ -23,14 +23,14 @@
             "tag": "tobacconistmod:flavorings/vanilla"
           },
           {
-            "amount": 1000,
+            "amount": 250,
             "fluid": "tobacconistmod:aqua_vitae",
             "nbt": {}
           }
         ],
         "results": [
           {
-            "amount": 1000,
+            "amount": 250,
             "fluid": "tobacconistmod:essence_vanilla"
           }
         ]

@@ -75,6 +75,11 @@ public class IndustrialDryingRackBlock extends TobaccoDryingRackBlock {
         registerDefaultState(defaultBlockState().setValue(HALF, DoubleBlockHalf.LOWER));
     }
 
+    @Override
+    protected boolean hasPersistentUpperHalf() {
+        return true;
+    }
+
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
@@ -123,8 +128,10 @@ public class IndustrialDryingRackBlock extends TobaccoDryingRackBlock {
             BlockEntity be = level.getBlockEntity(lowerPos);
             if (be instanceof IndustrialDryingRackBlockEntity rack) rack.clearContent();
         }
-        // Do not call the wooden-rack implementation: its lower-half cleanup is specifically for
-        // the retired wooden proxy and would tear down a legitimate industrial upper tier here.
+        // The parent now knows this is a legitimate two-block rack, so it skips only the old
+        // wooden-proxy cleanup while still reaching vanilla Block.playerWillDestroy. That restores
+        // the normal break sound and destruction particles.
+        super.playerWillDestroy(level, pos, state, player);
     }
 
     @Override

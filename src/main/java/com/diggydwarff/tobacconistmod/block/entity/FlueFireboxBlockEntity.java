@@ -54,6 +54,7 @@ public class FlueFireboxBlockEntity extends BaseContainerBlockEntity implements 
             return switch (index) {
                 case 0 -> burnTime;
                 case 1 -> burnTimeTotal;
+                case 2 -> isRedstonePaused() ? 1 : 0;
                 default -> 0;
             };
         }
@@ -68,7 +69,7 @@ public class FlueFireboxBlockEntity extends BaseContainerBlockEntity implements 
 
         @Override
         public int getCount() {
-            return 2;
+            return 3;
         }
     };
 
@@ -77,28 +78,32 @@ public class FlueFireboxBlockEntity extends BaseContainerBlockEntity implements 
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, FlueFireboxBlockEntity be) {
-        boolean wasLit = be.isLit();
+        boolean wasLit = state.getValue(BlockStateProperties.LIT);
+        boolean redstonePaused = level.hasNeighborSignal(pos);
 
-        if (be.burnTime > 0) {
-            be.burnTime--;
-        }
+        // Redstone power is a hard pause: preserve remaining burn time and do not consume
+        // another fuel item until power is removed.
+        if (!redstonePaused) {
+            if (be.burnTime > 0) {
+                be.burnTime--;
+            }
 
-        ItemStack fuelStack = be.items.get(0);
+            ItemStack fuelStack = be.items.get(0);
+            if (be.burnTime <= 0 && !fuelStack.isEmpty()) {
+                int fuel = fuelStack.getBurnTime(RecipeType.SMELTING);
+                if (fuel > 0) {
+                    be.burnTime = fuel;
+                    be.burnTimeTotal = fuel;
 
-        if (be.burnTime <= 0 && !fuelStack.isEmpty()) {
-            int fuel = fuelStack.getBurnTime(RecipeType.SMELTING);
-            if (fuel > 0) {
-                be.burnTime = fuel;
-                be.burnTimeTotal = fuel;
-
-                fuelStack.shrink(1);
-                if (fuelStack.isEmpty()) {
-                    be.items.set(0, ItemStack.EMPTY);
+                    fuelStack.shrink(1);
+                    if (fuelStack.isEmpty()) {
+                        be.items.set(0, ItemStack.EMPTY);
+                    }
                 }
             }
         }
 
-        boolean litNow = be.isLit();
+        boolean litNow = be.burnTime > 0 && !redstonePaused;
         if (wasLit != litNow) {
             level.setBlock(pos, state.setValue(BlockStateProperties.LIT, litNow), 3);
         }
@@ -109,7 +114,11 @@ public class FlueFireboxBlockEntity extends BaseContainerBlockEntity implements 
     }
 
     public boolean isLit() {
-        return burnTime > 0;
+        return burnTime > 0 && !isRedstonePaused();
+    }
+
+    public boolean isRedstonePaused() {
+        return level != null && level.hasNeighborSignal(worldPosition);
     }
 
     public IItemHandler getItemHandler(@Nullable Direction side) {

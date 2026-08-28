@@ -287,10 +287,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             return SLOTS_FOR_BOTTOM;
         }
 
-        if (side == Direction.UP) {
-            return NO_SLOTS;
-        }
-
+        // Raw leaves can be loaded from above as well as from the horizontal faces.
+        // Bottom remains the dedicated hopper-extraction face.
         return SLOTS_FOR_SIDES;
     }
 
@@ -299,7 +297,6 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         TobaccoDryingRackBlockEntity master = getMasterRack();
         if (master != this) return master.canPlaceItemThroughFace(slot, stack, side);
         if (slot != 0) return false;
-        if (side == Direction.UP) return false;
         if (side == Direction.DOWN) return false;
 
         if (!isValidLeaf(stack)) return false;

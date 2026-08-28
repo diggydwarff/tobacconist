@@ -1,0 +1,22 @@
+{
+  "replace": false,
+  "values": [
+    "tobacconistmod:bottled_molasses_plain",
+    {
+      "id": "croptopia:molasses",
+      "required": false
+    },
+    {
+      "id": "#c:foods/molasses",
+      "required": false
+    },
+    {
+      "id": "#c:molasses",
+      "required": false
+    },
+    {
+      "id": "#forge:molasses",
+      "required": false
+    }
+  ]
+}

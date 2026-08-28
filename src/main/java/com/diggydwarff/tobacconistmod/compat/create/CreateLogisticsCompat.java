@@ -3,7 +3,6 @@ package com.diggydwarff.tobacconistmod.compat.create;
 import com.diggydwarff.tobacconistmod.TobacconistMod;
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
 import com.diggydwarff.tobacconistmod.block.custom.DoubleHookahBlock;
-import com.diggydwarff.tobacconistmod.block.custom.IndustrialDryingRackBlock;
 import com.diggydwarff.tobacconistmod.block.custom.TobaccoDryingRackBlock;
 import com.simibubi.create.api.packager.InventoryIdentifier;
 import com.simibubi.create.api.packager.unpacking.UnpackingHandler;
@@ -124,9 +123,8 @@ public final class CreateLogisticsCompat {
             targetState = level.getBlockState(targetPos);
         }
 
-        boolean industrial = targetState.getBlock() instanceof IndustrialDryingRackBlock;
-        if ((!industrial && (side == Direction.UP || side == Direction.DOWN))
-                || (industrial && side == Direction.DOWN)) {
+        // Package input follows rack sided I/O: top or horizontal faces are valid; bottom is output-only.
+        if (side == Direction.DOWN) {
             return false;
         }
 

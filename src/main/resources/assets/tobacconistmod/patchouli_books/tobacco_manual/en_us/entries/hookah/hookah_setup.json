@@ -31,7 +31,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "A fresh Water Bottle lasts for a random $(item)2–5 fully consumed Shisha loads$(). It then becomes $(bad)Dirty Hookah Water$(). The Hookah still works, but hose draws through dirty water give a short $(bad)Nausea$() effect. This never deals damage. Remove the dirty bottle and right-click it to empty it back into a Glass Bottle.",
+      "text": "A fresh Water Bottle lasts for a random $(item)2–5 fully consumed Shisha loads$(). It then becomes $(4)Dirty Hookah Water$(). The Hookah still works, but hose draws through dirty water give a short $(4)Nausea$() effect. This never deals damage. Remove the dirty bottle and right-click it to empty it back into a Glass Bottle.",
       "title": "Hookah Water"
     },
     {

@@ -116,7 +116,7 @@ public enum BottledMolassesFlavors {
 
     public Item getItem(){
         if (item == null) {
-            // Molasses and Essence bottles each represent a full 1000 mB processing batch.
+            // Molasses and Essence bottles each represent a full 250 mB processing batch.
             item = new BottledMolassesItem(new Item.Properties().stacksTo(1));
         }
         return item;

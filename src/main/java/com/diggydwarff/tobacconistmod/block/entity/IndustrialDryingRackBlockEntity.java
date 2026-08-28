@@ -83,7 +83,7 @@ public class IndustrialDryingRackBlockEntity extends TobaccoDryingRackBlockEntit
     public int[] getSlotsForFace(Direction side) {
         IndustrialDryingRackBlockEntity master = getMasterRack();
         if (master != this) return master.getSlotsForFace(side);
-        // Unlike the wooden rack, the industrial rack accepts automated input from above.
+        // Industrial automation follows the shared rack rule: input from the top or horizontal sides; bottom is output-only.
         return side == Direction.DOWN ? new int[]{0} : new int[]{0};
     }
 

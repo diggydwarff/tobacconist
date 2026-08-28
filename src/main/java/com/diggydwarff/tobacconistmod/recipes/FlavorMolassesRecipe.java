@@ -1,5 +1,7 @@
 package com.diggydwarff.tobacconistmod.recipes;
 
+import com.diggydwarff.tobacconistmod.compat.FlavorCompatibility;
+
 import net.minecraft.resources.ResourceLocation;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.BottledMolassesFlavors;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.FlavoringEssenceItem;
@@ -39,8 +41,7 @@ public final class FlavorMolassesRecipe extends CustomRecipe {
             ItemStack stack = input.getItem(i);
             if (stack.isEmpty()) continue;
 
-            BottledMolassesFlavors molasses = BottledMolassesFlavors.fromItem(stack.getItem());
-            if (molasses == BottledMolassesFlavors.BOTTLED_MOLASSES_PLAIN) {
+            if (FlavorCompatibility.isPlainMolasses(stack)) {
                 if (plainMolasses) return null;
                 plainMolasses = true;
                 continue;
@@ -65,8 +66,11 @@ public final class FlavorMolassesRecipe extends CustomRecipe {
         NonNullList<ItemStack> remains = NonNullList.withSize(input.getContainerSize(), ItemStack.EMPTY);
         for (int i = 0; i < input.getContainerSize(); i++) {
             ItemStack stack = input.getItem(i);
-            if (!(stack.getItem() instanceof FlavoringEssenceItem)) continue;
-            remains.set(i, new ItemStack(Items.GLASS_BOTTLE));
+            if (stack.getItem() instanceof FlavoringEssenceItem) {
+                remains.set(i, new ItemStack(Items.GLASS_BOTTLE));
+            } else if (FlavorCompatibility.isPlainMolasses(stack) && stack.hasCraftingRemainingItem()) {
+                remains.set(i, stack.getCraftingRemainingItem());
+            }
         }
         return remains;
     }

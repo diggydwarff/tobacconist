@@ -111,9 +111,17 @@ public class TobaccoDryingRackBlock extends BaseEntityBlock {
         return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
     }
 
+    /**
+     * Wooden racks only retain UPPER as a migration shim. Genuine two-block subclasses override
+     * this so the shared destruction path does not delete their legitimate upper half.
+     */
+    protected boolean hasPersistentUpperHalf() {
+        return false;
+    }
+
     @Override
     public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
-        if (state.getValue(HALF) == DoubleBlockHalf.LOWER) {
+        if (!hasPersistentUpperHalf() && state.getValue(HALF) == DoubleBlockHalf.LOWER) {
             // Clean up a legacy upper proxy if this rack was saved while the two-block version existed.
             BlockPos upperPos = pos.above();
             BlockState upperState = level.getBlockState(upperPos);

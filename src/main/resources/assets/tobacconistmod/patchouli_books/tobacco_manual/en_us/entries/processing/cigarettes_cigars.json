@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "$(thing)Cigarette:$() craft exactly 1 loose tobacco with 1 Rolling Paper. Final quality is driven mainly by the tobacco's actual quality; cut choice is a preparation modifier. Manual crafting and Create assembly calculate the same score and preserve the same metadata."
+      "text": "$(thing)Cigarette:$() craft exactly 1 loose tobacco with 1 Rolling Paper. Final quality is driven mainly by the tobacco's actual quality; cut choice is a preparation modifier. Genuine hand crafting and the dedicated Create Deployer → Incomplete Cigarette → Mechanical Press route preserve the same full score and metadata."
     },
     {
       "type": "patchouli:crafting",
@@ -16,12 +16,17 @@
     },
     {
       "type": "patchouli:text",
+      "text": "When $(thing)Create$() is installed, generic crafting automation such as Create Mechanical Crafters or compatible fake-player crafting systems is less precise. By default it subtracts $(item)10 raw quality points$() on the underlying 0–120 scale before the finished Cigarette/Cigar score is calculated. Servers can configure this penalty or set it to 0. Hand rolling and the dedicated incomplete-product assembly route have no automation penalty.",
+      "title": "Automation Quality"
+    },
+    {
+      "type": "patchouli:text",
       "text": "For cigarettes, $(thing)Shag$() is ideal and Ribbon is a strong alternative. Rough and especially Flake reduce the final score, but leaf quality remains the dominant factor; a reasonable second-choice cut no longer turns excellent tobacco into a mediocre cigarette.",
       "title": "Cigarette Cut"
     },
     {
       "type": "patchouli:text",
-      "text": "$(thing)Cigar:$() combine 1 loose tobacco filler with 1 dry Tobacco Leaf wrapper. Final quality is $(item)75% filler + 25% wrapper$(), then adjusted modestly for filler preparation. Fermentation/aging already improve each component's leaf quality before this calculation.",
+      "text": "$(thing)Cigar:$() combine 1 loose tobacco filler with 1 dry Tobacco Leaf wrapper. Final quality is $(item)75% filler + 25% wrapper$(), then adjusted modestly for filler preparation. Hand crafting and the dedicated Create Deployer → Incomplete Cigar → Mechanical Press route preserve full quality.",
       "title": "Cigar Recipe"
     },
     {

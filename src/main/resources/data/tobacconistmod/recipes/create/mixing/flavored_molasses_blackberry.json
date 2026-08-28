@@ -6,25 +6,32 @@
         {
           "type": "forge:mod_loaded",
           "modid": "create"
+        },
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:tag_empty",
+            "tag": "tobacconistmod:flavorings/blackberry"
+          }
         }
       ],
       "recipe": {
         "type": "create:mixing",
         "ingredients": [
           {
-            "amount": 1000,
+            "amount": 250,
             "fluid": "tobacconistmod:molasses_plain",
             "nbt": {}
           },
           {
-            "amount": 1000,
+            "amount": 250,
             "fluid": "tobacconistmod:essence_blackberry",
             "nbt": {}
           }
         ],
         "results": [
           {
-            "amount": 1000,
+            "amount": 250,
             "fluid": "tobacconistmod:molasses_blackberry"
           }
         ]

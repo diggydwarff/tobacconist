@@ -6,17 +6,17 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "The $(thing)Drying Rack$() is one block tall and holds one 16-leaf inventory. Horizontal sides can insert valid raw leaves. The top and bottom cannot insert, and a hopper underneath can extract only when the batch has completely finished curing."
+      "text": "The $(thing)Drying Rack$() is one block tall and holds one 16-leaf inventory. Valid raw leaves can enter from the $(thing)top or horizontal sides$(); bottom insertion is blocked. A hopper underneath can extract only when the batch has completely finished curing."
     },
     {
       "type": "patchouli:text",
-      "text": "Rack automation still obeys batch rules: leaves must match the stored leaf’s exact item/components, the rack holds at most 16, and insertion is blocked once progress reaches 10%. A vanilla hopper pulls finished output from the bottom. Forge/Create capability consumers also pass through the rack’s validated finished-output handler.",
+      "text": "Rack automation still obeys batch rules: leaves must match the stored leaf's exact item/components, the rack holds at most 16, and insertion is blocked once progress reaches 10%. Bottom-facing vanilla hoppers pull only finished output; compatible Forge/Create logistics use the rack's validated handlers without bypassing those rules.",
       "title": "Drying Rack"
     },
     {
       "type": "patchouli:text",
       "title": "Industrial Rack",
-      "text": "The $(thing)Industrial Drying Rack$() is automation-only and occupies two real block levels. Funnels/Hoppers may connect to either level, and Chutes/Hoppers above can insert through the top. Both halves address the same 32-leaf inventory. Both tiers must receive matching Create airflow from two distinct Encased Fans before curing progresses."
+      "text": "The $(thing)Industrial Drying Rack$() is automation-only and occupies two real block levels sharing one 32-leaf inventory. Compatible automation can address either level, with valid input from above or horizontal sides; bottom insertion is blocked. Both the lower and upper rack levels must receive matching qualifying airflow from two distinct Encased Fans. Plain airflow normally Air Cures, or assists Sun Curing when the normal sunlight requirements are also met."
     },
     {
       "type": "patchouli:text",
@@ -52,6 +52,14 @@
       "type": "patchouli:text",
       "title": "Tobacco Crates",
       "text": "Tobacco Crates are packaged blocks rather than live inventories. Their nine stored units are recovered by breaking the crate; individual contents are not exposed to hopper/Create logistics."
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "tobacconistmod:reference/production_monitor"
+      ],
+      "title": "Production Monitor",
+      "flag": "mod:create"
     }
   ]
 }

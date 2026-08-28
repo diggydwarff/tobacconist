@@ -142,6 +142,10 @@ public class TobacconistMod {
                 Ingredient.of(Items.WHEAT),
                 new ItemStack(ModItems.BOTTLED_AQUA_VITAE.get()));
 
+        // Forge 1.20.1 registers brewing recipes before datapack item tags are bound. Register
+        // the tag-backed recipes unconditionally: an unavailable flavor has an empty ingredient
+        // tag and therefore cannot match, while an installed/datapack-provided ingredient becomes
+        // usable without rebuilding the global BrewingRecipeRegistry.
         for (BottledMolassesFlavors flavor : BottledMolassesFlavors.values()) {
             if (flavor.hasDirectEssenceInfusion()) {
                 addEssenceRecipe(flavor);
