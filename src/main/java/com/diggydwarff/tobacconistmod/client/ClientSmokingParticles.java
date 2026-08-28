@@ -22,6 +22,8 @@ public class ClientSmokingParticles {
                 if (handler == null) return;
 
                 ItemStack stack = handler.getStacks().getStackInSlot(0);
+                var renderStates = handler.getRenders();
+                if (renderStates.size() > 0 && !renderStates.get(0)) return;
                 if (stack.isEmpty()) return;
                 if (!(stack.getItem() instanceof SmokingItem smokingItem)) return;
                 if (!smokingItem.shouldEmitMouthSmoke(stack)) return;

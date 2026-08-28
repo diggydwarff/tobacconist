@@ -716,7 +716,7 @@
   "tobacconistmod.tooltip.pouch.bonus_puffs": "Maaaring magkaroon ng dagdag na hitit ang mga napunong pipa",
   "tobacconistmod.tooltip.pouch.dye": "Maaaring kulayan",
   "tobacconistmod.tooltip.box.capacity": "Nag-iimbak ng magkatugmang tapos na produktong tabako",
-  "tobacconistmod.tooltip.spectacles.curios_or_head": "Isuot sa Curios Eyes slot o vanilla Head slot",
+  "tobacconistmod.tooltip.spectacles.curios_or_head": "Isuot sa Curios Head slot o vanilla Head slot",
   "tobacconistmod.tooltip.spectacles.head": "Isuot sa Head slot",
   "tobacconistmod.tooltip.spectacles.info": "Nagpapakita ng detalyadong impormasyon sa pagproseso ng tabako",
   "tobacconistmod.barrel.status.line1": "Bariles ng Tabako | Nakaimbak: %1$s | Modo: %2$s",

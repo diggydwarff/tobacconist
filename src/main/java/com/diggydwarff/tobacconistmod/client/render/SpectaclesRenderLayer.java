@@ -37,7 +37,7 @@ public class SpectaclesRenderLayer extends RenderLayer<AbstractClientPlayer, Pla
             float netHeadYaw,
             float headPitch
     ) {
-        ItemStack spectacles = SpectaclesEquipmentHelper.findWorn(player);
+        ItemStack spectacles = SpectaclesEquipmentHelper.findVisibleWorn(player);
         if (spectacles.isEmpty()) return;
 
         poseStack.pushPose();
