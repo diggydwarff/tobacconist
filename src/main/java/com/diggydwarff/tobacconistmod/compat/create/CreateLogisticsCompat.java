@@ -3,7 +3,6 @@ package com.diggydwarff.tobacconistmod.compat.create;
 import com.diggydwarff.tobacconistmod.TobacconistMod;
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
 import com.diggydwarff.tobacconistmod.block.custom.DoubleHookahBlock;
-import com.diggydwarff.tobacconistmod.block.custom.IndustrialDryingRackBlock;
 import com.diggydwarff.tobacconistmod.block.custom.TobaccoDryingRackBlock;
 import com.simibubi.create.api.packager.InventoryIdentifier;
 import com.simibubi.create.api.packager.unpacking.UnpackingHandler;
@@ -63,7 +62,7 @@ public final class CreateLogisticsCompat {
         registerDoubleHookah(ModBlocks.EMERALD_HOOKAH.get());
         registerDoubleHookah(ModBlocks.NETHERITE_HOOKAH.get());
 
-        // Use a custom rack unpacker because normal sided insertion rejects top/bottom faces.
+        // Keep package import aligned with rack sided I/O: valid input may enter from the top or sides, never the bottom.
         UnpackingHandler.REGISTRY.register(
                 ModBlocks.TOBACCO_DRYING_RACK.get(),
                 CreateLogisticsCompat::unpackDryingRack
@@ -124,9 +123,7 @@ public final class CreateLogisticsCompat {
             targetState = level.getBlockState(targetPos);
         }
 
-        boolean industrial = targetState.getBlock() instanceof IndustrialDryingRackBlock;
-        if ((!industrial && (side == Direction.UP || side == Direction.DOWN))
-                || (industrial && side == Direction.DOWN)) {
+        if (side == Direction.DOWN) {
             return false;
         }
 

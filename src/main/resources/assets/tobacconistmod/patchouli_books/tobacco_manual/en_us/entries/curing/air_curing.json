@@ -15,6 +15,11 @@
     },
     {
       "type": "patchouli:text",
+      "title": "Fan-Assisted Air Cure",
+      "text": "With $(thing)Create$(), plain Encased Fan airflow reaching a wooden rack provides accelerated Air Curing. The fan is an alternative valid airflow source, not a different cure type. If normal Sun Curing conditions are valid, the same plain airflow accelerates Sun Curing instead."
+    },
+    {
+      "type": "patchouli:text",
       "title": "Hanging Bunches",
       "text": "Traditional hanging bunches naturally Air Cure under a continuous roof when no side opening qualifies for Sun Curing. Their support block above does not need to expose the bunch to vertical sky."
     },

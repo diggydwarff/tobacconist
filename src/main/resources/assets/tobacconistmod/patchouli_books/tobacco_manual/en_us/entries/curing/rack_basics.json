@@ -27,7 +27,7 @@
     {
       "type": "patchouli:text",
       "title": "Industrial Drying Rack",
-      "text": "With $(thing)Create$() installed, the $(item)Industrial Drying Rack$() is a true two-block, 32-leaf automation-only factory rack. Both levels expose one inventory and top-down loading is allowed. Curing requires matching airflow across $(thing)both$() rack levels from two distinct Encased Fans; one fan or one-sided airflow is not enough."
+      "text": "With $(thing)Create$() installed, the $(item)Industrial Drying Rack$() is a true two-block, 32-leaf automation-only factory rack. Both levels share one inventory, and valid automated input may enter from above or the horizontal sides. Curing requires matching airflow across $(thing)both$() rack levels from two distinct Encased Fans; one fan or one-sided airflow is not enough. Plain airflow normally gives Air Curing, or Sun Curing when the normal sunlight rules are also valid."
     },
     {
       "type": "patchouli:text",
@@ -36,7 +36,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Vanilla hoppers can automate the wooden rack from its horizontal sides. Top and bottom cannot insert. A hopper underneath can extract only after curing is complete, and the rack now leaves the block space directly above it completely free.",
+      "text": "The wooden rack accepts valid raw leaves from its $(thing)top or horizontal sides$(). A hopper underneath extracts only after curing is complete. Hoppers are only one option: compatible Create/NeoForge logistics can use the rack's validated input and finished-output rules, and the block space directly above the wooden rack remains free.",
       "title": "Automation"
     },
     {

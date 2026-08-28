@@ -25,7 +25,7 @@
     },
     {
       "type": "patchouli:text",
-      "title": "Analog Batch Control",
+      "title": "Redstone Batch Control",
       "text": "Signal 0 keeps the default $(thing)64-leaf$() target. Power either the $(thing)Mixer or Basin$(); if both are powered, the stronger signal wins. Signals 1–14 select 16/32/48/64/96/128/160/192/256/320/384/448/512/576 leaves."
     },
     {

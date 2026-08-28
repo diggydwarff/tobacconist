@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
  * NeoForge item capability adapter for the drying rack.
  *
  * <p>Horizontal faces and the top face are inputs. The bottom face is reserved for hopper-style
- * extraction. The industrial rack follows the same top-down loading rule. Finished batches may be extracted
+ * extraction. The industrial rack follows the same top-or-side input rule. Finished batches may be extracted
  * through any capability face. This is intentional: capability-driven logistics such
  * as Create funnels may query the attached inventory through a different logical face than vanilla
  * sided-container automation. The rack's finished-state check remains authoritative, so automation

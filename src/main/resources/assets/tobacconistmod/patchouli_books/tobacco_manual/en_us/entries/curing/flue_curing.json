@@ -16,6 +16,11 @@
     },
     {
       "type": "patchouli:text",
+      "title": "Fan-Assisted Flue Cure",
+      "text": "With $(thing)Create$(), an Encased Fan blowing through $(item)Lava$() produces blasting, smoke-free heat that can Flue Cure a nearby wooden rack faster. This assisted route does not require a nearby Flue Firebox; a direct Campfire still takes Fire-Curing priority."
+    },
+    {
+      "type": "patchouli:text",
       "title": "Hanging Bunches",
       "text": "Hanging bunches can also Flue Cure from nearby lit Flue Fireboxes. Direct fire or smoke contamination still disqualifies clean flue curing; the bunch itself is already considered covered because it must be attached beneath a support."
     },

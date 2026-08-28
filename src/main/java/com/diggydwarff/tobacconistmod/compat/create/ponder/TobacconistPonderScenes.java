@@ -2,6 +2,7 @@ package com.diggydwarff.tobacconistmod.compat.create.ponder;
 
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
+import com.diggydwarff.tobacconistmod.datagen.items.custom.BottledMolassesFlavors;
 import net.createmod.ponder.api.registration.PonderSceneRegistrationHelper;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -28,8 +29,8 @@ public final class TobacconistPonderScenes {
                         id(ModItems.DOKHA_TOBACCO_LEAF_DRY.get()),
                         id(ModItems.SHADE_TOBACCO_LEAF_DRY.get())
                 )
-                .addStoryBoard("tobacco/curing_air", TobacconistPonderStoryboards::curingSun)
-                .addStoryBoard("tobacco/curing_sun", TobacconistPonderStoryboards::curingAir)
+                .addStoryBoard("tobacco/curing_sun", TobacconistPonderStoryboards::curingSun)
+                .addStoryBoard("tobacco/curing_air", TobacconistPonderStoryboards::curingAir)
                 .addStoryBoard("tobacco/curing_fire", TobacconistPonderStoryboards::curingFire)
                 .addStoryBoard("tobacco/curing_flue", TobacconistPonderStoryboards::curingFlue);
 
@@ -83,12 +84,20 @@ public final class TobacconistPonderScenes {
                 )
                 .addStoryBoard("tobacco/blending", TobacconistPonderStoryboards::blending);
 
-        helper.forComponents(
-                        id(ModItems.BOTTLED_AQUA_VITAE.get()),
-                        id(ModItems.BOTTLED_MOLASSES_PLAIN.get()),
-                        id(ModItems.SHISHA_TOBACCO.get())
-                )
-                .addStoryBoard("tobacco/flavoring", TobacconistPonderStoryboards::flavoring);
+        helper.forComponents(id(ModItems.BOTTLED_MOLASSES_PLAIN.get()))
+                .addStoryBoard("tobacco/plain_molasses", TobacconistPonderStoryboards::plainMolasses)
+                .addStoryBoard("tobacco/flavored_molasses", TobacconistPonderStoryboards::flavoredMolasses);
+
+        helper.forComponents(id(ModItems.BOTTLED_AQUA_VITAE.get()))
+                .addStoryBoard("tobacco/aqua_vitae", TobacconistPonderStoryboards::aquaVitae);
+
+        for (BottledMolassesFlavors flavor : BottledMolassesFlavors.values()) {
+            if (flavor.isPlain()) {
+                continue;
+            }
+            helper.forComponents(id(flavor.getItem()))
+                    .addStoryBoard("tobacco/flavored_molasses", TobacconistPonderStoryboards::flavoredMolasses);
+        }
 
         helper.forComponents(
                         id(ModItems.CIGARETTE.get()),
@@ -110,8 +119,10 @@ public final class TobacconistPonderScenes {
         // Register the logistics tutorial on automatable processing blocks.
         helper.forComponents(
                         id(ModBlocks.TOBACCO_DRYING_RACK.get()),
+                        id(ModBlocks.INDUSTRIAL_DRYING_RACK.get()),
                         id(ModBlocks.TOBACCO_BARREL.get()),
-                        id(ModBlocks.FLUE_FIREBOX.get())
+                        id(ModBlocks.FLUE_FIREBOX.get()),
+                        id(ModBlocks.HOOKAH.get())
                 )
                 .addStoryBoard("tobacco/logistics", TobacconistPonderStoryboards::logistics);
     }
