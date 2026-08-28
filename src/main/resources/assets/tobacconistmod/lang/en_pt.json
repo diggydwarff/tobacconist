@@ -716,7 +716,7 @@
   "tobacconistmod.tooltip.pouch.bonus_puffs": "Packed pipes can receive bonus puffs",
   "tobacconistmod.tooltip.pouch.dye": "Can be dyed",
   "tobacconistmod.tooltip.box.capacity": "Stores matchin' finish'd tobacco products",
-  "tobacconistmod.tooltip.spectacles.curios_or_head": "Equip in th' Curios Eyes slot or vanilla Head slot",
+  "tobacconistmod.tooltip.spectacles.curios_or_head": "Equip in th' Curios Head slot or vanilla Head slot",
   "tobacconistmod.tooltip.spectacles.head": "Equip in th' Head slot",
   "tobacconistmod.tooltip.spectacles.info": "Shows detailed tobacco processin' information",
   "tobacconistmod.barrel.status.line1": "Tobacco Barrel | Stow'd: %1$s | Mode: %2$s",

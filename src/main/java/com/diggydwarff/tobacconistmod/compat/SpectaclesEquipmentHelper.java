@@ -27,6 +27,23 @@ public final class SpectaclesEquipmentHelper {
         return ItemStack.EMPTY;
     }
 
+    /**
+     * Rendering lookup that respects Curios' per-slot visibility toggle.
+     * Vanilla head-slot spectacles have no Curios render state and remain visible.
+     */
+    public static ItemStack findVisibleWorn(Player player) {
+        ItemStack head = player.getItemBySlot(EquipmentSlot.HEAD);
+        if (head.is(ModItems.TOBACCONISTS_SPECTACLES.get())) {
+            return head;
+        }
+
+        if (ModList.get().isLoaded("curios")) {
+            return CuriosSpectaclesHelper.findVisibleWorn(player);
+        }
+
+        return ItemStack.EMPTY;
+    }
+
     public static boolean isWearing(Player player) {
         return !findWorn(player).isEmpty();
     }

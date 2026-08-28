@@ -45,8 +45,10 @@ public class MouthCurioLayer extends RenderLayer<AbstractClientPlayer, PlayerMod
             if (handler != null) {
 
                 ItemStack stack = handler.getStacks().getStackInSlot(0);
+                var renderStates = handler.getRenders();
+                boolean shouldRender = renderStates.size() == 0 || renderStates.get(0);
 
-                if (!stack.isEmpty()) {
+                if (!stack.isEmpty() && shouldRender) {
                     poseStack.pushPose();
                     this.getParentModel().head.translateAndRotate(poseStack);
 
