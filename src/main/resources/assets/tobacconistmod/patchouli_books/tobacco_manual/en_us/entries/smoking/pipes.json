@@ -17,7 +17,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Right-click a packed pipe to take one puff. When its 40 puffs are exhausted, the pipe becomes empty and can be packed again. The durability-style bar and tooltip show how much tobacco remains.",
+      "text": "Right-click a packed pipe to take one puff. When its stored puffs are exhausted, the pipe becomes empty and can be packed again. The durability-style bar and tooltip show how much tobacco remains.",
       "title": "Smoking"
     },
     {
