@@ -9,7 +9,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeType;
 import org.jetbrains.annotations.NotNull;
 
 public class FlueFireboxMenu extends AbstractContainerMenu {
@@ -34,7 +33,7 @@ public class FlueFireboxMenu extends AbstractContainerMenu {
         this.addSlot(new Slot(container, 0, 80, 53) {
             @Override
             public boolean mayPlace(@NotNull ItemStack stack) {
-                return stack.getBurnTime(RecipeType.SMELTING) > 0;
+                return FlueFireboxBlockEntity.isValidFuel(stack);
             }
         });
 
@@ -89,7 +88,7 @@ public class FlueFireboxMenu extends AbstractContainerMenu {
                     return ItemStack.EMPTY;
                 }
             } else {
-                if (stack.getBurnTime(RecipeType.SMELTING) > 0) {
+                if (FlueFireboxBlockEntity.isValidFuel(stack)) {
                     if (!this.moveItemStackTo(stack, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }

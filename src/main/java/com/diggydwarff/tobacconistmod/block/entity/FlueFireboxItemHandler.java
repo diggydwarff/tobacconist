@@ -1,7 +1,6 @@
 package com.diggydwarff.tobacconistmod.block.entity;
 
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.items.IItemHandler;
 
 /** Fuel-only capability adapter for the flue firebox. */
@@ -24,7 +23,7 @@ final class FlueFireboxItemHandler implements IItemHandler {
 
     @Override
     public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-        if (slot != 0 || stack.isEmpty() || stack.getBurnTime(RecipeType.SMELTING) <= 0) {
+        if (slot != 0 || stack.isEmpty() || !FlueFireboxBlockEntity.isValidFuel(stack)) {
             return stack;
         }
 
@@ -68,6 +67,6 @@ final class FlueFireboxItemHandler implements IItemHandler {
 
     @Override
     public boolean isItemValid(int slot, ItemStack stack) {
-        return slot == 0 && !stack.isEmpty() && stack.getBurnTime(RecipeType.SMELTING) > 0;
+        return slot == 0 && !stack.isEmpty() && FlueFireboxBlockEntity.isValidFuel(stack);
     }
 }

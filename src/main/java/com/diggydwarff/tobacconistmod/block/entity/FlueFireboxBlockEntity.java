@@ -20,6 +20,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,8 +40,7 @@ public class FlueFireboxBlockEntity extends BaseContainerBlockEntity implements 
 
     @Override
     public boolean canPlaceItemThroughFace(int slot, net.minecraft.world.item.ItemStack stack, @org.jetbrains.annotations.Nullable net.minecraft.core.Direction side) {
-        return slot == 0
-                && stack.getBurnTime(RecipeType.SMELTING) > 0;
+        return slot == 0 && isValidFuel(stack);
     }
 
     @Override
@@ -90,7 +90,7 @@ public class FlueFireboxBlockEntity extends BaseContainerBlockEntity implements 
 
             ItemStack fuelStack = be.items.get(0);
             if (be.burnTime <= 0 && !fuelStack.isEmpty()) {
-                int fuel = fuelStack.getBurnTime(RecipeType.SMELTING);
+                int fuel = getFuelBurnTime(fuelStack);
                 if (fuel > 0) {
                     be.burnTime = fuel;
                     be.burnTimeTotal = fuel;
@@ -123,6 +123,19 @@ public class FlueFireboxBlockEntity extends BaseContainerBlockEntity implements 
 
     public IItemHandler getItemHandler(@Nullable Direction side) {
         return itemHandler;
+    }
+
+    /**
+     * Forge 1.20.1 ItemStack#getBurnTime only asks the Item override; vanilla fuels commonly
+     * return -1 there to request vanilla fallback. ForgeHooks resolves both modded overrides and
+     * the vanilla furnace fuel map, so use it everywhere the Firebox validates or consumes fuel.
+     */
+    public static int getFuelBurnTime(ItemStack stack) {
+        return stack.isEmpty() ? 0 : ForgeHooks.getBurnTime(stack, RecipeType.SMELTING);
+    }
+
+    public static boolean isValidFuel(ItemStack stack) {
+        return getFuelBurnTime(stack) > 0;
     }
 
     public int getBurnTime() {
@@ -185,7 +198,7 @@ public class FlueFireboxBlockEntity extends BaseContainerBlockEntity implements 
 
     @Override
     public boolean canPlaceItem(int slot, ItemStack stack) {
-        return stack.getBurnTime(RecipeType.SMELTING) > 0;
+        return isValidFuel(stack);
     }
 
     @Override
