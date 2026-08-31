@@ -25,7 +25,7 @@ public final class SmokeMouthItemPacket {
             ServerPlayer player = context.getSender();
             if (player == null) return;
             if (!ModList.get().isLoaded("curios")) {
-                player.displayClientMessage(Component.literal("Manual mouth-slot smoking requires Curios."), true);
+                player.displayClientMessage(Component.translatable("tobacconistmod.message.mouth_slot_requires_curios"), true);
                 return;
             }
             long now = player.serverLevel().getGameTime();
