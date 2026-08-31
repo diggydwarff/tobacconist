@@ -21,6 +21,10 @@
 
 Additional food and farming mods may work automatically through shared **`c:`** and compatible **`forge:`** ingredient tags.
 
-### Tobacconist Team
-DiggyDwarff - Developer and Maintainer<br />
-DimaS288 - Russian Language Translator
+Thank you to our contributors:
+InLoveWithCocoa - QA/Playtesting
+
+Language Contributors:
+DimaS288 - Russian Language Translations
+Artémis - French Language Translations
+Cocoa - Finnish Language Translations
