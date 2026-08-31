@@ -21,10 +21,11 @@
 
 Additional food and farming mods may work automatically through shared **`c:`** and compatible **`forge:`** ingredient tags.
 
-Thank you to our contributors:
-InLoveWithCocoa - QA/Playtesting
 
-Language Contributors:
-DimaS288 - Russian Language Translations
-Artémis - French Language Translations
-Cocoa - Finnish Language Translations
+**Thank you to our contributors:
+**<br />_InLoveWithCocoa - QA/Playtesting_
+
+**Language Contributors:
+**<br />_DimaS288 - Russian Language Translations_
+<br />_Artémis - French Language Translations_
+<br />_Cocoa - Finnish Language Translations_
