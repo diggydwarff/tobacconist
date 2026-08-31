@@ -212,9 +212,12 @@ public class TobacconistMod {
     }
 
     private boolean hasFlavoringIngredient(RegisterBrewingRecipesEvent event, BottledMolassesFlavors flavor) {
+        // Brewing registration can also run in temporary client contexts whose registry access
+        // is intentionally incomplete. Missing item registries mean flavor tags are unavailable,
+        // not that brewing registration should crash the client.
         return event.getRegistryAccess()
-                .lookupOrThrow(Registries.ITEM)
-                .get(flavor.getFlavoringIngredientTag())
+                .lookup(Registries.ITEM)
+                .flatMap(items -> items.get(flavor.getFlavoringIngredientTag()))
                 .map(tag -> tag.size() > 0)
                 .orElse(false);
     }
