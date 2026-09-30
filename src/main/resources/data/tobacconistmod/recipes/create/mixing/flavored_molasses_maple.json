@@ -1,0 +1,41 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "create"
+        },
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:tag_empty",
+            "tag": "tobacconistmod:flavorings/maple"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "create:mixing",
+        "ingredients": [
+          {
+            "amount": 250,
+            "fluid": "tobacconistmod:molasses_plain",
+            "nbt": {}
+          },
+          {
+            "amount": 250,
+            "fluid": "tobacconistmod:essence_maple",
+            "nbt": {}
+          }
+        ],
+        "results": [
+          {
+            "amount": 250,
+            "fluid": "tobacconistmod:molasses_maple"
+          }
+        ]
+      }
+    }
+  ]
+}

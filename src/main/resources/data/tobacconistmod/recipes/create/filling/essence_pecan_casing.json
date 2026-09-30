@@ -1,0 +1,38 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "create"
+        },
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:tag_empty",
+            "tag": "tobacconistmod:flavorings/pecan"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "tobacconistmod:create_tobacco_casing",
+        "ingredients": [
+          {
+            "tag": "tobacconistmod:loose_tobacco"
+          },
+          {
+            "amount": 250,
+            "fluid": "tobacconistmod:essence_pecan",
+            "nbt": {}
+          }
+        ],
+        "results": [
+          {
+            "item": "tobacconistmod:tobacco_loose_wild"
+          }
+        ]
+      }
+    }
+  ]
+}

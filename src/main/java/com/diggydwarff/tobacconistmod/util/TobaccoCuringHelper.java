@@ -20,9 +20,20 @@ public final class TobaccoCuringHelper {
     public static final String CURE_FLUE = "flue";
     public static final String CURE_MIXED = "mixed";
 
+    // Named specialty cures/process outcomes. These reuse the normal CureType field so
+    // player-facing tooltips stay simple and metadata-preserving recipes carry them naturally.
+    public static final String CURE_HAUNTED = "haunted";
+    public static final String CURE_LATAKIA = "latakia";
+    public static final String CURE_PERIQUE = "perique";
+    public static final String CURE_DARK_FIRED_KENTUCKY = "dark_fired_kentucky";
+    public static final String CURE_CAVENDISH = "cavendish";
+    public static final String CURE_BLACK_CAVENDISH = "black_cavendish";
+    public static final String CURE_STOVED_VIRGINIA = "stoved_virginia";
+
     public static final String CUT_RIBBON = "ribbon";
     public static final String CUT_SHAG = "shag";
     public static final String CUT_ROUGH = "rough";
+    public static final String CUT_PLUG = "plug";
     public static final String CUT_FLAKE = "flake";
 
     private TobaccoCuringHelper() {}
@@ -181,6 +192,7 @@ public final class TobaccoCuringHelper {
             case CUT_RIBBON -> "Ribbon Cut";
             case CUT_SHAG -> "Shag Cut";
             case CUT_ROUGH -> "Rough Cut";
+            case CUT_PLUG -> "Pressed Plug";
             case CUT_FLAKE -> "Flake Cut";
             default -> "Uncut";
         };
@@ -370,6 +382,13 @@ public final class TobaccoCuringHelper {
             case CURE_SUN -> "Sun-Cured";
             case CURE_FLUE -> "Flue-Cured";
             case CURE_MIXED -> "Mixed-Cure";
+            case CURE_HAUNTED -> "Haunted";
+            case CURE_LATAKIA -> "Latakia";
+            case CURE_PERIQUE -> "Perique";
+            case CURE_DARK_FIRED_KENTUCKY -> "Dark Fired Kentucky";
+            case CURE_CAVENDISH -> "Cavendish";
+            case CURE_BLACK_CAVENDISH -> "Black Cavendish";
+            case CURE_STOVED_VIRGINIA -> "Stoved Virginia";
             default -> "Air-Cured";
         };
     }

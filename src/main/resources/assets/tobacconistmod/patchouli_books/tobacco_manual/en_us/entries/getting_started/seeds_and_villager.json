@@ -5,9 +5,12 @@
   "sortnum": 1,
   "pages": [
     {
-      "type": "patchouli:spotlight",
-      "item": "tobacconistmod:wild_tobacco_seeds",
+      "type": "patchouli:text",
       "text": "$(thing)Wild Tobacco$() is the natural starting point. Flowering wild tobacco can appear in Forest, Birch Forest, and Dark Forest. Breaking it can provide wild leaf and seeds. Wild seeds are $(bold)not$() sold by normal Tobacconists; a Wandering Trader may occasionally carry them as a backup source."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "tobacconistmod:wild_tobacco_seeds"
     },
     {
       "type": "patchouli:text",

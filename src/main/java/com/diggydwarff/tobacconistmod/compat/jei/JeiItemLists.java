@@ -27,6 +27,7 @@ public final class JeiItemLists {
             TobaccoCuringHelper.CUT_ROUGH,
             TobaccoCuringHelper.CUT_RIBBON,
             TobaccoCuringHelper.CUT_SHAG,
+            TobaccoCuringHelper.CUT_PLUG,
             TobaccoCuringHelper.CUT_FLAKE
     );
 

@@ -105,6 +105,13 @@ public class TobacconistMod {
             ComposterBlock.COMPOSTABLES.put(ModItems.ORIENTAL_TOBACCO_LEAF.get(), 0.50F);
             ComposterBlock.COMPOSTABLES.put(ModItems.DOKHA_TOBACCO_LEAF.get(), 0.50F);
             ComposterBlock.COMPOSTABLES.put(ModItems.SHADE_TOBACCO_LEAF.get(), 0.50F);
+
+            ComposterBlock.COMPOSTABLES.put(ModItems.WILD_TOBACCO_LEAF_DRY.get(), 0.50F);
+            ComposterBlock.COMPOSTABLES.put(ModItems.VIRGINIA_TOBACCO_LEAF_DRY.get(), 0.50F);
+            ComposterBlock.COMPOSTABLES.put(ModItems.BURLEY_TOBACCO_LEAF_DRY.get(), 0.50F);
+            ComposterBlock.COMPOSTABLES.put(ModItems.ORIENTAL_TOBACCO_LEAF_DRY.get(), 0.50F);
+            ComposterBlock.COMPOSTABLES.put(ModItems.DOKHA_TOBACCO_LEAF_DRY.get(), 0.50F);
+            ComposterBlock.COMPOSTABLES.put(ModItems.SHADE_TOBACCO_LEAF_DRY.get(), 0.50F);
             ComposterBlock.COMPOSTABLES.put(ModBlocks.WILD_FLOWERING_TOBACCO.get().asItem(), 0.65F);
             ComposterBlock.COMPOSTABLES.put(ModItems.SPOILED_TOBACCO.get(), 1.00F);
 

@@ -11,7 +11,14 @@
           "type": "forge:not",
           "value": {
             "type": "forge:tag_empty",
-            "tag": "tobacconistmod:flavorings/berry"
+            "tag": "tobacconistmod:flavorings/sweetberry"
+          }
+        },
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:tag_empty",
+            "tag": "tobacconistmod:flavorings/glowberry"
           }
         }
       ],

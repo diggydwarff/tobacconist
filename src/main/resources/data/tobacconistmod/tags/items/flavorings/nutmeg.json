@@ -1,0 +1,25 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#c:spices/nutmeg",
+      "required": false
+    },
+    {
+      "id": "#c:foods/nutmeg",
+      "required": false
+    },
+    {
+      "id": "#c:nutmeg",
+      "required": false
+    },
+    {
+      "id": "#forge:spices/nutmeg",
+      "required": false
+    },
+    {
+      "id": "croptopia:nutmeg",
+      "required": false
+    }
+  ]
+}

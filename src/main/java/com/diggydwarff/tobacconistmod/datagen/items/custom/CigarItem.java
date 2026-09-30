@@ -72,12 +72,16 @@ public class CigarItem extends SmokingItem {
     @Override
     public Component getName(ItemStack stack) {
         boolean flavored = TobaccoAromaticHelper.getProductAromaticProfile(stack).isAromatic();
+        boolean haunted = TobaccoSpecialProcessingHelper.isHaunted(stack);
         CompoundTag packed = TobaccoTooltipHelper.getPackedTobaccoData(stack);
         boolean blended = packed != null && !TobaccoBlendHelper.getComponentData(packed).isEmpty();
 
         Component productName = Component.translatable(blended
                 ? (flavored ? "tobacconistmod.product.flavored_blended_cigar" : "tobacconistmod.product.blended_cigar")
                 : (flavored ? "tobacconistmod.product.flavored_cigar" : "item.tobacconistmod.cigar"));
+        if (haunted) {
+            productName = Component.translatable("tobacconistmod.product.haunted", productName);
+        }
 
         String label = TobaccoLabelHelper.getProductLabel(stack);
         if (!label.isEmpty()) {
@@ -89,6 +93,9 @@ public class CigarItem extends SmokingItem {
             Component cigarName = Component.translatable(flavored
                     ? "tobacconistmod.product.flavored_cigar"
                     : "item.tobacconistmod.cigar");
+            if (haunted) {
+                cigarName = Component.translatable("tobacconistmod.product.haunted", cigarName);
+            }
             return Component.translatable(
                     "tobacconistmod.product.named",
                     TobaccoBlendHelper.getIntrinsicBlendNameComponent(packed),
@@ -96,7 +103,7 @@ public class CigarItem extends SmokingItem {
             );
         }
 
-        if (blended || flavored) return productName;
+        if (blended || flavored || haunted) return productName;
         return super.getName(stack);
     }
 

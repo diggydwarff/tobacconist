@@ -78,6 +78,11 @@ public final class EssenceFlavorColors {
             case BOTTLED_MOLASSES_PEANUT_FLAVOR -> 0xBCB09F;
             case BOTTLED_MOLASSES_BROWNIE_FLAVOR -> 0xABA6A2;
             case BOTTLED_MOLASSES_CUSTARD_FLAVOR -> 0xC5C0AA;
+            case BOTTLED_MOLASSES_MAPLE_FLAVOR -> 0xBCA88F;
+            case BOTTLED_MOLASSES_NUTMEG_FLAVOR -> 0xB5AAA1;
+            case BOTTLED_MOLASSES_GINGER_FLAVOR -> 0xC5B69B;
+            case BOTTLED_MOLASSES_CLOVE_FLAVOR -> 0xACA2A0;
+            case BOTTLED_MOLASSES_PECAN_FLAVOR -> 0xB6AA9D;
             case BOTTLED_MOLASSES_PLAIN -> 0xC6D0D6;
         };
     }

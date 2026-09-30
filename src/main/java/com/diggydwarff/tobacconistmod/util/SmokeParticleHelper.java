@@ -3,6 +3,7 @@ package com.diggydwarff.tobacconistmod.util;
 import com.diggydwarff.tobacconistmod.particle.ModParticles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
@@ -57,6 +58,31 @@ public final class SmokeParticleHelper {
             spawnServerRisingSmoke(level, random, cloudX, cloudY, cloudZ, dirX, dirZ, true);
         }
         spawnServerCeilingHaze(level, random, x, y, z, 0.85F);
+    }
+
+    /** Adds a restrained soul-fire wisp to smoke made from Haunted tobacco. */
+    public static void spawnServerHauntedWisps(ServerLevel level,
+                                                double x, double y, double z,
+                                                double dirX, double dirZ,
+                                                boolean hookahDraw) {
+        if (level == null) return;
+
+        RandomSource random = level.random;
+        int wisps = hookahDraw ? 3 : 1;
+        for (int i = 0; i < wisps; i++) {
+            double px = x + (random.nextDouble() - 0.5D) * (hookahDraw ? 0.16D : 0.07D);
+            double py = y + random.nextDouble() * 0.08D;
+            double pz = z + (random.nextDouble() - 0.5D) * (hookahDraw ? 0.16D : 0.07D);
+            double vx = dirX * 0.008D + (random.nextDouble() - 0.5D) * 0.006D;
+            double vy = 0.018D + random.nextDouble() * 0.016D;
+            double vz = dirZ * 0.008D + (random.nextDouble() - 0.5D) * 0.006D;
+            sendSingleWithVelocity(level, ParticleTypes.SOUL, px, py, pz, vx, vy, vz);
+        }
+
+        if (hookahDraw || random.nextFloat() < 0.35F) {
+            sendSingleWithVelocity(level, ParticleTypes.SOUL_FIRE_FLAME,
+                    x, y + 0.02D, z, dirX * 0.006D, 0.014D, dirZ * 0.006D);
+        }
     }
 
     public static void spawnServerHookahSmoke(ServerLevel level,

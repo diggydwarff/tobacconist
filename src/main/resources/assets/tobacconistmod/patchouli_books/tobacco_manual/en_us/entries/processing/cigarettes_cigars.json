@@ -16,7 +16,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "When $(thing)Create$() is installed, generic crafting automation such as Create Mechanical Crafters or compatible fake-player crafting systems is less precise. By default it subtracts $(item)10 raw quality points$() on the underlying 0–120 scale before the finished Cigarette/Cigar score is calculated. Servers can configure this penalty or set it to 0. Hand rolling and the dedicated incomplete-product assembly route have no automation penalty.",
+      "text": "When $(thing)Create$() is installed, generic crafting automation such as the vanilla Crafter or Create Mechanical Crafters is less precise. By default it subtracts $(item)10 raw quality points$() on the underlying 0–120 scale before the finished Cigarette/Cigar score is calculated. Servers can configure this penalty or set it to 0. Hand rolling and the dedicated incomplete-product assembly route have no automation penalty.",
       "title": "Automation Quality"
     },
     {

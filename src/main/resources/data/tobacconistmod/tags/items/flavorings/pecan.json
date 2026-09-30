@@ -1,0 +1,29 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#c:foods/nuts/pecan",
+      "required": false
+    },
+    {
+      "id": "#c:nuts/pecan",
+      "required": false
+    },
+    {
+      "id": "#c:foods/pecan",
+      "required": false
+    },
+    {
+      "id": "#c:pecan",
+      "required": false
+    },
+    {
+      "id": "#forge:nuts/pecan",
+      "required": false
+    },
+    {
+      "id": "croptopia:pecan",
+      "required": false
+    }
+  ]
+}

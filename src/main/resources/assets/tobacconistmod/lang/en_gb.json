@@ -1195,5 +1195,7 @@
   "tobacconistmod.ponder.tobacconist_production_monitor_belt.text_1": "Production Monitors can watch a Create Belt directly, so throughput can be measured without diverting the items",
   "tobacconistmod.ponder.tobacconist_production_monitor_belt.text_2": "Point the Monitor at the Belt and configure the same filter, counting mode, target and output options used for other transports",
   "tobacconistmod.ponder.tobacconist_production_monitor_belt.text_3": "Matching items count only when they successfully pass the monitored Belt position; the rolling Rate tracks real throughput",
-  "tobacconistmod.ponder.tobacconist_production_monitor_belt.text_4": "At the target, redstone output can signal the line or drive other factory controls while the Belt continues feeding storage"
+  "tobacconistmod.ponder.tobacconist_production_monitor_belt.text_4": "At the target, redstone output can signal the line or drive other factory controls while the Belt continues feeding storage",
+  "tobacconistmod.command.barrel_pressed": "Forced barrel pressing; Rough Cut tobacco became Pressed Plug.",
+  "tobacconistmod.command.barrel_press_invalid": "Barrel pressing requires non-ruined Rough Cut tobacco."
 }

@@ -15,7 +15,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Breaking mature tall tobacco yields raw leaves and seeds. Harvest timing matters to growth quality: fully mature is best, one stage early is penalized, and earlier harvesting is heavily penalized. If quality matters, wait for Stage 7.",
+      "text": "Breaking immature tobacco returns exactly the seed used to plant it, so planting and immediately breaking a crop cannot multiply seeds. Mature tall tobacco yields raw leaves and 1–2 seeds. Harvest timing matters to growth quality: fully mature is best, one stage early is penalized, and earlier harvesting is heavily penalized. If quality matters, wait for Stage 7.",
       "title": "Harvesting"
     },
     {
@@ -26,7 +26,7 @@
     {
       "type": "patchouli:text",
       "title": "Composting",
-      "text": "Tobacco now works with the vanilla Composter. Seeds have a 30% fill chance, raw leaves 50%, and Wild Flowering Tobacco 65%. $(item)Spoiled Tobacco always fills one composting layer$(), giving failed batches a simple use instead of making them pure waste."
+      "text": "Tobacco works with the vanilla Composter. Seeds have a 30% fill chance, raw or cured leaves 50%, and Wild Flowering Tobacco 65%. $(item)Spoiled Tobacco has a 100% chance to add one composting layer$(), giving failed batches a simple use instead of making them pure waste."
     },
     {
       "type": "patchouli:relations",

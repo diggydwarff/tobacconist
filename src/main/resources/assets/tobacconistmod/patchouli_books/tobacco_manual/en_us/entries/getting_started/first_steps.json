@@ -25,7 +25,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "$(thing)4. Cut the cured leaf.$() Craft one cured leaf beside a Chaveta. The Chaveta's position determines Ribbon, Shag, Rough, or Flake cut. One leaf produces 3 loose tobacco.",
+      "text": "$(thing)4. Cut the cured leaf.$() Craft one cured leaf beside a Chaveta to make Ribbon, Shag, or Rough cut. Flake is made by compressing Rough tobacco into a Plug, then slicing the Plug with a Chaveta. One cured leaf produces 3 loose tobacco.",
       "title": "4 — Cut"
     },
     {

@@ -5,9 +5,12 @@
   "sortnum": 0,
   "pages": [
     {
-      "type": "patchouli:spotlight",
-      "item": "tobacconistmod:bottled_aqua_vitae",
+      "type": "patchouli:text",
       "text": "Flavoring is split into two ingredients: $(thing)Aqua Vitae$(), the extraction spirit, and concentrated $(thing)Flavoring Essence$(). Molasses supplies the heavy sweetness and moisture used for shisha."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "tobacconistmod:bottled_aqua_vitae"
     },
     {
       "type": "patchouli:text",

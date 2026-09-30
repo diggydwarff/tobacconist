@@ -11,7 +11,7 @@
           "type": "forge:not",
           "value": {
             "type": "forge:tag_empty",
-            "tag": "tobacconistmod:flavorings/two_royalapples"
+            "tag": "tobacconistmod:flavorings/royalapple"
           }
         }
       ],

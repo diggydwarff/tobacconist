@@ -213,6 +213,7 @@ public class TobacconistJeiPlugin implements IModPlugin {
         registration.addRecipeCatalyst(new ItemStack(ModBlocks.ORNATE_AMETHYST_HOOKAH.get().asItem()), HookahStationRecipeCategory.TYPE);
         registration.addRecipeCatalyst(new ItemStack(ModBlocks.ORNATE_DIAMOND_HOOKAH.get().asItem()), HookahStationRecipeCategory.TYPE);
         registration.addRecipeCatalyst(new ItemStack(ModBlocks.TALL_HOOKAH.get().asItem()), HookahStationRecipeCategory.TYPE);
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.PUMPKIN_HOOKAH.get().asItem()), HookahStationRecipeCategory.TYPE);
         registration.addRecipeCatalyst(new ItemStack(ModBlocks.REDSTONE_HOOKAH.get().asItem()), HookahStationRecipeCategory.TYPE);
         registration.addRecipeCatalyst(new ItemStack(ModBlocks.LAPIS_HOOKAH.get().asItem()), HookahStationRecipeCategory.TYPE);
         registration.addRecipeCatalyst(new ItemStack(ModBlocks.OBSIDIAN_HOOKAH.get().asItem()), HookahStationRecipeCategory.TYPE);

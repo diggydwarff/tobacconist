@@ -75,6 +75,7 @@ public class CigaretteItem extends SmokingItem {
     @Override
     public Component getName(ItemStack stack) {
         boolean flavored = TobaccoAromaticHelper.getProductAromaticProfile(stack).isAromatic();
+        boolean haunted = TobaccoSpecialProcessingHelper.isHaunted(stack);
         CompoundTag packed = TobaccoTooltipHelper.getPackedTobaccoData(stack);
         boolean blended = packed != null && !TobaccoBlendHelper.getComponentData(packed).isEmpty();
 
@@ -99,7 +100,7 @@ public class CigaretteItem extends SmokingItem {
             );
         }
 
-        if (blended || flavored) return productName;
+        if (blended || flavored || haunted) return productName;
         return super.getName(stack);
     }
 

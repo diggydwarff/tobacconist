@@ -1,0 +1,38 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "create"
+        },
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:tag_empty",
+            "tag": "tobacconistmod:flavorings/clove"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "tobacconistmod:create_tobacco_mixing",
+        "ingredients": [
+          {
+            "tag": "tobacconistmod:loose_tobacco"
+          },
+          {
+            "amount": 250,
+            "fluid": "tobacconistmod:molasses_clove",
+            "nbt": {}
+          }
+        ],
+        "results": [
+          {
+            "item": "tobacconistmod:shisha_tobacco"
+          }
+        ]
+      }
+    }
+  ]
+}

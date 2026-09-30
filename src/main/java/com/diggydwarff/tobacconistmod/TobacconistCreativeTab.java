@@ -128,6 +128,7 @@ public class TobacconistCreativeTab {
                         output.accept(ModBlocks.ORNATE_DIAMOND_HOOKAH.get());
                         output.accept(ModBlocks.EMERALD_HOOKAH.get());
                         output.accept(ModBlocks.NETHERITE_HOOKAH.get());
+                        output.accept(ModBlocks.PUMPKIN_HOOKAH.get());
 
                         output.accept(makePipe(Items.OAK_PLANKS));
                         output.accept(makePipe(Items.SPRUCE_PLANKS));
@@ -151,6 +152,7 @@ public class TobacconistCreativeTab {
                         output.accept(EMERALD_AZTEC_SMOKING_PIPE.get());
                         output.accept(NETHERITE_SMOKING_PIPE.get());
                         output.accept(KISERU_SMOKING_PIPE.get());
+                        output.accept(CORN_COB_SMOKING_PIPE.get());
 
                         output.accept(PaintingTabHelper.paintingVariant("american_tobacco_fields_small"));
                         output.accept(PaintingTabHelper.paintingVariant("camel_american_cigarette"));
@@ -190,6 +192,7 @@ public class TobacconistCreativeTab {
         output.accept(TobaccoCuringHelper.makeCreativeLoose(base, TobaccoCuringHelper.CUT_RIBBON));
         output.accept(TobaccoCuringHelper.makeCreativeLoose(base, TobaccoCuringHelper.CUT_SHAG));
         output.accept(TobaccoCuringHelper.makeCreativeLoose(base, TobaccoCuringHelper.CUT_ROUGH));
+        output.accept(TobaccoCuringHelper.makeCreativeLoose(base, TobaccoCuringHelper.CUT_PLUG));
         output.accept(TobaccoCuringHelper.makeCreativeLoose(base, TobaccoCuringHelper.CUT_FLAKE));
     }
 

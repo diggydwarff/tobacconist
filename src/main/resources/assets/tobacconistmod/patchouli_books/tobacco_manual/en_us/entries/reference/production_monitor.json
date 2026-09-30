@@ -5,10 +5,13 @@
   "sortnum": 3,
   "pages": [
     {
+      "type": "patchouli:text",
+      "text": "The Production Monitor is a non-invasive throughput counter for factory lines. It observes confirmed transfers through one adjacent supported transport without inserting, extracting, or buffering the items itself."
+    },
+    {
       "type": "patchouli:crafting",
       "recipe": "tobacconistmod:production_monitor",
-      "title": "Production Monitor",
-      "text": "The Production Monitor is a non-invasive throughput counter for factory lines. It observes confirmed transfers through one adjacent supported transport without inserting, extracting, or buffering the items itself."
+      "title": "Production Monitor"
     },
     {
       "type": "patchouli:text",

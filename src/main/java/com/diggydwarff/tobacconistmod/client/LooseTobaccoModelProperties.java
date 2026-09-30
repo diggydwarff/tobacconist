@@ -14,6 +14,8 @@ public final class LooseTobaccoModelProperties {
             new ResourceLocation(TobacconistMod.MODID, "shag_cut");
     private static final ResourceLocation ROUGH_CUT =
             new ResourceLocation(TobacconistMod.MODID, "rough_cut");
+    private static final ResourceLocation PLUG_CUT =
+            new ResourceLocation(TobacconistMod.MODID, "plug_cut");
     private static final ResourceLocation FLAKE_CUT =
             new ResourceLocation(TobacconistMod.MODID, "flake_cut");
     private static final ResourceLocation LEGENDARY_SECRET =
@@ -38,6 +40,9 @@ public final class LooseTobaccoModelProperties {
                         ? 1.0F : 0.0F);
         ItemProperties.register(item, ROUGH_CUT,
                 (stack, level, entity, seed) -> TobaccoCuringHelper.CUT_ROUGH.equals(TobaccoCuringHelper.getCutType(stack))
+                        ? 1.0F : 0.0F);
+        ItemProperties.register(item, PLUG_CUT,
+                (stack, level, entity, seed) -> TobaccoCuringHelper.CUT_PLUG.equals(TobaccoCuringHelper.getCutType(stack))
                         ? 1.0F : 0.0F);
         ItemProperties.register(item, FLAKE_CUT,
                 (stack, level, entity, seed) -> TobaccoCuringHelper.CUT_FLAKE.equals(TobaccoCuringHelper.getCutType(stack))

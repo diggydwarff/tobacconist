@@ -72,8 +72,12 @@ public class TobacconistCommands {
                                                         StringArgumentType.getString(ctx, "options")
                                                 )))))
                         .then(Commands.literal("barrel")
+                                .then(Commands.literal("press")
+                                        .executes(ctx -> forceBarrelPress(ctx.getSource())))
                                 .then(Commands.literal("ferment")
                                         .executes(ctx -> forceBarrelFerment(ctx.getSource())))
+                                .then(Commands.literal("finish")
+                                        .executes(ctx -> forceBarrelFinish(ctx.getSource())))
                                 .then(Commands.literal("age")
                                         .then(Commands.argument("days", IntegerArgumentType.integer(1))
                                                 .executes(ctx -> forceBarrelAge(
@@ -213,6 +217,24 @@ public class TobacconistCommands {
         return 0;
     }
 
+    private static int forceBarrelPress(CommandSourceStack source) throws CommandSyntaxException {
+        ServerPlayer player = source.getPlayerOrException();
+        TobaccoBarrelBlockEntity barrel = getLookedAtBarrel(player);
+
+        if (barrel == null) {
+            source.sendFailure(Component.translatable("tobacconistmod.command.no_barrel"));
+            return 0;
+        }
+
+        if (!barrel.forceFinishPressing()) {
+            source.sendFailure(Component.translatable("tobacconistmod.command.barrel_press_invalid"));
+            return 0;
+        }
+
+        source.sendSuccess(() -> Component.translatable("tobacconistmod.command.barrel_pressed"), false);
+        return 1;
+    }
+
     private static int forceBarrelFerment(CommandSourceStack source) throws CommandSyntaxException {
         ServerPlayer player = source.getPlayerOrException();
         TobaccoBarrelBlockEntity barrel = getLookedAtBarrel(player);
@@ -224,6 +246,24 @@ public class TobacconistCommands {
 
         barrel.forceFinishFermentation();
         source.sendSuccess(() -> Component.translatable("tobacconistmod.command.barrel_fermented"), false);
+        return 1;
+    }
+
+    private static int forceBarrelFinish(CommandSourceStack source) throws CommandSyntaxException {
+        ServerPlayer player = source.getPlayerOrException();
+        TobaccoBarrelBlockEntity barrel = getLookedAtBarrel(player);
+
+        if (barrel == null) {
+            source.sendFailure(Component.translatable("tobacconistmod.command.no_barrel"));
+            return 0;
+        }
+
+        if (!barrel.forceFinishCurrentProcess()) {
+            source.sendFailure(Component.translatable("tobacconistmod.command.barrel_finish_invalid"));
+            return 0;
+        }
+
+        source.sendSuccess(() -> Component.translatable("tobacconistmod.command.barrel_finished"), false);
         return 1;
     }
 

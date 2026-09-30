@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "tobacconistmod:item/blended_tobacco_flake",
+    "layer1": "tobacconistmod:item/legendary_tint/blended_tobacco_flake"
+  }
+}

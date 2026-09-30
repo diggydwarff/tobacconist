@@ -49,6 +49,7 @@ public final class CreateLogisticsCompat {
         registerDoubleHookah(ModBlocks.ORNATE_IRON_HOOKAH.get());
         registerDoubleHookah(ModBlocks.ORNATE_AMETHYST_HOOKAH.get());
         registerDoubleHookah(ModBlocks.TALL_HOOKAH.get());
+        registerDoubleHookah(ModBlocks.PUMPKIN_HOOKAH.get());
         registerDoubleHookah(ModBlocks.EXPOSED_COPPER_HOOKAH.get());
         registerDoubleHookah(ModBlocks.WEATHERED_COPPER_HOOKAH.get());
         registerDoubleHookah(ModBlocks.OXIDIZED_COPPER_HOOKAH.get());

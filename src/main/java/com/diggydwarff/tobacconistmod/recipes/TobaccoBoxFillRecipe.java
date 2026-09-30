@@ -48,7 +48,7 @@ public class TobaccoBoxFillRecipe extends CustomRecipe {
                 if (!TobaccoBoxHelper.sameContent(contentType, compare)) return false;
             }
 
-            incomingCount += stack.getCount();
+            incomingCount += 1;
         }
 
         if (box.isEmpty() || contentType.isEmpty()) return false;
@@ -80,9 +80,9 @@ public class TobaccoBoxFillRecipe extends CustomRecipe {
                 content = stack.copy();
                 content.setCount(1);
                 TobaccoBoxHelper.clearCustomProductName(content);
-                incomingCount += stack.getCount();
+                incomingCount += 1;
             } else {
-                incomingCount += stack.getCount();
+                incomingCount += 1;
             }
         }
 

@@ -91,7 +91,14 @@ public enum BottledMolassesFlavors {
     BOTTLED_MOLASSES_LAVENDER_FLAVOR("[Bottle of Molasses (Lavender Flavored)]"),
     BOTTLED_MOLASSES_PEANUT_FLAVOR("[Bottle of Molasses (Peanut Flavored)]"),
     BOTTLED_MOLASSES_BROWNIE_FLAVOR("[Bottle of Molasses (Brownie Flavored)]"),
-    BOTTLED_MOLASSES_CUSTARD_FLAVOR("[Bottle of Molasses (Custard Flavored)]");
+    BOTTLED_MOLASSES_CUSTARD_FLAVOR("[Bottle of Molasses (Custard Flavored)]"),
+
+    // AUTUMN / SPICE COMPATIBILITY
+    BOTTLED_MOLASSES_MAPLE_FLAVOR("[Bottle of Molasses (Maple Flavored)]"),
+    BOTTLED_MOLASSES_NUTMEG_FLAVOR("[Bottle of Molasses (Nutmeg Flavored)]"),
+    BOTTLED_MOLASSES_GINGER_FLAVOR("[Bottle of Molasses (Ginger Flavored)]"),
+    BOTTLED_MOLASSES_CLOVE_FLAVOR("[Bottle of Molasses (Clove Flavored)]"),
+    BOTTLED_MOLASSES_PECAN_FLAVOR("[Bottle of Molasses (Pecan Flavored)]");
 
     /**
      * Lazily created during the ITEM registration event.

@@ -11,7 +11,7 @@
     {
       "type": "patchouli:text",
       "title": "Crafting Averaging",
-      "text": "All inputs must be the same tobacco item and compatible processing state. Raw leaf averages with the same raw leaf. Cured leaf must share its cure type. Single-variety loose tobacco must share cure and cut. The result averages occupied crafting slots and rounds down to the whole quality value. This preserves item count while ensuring averaging can never create quality points."
+      "text": "All inputs must be the same tobacco item and may differ only in quality. Raw leaf averages with the same raw leaf. Cured leaf and single-variety loose tobacco must match every non-quality processing state, including cure, cut where applicable, fermentation, age, ruined state, aromatic casing, labels, and other stored metadata. The result averages occupied crafting slots and rounds down, so averaging cannot erase processing work or create quality points."
     },
     {
       "type": "patchouli:text",
@@ -57,10 +57,17 @@
       "type": "patchouli:relations",
       "entries": [
         "tobacconistmod:processing/blending",
-        "tobacconistmod:reference/create_integration",
         "tobacconistmod:storage/tobacco_crates"
       ],
       "title": "Related Chapters"
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "tobacconistmod:reference/create_integration"
+      ],
+      "title": "Create Integration",
+      "flag": "mod:create"
     }
   ]
 }

@@ -39,6 +39,7 @@ public record WoodenPipeFillJeiRecipe(
         pipes.add(new ItemStack(ModItems.EMERALD_AZTEC_SMOKING_PIPE.get()));
         pipes.add(new ItemStack(ModItems.NETHERITE_SMOKING_PIPE.get()));
         pipes.add(new ItemStack(ModItems.KISERU_SMOKING_PIPE.get()));
+        pipes.add(new ItemStack(ModItems.CORN_COB_SMOKING_PIPE.get()));
 
         return List.of(new WoodenPipeFillJeiRecipe(tobaccos, pipes, pipes));
     }

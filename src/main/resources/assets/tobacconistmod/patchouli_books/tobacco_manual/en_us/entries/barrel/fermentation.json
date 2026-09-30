@@ -10,7 +10,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Once the barrel enters Fermenting mode, it needs $(item)48,000 ticks$(), about $(item)2 Minecraft days$(), under continuously valid fermentation conditions. If conditions force a mode change, the fermentation progress resets.",
+      "text": "Once the barrel enters Fermenting mode, it needs $(item)48,000 ticks$(), about $(item)2 Minecraft days$(), under continuously valid fermentation conditions. Ordinary fermentation remains $(thing)Fermenting$() even if a piston or Mechanical Press happens to be nearby. $(thing)Pressure Fermenting$() is reserved for specialty processes where pressure is actually required, such as Perique and Cavendish. Pressure by itself does not ferment tobacco. If required fermentation conditions are lost, progress resets.",
       "title": "Time"
     },
     {
@@ -29,10 +29,16 @@
       "title": "Humidity Charge"
     },
     {
+      "type": "patchouli:text",
+      "title": "Sealed Process",
+      "text": "A working Tobacco Barrel does $(bold)not$() emit smoke. Fermentation, pressure fermentation, pressing, stoving, and aging are visually sealed barrel processes. Smoke particles belong to curing racks, campfires, Flue Fireboxes, and Haunted soul-fire curing."
+    },
+    {
       "type": "patchouli:relations",
       "entries": [
         "tobacconistmod:barrel/environment",
-        "tobacconistmod:barrel/aging"
+        "tobacconistmod:barrel/aging",
+        "tobacconistmod:barrel/specialty_processing"
       ],
       "title": "Related Chapters"
     }

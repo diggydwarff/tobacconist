@@ -370,7 +370,9 @@ public final class TobaccoTestItemFactory {
     private static String validateCure(String value) {
         String cure = normalize(value).replace("_cured", "").replace("cured", "");
         return switch (cure) {
-            case "air", "fire", "sun", "flue", "mixed" -> cure;
+            case "air", "fire", "sun", "flue", "mixed",
+                    "haunted", "latakia", "perique", "dark_fired_kentucky",
+                    "cavendish", "black_cavendish", "stoved_virginia" -> cure;
             default -> throw new IllegalArgumentException("Unknown cure: " + value);
         };
     }
@@ -378,7 +380,7 @@ public final class TobaccoTestItemFactory {
     private static String cutOption(Map<String, String> options, String key, String fallback) {
         String cut = normalize(options.getOrDefault(key.toLowerCase(Locale.ROOT), fallback)).replace("_cut", "");
         return switch (cut) {
-            case "rough", "ribbon", "shag", "flake" -> cut;
+            case "rough", "ribbon", "shag", "plug", "flake" -> cut;
             default -> throw new IllegalArgumentException("Unknown cut: " + cut);
         };
     }

@@ -26,7 +26,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "A flue rack must:$(br2)- not be rained on$(br)- have no direct sky access$(br)- have 2 air blocks immediately above it$(br)- have a sturdy roof underside 3–5 blocks above$(br)- have no nearby fire/campfire contamination$(br)- have at least 1 lit Flue Firebox nearby",
+      "text": "A flue rack must:$(br2)- not be rained on$(br)- have no direct sky access$(br)- have 1 clear air block immediately above it$(br)- have a sturdy roof underside 2–4 blocks above$(br)- have no nearby fire/campfire contamination$(br)- have at least 1 lit Flue Firebox nearby",
       "title": "Rack Requirements"
     },
     {

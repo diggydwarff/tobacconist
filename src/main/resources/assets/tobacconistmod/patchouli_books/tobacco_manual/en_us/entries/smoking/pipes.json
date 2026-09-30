@@ -5,10 +5,13 @@
   "sortnum": 0,
   "pages": [
     {
+      "type": "patchouli:text",
+      "text": "Use any two $(item)Planks$() and two $(item)Sticks$() in the shown 3×3 pattern. The pipe remembers the first plank type used and reflects that wood in its name and appearance."
+    },
+    {
       "type": "patchouli:crafting",
       "recipe": "tobacconistmod:wooden_smoking_pipe",
-      "title": "Wooden Smoking Pipe",
-      "text": "Use any two $(item)Planks$() and two $(item)Sticks$() in the shown 3×3 pattern. The pipe remembers the first plank type used and reflects that wood in its name and appearance."
+      "title": "Wooden Smoking Pipe"
     },
     {
       "type": "patchouli:text",
@@ -60,6 +63,16 @@
       "recipe": "tobacconistmod:netherite_smoking_pipe",
       "recipe2": "tobacconistmod:kiseru_smoking_pipe",
       "title": "Netherite & Kiseru"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:corn_cob_smoking_pipe",
+      "title": "Corn Cob Pipe"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The $(thing)Corn Cob Pipe$() is a rustic harvest-season pipe made from Wheat and a Stick. It uses the same reusable packing, pouch bonus, puff counter, Curios Mouth-slot support, and tobacco metadata behavior as the other pipes.",
+      "title": "Haunted Harvest"
     },
     {
       "type": "patchouli:text",

@@ -191,7 +191,7 @@ public abstract class AbstractTallTobaccoCropBlock extends CropBlock {
         DoubleBlockHalf half = state.getValue(HALF);
 
         if (half == DoubleBlockHalf.UPPER) {
-            if (!player.isCreative()) {
+            if (!player.isCreative() && getAge(state) >= getMaxAge()) {
                 BlockPos basePos = pos.below();
                 int leaves = getLeafDropCount(level);
                 int seeds = getSeedDropCount(level);
@@ -200,6 +200,7 @@ public abstract class AbstractTallTobaccoCropBlock extends CropBlock {
                 popResource(level, pos, new ItemStack(getBaseSeedId(), seeds));
             }
 
+            // Immature age 4-6 upper halves yield nothing. The lower planted crop remains.
             level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
             return;
         }
@@ -208,12 +209,14 @@ public abstract class AbstractTallTobaccoCropBlock extends CropBlock {
         BlockState upperState = level.getBlockState(upperPos);
 
         if (upperState.is(this) && upperState.getValue(HALF) == DoubleBlockHalf.UPPER) {
-            if (!player.isCreative()) {
-                // The lower-half loot table already supplies the seed drop.
-                // Only drop the upper leaves manually here so breaking the lower half
-                // does not duplicate seeds.
+            boolean mature = getAge(upperState) >= getMaxAge();
+            if (!player.isCreative() && mature) {
                 int leaves = getLeafDropCount(level);
                 popResource(level, upperPos, makeLeafStackWithQuality(level, pos, leaves));
+                // Lower loot always returns the planted seed; mature crops may add one bonus seed.
+                if (level.random.nextBoolean()) {
+                    popResource(level, pos, new ItemStack(getBaseSeedId(), 1));
+                }
             }
 
             level.setBlock(upperPos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);

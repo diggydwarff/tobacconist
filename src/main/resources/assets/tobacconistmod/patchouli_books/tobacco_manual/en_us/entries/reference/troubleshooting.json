@@ -25,7 +25,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "$(thing)Two tobacco stacks will not merge:$() their hidden quality/cure/cut/aging/label components may differ. Use averaging for compatible raw/cured/single-variety loose tobacco, a Tobacco Box for one exact batch, or a Tobacco Crate to package nine same-item units without averaging their metadata.",
+      "text": "$(thing)Two tobacco stacks will not merge:$() their hidden quality/cure/cut/fermentation/aging/label components may differ. Crafting averaging intentionally accepts only stacks whose non-quality processing metadata matches; it will not flatten fermented into unfermented or aged into fresh tobacco. Use a Tobacco Box for one exact batch, or a Tobacco Crate to package nine same-item units without averaging their metadata.",
       "title": "Stacking"
     },
     {

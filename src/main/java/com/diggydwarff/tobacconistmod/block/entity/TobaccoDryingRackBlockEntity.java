@@ -7,6 +7,7 @@ import com.diggydwarff.tobacconistmod.block.custom.TobaccoDryingRackBlock;
 import com.diggydwarff.tobacconistmod.compat.create.CreateCompat;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
+import com.diggydwarff.tobacconistmod.util.TobaccoSpecialProcessingHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoText;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -43,6 +44,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
     public static final int GLASS_SUN_DRY_TIME = 54000;
     public static final int FIRE_DRY_TIME = 24000;
     public static final int FLUE_DRY_TIME = 36000;
+    public static final int HAUNTED_DRY_TIME = 28000;
 
     // Create fan assistance accelerates the existing rack timers; it never converts leaves by
     // itself. Plain airflow is a strong air-cure boost, while catalyst-heated air is faster.
@@ -52,7 +54,6 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
 
     private static final int[] SLOTS_FOR_SIDES = new int[]{0};
     private static final int[] SLOTS_FOR_BOTTOM = new int[]{0};
-    private static final int[] NO_SLOTS = new int[]{};
 
     private ItemStack storedLeaf = ItemStack.EMPTY;
     private int dryingProgress = 0;
@@ -69,6 +70,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
     private int sunTicks = 0;
     private int fireTicks = 0;
     private int flueTicks = 0;
+    private int hauntedTicks = 0;
+    private String specialFinishTarget = "";
 
     // Runtime-only Create environment cache. There is no need to persist this; the fan resolver
     // re-evaluates the actual airflow after load and whenever the short cache expires.
@@ -196,6 +199,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             sunTicks = 0;
             fireTicks = 0;
             flueTicks = 0;
+            hauntedTicks = 0;
+            specialFinishTarget = TobaccoSpecialProcessingHelper.getRackSmokeFinishTarget(storedLeaf);
         } else {
             storedLeaf.grow(1);
         }
@@ -269,6 +274,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         if (slot != 0) return;
 
         storedLeaf = stack.copy();
+        specialFinishTarget = TobaccoSpecialProcessingHelper.getRackSmokeFinishTarget(storedLeaf);
 
         if (storedLeaf.getCount() > getMaxLeaves()) {
             storedLeaf.setCount(getMaxLeaves());
@@ -380,13 +386,20 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             return 100;
         }
 
+        if (!specialFinishTarget.isEmpty()) {
+            int needed = TobaccoSpecialProcessingHelper.getRackSmokeFinishTime(specialFinishTarget);
+            return needed <= 0 ? 0 : Math.min(100, (fireTicks * 100) / needed);
+        }
+
         int dominantTicks = Math.max(
-                Math.max(fireTicks, sunTicks),
-                Math.max(airTicks, flueTicks)
+                hauntedTicks,
+                Math.max(Math.max(fireTicks, sunTicks), Math.max(airTicks, flueTicks))
         );
 
         int needed;
-        if (dominantTicks == fireTicks) {
+        if (dominantTicks == hauntedTicks) {
+            needed = HAUNTED_DRY_TIME;
+        } else if (dominantTicks == fireTicks) {
             needed = FIRE_DRY_TIME;
         } else if (dominantTicks == flueTicks) {
             needed = FLUE_DRY_TIME;
@@ -436,6 +449,13 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
     }
 
     private int getRequiredDryingTime() {
+        if (!specialFinishTarget.isEmpty()) {
+            return TobaccoSpecialProcessingHelper.getRackSmokeFinishTime(specialFinishTarget);
+        }
+        if (hauntedTicks >= fireTicks && hauntedTicks >= flueTicks && hauntedTicks >= sunTicks && hauntedTicks >= airTicks
+                && hauntedTicks > 0) {
+            return HAUNTED_DRY_TIME;
+        }
         if (usedFireDrying && fireTicks >= flueTicks && fireTicks >= sunTicks && fireTicks >= airTicks) {
             return FIRE_DRY_TIME;
         }
@@ -460,7 +480,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
 
         CreateCompat.FanCuringAssist fanAssist = getCreateFanAssist();
         if (requiresCreateAssistance()) {
-            if (fanAssist == CreateCompat.FanCuringAssist.FIRE
+            if (fanAssist == CreateCompat.FanCuringAssist.HAUNTED
+                    || fanAssist == CreateCompat.FanCuringAssist.FIRE
                     || fanAssist == CreateCompat.FanCuringAssist.FLUE) {
                 return adjustCreateAssistedTickRate(CREATE_FAN_HEATED_TICK_RATE);
             }
@@ -468,7 +489,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
                     ? adjustCreateAssistedTickRate(CREATE_FAN_AIR_TICK_RATE)
                     : 1;
         }
-        if (fanAssist == CreateCompat.FanCuringAssist.FIRE) {
+        if (fanAssist == CreateCompat.FanCuringAssist.HAUNTED
+                || fanAssist == CreateCompat.FanCuringAssist.FIRE) {
             return adjustCreateAssistedTickRate(CREATE_FAN_HEATED_TICK_RATE);
         }
         if (fanAssist == CreateCompat.FanCuringAssist.FLUE
@@ -519,6 +541,9 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
                 : getCreateFanAssist();
 
         if (requiresCreateAssistance()) {
+            if (fanAssist == CreateCompat.FanCuringAssist.HAUNTED) {
+                return Component.translatable("tobacconistmod.cure_method.haunted_create");
+            }
             if (fanAssist == CreateCompat.FanCuringAssist.FIRE) {
                 return Component.translatable("tobacconistmod.cure_method.fire_create_smoke");
             }
@@ -538,6 +563,15 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
                     : "tobacconistmod.cure_method.industrial_requires_create");
         }
 
+        if (!specialFinishTarget.isEmpty()) {
+            return Component.translatable("tobacconistmod.cure_method.special_smoke_finish",
+                    TobaccoText.cure(specialFinishTarget));
+        }
+        if (isOverLitSoulCampfire(level, worldPosition) || fanAssist == CreateCompat.FanCuringAssist.HAUNTED) {
+            return Component.translatable(fanAssist == CreateCompat.FanCuringAssist.HAUNTED
+                    ? "tobacconistmod.cure_method.haunted_create"
+                    : "tobacconistmod.cure_method.haunted_soul_fire");
+        }
         if (isOverLitCampfire(level, worldPosition) || fanAssist == CreateCompat.FanCuringAssist.FIRE) {
             return Component.translatable(fanAssist == CreateCompat.FanCuringAssist.FIRE
                     ? "tobacconistmod.cure_method.fire_create_smoke"
@@ -583,13 +617,16 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
 
         if (requiresCreateAssistance()) {
             if (directRain) return false;
-            if (fanAssist == CreateCompat.FanCuringAssist.FIRE || fanAssist == CreateCompat.FanCuringAssist.FLUE) {
+            if (fanAssist == CreateCompat.FanCuringAssist.HAUNTED
+                    || fanAssist == CreateCompat.FanCuringAssist.FIRE
+                    || fanAssist == CreateCompat.FanCuringAssist.FLUE) {
                 return true;
             }
             return fanAssist == CreateCompat.FanCuringAssist.AIR;
         }
 
-        return isOverLitCampfire(level, worldPosition)
+        return isOverLitSoulCampfire(level, worldPosition)
+                || isOverLitCampfire(level, worldPosition)
                 || canFlueCure(level, worldPosition)
                 || hasDirectSunlight(level, worldPosition)
                 || canAirDry(level, worldPosition)
@@ -601,6 +638,10 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         if (master != this) return master.isFinished();
         if (storedLeaf.isEmpty()) {
             return false;
+        }
+
+        if (!specialFinishTarget.isEmpty()) {
+            return specialFinishTarget.equals(TobaccoCuringHelper.getCureType(storedLeaf));
         }
 
         return LegacyItemTags.hasTag(storedLeaf)
@@ -647,6 +688,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         sunTicks = 0;
         fireTicks = 0;
         flueTicks = 0;
+        hauntedTicks = 0;
+        specialFinishTarget = "";
         createFanAssistRefresh = 0;
         cachedCreateFanAssist = CreateCompat.FanCuringAssist.NONE;
     }
@@ -656,6 +699,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             return;
         }
 
+        boolean overSoulCampfire = isOverLitSoulCampfire(level, pos);
         boolean overCampfire = isOverLitCampfire(level, pos);
         boolean flueCure = canFlueCure(level, pos);
         boolean inSun = hasDirectSunlight(level, pos);
@@ -664,8 +708,9 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         BlockState current = level.getBlockState(pos);
         if (current.hasProperty(TobaccoDryingRackBlock.OVER_CAMPFIRE)) {
             boolean currentValue = current.getValue(TobaccoDryingRackBlock.OVER_CAMPFIRE);
-            if (currentValue != overCampfire) {
-                level.setBlock(pos, current.setValue(TobaccoDryingRackBlock.OVER_CAMPFIRE, overCampfire), 3);
+            boolean overAnyCampfire = overCampfire || overSoulCampfire;
+            if (currentValue != overAnyCampfire) {
+                level.setBlock(pos, current.setValue(TobaccoDryingRackBlock.OVER_CAMPFIRE, overAnyCampfire), 3);
             }
         }
 
@@ -701,11 +746,27 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         boolean validDryingThisTick = false;
         int progressTicks = 0;
 
+        // Sun-cured Oriental and Fire-cured Burley can return to a rack for their
+        // traditional extended smoke finishing. They only progress in ordinary smoke, not soul fire.
+        if (!rack.specialFinishTarget.isEmpty()) {
+            boolean smokeFinish = rack.requiresCreateAssistance()
+                    ? fanAssist == CreateCompat.FanCuringAssist.FIRE
+                    : overCampfire || fanAssist == CreateCompat.FanCuringAssist.FIRE;
+            if (smokeFinish) {
+                validDryingThisTick = true;
+                progressTicks = fanAssist == CreateCompat.FanCuringAssist.FIRE
+                        ? rack.adjustCreateAssistedTickRate(CREATE_FAN_HEATED_TICK_RATE)
+                        : 1;
+                rack.fireTicks += progressTicks;
+            }
         // Traditional racks may cure passively. Industrial racks require an actual Create fan
-        // assist and receive only a small assisted throughput bonus. Cure identity remains the
-        // same four-method system; the industrial block does not invent a fifth cure type.
-        if (rack.requiresCreateAssistance()) {
-            if (fanAssist == CreateCompat.FanCuringAssist.FIRE) {
+        // assist and receive only a small assisted throughput bonus.
+        } else if (rack.requiresCreateAssistance()) {
+            if (fanAssist == CreateCompat.FanCuringAssist.HAUNTED) {
+                validDryingThisTick = true;
+                progressTicks = rack.adjustCreateAssistedTickRate(CREATE_FAN_HEATED_TICK_RATE);
+                rack.hauntedTicks += progressTicks;
+            } else if (fanAssist == CreateCompat.FanCuringAssist.FIRE) {
                 validDryingThisTick = true;
                 rack.usedFireDrying = true;
                 progressTicks = rack.adjustCreateAssistedTickRate(CREATE_FAN_HEATED_TICK_RATE);
@@ -725,6 +786,12 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
                 progressTicks = rack.adjustCreateAssistedTickRate(CREATE_FAN_AIR_TICK_RATE);
                 rack.airTicks += progressTicks;
             }
+        } else if (overSoulCampfire || fanAssist == CreateCompat.FanCuringAssist.HAUNTED) {
+            validDryingThisTick = true;
+            progressTicks = fanAssist == CreateCompat.FanCuringAssist.HAUNTED
+                    ? CREATE_FAN_HEATED_TICK_RATE
+                    : 1;
+            rack.hauntedTicks += progressTicks;
         } else if (overCampfire || fanAssist == CreateCompat.FanCuringAssist.FIRE) {
             validDryingThisTick = true;
             rack.usedFireDrying = true;
@@ -770,7 +837,14 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
 
         int requiredSunTime = isGlassSunCure(level, pos) ? GLASS_SUN_DRY_TIME : SUN_DRY_TIME;
 
-        if (rack.fireTicks >= FIRE_DRY_TIME
+        int specialTime = TobaccoSpecialProcessingHelper.getRackSmokeFinishTime(rack.specialFinishTarget);
+        if (!rack.specialFinishTarget.isEmpty()) {
+            if (specialTime > 0 && rack.fireTicks >= specialTime) {
+                rack.finishSpecialRackProcess();
+                return;
+            }
+        } else if (rack.hauntedTicks >= HAUNTED_DRY_TIME
+                || rack.fireTicks >= FIRE_DRY_TIME
                 || rack.flueTicks >= FLUE_DRY_TIME
                 || rack.sunTicks >= requiredSunTime
                 || rack.airTicks >= AIR_DRY_TIME) {
@@ -796,6 +870,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             return;
         }
 
+        boolean overSoulCampfire = isOverLitSoulCampfire(level, worldPosition);
         boolean overCampfire = isOverLitCampfire(level, worldPosition);
         boolean flueCure = canFlueCure(level, worldPosition);
         boolean inSun = hasDirectSunlight(level, worldPosition);
@@ -805,7 +880,13 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
                 ? CreateCompat.FanCuringAssist.NONE
                 : getCreateFanAssist();
 
-        if (overCampfire || fanAssist == CreateCompat.FanCuringAssist.FIRE) {
+        if (!specialFinishTarget.isEmpty()) {
+            if (overCampfire || fanAssist == CreateCompat.FanCuringAssist.FIRE) {
+                fireTicks += ticks;
+            }
+        } else if (overSoulCampfire || fanAssist == CreateCompat.FanCuringAssist.HAUNTED) {
+            hauntedTicks += ticks;
+        } else if (overCampfire || fanAssist == CreateCompat.FanCuringAssist.FIRE) {
             usedFireDrying = true;
             fireTicks += ticks;
         } else if (flueCure || fanAssist == CreateCompat.FanCuringAssist.FLUE) {
@@ -823,7 +904,14 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
 
         int requiredSunTime = isGlassSunCure(level, worldPosition) ? GLASS_SUN_DRY_TIME : SUN_DRY_TIME;
 
-        if (fireTicks >= FIRE_DRY_TIME
+        int specialTime = TobaccoSpecialProcessingHelper.getRackSmokeFinishTime(specialFinishTarget);
+        if (!specialFinishTarget.isEmpty()) {
+            if (specialTime > 0 && fireTicks >= specialTime) {
+                finishSpecialRackProcess();
+                return;
+            }
+        } else if (hauntedTicks >= HAUNTED_DRY_TIME
+                || fireTicks >= FIRE_DRY_TIME
                 || flueTicks >= FLUE_DRY_TIME
                 || sunTicks >= requiredSunTime
                 || airTicks >= AIR_DRY_TIME) {
@@ -846,7 +934,14 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
                 ? CreateCompat.FanCuringAssist.NONE
                 : getCreateFanAssist();
 
-        if (isOverLitCampfire(level, worldPosition) || fanAssist == CreateCompat.FanCuringAssist.FIRE) {
+        if (!specialFinishTarget.isEmpty()) {
+            fireTicks = TobaccoSpecialProcessingHelper.getRackSmokeFinishTime(specialFinishTarget);
+            finishSpecialRackProcess();
+            return;
+        }
+        if (isOverLitSoulCampfire(level, worldPosition) || fanAssist == CreateCompat.FanCuringAssist.HAUNTED) {
+            hauntedTicks = HAUNTED_DRY_TIME;
+        } else if (isOverLitCampfire(level, worldPosition) || fanAssist == CreateCompat.FanCuringAssist.FIRE) {
             usedFireDrying = true;
             fireTicks = FIRE_DRY_TIME;
         } else if (canFlueCure(level, worldPosition) || fanAssist == CreateCompat.FanCuringAssist.FLUE) {
@@ -876,12 +971,14 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         cured.setCount(storedLeaf.getCount());
 
         int dominant = Math.max(
-                Math.max(fireTicks, sunTicks),
-                Math.max(airTicks, flueTicks)
+                hauntedTicks,
+                Math.max(Math.max(fireTicks, sunTicks), Math.max(airTicks, flueTicks))
         );
 
         String cureType;
-        if (dominant == fireTicks) {
+        if (dominant == hauntedTicks && hauntedTicks > 0) {
+            cureType = TobaccoCuringHelper.CURE_HAUNTED;
+        } else if (dominant == fireTicks) {
             cureType = TobaccoCuringHelper.CURE_FIRE;
         } else if (dominant == flueTicks) {
             cureType = TobaccoCuringHelper.CURE_FLUE;
@@ -891,7 +988,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             cureType = TobaccoCuringHelper.CURE_AIR;
         }
 
-        int total = fireTicks + sunTicks + airTicks + flueTicks;
+        int total = hauntedTicks + fireTicks + sunTicks + airTicks + flueTicks;
         float ratio = total > 0 ? (float) dominant / total : 1f;
 
         int mixPenalty = 0;
@@ -909,6 +1006,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
                 : 50;
 
         int methodsUsed = 0;
+        if (hauntedTicks > 0) methodsUsed++;
         if (fireTicks > 0) methodsUsed++;
         if (flueTicks > 0) methodsUsed++;
         if (sunTicks > 0) methodsUsed++;
@@ -949,7 +1047,31 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         sunTicks = 0;
         fireTicks = 0;
         flueTicks = 0;
+        hauntedTicks = 0;
+        specialFinishTarget = "";
 
+        syncRackState();
+        syncToClient();
+    }
+
+    private void finishSpecialRackProcess() {
+        if (storedLeaf.isEmpty() || specialFinishTarget.isEmpty()) return;
+
+        TobaccoSpecialProcessingHelper.applyNamedCure(storedLeaf, specialFinishTarget);
+        dryingProgress = 0;
+        sunExposureTicks = 0;
+        interruptionCount = 0;
+        lastTickHadValidDrying = false;
+        usedFireDrying = false;
+        usedFlueDrying = false;
+        directRainExposureTicks = 0;
+        wetDamagePenalty = 0;
+        airTicks = 0;
+        sunTicks = 0;
+        fireTicks = 0;
+        flueTicks = 0;
+        hauntedTicks = 0;
+        specialFinishTarget = "";
         syncRackState();
         syncToClient();
     }
@@ -1028,7 +1150,15 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
     private static boolean isOverLitCampfire(Level level, BlockPos pos) {
         BlockPos below = pos.below();
         BlockState belowState = level.getBlockState(below);
-        return belowState.getBlock() instanceof CampfireBlock
+        return belowState.is(Blocks.CAMPFIRE)
+                && belowState.hasProperty(CampfireBlock.LIT)
+                && belowState.getValue(CampfireBlock.LIT);
+    }
+
+    private static boolean isOverLitSoulCampfire(Level level, BlockPos pos) {
+        BlockPos below = pos.below();
+        BlockState belowState = level.getBlockState(below);
+        return belowState.is(Blocks.SOUL_CAMPFIRE)
                 && belowState.hasProperty(CampfireBlock.LIT)
                 && belowState.getValue(CampfireBlock.LIT);
     }
@@ -1090,7 +1220,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             return false;
         }
 
-        if (isOverLitCampfire(level, pos)) {
+        if (isOverLitCampfire(level, pos) || isOverLitSoulCampfire(level, pos)) {
             return false;
         }
 
@@ -1114,24 +1244,17 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
     }
 
     private static boolean hasClearAirAbove(Level level, BlockPos pos) {
-        for (int y = 1; y <= 2; y++) {
-            BlockPos checkPos = pos.above(y);
-            BlockState state = level.getBlockState(checkPos);
-
-            boolean ownUpperProxy = y == 1
-                    && state.getBlock() instanceof TobaccoDryingRackBlock
-                    && state.hasProperty(TobaccoDryingRackBlock.HALF)
-                    && state.getValue(TobaccoDryingRackBlock.HALF) == DoubleBlockHalf.UPPER;
-            if (!state.isAir() && !ownUpperProxy) {
-                return false;
-            }
-        }
-        return true;
+        // The current rack needs exactly one clear air block above its physical top.
+        // getExposurePos() already accounts for the legacy/tall two-block form when present.
+        return level.getBlockState(getExposurePos(level, pos)).isAir();
     }
 
     private static boolean hasRoofOverhead(Level level, BlockPos pos) {
-        for (int y = 3; y <= 5; y++) {
-            BlockPos checkPos = pos.above(y);
+        // A compact flue room may put its ceiling immediately above that single clear air block.
+        // Keep a small search range so taller barns continue to work as before.
+        BlockPos exposure = getExposurePos(level, pos);
+        for (int y = 1; y <= 3; y++) {
+            BlockPos checkPos = exposure.above(y);
             BlockState state = level.getBlockState(checkPos);
 
             if (state.isFaceSturdy(level, checkPos, Direction.DOWN)) {
@@ -1263,12 +1386,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
     }
 
     private boolean isValidLeaf(ItemStack stack) {
-        return stack.is(ModItems.WILD_TOBACCO_LEAF.get())
-                || stack.is(ModItems.VIRGINIA_TOBACCO_LEAF.get())
-                || stack.is(ModItems.BURLEY_TOBACCO_LEAF.get())
-                || stack.is(ModItems.ORIENTAL_TOBACCO_LEAF.get())
-                || stack.is(ModItems.DOKHA_TOBACCO_LEAF.get())
-                || stack.is(ModItems.SHADE_TOBACCO_LEAF.get());
+        return TobaccoCuringHelper.isRawTobaccoLeaf(stack)
+                || !TobaccoSpecialProcessingHelper.getRackSmokeFinishTarget(stack).isEmpty();
     }
 
     @Override
@@ -1291,6 +1410,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         tag.putInt("SunTicks", sunTicks);
         tag.putInt("FireTicks", fireTicks);
         tag.putInt("FlueTicks", flueTicks);
+        tag.putInt("HauntedTicks", hauntedTicks);
+        tag.putString("SpecialFinishTarget", specialFinishTarget);
     }
 
     @Override
@@ -1315,6 +1436,12 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         sunTicks = tag.getInt("SunTicks");
         fireTicks = tag.getInt("FireTicks");
         flueTicks = tag.getInt("FlueTicks");
+        hauntedTicks = tag.getInt("HauntedTicks");
+        // Older worlds have no SpecialFinishTarget key. Do not reinterpret an already
+        // finished Sun/Fire cured leaf as an in-progress Latakia/DFK finish on load.
+        specialFinishTarget = tag.contains("SpecialFinishTarget")
+                ? tag.getString("SpecialFinishTarget")
+                : "";
     }
 
     public List<Component> getFullDebugLines() {

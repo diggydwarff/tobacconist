@@ -105,6 +105,9 @@ public final class TobaccoBlendHelper {
         tag.remove(TAG_BLEND_NAME);
         tag.remove(TobaccoAromaticHelper.TAG_FLAVOR_ID);
         tag.remove(TobaccoAromaticHelper.TAG_FLAVOR_NAME);
+        // This index belongs to the source stack's old age. Rebuild it from the averaged
+        // blend age below instead of inheriting whichever ingredient happened to be first.
+        tag.remove(TobaccoBarrelBlockEntity.TAG_LAST_SPOIL_CHECK_MONTH);
 
         int qualityTotal = 0;
         int ageTotal = 0;
@@ -149,6 +152,11 @@ public final class TobaccoBlendHelper {
 
         if (agedDays > 0) tag.putInt("AgedDays", agedDays);
         else tag.remove("AgedDays");
+
+        if (agedDays > 365) {
+            int spoilMonthIndex = Math.max(0, (agedDays - 366) / 30);
+            tag.putInt(TobaccoBarrelBlockEntity.TAG_LAST_SPOIL_CHECK_MONTH, spoilMonthIndex);
+        }
 
         if (!aromaticFlavors.isEmpty()) {
             if (aromaticFlavors.size() == 1) {
@@ -494,6 +502,13 @@ public final class TobaccoBlendHelper {
             case TobaccoCuringHelper.CURE_SUN -> mixRgb(base, 0xE8C55B, 0.40f);
             case TobaccoCuringHelper.CURE_FLUE -> mixRgb(base, 0xDDAA55, 0.32f);
             case TobaccoCuringHelper.CURE_AIR -> mixRgb(base, 0xBDA57F, 0.20f);
+            case TobaccoCuringHelper.CURE_HAUNTED -> mixRgb(base, 0x6E749C, 0.38f);
+            case TobaccoCuringHelper.CURE_LATAKIA -> mixRgb(base, 0x49342D, 0.46f);
+            case TobaccoCuringHelper.CURE_PERIQUE -> mixRgb(base, 0x663B38, 0.40f);
+            case TobaccoCuringHelper.CURE_DARK_FIRED_KENTUCKY -> mixRgb(base, 0x573428, 0.46f);
+            case TobaccoCuringHelper.CURE_CAVENDISH -> mixRgb(base, 0x804B35, 0.34f);
+            case TobaccoCuringHelper.CURE_BLACK_CAVENDISH -> mixRgb(base, 0x342824, 0.56f);
+            case TobaccoCuringHelper.CURE_STOVED_VIRGINIA -> mixRgb(base, 0x743E30, 0.42f);
             default -> base;
         };
     }
@@ -513,6 +528,10 @@ public final class TobaccoBlendHelper {
             case "blackberry" -> 0x775A78;
             case "mint", "lime" -> 0x79965E;
             case "tea" -> 0x9A7B4B;
+            case "maple" -> 0xB66D32;
+            case "nutmeg", "clove" -> 0x825039;
+            case "ginger" -> 0xC58748;
+            case "pecan" -> 0x855C3E;
             default -> unknownFlavorAccent(flavor);
         };
         return mixRgb(base, accent, 0.24f);

@@ -6,22 +6,22 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "$(thing)Fire curing$() is activated by placing the Drying Rack directly above a $(item)lit Campfire$(). The rack detects campfire blocks, including the soul-campfire form."
+      "text": "$(thing)Fire curing$() is activated by placing the Drying Rack directly above a $(item)lit Campfire$(). Use an ordinary Campfire for this cure."
     },
     {
       "type": "patchouli:text",
-      "text": "Fire curing takes $(item)24,000 ticks$(), about $(item)1 Minecraft day$(), making it the fastest curing method. Because Fire has highest method priority, a lit campfire directly below the rack overrides flue, sun, and air conditions.",
+      "text": "Fire curing takes $(item)24,000 ticks$(), about $(item)1 Minecraft day$(), making it the fastest curing method. Among the standard cures, Fire has highest method priority, so a lit ordinary Campfire directly below the rack overrides flue, sun, and air conditions.",
       "title": "Time and Priority"
     },
     {
       "type": "patchouli:text",
       "title": "Fan-Assisted Fire Cure",
-      "text": "With $(thing)Create$(), an Encased Fan blowing through a lit Campfire produces smoky airflow that can Fire Cure a nearby wooden rack and advances the cure faster. The rack does not need to sit directly over that Campfire for this assisted route."
+      "text": "With $(thing)Create$(), an Encased Fan blowing through a lit ordinary Campfire produces smoky airflow that can Fire Cure a nearby wooden rack and advances the cure faster. The rack does not need to sit directly over that Campfire for this assisted route."
     },
     {
       "type": "patchouli:text",
       "title": "Hanging Bunches",
-      "text": "A hanging bunch Fire Cures when a lit Campfire is directly below its lower half. Fire keeps the same highest curing priority and timing as the Drying Rack."
+      "text": "A hanging bunch Fire Cures when a lit ordinary Campfire is directly below its lower half. Fire keeps the same standard curing priority and timing as the Drying Rack."
     },
     {
       "type": "patchouli:text",
@@ -31,7 +31,8 @@
     {
       "type": "patchouli:relations",
       "entries": [
-        "tobacconistmod:curing/curing_quality"
+        "tobacconistmod:curing/curing_quality",
+        "tobacconistmod:curing/traditional_cures"
       ],
       "title": "Related Chapters"
     }

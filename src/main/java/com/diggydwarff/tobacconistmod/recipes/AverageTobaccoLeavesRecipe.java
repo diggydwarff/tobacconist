@@ -84,6 +84,17 @@ public class AverageTobaccoLeavesRecipe extends CustomRecipe {
                     return false;
                 }
 
+                // Averaging may change quality only. All other processing metadata must match.
+                // In particular, never let a fermented/aged stack inherit or erase those states
+                // merely because another stack shares the same item, cure and cut.
+                if (mode == Mode.RAW_LEAF || mode == Mode.DRY_LEAF) {
+                    if (!TobaccoProcessingHelper.areHomogenizingCompatibleLeaves(first, stack)) {
+                        return false;
+                    }
+                } else if (!TobaccoProcessingHelper.areQualityAveragingCompatibleLooseTobacco(first, stack)) {
+                    return false;
+                }
+
                 if (mode != Mode.RAW_LEAF) {
                     String otherCure = TobaccoCuringHelper.getCureType(stack);
                     if (!cureType.equals(otherCure)) {
@@ -192,7 +203,8 @@ public class AverageTobaccoLeavesRecipe extends CustomRecipe {
     private static int getStackQuality(ItemStack stack, Mode mode) {
         if (mode == Mode.RAW_LEAF) {
             if (LegacyItemTags.hasTag(stack) && LegacyItemTags.getTag(stack).contains(TobaccoCuringHelper.TAG_GROWTH_QUALITY)) {
-                return TobaccoCuringHelper.clampQuality(LegacyItemTags.getTag(stack).getInt(TobaccoCuringHelper.TAG_GROWTH_QUALITY));
+                return Math.max(0, Math.min(70,
+                        LegacyItemTags.getTag(stack).getInt(TobaccoCuringHelper.TAG_GROWTH_QUALITY)));
             }
             return 50;
         }

@@ -1,0 +1,36 @@
+{
+  "name": "Traditional Cures",
+  "icon": "tobacconistmod:oriental_tobacco_leaf_dry",
+  "category": "tobacconistmod:curing",
+  "sortnum": 7,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Some tobacco styles build on an existing cure and then receive a longer finishing treatment. The finished tobacco reports the traditional name directly in its $(thing)Cure$() field rather than adding another technical tooltip."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Latakia",
+      "text": "Start with $(item)Sun-Cured Oriental$() leaf. Return it to a Drying Rack or hanging bunch and expose it to $(item)ordinary Campfire smoke$() for an extended finishing cycle. The result becomes $(thing)Latakia$(). With Create, smoking airflow from an Encased Fan can perform the same finish."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Dark Fired Kentucky",
+      "text": "Start with $(item)Fire-Cured Burley$(). Give it a second, extended ordinary-smoke finish on a rack or hanging bunch to produce $(thing)Dark Fired Kentucky$(). Create smoking airflow is also valid."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Why Named Cures?",
+      "text": "These results are more specific than simply calling tobacco Sun-Cured or Fire-Cured. Variety and processing both matter, so the final Cure field changes to the traditional style name when the complete process succeeds."
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "tobacconistmod:curing/sun_curing",
+        "tobacconistmod:curing/fire_curing",
+        "tobacconistmod:barrel/specialty_processing"
+      ],
+      "title": "Related Chapters"
+    }
+  ]
+}
