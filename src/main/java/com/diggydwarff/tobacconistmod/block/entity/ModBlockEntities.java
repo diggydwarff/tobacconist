@@ -18,6 +18,7 @@ public class ModBlockEntities {
                     HookahEntity::new,
                     ModBlocks.HOOKAH.get(),
                     ModBlocks.TALL_HOOKAH.get(),
+                    ModBlocks.PUMPKIN_HOOKAH.get(),
                     ModBlocks.ORNATE_COPPER_HOOKAH.get(),
                     ModBlocks.EXPOSED_COPPER_HOOKAH.get(),
                     ModBlocks.WEATHERED_COPPER_HOOKAH.get(),

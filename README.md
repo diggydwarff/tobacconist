@@ -1,31 +1,42 @@
 # Minecraft Tobacconist
 
-Tobacconist is a mod that facilitates the cultivation and production of tobacco and related smokables for your Minecraft world. This mod supports Minecraft Forge `1.19.2` and `1.20.1`and there are plans to start supporting NeoForged for `1.21+`. 
+Tobacconist adds tobacco cultivation, curing, processing, blending, smoking products, and related factory automation to Minecraft. This branch targets **Minecraft 1.21.1 on NeoForge**. Forge builds are maintained separately for older supported Minecraft versions.
 
 ## Current Features
-Current features include:
-- Six varieties of tobacco including: Wild, Virginia, Burley, Dokha, Oriental, and Shade
-- Cigarettes (Can fill with any tobacco type)
-- Cigars (Can fill with any tobacco type and wrap with any leaf)
-- Pipes (Fill with any tobacco type, re-usable, can craft different types from different types of wood)
-- Shisha (Can use any tobacco type and create custom flavor combinations)
-- Hookah (To smoke your custom-blended shisha!) <br /><br />
-For a full list of features and help [visit the wiki](https://github.com/griffinpuc/tobacconist/wiki)<br />
-For a list of in-progress and to-do items [see here](https://github.com/griffinpuc/tobacconist/blob/master/TODO.md)
+- Six tobacco varieties: Wild, Virginia, Burley, Dokha, Oriental, and Shade
+- Crop quality based on growing conditions
+- Air, Sun, Fire, Flue, and specialty tobacco curing and processing
+- Fermentation, aging, cutting, blending, flavoring, and Shisha production
+- Cigarettes, Cigars, reusable Pipes, and functional Hookahs
+- Tobacco storage, packaging, grading, and production tools
+- Haunted Harvest seasonal content including Haunted curing, traditional specialty tobaccos, autumn flavors, secret blends, the Jack-o'-Lantern Hookah, and Corn Cob Pipe
+- Optional Create automation for large-scale tobacco processing and production
+
+For a full list of features and help, [visit the wiki](https://github.com/griffinpuc/tobacconist/wiki).
 
 ## Mod Compatibility
-This mod is compatible with the following mods (but are totally optional of course)
+The following integrations are optional; Tobacconist can be used without them.
+
+### Create
+Adds extensive factory automation for curing, cutting, pressing, blending, flavoring, Cigarette/Cigar production, logistics, monitoring, and other tobacco-processing workflows.
+
+### JEI
+Adds recipe and usage integration for Tobacconist items and processing systems.
+
+### Curios API
+Adds Head-slot support for Spectacles and Mouth-slot support for Cigarettes, Cigars, and Pipes.
+
+### Patchouli
+Provides **The Tobacconist's Manual**, the in-game guide to growing, curing, processing, smoking, and automation.
 
 ### Farmer's Delight
-Adds compatbility to craft shisha flavors from foods and drink found in this mod including:
-*apple pie, sweet berry cheesecake, chocolate pie, cake, apple pie, sweet berry cookie, honey cookie, melon popsicle, glow berry custard, hot cocoa, apple cider*<br />
-[Download Farmers Delight from here](https://www.curseforge.com/minecraft/mc-mods/farmers-delight)
+Adds compatible flavor ingredients from Farmer's Delight foods and drinks.
+
+[Download Farmer's Delight](https://www.curseforge.com/minecraft/mc-mods/farmers-delight)
 
 ### Fruits Delight
-An extension of the *Farmers Delight* mod, this adds compatbility to craft shisha flavors from fruits found in this mod including: *peach, pear, mango, lychee, hawberry, orange, persimmon, blueberry, lemon, hamimelon, pineapple, mangosteen, cranberry, bayberry, fig, kiwi, durian*<br />
-[Download Fruits Delight here](https://www.curseforge.com/minecraft/mc-mods/fruits-delight)
+Adds compatible flavor ingredients from Fruits Delight fruits.
 
-### Compatibility Coming Soon:
-- Full JEI integration
-- Curios API armor slot (for holding/using cigar, cigarette, pipe)
-- Create Mod support for cigar and cigarette rolling
+[Download Fruits Delight](https://www.curseforge.com/minecraft/mc-mods/fruits-delight)
+
+Tobacconist also uses shared item tags for compatibility with additional food and farming mods where suitable ingredients are available.

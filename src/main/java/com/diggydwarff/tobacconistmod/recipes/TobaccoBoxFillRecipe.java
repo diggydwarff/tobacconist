@@ -47,7 +47,11 @@ public class TobaccoBoxFillRecipe extends CustomRecipe {
                 if (!TobaccoBoxHelper.sameContent(contentType, compare)) return false;
             }
 
-            incomingCount += stack.getCount();
+            // Crafting consumes one item from each occupied input slot, not the entire stack
+            // present in that slot. Counting stack.getCount() here duplicated the unconsumed
+            // remainder into the box (e.g. 16 tobacco in one slot stored all 16 while only one
+            // item was actually consumed).
+            incomingCount += 1;
         }
 
         if (box.isEmpty() || contentType.isEmpty()) return false;
@@ -79,9 +83,9 @@ public class TobaccoBoxFillRecipe extends CustomRecipe {
                 content = stack.copy();
                 content.setCount(1);
                 TobaccoBoxHelper.clearCustomProductName(content);
-                incomingCount += stack.getCount();
+                incomingCount += 1;
             } else {
-                incomingCount += stack.getCount();
+                incomingCount += 1;
             }
         }
 

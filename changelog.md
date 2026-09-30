@@ -1,3 +1,20 @@
+## Update 4.1.0 - Haunted Harvest Update
+
+Tobacconist 4.1.0 releases Haunted Harvest for **Minecraft 1.21.1 NeoForge**.
+
+### Haunted Harvest & Specialty Processing
+- Added Haunted curing, Latakia, Dark Fired Kentucky, Perique, Cavendish, Black Cavendish, Stoved Virginia, and corrected Rough Cut -> Pressed Plug -> Flake processing.
+- Added autumn flavor profiles and six hidden seasonal blends, with Create equivalents for the applicable processing routes.
+- Added the seasonal **Jack-o'-Lantern Hookah** and **Corn Cob Pipe**.
+- Added `/tobacconist barrel finish` as a universal QA command for active finite barrel processes.
+
+### Fixes
+- Fixed immature crop harvest seed/leaf duplication, Tobacco Box stack-count duplication, and label loss on empty boxes.
+- Fixed barrel timing to use monotonic game time and corrected blend spoil-check metadata after age averaging.
+- Fixed compact Flue curing clearance, Create flavor-tag conditions, and the obsolete duplicate compostables data-map path.
+- Final QA: restored Latakia/Dark Fired Kentucky finishing on hanging bunches, immediate fermentation-command sync, and seasonal Hookah advancement/mining integration.
+- Replaced the Jack-o'Lantern Hookah inventory render with a dedicated 16x16 item sprite matching the existing Hookah item style.
+
 ## Update 4.0.0 - The Tobacco Industry Update
 
 Tobacconist 4.0.0 is released for **Minecraft 1.20.1 Forge** and **Minecraft 1.21.1 NeoForge** with the same intended gameplay and feature set. Loader/API differences are implementation details and are not separate feature versions.

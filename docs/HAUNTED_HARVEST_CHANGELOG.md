@@ -20,7 +20,8 @@
 - Added autumn flavor profiles: **Maple, Nutmeg, Ginger, Clove, and Pecan**.
 - Added six hidden autumn secret blends: **Witching Hour**, **Graveyard Watch**, **Headless Horseman**, **Harvest Moon**, **Maple Hollow**, and **All Hallows' Eve**. Witching Hour and Graveyard Watch are non-aromatic.
 - Added tag-first optional flavor compatibility so external food mods can supply autumn ingredients without becoming required dependencies.
-- Jack-o'-Lantern Hookah remains planned pending final model/texture assets.
+- Added the **Jack-o'-Lantern Hookah**, a seasonal two-block Hookah using the supplied pumpkin model and texture while retaining normal Hookah mechanics and automation.
+- Added the **Corn Cob Pipe**, a rustic seasonal reusable smoking pipe.
 
 ## Create integration
 
@@ -30,6 +31,19 @@
 ## Manual / QA
 
 - Expanded Patchouli documentation for Plug, Flake, barrel modes, pressure fermentation, and traditional named tobacco styles.
-- Added `/tobacconist barrel press` for instantly completing a valid Rough Cut -> Pressed Plug batch during QA.
+- Added `/tobacconist barrel finish` for instantly completing the current finite barrel process during QA; `/tobacconist barrel press` remains available for forced Plug testing.
 - Documented that barrels do not emit smoke; Haunted/smoke effects stay on curing and smoking sources.
 - Added repository-ready wiki pages for Haunted Harvest, specialty processing, and Tobacco Barrel behavior.
+
+## Bug fixes / audit
+
+- Fixed immature age 4-6 tobacco plants dropping mature leaves or bonus seeds; mature harvest behavior now requires age 7.
+- Fixed Tobacco Box crafting counting entire input stacks instead of one consumed item per crafting slot, and preserved box labels when emptied.
+- Moved barrel process timing to monotonic game time with save migration so sleep or `/time` changes cannot rewind or distort progress.
+- Rebuilt blend spoil-check metadata after averaged aging changes.
+- Restored compact Flue curing clearance: one clear air block above the rack with a roof 2-4 blocks above.
+- Fixed Create flavor recipe conditions for Double Apple, Double Eden's Apple, Double Royal Apple, and Berry.
+- Removed the obsolete duplicate compostables data-map path.
+- Restored Latakia and Dark Fired Kentucky smoke-finishing on hanging tobacco bunches (ordinary Campfire/Create smoke only), matching Drying Rack behavior.
+- Restored immediate client sync for the legacy `/tobacconist barrel ferment` QA helper.
+- Added the Jack-o'Lantern Hookah to Hookah Collector, corrected its mining tool to an axe, and gave it a dedicated 16x16 inventory sprite consistent with the other Hookahs.

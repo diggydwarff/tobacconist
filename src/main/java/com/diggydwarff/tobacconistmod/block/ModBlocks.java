@@ -40,6 +40,9 @@ public class ModBlocks {
                         return state.getValue(DoubleHookahBlock.LIT) ? 6 : 0;
                     })));
 
+    public static final Supplier<Block> PUMPKIN_HOOKAH = registerSingleStackBlock("pumpkin_hookah_block",
+            () -> new DoubleHookahBlock(hookahProperties().sound(SoundType.WOOD)));
+
     // Preserve existing material Hookah registry IDs for world compatibility.
     public static final Supplier<Block> ORNATE_COPPER_HOOKAH = registerSingleStackBlock("ornate_copper_hookah_block",
             () -> new CopperHookahBlock(hookahProperties(), 0, false));

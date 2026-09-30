@@ -8,7 +8,14 @@
       "type": "neoforge:not",
       "value": {
         "type": "neoforge:tag_empty",
-        "tag": "tobacconistmod:flavorings/berry"
+        "tag": "tobacconistmod:flavorings/sweetberry"
+      }
+    },
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "tobacconistmod:flavorings/glowberry"
       }
     }
   ],

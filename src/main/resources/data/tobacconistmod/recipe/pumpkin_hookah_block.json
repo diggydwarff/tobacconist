@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "tobacconistmod:hookah_block"
+    },
+    {
+      "item": "minecraft:jack_o_lantern"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "tobacconistmod:pumpkin_hookah_block"
+  }
+}

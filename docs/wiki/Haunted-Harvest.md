@@ -20,6 +20,8 @@ The update also adds Latakia, Dark Fired Kentucky, Perique, Cavendish, Black Cav
 
 Flake now has a proper two-stage preparation: Rough Cut is compressed into Pressed Plug, then the Plug is sliced with a Chaveta. Vanilla uses a downward-facing powered piston pressing into a Tobacco Barrel; Create can use a Mechanical Press.
 
-## Jack-o'-Lantern Hookah
+## Seasonal smoking equipment
 
-Planned for the Haunted Harvest content set but not included in the current code patch; model and texture assets will be integrated separately.
+The **Jack-o'-Lantern Hookah** is a two-block seasonal Hookah crafted from a standard Hookah and a Jack o'Lantern. It uses the same fuel, water, Shisha, hose, inventory, Hopper/Create logistics, and Display Link behavior as the other tall Hookahs.
+
+The **Corn Cob Pipe** is a rustic reusable pipe for the harvest season and follows the normal pipe packing and smoking rules.

@@ -115,6 +115,7 @@ public class TobacconistCreativeTab {
 
                         output.accept(ModBlocks.HOOKAH.get());
                         output.accept(ModBlocks.TALL_HOOKAH.get());
+                        output.accept(ModBlocks.PUMPKIN_HOOKAH.get());
                         output.accept(ModBlocks.ORNATE_COPPER_HOOKAH.get());
                         output.accept(ModBlocks.EXPOSED_COPPER_HOOKAH.get());
                         output.accept(ModBlocks.WEATHERED_COPPER_HOOKAH.get());
@@ -151,6 +152,7 @@ public class TobacconistCreativeTab {
                         output.accept(EMERALD_AZTEC_SMOKING_PIPE.get());
                         output.accept(NETHERITE_SMOKING_PIPE.get());
                         output.accept(KISERU_SMOKING_PIPE.get());
+                        output.accept(CORN_COB_SMOKING_PIPE.get());
 
                         output.accept(PaintingTabHelper.paintingVariant("american_tobacco_fields_small"));
                         output.accept(PaintingTabHelper.paintingVariant("camel_american_cigarette"));

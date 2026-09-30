@@ -6,6 +6,7 @@ import com.diggydwarff.tobacconistmod.compat.create.CreateCompat;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
+import com.diggydwarff.tobacconistmod.util.TobaccoSpecialProcessingHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoText;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -51,6 +52,7 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
     private int fireTicks = 0;
     private int flueTicks = 0;
     private int hauntedTicks = 0;
+    private String specialFinishTarget = "";
     // Stored separately so the finished model retains the botanical variety.
     private int tobaccoVariety = 0;
 
@@ -82,6 +84,7 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
         storedLeaf = source.copyWithCount(LEAF_COUNT);
         tobaccoVariety = HangingTobaccoBlock.getVarietyIndex(source);
         resetProgress();
+        specialFinishTarget = TobaccoSpecialProcessingHelper.getRackSmokeFinishTarget(storedLeaf);
         syncState();
         syncToClient();
     }
@@ -107,6 +110,11 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
 
     public boolean isFinished() {
         if (!hasLeaves()) return false;
+
+        if (!specialFinishTarget.isEmpty()) {
+            return specialFinishTarget.equals(TobaccoCuringHelper.getCureType(storedLeaf));
+        }
+
         if (TobaccoCuringHelper.isDryTobaccoLeaf(storedLeaf)) return true;
         if (!LegacyItemTags.hasTag(storedLeaf)) return false;
         CompoundTag tag = LegacyItemTags.getTag(storedLeaf);
@@ -119,7 +127,9 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
 
         int tracked;
         int needed = getRequiredDryingTime();
-        if (hauntedTicks > 0) {
+        if (!specialFinishTarget.isEmpty()) {
+            tracked = fireTicks;
+        } else if (hauntedTicks > 0) {
             tracked = hauntedTicks;
         } else if (usedFireDrying) {
             tracked = fireTicks;
@@ -155,6 +165,9 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
     }
 
     private int getRequiredDryingTime() {
+        if (!specialFinishTarget.isEmpty()) {
+            return TobaccoSpecialProcessingHelper.getRackSmokeFinishTime(specialFinishTarget);
+        }
         if (hauntedTicks > 0) {
             return TobaccoDryingRackBlockEntity.HAUNTED_DRY_TIME;
         }
@@ -203,6 +216,9 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
         if (isSideRainExposed(level, worldPosition)) return false;
 
         CreateCompat.FanCuringAssist fan = getCreateFanAssist();
+        if (!specialFinishTarget.isEmpty()) {
+            return isOverLitCampfire(level, worldPosition) || fan == CreateCompat.FanCuringAssist.FIRE;
+        }
         return isOverLitSoulCampfire(level, worldPosition)
                 || isOverLitCampfire(level, worldPosition)
                 || canFlueCure(level, worldPosition)
@@ -218,6 +234,10 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
         boolean rain = isSideRainExposed(level, worldPosition);
         CreateCompat.FanCuringAssist fan = rain ? CreateCompat.FanCuringAssist.NONE : getCreateFanAssist();
 
+        if (!specialFinishTarget.isEmpty()) {
+            return Component.translatable("tobacconistmod.cure_method.special_smoke_finish",
+                    TobaccoText.cure(specialFinishTarget));
+        }
         if (isHauntedPriority(fan)) {
             return Component.translatable(fan == CreateCompat.FanCuringAssist.HAUNTED
                     ? "tobacconistmod.cure_method.haunted_create"
@@ -295,7 +315,13 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
         boolean valid = false;
         int progressTicks = 0;
 
-        if (haunted || fan == CreateCompat.FanCuringAssist.HAUNTED) {
+        if (!bundle.specialFinishTarget.isEmpty()) {
+            if (fire || fan == CreateCompat.FanCuringAssist.FIRE) {
+                valid = true;
+                progressTicks = fan == CreateCompat.FanCuringAssist.FIRE ? CREATE_FAN_HEATED_TICK_RATE : 1;
+                bundle.fireTicks += progressTicks;
+            }
+        } else if (haunted || fan == CreateCompat.FanCuringAssist.HAUNTED) {
             valid = true;
             progressTicks = fan == CreateCompat.FanCuringAssist.HAUNTED ? CREATE_FAN_HEATED_TICK_RATE : 1;
             bundle.hauntedTicks += progressTicks;
@@ -331,7 +357,13 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
         bundle.dryingProgress += progressTicks;
         bundle.syncState();
 
-        if (bundle.hauntedTicks >= TobaccoDryingRackBlockEntity.HAUNTED_DRY_TIME
+        int specialTime = TobaccoSpecialProcessingHelper.getRackSmokeFinishTime(bundle.specialFinishTarget);
+        if (!bundle.specialFinishTarget.isEmpty()) {
+            if (specialTime > 0 && bundle.fireTicks >= specialTime) {
+                bundle.finishSpecialSmokeProcess();
+                return;
+            }
+        } else if (bundle.hauntedTicks >= TobaccoDryingRackBlockEntity.HAUNTED_DRY_TIME
                 || bundle.fireTicks >= TobaccoDryingRackBlockEntity.FIRE_DRY_TIME
                 || bundle.flueTicks >= TobaccoDryingRackBlockEntity.FLUE_DRY_TIME
                 || bundle.sunTicks >= TobaccoDryingRackBlockEntity.SUN_DRY_TIME
@@ -354,7 +386,11 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
                 ? CreateCompat.FanCuringAssist.NONE
                 : getCreateFanAssist();
 
-        if (isOverLitSoulCampfire(level, worldPosition) || fan == CreateCompat.FanCuringAssist.HAUNTED) {
+        if (!specialFinishTarget.isEmpty()) {
+            if (isOverLitCampfire(level, worldPosition) || fan == CreateCompat.FanCuringAssist.FIRE) {
+                fireTicks += ticks;
+            }
+        } else if (isOverLitSoulCampfire(level, worldPosition) || fan == CreateCompat.FanCuringAssist.HAUNTED) {
             hauntedTicks += ticks;
         } else if (isOverLitCampfire(level, worldPosition) || fan == CreateCompat.FanCuringAssist.FIRE) {
             usedFireDrying = true;
@@ -372,7 +408,14 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
         dryingProgress += ticks;
         syncState();
 
-        if (hauntedTicks >= TobaccoDryingRackBlockEntity.HAUNTED_DRY_TIME
+        int specialTime = TobaccoSpecialProcessingHelper.getRackSmokeFinishTime(specialFinishTarget);
+        if (!specialFinishTarget.isEmpty()) {
+            if (specialTime > 0 && fireTicks >= specialTime) {
+                finishSpecialSmokeProcess();
+            } else {
+                syncToClient();
+            }
+        } else if (hauntedTicks >= TobaccoDryingRackBlockEntity.HAUNTED_DRY_TIME
                 || fireTicks >= TobaccoDryingRackBlockEntity.FIRE_DRY_TIME
                 || flueTicks >= TobaccoDryingRackBlockEntity.FLUE_DRY_TIME
                 || sunTicks >= TobaccoDryingRackBlockEntity.SUN_DRY_TIME
@@ -390,6 +433,11 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
                 ? CreateCompat.FanCuringAssist.NONE
                 : getCreateFanAssist();
 
+        if (!specialFinishTarget.isEmpty()) {
+            fireTicks = TobaccoSpecialProcessingHelper.getRackSmokeFinishTime(specialFinishTarget);
+            finishSpecialSmokeProcess();
+            return;
+        }
         if (isOverLitSoulCampfire(level, worldPosition) || fan == CreateCompat.FanCuringAssist.HAUNTED) {
             hauntedTicks = TobaccoDryingRackBlockEntity.HAUNTED_DRY_TIME;
         } else if (isOverLitCampfire(level, worldPosition) || fan == CreateCompat.FanCuringAssist.FIRE) {
@@ -406,6 +454,15 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
         }
 
         finishCuring();
+    }
+
+    private void finishSpecialSmokeProcess() {
+        if (storedLeaf.isEmpty() || specialFinishTarget.isEmpty()) return;
+
+        TobaccoSpecialProcessingHelper.applyNamedCure(storedLeaf, specialFinishTarget);
+        resetProgress();
+        syncState();
+        syncToClient();
     }
 
     private void finishCuring() {
@@ -507,6 +564,7 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
         fireTicks = 0;
         flueTicks = 0;
         hauntedTicks = 0;
+        specialFinishTarget = "";
         createFanAssistRefresh = 0;
         cachedCreateFanAssist = CreateCompat.FanCuringAssist.NONE;
     }
@@ -696,6 +754,7 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
         tag.putInt("FireTicks", fireTicks);
         tag.putInt("FlueTicks", flueTicks);
         tag.putInt("HauntedTicks", hauntedTicks);
+        tag.putString("SpecialFinishTarget", specialFinishTarget);
         tag.putInt("TobaccoVariety", tobaccoVariety);
     }
 
@@ -718,6 +777,11 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
         fireTicks = tag.getInt("FireTicks");
         flueTicks = tag.getInt("FlueTicks");
         hauntedTicks = tag.getInt("HauntedTicks");
+        // Older worlds did not persist hanging specialty-smoke state. Leave those cured
+        // decorative bunches finished instead of silently reinterpreting them after upgrade.
+        specialFinishTarget = tag.contains("SpecialFinishTarget")
+                ? tag.getString("SpecialFinishTarget")
+                : "";
         tobaccoVariety = tag.contains("TobaccoVariety")
                 ? tag.getInt("TobaccoVariety")
                 : HangingTobaccoBlock.getVarietyIndex(storedLeaf);

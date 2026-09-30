@@ -34,7 +34,8 @@
           "block": "tobacconistmod:tobacco_crop_virginia",
           "condition": "minecraft:block_state_property",
           "properties": {
-            "half": "upper"
+            "half": "upper",
+            "age": "7"
           }
         }
       ],

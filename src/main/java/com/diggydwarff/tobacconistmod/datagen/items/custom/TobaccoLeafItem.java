@@ -32,7 +32,8 @@ public class TobaccoLeafItem extends Item {
         var player = context.getPlayer();
 
         // Traditional hanging bunch placement: sneak-use the underside of a sturdy block while
-        // holding one complete 16-leaf batch. Raw leaves cure normally; cured leaves hang as storage/decoration.
+        // holding one complete 16-leaf batch. Raw leaves cure normally; eligible cured leaves can
+        // receive the Latakia / Dark Fired Kentucky smoke finish, while other cured leaves store decoratively.
         if (player == null
                 || !player.isShiftKeyDown()
                 || context.getClickedFace() != Direction.DOWN

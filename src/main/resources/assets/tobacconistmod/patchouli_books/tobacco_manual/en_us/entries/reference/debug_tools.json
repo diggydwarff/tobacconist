@@ -21,7 +21,7 @@
     {
       "type": "patchouli:text",
       "title": "Barrel Commands",
-      "text": "Use $(item)/tobacconist barrel press$(), $(item)barrel ferment$(), $(item)barrel age <days>$(), or $(item)barrel ruin$() while targeting a Tobacco Barrel. $(item)barrel press$() immediately converts a valid Rough Cut batch into Pressed Plug for QA testing; normal gameplay still requires piston or Mechanical Press pressure."
+      "text": "Use $(item)/tobacconist barrel press$(), $(item)barrel ferment$(), $(item)barrel finish$(), $(item)barrel age <days>$(), or $(item)barrel ruin$() while targeting a Tobacco Barrel. $(item)barrel finish$() completes the current finite Pressing, Fermenting, Pressure Fermenting, or Stoving process. $(item)barrel press$() immediately converts a valid Rough Cut batch into Pressed Plug for QA testing; normal gameplay still requires piston or Mechanical Press pressure."
     },
     {
       "type": "patchouli:text",

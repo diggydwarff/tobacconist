@@ -46,7 +46,7 @@ A normal rack can Flue Cure when all of these are true:
 - It is not directly over a lit campfire.
 - The rack does not have direct sky access above.
 - The open space immediately above the rack is clear.
-- A sturdy roof underside exists 3–5 blocks above the rack.
+- A sturdy roof underside exists 2–4 blocks above the rack (after one clear air block).
 - No fire, soul fire, campfire, or soul campfire is present in the nearby 3×3×3 smoke-contamination area.
 - At least one lit Flue Firebox is at the rack's level or one block below, within horizontal Manhattan distance 3.
 

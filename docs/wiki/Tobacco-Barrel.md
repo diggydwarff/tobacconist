@@ -20,6 +20,7 @@ The barrel is treated as a sealed processor/storage block and therefore emits no
 
 ## QA commands
 
+- `/tobacconist barrel finish` - instantly complete the active finite process (Pressing, Fermenting, Pressure Fermenting, or Stoving).
 - `/tobacconist barrel press` - instantly finish valid Rough Cut -> Pressed Plug.
 - `/tobacconist barrel ferment` - force fermentation completion.
 - `/tobacconist barrel age <days>` - add aging days.

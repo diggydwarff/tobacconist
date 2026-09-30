@@ -71,6 +71,10 @@ public class ModItems {
             ITEMS.register("kiseru_smoking_pipe",
                     () -> new KiseruSmokingPipeItem(new Item.Properties().stacksTo(1)));
 
+    public static final Supplier<Item> CORN_COB_SMOKING_PIPE =
+            ITEMS.register("corn_cob_smoking_pipe",
+                    () -> new WoodenSmokingPipeItem(new Item.Properties().stacksTo(1)));
+
 
     // CHAVETA TOOLS
     public static final Supplier<Item> STONE_CHAVETA =

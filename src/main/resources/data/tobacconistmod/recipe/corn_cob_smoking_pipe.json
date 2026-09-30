@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " WW",
+    " S "
+  ],
+  "key": {
+    "W": {
+      "item": "minecraft:wheat"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "count": 1,
+    "id": "tobacconistmod:corn_cob_smoking_pipe"
+  }
+}

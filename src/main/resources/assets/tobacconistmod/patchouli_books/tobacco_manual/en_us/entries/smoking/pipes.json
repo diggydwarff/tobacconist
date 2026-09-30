@@ -65,6 +65,16 @@
       "title": "Netherite & Kiseru"
     },
     {
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:corn_cob_smoking_pipe",
+      "title": "Corn Cob Pipe"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The $(thing)Corn Cob Pipe$() is a rustic harvest-season pipe made from Wheat and a Stick. It uses the same reusable packing, pouch bonus, puff counter, Curios Mouth-slot support, and tobacco metadata behavior as the other pipes.",
+      "title": "Haunted Harvest"
+    },
+    {
       "type": "patchouli:text",
       "text": "Clay, metal, decorative, and wooden pipes use the same basic packing and smoking behavior. Packed tobacco keeps its variety, quality, cure, cut, flavor, fermentation, and age data so the correct smoking bonuses are evaluated when you take a puff.",
       "title": "Shared Behavior"

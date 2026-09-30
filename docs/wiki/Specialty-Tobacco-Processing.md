@@ -32,4 +32,4 @@ The barrel itself emits **no smoke particles** in any mode. Visible smoke belong
 4. Power it so the extended piston head directly contacts the top of the barrel.
 5. Keep pressure applied until the barrel finishes Pressing.
 
-For QA, `/tobacconist barrel press` instantly completes a valid Rough Cut -> Pressed Plug batch in the targeted barrel.
+For QA, `/tobacconist barrel finish` instantly completes the active finite barrel process (Pressing, Fermenting, Pressure Fermenting, or Stoving). `/tobacconist barrel press` remains available for specifically forcing a valid Rough Cut -> Pressed Plug batch.

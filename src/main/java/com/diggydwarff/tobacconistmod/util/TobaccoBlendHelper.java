@@ -105,6 +105,9 @@ public final class TobaccoBlendHelper {
         tag.remove(TAG_BLEND_NAME);
         tag.remove(TobaccoAromaticHelper.TAG_FLAVOR_ID);
         tag.remove(TobaccoAromaticHelper.TAG_FLAVOR_NAME);
+        // This index belongs to the source stack's old age. Rebuild it from the averaged
+        // blend age below instead of inheriting whichever ingredient happened to be first.
+        tag.remove(TobaccoBarrelBlockEntity.TAG_LAST_SPOIL_CHECK_MONTH);
 
         int qualityTotal = 0;
         int ageTotal = 0;
@@ -149,6 +152,11 @@ public final class TobaccoBlendHelper {
 
         if (agedDays > 0) tag.putInt("AgedDays", agedDays);
         else tag.remove("AgedDays");
+
+        if (agedDays > 365) {
+            int spoilMonthIndex = Math.max(0, (agedDays - 366) / 30);
+            tag.putInt(TobaccoBarrelBlockEntity.TAG_LAST_SPOIL_CHECK_MONTH, spoilMonthIndex);
+        }
 
         if (!aromaticFlavors.isEmpty()) {
             if (aromaticFlavors.size() == 1) {

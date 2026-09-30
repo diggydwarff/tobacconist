@@ -191,7 +191,7 @@ public abstract class AbstractTallTobaccoCropBlock extends CropBlock {
         DoubleBlockHalf half = state.getValue(HALF);
 
         if (half == DoubleBlockHalf.UPPER) {
-            if (!player.isCreative()) {
+            if (!player.isCreative() && getAge(state) >= getMaxAge()) {
                 BlockPos basePos = pos.below();
                 int leaves = getLeafDropCount(level);
                 int seeds = getSeedDropCount(level);
@@ -200,6 +200,9 @@ public abstract class AbstractTallTobaccoCropBlock extends CropBlock {
                 popResource(level, pos, new ItemStack(getBaseSeedId(), seeds));
             }
 
+            // Breaking an immature upper half is allowed, but it yields nothing: the planted
+            // lower half remains in the ground and can regrow normally. Full leaves/seeds are
+            // reserved for age 7 so age 4-6 cannot be farmed as a mature harvest.
             level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
             return state;
         }
@@ -208,11 +211,12 @@ public abstract class AbstractTallTobaccoCropBlock extends CropBlock {
         BlockState upperState = level.getBlockState(upperPos);
 
         if (upperState.is(this) && upperState.getValue(HALF) == DoubleBlockHalf.UPPER) {
-            if (!player.isCreative()) {
+            boolean mature = getAge(upperState) >= getMaxAge();
+            if (!player.isCreative() && mature) {
                 // The lower-half loot table always returns exactly the one seed used to plant
-                // the crop. Mature/tall plants may additionally return one bonus seed here,
-                // preserving the normal 1-2 mature yield without allowing freshly planted or
-                // otherwise immature crops to duplicate seeds.
+                // the crop. A genuinely mature plant may additionally return one bonus seed
+                // here, preserving the normal 1-2 mature yield. Ages 4-6 get only the planted
+                // seed from the lower-half loot table and no leaves/bonus seed.
                 int leaves = getLeafDropCount(level);
                 popResource(level, upperPos, makeLeafStackWithQuality(level, pos, leaves));
                 if (level.random.nextBoolean()) {

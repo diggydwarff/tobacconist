@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "The Hookah collection now includes a short dyeable Hookah, a roughly 1.5-block-tall $(thing)Tall Hookah$(), and a range of similarly tall material designs. These taller Hookahs reserve the block above them for clean placement. Their two occupied levels resolve to one lower/master inventory for Hoppers, Create logistics, and Display Links. All use the same fuel, shisha, water, hose, quality, and Dirty Water rules; material choice is cosmetic."
+      "text": "The Hookah collection includes a short dyeable Hookah, a roughly 1.5-block-tall $(thing)Tall Hookah$(), the seasonal $(thing)Jack-o'-Lantern Hookah$(), and a range of similarly tall material designs. These taller Hookahs reserve the block above them for clean placement. Their two occupied levels resolve to one lower/master inventory for Hoppers, Create logistics, and Display Links. All use the same fuel, shisha, water, hose, quality, and Dirty Water rules; the different designs are cosmetic."
     },
     {
       "type": "patchouli:crafting",
@@ -42,6 +42,16 @@
       "type": "patchouli:crafting",
       "recipe": "tobacconistmod:netherite_hookah_block",
       "title": "Netherite Hookah"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:pumpkin_hookah_block",
+      "title": "Jack-o'-Lantern Hookah"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Haunted Harvest",
+      "text": "The $(thing)Jack-o'-Lantern Hookah$() is a seasonal two-block Hookah built from a standard Hookah and a Jack o'Lantern. It behaves like the other tall Hookahs, including shared inventory handling, Hoppers, Create logistics, Display Links, fuel, water, Shisha, hoses, quality, and Dirty Water."
     },
     {
       "type": "patchouli:text",

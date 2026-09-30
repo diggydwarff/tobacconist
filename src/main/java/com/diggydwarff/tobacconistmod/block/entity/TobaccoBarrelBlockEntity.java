@@ -39,6 +39,7 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
 
     public static final String TAG_LAST_AGE_GAME_TIME = "LastAgeGameTime";
     public static final String TAG_LAST_FERMENT_GAME_TIME = "LastFermentGameTime";
+    private static final String TAG_MONOTONIC_PROCESS_CLOCK = "MonotonicProcessClock";
 
     public static final int MAX_STACK = 64;
 
@@ -60,6 +61,7 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
 
     private long lastAgeGameTime = -1L;
     private long lastFermentGameTime = -1L;
+    private boolean monotonicProcessClock = true;
 
     private TobaccoBarrelMode mode = TobaccoBarrelMode.IDLE;
     private final IItemHandler itemHandler = new TobaccoBarrelItemHandler(this);
@@ -120,7 +122,15 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
             newMode = TobaccoBarrelMode.AGING;
         }
 
-        long now = level.getDayTime();
+        long now = level.getGameTime();
+
+        // Older v8 saves wrote day-time values into these fields. Day time is mutable via sleep
+        // and /time commands, while game time is monotonic. On the first tick after upgrading,
+        // rebuild the anchors from the persisted processTicks so existing barrels keep their
+        // visible progress without inheriting a bogus/negative elapsed interval.
+        if (!barrel.monotonicProcessClock) {
+            barrel.migrateProcessingClock(now);
+        }
 
         if (newMode != barrel.mode) {
             boolean fermentationLabelOnlyChange = isFermentationMode(newMode)
@@ -159,7 +169,7 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
             }
 
             int required = barrel.getFiniteProcessTime();
-            long elapsed = now - barrel.lastFermentGameTime;
+            long elapsed = Math.max(0L, now - barrel.lastFermentGameTime);
             barrel.processTicks = (int) Math.min(elapsed, required);
 
             if (elapsed >= required) {
@@ -175,7 +185,7 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
                 barrel.lastAgeGameTime = now;
             }
 
-            long elapsed = now - barrel.lastAgeGameTime;
+            long elapsed = Math.max(0L, now - barrel.lastAgeGameTime);
             int daysPassed = (int) (elapsed / TICKS_PER_DAY);
 
             if (daysPassed > 0) {
@@ -190,6 +200,24 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
 
         barrel.setChanged();
         if (level.getGameTime() % 20 == 0) barrel.syncToClient();
+    }
+
+    private void migrateProcessingClock(long now) {
+        if (isFiniteFermentationOrProcessingMode(mode)) {
+            int required = getFiniteProcessTime();
+            int preserved = Math.max(0, Math.min(processTicks, required));
+            lastFermentGameTime = now - preserved;
+            lastAgeGameTime = -1L;
+        } else if (mode == TobaccoBarrelMode.AGING) {
+            int preserved = Math.max(0, Math.min(processTicks, TICKS_PER_DAY - 1));
+            lastAgeGameTime = now - preserved;
+            lastFermentGameTime = -1L;
+        } else {
+            lastAgeGameTime = -1L;
+            lastFermentGameTime = -1L;
+        }
+        monotonicProcessClock = true;
+        setChanged();
     }
 
     public static void clientTick(Level level, BlockPos pos, BlockState state, TobaccoBarrelBlockEntity barrel) {
@@ -695,6 +723,7 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
         tag.putString("Mode", mode.name());
         tag.putLong(TAG_LAST_AGE_GAME_TIME, lastAgeGameTime);
         tag.putLong(TAG_LAST_FERMENT_GAME_TIME, lastFermentGameTime);
+        tag.putBoolean(TAG_MONOTONIC_PROCESS_CLOCK, monotonicProcessClock);
     }
 
     @Override
@@ -712,6 +741,7 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
         overheatTicks = tag.getInt("OverheatTicks");
         lastAgeGameTime = tag.contains(TAG_LAST_AGE_GAME_TIME) ? tag.getLong(TAG_LAST_AGE_GAME_TIME) : -1L;
         lastFermentGameTime = tag.contains(TAG_LAST_FERMENT_GAME_TIME) ? tag.getLong(TAG_LAST_FERMENT_GAME_TIME) : -1L;
+        monotonicProcessClock = tag.getBoolean(TAG_MONOTONIC_PROCESS_CLOCK);
 
         try {
             mode = TobaccoBarrelMode.valueOf(tag.getString("Mode"));
@@ -776,6 +806,28 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
         return true;
     }
 
+    /** QA helper: immediately completes whichever finite barrel process is currently active. */
+    public boolean forceFinishCurrentProcess() {
+        if (storedTobacco.isEmpty() || isRuined(storedTobacco)) return false;
+
+        switch (mode) {
+            case PRESSING -> finishPressing();
+            case FERMENTING, PRESSURE_FERMENTING -> finishFermentation();
+            case STOVING -> finishStoving();
+            default -> {
+                return false;
+            }
+        }
+
+        processTicks = 0;
+        mode = TobaccoBarrelMode.IDLE;
+        lastAgeGameTime = -1L;
+        lastFermentGameTime = -1L;
+        setChanged();
+        syncToClient();
+        return true;
+    }
+
     public void forceFinishFermentation() {
         if (storedTobacco.isEmpty()) return;
         if (isRuined(storedTobacco)) return;
@@ -799,6 +851,7 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
         mode = TobaccoBarrelMode.IDLE;
         lastFermentGameTime = -1L;
         setChanged();
+        syncToClient();
     }
 
     public void addAgedDays(int days) {

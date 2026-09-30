@@ -1245,24 +1245,17 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
     }
 
     private static boolean hasClearAirAbove(Level level, BlockPos pos) {
-        for (int y = 1; y <= 2; y++) {
-            BlockPos checkPos = pos.above(y);
-            BlockState state = level.getBlockState(checkPos);
-
-            boolean ownUpperProxy = y == 1
-                    && state.getBlock() instanceof TobaccoDryingRackBlock
-                    && state.hasProperty(TobaccoDryingRackBlock.HALF)
-                    && state.getValue(TobaccoDryingRackBlock.HALF) == DoubleBlockHalf.UPPER;
-            if (!state.isAir() && !ownUpperProxy) {
-                return false;
-            }
-        }
-        return true;
+        // The current rack needs exactly one clear air block above its physical top.
+        // getExposurePos() already accounts for the legacy/tall two-block form when present.
+        return level.getBlockState(getExposurePos(level, pos)).isAir();
     }
 
     private static boolean hasRoofOverhead(Level level, BlockPos pos) {
-        for (int y = 3; y <= 5; y++) {
-            BlockPos checkPos = pos.above(y);
+        // A compact flue room may put its ceiling immediately above that single clear air block.
+        // Keep a small search range so taller barns continue to work as before.
+        BlockPos exposure = getExposurePos(level, pos);
+        for (int y = 1; y <= 3; y++) {
+            BlockPos checkPos = exposure.above(y);
             BlockState state = level.getBlockState(checkPos);
 
             if (state.isFaceSturdy(level, checkPos, Direction.DOWN)) {

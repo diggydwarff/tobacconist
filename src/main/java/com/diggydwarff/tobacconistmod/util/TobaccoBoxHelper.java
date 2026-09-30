@@ -123,7 +123,9 @@ public class TobaccoBoxHelper {
 
         tag.remove(TAG_STORED);
         tag.remove(TAG_COUNT);
-        tag.remove(TAG_LABEL);
+        // The label belongs to the physical box, not to the current batch of contents.
+        // Emptying a labeled box must therefore keep TAG_LABEL so it remains labeled and can
+        // enforce/adopt that branding when it is refilled.
 
         if (tag.isEmpty()) {
             LegacyItemTags.setTag(box, null);

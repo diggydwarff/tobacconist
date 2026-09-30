@@ -46,9 +46,11 @@ New flavor profiles are `maple`, `nutmeg`, `ginger`, `clove`, and `pecan`. Ingre
 
 Haunted tobacco does not gain a direct quality/power advantage. Its distinguishing behavior is recipe access and presentation: normal tobacco smoke is mixed with restrained soul-fire wisps, and the Haunted state is detected through loose tobacco, blends, packed product data, and cigar wrapper data. Finished cigarettes and cigars containing Haunted tobacco are named Haunted Cigarette / Haunted Cigar while preserving aromatic, blend, and custom-label naming.
 
-## Jack-o'-Lantern Hookah
+## Seasonal smoking equipment
 
-Not included yet. Model/texture assets will be supplied separately and should be integrated after the core patch is built and verified.
+The **Jack-o'-Lantern Hookah** is a two-block seasonal Hookah built from a standard Hookah and a Jack o'Lantern. It uses the supplied pumpkin model/texture and otherwise follows normal Hookah inventory, fuel, water, Shisha, hose, automation, and Display Link behavior.
+
+The **Corn Cob Pipe** is a reusable harvest-season pipe. It uses the normal pipe packing, pouch bonus, puff counter, tobacco metadata, and Curios Mouth-slot behavior.
 
 ## Backport plan
 
@@ -56,7 +58,7 @@ Do not backport this patch to 1.20.1 yet. First build and test the 1.21.1 implem
 
 ### Barrel QA command
 
-While looking at a Tobacco Barrel, `/tobacconist barrel press` immediately completes a valid Rough Cut → Pressed Plug operation. The command is intended for testing and rejects intact cured leaves, ruined tobacco, and other non-Rough inputs.
+While looking at an active Tobacco Barrel, `/tobacconist barrel finish` immediately completes the current Pressing, Fermenting, Pressure Fermenting, or Stoving process. `/tobacconist barrel press` remains available for specifically forcing a valid Rough Cut → Pressed Plug operation.
 
 ## Barrel visual behavior
 

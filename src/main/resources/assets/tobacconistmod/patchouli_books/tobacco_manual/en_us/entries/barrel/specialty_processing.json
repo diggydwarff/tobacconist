@@ -36,7 +36,7 @@
     {
       "type": "patchouli:text",
       "title": "Testing",
-      "text": "For development/QA, look directly at a barrel containing valid Rough Cut tobacco and use $(item)/tobacconist barrel press$() to finish the Pressed Plug stage instantly. This command does not make intact cured leaf into Plug."
+      "text": "For development/QA, look directly at an active Tobacco Barrel and use $(item)/tobacconist barrel finish$() to complete its current Pressing, Fermenting, Pressure Fermenting, or Stoving cycle instantly. $(item)/tobacconist barrel press$() remains available when you specifically want to force a valid Rough Cut → Pressed Plug operation."
     },
     {
       "type": "patchouli:relations",

@@ -37,6 +37,16 @@
         ]
       }
     },
+    "pumpkin_hookah_block": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tobacconistmod:pumpkin_hookah_block"
+          }
+        ]
+      }
+    },
     "ornate_copper_hookah_block": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
@@ -144,6 +154,9 @@
     ],
     [
       "tall_hookah_block"
+    ],
+    [
+      "pumpkin_hookah_block"
     ],
     [
       "ornate_copper_hookah_block"
