@@ -366,7 +366,6 @@
   "tobacconistmod.ponder.tobacconist_wooden_automation_arm.text_3": "This makes one Arm useful fer servicing several racks, while other compatible logistics can be mixed into th' same factory without bypassin' curin' rules.",
   "tobacconistmod.ponder.tobacconist_processing.header": "Cuttin' an' Pressin' Tobacco",
   "tobacconistmod.ponder.tobacconist_processing.text_1": "A Deployer holdin' a Chaveta cuts cur'd leaf through Rough, Ribbon an' Shag stages",
-  "tobacconistmod.ponder.tobacconist_processing.text_2": "Th' Mechanical Press converts Rough-cut tobacco into Flake while preservin' tobacco metadata",
   "tobacconistmod.ponder.tobacconist_blending.header": "Blendin' an' Barrel Automation",
   "tobacconistmod.ponder.tobacconist_blending.text_1": "A Mechanical Mixer combines two or three compatible loose tobaccos into metadata-aware blends",
   "tobacconistmod.ponder.tobacconist_blending.text_2": "Blend components an' secret blend identity be carried forward",

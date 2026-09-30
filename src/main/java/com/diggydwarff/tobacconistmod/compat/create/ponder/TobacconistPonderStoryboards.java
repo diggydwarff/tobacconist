@@ -796,8 +796,8 @@ public final class TobacconistPonderStoryboards {
         ItemStack loose = new ItemStack(ModItems.TOBACCO_LOOSE_VIRGINIA.get());
         ItemStack rough = loose.copy();
         TobaccoCuringHelper.setCutType(rough, TobaccoCuringHelper.CUT_ROUGH);
-        ItemStack flake = loose.copy();
-        TobaccoCuringHelper.setCutType(flake, TobaccoCuringHelper.CUT_FLAKE);
+        ItemStack plug = loose.copy();
+        TobaccoCuringHelper.setCutType(plug, TobaccoCuringHelper.CUT_PLUG);
         ItemStack chaveta = new ItemStack(ModItems.STONE_CHAVETA.get());
         scene.world().modifyBlockEntityNBT(util.select().position(deployer), DeployerBlockEntity.class,
                 nbt -> nbt.put("HeldItem", chaveta.saveOptional(scene.world().getHolderLookupProvider())));
@@ -836,7 +836,7 @@ public final class TobacconistPonderStoryboards {
                 pte -> pte.getPressingBehaviour().makePressingParticleEffect(
                         util.vector().centerOf(depotB).add(0, 8 / 16f, 0), rough));
         scene.world().removeItemsFromBelt(depotB);
-        scene.world().createItemOnBeltLike(depotB, Direction.UP, flake);
+        scene.world().createItemOnBeltLike(depotB, Direction.UP, plug);
         scene.effects().indicateSuccess(depotB);
         scene.idle(65);
     }

@@ -18,6 +18,12 @@
     },
     {
       "predicate": {
+        "tobacconistmod:plug_cut": 1.0
+      },
+      "model": "tobacconistmod:item/tobacco_loose_shade_plug"
+    },
+    {
+      "predicate": {
         "tobacconistmod:flake_cut": 1.0
       },
       "model": "tobacconistmod:item/tobacco_loose_shade_flake"

@@ -587,19 +587,28 @@ public class TobaccoBoxHelper {
         return switch (type) {
             case "ribbon" -> "Ribbon Cut";
             case "shag" -> "Shag Cut";
+            case "rough" -> "Rough Cut";
             case "fine" -> "Fine Cut";
+            case "plug" -> "Pressed Plug";
             case "flake" -> "Flake Cut";
-            case "plug" -> "Plug Cut";
             default -> "";
         };
     }
 
     private static String formatCureType(String type) {
         return switch (type) {
-            case "air_cured" -> "Air-Cured";
-            case "fire_cured" -> "Fire-Cured";
-            case "flue_cured" -> "Flue-Cured";
-            case "sun_cured" -> "Sun-Cured";
+            case "air", "air_cured" -> "Air-Cured";
+            case "fire", "fire_cured" -> "Fire-Cured";
+            case "flue", "flue_cured" -> "Flue-Cured";
+            case "sun", "sun_cured" -> "Sun-Cured";
+            case "mixed", "mixed_cure" -> "Mixed-Cure";
+            case "haunted" -> "Haunted";
+            case "latakia" -> "Latakia";
+            case "perique" -> "Perique";
+            case "dark_fired_kentucky" -> "Dark Fired Kentucky";
+            case "cavendish" -> "Cavendish";
+            case "black_cavendish" -> "Black Cavendish";
+            case "stoved_virginia" -> "Stoved Virginia";
             default -> "";
         };
     }

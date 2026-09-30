@@ -1,0 +1,25 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#c:spices/clove",
+      "required": false
+    },
+    {
+      "id": "#c:foods/clove",
+      "required": false
+    },
+    {
+      "id": "#c:clove",
+      "required": false
+    },
+    {
+      "id": "#forge:spices/clove",
+      "required": false
+    },
+    {
+      "id": "croptopia:clove",
+      "required": false
+    }
+  ]
+}

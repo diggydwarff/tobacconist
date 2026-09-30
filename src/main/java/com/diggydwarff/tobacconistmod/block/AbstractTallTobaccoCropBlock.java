@@ -209,11 +209,15 @@ public abstract class AbstractTallTobaccoCropBlock extends CropBlock {
 
         if (upperState.is(this) && upperState.getValue(HALF) == DoubleBlockHalf.UPPER) {
             if (!player.isCreative()) {
-                // The lower-half loot table already supplies the seed drop.
-                // Only drop the upper leaves manually here so breaking the lower half
-                // does not duplicate seeds.
+                // The lower-half loot table always returns exactly the one seed used to plant
+                // the crop. Mature/tall plants may additionally return one bonus seed here,
+                // preserving the normal 1-2 mature yield without allowing freshly planted or
+                // otherwise immature crops to duplicate seeds.
                 int leaves = getLeafDropCount(level);
                 popResource(level, upperPos, makeLeafStackWithQuality(level, pos, leaves));
+                if (level.random.nextBoolean()) {
+                    popResource(level, pos, new ItemStack(getBaseSeedId(), 1));
+                }
             }
 
             level.setBlock(upperPos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);

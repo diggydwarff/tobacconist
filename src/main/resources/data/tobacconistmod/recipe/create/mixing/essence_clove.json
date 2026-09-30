@@ -1,0 +1,33 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "create"
+    },
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "tobacconistmod:flavorings/clove"
+      }
+    }
+  ],
+  "type": "create:mixing",
+  "heat_requirement": "heated",
+  "ingredients": [
+    {
+      "tag": "tobacconistmod:flavorings/clove"
+    },
+    {
+      "type": "neoforge:single",
+      "amount": 250,
+      "fluid": "tobacconistmod:aqua_vitae"
+    }
+  ],
+  "results": [
+    {
+      "amount": 250,
+      "id": "tobacconistmod:essence_clove"
+    }
+  ]
+}

@@ -15,18 +15,18 @@ import net.minecraft.world.level.Level;
  *
  * <p>Create pressing JSON uses a static output, while Tobacconist must preserve per-stack
  * quality, cure, fermentation, age, and processing metadata. Matching Rough tobacco produces
- * a one-item Flake result copied from the runtime input.</p>
+ * a one-item Plug result copied from the runtime input.</p>
  */
 public final class CreateTobaccoPressingRecipe extends PressingRecipe {
     public CreateTobaccoPressingRecipe(ProcessingRecipeParams params) {
         super(params);
 
-        // Mark the representative recipe output as Flake for recipe viewers. Runtime processing
+        // Mark the representative recipe output as Plug for recipe viewers. Runtime processing
         // replaces it with a metadata-preserving copy of the input.
         if (!results.isEmpty()) {
             ProcessingOutput displayOutput = results.getFirst();
             ItemStack displayStack = displayOutput.getStack();
-            TobaccoCuringHelper.setCutType(displayStack, TobaccoCuringHelper.CUT_FLAKE);
+            TobaccoCuringHelper.setCutType(displayStack, TobaccoCuringHelper.CUT_PLUG);
             results.set(0, new ProcessingOutput(displayStack, displayOutput.getChance()));
         }
     }
@@ -38,7 +38,7 @@ public final class CreateTobaccoPressingRecipe extends PressingRecipe {
         }
 
         ItemStack stack = input.getItem(0);
-        if (!TobaccoProcessingHelper.canMechanicallyPressToFlake(stack)) {
+        if (!TobaccoProcessingHelper.canMechanicallyPressToPlug(stack)) {
             return false;
         }
 

@@ -7,6 +7,7 @@ import com.diggydwarff.tobacconistmod.util.SmokeParticleHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoBlendHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoProductQualityHelper;
+import com.diggydwarff.tobacconistmod.util.TobaccoSpecialProcessingHelper;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -111,6 +112,12 @@ public abstract class SmokingItem extends Item {
         } else {
             SmokeParticleHelper.spawnServerMouthSmoke(
                     level, smokeX, smokeY, smokeZ, smokeDirX, smokeDirZ
+            );
+        }
+
+        if (TobaccoSpecialProcessingHelper.isHaunted(tobaccoStack)) {
+            SmokeParticleHelper.spawnServerHauntedWisps(
+                    level, smokeX, smokeY, smokeZ, smokeDirX, smokeDirZ, hookahDraw
             );
         }
 

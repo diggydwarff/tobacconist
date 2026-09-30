@@ -22,6 +22,11 @@
       "type": "patchouli:text",
       "title": "Existing Fruits Too",
       "text": "Existing Peach, Pear, Mango, Orange, Blueberry, Lemon, Pineapple, Cranberry, Fig, Kiwi and other profiles now use the same tag-first system. For example, a compatible Peach from another mod can make Peach Essence instead of requiring Fruits Delight specifically."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Autumn Profiles",
+      "text": "The autumn flavor set adds $(item)Maple, Nutmeg, Ginger, Clove, and Pecan$(). They use the same compatibility-tag system, so supported food mods or datapacks can provide the ingredients. Maple also recognizes compatible maple-syrup tags and Autumnity syrup when present."
     }
   ]
 }

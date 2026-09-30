@@ -1,6 +1,7 @@
 package com.diggydwarff.tobacconistmod.block.entity;
 
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
+import com.diggydwarff.tobacconistmod.compat.create.CreateCompat;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BiomeTags;
@@ -98,6 +99,22 @@ public class BarrelEnvironmentHelper {
         return 0;
     }
 
+    public static boolean hasNearbyLitFlueFirebox(Level level, BlockPos pos) {
+        if (level == null || pos == null) return false;
+        for (BlockPos check : BlockPos.betweenClosed(pos.offset(-2, -1, -2), pos.offset(2, 1, 2))) {
+            BlockState state = level.getBlockState(check);
+            if (state.is(ModBlocks.FLUE_FIREBOX.get())
+                    && state.hasProperty(BlockStateProperties.LIT)
+                    && state.getValue(BlockStateProperties.LIT)) {
+                return true;
+            }
+            if (CreateCompat.isStovingHeatSource(level, check)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private static int getNearbyFireboxHeatBonus(Level level, BlockPos pos) {
         int heat = 0;
 
@@ -108,6 +125,11 @@ public class BarrelEnvironmentHelper {
             if (state.is(ModBlocks.FLUE_FIREBOX.get())
                     && state.hasProperty(BlockStateProperties.LIT)
                     && state.getValue(BlockStateProperties.LIT)) {
+                heat += 3;
+            }
+            else if (CreateCompat.isStovingHeatSource(level, check)) {
+                // A heated Blaze Burner is the Create equivalent of the flue firebox for
+                // stoving/Cavendish and must also satisfy the barrel's warmth requirement.
                 heat += 3;
             }
             else if ((state.is(Blocks.CAMPFIRE) || state.is(Blocks.SOUL_CAMPFIRE))

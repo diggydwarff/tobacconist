@@ -21,6 +21,7 @@ public final class TobaccoProcessingHelper {
         return TobaccoCuringHelper.CUT_ROUGH.equals(cutType)
                 || TobaccoCuringHelper.CUT_RIBBON.equals(cutType)
                 || TobaccoCuringHelper.CUT_SHAG.equals(cutType)
+                || TobaccoCuringHelper.CUT_PLUG.equals(cutType)
                 || TobaccoCuringHelper.CUT_FLAKE.equals(cutType);
     }
 
@@ -64,7 +65,7 @@ public final class TobaccoProcessingHelper {
         return result;
     }
 
-    /** Returns the next mechanical cut: cured leaf -> Rough -> Ribbon -> Shag. */
+    /** Returns the next Chaveta/deployer cutting step: cured leaf -> Rough -> Ribbon -> Shag, or Plug -> Flake. */
     public static String getNextMechanicalCut(ItemStack stack) {
         if (TobaccoCuringHelper.isDryTobaccoLeaf(stack)) {
             return TobaccoCuringHelper.CUT_ROUGH;
@@ -76,6 +77,7 @@ public final class TobaccoProcessingHelper {
         return switch (TobaccoCuringHelper.getCutType(stack)) {
             case TobaccoCuringHelper.CUT_ROUGH -> TobaccoCuringHelper.CUT_RIBBON;
             case TobaccoCuringHelper.CUT_RIBBON -> TobaccoCuringHelper.CUT_SHAG;
+            case TobaccoCuringHelper.CUT_PLUG -> TobaccoCuringHelper.CUT_FLAKE;
             default -> "";
         };
     }
@@ -261,25 +263,25 @@ public final class TobaccoProcessingHelper {
 
     /**
      * Returns whether this loose tobacco is eligible for the Create Mechanical Press branch.
-     * Rough tobacco is the intentional branch point: Chaveta cutting can continue toward Ribbon
-     * and Shag, while pressing Rough tobacco produces Flake.
+     * Rough tobacco is compressed into a Plug. Flake is then made by slicing that Plug with a
+     * Chaveta/deployer, matching the vanilla processing chain.
      */
-    public static boolean canMechanicallyPressToFlake(ItemStack stack) {
+    public static boolean canMechanicallyPressToPlug(ItemStack stack) {
         return TobaccoCuringHelper.isLooseTobacco(stack)
                 && TobaccoCuringHelper.CUT_ROUGH.equals(TobaccoCuringHelper.getCutType(stack));
     }
 
     /**
-     * Presses one Rough loose-tobacco item into one Flake item without changing its tobacco data.
+     * Presses one Rough loose-tobacco item into one Plug without changing its tobacco data.
      * Create's recipe application handles stack quantities by applying this one-item result once
      * per processed input item.
      */
     public static ItemStack mechanicallyPressOne(ItemStack stack) {
-        if (!canMechanicallyPressToFlake(stack)) {
+        if (!canMechanicallyPressToPlug(stack)) {
             return ItemStack.EMPTY;
         }
 
-        return recutLooseTobacco(stack, TobaccoCuringHelper.CUT_FLAKE);
+        return recutLooseTobacco(stack, TobaccoCuringHelper.CUT_PLUG);
     }
 
     /** Returns whether two leaf stacks differ only in homogenized quality metadata. */
@@ -296,6 +298,24 @@ public final class TobaccoProcessingHelper {
         return ItemStack.isSameItemSameComponents(
                 normalizeLeafForHomogenizing(first),
                 normalizeLeafForHomogenizing(second)
+        );
+    }
+
+    /**
+     * Crafting-grid averaging for loose tobacco is allowed to differ only by quality metadata.
+     * Fermentation, age, cure, cut, aromatic casing, labels, ruined state and every other
+     * processing component must match so averaging can never erase or duplicate processing work.
+     */
+    public static boolean areQualityAveragingCompatibleLooseTobacco(ItemStack first, ItemStack second) {
+        if (!TobaccoBlendHelper.isBlendableBaseTobacco(first)
+                || !TobaccoBlendHelper.isBlendableBaseTobacco(second)
+                || !ItemStack.isSameItem(first, second)) {
+            return false;
+        }
+
+        return ItemStack.isSameItemSameComponents(
+                normalizeLooseTobaccoForQualityAveraging(first),
+                normalizeLooseTobaccoForQualityAveraging(second)
         );
     }
 
@@ -377,6 +397,20 @@ public final class TobaccoProcessingHelper {
                 TobaccoCuringHelper.getQualityTierId(clamped));
         tag.remove(TobaccoCuringHelper.TAG_GROWTH_QUALITY);
         return result;
+    }
+
+    private static ItemStack normalizeLooseTobaccoForQualityAveraging(ItemStack stack) {
+        ItemStack normalized = stack.copy();
+        normalized.setCount(1);
+
+        CompoundTag tag = LegacyItemTags.hasTag(normalized)
+                ? LegacyItemTags.getTag(normalized).copy()
+                : new CompoundTag();
+        tag.remove(TobaccoCuringHelper.TAG_QUALITY);
+        tag.remove(TobaccoCuringHelper.TAG_QUALITY_TIER);
+        tag.remove(TobaccoCuringHelper.TAG_GROWTH_QUALITY);
+        LegacyItemTags.setTag(normalized, tag);
+        return normalized;
     }
 
     private static ItemStack normalizeLeafForHomogenizing(ItemStack stack) {

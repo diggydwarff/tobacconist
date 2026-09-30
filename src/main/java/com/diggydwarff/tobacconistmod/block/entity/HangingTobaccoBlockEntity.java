@@ -50,6 +50,7 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
     private int sunTicks = 0;
     private int fireTicks = 0;
     private int flueTicks = 0;
+    private int hauntedTicks = 0;
     // Stored separately so the finished model retains the botanical variety.
     private int tobaccoVariety = 0;
 
@@ -118,7 +119,9 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
 
         int tracked;
         int needed = getRequiredDryingTime();
-        if (usedFireDrying) {
+        if (hauntedTicks > 0) {
+            tracked = hauntedTicks;
+        } else if (usedFireDrying) {
             tracked = fireTicks;
         } else if (usedFlueDrying) {
             tracked = flueTicks;
@@ -152,6 +155,9 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
     }
 
     private int getRequiredDryingTime() {
+        if (hauntedTicks > 0) {
+            return TobaccoDryingRackBlockEntity.HAUNTED_DRY_TIME;
+        }
         if (usedFireDrying) {
             return TobaccoDryingRackBlockEntity.FIRE_DRY_TIME;
         }
@@ -164,8 +170,13 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
         return TobaccoDryingRackBlockEntity.AIR_DRY_TIME;
     }
 
+    private boolean isHauntedPriority(CreateCompat.FanCuringAssist fan) {
+        return level != null && (isOverLitSoulCampfire(level, worldPosition) || fan == CreateCompat.FanCuringAssist.HAUNTED || hauntedTicks > 0);
+    }
+
     private boolean isFirePriority(CreateCompat.FanCuringAssist fan) {
-        return level != null && (isOverLitCampfire(level, worldPosition) || fan == CreateCompat.FanCuringAssist.FIRE || usedFireDrying);
+        return level != null && !isHauntedPriority(fan)
+                && (isOverLitCampfire(level, worldPosition) || fan == CreateCompat.FanCuringAssist.FIRE || usedFireDrying);
     }
 
     private boolean isFluePriority(CreateCompat.FanCuringAssist fan) {
@@ -176,7 +187,9 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
         if (level == null || isSideRainExposed(level, worldPosition)) return 1;
 
         CreateCompat.FanCuringAssist fan = getCreateFanAssist();
-        if (fan == CreateCompat.FanCuringAssist.FIRE || fan == CreateCompat.FanCuringAssist.FLUE) {
+        if (fan == CreateCompat.FanCuringAssist.HAUNTED
+                || fan == CreateCompat.FanCuringAssist.FIRE
+                || fan == CreateCompat.FanCuringAssist.FLUE) {
             return CREATE_FAN_HEATED_TICK_RATE;
         }
         if (fan == CreateCompat.FanCuringAssist.AIR) {
@@ -190,7 +203,8 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
         if (isSideRainExposed(level, worldPosition)) return false;
 
         CreateCompat.FanCuringAssist fan = getCreateFanAssist();
-        return isOverLitCampfire(level, worldPosition)
+        return isOverLitSoulCampfire(level, worldPosition)
+                || isOverLitCampfire(level, worldPosition)
                 || canFlueCure(level, worldPosition)
                 || hasPergolaSunlight(level, worldPosition)
                 || canAirDry(level, worldPosition)
@@ -204,6 +218,11 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
         boolean rain = isSideRainExposed(level, worldPosition);
         CreateCompat.FanCuringAssist fan = rain ? CreateCompat.FanCuringAssist.NONE : getCreateFanAssist();
 
+        if (isHauntedPriority(fan)) {
+            return Component.translatable(fan == CreateCompat.FanCuringAssist.HAUNTED
+                    ? "tobacconistmod.cure_method.haunted_create"
+                    : "tobacconistmod.cure_method.haunted_soul_fire");
+        }
         if (isFirePriority(fan)) {
             return Component.translatable(fan == CreateCompat.FanCuringAssist.FIRE
                     ? "tobacconistmod.cure_method.fire_create_smoke"
@@ -267,6 +286,7 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
         CreateCompat.FanCuringAssist fan = rain
                 ? CreateCompat.FanCuringAssist.NONE
                 : bundle.getCreateFanAssist();
+        boolean haunted = isOverLitSoulCampfire(level, pos);
         boolean fire = isOverLitCampfire(level, pos);
         boolean flue = canFlueCure(level, pos);
         boolean sun = hasPergolaSunlight(level, pos);
@@ -275,7 +295,11 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
         boolean valid = false;
         int progressTicks = 0;
 
-        if (fire || fan == CreateCompat.FanCuringAssist.FIRE) {
+        if (haunted || fan == CreateCompat.FanCuringAssist.HAUNTED) {
+            valid = true;
+            progressTicks = fan == CreateCompat.FanCuringAssist.HAUNTED ? CREATE_FAN_HEATED_TICK_RATE : 1;
+            bundle.hauntedTicks += progressTicks;
+        } else if (fire || fan == CreateCompat.FanCuringAssist.FIRE) {
             valid = true;
             bundle.usedFireDrying = true;
             progressTicks = fan == CreateCompat.FanCuringAssist.FIRE ? CREATE_FAN_HEATED_TICK_RATE : 1;
@@ -307,7 +331,8 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
         bundle.dryingProgress += progressTicks;
         bundle.syncState();
 
-        if (bundle.fireTicks >= TobaccoDryingRackBlockEntity.FIRE_DRY_TIME
+        if (bundle.hauntedTicks >= TobaccoDryingRackBlockEntity.HAUNTED_DRY_TIME
+                || bundle.fireTicks >= TobaccoDryingRackBlockEntity.FIRE_DRY_TIME
                 || bundle.flueTicks >= TobaccoDryingRackBlockEntity.FLUE_DRY_TIME
                 || bundle.sunTicks >= TobaccoDryingRackBlockEntity.SUN_DRY_TIME
                 || bundle.airTicks >= TobaccoDryingRackBlockEntity.AIR_DRY_TIME) {
@@ -329,7 +354,9 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
                 ? CreateCompat.FanCuringAssist.NONE
                 : getCreateFanAssist();
 
-        if (isOverLitCampfire(level, worldPosition) || fan == CreateCompat.FanCuringAssist.FIRE) {
+        if (isOverLitSoulCampfire(level, worldPosition) || fan == CreateCompat.FanCuringAssist.HAUNTED) {
+            hauntedTicks += ticks;
+        } else if (isOverLitCampfire(level, worldPosition) || fan == CreateCompat.FanCuringAssist.FIRE) {
             usedFireDrying = true;
             fireTicks += ticks;
         } else if (canFlueCure(level, worldPosition) || fan == CreateCompat.FanCuringAssist.FLUE) {
@@ -345,7 +372,8 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
         dryingProgress += ticks;
         syncState();
 
-        if (fireTicks >= TobaccoDryingRackBlockEntity.FIRE_DRY_TIME
+        if (hauntedTicks >= TobaccoDryingRackBlockEntity.HAUNTED_DRY_TIME
+                || fireTicks >= TobaccoDryingRackBlockEntity.FIRE_DRY_TIME
                 || flueTicks >= TobaccoDryingRackBlockEntity.FLUE_DRY_TIME
                 || sunTicks >= TobaccoDryingRackBlockEntity.SUN_DRY_TIME
                 || airTicks >= TobaccoDryingRackBlockEntity.AIR_DRY_TIME) {
@@ -362,7 +390,9 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
                 ? CreateCompat.FanCuringAssist.NONE
                 : getCreateFanAssist();
 
-        if (isOverLitCampfire(level, worldPosition) || fan == CreateCompat.FanCuringAssist.FIRE) {
+        if (isOverLitSoulCampfire(level, worldPosition) || fan == CreateCompat.FanCuringAssist.HAUNTED) {
+            hauntedTicks = TobaccoDryingRackBlockEntity.HAUNTED_DRY_TIME;
+        } else if (isOverLitCampfire(level, worldPosition) || fan == CreateCompat.FanCuringAssist.FIRE) {
             usedFireDrying = true;
             fireTicks = TobaccoDryingRackBlockEntity.FIRE_DRY_TIME;
         } else if (canFlueCure(level, worldPosition) || fan == CreateCompat.FanCuringAssist.FLUE) {
@@ -387,7 +417,13 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
 
         String cureType;
         int tracked;
-        if (usedFireDrying) {
+        // Preserve the original hanging-bunch cure priority semantics, with Haunted above Fire.
+        // Once a higher-priority curing method participates, it remains the resulting cure and
+        // mixed-method exposure is handled by the existing quality penalty below.
+        if (hauntedTicks > 0) {
+            cureType = TobaccoCuringHelper.CURE_HAUNTED;
+            tracked = hauntedTicks;
+        } else if (usedFireDrying) {
             cureType = TobaccoCuringHelper.CURE_FIRE;
             tracked = fireTicks;
         } else if (usedFlueDrying) {
@@ -401,7 +437,7 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
             tracked = airTicks;
         }
 
-        int total = fireTicks + sunTicks + airTicks + flueTicks;
+        int total = hauntedTicks + fireTicks + sunTicks + airTicks + flueTicks;
         float ratio = total > 0 ? (float) tracked / total : 1.0F;
         int mixPenalty = ratio >= 0.9F ? 0 : ratio >= 0.7F ? 3 : ratio >= 0.5F ? 7 : 12;
 
@@ -411,6 +447,7 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
                 : 50;
 
         int methodsUsed = 0;
+        if (hauntedTicks > 0) methodsUsed++;
         if (fireTicks > 0) methodsUsed++;
         if (flueTicks > 0) methodsUsed++;
         if (sunTicks > 0) methodsUsed++;
@@ -469,6 +506,7 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
         sunTicks = 0;
         fireTicks = 0;
         flueTicks = 0;
+        hauntedTicks = 0;
         createFanAssistRefresh = 0;
         cachedCreateFanAssist = CreateCompat.FanCuringAssist.NONE;
     }
@@ -525,7 +563,15 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
     private static boolean isOverLitCampfire(Level level, BlockPos upperPos) {
         BlockPos belowBundle = upperPos.below(2);
         BlockState state = level.getBlockState(belowBundle);
-        return state.getBlock() instanceof CampfireBlock
+        return state.is(Blocks.CAMPFIRE)
+                && state.hasProperty(CampfireBlock.LIT)
+                && state.getValue(CampfireBlock.LIT);
+    }
+
+    private static boolean isOverLitSoulCampfire(Level level, BlockPos upperPos) {
+        BlockPos belowBundle = upperPos.below(2);
+        BlockState state = level.getBlockState(belowBundle);
+        return state.is(Blocks.SOUL_CAMPFIRE)
                 && state.hasProperty(CampfireBlock.LIT)
                 && state.getValue(CampfireBlock.LIT);
     }
@@ -572,7 +618,7 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
     private static boolean canFlueCure(Level level, BlockPos upperPos) {
         BlockPos center = upperPos.below();
         if (isSideRainExposed(level, upperPos)) return false;
-        if (isOverLitCampfire(level, upperPos)) return false;
+        if (isOverLitCampfire(level, upperPos) || isOverLitSoulCampfire(level, upperPos)) return false;
         if (hasSmokeContaminationNearby(level, center)) return false;
         return countNearbyFlueHeatSources(level, center) >= 1;
     }
@@ -649,6 +695,7 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
         tag.putInt("SunTicks", sunTicks);
         tag.putInt("FireTicks", fireTicks);
         tag.putInt("FlueTicks", flueTicks);
+        tag.putInt("HauntedTicks", hauntedTicks);
         tag.putInt("TobaccoVariety", tobaccoVariety);
     }
 
@@ -670,6 +717,7 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
         sunTicks = tag.getInt("SunTicks");
         fireTicks = tag.getInt("FireTicks");
         flueTicks = tag.getInt("FlueTicks");
+        hauntedTicks = tag.getInt("HauntedTicks");
         tobaccoVariety = tag.contains("TobaccoVariety")
                 ? tag.getInt("TobaccoVariety")
                 : HangingTobaccoBlock.getVarietyIndex(storedLeaf);

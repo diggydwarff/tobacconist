@@ -7,6 +7,7 @@ import com.diggydwarff.tobacconistmod.datagen.items.ModTags;
 import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
 import com.diggydwarff.tobacconistmod.util.TobaccoAromaticHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
+import com.diggydwarff.tobacconistmod.util.TobaccoSpecialProcessingHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoText;
 import com.diggydwarff.tobacconistmod.util.TobaccoLabelHelper;
 import net.minecraft.ChatFormatting;
@@ -97,7 +98,8 @@ public class LooseTobaccoItem extends Item {
             tooltip.add(aromatic.tooltipComponent().copy().withStyle(ChatFormatting.LIGHT_PURPLE));
         }
 
-        if (TobaccoBarrelBlockEntity.isFermented(stack)) {
+        if (TobaccoBarrelBlockEntity.isFermented(stack)
+                && !TobaccoSpecialProcessingHelper.isNamedFermentationCure(stack)) {
             tooltip.add(Component.translatable("tobacconistmod.ui.fermented").withStyle(ChatFormatting.GOLD));
         }
 

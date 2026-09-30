@@ -5,11 +5,12 @@ import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoText;
+import com.diggydwarff.tobacconistmod.util.TobaccoProcessingHelper;
+import com.diggydwarff.tobacconistmod.util.TobaccoSpecialProcessingHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -20,8 +21,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.neoforge.items.IItemHandler;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,6 +44,8 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
 
     private static final int TICKS_PER_DAY = 24000;
     private static final int FERMENT_TIME = 48000;
+    private static final int PRESS_TIME = 12000;
+    private static final int STOVE_TIME = 36000;
     private static final int MAX_BARREL_HUMIDITY = 100;
     private static final int MIN_FERMENT_HUMIDITY = 25;
 
@@ -98,8 +103,19 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
 
         TobaccoBarrelMode newMode = TobaccoBarrelMode.IDLE;
 
-        if (barrel.canFerment(warmth)) {
-            newMode = TobaccoBarrelMode.FERMENTING;
+        if (barrel.canPressPlug()) {
+            // Pressing loose Rough tobacco into Plug is a physical operation of its own. It does
+            // not require fermentation or aging conditions and does not mark the tobacco as either.
+            newMode = TobaccoBarrelMode.PRESSING;
+        } else if (barrel.canStove()) {
+            newMode = TobaccoBarrelMode.STOVING;
+        } else if (barrel.canFerment(warmth)) {
+            // Pressure Fermenting is reserved for processes where pressure is actually part of
+            // the recipe (Perique/Cavendish). An ordinary fermentation batch remains simply
+            // Fermenting even if a piston or Mechanical Press happens to be present.
+            newMode = barrel.requiresPressureFermentation()
+                    ? TobaccoBarrelMode.PRESSURE_FERMENTING
+                    : TobaccoBarrelMode.FERMENTING;
         } else if (barrel.canAge(warmth, humidityEnv)) {
             newMode = TobaccoBarrelMode.AGING;
         }
@@ -107,12 +123,21 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
         long now = level.getDayTime();
 
         if (newMode != barrel.mode) {
+            boolean fermentationLabelOnlyChange = isFermentationMode(newMode)
+                    && isFermentationMode(barrel.mode);
             barrel.mode = newMode;
-            barrel.processTicks = 0;
 
-            if (newMode == TobaccoBarrelMode.FERMENTING) {
+            // Toggling incidental pressure during an ordinary fermentation batch changes only the
+            // displayed mode; it must not throw away already-earned fermentation time.
+            if (!fermentationLabelOnlyChange) {
+                barrel.processTicks = 0;
+            }
+
+            if (isFiniteFermentationOrProcessingMode(newMode)) {
                 barrel.lastAgeGameTime = -1L;
-                barrel.lastFermentGameTime = now;
+                if (!fermentationLabelOnlyChange || barrel.lastFermentGameTime < 0L) {
+                    barrel.lastFermentGameTime = now;
+                }
             } else if (newMode == TobaccoBarrelMode.AGING) {
                 barrel.lastFermentGameTime = -1L;
                 barrel.lastAgeGameTime = now;
@@ -128,16 +153,19 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
             return;
         }
 
-        if (barrel.mode == TobaccoBarrelMode.FERMENTING) {
+        if (isFiniteFermentationOrProcessingMode(barrel.mode)) {
             if (barrel.lastFermentGameTime < 0L) {
                 barrel.lastFermentGameTime = now;
             }
 
+            int required = barrel.getFiniteProcessTime();
             long elapsed = now - barrel.lastFermentGameTime;
-            barrel.processTicks = (int) Math.min(elapsed, FERMENT_TIME);
+            barrel.processTicks = (int) Math.min(elapsed, required);
 
-            if (elapsed >= FERMENT_TIME) {
-                barrel.finishFermentation();
+            if (elapsed >= required) {
+                if (barrel.mode == TobaccoBarrelMode.PRESSING) barrel.finishPressing();
+                else if (barrel.mode == TobaccoBarrelMode.STOVING) barrel.finishStoving();
+                else barrel.finishFermentation();
                 barrel.lastFermentGameTime = -1L;
                 barrel.processTicks = 0;
                 barrel.mode = TobaccoBarrelMode.IDLE;
@@ -165,31 +193,9 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
     }
 
     public static void clientTick(Level level, BlockPos pos, BlockState state, TobaccoBarrelBlockEntity barrel) {
-        if (barrel.mode == TobaccoBarrelMode.FERMENTING && !barrel.storedTobacco.isEmpty()) {
-            if (level.random.nextFloat() < 0.08f) {
-                double x = pos.getX() + 0.5 + (level.random.nextDouble() - 0.5) * 0.25;
-                double y = pos.getY() + 0.9;
-                double z = pos.getZ() + 0.5 + (level.random.nextDouble() - 0.5) * 0.25;
-
-                level.addParticle(
-                        ParticleTypes.CAMPFIRE_COSY_SMOKE,
-                        x, y, z,
-                        0.0, 0.01, 0.0
-                );
-            }
-
-            if (level.random.nextFloat() < 0.04f) {
-                double x = pos.getX() + 0.5 + (level.random.nextDouble() - 0.5) * 0.30;
-                double y = pos.getY() + 0.82;
-                double z = pos.getZ() + 0.5 + (level.random.nextDouble() - 0.5) * 0.30;
-
-                level.addParticle(
-                        ParticleTypes.SMOKE,
-                        x, y, z,
-                        0.0, 0.005, 0.0
-                );
-            }
-        }
+        // Barrel processing is intentionally visually sealed. Fermentation, pressure fermentation,
+        // pressing, stoving, and aging do not emit smoke particles from the barrel itself. Visible
+        // smoke belongs to curing/fire sources (including Haunted soul-fire curing), not storage.
     }
 
     private void updateBarrelHumidity(int humidityEnv, int warmth) {
@@ -218,12 +224,97 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
         }
     }
 
+    private boolean canPressPlug() {
+        return TobaccoProcessingHelper.canMechanicallyPressToPlug(storedTobacco) && hasPressureWeight();
+    }
+
+    private boolean canStove() {
+        return TobaccoSpecialProcessingHelper.isStovedVirginiaCandidate(storedTobacco)
+                && hasStovingHeat();
+    }
+
+    private boolean hasStovingHeat() {
+        return level != null && BarrelEnvironmentHelper.hasNearbyLitFlueFirebox(level, worldPosition);
+    }
+
     private boolean canFerment(int warmth) {
         if (storedTobacco.isEmpty()) return false;
         if (isRuined(storedTobacco)) return false;
-        if (isFermented(storedTobacco)) return false;
 
-        return warmth >= 3 && barrelHumidity >= MIN_FERMENT_HUMIDITY;
+        boolean conditions = warmth >= 3 && barrelHumidity >= MIN_FERMENT_HUMIDITY;
+        if (!conditions) return false;
+
+        // Perique is specifically pressure-fermented. Do not let an intact air-cured Burley
+        // batch become generic fermented tobacco first and permanently miss the Perique path.
+        if (TobaccoSpecialProcessingHelper.isPeriqueCandidate(storedTobacco)) {
+            return hasPressureWeight();
+        }
+
+        // Cavendish is pressure-fermented. Black Cavendish is a deliberate second, heated pressure cycle.
+        if (TobaccoSpecialProcessingHelper.isBlackCavendishCandidate(storedTobacco)) {
+            return hasPressureWeight() && hasStovingHeat();
+        }
+        if (TobaccoSpecialProcessingHelper.isCavendishCandidate(storedTobacco)) {
+            // Cavendish needs the pressed plug to be heated/steamed as well as kept under
+            // pressure. This prevents an ordinary Plug left under generic pressure from silently
+            // becoming Cavendish in any generically warm fermentation room.
+            return hasPressureWeight() && hasStovingHeat();
+        }
+        if (isFermented(storedTobacco)) return false;
+        return true;
+    }
+
+    /** Returns true only when pressure is a required part of the active fermentation recipe. */
+    private boolean requiresPressureFermentation() {
+        return TobaccoSpecialProcessingHelper.isPeriqueCandidate(storedTobacco)
+                || TobaccoSpecialProcessingHelper.isCavendishCandidate(storedTobacco)
+                || TobaccoSpecialProcessingHelper.isBlackCavendishCandidate(storedTobacco);
+    }
+
+    private boolean hasPressureWeight() {
+        if (level == null) return false;
+
+        // Vanilla pressure: a downward-facing piston sits two blocks above the barrel. When
+        // powered, its extended head occupies the block directly above the barrel and acts as
+        // the press. Requiring the actual extended head prevents an unpowered piston from
+        // supplying free pressure.
+        BlockState head = level.getBlockState(worldPosition.above());
+        BlockState base = level.getBlockState(worldPosition.above(2));
+        boolean vanillaPistonPressure = head.is(Blocks.PISTON_HEAD)
+                && head.hasProperty(BlockStateProperties.FACING)
+                && head.getValue(BlockStateProperties.FACING) == Direction.DOWN
+                && (base.is(Blocks.PISTON) || base.is(Blocks.STICKY_PISTON))
+                && base.hasProperty(BlockStateProperties.FACING)
+                && base.getValue(BlockStateProperties.FACING) == Direction.DOWN
+                && base.hasProperty(BlockStateProperties.EXTENDED)
+                && base.getValue(BlockStateProperties.EXTENDED);
+        if (vanillaPistonPressure) return true;
+
+        // Create presses normally sit two blocks above the processing surface (one block of
+        // working clearance). Also accept the adjacent position for compact/custom setups.
+        return com.diggydwarff.tobacconistmod.compat.create.CreateCompat.isBarrelPressureSource(
+                level, worldPosition.above())
+                || com.diggydwarff.tobacconistmod.compat.create.CreateCompat.isBarrelPressureSource(
+                level, worldPosition.above(2));
+    }
+
+    private static boolean isFermentationMode(TobaccoBarrelMode mode) {
+        return mode == TobaccoBarrelMode.FERMENTING
+                || mode == TobaccoBarrelMode.PRESSURE_FERMENTING;
+    }
+
+    private static boolean isFiniteFermentationOrProcessingMode(TobaccoBarrelMode mode) {
+        return isFermentationMode(mode)
+                || mode == TobaccoBarrelMode.PRESSING
+                || mode == TobaccoBarrelMode.STOVING;
+    }
+
+    private int getFiniteProcessTime() {
+        return switch (mode) {
+            case PRESSING -> PRESS_TIME;
+            case STOVING -> STOVE_TIME;
+            default -> FERMENT_TIME;
+        };
     }
 
     private boolean canAge(int warmth, int humidity) {
@@ -236,15 +327,41 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
                 && BarrelEnvironmentHelper.isCoolDarkStorage(level, worldPosition);
     }
 
+    private void finishPressing() {
+        ItemStack pressed = TobaccoProcessingHelper.mechanicallyPressOne(storedTobacco);
+        if (!pressed.isEmpty()) {
+            pressed.setCount(storedTobacco.getCount());
+            storedTobacco = pressed;
+        }
+    }
+
+    private void finishStoving() {
+        TobaccoSpecialProcessingHelper.applyNamedCure(storedTobacco, TobaccoCuringHelper.CURE_STOVED_VIRGINIA);
+    }
+
     private void finishFermentation() {
         processTicks = 0;
-
         CompoundTag tag = LegacyItemTags.getOrCreateTag(storedTobacco);
+
+        String targetCure = "";
+        int qualityBonus = 7;
+        if (TobaccoSpecialProcessingHelper.isBlackCavendishCandidate(storedTobacco)
+                && hasPressureWeight() && hasStovingHeat()) {
+            targetCure = TobaccoCuringHelper.CURE_BLACK_CAVENDISH;
+            qualityBonus = 3;
+        } else if (TobaccoSpecialProcessingHelper.isPeriqueCandidate(storedTobacco) && hasPressureWeight()) {
+            targetCure = TobaccoCuringHelper.CURE_PERIQUE;
+        } else if (TobaccoSpecialProcessingHelper.isCavendishCandidate(storedTobacco)) {
+            targetCure = TobaccoCuringHelper.CURE_CAVENDISH;
+        }
+
+        if (!targetCure.isEmpty()) {
+            tag.putString(TobaccoCuringHelper.TAG_CURE_TYPE, targetCure);
+        }
         tag.putBoolean(TAG_FERMENTED, true);
 
         int q = TobaccoCuringHelper.getQuality(storedTobacco);
-        int newQ = Math.min(120, q + 7);
-
+        int newQ = Math.min(120, q + qualityBonus);
         tag.putInt(TobaccoCuringHelper.TAG_QUALITY, newQ);
         tag.putString(TobaccoCuringHelper.TAG_QUALITY_TIER, TobaccoCuringHelper.getQualityTierId(newQ));
     }
@@ -476,9 +593,12 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
                 TobaccoText.ageLabel(agedDays)
         );
 
-        if (mode == TobaccoBarrelMode.FERMENTING) {
+        if (isFermentationMode(mode)) {
             double pct = Math.min(100.0, processTicks * 100.0 / FERMENT_TIME);
             line2.append(Component.translatable("tobacconistmod.barrel.status.ferment_progress", String.format("%.1f", pct)));
+        } else if (mode == TobaccoBarrelMode.PRESSING || mode == TobaccoBarrelMode.STOVING) {
+            double pct = Math.min(100.0, processTicks * 100.0 / getFiniteProcessTime());
+            line2.append(Component.translatable("tobacconistmod.barrel.status.process_progress", String.format("%.1f", pct)));
         } else if (mode == TobaccoBarrelMode.AGING) {
             double pct = Math.min(100.0, processTicks * 100.0 / TICKS_PER_DAY);
             line2.append(Component.translatable("tobacconistmod.barrel.status.aging_progress", String.format("%.1f", pct)));
@@ -500,12 +620,12 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
     }
 
     /**
-     * Fermentation is a finite protected batch process. Generic automation must not
-     * pull from the barrel until it completes. Aging remains extractable so Create
+     * Fermentation (ordinary or under pressure) is a finite protected batch process.
+     * Generic automation must not pull from the barrel until it completes. Aging remains extractable so Create
      * Attribute Filters can release tobacco at a player-selected age threshold.
      */
     public boolean isAutomatedExtractionLocked() {
-        return mode == TobaccoBarrelMode.FERMENTING;
+        return isFermentationMode(mode) || mode == TobaccoBarrelMode.PRESSING || mode == TobaccoBarrelMode.STOVING;
     }
 
     public int getProcessTicks() {
@@ -534,7 +654,9 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
 
     public int getProcessProgressPercent() {
         return switch (mode) {
-            case FERMENTING -> Math.min(100, (processTicks * 100) / FERMENT_TIME);
+            case FERMENTING, PRESSURE_FERMENTING -> Math.min(100, (processTicks * 100) / FERMENT_TIME);
+            case PRESSING -> Math.min(100, (processTicks * 100) / PRESS_TIME);
+            case STOVING -> Math.min(100, (processTicks * 100) / STOVE_TIME);
             case AGING -> Math.min(100, (processTicks * 100) / TICKS_PER_DAY);
             default -> 0;
         };
@@ -610,9 +732,12 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
         int agedDays = getAgedDays(storedTobacco);
 
         Component progress = Component.translatable("tobacconistmod.ui.none");
-        if (mode == TobaccoBarrelMode.FERMENTING) {
+        if (isFermentationMode(mode)) {
             double pct = Math.min(100.0, processTicks * 100.0 / FERMENT_TIME);
             progress = Component.translatable("tobacconistmod.debug.ferment_progress", String.format("%.1f", pct));
+        } else if (mode == TobaccoBarrelMode.PRESSING || mode == TobaccoBarrelMode.STOVING) {
+            double pct = Math.min(100.0, processTicks * 100.0 / getFiniteProcessTime());
+            progress = Component.translatable("tobacconistmod.debug.process_progress", String.format("%.1f", pct));
         } else if (mode == TobaccoBarrelMode.AGING) {
             double pct = Math.min(100.0, processTicks * 100.0 / TICKS_PER_DAY);
             progress = Component.translatable("tobacconistmod.debug.aging_progress", String.format("%.1f", pct));
@@ -636,12 +761,40 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
     }
 
 
+    /** QA helper: immediately completes a valid Rough Cut -> Pressed Plug operation. */
+    public boolean forceFinishPressing() {
+        if (storedTobacco.isEmpty()) return false;
+        if (isRuined(storedTobacco)) return false;
+        if (!TobaccoProcessingHelper.canMechanicallyPressToPlug(storedTobacco)) return false;
+
+        finishPressing();
+        processTicks = 0;
+        mode = TobaccoBarrelMode.IDLE;
+        lastFermentGameTime = -1L;
+        setChanged();
+        syncToClient();
+        return true;
+    }
+
     public void forceFinishFermentation() {
         if (storedTobacco.isEmpty()) return;
         if (isRuined(storedTobacco)) return;
-        if (isFermented(storedTobacco)) return;
 
-        finishFermentation();
+        // Cavendish is already marked fermented, so allow the debug helper to advance it
+        // through the deliberate second fermentation into Black Cavendish.
+        if (TobaccoSpecialProcessingHelper.isBlackCavendishCandidate(storedTobacco)) {
+            CompoundTag tag = LegacyItemTags.getOrCreateTag(storedTobacco);
+            tag.putString(TobaccoCuringHelper.TAG_CURE_TYPE, TobaccoCuringHelper.CURE_BLACK_CAVENDISH);
+            tag.putBoolean(TAG_FERMENTED, true);
+            int q = TobaccoCuringHelper.getQuality(storedTobacco);
+            int newQ = Math.min(120, q + 3);
+            tag.putInt(TobaccoCuringHelper.TAG_QUALITY, newQ);
+            tag.putString(TobaccoCuringHelper.TAG_QUALITY_TIER, TobaccoCuringHelper.getQualityTierId(newQ));
+        } else {
+            if (isFermented(storedTobacco)) return;
+            finishFermentation();
+        }
+
         processTicks = 0;
         mode = TobaccoBarrelMode.IDLE;
         lastFermentGameTime = -1L;

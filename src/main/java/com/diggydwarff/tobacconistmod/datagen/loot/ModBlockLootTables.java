@@ -164,14 +164,14 @@ public class ModBlockLootTables extends BlockLootSubProvider {
 
         this.add(ModBlocks.WILD_TOBACCO_CROP.get(),
                 LootTable.lootTable()
-                        // LOWER seeds
+                        // LOWER seed: always return the planted seed; mature bonus is handled by the crop block
                         .withPool(LootPool.lootPool()
                                 .setRolls(ConstantValue.exactly(1))
                                 .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(ModBlocks.WILD_TOBACCO_CROP.get())
                                         .setProperties(StatePropertiesPredicate.Builder.properties()
                                                 .hasProperty(WildCropBlock.HALF, DoubleBlockHalf.LOWER)))
                                 .add(LootItem.lootTableItem(ModItems.WILD_TOBACCO_SEEDS.get())
-                                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0f, 2.0f)))))
+                                        .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1.0f)))))
 
                         // UPPER leaves (no age gate)
                         .withPool(LootPool.lootPool()
@@ -185,14 +185,14 @@ public class ModBlockLootTables extends BlockLootSubProvider {
 
         this.add(ModBlocks.VIRGINIA_TOBACCO_CROP.get(),
                 LootTable.lootTable()
-                        // LOWER seeds
+                        // LOWER seed: always return the planted seed; mature bonus is handled by the crop block
                         .withPool(LootPool.lootPool()
                                 .setRolls(ConstantValue.exactly(1))
                                 .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(ModBlocks.VIRGINIA_TOBACCO_CROP.get())
                                         .setProperties(StatePropertiesPredicate.Builder.properties()
                                                 .hasProperty(VirginiaCropBlock.HALF, DoubleBlockHalf.LOWER)))
                                 .add(LootItem.lootTableItem(ModItems.VIRGINIA_TOBACCO_SEEDS.get())
-                                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0f, 2.0f)))))
+                                        .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1.0f)))))
 
                         // UPPER leaves (no age gate)
                         .withPool(LootPool.lootPool()
@@ -204,14 +204,14 @@ public class ModBlockLootTables extends BlockLootSubProvider {
 
         this.add(ModBlocks.BURLEY_TOBACCO_CROP.get(),
                 LootTable.lootTable()
-                        // LOWER seeds
+                        // LOWER seed: always return the planted seed; mature bonus is handled by the crop block
                         .withPool(LootPool.lootPool()
                                 .setRolls(ConstantValue.exactly(1))
                                 .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(ModBlocks.BURLEY_TOBACCO_CROP.get())
                                         .setProperties(StatePropertiesPredicate.Builder.properties()
                                                 .hasProperty(BurleyCropBlock.HALF, DoubleBlockHalf.LOWER)))
                                 .add(LootItem.lootTableItem(ModItems.BURLEY_TOBACCO_SEEDS.get())
-                                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0f, 2.0f)))))
+                                        .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1.0f)))))
 
                         // UPPER leaves (no age gate)
                         .withPool(LootPool.lootPool()
@@ -223,14 +223,14 @@ public class ModBlockLootTables extends BlockLootSubProvider {
 
         this.add(ModBlocks.DOKHA_TOBACCO_CROP.get(),
                 LootTable.lootTable()
-                        // LOWER seeds
+                        // LOWER seed: always return the planted seed; mature bonus is handled by the crop block
                         .withPool(LootPool.lootPool()
                                 .setRolls(ConstantValue.exactly(1))
                                 .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(ModBlocks.DOKHA_TOBACCO_CROP.get())
                                         .setProperties(StatePropertiesPredicate.Builder.properties()
                                                 .hasProperty(DokhaCropBlock.HALF, DoubleBlockHalf.LOWER)))
                                 .add(LootItem.lootTableItem(ModItems.DOKHA_TOBACCO_SEEDS.get())
-                                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0f, 2.0f)))))
+                                        .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1.0f)))))
 
                         // UPPER leaves (no age gate)
                         .withPool(LootPool.lootPool()
@@ -242,14 +242,14 @@ public class ModBlockLootTables extends BlockLootSubProvider {
 
         this.add(ModBlocks.ORIENTAL_TOBACCO_CROP.get(),
                 LootTable.lootTable()
-                        // LOWER seeds
+                        // LOWER seed: always return the planted seed; mature bonus is handled by the crop block
                         .withPool(LootPool.lootPool()
                                 .setRolls(ConstantValue.exactly(1))
                                 .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(ModBlocks.ORIENTAL_TOBACCO_CROP.get())
                                         .setProperties(StatePropertiesPredicate.Builder.properties()
                                                 .hasProperty(OrientalCropBlock.HALF, DoubleBlockHalf.LOWER)))
                                 .add(LootItem.lootTableItem(ModItems.ORIENTAL_TOBACCO_SEEDS.get())
-                                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0f, 2.0f)))))
+                                        .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1.0f)))))
 
                         // UPPER leaves (no age gate)
                         .withPool(LootPool.lootPool()
@@ -261,14 +261,14 @@ public class ModBlockLootTables extends BlockLootSubProvider {
 
         this.add(ModBlocks.SHADE_TOBACCO_CROP.get(),
                 LootTable.lootTable()
-                        // LOWER seeds
+                        // LOWER seed: always return the planted seed; mature bonus is handled by the crop block
                         .withPool(LootPool.lootPool()
                                 .setRolls(ConstantValue.exactly(1))
                                 .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(ModBlocks.SHADE_TOBACCO_CROP.get())
                                         .setProperties(StatePropertiesPredicate.Builder.properties()
                                                 .hasProperty(ShadeCropBlock.HALF, DoubleBlockHalf.LOWER)))
                                 .add(LootItem.lootTableItem(ModItems.SHADE_TOBACCO_SEEDS.get())
-                                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0f, 2.0f)))))
+                                        .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1.0f)))))
 
                         // UPPER leaves (no age gate)
                         .withPool(LootPool.lootPool()

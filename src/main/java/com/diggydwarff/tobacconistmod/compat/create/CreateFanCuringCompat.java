@@ -51,6 +51,7 @@ public final class CreateFanCuringCompat {
             // The factory rack deliberately costs more infrastructure: both tiers need matching
             // airflow from two distinct Encased Fans. One fan reaching both probes is insufficient.
             for (CreateCompat.FanCuringAssist assist : new CreateCompat.FanCuringAssist[]{
+                    CreateCompat.FanCuringAssist.HAUNTED,
                     CreateCompat.FanCuringAssist.FIRE,
                     CreateCompat.FanCuringAssist.FLUE,
                     CreateCompat.FanCuringAssist.AIR}) {
@@ -142,8 +143,11 @@ public final class CreateFanCuringCompat {
         if (processingType == AllFanProcessingTypes.BLASTING) {
             return CreateCompat.FanCuringAssist.FLUE;
         }
+        if (processingType == AllFanProcessingTypes.HAUNTING) {
+            return CreateCompat.FanCuringAssist.HAUNTED;
+        }
 
-        // Water, soul-fire/haunting, and unknown addon catalysts are not valid curing air.
+        // Water and unknown addon catalysts are not valid curing air.
         return CreateCompat.FanCuringAssist.NONE;
     }
 

@@ -6,15 +6,27 @@
   },
   "overrides": [
     {
-      "predicate": { "tobacconistmod:shag_cut": 1.0 },
+      "predicate": {
+        "tobacconistmod:shag_cut": 1.0
+      },
       "model": "tobacconistmod:item/blended_tobacco_shag_legendary"
     },
     {
-      "predicate": { "tobacconistmod:rough_cut": 1.0 },
+      "predicate": {
+        "tobacconistmod:rough_cut": 1.0
+      },
       "model": "tobacconistmod:item/blended_tobacco_rough_legendary"
     },
     {
-      "predicate": { "tobacconistmod:flake_cut": 1.0 },
+      "predicate": {
+        "tobacconistmod:plug_cut": 1.0
+      },
+      "model": "tobacconistmod:item/blended_tobacco_plug_legendary"
+    },
+    {
+      "predicate": {
+        "tobacconistmod:flake_cut": 1.0
+      },
       "model": "tobacconistmod:item/blended_tobacco_flake_legendary"
     }
   ]

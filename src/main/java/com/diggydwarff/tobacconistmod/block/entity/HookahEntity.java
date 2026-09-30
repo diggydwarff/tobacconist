@@ -9,6 +9,7 @@ import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.screen.HookahMenu;
 import com.diggydwarff.tobacconistmod.util.HookahFuelHelper;
 import com.diggydwarff.tobacconistmod.util.SmokeParticleHelper;
+import com.diggydwarff.tobacconistmod.util.TobaccoSpecialProcessingHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleTypes;
@@ -302,6 +303,19 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
                         smokeY,
                         pos.getZ() + 0.5D
                 );
+                ItemStack activeShisha = pEntity.itemHandler.getStackInSlot(1);
+                if (TobaccoSpecialProcessingHelper.isHaunted(activeShisha)
+                        && level.random.nextFloat() < 0.45F) {
+                    SmokeParticleHelper.spawnServerHauntedWisps(
+                            serverLevel,
+                            pos.getX() + 0.5D,
+                            smokeY,
+                            pos.getZ() + 0.5D,
+                            0.0D,
+                            0.0D,
+                            false
+                    );
+                }
             }
 
             pEntity.progress++;

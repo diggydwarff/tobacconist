@@ -11,6 +11,7 @@ import net.neoforged.fml.ModList;
 
 import java.util.Objects;
 import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 
 /**
  * Loader-safe entry point for optional Create integration. Create API classes are loaded only
@@ -45,6 +46,8 @@ public final class CreateCompat {
             "com.diggydwarff.tobacconistmod.compat.create.CreateHomogenizationCompat";
     private static final String PRODUCTION_MONITOR_COMPAT_CLASS =
             "com.diggydwarff.tobacconistmod.compat.create.CreateProductionMonitorCompat";
+    private static final String BARREL_PROCESSING_COMPAT_CLASS =
+            "com.diggydwarff.tobacconistmod.compat.create.CreateBarrelProcessingCompat";
 
     private static BiFunction<Level, BlockPos, FanCuringAssist> fanCuringResolver =
             (level, pos) -> FanCuringAssist.NONE;
@@ -53,6 +56,8 @@ public final class CreateCompat {
     private static BiFunction<Level, BlockPos, HomogenizationStatus> homogenizationStatusResolver =
             (level, pos) -> HomogenizationStatus.NONE;
     private static ProductionMonitorBridge productionMonitorBridge = ProductionMonitorBridge.NONE;
+    private static BiPredicate<Level, BlockPos> barrelPressureResolver = (level, pos) -> false;
+    private static BiPredicate<Level, BlockPos> stovingHeatResolver = (level, pos) -> false;
 
     private CreateCompat() {}
 
@@ -78,6 +83,7 @@ public final class CreateCompat {
         registerCreateIntegration(SMOKE_CLEARING_COMPAT_CLASS);
         registerCreateIntegration(HOMOGENIZATION_COMPAT_CLASS);
         registerCreateIntegration(PRODUCTION_MONITOR_COMPAT_CLASS);
+        registerCreateIntegration(BARREL_PROCESSING_COMPAT_CLASS);
         TobacconistMod.LOGGER.info("Create detected; Tobacconist Create compatibility enabled.");
     }
 
@@ -98,7 +104,8 @@ public final class CreateCompat {
         NONE(0),
         AIR(1),
         FLUE(2),
-        FIRE(3);
+        FIRE(3),
+        HAUNTED(4);
 
         private final int priority;
 
@@ -175,6 +182,23 @@ public final class CreateCompat {
     static void installHomogenizationStatusResolver(
             BiFunction<Level, BlockPos, HomogenizationStatus> resolver) {
         homogenizationStatusResolver = Objects.requireNonNull(resolver);
+    }
+
+
+    public static boolean isBarrelPressureSource(Level level, BlockPos pos) {
+        return loaded() && level != null && pos != null && barrelPressureResolver.test(level, pos);
+    }
+
+    static void installBarrelPressureResolver(BiPredicate<Level, BlockPos> resolver) {
+        barrelPressureResolver = Objects.requireNonNull(resolver);
+    }
+
+    public static boolean isStovingHeatSource(Level level, BlockPos pos) {
+        return loaded() && level != null && pos != null && stovingHeatResolver.test(level, pos);
+    }
+
+    static void installStovingHeatResolver(BiPredicate<Level, BlockPos> resolver) {
+        stovingHeatResolver = Objects.requireNonNull(resolver);
     }
 
     public interface ProductionMonitorBridge {

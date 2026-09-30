@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "The $(thing)Tobacco Barrel$() performs both fermentation and aging. It accepts $(item)loose tobacco$() or $(item)cured tobacco leaf$(). Fresh raw leaf and Spoiled Tobacco are rejected."
+      "text": "The $(thing)Tobacco Barrel$() handles pressing, fermentation, aging, and several specialty tobacco processes. It accepts $(item)loose tobacco$() or $(item)cured tobacco leaf$(). Fresh raw leaf and Spoiled Tobacco are rejected."
     },
     {
       "type": "patchouli:crafting",
@@ -15,7 +15,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "A barrel holds up to $(item)64$() items. Additional tobacco must be exactly compatible with the existing stored stack, including its components/processing data. Adding more tobacco to a batch resets its current fermentation or aging progress.",
+      "text": "A barrel holds up to $(item)64$() items. Additional tobacco must be exactly compatible with the existing stored stack, including its components/processing data. Adding more tobacco to a batch resets the current active barrel-process progress.",
       "title": "Batch Rules"
     },
     {
@@ -25,20 +25,21 @@
     },
     {
       "type": "patchouli:text",
-      "text": "The barrel automatically chooses a mode from its environment. Fermentation takes priority when its requirements are met. Otherwise the barrel ages if aging conditions are valid. If neither set of conditions is valid, the barrel remains Idle.",
+      "text": "The barrel chooses its mode from both the tobacco and its surroundings. Rough Cut under pressure enters $(thing)Pressing$(). Valid specialty stoving takes priority next, then fermentation, then aging. If no process requirements are met, the barrel remains $(thing)Idle$().",
       "title": "Automatic Modes"
     },
     {
       "type": "patchouli:text",
       "title": "Create Extraction",
-      "text": "Create automation treats fermentation and aging differently. Fermenting is a protected finite batch, so automated extraction waits until it finishes. Aging has no universal endpoint, so it remains extractable; use an aging Attribute Filter when you want an automated cellar to wait for a specific age."
+      "text": "Create automation treats finite barrel work and aging differently. Pressing, stoving, and active fermentation are protected finite batches, so automated extraction waits until they finish. Aging has no universal endpoint, so it remains extractable; use an aging Attribute Filter when you want an automated cellar to wait for a specific age."
     },
     {
       "type": "patchouli:relations",
       "entries": [
         "tobacconistmod:barrel/fermentation",
         "tobacconistmod:barrel/aging",
-        "tobacconistmod:barrel/environment"
+        "tobacconistmod:barrel/environment",
+        "tobacconistmod:barrel/specialty_processing"
       ],
       "title": "Related Chapters"
     }

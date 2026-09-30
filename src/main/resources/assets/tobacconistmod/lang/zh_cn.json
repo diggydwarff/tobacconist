@@ -366,7 +366,6 @@
   "tobacconistmod.ponder.tobacconist_wooden_automation_arm.text_3": "因此，一个动力臂可以服务多个调制架；同一工厂也可以混用其他物流方式，而不会跳过调制规则。",
   "tobacconistmod.ponder.tobacconist_processing.header": "切制与压制烟草",
   "tobacconistmod.ponder.tobacconist_processing.text_1": "手持雪茄刀的机械手会依次将调制烟叶切成粗切、丝带切和细丝切",
-  "tobacconistmod.ponder.tobacconist_processing.text_2": "动力冲压机将粗切烟草压成片切，同时保留烟草的品种、品质、调制方式、风味等信息",
   "tobacconistmod.ponder.tobacconist_blending.header": "调配与烟草桶自动化",
   "tobacconistmod.ponder.tobacconist_blending.text_1": "动力搅拌器将两种或三种可调配的散装烟草混合成调配烟草，并保留原有烟草信息",
   "tobacconistmod.ponder.tobacconist_blending.text_2": "调配成分和秘密调配身份会在后续加工中继续保留",

@@ -34,7 +34,7 @@ public record LeafCuttingJeiRecipe(
         recipes.add(create(dryLeaf, looseTobacco, TobaccoCuringHelper.CUT_RIBBON, 1, 1, 0, 1));
         recipes.add(create(dryLeaf, looseTobacco, TobaccoCuringHelper.CUT_ROUGH, 1, 1, 2, 1));
         recipes.add(create(dryLeaf, looseTobacco, TobaccoCuringHelper.CUT_SHAG, 1, 1, 1, 0));
-        recipes.add(create(dryLeaf, looseTobacco, TobaccoCuringHelper.CUT_FLAKE, 1, 1, 1, 2));
+        recipes.add(createPlugToFlake(dryLeaf, looseTobacco));
     }
 
     private static LeafCuttingJeiRecipe create(Item dryLeaf, Item looseTobacco, String cutType,
@@ -48,4 +48,17 @@ public record LeafCuttingJeiRecipe(
 
         return new LeafCuttingJeiRecipe(leaf, output, cutType, leafX, leafY, chavetaX, chavetaY);
     }
+    private static LeafCuttingJeiRecipe createPlugToFlake(Item dryLeaf, Item looseTobacco) {
+        ItemStack leaf = new ItemStack(dryLeaf);
+        TobaccoCuringHelper.applyCreativeLeafDefaults(leaf, true);
+
+        ItemStack plug = new ItemStack(looseTobacco);
+        TobaccoCuringHelper.copyTobaccoProcessingData(leaf, plug);
+        TobaccoCuringHelper.setCutType(plug, TobaccoCuringHelper.CUT_PLUG);
+
+        ItemStack flake = plug.copy();
+        TobaccoCuringHelper.setCutType(flake, TobaccoCuringHelper.CUT_FLAKE);
+        return new LeafCuttingJeiRecipe(plug, flake, TobaccoCuringHelper.CUT_FLAKE, 1, 1, 1, 2);
+    }
+
 }

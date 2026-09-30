@@ -340,7 +340,6 @@
   "tobacconistmod.ponder.tobacconist_curing.text_8": "Mechanical Arms can load raw leaves and only extract them after the selected curing process is complete",
   "tobacconistmod.ponder.tobacconist_processing.header": "Cutting and Pressing Tobacco",
   "tobacconistmod.ponder.tobacconist_processing.text_1": "A Deployer holding a Chaveta cuts cured leaf through Rough, Ribbon and Shag stages",
-  "tobacconistmod.ponder.tobacconist_processing.text_2": "The Mechanical Press converts Rough-cut tobacco into Flake while preserving tobacco metadata",
   "tobacconistmod.ponder.tobacconist_blending.header": "Blending and Fermenting Tobacco",
   "tobacconistmod.ponder.tobacconist_blending.text_1": "A Mechanical Mixer combines two or three compatible loose tobaccos into metadata-aware blends",
   "tobacconistmod.ponder.tobacconist_blending.text_2": "Blend components and secret blend identity are carried forward",

@@ -44,7 +44,15 @@ public class TobacconistConfig {
             "Blue Hour=shade|100|air|lavender+virginia|95|flue|none+oriental|95|sun|tea",
             "Port Royal=virginia|100|flue|coconut+burley|95|air|caramel+oriental|95|sun|none",
             "Summer Ledger=virginia|100|flue|strawberry+shade|95|air|raspberry+oriental|90|sun|none",
-            "The Decadent=burley|105|fire|brownie+virginia|100|flue|custard+shade|100|air|vanilla"
+            "The Decadent=burley|105|fire|brownie+virginia|100|flue|custard+shade|100|air|vanilla",
+
+            // Autumn/Halloween secrets. The first two are intentionally non-aromatic.
+            "Witching Hour=oriental|90|haunted|none+oriental|90|latakia|none+burley|90|dark_fired_kentucky|none",
+            "Graveyard Watch=burley|90|haunted|none+burley|90|dark_fired_kentucky|none+virginia|90|stoved_virginia|none",
+            "Headless Horseman=burley|85|haunted|pumpkin+virginia|85|flue|apple+shade|80|air|honey",
+            "Harvest Moon=virginia|85|haunted|honey+burley|85|air|apple+oriental|85|sun|pumpkin",
+            "Maple Hollow=burley|85|haunted|maple+virginia|85|stoved_virginia|vanilla+shade|80|air|pecan",
+            "All Hallows' Eve=oriental|85|haunted|clove+virginia|85|flue|nutmeg+burley|85|air|ginger"
     );
 
     /**
@@ -83,7 +91,13 @@ public class TobacconistConfig {
             "Blue Hour=#5E74F1|0.94|0.11|0.28",
             "Port Royal=#B38B61|0.58|0.08|0.10",
             "Summer Ledger=#AA6E68|0.57|0.08|0.12",
-            "The Decadent=#765247|0.62|0.06|0.09"
+            "The Decadent=#765247|0.62|0.06|0.09",
+            "Witching Hour=#5C4B63|0.67|0.06|0.12",
+            "Graveyard Watch=#54483D|0.65|0.05|0.08",
+            "Headless Horseman=#C06D2C|0.72|0.09|0.16",
+            "Harvest Moon=#C79A45|0.68|0.10|0.14",
+            "Maple Hollow=#A66037|0.68|0.08|0.13",
+            "All Hallows' Eve=#8A5B49|0.69|0.07|0.13"
     );
 
     /**
@@ -95,6 +109,30 @@ public class TobacconistConfig {
             "Crown & Ember=3|minecraft:fire_resistance,180,0;minecraft:strength,120,0",
             "Mint Condition=3|minecraft:speed,180,0;minecraft:jump_boost,140,0",
             "Blue Hour=3|minecraft:night_vision,220,0;minecraft:slow_falling,120,0"
+    );
+
+    /** Defaults from immediately before the autumn specialty update. */
+    private static final List<String> PRE_AUTUMN_DEFAULT_SECRET_BLENDS = List.of(
+            "The Ninth Bell=virginia|95|flue|none+burley|95|fire|none+shade|90|air|none",
+            "Bosphorus No. 7=oriental|100|sun|none+dokha|95|fire|none+virginia|90|flue|none",
+            "Black Cabinet=burley|100|fire|none+dokha|100|fire|none+wild|95|air|none",
+            "Three Crowns=virginia|100|flue|none+oriental|100|sun|none+shade|100|air|none",
+            "Last Harvest=wild|110|sun|none+virginia|105|flue|none+burley|105|air|none",
+            "Golden Sultana=oriental|100|sun|honey+virginia|95|flue|none+shade|95|air|none",
+            "Orchard Reserve=virginia|100|flue|apple+burley|95|air|none+shade|90|air|honey",
+            "Crown & Ember=virginia|105|flue|goldenapple+burley|100|fire|none+oriental|95|sun|none",
+            "Lamplighter No. 23=burley|95|fire|cocoa+virginia|95|flue|none+shade|90|air|none",
+            "Far End Mixture=dokha|100|fire|chorus_fruit+oriental|95|sun|none+wild|95|air|glowberry",
+            "Vienna Cabinet=burley|100|air|coffee+virginia|95|flue|vanilla+oriental|90|sun|none",
+            "Red Parlor=virginia|100|flue|cherry+burley|95|air|none+shade|95|air|vanilla",
+            "Mint Condition=dokha|100|fire|mint+oriental|95|sun|lime+virginia|90|flue|none",
+            "The Confectioner=burley|100|air|caramel+virginia|95|flue|vanilla+shade|95|air|custard",
+            "Black Orchard=burley|100|fire|blackberry+virginia|95|flue|none+oriental|95|sun|cinnamon",
+            "Silk Road No. 12=oriental|105|sun|tea+dokha|100|fire|none+shade|95|air|hibiscus",
+            "Blue Hour=shade|100|air|lavender+virginia|95|flue|none+oriental|95|sun|tea",
+            "Port Royal=virginia|100|flue|coconut+burley|95|air|caramel+oriental|95|sun|none",
+            "Summer Ledger=virginia|100|flue|strawberry+shade|95|air|raspberry+oriental|90|sun|none",
+            "The Decadent=burley|105|fire|brownie+virginia|100|flue|custard+shade|100|air|vanilla"
     );
 
     /** Defaults from the short-lived custom-font secret-blend implementation. */
@@ -241,7 +279,8 @@ public class TobacconistConfig {
             // the new built-ins without administrators having to delete their server config.
             if (configured.equals(LEGACY_DEFAULT_SECRET_BLENDS)
                     || configured.equals(PREVIOUS_DEFAULT_SECRET_BLENDS)
-                    || configured.equals(FONTED_DEFAULT_SECRET_BLENDS)) {
+                    || configured.equals(FONTED_DEFAULT_SECRET_BLENDS)
+                    || configured.equals(PRE_AUTUMN_DEFAULT_SECRET_BLENDS)) {
                 return DEFAULT_SECRET_BLENDS;
             }
             return configured;
@@ -550,7 +589,7 @@ public class TobacconistConfig {
             secretBlends = builder
                     .comment("Hidden named tobacco blends with exact per-variety requirements.")
                     .comment("Format: Display Name=variety|minQuality|cure|flavor+variety|minQuality|cure|flavor[+...]")
-                    .comment("Quality is a minimum (0-120). Cure: air, fire, sun, flue, or * for any.")
+                    .comment("Quality is a minimum (0-120). Cure accepts any stored cure id (air, fire, haunted, latakia, etc.) or * for any.")
                     .comment("Flavor: none, *, or a flavor id such as apple, chorus_fruit, coffee, vanilla, or mint.")
                     .comment("Order does not matter. Legacy fonted and variety-only entries remain accepted for migration.")
                     .comment("Valid varieties: wild, virginia, burley, oriental, dokha, shade.")

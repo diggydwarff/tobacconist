@@ -77,6 +77,13 @@ public final class TobaccoText {
             case TobaccoCuringHelper.CURE_SUN, "sun_cured" -> "sun";
             case TobaccoCuringHelper.CURE_FLUE, "flue_cured" -> "flue";
             case TobaccoCuringHelper.CURE_MIXED, "mixed_cure" -> "mixed";
+            case TobaccoCuringHelper.CURE_HAUNTED -> "haunted";
+            case TobaccoCuringHelper.CURE_LATAKIA -> "latakia";
+            case TobaccoCuringHelper.CURE_PERIQUE -> "perique";
+            case TobaccoCuringHelper.CURE_DARK_FIRED_KENTUCKY -> "dark_fired_kentucky";
+            case TobaccoCuringHelper.CURE_CAVENDISH -> "cavendish";
+            case TobaccoCuringHelper.CURE_BLACK_CAVENDISH -> "black_cavendish";
+            case TobaccoCuringHelper.CURE_STOVED_VIRGINIA -> "stoved_virginia";
             default -> "air";
         };
         return Component.translatable("tobacconistmod.cure." + id);
@@ -88,6 +95,7 @@ public final class TobaccoText {
             case TobaccoCuringHelper.CUT_RIBBON, "ribbon_cut" -> "ribbon";
             case TobaccoCuringHelper.CUT_SHAG, "shag_cut" -> "shag";
             case TobaccoCuringHelper.CUT_ROUGH, "rough_cut" -> "rough";
+            case TobaccoCuringHelper.CUT_PLUG, "pressed_plug" -> "plug";
             case TobaccoCuringHelper.CUT_FLAKE, "flake_cut" -> "flake";
             default -> "uncut";
         };
@@ -114,7 +122,10 @@ public final class TobaccoText {
 
     public static MutableComponent barrelMode(TobaccoBarrelMode mode) {
         String id = switch (mode) {
+            case PRESSING -> "pressing";
             case FERMENTING -> "fermenting";
+            case PRESSURE_FERMENTING -> "pressure_fermenting";
+            case STOVING -> "stoving";
             case AGING -> "aging";
             default -> "idle";
         };

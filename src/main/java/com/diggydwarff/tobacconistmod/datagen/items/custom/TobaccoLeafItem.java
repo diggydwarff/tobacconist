@@ -6,6 +6,7 @@ import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelBlockEntity;
 import com.diggydwarff.tobacconistmod.block.custom.HangingTobaccoBlock;
 import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
+import com.diggydwarff.tobacconistmod.util.TobaccoSpecialProcessingHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoText;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
@@ -125,7 +126,8 @@ public class TobaccoLeafItem extends Item {
             }
         }
 
-        if (TobaccoBarrelBlockEntity.isFermented(stack)) {
+        if (TobaccoBarrelBlockEntity.isFermented(stack)
+                && !TobaccoSpecialProcessingHelper.isNamedFermentationCure(stack)) {
             tooltip.add(Component.translatable("tobacconistmod.ui.fermented").withStyle(ChatFormatting.GOLD));
         }
 

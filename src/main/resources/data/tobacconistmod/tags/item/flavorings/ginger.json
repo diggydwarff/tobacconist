@@ -1,0 +1,29 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#c:crops/ginger",
+      "required": false
+    },
+    {
+      "id": "#c:spices/ginger",
+      "required": false
+    },
+    {
+      "id": "#c:foods/ginger",
+      "required": false
+    },
+    {
+      "id": "#c:ginger",
+      "required": false
+    },
+    {
+      "id": "#forge:crops/ginger",
+      "required": false
+    },
+    {
+      "id": "croptopia:ginger",
+      "required": false
+    }
+  ]
+}

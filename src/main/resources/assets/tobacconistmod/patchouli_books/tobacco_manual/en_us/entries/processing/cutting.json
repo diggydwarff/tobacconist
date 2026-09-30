@@ -10,7 +10,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Relative to the $(item)leaf$():$(br2)$(thing)Chaveta above$() → Shag Cut$(br)$(thing)Chaveta left$() → Ribbon Cut$(br)$(thing)Chaveta right$() → Rough Cut$(br)$(thing)Chaveta below$() → Flake Cut$(br2)Diagonal placement does not work.",
+      "text": "Relative to the $(item)leaf$():$(br2)$(thing)Chaveta above$() → Shag Cut$(br)$(thing)Chaveta left$() → Ribbon Cut$(br)$(thing)Chaveta right$() → Rough Cut$(br2)$(thing)Flake$() is a two-step preparation: first compress Rough Cut tobacco into a $(thing)Pressed Plug$(). In vanilla, seal Rough tobacco in a Tobacco Barrel, place a downward-facing Piston two blocks above it, and power the piston so its extended head presses onto the barrel. With Create, use a Mechanical Press. Then slice the Plug with a Chaveta placed below it in the crafting grid, or use a Deployer holding a Chaveta.$(br2)Diagonal placement does not work.",
       "title": "Cut Layout"
     },
     {

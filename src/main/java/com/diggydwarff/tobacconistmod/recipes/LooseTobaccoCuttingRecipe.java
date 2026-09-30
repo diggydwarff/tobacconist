@@ -35,7 +35,9 @@ public class LooseTobaccoCuttingRecipe extends CustomRecipe {
 
             nonEmpty++;
 
-            if (TobaccoCuringHelper.isDryTobaccoLeaf(stack)) {
+            if (TobaccoCuringHelper.isDryTobaccoLeaf(stack)
+                    || (TobaccoCuringHelper.isLooseTobacco(stack)
+                    && TobaccoCuringHelper.CUT_PLUG.equals(TobaccoCuringHelper.getCutType(stack)))) {
                 if (leafSlot != -1) return ItemStack.EMPTY;
                 leafSlot = i;
             } else if (TobaccoCuringHelper.isChaveta(stack)) {
@@ -59,6 +61,17 @@ public class LooseTobaccoCuttingRecipe extends CustomRecipe {
         int dx = chavetaX - leafX;
         int dy = chavetaY - leafY;
 
+        ItemStack leaf = container.getItem(leafSlot);
+        if (TobaccoCuringHelper.isLooseTobacco(leaf)) {
+            // A Plug has one intentional hand-cut route: slice it into Flake. It must not be
+            // reversible back into Rough/Ribbon/Shag merely by moving the Chaveta around.
+            if (dx != 0 || dy != 1
+                    || !TobaccoCuringHelper.CUT_PLUG.equals(TobaccoCuringHelper.getCutType(leaf))) {
+                return ItemStack.EMPTY;
+            }
+            return TobaccoProcessingHelper.recutLooseTobacco(leaf, TobaccoCuringHelper.CUT_FLAKE);
+        }
+
         String cutType;
         if (dx == -1 && dy == 0) {
             cutType = TobaccoCuringHelper.CUT_RIBBON;
@@ -66,13 +79,10 @@ public class LooseTobaccoCuttingRecipe extends CustomRecipe {
             cutType = TobaccoCuringHelper.CUT_ROUGH;
         } else if (dx == 0 && dy == -1) {
             cutType = TobaccoCuringHelper.CUT_SHAG;
-        } else if (dx == 0 && dy == 1) {
-            cutType = TobaccoCuringHelper.CUT_FLAKE;
         } else {
             return ItemStack.EMPTY;
         }
 
-        ItemStack leaf = container.getItem(leafSlot);
         return TobaccoProcessingHelper.cutDryLeaf(leaf, cutType, 3);
     }
 

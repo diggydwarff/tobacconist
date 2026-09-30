@@ -153,11 +153,27 @@ public class TobaccoDryingRackBlock extends BaseEntityBlock {
             return;
         }
 
-        // Continue the campfire plume above the rack's top rail.
+        // Continue the campfire plume above the rack's top rail. Soul fire keeps the normal
+        // tobacco smoke but occasionally leaks a blue wisp so Haunted curing is discoverable.
         double x = pos.getX() + 0.5D + (random.nextDouble() - 0.5D) * 0.24D;
         double y = pos.getY() + 1.04D;
         double z = pos.getZ() + 0.5D + (random.nextDouble() - 0.5D) * 0.24D;
         level.addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, x, y, z, 0.0D, 0.07D, 0.0D);
+
+        BlockState heatSource = level.getBlockState(pos.below());
+        if (heatSource.is(Blocks.SOUL_CAMPFIRE)
+                && heatSource.hasProperty(BlockStateProperties.LIT)
+                && heatSource.getValue(BlockStateProperties.LIT)) {
+            if (random.nextFloat() < 0.42F) {
+                level.addParticle(ParticleTypes.SOUL, x, y + 0.03D, z,
+                        (random.nextDouble() - 0.5D) * 0.012D,
+                        0.025D + random.nextDouble() * 0.02D,
+                        (random.nextDouble() - 0.5D) * 0.012D);
+            }
+            if (random.nextFloat() < 0.10F) {
+                level.addParticle(ParticleTypes.SOUL_FIRE_FLAME, x, y, z, 0.0D, 0.015D, 0.0D);
+            }
+        }
     }
 
     @Override

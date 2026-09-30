@@ -1,0 +1,34 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "create"
+    },
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "tobacconistmod:flavorings/nutmeg"
+      }
+    }
+  ],
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "type": "neoforge:single",
+      "amount": 250,
+      "fluid": "tobacconistmod:molasses_plain"
+    },
+    {
+      "type": "neoforge:single",
+      "amount": 250,
+      "fluid": "tobacconistmod:essence_nutmeg"
+    }
+  ],
+  "results": [
+    {
+      "amount": 250,
+      "id": "tobacconistmod:molasses_nutmeg"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#c:foods/maple_syrup",
+      "required": false
+    },
+    {
+      "id": "#c:drinks/maple_syrup",
+      "required": false
+    },
+    {
+      "id": "#c:maple_syrup",
+      "required": false
+    },
+    {
+      "id": "#forge:maple_syrup",
+      "required": false
+    },
+    {
+      "id": "autumnity:syrup_bottle",
+      "required": false
+    }
+  ]
+}

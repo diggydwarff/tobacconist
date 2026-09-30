@@ -1,0 +1,51 @@
+{
+  "name": "Specialty Processing",
+  "icon": "tobacconistmod:tobacco_barrel",
+  "category": "tobacconistmod:barrel",
+  "sortnum": 4,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The Tobacco Barrel supports Pressed Plug and several traditional tobacco preparations in addition to ordinary fermentation and aging. Specialty results reuse the normal $(thing)Cure$() field, so the finished item simply reads Perique, Cavendish, Black Cavendish, or Stoved Virginia."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Pressed Plug",
+      "text": "Put $(item)Rough Cut$() tobacco in a barrel. Place a downward-facing $(item)Piston$() two blocks above the barrel, then power it so the extended piston head presses directly onto the barrel. The barrel enters $(thing)Pressing$() mode; no warmth, humidity, fermentation, or aging is required. After $(item)12,000 ticks$(), the batch becomes $(thing)Pressed Plug$() while preserving its existing tobacco data. With Create, a running Mechanical Press supplies the same pressure. Plug is the required intermediate for Flake and Cavendish."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Perique",
+      "text": "An intact $(item)Air-Cured Burley$() batch can undergo pressure fermentation. Keep the barrel warm and humid enough to ferment, then hold it under an extended downward-facing Piston or a running Create Mechanical Press. The barrel displays $(thing)Pressure Fermenting$() while both fermentation and pressure are active. After the normal fermentation cycle, the Cure becomes $(thing)Perique$()."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Cavendish",
+      "text": "Start with a $(item)Pressed Plug$(). Pressing the Plug by itself does not ferment it. To make Cavendish, the barrel must then be warm and humid, under pressure, and near a lit $(item)Flue Firebox$(). This separate stage displays $(thing)Pressure Fermenting$(). With Create, a heated Blaze Burner can provide the stoving heat and a running Mechanical Press can provide pressure. The completed cycle becomes $(thing)Cavendish$()."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Black Cavendish",
+      "text": "Cavendish can be processed through a second heated pressure-fermentation cycle under the same stoving conditions. Completing that deliberate second cycle changes the Cure to $(thing)Black Cavendish$()."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Stoved Virginia",
+      "text": "Place $(item)Flue-Cured Virginia$() in a Tobacco Barrel near a lit Flue Firebox. A long low-heat stoving cycle of $(item)36,000 ticks$() produces $(thing)Stoved Virginia$(). Pressed Plug is reserved for the Cavendish route. A heated Create Blaze Burner can provide the same stoving heat."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Testing",
+      "text": "For development/QA, look directly at a barrel containing valid Rough Cut tobacco and use $(item)/tobacconist barrel press$() to finish the Pressed Plug stage instantly. This command does not make intact cured leaf into Plug."
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "tobacconistmod:barrel/fermentation",
+        "tobacconistmod:processing/cutting",
+        "tobacconistmod:curing/traditional_cures"
+      ],
+      "title": "Related Chapters"
+    }
+  ]
+}
