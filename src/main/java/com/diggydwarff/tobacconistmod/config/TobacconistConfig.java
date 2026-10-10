@@ -3,11 +3,13 @@ package com.diggydwarff.tobacconistmod.config;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import com.diggydwarff.tobacconistmod.util.TobaccoAromaticHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoBlendComponent;
+import com.diggydwarff.tobacconistmod.util.TobaccoSmokeData;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Predicate;
 
 public class TobacconistConfig {
 
@@ -175,6 +177,8 @@ public class TobacconistConfig {
             "Dragon's Hoard=dokha+oriental+wild"
     );
 
+    public static final List<String> DEFAULT_EFFECT_RULES = List.of();
+
     public static final Client CLIENT;
     public static final ModConfigSpec CLIENT_SPEC;
 
@@ -255,6 +259,16 @@ public class TobacconistConfig {
             if (definition != null) definitions.add(definition);
         }
         return List.copyOf(definitions);
+    }
+
+    /** Returns all valid configured smoking effect rules in config order. */
+    public static List<SmokeEffectRule> getEffectRules() {
+        List<SmokeEffectRule> rules = new ArrayList<>();
+        for (String entry : SERVER.effectRules.get()) {
+            SmokeEffectRule rule = parseEffectRule(entry);
+            if (rule != null) rules.add(rule);
+        }
+        return List.copyOf(rules);
     }
 
     /** Case-insensitive lookup used by the admin spawn command. */
@@ -458,6 +472,99 @@ public class TobacconistConfig {
         return new SecretBlendDefinition(name, List.copyOf(requirements));
     }
 
+    private static SmokeEffectRule parseEffectRule(String entry) {
+        if (entry == null) return null;
+        int arrow = entry.indexOf("->");
+        if (arrow < 0 || arrow >= entry.length() - 2) return null;
+
+        List<Predicate<TobaccoSmokeData>> conditions = new ArrayList<>();
+        for (String rawCondition : entry.substring(0, arrow).split("\\|")) {
+            String trimmed = rawCondition.trim();
+            if (trimmed.isEmpty()) continue;
+            Predicate<TobaccoSmokeData> condition = parseCondition(trimmed);
+            if (condition == null) return null;   // one bad condition invalidates the rule
+            conditions.add(condition);
+        }
+
+        List<ConfiguredSmokingEffect> effects = new ArrayList<>();
+        for (String token : entry.substring(arrow + 2).split(";")) {
+            String trimmed = token.trim();
+            if (trimmed.isEmpty()) continue;
+            String[] parts = trimmed.split(",");
+            if (parts.length < 3) continue;
+            try {
+                effects.add(new ConfiguredSmokingEffect(parts[0].trim(),
+                        Integer.parseInt(parts[1].trim()), Integer.parseInt(parts[2].trim())));
+            } catch (NumberFormatException ignored) {
+                // ignore malformed effect entry parts
+            }
+        }
+
+        return effects.isEmpty() ? null : new SmokeEffectRule(List.copyOf(conditions), List.copyOf(effects));
+    }
+    
+    private static Predicate<TobaccoSmokeData> parseCondition(String condition) {
+        int equals = condition.indexOf('=');
+        if (equals <= 0 || equals >= condition.length() - 1) return null;
+
+        String key = condition.substring(0, equals).trim();
+        String value = condition.substring(equals + 1).trim().toLowerCase(Locale.ROOT);
+        if (key.isEmpty() || value.isEmpty()) return null;
+
+        switch (key) {
+            case "filler" -> {
+                return data -> data.filler().contains(value);
+            }
+            case "wrapper" -> {
+                return data -> data.wrapper().contains(value);
+            }
+            case "blend" -> {
+                return data -> data.blendName().equals(value);
+            }
+            case "blended" -> {
+                Boolean expected = parseConditionBoolean(value);
+                return expected == null ? null : data -> data.blended() == expected;
+            }
+            case "fermented" -> {
+                Boolean expected = parseConditionBoolean(value);
+                return expected == null ? null : data -> data.fermented() == expected;
+            }
+            case "minQuality" -> {
+                Integer min = parseConditionInt(value);
+                return min == null ? null : data -> data.quality() >= min;
+            }
+            case "maxQuality" -> {
+                Integer max = parseConditionInt(value);
+                return max == null ? null : data -> data.quality() <= max;
+            }
+            case "minAgedDays" -> {
+                Integer min = parseConditionInt(value);
+                return min == null ? null : data -> data.agedDays() >= min;
+            }
+            case "maxAgedDays" -> {
+                Integer max = parseConditionInt(value);
+                return max == null ? null : data -> data.agedDays() <= max;
+            }
+            default -> {
+                return null;
+            }
+        }
+    }
+
+    private static Integer parseConditionInt(String value) {
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException ignored) {
+            return null;
+        }
+    }
+
+    private static Boolean parseConditionBoolean(String value) {
+        if (value.equals("true")) return true;
+        if (value.equals("false")) return false;
+        return null;
+    }
+
     private static SecretBlendRequirement parseRequirement(String raw) {
         if (raw == null || raw.isBlank()) return null;
         String[] fields = raw.trim().split("\\|", -1);
@@ -505,6 +612,19 @@ public class TobacconistConfig {
             String name,
             List<SecretBlendRequirement> requirements
     ) {}
+
+    public record SmokeEffectRule(
+            List<Predicate<TobaccoSmokeData>> conditions,
+            List<ConfiguredSmokingEffect> effects
+    ) {
+        /** A rule without conditions matches every smoke. */
+        public boolean matches(TobaccoSmokeData data) {
+            for (Predicate<TobaccoSmokeData> condition : conditions) {
+                if (!condition.test(data)) return false;
+            }
+            return true;
+        }
+    }
 
     public record SecretBlendVisualDefinition(
             int colorRgb,
@@ -564,6 +684,7 @@ public class TobacconistConfig {
         public final ModConfigSpec.ConfigValue<List<? extends String>> secretBlends;
         public final ModConfigSpec.ConfigValue<List<? extends String>> secretBlendVisuals;
         public final ModConfigSpec.ConfigValue<List<? extends String>> secretBlendBonuses;
+        public final ModConfigSpec.ConfigValue<List<? extends String>> effectRules;
 
         public Server(ModConfigSpec.Builder builder) {
             builder.push("gameplay");
@@ -623,6 +744,24 @@ public class TobacconistConfig {
                     .defineListAllowEmpty(
                             List.of("secretBlendBonuses"),
                             DEFAULT_SECRET_BLEND_BONUSES,
+                            obj -> obj instanceof String
+                    );
+            builder.pop();
+
+            builder.push("smoking_effects");
+            effectRules = builder
+                    .comment("Conditional effects applied on every puff, based on the tobacco being smoked.")
+                    .comment("Format: condition|condition -> effect_id,duration,amplifier;effect_id,duration,amplifier")
+                    .comment("Every matching rule is applied. A rule without conditions matches every smoke.")
+                    .comment("Conditions: filler, wrapper, blend, blended, fermented, minQuality, maxQuality, minAgedDays, maxAgedDays.")
+                    .comment("filler/wrapper match when the tobacco name contains the text; for blends, any component variety counts.")
+                    .comment("blend matches a secret blend name from the blending section; blended=true matches any blend.")
+                    .comment("Quality is 0-120, duration is in ticks (20 = 1 second), amplifier 0 = level I.")
+                    .comment("Example: filler=burley|minQuality=90|fermented=true -> minecraft:speed,400,0;minecraft:haste,200,0")
+                    .comment("Example: blend=Black Orchard|minAgedDays=90 -> minecraft:night_vision,600,0")
+                    .defineListAllowEmpty(
+                            List.of("effectRules"),
+                            DEFAULT_EFFECT_RULES,
                             obj -> obj instanceof String
                     );
             builder.pop();
