@@ -3,23 +3,23 @@ package com.diggydwarff.tobacconistmod.datagen.items;
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelBlockEntity;
 import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
 import com.diggydwarff.tobacconistmod.effect.ModEffects;
-import com.diggydwarff.tobacconistmod.util.SmokeParticleHelper;
-import com.diggydwarff.tobacconistmod.util.TobaccoBlendHelper;
-import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
-import com.diggydwarff.tobacconistmod.util.TobaccoProductQualityHelper;
-import com.diggydwarff.tobacconistmod.util.TobaccoSpecialProcessingHelper;
+import com.diggydwarff.tobacconistmod.util.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.List;
 
 public abstract class SmokingItem extends Item {
 
@@ -135,6 +135,7 @@ public abstract class SmokingItem extends Item {
         applyQualityHealthBonus(player, tobaccoStack);
         applySecretBlendLegendaryBonus(player, tobaccoStack);
         applyConfiguredAdditionalEffects(player);
+        applyConfiguredRuleEffects(player, tobaccoStack);
     }
 
     private static void applySecretBlendLegendaryBonus(Player player, ItemStack tobaccoStack) {
@@ -244,5 +245,40 @@ public abstract class SmokingItem extends Item {
                 false,
                 true
         ));
+    }
+
+    private static void applyConfiguredRuleEffects(Player player, ItemStack tobaccoStack) {
+        if (player == null || tobaccoStack == null || tobaccoStack.isEmpty()) return;
+
+        List<TobacconistConfig.SmokeEffectRule> rules = TobacconistConfig.getEffectRules();
+        if (rules.isEmpty()) return;
+
+        TobaccoSmokeData data = TobaccoSmokeData.from(tobaccoStack);
+        if (data == null) return;
+
+        for (TobacconistConfig.SmokeEffectRule rule : rules) {
+            if (!rule.matches(data)) continue;
+
+            for (TobacconistConfig.ConfiguredSmokingEffect configured : rule.effects()) {
+                try {
+                    ResourceLocation id = ResourceLocation.tryParse(configured.effectId());
+                    if (id == null) continue;
+
+                    MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(id);
+                    if (effect == null) continue;
+
+                    player.addEffect(new MobEffectInstance(
+                            effect,
+                            configured.duration(),
+                            configured.amplifier(),
+                            false,
+                            false,
+                            true
+                    ));
+                } catch (Exception ignored) {
+                    // ignore malformed effect rule entries
+                }
+            }
+        }
     }
 }
