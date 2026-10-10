@@ -1,0 +1,38 @@
+{
+  "parent": "tobacconistmod:tobacconist/root",
+  "display": {
+    "icon": {
+      "item": "tobacconistmod:tobacconists_spectacles"
+    },
+    "title": {
+      "translate": "advancement.tobacconistmod.tobacconists_eye"
+    },
+    "description": {
+      "translate": "advancement.tobacconistmod.tobacconists_eye.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "obtain": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "tobacconistmod:tobacconists_spectacles"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "obtain"
+    ]
+  ],
+  "sends_telemetry_event": false
+}
