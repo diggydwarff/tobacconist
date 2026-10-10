@@ -32,7 +32,7 @@ public final class MolassesBottleFluidHandler implements IFluidHandlerItem {
 
     @Override
     public FluidStack getFluidInTank(int tank) {
-        return tank == 0 && !container.isEmpty()
+        return tank == 0 && isFullBottle(container)
                 ? new FluidStack(ModMolassesFluids.source(flavor), CAPACITY)
                 : FluidStack.EMPTY;
     }
@@ -58,7 +58,7 @@ public final class MolassesBottleFluidHandler implements IFluidHandlerItem {
 
     @Override
     public FluidStack drain(int maxDrain, IFluidHandler.FluidAction action) {
-        if (container.isEmpty() || maxDrain < CAPACITY) return FluidStack.EMPTY;
+        if (!isFullBottle(container) || maxDrain < CAPACITY) return FluidStack.EMPTY;
         if (action.execute()) container = new ItemStack(Items.GLASS_BOTTLE);
         return new FluidStack(ModMolassesFluids.source(flavor), CAPACITY);
     }
