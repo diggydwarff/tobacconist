@@ -25,7 +25,7 @@ public record TobaccoSmokeData(
         if (stack == null || stack.isEmpty()) return null;
 
         CompoundTag tag = LegacyItemTags.getTag(stack);
-        if (tag == null) return null;
+        if (tag == null) tag = new CompoundTag();
 
         List<String> varieties = blendVarieties(stack);
         String filler = varieties.isEmpty() ? fillerName(stack, tag) : String.join(" ", varieties);
