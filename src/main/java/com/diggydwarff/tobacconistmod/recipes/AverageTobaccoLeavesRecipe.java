@@ -164,7 +164,7 @@ public class AverageTobaccoLeavesRecipe extends CustomRecipe {
                 mode == Mode.RAW_LEAF
         );
 
-        ItemStack result = new ItemStack(first.getItem(), usedItems);
+        ItemStack result = first.copyWithCount(usedItems);
 
         if (mode == Mode.RAW_LEAF) {
             TobaccoGrowthHelper.applyGrowthQuality(result, avgQuality);

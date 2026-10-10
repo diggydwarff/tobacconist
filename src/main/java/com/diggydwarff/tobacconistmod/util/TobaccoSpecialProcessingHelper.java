@@ -37,6 +37,30 @@ public final class TobaccoSpecialProcessingHelper {
         };
     }
 
+    /** Secondary smoke starts with the finished base cure, never with green leaf. */
+    public static int getSmokeFinishVisualStage(ItemStack stack, String targetCure, int progressPercent) {
+        String cure = TobaccoCuringHelper.getCureType(stack);
+        if (TobaccoCuringHelper.CURE_LATAKIA.equals(cure)
+                || TobaccoCuringHelper.CURE_DARK_FIRED_KENTUCKY.equals(cure)) {
+            return 10;
+        }
+        if (!targetCure.isEmpty()) {
+            return 5 + Math.min(4, Math.max(0, progressPercent) / 20);
+        }
+        return 5;
+    }
+
+    /** Warm smoke darkening applied only to leaf faces over their existing brown texture. */
+    public static int getSmokeFinishTint(int cureStage, int variety) {
+        int stage = Math.min(5, Math.max(0, cureStage - 5));
+        // Latakia is darker than Dark Fired Kentucky; botanical texture detail stays visible.
+        int target = variety == 3 ? 0x604E40 : 0x8C6E5A;
+        int red = 255 - (255 - ((target >> 16) & 0xFF)) * stage / 5;
+        int green = 255 - (255 - ((target >> 8) & 0xFF)) * stage / 5;
+        int blue = 255 - (255 - (target & 0xFF)) * stage / 5;
+        return 0xFF000000 | (red << 16) | (green << 8) | blue;
+    }
+
     public static void applyNamedCure(ItemStack stack, String targetCure) {
         if (stack.isEmpty() || targetCure == null || targetCure.isBlank()) return;
         TobaccoCuringHelper.applyCureData(stack, targetCure, TobaccoCuringHelper.getQuality(stack));

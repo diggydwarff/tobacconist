@@ -81,7 +81,7 @@ public abstract class HarvesterMovementBehaviourMixin {
             MovementBehaviour behaviour = (MovementBehaviour) (Object) this;
             for (ItemStack drop : drops) {
                 if (!drop.isEmpty()) {
-                    behaviour.collectOrDropItem(context, drop);
+                    behaviour.dropItem(context, drop);
                 }
             }
         }

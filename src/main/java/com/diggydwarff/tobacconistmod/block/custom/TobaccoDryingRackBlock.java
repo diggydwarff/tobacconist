@@ -48,8 +48,8 @@ public class TobaccoDryingRackBlock extends BaseEntityBlock {
      * 0 = empty, 1 = lightly loaded, 2 = mostly loaded, 3 = completely full.
      */
     public static final IntegerProperty LOAD_STAGE = IntegerProperty.create("load_stage", 0, 3);
-    /** Visual cure-color stage: 0 = raw green through 5 = fully cured brown. */
-    public static final IntegerProperty CURE_STAGE = IntegerProperty.create("cure_stage", 0, 5);
+    /** 0-5: green to cured brown; 6-10: secondary smoke darkening. */
+    public static final IntegerProperty CURE_STAGE = IntegerProperty.create("cure_stage", 0, 10);
     /** Tobacco variety tint, matching hanging bunches: 0 wild, 1 Virginia, 2 Burley, 3 Oriental, 4 Dokha, 5 Shade. */
     public static final IntegerProperty VARIETY = IntegerProperty.create("variety", 0, 5);
 
