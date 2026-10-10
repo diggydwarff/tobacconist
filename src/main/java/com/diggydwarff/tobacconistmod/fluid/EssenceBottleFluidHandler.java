@@ -21,7 +21,7 @@ public final class EssenceBottleFluidHandler implements IFluidHandlerItem {
     }
 
     public static int amountIn(ItemStack stack) {
-        return stack.isEmpty() ? 0 : CAPACITY;
+        return stack.isEmpty() || BottledMolassesFlavors.fromEssenceItem(stack.getItem()) == null ? 0 : CAPACITY;
     }
 
     public static boolean hasDose(ItemStack stack) { return amountIn(stack) >= DOSE; }

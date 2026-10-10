@@ -154,6 +154,7 @@ public abstract class AbstractTallTobaccoCropBlock extends CropBlock {
         if (nextAge > FIRST_STAGE_MAX_AGE) {
             BlockPos lowerPos = state.getValue(HALF) == DoubleBlockHalf.UPPER ? pos.below() : pos;
             BlockPos upperPos = lowerPos.above();
+            if (!canGrowUpperHalf(level, upperPos)) return;
 
             level.setBlock(lowerPos, lower(FIRST_STAGE_MAX_AGE), 2);
             level.setBlock(upperPos, upper(nextAge), 2);
@@ -271,11 +272,19 @@ public abstract class AbstractTallTobaccoCropBlock extends CropBlock {
         if (nextAge > FIRST_STAGE_MAX_AGE) {
             BlockPos lowerPos = pos;
             BlockPos upperPos = pos.above();
+            if (!canGrowUpperHalf(level, upperPos)) return;
             level.setBlock(lowerPos, lower(FIRST_STAGE_MAX_AGE), 2);
             level.setBlock(upperPos, upper(nextAge), 2);
         } else {
             level.setBlock(pos, lower(nextAge), 2);
         }
+    }
+
+    private boolean canGrowUpperHalf(LevelReader level, BlockPos upperPos) {
+        if (level.isOutsideBuildHeight(upperPos)) return false;
+        BlockState above = level.getBlockState(upperPos);
+        return above.isAir()
+                || (above.is(this) && above.getValue(HALF) == DoubleBlockHalf.UPPER);
     }
 
     @Override
