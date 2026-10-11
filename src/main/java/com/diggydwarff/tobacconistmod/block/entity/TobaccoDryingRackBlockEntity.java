@@ -160,7 +160,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             return false;
         }
 
-        if (isFinished()) {
+        // Eligible base-cured leaves may still be loaded together before smoke finishing starts.
+        if (isFinished() && TobaccoSpecialProcessingHelper.getRackSmokeFinishTarget(storedLeaf).isEmpty()) {
             return false;
         }
 
@@ -201,7 +202,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             fireTicks = 0;
             flueTicks = 0;
             hauntedTicks = 0;
-            specialFinishTarget = TobaccoSpecialProcessingHelper.getRackSmokeFinishTarget(storedLeaf);
+            specialFinishTarget = "";
         } else {
             storedLeaf.grow(1);
         }
@@ -279,7 +280,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         boolean sameBatch = !stack.isEmpty() && ItemStack.isSameItemSameComponents(storedLeaf, stack);
         if (!sameBatch) clearRack();
         storedLeaf = stack.copy();
-        if (!sameBatch) specialFinishTarget = TobaccoSpecialProcessingHelper.getRackSmokeFinishTarget(storedLeaf);
+        // tryStartSmokeFinish begins an eligible secondary cure only when smoke is present.
 
         if (storedLeaf.getCount() > getMaxLeaves()) {
             storedLeaf.setCount(getMaxLeaves());
@@ -551,8 +552,14 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         CreateCompat.FanCuringAssist fanAssist = getCreateFanAssist();
 
         if (!specialFinishTarget.isEmpty()) {
-            return Component.translatable("tobacconistmod.cure_method.special_smoke_finish",
+            MutableComponent method = Component.translatable("tobacconistmod.cure_method.special_smoke_finish",
                     TobaccoText.cure(specialFinishTarget));
+            boolean smoke = fanAssist == CreateCompat.FanCuringAssist.FIRE
+                    || (!requiresCreateAssistance() && isOverLitCampfire(level, worldPosition));
+            if (!smoke) {
+                method.append(" - ").append(Component.translatable("tobacconistmod.ui.processing_paused"));
+            }
+            return method;
         }
 
         if (requiresCreateAssistance()) {
@@ -1487,6 +1494,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         specialFinishTarget = tag.contains("SpecialFinishTarget")
                 ? tag.getString("SpecialFinishTarget")
                 : "";
+        // Discard old queued targets that never received any smoke; preserve real progress.
+        if (fireTicks <= 0) specialFinishTarget = "";
     }
 
     public List<Component> getFullDebugLines() {

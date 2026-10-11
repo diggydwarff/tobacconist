@@ -84,7 +84,7 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
         storedLeaf = source.copyWithCount(LEAF_COUNT);
         tobaccoVariety = HangingTobaccoBlock.getVarietyIndex(source);
         resetProgress();
-        specialFinishTarget = TobaccoSpecialProcessingHelper.getRackSmokeFinishTarget(storedLeaf);
+        // A completed base cure stays finished until smoke actually starts its next process.
         syncState();
         syncToClient();
     }
@@ -243,8 +243,12 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
         CreateCompat.FanCuringAssist fan = getCreateFanAssist();
 
         if (!specialFinishTarget.isEmpty()) {
-            return Component.translatable("tobacconistmod.cure_method.special_smoke_finish",
+            MutableComponent method = Component.translatable("tobacconistmod.cure_method.special_smoke_finish",
                     TobaccoText.cure(specialFinishTarget));
+            if (!isOverLitCampfire(level, worldPosition) && fan != CreateCompat.FanCuringAssist.FIRE) {
+                method.append(" - ").append(Component.translatable("tobacconistmod.ui.processing_paused"));
+            }
+            return method;
         }
         if (isHauntedPriority(fan)) {
             return Component.translatable(fan == CreateCompat.FanCuringAssist.HAUNTED
@@ -814,6 +818,9 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
         specialFinishTarget = tag.contains("SpecialFinishTarget")
                 ? tag.getString("SpecialFinishTarget")
                 : "";
+        // Earlier placement code queued a finish before any smoke reached the batch.
+        // Keep those zero-progress saves as their completed base cure.
+        if (fireTicks <= 0) specialFinishTarget = "";
         tobaccoVariety = tag.contains("TobaccoVariety")
                 ? tag.getInt("TobaccoVariety")
                 : HangingTobaccoBlock.getVarietyIndex(storedLeaf);

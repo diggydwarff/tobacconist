@@ -145,12 +145,40 @@ public class TobaccoBoxHelper {
     }
 
     public static boolean canAccept(ItemStack box, ItemStack incoming) {
-        if (!isSupportedContent(incoming)) return false;
+        if (incoming.isEmpty() || !isSupportedContent(incoming)) return false;
 
-        if (!hasStoredItem(box)) return true;
+        String boxLabel = getLabel(box);
+        String incomingLabel = TobaccoLabelHelper.getProductLabel(incoming);
+        if (!boxLabel.isEmpty() && !incomingLabel.isEmpty() && !boxLabel.equals(incomingLabel)) {
+            return false;
+        }
 
         ItemStack stored = getStoredItem(box);
-        return sameContent(stored, incoming);
+        if (!stored.isEmpty() && !sameContent(stored, incoming)) return false;
+        ItemStack content = stored.isEmpty() ? incoming : stored;
+        return getStoredCount(box) < getCapacity(content);
+    }
+
+    /**
+     * Pack up to the requested number without consuming the source stack. Validate every
+     * condition before changing the box, including the label retained by an empty box.
+     * Manual clicks, crafting and deployers share this policy.
+     */
+    public static int insert(ItemStack box, ItemStack incoming, int requested) {
+        if (requested <= 0 || !canAccept(box, incoming)) return 0;
+
+        ItemStack stored = getStoredItem(box);
+        ItemStack content = stored.isEmpty() ? incoming : stored;
+        int count = getStoredCount(box);
+        int moved = Math.min(Math.min(requested, incoming.getCount()), getCapacity(content) - count);
+        if (moved <= 0) return 0;
+
+        String incomingLabel = TobaccoLabelHelper.getProductLabel(incoming);
+        setStored(box, content, count + moved);
+        if (getLabel(box).isEmpty() && !incomingLabel.isEmpty()) {
+            setLabel(box, incomingLabel);
+        }
+        return moved;
     }
 
     public static boolean sameContent(ItemStack a, ItemStack b) {

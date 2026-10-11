@@ -73,8 +73,7 @@ public class ProductionMonitorBlock extends BaseEntityBlock {
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
                                               Player player, InteractionHand hand, BlockHitResult hit) {
-        if (hand == InteractionHand.MAIN_HAND && isExternalFilterSlotHit(state, pos, hit) && !isCreateWrench(stack)) {
-            setExternalFilter(level, pos, stack);
+        if (trySetExternalFilter(state, level, pos, stack, hand, hit)) {
             return ItemInteractionResult.sidedSuccess(level.isClientSide);
         }
 
@@ -87,11 +86,21 @@ public class ProductionMonitorBlock extends BaseEntityBlock {
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos,
                                                Player player, BlockHitResult hit) {
-        if (isExternalFilterSlotHit(state, pos, hit)) {
-            setExternalFilter(level, pos, ItemStack.EMPTY);
+        if (trySetExternalFilter(state, level, pos, ItemStack.EMPTY, InteractionHand.MAIN_HAND, hit)) {
             return InteractionResult.sidedSuccess(level.isClientSide);
         }
         return openMenu(level, pos, player);
+    }
+
+    /** Shared by normal block use and the early click event, which also reaches sneak-clicks. */
+    public boolean trySetExternalFilter(BlockState state, Level level, BlockPos pos, ItemStack stack,
+                                        InteractionHand hand, BlockHitResult hit) {
+        if (hand != InteractionHand.MAIN_HAND || !isExternalFilterSlotHit(state, pos, hit)
+                || isCreateWrench(stack)) {
+            return false;
+        }
+        setExternalFilter(level, pos, stack);
+        return true;
     }
 
     /**
