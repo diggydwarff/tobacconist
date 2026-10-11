@@ -67,7 +67,7 @@ final class DryingRackItemHandler implements IItemHandler {
 
     @Override
     public ItemStack extractItem(int slot, int amount, boolean simulate) {
-        if (slot != 0 || amount <= 0 || !canExtractFromSide() || !rack.isFinished()) {
+        if (slot != 0 || amount <= 0 || !canExtractFromSide() || !rack.canExtractFinishedBatch()) {
             return ItemStack.EMPTY;
         }
 
