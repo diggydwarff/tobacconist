@@ -73,6 +73,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
     private int flueTicks = 0;
     private int hauntedTicks = 0;
     private String specialFinishTarget = "";
+    // A primary cure completed under smoke is output, not an implicit secondary input.
+    private boolean smokeFinishNeedsFreshSource = false;
 
     // Runtime-only Create environment cache. There is no need to persist this; the fan resolver
     // re-evaluates the actual airflow after load and whenever the short cache expires.
@@ -161,7 +163,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         }
 
         // Eligible base-cured leaves may still be loaded together before smoke finishing starts.
-        if (isFinished() && TobaccoSpecialProcessingHelper.getRackSmokeFinishTarget(storedLeaf).isEmpty()) {
+        if (isFinished() && (smokeFinishNeedsFreshSource
+                || TobaccoSpecialProcessingHelper.getRackSmokeFinishTarget(storedLeaf).isEmpty())) {
             return false;
         }
 
@@ -203,6 +206,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             flueTicks = 0;
             hauntedTicks = 0;
             specialFinishTarget = "";
+            smokeFinishNeedsFreshSource = false;
         } else {
             storedLeaf.grow(1);
         }
@@ -237,7 +241,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
     public ItemStack removeItem(int slot, int amount) {
         TobaccoDryingRackBlockEntity master = getMasterRack();
         if (master != this) return master.removeItem(slot, amount);
-        if (slot != 0 || amount <= 0 || storedLeaf.isEmpty() || !isFinished()) {
+        if (slot != 0 || amount <= 0 || storedLeaf.isEmpty() || !canExtractFinishedBatch()) {
             return ItemStack.EMPTY;
         }
 
@@ -337,7 +341,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         if (slot != 0) return false;
         if (side != Direction.DOWN) return false;
 
-        return isFinished();
+        return canExtractFinishedBatch();
     }
 
     @Override
@@ -355,7 +359,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
     public void clearContent() {
         TobaccoDryingRackBlockEntity master = getMasterRack();
         if (master != this) { master.clearContent(); return; }
-        storedLeaf = ItemStack.EMPTY;
+        clearRack();
         setChanged();
         syncRackState();
         syncToClient();
@@ -673,6 +677,16 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
                 && LegacyItemTags.getTag(storedLeaf).contains(TobaccoCuringHelper.TAG_CURE_TYPE);
     }
 
+    /** Keep automation from bypassing a deliberate secondary stage between insertion and its first tick. */
+    public boolean canExtractFinishedBatch() {
+        TobaccoDryingRackBlockEntity master = getMasterRack();
+        if (master != this) return master.canExtractFinishedBatch();
+        if (!isFinished()) return false;
+        if (smokeFinishNeedsFreshSource
+                || TobaccoSpecialProcessingHelper.getRackSmokeFinishTarget(storedLeaf).isEmpty()) return true;
+        return !hasSmokeFinishSource() || isDirectRain(level, worldPosition);
+    }
+
     public ItemStack removeAllLeaves() {
         TobaccoDryingRackBlockEntity master = getMasterRack();
         if (master != this) return master.removeAllLeaves();
@@ -714,6 +728,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         flueTicks = 0;
         hauntedTicks = 0;
         specialFinishTarget = "";
+        smokeFinishNeedsFreshSource = false;
         createFanAssistRefresh = 0;
         cachedCreateFanAssist = CreateCompat.FanCuringAssist.NONE;
     }
@@ -1086,18 +1101,31 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         flueTicks = 0;
         hauntedTicks = 0;
         specialFinishTarget = "";
+        smokeFinishNeedsFreshSource = hasSmokeFinishSource();
 
         syncRackState();
         syncToClient();
     }
 
+    private boolean hasSmokeFinishSource() {
+        return level != null && (getCreateFanAssist() == CreateCompat.FanCuringAssist.FIRE
+                || (!requiresCreateAssistance() && isOverLitCampfire(level, worldPosition)));
+    }
+
     private void tryStartSmokeFinish() {
         if (level == null || !specialFinishTarget.isEmpty()) return;
         String target = TobaccoSpecialProcessingHelper.getRackSmokeFinishTarget(storedLeaf);
-        if (target.isEmpty() || isDirectRain(level, worldPosition)) return;
-        boolean smoke = getCreateFanAssist() == CreateCompat.FanCuringAssist.FIRE
-                || (!requiresCreateAssistance() && isOverLitCampfire(level, worldPosition));
-        if (!smoke) return;
+        if (target.isEmpty()) return;
+        boolean smoke = hasSmokeFinishSource();
+        if (smokeFinishNeedsFreshSource) {
+            // Rain pauses a source; it must not silently re-arm a completed primary batch.
+            if (!smoke) {
+                smokeFinishNeedsFreshSource = false;
+                setChanged();
+            }
+            return;
+        }
+        if (!smoke || isDirectRain(level, worldPosition)) return;
 
         ItemStack batch = storedLeaf;
         clearRack();
@@ -1124,6 +1152,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         flueTicks = 0;
         hauntedTicks = 0;
         specialFinishTarget = "";
+        smokeFinishNeedsFreshSource = false;
         syncRackState();
         syncToClient();
     }
@@ -1464,6 +1493,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         tag.putInt("FlueTicks", flueTicks);
         tag.putInt("HauntedTicks", hauntedTicks);
         tag.putString("SpecialFinishTarget", specialFinishTarget);
+        tag.putBoolean("SmokeFinishNeedsFreshSource", smokeFinishNeedsFreshSource);
     }
 
     @Override
@@ -1496,6 +1526,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
                 : "";
         // Discard old queued targets that never received any smoke; preserve real progress.
         if (fireTicks <= 0) specialFinishTarget = "";
+        smokeFinishNeedsFreshSource = tag.getBoolean("SmokeFinishNeedsFreshSource");
     }
 
     public List<Component> getFullDebugLines() {

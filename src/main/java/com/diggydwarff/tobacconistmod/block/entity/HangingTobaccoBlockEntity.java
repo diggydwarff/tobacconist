@@ -53,6 +53,8 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
     private int flueTicks = 0;
     private int hauntedTicks = 0;
     private String specialFinishTarget = "";
+    // A primary cure completed under smoke is output, not an implicit secondary input.
+    private boolean smokeFinishNeedsFreshSource = false;
     // Stored separately so the finished model retains the botanical variety.
     private int tobaccoVariety = 0;
 
@@ -479,13 +481,26 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
         finishCuring();
     }
 
+    private boolean hasSmokeFinishSource() {
+        return level != null && (getCreateFanAssist() == CreateCompat.FanCuringAssist.FIRE
+                || isOverLitCampfire(level, worldPosition));
+    }
+
     private void tryStartSmokeFinish() {
         if (level == null || !specialFinishTarget.isEmpty()) return;
 
         String target = TobaccoSpecialProcessingHelper.getRackSmokeFinishTarget(storedLeaf);
-        if (target.isEmpty() || isSideRainExposed(level, worldPosition)) return;
-        if (!isOverLitCampfire(level, worldPosition)
-                && getCreateFanAssist() != CreateCompat.FanCuringAssist.FIRE) return;
+        if (target.isEmpty()) return;
+        boolean smoke = hasSmokeFinishSource();
+        if (smokeFinishNeedsFreshSource) {
+            // Rain pauses a source; it must not silently re-arm a completed primary batch.
+            if (!smoke) {
+                smokeFinishNeedsFreshSource = false;
+                setChanged();
+            }
+            return;
+        }
+        if (!smoke || isSideRainExposed(level, worldPosition)) return;
 
         resetProgress();
         specialFinishTarget = target;
@@ -562,6 +577,7 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
         LegacyItemTags.getOrCreateTag(cured).remove(TobaccoCuringHelper.TAG_GROWTH_QUALITY);
         storedLeaf = cured;
         resetProgress();
+        smokeFinishNeedsFreshSource = hasSmokeFinishSource();
         syncState();
         syncToClient();
     }
@@ -601,6 +617,7 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
         flueTicks = 0;
         hauntedTicks = 0;
         specialFinishTarget = "";
+        smokeFinishNeedsFreshSource = false;
         createFanAssistRefresh = 0;
         cachedCreateFanAssist = CreateCompat.FanCuringAssist.NONE;
     }
@@ -791,6 +808,7 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
         tag.putInt("FlueTicks", flueTicks);
         tag.putInt("HauntedTicks", hauntedTicks);
         tag.putString("SpecialFinishTarget", specialFinishTarget);
+        tag.putBoolean("SmokeFinishNeedsFreshSource", smokeFinishNeedsFreshSource);
         tag.putInt("TobaccoVariety", tobaccoVariety);
     }
 
@@ -821,6 +839,7 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
         // Earlier placement code queued a finish before any smoke reached the batch.
         // Keep those zero-progress saves as their completed base cure.
         if (fireTicks <= 0) specialFinishTarget = "";
+        smokeFinishNeedsFreshSource = tag.getBoolean("SmokeFinishNeedsFreshSource");
         tobaccoVariety = tag.contains("TobaccoVariety")
                 ? tag.getInt("TobaccoVariety")
                 : HangingTobaccoBlock.getVarietyIndex(storedLeaf);

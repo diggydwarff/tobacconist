@@ -27,6 +27,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -126,6 +127,23 @@ public class ProductionMonitorBlock extends BaseEntityBlock {
         double horizontal = operatorFace.getAxis() == Direction.Axis.X ? local.z : local.x;
         return horizontal >= 0.25D && horizontal <= 0.75D
                 && local.y >= 0.25D && local.y <= 0.75D;
+    }
+
+    /** Keep the hover outline outside the solid cube so depth testing cannot hide it. */
+    public static AABB getExternalFilterSlotOutline(BlockState state) {
+        double min = 0.25D;
+        double max = 0.75D;
+        double offset = 1.0D / 128.0D;
+        double thickness = 1.0D / 512.0D;
+        double near = -offset;
+        double far = 1.0D + offset;
+        return switch (state.getValue(BlockStateProperties.HORIZONTAL_FACING).getOpposite()) {
+            case NORTH -> new AABB(min, min, near - thickness, max, max, near + thickness);
+            case SOUTH -> new AABB(min, min, far - thickness, max, max, far + thickness);
+            case WEST -> new AABB(near - thickness, min, min, near + thickness, max, max);
+            case EAST -> new AABB(far - thickness, min, min, far + thickness, max, max);
+            default -> throw new IllegalStateException("Production Monitor must face horizontally");
+        };
     }
 
     private boolean isCreateWrench(ItemStack stack) {
