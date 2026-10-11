@@ -366,7 +366,6 @@
   "tobacconistmod.ponder.tobacconist_wooden_automation_arm.text_3": "Això permet que un sol braç atengui diversos bastidors, mentre altres sistemes logístics compatibles es poden combinar a la mateixa fàbrica sense eludir les regles de curat.",
   "tobacconistmod.ponder.tobacconist_processing.header": "Tall i premsat del tabac",
   "tobacconistmod.ponder.tobacconist_processing.text_1": "Un Desplegador amb una Chaveta talla la fulla curada passant pels estadis de tall gruixut, en cinta i fi",
-  "tobacconistmod.ponder.tobacconist_processing.text_2": "La premsa mecànica converteix el tabac de tall gruixut en tall en làmina mantenint les metadades del tabac",
   "tobacconistmod.ponder.tobacconist_blending.header": "Barreja i automatització de bótes",
   "tobacconistmod.ponder.tobacconist_blending.text_1": "Un barrejador mecànic combina dos o tres tabacs solts compatibles en barreges que conserven les metadades",
   "tobacconistmod.ponder.tobacconist_blending.text_2": "Els components de la barreja i la identitat de la barreja secreta es mantenen",

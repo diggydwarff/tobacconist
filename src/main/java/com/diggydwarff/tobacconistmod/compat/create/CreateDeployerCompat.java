@@ -121,39 +121,9 @@ public final class CreateDeployerCompat {
     }
 
     private static BoxPackingResult packIntoBox(ItemStack boxInput, ItemStack incoming) {
-        ItemStack box = boxInput.copy();
-        box.setCount(1);
-
-        ItemStack normalized = incoming.copy();
-        normalized.setCount(1);
-        String incomingLabel = TobaccoLabelHelper.getProductLabel(normalized);
-        TobaccoLabelHelper.clearProductLabel(normalized);
-        TobaccoBoxHelper.clearCustomProductName(normalized);
-
-        ItemStack stored = TobaccoBoxHelper.getStoredItem(box);
-        int count = TobaccoBoxHelper.getStoredCount(box);
-
-        if (!stored.isEmpty() && !TobaccoBoxHelper.sameContent(stored, normalized)) {
-            return BoxPackingResult.EMPTY;
-        }
-
-        ItemStack capacityStack = stored.isEmpty() ? normalized : stored;
-        int remaining = TobaccoBoxHelper.getCapacity(capacityStack) - count;
-        if (remaining <= 0) return BoxPackingResult.EMPTY;
-
-        String boxLabel = TobaccoBoxHelper.getLabel(box);
-        if (!boxLabel.isEmpty() && !incomingLabel.isEmpty() && !boxLabel.equals(incomingLabel)) {
-            return BoxPackingResult.EMPTY;
-        }
-        if (boxLabel.isEmpty() && !incomingLabel.isEmpty()) {
-            TobaccoBoxHelper.setLabel(box, incomingLabel);
-        }
-
-        int transfer = Math.min(remaining, incoming.getCount());
-        if (transfer <= 0) return BoxPackingResult.EMPTY;
-
-        TobaccoBoxHelper.setStored(box, capacityStack, count + transfer);
-        return new BoxPackingResult(box, transfer);
+        ItemStack box = boxInput.copyWithCount(1);
+        int transfer = TobaccoBoxHelper.insert(box, incoming, incoming.getCount());
+        return transfer == 0 ? BoxPackingResult.EMPTY : new BoxPackingResult(box, transfer);
     }
 
     private record BoxPackingResult(ItemStack box, int consumed) {

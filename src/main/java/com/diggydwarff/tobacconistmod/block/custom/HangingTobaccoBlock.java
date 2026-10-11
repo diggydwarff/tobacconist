@@ -40,7 +40,7 @@ import java.util.Set;
 public class HangingTobaccoBlock extends BaseEntityBlock {
 
     public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
-    public static final IntegerProperty CURE_STAGE = IntegerProperty.create("cure_stage", 0, 5);
+    public static final IntegerProperty CURE_STAGE = IntegerProperty.create("cure_stage", 0, 10);
     public static final IntegerProperty VARIETY = IntegerProperty.create("variety", 0, 5);
 
     // Selection bounds follow the current two-block hanging-bundle model.

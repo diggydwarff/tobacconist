@@ -366,7 +366,6 @@
   "tobacconistmod.ponder.tobacconist_wooden_automation_arm.text_3": "因此，一個機械臂就能服務多個調製架；同一座工廠也能搭配其他物流方式，而不會跳過調製規則。",
   "tobacconistmod.ponder.tobacconist_processing.header": "切製與壓製菸草",
   "tobacconistmod.ponder.tobacconist_processing.text_1": "手持雪茄刀的機械手會依次將調製菸葉切成粗切、絲帶切和細絲切",
-  "tobacconistmod.ponder.tobacconist_processing.text_2": "機械衝壓機將粗切菸草壓成片切，同時保留菸草的品種、品質、調製方式、風味等資訊",
   "tobacconistmod.ponder.tobacconist_blending.header": "調配與菸草桶自動化",
   "tobacconistmod.ponder.tobacconist_blending.text_1": "機械攪拌器將兩種或三種可調配的散裝菸草混合成調配菸草，並保留原有菸草資訊",
   "tobacconistmod.ponder.tobacconist_blending.text_2": "調配成分和秘密調配身分會在後續加工中繼續保留",

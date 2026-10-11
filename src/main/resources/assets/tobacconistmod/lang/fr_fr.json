@@ -366,7 +366,6 @@
   "tobacconistmod.ponder.tobacconist_wooden_automation_arm.text_3": "Un seul bras peut ainsi desservir plusieurs séchoirs, tandis que d’autres systèmes logistiques compatibles peuvent être combinés dans la même fabrique sans contourner les règles de séchage.",
   "tobacconistmod.ponder.tobacconist_processing.header": "Découpe et pressage du tabac",
   "tobacconistmod.ponder.tobacconist_processing.text_1": "Un déployeur équipé d’une chaveta découpe les feuilles séchées en plusieurs étapes : coupe grossière, Ribbon, puis Shag.",
-  "tobacconistmod.ponder.tobacconist_processing.text_2": "La presse mécanique transforme le tabac de coupe grossière en Flake sans altérer les propriétés du tabac",
   "tobacconistmod.ponder.tobacconist_blending.header": "Mélange et automatisation des tonneaux",
   "tobacconistmod.ponder.tobacconist_blending.text_1": "Un mixeur mécanique combine deux ou trois tabacs en vrac compatibles en conservant les propriétés de chaque composant",
   "tobacconistmod.ponder.tobacconist_blending.text_2": "La composition du mélange et l’identité d’un mélange secret sont conservées lors des étapes suivantes",

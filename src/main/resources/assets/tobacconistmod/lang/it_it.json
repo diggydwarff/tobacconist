@@ -366,7 +366,6 @@
   "tobacconistmod.ponder.tobacconist_wooden_automation_arm.text_3": "In questo modo un solo braccio può servire più rastrelliere, mentre nella stessa fabbrica si possono usare altri sistemi logistici compatibili senza aggirare le regole di cura.",
   "tobacconistmod.ponder.tobacconist_processing.header": "Taglio e pressatura del tabacco",
   "tobacconistmod.ponder.tobacconist_processing.text_1": "Un utilizzatore con una chaveta taglia le foglie curate, passando in sequenza da taglio grossolano a Ribbon e poi a Shag",
-  "tobacconistmod.ponder.tobacconist_processing.text_2": "La pressa meccanica trasforma il tabacco a taglio grossolano in Flake senza alterare le proprietà del tabacco",
   "tobacconistmod.ponder.tobacconist_blending.header": "Miscelazione e automazione delle botti",
   "tobacconistmod.ponder.tobacconist_blending.text_1": "Un miscelatore meccanico combina due o tre tabacchi sfusi compatibili in miscele che ne conservano le proprietà",
   "tobacconistmod.ponder.tobacconist_blending.text_2": "I componenti della miscela e l’identità delle miscele segrete vengono conservati",

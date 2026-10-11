@@ -366,7 +366,6 @@
   "tobacconistmod.ponder.tobacconist_wooden_automation_arm.text_3": "Így egyetlen kar több állványt is kiszolgálhat, és ugyanabban a gyárban más kompatibilis logisztikai megoldások is használhatók a szárítási szabályok megkerülése nélkül.",
   "tobacconistmod.ponder.tobacconist_processing.header": "Dohány vágása és préselése",
   "tobacconistmod.ponder.tobacconist_processing.text_1": "Egy chavetát tartó lehelyező a megszárított levelet előbb Durva vágatúra, majd Ribbon és Shag vágatúra vágja",
-  "tobacconistmod.ponder.tobacconist_processing.text_2": "A présgép a Durva vágatú dohányt Flake vágatúvá alakítja, miközben megőrzi a dohány adatait",
   "tobacconistmod.ponder.tobacconist_blending.header": "Keverés és hordóautomatizálás",
   "tobacconistmod.ponder.tobacconist_blending.text_1": "Egy keverőgép két vagy három kompatibilis vágott dohányt egyesít úgy, hogy a keverék megőrzi a dohányok adatait",
   "tobacconistmod.ponder.tobacconist_blending.text_2": "A keverék összetevői és a titkos keverék azonosítója is megmarad",

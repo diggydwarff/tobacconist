@@ -366,7 +366,6 @@
   "tobacconistmod.ponder.tobacconist_wooden_automation_arm.text_3": "Tako lahko ena roka oskrbuje več stojal, v isti tovarni pa se lahko uporablja tudi druga združljiva logistika, ne da bi obšla pravila sušenja.",
   "tobacconistmod.ponder.tobacconist_processing.header": "Rezanje in stiskanje tobaka",
   "tobacconistmod.ponder.tobacconist_processing.text_1": "Postavljalnik s chaveto sušen list reže po stopnjah: grobi rez, rez ribbon in rez shag",
-  "tobacconistmod.ponder.tobacconist_processing.text_2": "Mehanska stiskalnica spremeni grobo rezan tobak v rez flake in pri tem ohrani podatke o tobaku",
   "tobacconistmod.ponder.tobacconist_blending.header": "Mešanje in avtomatizacija sodov",
   "tobacconistmod.ponder.tobacconist_blending.text_1": "Mehanski mešalnik združi dve ali tri združljive vrste razsutega tobaka v mešanice, ki ohranijo podatke o tobaku",
   "tobacconistmod.ponder.tobacconist_blending.text_2": "Sestavine mešanice in identiteta skrivne mešanice se ohranijo",

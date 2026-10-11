@@ -65,11 +65,21 @@ public class ProductionMonitorBlock extends BaseEntityBlock {
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         ItemStack stack = player.getItemInHand(hand);
-        if (hand == InteractionHand.MAIN_HAND && isExternalFilterSlotHit(state, pos, hit) && !isCreateWrench(stack)) {
-            setExternalFilter(level, pos, stack.isEmpty() ? ItemStack.EMPTY : stack);
+        if (trySetExternalFilter(state, level, pos, stack, hand, hit)) {
             return InteractionResult.sidedSuccess(level.isClientSide);
         }
         return openMenu(level, pos, player);
+    }
+
+    /** Shared by normal block use and the early click event, which also reaches sneak-clicks. */
+    public boolean trySetExternalFilter(BlockState state, Level level, BlockPos pos, ItemStack stack,
+                                        InteractionHand hand, BlockHitResult hit) {
+        if (hand != InteractionHand.MAIN_HAND || !isExternalFilterSlotHit(state, pos, hit)
+                || isCreateWrench(stack)) {
+            return false;
+        }
+        setExternalFilter(level, pos, stack);
+        return true;
     }
 
     /**

@@ -366,7 +366,6 @@
   "tobacconistmod.ponder.tobacconist_wooden_automation_arm.text_3": "Nii saab üks käsi teenindada mitut resti ning samas tehases võib kasutada ka muid sobivaid logistikasüsteeme ilma kuivatusreegleid eiramata.",
   "tobacconistmod.ponder.tobacconist_processing.header": "Tubaka lõikamine ja pressimine",
   "tobacconistmod.ponder.tobacconist_processing.text_1": "Paigaldaja, mille käes on chaveta, lõikab kuivatatud lehe järjest jämedaks lõikeks, Ribbon-lõikeks ja Shag-lõikeks",
-  "tobacconistmod.ponder.tobacconist_processing.text_2": "Mehhaaniline press muudab jämeda lõike Flake-lõikeks, säilitades tubaka andmed",
   "tobacconistmod.ponder.tobacconist_blending.header": "Segamine ja tünniautomaatika",
   "tobacconistmod.ponder.tobacconist_blending.text_1": "Mehaaniline mikser ühendab kaks või kolm sobivat lahtist tubakat seguks, milles säilivad tubaka andmed",
   "tobacconistmod.ponder.tobacconist_blending.text_2": "Segu komponendid ja salasegu identiteet säilivad",

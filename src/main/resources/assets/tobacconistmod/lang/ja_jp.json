@@ -366,7 +366,6 @@
   "tobacconistmod.ponder.tobacconist_wooden_automation_arm.text_3": "これにより、一本のアームで複数の棚を扱えます。同じ工場に他の対応物流設備を組み合わせても、乾燥ルールを回避することはできません。",
   "tobacconistmod.ponder.tobacconist_processing.header": "タバコの裁断とプレス",
   "tobacconistmod.ponder.tobacconist_processing.text_1": "チャベタを持たせたデプロイヤーは、乾燥葉を粗切り、リボンカット、シャグカットの順に裁断します",
-  "tobacconistmod.ponder.tobacconist_processing.text_2": "メカニカルプレスはタバコの情報を保ったまま、粗切りタバコをフレークカットに加工します",
   "tobacconistmod.ponder.tobacconist_blending.header": "ブレンドと樽の自動化",
   "tobacconistmod.ponder.tobacconist_blending.text_1": "メカニカルミキサーは組み合わせ可能な2～3種類の刻みタバコを混ぜ、元の情報を保持したブレンドを作ります",
   "tobacconistmod.ponder.tobacconist_blending.text_2": "ブレンドの構成要素とシークレットブレンドの識別情報はそのまま引き継がれます",

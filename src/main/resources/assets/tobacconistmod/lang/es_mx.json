@@ -366,7 +366,6 @@
   "tobacconistmod.ponder.tobacconist_wooden_automation_arm.text_3": "Así, un solo Brazo puede atender varios secaderos, mientras otros sistemas logísticos compatibles pueden combinarse en la misma fábrica sin saltarse las reglas de curado.",
   "tobacconistmod.ponder.tobacconist_processing.header": "Corte y prensado del tabaco",
   "tobacconistmod.ponder.tobacconist_processing.text_1": "Un Desplegador con una chaveta corta las hojas curadas pasando por corte grueso, corte en cinta y corte shag",
-  "tobacconistmod.ponder.tobacconist_processing.text_2": "La Prensa mecánica convierte el tabaco de corte grueso en láminas sin perder los datos del tabaco",
   "tobacconistmod.ponder.tobacconist_blending.header": "Mezcla y automatización de barriles",
   "tobacconistmod.ponder.tobacconist_blending.text_1": "Una Mezcladora mecánica combina dos o tres tabacos sueltos compatibles en mezclas que conservan sus datos",
   "tobacconistmod.ponder.tobacconist_blending.text_2": "Los componentes y la identidad de las mezclas secretas se conservan durante el procesamiento",

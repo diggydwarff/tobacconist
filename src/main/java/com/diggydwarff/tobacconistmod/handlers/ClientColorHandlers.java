@@ -4,6 +4,9 @@ import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
 
 import com.diggydwarff.tobacconistmod.TobacconistMod;
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
+import com.diggydwarff.tobacconistmod.util.TobaccoSpecialProcessingHelper;
+import com.diggydwarff.tobacconistmod.block.custom.TobaccoDryingRackBlock;
+import com.diggydwarff.tobacconistmod.block.custom.HangingTobaccoBlock;
 import com.diggydwarff.tobacconistmod.block.custom.HookahBlock;
 import com.diggydwarff.tobacconistmod.block.custom.DyeableDoubleHookahBlock;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
@@ -36,10 +39,28 @@ public class ClientColorHandlers {
         }, ModBlocks.TALL_HOOKAH.get());
 
         event.register((state, level, pos, tintIndex) -> {
-            // Cure colors are baked into dedicated rack textures. White preserves those pixels
-            // exactly and avoids Minecraft's multiplicative tint turning brown targets olive.
-            return 0xFFFFFFFF;
-        }, ModBlocks.TOBACCO_DRYING_RACK.get());
+            if (tintIndex != 0) return 0xFFFFFFFF;
+            return vanillaDyeRgb(state.getValue(HookahBlock.COLOR));
+        }, ModBlocks.HOOKAH.get());
+        event.register((state, level, pos, tintIndex) -> {
+            if (tintIndex != 0) return 0xFFFFFFFF;
+            return vanillaDyeRgb(state.getValue(DyeableDoubleHookahBlock.COLOR));
+        }, ModBlocks.TALL_HOOKAH.get());
+
+        event.register((state, level, pos, tintIndex) -> {
+            if (tintIndex != 0) return 0xFFFFFFFF;
+            // Primary cures keep their baked colors. Only secondary smoke darkens the leaves.
+            return TobaccoSpecialProcessingHelper.getSmokeFinishTint(
+                    state.getValue(TobaccoDryingRackBlock.CURE_STAGE),
+                    state.getValue(TobaccoDryingRackBlock.VARIETY));
+        }, ModBlocks.TOBACCO_DRYING_RACK.get(), ModBlocks.INDUSTRIAL_DRYING_RACK.get());
+
+        event.register((state, level, pos, tintIndex) -> {
+            if (tintIndex != 0) return 0xFFFFFFFF;
+            return TobaccoSpecialProcessingHelper.getSmokeFinishTint(
+                    state.getValue(HangingTobaccoBlock.CURE_STAGE),
+                    state.getValue(HangingTobaccoBlock.VARIETY));
+        }, ModBlocks.HANGING_TOBACCO_LEAVES.get());
     }
 
     @SubscribeEvent

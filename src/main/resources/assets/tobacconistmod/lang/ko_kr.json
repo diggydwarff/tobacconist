@@ -366,7 +366,6 @@
   "tobacconistmod.ponder.tobacconist_wooden_automation_arm.text_3": "기계 팔 하나로 여러 건조대를 관리할 수 있으며, 다른 물류 장치도 건조 규칙을 우회하지 않는 범위에서 같은 공장에 함께 사용할 수 있습니다.",
   "tobacconistmod.ponder.tobacconist_processing.header": "담배 절단과 압착",
   "tobacconistmod.ponder.tobacconist_processing.text_1": "차베타를 든 기계 손은 건조된 잎을 러프 컷, 리본 컷, 섀그 컷 단계로 차례로 자릅니다.",
-  "tobacconistmod.ponder.tobacconist_processing.text_2": "압착기는 담배의 특성을 유지한 채 러프 컷 담배를 플레이크로 만듭니다.",
   "tobacconistmod.ponder.tobacconist_blending.header": "블렌딩과 통 자동화",
   "tobacconistmod.ponder.tobacconist_blending.text_1": "믹서는 함께 섞을 수 있는 각초 두세 종류를 섞어 담배의 특성을 유지하는 블렌드를 만듭니다.",
   "tobacconistmod.ponder.tobacconist_blending.text_2": "블렌드 구성과 비밀 블렌드 정보도 그대로 유지됩니다.",

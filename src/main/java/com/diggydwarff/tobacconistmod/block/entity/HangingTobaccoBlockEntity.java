@@ -83,7 +83,7 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
         storedLeaf = source.copyWithCount(LEAF_COUNT);
         tobaccoVariety = HangingTobaccoBlock.getVarietyIndex(source);
         resetProgress();
-        specialFinishTarget = TobaccoSpecialProcessingHelper.getRackSmokeFinishTarget(storedLeaf);
+        // A completed base cure stays finished until smoke actually starts its next process.
         syncState();
         syncToClient();
     }
@@ -109,6 +109,8 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
 
     public boolean isFinished() {
         if (!hasLeaves()) return false;
+
+        if (storedLeaf.is(ModItems.SPOILED_TOBACCO.get())) return true;
 
         if (!specialFinishTarget.isEmpty()) {
             return specialFinishTarget.equals(TobaccoCuringHelper.getCureType(storedLeaf));
@@ -144,6 +146,10 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
 
     public int getVisualCureStage() {
         if (!hasLeaves()) return 0;
+        if (TobaccoCuringHelper.isDryTobaccoLeaf(storedLeaf)) {
+            return TobaccoSpecialProcessingHelper.getSmokeFinishVisualStage(
+                    storedLeaf, specialFinishTarget, getDryProgressPercent());
+        }
         if (isFinished()) return 5;
 
         int pct = getDryProgressPercent();
@@ -228,14 +234,20 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
 
     public MutableComponent getCurrentCureMethodComponent() {
         if (level == null || !hasLeaves()) return Component.translatable("tobacconistmod.ui.empty");
+        if (storedLeaf.is(ModItems.SPOILED_TOBACCO.get())) return Component.translatable("tobacconistmod.ui.ruined");
         if (isFinished()) return TobaccoText.cure(TobaccoCuringHelper.getCureType(storedLeaf));
 
         boolean rain = isSideRainExposed(level, worldPosition);
-        CreateCompat.FanCuringAssist fan = rain ? CreateCompat.FanCuringAssist.NONE : getCreateFanAssist();
+        if (rain) return Component.translatable("tobacconistmod.cure_method.paused_rain_side");
+        CreateCompat.FanCuringAssist fan = getCreateFanAssist();
 
         if (!specialFinishTarget.isEmpty()) {
-            return Component.translatable("tobacconistmod.cure_method.special_smoke_finish",
+            MutableComponent method = Component.translatable("tobacconistmod.cure_method.special_smoke_finish",
                     TobaccoText.cure(specialFinishTarget));
+            if (!isOverLitCampfire(level, worldPosition) && fan != CreateCompat.FanCuringAssist.FIRE) {
+                method.append(" - ").append(Component.translatable("tobacconistmod.ui.processing_paused"));
+            }
+            return method;
         }
         if (isHauntedPriority(fan)) {
             return Component.translatable(fan == CreateCompat.FanCuringAssist.HAUNTED
@@ -269,6 +281,7 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
 
     public MutableComponent getStatusComponent() {
         if (!hasLeaves()) return Component.translatable("tobacconistmod.ui.empty");
+        if (storedLeaf.is(ModItems.SPOILED_TOBACCO.get())) return Component.translatable("tobacconistmod.ui.ruined");
         if (isFinished()) {
             return Component.translatable(
                     "tobacconistmod.status.finished_cure",
@@ -285,6 +298,11 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
     public static void serverTick(Level level, BlockPos pos, BlockState state, HangingTobaccoBlockEntity bundle) {
         if (level.isClientSide || !bundle.hasLeaves()) return;
 
+        // A completed base cure can stay hanging while a newly added smoke source starts
+        // its secondary cure. Reset the counters so the first cure contributes no smoke time.
+        if (bundle.isFinished()) {
+            bundle.tryStartSmokeFinish();
+        }
         bundle.syncState();
         if (bundle.isFinished()) return;
 
@@ -305,11 +323,11 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
         CreateCompat.FanCuringAssist fan = rain
                 ? CreateCompat.FanCuringAssist.NONE
                 : bundle.getCreateFanAssist();
-        boolean haunted = isOverLitSoulCampfire(level, pos);
-        boolean fire = isOverLitCampfire(level, pos);
-        boolean flue = canFlueCure(level, pos);
-        boolean sun = hasPergolaSunlight(level, pos);
-        boolean air = canAirDry(level, pos);
+        boolean haunted = !rain && isOverLitSoulCampfire(level, pos);
+        boolean fire = !rain && isOverLitCampfire(level, pos);
+        boolean flue = !rain && canFlueCure(level, pos);
+        boolean sun = !rain && hasPergolaSunlight(level, pos);
+        boolean air = !rain && canAirDry(level, pos);
 
         boolean valid = false;
         int progressTicks = 0;
@@ -351,7 +369,12 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
         }
         bundle.lastTickHadValidDrying = valid;
 
-        if (!valid) return;
+        if (!valid) {
+            // Rain damage and its recovery must survive chunk saves even while curing is paused.
+            if (level.getGameTime() % 20 == 0) bundle.syncToClient();
+            else bundle.setChanged();
+            return;
+        }
 
         bundle.dryingProgress += progressTicks;
         bundle.syncState();
@@ -453,6 +476,19 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
         }
 
         finishCuring();
+    }
+
+    private void tryStartSmokeFinish() {
+        if (level == null || !specialFinishTarget.isEmpty()) return;
+
+        String target = TobaccoSpecialProcessingHelper.getRackSmokeFinishTarget(storedLeaf);
+        if (target.isEmpty() || isSideRainExposed(level, worldPosition)) return;
+        if (!isOverLitCampfire(level, worldPosition)
+                && getCreateFanAssist() != CreateCompat.FanCuringAssist.FIRE) return;
+
+        resetProgress();
+        specialFinishTarget = target;
+        syncToClient();
     }
 
     private void finishSpecialSmokeProcess() {
@@ -781,6 +817,9 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
         specialFinishTarget = tag.contains("SpecialFinishTarget")
                 ? tag.getString("SpecialFinishTarget")
                 : "";
+        // Earlier placement code queued a finish before any smoke reached the batch.
+        // Keep those zero-progress saves as their completed base cure.
+        if (fireTicks <= 0) specialFinishTarget = "";
         tobaccoVariety = tag.contains("TobaccoVariety")
                 ? tag.getInt("TobaccoVariety")
                 : HangingTobaccoBlock.getVarietyIndex(storedLeaf);

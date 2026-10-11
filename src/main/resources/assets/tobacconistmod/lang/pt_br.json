@@ -366,7 +366,6 @@
   "tobacconistmod.ponder.tobacconist_wooden_automation_arm.text_3": "Assim, um único Braço pode atender vários varais, enquanto outros sistemas logísticos compatíveis podem ser usados na mesma fábrica sem contornar as regras de cura.",
   "tobacconistmod.ponder.tobacconist_processing.header": "Cortando e prensando tabaco",
   "tobacconistmod.ponder.tobacconist_processing.text_1": "Um Implantador com uma Chaveta faz cortes sucessivos nas folhas curadas: Corte grosso, Ribbon Cut e Shag Cut",
-  "tobacconistmod.ponder.tobacconist_processing.text_2": "Uma Prensa Mecânica transforma tabaco de Corte grosso em Flake sem alterar as propriedades do tabaco",
   "tobacconistmod.ponder.tobacconist_blending.header": "Mistura e automação de barris",
   "tobacconistmod.ponder.tobacconist_blending.text_1": "Uma Batedeira Mecânica combina dois ou três tabacos soltos compatíveis em misturas que preservam as propriedades de cada componente",
   "tobacconistmod.ponder.tobacconist_blending.text_2": "Os componentes da mistura e a identidade das misturas secretas são preservados nas etapas seguintes",
