@@ -5,9 +5,13 @@ import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoText;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -18,6 +22,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Small no-GUI container for pipe tobacco. A pouch holds one exact tobacco batch at a time
@@ -28,6 +33,7 @@ public class TobaccoPouchItem extends Item {
 
     private static final String TAG_ITEM = "StoredTobacco";
     private static final String TAG_DATA = "StoredTobaccoData";
+    private static final String TAG_NAME = "StoredTobaccoName";
     private static final String TAG_COUNT = "StoredCount";
 
     public TobaccoPouchItem(Properties properties) {
@@ -85,6 +91,13 @@ public class TobaccoPouchItem extends Item {
         int moved = Math.min(CAPACITY - count, tobacco.getCount());
         if (moved <= 0) return false;
 
+        // Custom names moved out of item NBT in 1.21. Keep the component separately so
+        // withdrawing an anvil-named batch has the same behavior as the 1.20.1 pouch.
+        Component customName = tobacco.get(DataComponents.CUSTOM_NAME);
+        Tag savedName = customName == null ? null
+                : ComponentSerialization.CODEC.encodeStart(NbtOps.INSTANCE, customName).result().orElse(null);
+        if (customName != null && savedName == null) return false;
+
         CompoundTag tag = LegacyItemTags.getOrCreateTag(pouch);
         if (stored.isEmpty()) {
             tag.putString(TAG_ITEM, BuiltInRegistries.ITEM.getKey(tobacco.getItem()).toString());
@@ -94,6 +107,8 @@ public class TobaccoPouchItem extends Item {
             } else {
                 tag.remove(TAG_DATA);
             }
+            if (savedName == null) tag.remove(TAG_NAME);
+            else tag.put(TAG_NAME, savedName);
         }
         tag.putInt(TAG_COUNT, count + moved);
 
@@ -120,6 +135,7 @@ public class TobaccoPouchItem extends Item {
 
     private static boolean sameBatch(ItemStack a, ItemStack b) {
         if (!a.is(b.getItem())) return false;
+        if (!Objects.equals(a.get(DataComponents.CUSTOM_NAME), b.get(DataComponents.CUSTOM_NAME))) return false;
         CompoundTag aTag = LegacyItemTags.getTag(a);
         CompoundTag bTag = LegacyItemTags.getTag(b);
         if (aTag == null) return bTag == null;
@@ -142,6 +158,10 @@ public class TobaccoPouchItem extends Item {
         if (tag.contains(TAG_DATA)) {
             LegacyItemTags.setTag(stack, tag.getCompound(TAG_DATA).copy());
         }
+        if (tag.contains(TAG_NAME)) {
+            ComponentSerialization.CODEC.parse(NbtOps.INSTANCE, tag.get(TAG_NAME))
+                    .result().ifPresent(name -> stack.set(DataComponents.CUSTOM_NAME, name));
+        }
         return stack;
     }
 
@@ -150,6 +170,7 @@ public class TobaccoPouchItem extends Item {
         if (count <= 0) {
             tag.remove(TAG_ITEM);
             tag.remove(TAG_DATA);
+            tag.remove(TAG_NAME);
             tag.remove(TAG_COUNT);
         } else {
             tag.putInt(TAG_COUNT, Math.min(CAPACITY, count));

@@ -20,82 +20,34 @@ public class TobaccoBoxFillRecipe extends CustomRecipe {
 
     @Override
     public boolean matches(CraftingInput inv, Level level) {
-        ItemStack box = ItemStack.EMPTY;
-        ItemStack contentType = ItemStack.EMPTY;
-        int incomingCount = 0;
-
-        for (int i = 0; i < inv.size(); i++) {
-            ItemStack stack = inv.getItem(i);
-            if (stack.isEmpty()) continue;
-
-            if (stack.is(ModItems.TOBACCO_BOX.get())) {
-                if (!box.isEmpty()) return false;
-                box = stack;
-                continue;
-            }
-
-            if (!TobaccoBoxHelper.isSupportedContent(stack)) return false;
-
-            if (contentType.isEmpty()) {
-                contentType = stack.copy();
-                contentType.setCount(1);
-                TobaccoBoxHelper.clearCustomProductName(contentType);
-            } else {
-                ItemStack compare = stack.copy();
-                compare.setCount(1);
-                TobaccoBoxHelper.clearCustomProductName(compare);
-                if (!TobaccoBoxHelper.sameContent(contentType, compare)) return false;
-            }
-
-            // Crafting consumes one item from each occupied input slot, not the entire stack
-            // present in that slot. Counting stack.getCount() here duplicated the unconsumed
-            // remainder into the box (e.g. 16 tobacco in one slot stored all 16 while only one
-            // item was actually consumed).
-            incomingCount += 1;
-        }
-
-        if (box.isEmpty() || contentType.isEmpty()) return false;
-
-        if (TobaccoBoxHelper.hasStoredItem(box) && !TobaccoBoxHelper.canAccept(box, contentType)) {
-            return false;
-        }
-
-        ItemStack base = TobaccoBoxHelper.hasStoredItem(box) ? TobaccoBoxHelper.getStoredItem(box) : contentType;
-        int current = TobaccoBoxHelper.getStoredCount(box);
-        int cap = TobaccoBoxHelper.getCapacity(base);
-
-        return current + incomingCount <= cap;
+        return !pack(inv).isEmpty();
     }
 
     @Override
     public ItemStack assemble(CraftingInput inv, HolderLookup.Provider registries) {
-        ItemStack box = ItemStack.EMPTY;
-        ItemStack content = ItemStack.EMPTY;
-        int incomingCount = 0;
+        return pack(inv);
+    }
 
+    private ItemStack pack(CraftingInput inv) {
+        ItemStack box = ItemStack.EMPTY;
         for (int i = 0; i < inv.size(); i++) {
             ItemStack stack = inv.getItem(i);
-            if (stack.isEmpty()) continue;
-
-            if (stack.is(ModItems.TOBACCO_BOX.get())) {
-                box = stack.copy();
-            } else if (content.isEmpty()) {
-                content = stack.copy();
-                content.setCount(1);
-                TobaccoBoxHelper.clearCustomProductName(content);
-                incomingCount += 1;
-            } else {
-                incomingCount += 1;
-            }
+            if (!stack.is(ModItems.TOBACCO_BOX.get())) continue;
+            if (!box.isEmpty()) return ItemStack.EMPTY;
+            box = stack.copyWithCount(1);
         }
+        if (box.isEmpty()) return ItemStack.EMPTY;
 
-        if (box.isEmpty() || content.isEmpty()) return ItemStack.EMPTY;
-
-        int current = TobaccoBoxHelper.getStoredCount(box);
-        ItemStack base = TobaccoBoxHelper.hasStoredItem(box) ? TobaccoBoxHelper.getStoredItem(box) : content;
-
-        TobaccoBoxHelper.setStored(box, base, current + incomingCount);
-        return box;
+        int incomingCount = 0;
+        for (int i = 0; i < inv.size(); i++) {
+            ItemStack stack = inv.getItem(i);
+            if (stack.isEmpty() || stack.is(ModItems.TOBACCO_BOX.get())) continue;
+            // Crafting consumes one item per occupied slot, irrespective of stack size.
+            // Pack only into the copy so recipe checks never change any input or its label.
+            if (TobaccoBoxHelper.insert(box, stack, 1) != 1) return ItemStack.EMPTY;
+            incomingCount++;
+        }
+        return incomingCount == 0 ? ItemStack.EMPTY : box;
     }
 
     @Override

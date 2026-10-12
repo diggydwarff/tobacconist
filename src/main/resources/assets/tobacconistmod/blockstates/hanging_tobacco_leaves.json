@@ -215,6 +215,186 @@
     },
     "cure_stage=5,half=upper,variety=5": {
       "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_5_shade"
+    },
+    "cure_stage=6,half=lower,variety=0": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_5_wild"
+    },
+    "cure_stage=7,half=lower,variety=0": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_5_wild"
+    },
+    "cure_stage=8,half=lower,variety=0": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_5_wild"
+    },
+    "cure_stage=9,half=lower,variety=0": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_5_wild"
+    },
+    "cure_stage=10,half=lower,variety=0": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_5_wild"
+    },
+    "cure_stage=6,half=lower,variety=1": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_5_virginia"
+    },
+    "cure_stage=7,half=lower,variety=1": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_5_virginia"
+    },
+    "cure_stage=8,half=lower,variety=1": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_5_virginia"
+    },
+    "cure_stage=9,half=lower,variety=1": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_5_virginia"
+    },
+    "cure_stage=10,half=lower,variety=1": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_5_virginia"
+    },
+    "cure_stage=6,half=lower,variety=2": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_5_burley"
+    },
+    "cure_stage=7,half=lower,variety=2": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_5_burley"
+    },
+    "cure_stage=8,half=lower,variety=2": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_5_burley"
+    },
+    "cure_stage=9,half=lower,variety=2": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_5_burley"
+    },
+    "cure_stage=10,half=lower,variety=2": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_5_burley"
+    },
+    "cure_stage=6,half=lower,variety=3": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_5_oriental"
+    },
+    "cure_stage=7,half=lower,variety=3": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_5_oriental"
+    },
+    "cure_stage=8,half=lower,variety=3": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_5_oriental"
+    },
+    "cure_stage=9,half=lower,variety=3": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_5_oriental"
+    },
+    "cure_stage=10,half=lower,variety=3": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_5_oriental"
+    },
+    "cure_stage=6,half=lower,variety=4": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_5_dokha"
+    },
+    "cure_stage=7,half=lower,variety=4": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_5_dokha"
+    },
+    "cure_stage=8,half=lower,variety=4": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_5_dokha"
+    },
+    "cure_stage=9,half=lower,variety=4": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_5_dokha"
+    },
+    "cure_stage=10,half=lower,variety=4": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_5_dokha"
+    },
+    "cure_stage=6,half=lower,variety=5": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_5_shade"
+    },
+    "cure_stage=7,half=lower,variety=5": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_5_shade"
+    },
+    "cure_stage=8,half=lower,variety=5": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_5_shade"
+    },
+    "cure_stage=9,half=lower,variety=5": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_5_shade"
+    },
+    "cure_stage=10,half=lower,variety=5": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_lower_cure_5_shade"
+    },
+    "cure_stage=6,half=upper,variety=0": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_5_wild"
+    },
+    "cure_stage=7,half=upper,variety=0": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_5_wild"
+    },
+    "cure_stage=8,half=upper,variety=0": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_5_wild"
+    },
+    "cure_stage=9,half=upper,variety=0": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_5_wild"
+    },
+    "cure_stage=10,half=upper,variety=0": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_5_wild"
+    },
+    "cure_stage=6,half=upper,variety=1": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_5_virginia"
+    },
+    "cure_stage=7,half=upper,variety=1": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_5_virginia"
+    },
+    "cure_stage=8,half=upper,variety=1": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_5_virginia"
+    },
+    "cure_stage=9,half=upper,variety=1": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_5_virginia"
+    },
+    "cure_stage=10,half=upper,variety=1": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_5_virginia"
+    },
+    "cure_stage=6,half=upper,variety=2": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_5_burley"
+    },
+    "cure_stage=7,half=upper,variety=2": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_5_burley"
+    },
+    "cure_stage=8,half=upper,variety=2": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_5_burley"
+    },
+    "cure_stage=9,half=upper,variety=2": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_5_burley"
+    },
+    "cure_stage=10,half=upper,variety=2": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_5_burley"
+    },
+    "cure_stage=6,half=upper,variety=3": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_5_oriental"
+    },
+    "cure_stage=7,half=upper,variety=3": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_5_oriental"
+    },
+    "cure_stage=8,half=upper,variety=3": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_5_oriental"
+    },
+    "cure_stage=9,half=upper,variety=3": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_5_oriental"
+    },
+    "cure_stage=10,half=upper,variety=3": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_5_oriental"
+    },
+    "cure_stage=6,half=upper,variety=4": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_5_dokha"
+    },
+    "cure_stage=7,half=upper,variety=4": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_5_dokha"
+    },
+    "cure_stage=8,half=upper,variety=4": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_5_dokha"
+    },
+    "cure_stage=9,half=upper,variety=4": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_5_dokha"
+    },
+    "cure_stage=10,half=upper,variety=4": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_5_dokha"
+    },
+    "cure_stage=6,half=upper,variety=5": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_5_shade"
+    },
+    "cure_stage=7,half=upper,variety=5": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_5_shade"
+    },
+    "cure_stage=8,half=upper,variety=5": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_5_shade"
+    },
+    "cure_stage=9,half=upper,variety=5": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_5_shade"
+    },
+    "cure_stage=10,half=upper,variety=5": {
+      "model": "tobacconistmod:block/hanging_tobacco_leaves_upper_cure_5_shade"
     }
   }
 }

@@ -14,6 +14,13 @@ Tobacconist 4.1.0 releases Haunted Harvest for **Minecraft 1.21.1 NeoForge**.
 - Fixed compact Flue curing clearance, Create flavor-tag conditions, and the obsolete duplicate compostables data-map path.
 - Final QA: restored Latakia/Dark Fired Kentucky finishing on hanging bunches, immediate fermentation-command sync, and seasonal Hookah advancement/mining integration.
 - Replaced the Jack-o'Lantern Hookah inventory render with a dedicated 16x16 item sprite matching the existing Hookah item style.
+- Fixed secondary curing colors and allowed smoke finishing to start without replacing hanging bundles or racks.
+- Fixed curing continuing during rain or after a rack batch finished.
+- Fixed old rack progress carrying into new batches and spoiled tobacco blocking automation.
+- Corrected secondary-cure progress and status displays.
+- Fixed tobacco boxes bypassing inventory slot restrictions.
+- Preserved batch metadata and custom names when averaging tobacco quality.
+- Corrected the Create harvester item-drop API call
 
 ## Update 4.0.0 - The Tobacco Industry Update
 

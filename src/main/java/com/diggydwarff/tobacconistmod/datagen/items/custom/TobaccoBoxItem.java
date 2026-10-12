@@ -80,16 +80,17 @@ public class TobaccoBoxItem extends Item {
 
     @Override
     public boolean overrideStackedOnOther(ItemStack box, Slot slot, ClickAction action, Player player) {
-        if (action != ClickAction.SECONDARY) return false;
+        if (action != ClickAction.SECONDARY || !slot.allowModification(player)) return false;
 
         ItemStack other = slot.getItem();
         if (other.isEmpty()) {
-            ItemStack extracted = tryExtract(box, player);
-            if (!extracted.isEmpty()) {
-                slot.set(extracted);
-                return true;
+            ItemStack candidate = getExtractableItem(box);
+            if (candidate.isEmpty() || !slot.mayPlace(candidate) || slot.getMaxStackSize(candidate) < 1) {
+                return false;
             }
-            return false;
+            if (!slot.safeInsert(candidate).isEmpty()) return false;
+            tryExtract(box, player);
+            return true;
         }
 
         if (tryInsert(box, other, player)) {
@@ -102,7 +103,7 @@ public class TobaccoBoxItem extends Item {
 
     @Override
     public boolean overrideOtherStackedOnMe(ItemStack box, ItemStack other, Slot slot, ClickAction action, Player player, SlotAccess access) {
-        if (action != ClickAction.SECONDARY) return false;
+        if (action != ClickAction.SECONDARY || !slot.allowModification(player)) return false;
         if (other.isEmpty()) return false;
 
         if (tryInsert(box, other, player)) {
@@ -141,60 +142,14 @@ public class TobaccoBoxItem extends Item {
     }
 
     private boolean tryInsert(ItemStack box, ItemStack incoming, Player player) {
-        if (incoming.isEmpty()) return false;
-        if (!TobaccoBoxHelper.isSupportedContent(incoming)) return false;
-
-        ItemStack stored = TobaccoBoxHelper.getStoredItem(box);
-        int count = TobaccoBoxHelper.getStoredCount(box);
-
-        String boxLabel = TobaccoBoxHelper.getLabel(box);
-        String incomingLabel = TobaccoLabelHelper.getProductLabel(incoming);
-
-        ItemStack incomingCompare = incoming.copy();
-        incomingCompare.setCount(1);
-        TobaccoLabelHelper.clearProductLabel(incomingCompare);
-
-        if (stored.isEmpty()) {
-            int cap = TobaccoBoxHelper.getCapacity(incomingCompare);
-
-            if (count >= cap) return false;
-
-            TobaccoBoxHelper.setStored(box, incomingCompare, 1);
-
-            if (!incomingLabel.isEmpty()) {
-                TobaccoBoxHelper.setLabel(box, incomingLabel);
-            }
-
-            incoming.shrink(1);
-            playSound(player);
-            return true;
-        }
-
-        if (!TobaccoBoxHelper.sameContent(stored, incomingCompare)) {
-            return false;
-        }
-
-        // Branding belongs to the box, not the compatibility identity of its contents.
-        // A labeled box may accept the same unlabeled product, and an unlabeled box adopts
-        // the label of a matching named product being returned to it.
-        if (!boxLabel.isEmpty()) {
-            if (!incomingLabel.isEmpty() && !boxLabel.equals(incomingLabel)) {
-                return false;
-            }
-        } else if (!incomingLabel.isEmpty()) {
-            TobaccoBoxHelper.setLabel(box, incomingLabel);
-        }
-
-        int cap = TobaccoBoxHelper.getCapacity(stored);
-        if (count >= cap) return false;
-
-        TobaccoBoxHelper.setStored(box, stored, count + 1);
-        incoming.shrink(1);
+        int moved = TobaccoBoxHelper.insert(box, incoming, 1);
+        if (moved == 0) return false;
+        incoming.shrink(moved);
         playSound(player);
         return true;
     }
 
-    private ItemStack tryExtract(ItemStack box, Player player) {
+    private ItemStack getExtractableItem(ItemStack box) {
         ItemStack stored = TobaccoBoxHelper.getStoredItem(box);
         int count = TobaccoBoxHelper.getStoredCount(box);
 
@@ -210,6 +165,14 @@ public class TobaccoBoxItem extends Item {
             TobaccoLabelHelper.setProductLabel(out, label);
         }
 
+        return out;
+    }
+
+    private ItemStack tryExtract(ItemStack box, Player player) {
+        ItemStack out = getExtractableItem(box);
+        if (out.isEmpty()) return ItemStack.EMPTY;
+        int count = TobaccoBoxHelper.getStoredCount(box);
+        ItemStack stored = TobaccoBoxHelper.getStoredItem(box);
         if (count == 1) {
             TobaccoBoxHelper.clearStored(box);
         } else {

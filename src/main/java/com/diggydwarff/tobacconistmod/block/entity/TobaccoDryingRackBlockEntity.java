@@ -73,6 +73,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
     private int flueTicks = 0;
     private int hauntedTicks = 0;
     private String specialFinishTarget = "";
+    // A primary cure completed under smoke is output, not an implicit secondary input.
+    private boolean smokeFinishNeedsFreshSource = false;
 
     // Runtime-only Create environment cache. There is no need to persist this; the fan resolver
     // re-evaluates the actual airflow after load and whenever the short cache expires.
@@ -160,7 +162,9 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             return false;
         }
 
-        if (isFinished()) {
+        // Eligible base-cured leaves may still be loaded together before smoke finishing starts.
+        if (isFinished() && (smokeFinishNeedsFreshSource
+                || TobaccoSpecialProcessingHelper.getRackSmokeFinishTarget(storedLeaf).isEmpty())) {
             return false;
         }
 
@@ -201,7 +205,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             fireTicks = 0;
             flueTicks = 0;
             hauntedTicks = 0;
-            specialFinishTarget = TobaccoSpecialProcessingHelper.getRackSmokeFinishTarget(storedLeaf);
+            specialFinishTarget = "";
+            smokeFinishNeedsFreshSource = false;
         } else {
             storedLeaf.grow(1);
         }
@@ -236,13 +241,13 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
     public ItemStack removeItem(int slot, int amount) {
         TobaccoDryingRackBlockEntity master = getMasterRack();
         if (master != this) return master.removeItem(slot, amount);
-        if (slot != 0 || amount <= 0 || storedLeaf.isEmpty() || !isFinished()) {
+        if (slot != 0 || amount <= 0 || storedLeaf.isEmpty() || !canExtractFinishedBatch()) {
             return ItemStack.EMPTY;
         }
 
         ItemStack out = storedLeaf.split(amount);
         if (storedLeaf.isEmpty()) {
-            storedLeaf = ItemStack.EMPTY;
+            clearRack();
         }
 
         setChanged();
@@ -260,7 +265,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         }
 
         ItemStack out = storedLeaf;
-        storedLeaf = ItemStack.EMPTY;
+        clearRack();
 
         setChanged();
         syncRackState();
@@ -274,8 +279,12 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         if (master != this) { master.setItem(slot, stack); return; }
         if (slot != 0) return;
 
+        // Vanilla hoppers also use setItem for count changes and failed-transfer rollbacks.
+        // Keep those counters, but never let an empty or different batch inherit old progress.
+        boolean sameBatch = !stack.isEmpty() && ItemStack.isSameItemSameComponents(storedLeaf, stack);
+        if (!sameBatch) clearRack();
         storedLeaf = stack.copy();
-        specialFinishTarget = TobaccoSpecialProcessingHelper.getRackSmokeFinishTarget(storedLeaf);
+        // tryStartSmokeFinish begins an eligible secondary cure only when smoke is present.
 
         if (storedLeaf.getCount() > getMaxLeaves()) {
             storedLeaf.setCount(getMaxLeaves());
@@ -332,7 +341,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         if (slot != 0) return false;
         if (side != Direction.DOWN) return false;
 
-        return isFinished();
+        return canExtractFinishedBatch();
     }
 
     @Override
@@ -350,7 +359,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
     public void clearContent() {
         TobaccoDryingRackBlockEntity master = getMasterRack();
         if (master != this) { master.clearContent(); return; }
-        storedLeaf = ItemStack.EMPTY;
+        clearRack();
         setChanged();
         syncRackState();
         syncToClient();
@@ -436,6 +445,10 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             return 0;
         }
 
+        if (TobaccoCuringHelper.isDryTobaccoLeaf(storedLeaf)) {
+            return TobaccoSpecialProcessingHelper.getSmokeFinishVisualStage(
+                    storedLeaf, specialFinishTarget, getDryProgressPercent());
+        }
         if (isFinished()) {
             return 5;
         }
@@ -513,6 +526,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         if (!hasLeaves()) {
             return Component.translatable("tobacconistmod.ui.empty");
         }
+        if (storedLeaf.is(ModItems.SPOILED_TOBACCO.get())) return Component.translatable("tobacconistmod.ui.ruined");
         if (isFinished()) {
             return Component.translatable(
                     "tobacconistmod.status.finished_cure",
@@ -532,14 +546,25 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         if (level == null || !hasLeaves()) {
             return Component.translatable("tobacconistmod.ui.empty");
         }
+        if (storedLeaf.is(ModItems.SPOILED_TOBACCO.get())) return Component.translatable("tobacconistmod.ui.ruined");
         if (isFinished()) {
             return TobaccoText.cure(TobaccoCuringHelper.getCureType(storedLeaf));
         }
 
         boolean directRain = isDirectRain(level, worldPosition);
-        CreateCompat.FanCuringAssist fanAssist = directRain
-                ? CreateCompat.FanCuringAssist.NONE
-                : getCreateFanAssist();
+        if (directRain) return Component.translatable("tobacconistmod.cure_method.paused_rain");
+        CreateCompat.FanCuringAssist fanAssist = getCreateFanAssist();
+
+        if (!specialFinishTarget.isEmpty()) {
+            MutableComponent method = Component.translatable("tobacconistmod.cure_method.special_smoke_finish",
+                    TobaccoText.cure(specialFinishTarget));
+            boolean smoke = fanAssist == CreateCompat.FanCuringAssist.FIRE
+                    || (!requiresCreateAssistance() && isOverLitCampfire(level, worldPosition));
+            if (!smoke) {
+                method.append(" - ").append(Component.translatable("tobacconistmod.ui.processing_paused"));
+            }
+            return method;
+        }
 
         if (requiresCreateAssistance()) {
             if (fanAssist == CreateCompat.FanCuringAssist.HAUNTED) {
@@ -564,10 +589,6 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
                     : "tobacconistmod.cure_method.industrial_requires_create");
         }
 
-        if (!specialFinishTarget.isEmpty()) {
-            return Component.translatable("tobacconistmod.cure_method.special_smoke_finish",
-                    TobaccoText.cure(specialFinishTarget));
-        }
         if (isOverLitSoulCampfire(level, worldPosition) || fanAssist == CreateCompat.FanCuringAssist.HAUNTED) {
             return Component.translatable(fanAssist == CreateCompat.FanCuringAssist.HAUNTED
                     ? "tobacconistmod.cure_method.haunted_create"
@@ -613,11 +634,15 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             return false;
         }
 
-        CreateCompat.FanCuringAssist fanAssist = getCreateFanAssist();
         boolean directRain = isDirectRain(level, worldPosition);
+        if (directRain) return false;
+        CreateCompat.FanCuringAssist fanAssist = getCreateFanAssist();
+        if (!specialFinishTarget.isEmpty()) {
+            return fanAssist == CreateCompat.FanCuringAssist.FIRE
+                    || (!requiresCreateAssistance() && isOverLitCampfire(level, worldPosition));
+        }
 
         if (requiresCreateAssistance()) {
-            if (directRain) return false;
             if (fanAssist == CreateCompat.FanCuringAssist.HAUNTED
                     || fanAssist == CreateCompat.FanCuringAssist.FIRE
                     || fanAssist == CreateCompat.FanCuringAssist.FLUE) {
@@ -641,6 +666,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             return false;
         }
 
+        if (storedLeaf.is(ModItems.SPOILED_TOBACCO.get())) return true;
+
         if (!specialFinishTarget.isEmpty()) {
             return specialFinishTarget.equals(TobaccoCuringHelper.getCureType(storedLeaf));
         }
@@ -648,6 +675,16 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         return LegacyItemTags.hasTag(storedLeaf)
                 && LegacyItemTags.getTag(storedLeaf) != null
                 && LegacyItemTags.getTag(storedLeaf).contains(TobaccoCuringHelper.TAG_CURE_TYPE);
+    }
+
+    /** Keep automation from bypassing a deliberate secondary stage between insertion and its first tick. */
+    public boolean canExtractFinishedBatch() {
+        TobaccoDryingRackBlockEntity master = getMasterRack();
+        if (master != this) return master.canExtractFinishedBatch();
+        if (!isFinished()) return false;
+        if (smokeFinishNeedsFreshSource
+                || TobaccoSpecialProcessingHelper.getRackSmokeFinishTarget(storedLeaf).isEmpty()) return true;
+        return !hasSmokeFinishSource() || isDirectRain(level, worldPosition);
     }
 
     public ItemStack removeAllLeaves() {
@@ -691,6 +728,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         flueTicks = 0;
         hauntedTicks = 0;
         specialFinishTarget = "";
+        smokeFinishNeedsFreshSource = false;
         createFanAssistRefresh = 0;
         cachedCreateFanAssist = CreateCompat.FanCuringAssist.NONE;
     }
@@ -715,10 +753,13 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             }
         }
 
+        // Completed base cures can start smoke finishing when a source is added in place.
+        if (rack.isFinished()) rack.tryStartSmokeFinish();
+
         // Synchronize visual load/cure state with the stored batch.
         rack.syncRackState();
 
-        if (!rack.hasLeaves()) {
+        if (!rack.hasLeaves() || rack.isFinished()) {
             rack.lastTickHadValidDrying = false;
             return;
         }
@@ -740,6 +781,14 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
             rack.directRainExposureTicks = Math.max(0, rack.directRainExposureTicks - 5);
         }
 
+        // Exposed rain pauses every method, including a lit campfire underneath.
+        if (directRain) {
+            overSoulCampfire = false;
+            overCampfire = false;
+            flueCure = false;
+            inSun = false;
+            airDry = false;
+        }
         CreateCompat.FanCuringAssist fanAssist = directRain
                 ? CreateCompat.FanCuringAssist.NONE
                 : rack.getCreateFanAssist();
@@ -830,6 +879,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         rack.lastTickHadValidDrying = validDryingThisTick;
 
         if (!validDryingThisTick) {
+            if (level.getGameTime() % 20 == 0) rack.syncToClient();
+            else rack.setChanged();
             return;
         }
 
@@ -1050,8 +1101,36 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         flueTicks = 0;
         hauntedTicks = 0;
         specialFinishTarget = "";
+        smokeFinishNeedsFreshSource = hasSmokeFinishSource();
 
         syncRackState();
+        syncToClient();
+    }
+
+    private boolean hasSmokeFinishSource() {
+        return level != null && (getCreateFanAssist() == CreateCompat.FanCuringAssist.FIRE
+                || (!requiresCreateAssistance() && isOverLitCampfire(level, worldPosition)));
+    }
+
+    private void tryStartSmokeFinish() {
+        if (level == null || !specialFinishTarget.isEmpty()) return;
+        String target = TobaccoSpecialProcessingHelper.getRackSmokeFinishTarget(storedLeaf);
+        if (target.isEmpty()) return;
+        boolean smoke = hasSmokeFinishSource();
+        if (smokeFinishNeedsFreshSource) {
+            // Rain pauses a source; it must not silently re-arm a completed primary batch.
+            if (!smoke) {
+                smokeFinishNeedsFreshSource = false;
+                setChanged();
+            }
+            return;
+        }
+        if (!smoke || isDirectRain(level, worldPosition)) return;
+
+        ItemStack batch = storedLeaf;
+        clearRack();
+        storedLeaf = batch;
+        specialFinishTarget = target;
         syncToClient();
     }
 
@@ -1073,6 +1152,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         flueTicks = 0;
         hauntedTicks = 0;
         specialFinishTarget = "";
+        smokeFinishNeedsFreshSource = false;
         syncRackState();
         syncToClient();
     }
@@ -1413,6 +1493,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         tag.putInt("FlueTicks", flueTicks);
         tag.putInt("HauntedTicks", hauntedTicks);
         tag.putString("SpecialFinishTarget", specialFinishTarget);
+        tag.putBoolean("SmokeFinishNeedsFreshSource", smokeFinishNeedsFreshSource);
     }
 
     @Override
@@ -1443,6 +1524,9 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         specialFinishTarget = tag.contains("SpecialFinishTarget")
                 ? tag.getString("SpecialFinishTarget")
                 : "";
+        // Discard old queued targets that never received any smoke; preserve real progress.
+        if (fireTicks <= 0) specialFinishTarget = "";
+        smokeFinishNeedsFreshSource = tag.getBoolean("SmokeFinishNeedsFreshSource");
     }
 
     public List<Component> getFullDebugLines() {
@@ -1501,20 +1585,8 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         tag.putString(TobaccoCuringHelper.TAG_QUALITY_TIER,
                 TobaccoCuringHelper.getQualityTierId(ruinedQuality));
 
+        clearRack();
         storedLeaf = ruined;
-
-        dryingProgress = 0;
-        sunExposureTicks = 0;
-        interruptionCount = 0;
-        lastTickHadValidDrying = false;
-        usedFireDrying = false;
-        usedFlueDrying = false;
-        airTicks = 0;
-        sunTicks = 0;
-        fireTicks = 0;
-        flueTicks = 0;
-        directRainExposureTicks = 0;
-        wetDamagePenalty = 0;
 
         syncRackState();
         syncToClient();

@@ -114,12 +114,15 @@ public final class TobaccoInspectionOverlay {
             if (hangingEntity instanceof HangingTobaccoBlockEntity hanging) {
                 List<Line> lines = new ArrayList<>();
                 ItemStack stack = hanging.getStoredLeaf();
+                boolean ruined = stack.is(ModItems.SPOILED_TOBACCO.get());
                 lines.add(new Line(Component.translatable("tobacconistmod.ui.leaves", hanging.getLeafCount(), 16), TEXT));
                 if (!stack.isEmpty()) {
                     lines.add(new Line(stack.getHoverName(), TEXT));
-                    lines.add(new Line(Component.translatable("tobacconistmod.ui.method", hanging.getCurrentCureMethodComponent()), hanging.isDryingActive() ? GOOD : WARN));
-                    lines.add(new Line(Component.translatable("tobacconistmod.ui.progress", hanging.getDryProgressPercent()), TEXT));
-                    if (hanging.isFinished()) {
+                    lines.add(new Line(Component.translatable("tobacconistmod.ui.method", hanging.getCurrentCureMethodComponent()), !ruined && (hanging.isFinished() || hanging.isDryingActive()) ? GOOD : WARN));
+                    if (!ruined) lines.add(new Line(Component.translatable("tobacconistmod.ui.progress", hanging.getDryProgressPercent()), TEXT));
+                    if (ruined) {
+                        lines.add(new Line(Component.translatable("tobacconistmod.ui.ruined"), BAD));
+                    } else if (hanging.isFinished()) {
                         lines.add(new Line(Component.translatable("tobacconistmod.ui.finished"), GOOD));
                     } else if (hanging.isDryingActive()) {
                         lines.add(new Line(Component.translatable("tobacconistmod.ui.estimated_remaining", formatTicks(hanging.getEstimatedTicksRemaining())), MUTED));
@@ -141,11 +144,14 @@ public final class TobaccoInspectionOverlay {
             }
 
             ItemStack stack = rack.getStoredLeaf();
+            boolean ruined = stack.is(ModItems.SPOILED_TOBACCO.get());
             lines.add(new Line(stack.getHoverName(), TEXT));
-            lines.add(new Line(Component.translatable("tobacconistmod.ui.method", rack.getCurrentCureMethodComponent()), rack.isDryingActive() ? GOOD : WARN));
-            lines.add(new Line(Component.translatable("tobacconistmod.ui.progress", rack.getDryProgressPercent()), TEXT));
+            lines.add(new Line(Component.translatable("tobacconistmod.ui.method", rack.getCurrentCureMethodComponent()), !ruined && (rack.isFinished() || rack.isDryingActive()) ? GOOD : WARN));
+            if (!ruined) lines.add(new Line(Component.translatable("tobacconistmod.ui.progress", rack.getDryProgressPercent()), TEXT));
 
-            if (rack.isFinished()) {
+            if (ruined) {
+                lines.add(new Line(Component.translatable("tobacconistmod.ui.ruined"), BAD));
+            } else if (rack.isFinished()) {
                 lines.add(new Line(Component.translatable("tobacconistmod.ui.finished"), GOOD));
             } else if (rack.isDryingActive()) {
                 lines.add(new Line(Component.translatable("tobacconistmod.ui.estimated_remaining", formatTicks(rack.getEstimatedTicksRemaining())), MUTED));
