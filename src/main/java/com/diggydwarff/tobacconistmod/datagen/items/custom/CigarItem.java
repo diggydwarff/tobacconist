@@ -31,6 +31,9 @@ public class CigarItem extends SmokingItem {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
+        if (TobacconistConfig.areSmokingDrawAnimationsEnabled()) {
+            return beginDraw(level, player, hand);
+        }
 
         if (level.isClientSide()) {
             return InteractionResultHolder.consume(stack);

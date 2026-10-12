@@ -214,6 +214,14 @@ public class TobacconistConfig {
         }
     }
 
+    public static boolean areSmokingDrawAnimationsEnabled() {
+        try {
+            return SERVER.enableSmokingDrawAnimations.get();
+        } catch (IllegalStateException ignored) {
+            return true;
+        }
+    }
+
     public static boolean areNicotineEffectsEnabled() {
         try {
             return SERVER.enableNicotineEffects.get();
@@ -680,6 +688,7 @@ public class TobacconistConfig {
     public static class Server {
         public final ModConfigSpec.BooleanValue enableQualitySystem;
         public final ModConfigSpec.BooleanValue enableNicotineEffects;
+        public final ModConfigSpec.BooleanValue enableSmokingDrawAnimations;
         public final ModConfigSpec.IntValue genericAutomationQualityPenalty;
         public final ModConfigSpec.ConfigValue<List<? extends String>> secretBlends;
         public final ModConfigSpec.ConfigValue<List<? extends String>> secretBlendVisuals;
@@ -697,6 +706,12 @@ public class TobacconistConfig {
                     .comment("Apply Tobacconist's nicotine status effect when tobacco is smoked.")
                     .comment("Disabling this does not disable configured additional smoking effects.")
                     .define("enableNicotineEffects", true);
+
+            enableSmokingDrawAnimations = builder
+                    .comment("Require holding use to draw on cigarettes, cigars, pipes and hookah hoses; also affects the Curios mouth smoking key.")
+                    .comment("Includes basic hand/arm animations, draw sounds and delayed exhalation. Defaults to true.")
+                    .comment("Set false to restore instant smoking. This server setting is synchronized to connected clients.")
+                    .define("enableSmokingDrawAnimations", true);
 
             genericAutomationQualityPenalty = builder
                     .comment("Raw tobacco-quality points removed when a Cigarette or Cigar is made by generic crafting automation while Create is installed.")

@@ -1,6 +1,11 @@
 package com.diggydwarff.tobacconistmod.network;
 
 import com.diggydwarff.tobacconistmod.TobacconistMod;
+import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
+import com.diggydwarff.tobacconistmod.client.ClientDrawAnimations;
+import com.diggydwarff.tobacconistmod.datagen.items.SmokingItem;
+import com.diggydwarff.tobacconistmod.util.SmokingDraws;
+import net.minecraft.world.item.ItemStack;
 import com.diggydwarff.tobacconistmod.compat.curios.CuriosSmokingHelper;
 import com.diggydwarff.tobacconistmod.block.entity.ProductionMonitorBlockEntity;
 import com.diggydwarff.tobacconistmod.screen.ProductionMonitorMenu;
@@ -24,7 +29,7 @@ public final class NetworkEvents {
 
     @SubscribeEvent
     public static void registerPayloads(RegisterPayloadHandlersEvent event) {
-        var registrar = event.registrar("1");
+        var registrar = event.registrar("2");
         registrar.playToServer(
                 SmokeMouthItemPayload.TYPE,
                 SmokeMouthItemPayload.STREAM_CODEC,
@@ -33,6 +38,22 @@ public final class NetworkEvents {
 
                     if (!ModList.get().isLoaded("curios")) {
                         player.displayClientMessage(Component.translatable("tobacconistmod.message.mouth_slot_requires_curios"), true);
+                        return;
+                    }
+
+                    if (!payload.drawing()) {
+                        SmokingDraws.cancelMouth(player);
+                        return;
+                    }
+                    if (TobacconistConfig.areSmokingDrawAnimationsEnabled()) {
+                        ItemStack stack = CuriosSmokingHelper.getMouthItem(player);
+                        if (!(stack.getItem() instanceof SmokingItem smokingItem)) {
+                            player.displayClientMessage(Component.translatable("tobacconistmod.message.mouth.empty"), true);
+                        } else if (!smokingItem.canSmoke(stack)) {
+                            player.displayClientMessage(Component.translatable("tobacconistmod.message.mouth.no_puffs"), true);
+                        } else {
+                            SmokingDraws.startMouth(player, stack);
+                        }
                         return;
                     }
 
@@ -49,6 +70,12 @@ public final class NetworkEvents {
                         player.displayClientMessage(failure, true);
                     }
                 }
+        );
+
+        registrar.playToClient(
+                SmokingDrawStatePayload.TYPE,
+                SmokingDrawStatePayload.STREAM_CODEC,
+                (payload, context) -> ClientDrawAnimations.receiveMouthDraw(payload.entityId(), payload.ticks())
         );
 
         registrar.playToServer(

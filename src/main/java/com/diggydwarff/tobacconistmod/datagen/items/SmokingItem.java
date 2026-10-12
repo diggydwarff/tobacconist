@@ -4,6 +4,7 @@ import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelBlockEntity;
 import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
 import com.diggydwarff.tobacconistmod.effect.ModEffects;
 import com.diggydwarff.tobacconistmod.util.SmokeParticleHelper;
+import com.diggydwarff.tobacconistmod.util.SmokingDraws;
 import com.diggydwarff.tobacconistmod.util.TobaccoBlendHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoProductQualityHelper;
@@ -18,6 +19,12 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
@@ -28,6 +35,51 @@ public abstract class SmokingItem extends Item {
 
     public SmokingItem(Properties properties) {
         super(properties);
+    }
+
+    public boolean canSmoke(ItemStack stack) {
+        return !stack.isEmpty() && (!stack.isDamageableItem() || stack.getDamageValue() < stack.getMaxDamage());
+    }
+
+    protected InteractionResultHolder<ItemStack> beginDraw(Level level, Player player, InteractionHand hand) {
+        ItemStack stack = player.getItemInHand(hand);
+        if (!canSmoke(stack)) return InteractionResultHolder.pass(stack);
+        if (!SmokingDraws.canStart(player, stack)) return InteractionResultHolder.consume(stack);
+        player.startUsingItem(hand);
+        return InteractionResultHolder.consume(stack);
+    }
+
+    @Override
+    public int getUseDuration(ItemStack stack, LivingEntity entity) {
+        return SmokingDraws.duration(stack);
+    }
+
+    @Override
+    public UseAnim getUseAnimation(ItemStack stack) {
+        // A custom native hand transform avoids vanilla drinking/eating bobbing and sounds.
+        return UseAnim.NONE;
+    }
+
+    @Override
+    public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingUseDuration) {
+        if (!level.isClientSide() && entity instanceof Player player
+                && (!player.isAlive() || player.containerMenu != player.inventoryMenu)) {
+            player.stopUsingItem();
+            return;
+        }
+        if (TobacconistConfig.areSmokingDrawAnimationsEnabled()) {
+            SmokingDraws.drawSound(level, entity, stack, getUseDuration(stack, entity) - remainingUseDuration);
+        }
+    }
+
+    @Override
+    public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
+        if (entity instanceof ServerPlayer player && player.isAlive()
+                && player.containerMenu == player.inventoryMenu && canSmoke(stack)) {
+            ItemStack used = stack.copy();
+            if (smokeFromMouthSlot(player, player.serverLevel(), stack)) SmokingDraws.recover(player, used);
+        }
+        return stack;
     }
 
     private String tooltip;
@@ -68,6 +120,30 @@ public abstract class SmokingItem extends Item {
     }
 
     private static void applySmokingEffects(Player player, ServerLevel level, ItemStack tobaccoStack, boolean hookahDraw) {
+        if (TobacconistConfig.areSmokingDrawAnimationsEnabled()) {
+            SmokingDraws.queueExhale(player, tobaccoStack, hookahDraw);
+        } else {
+            emitSmokingSmoke(player, level, tobaccoStack, hookahDraw);
+        }
+
+        if (TobacconistConfig.areNicotineEffectsEnabled()) {
+            player.addEffect(new MobEffectInstance(
+                    ModEffects.NICOTINE,
+                    500,
+                    0,
+                    false,
+                    false,
+                    true
+            ));
+        }
+
+        applyQualityHealthBonus(player, tobaccoStack);
+        applySecretBlendLegendaryBonus(player, tobaccoStack);
+        applyConfiguredAdditionalEffects(player);
+        applyConfiguredRuleEffects(player, tobaccoStack);
+    }
+
+    public static void emitSmokingSmoke(Player player, ServerLevel level, ItemStack tobaccoStack, boolean hookahDraw) {
         Vec3 look = player.getLookAngle();
 
         level.playSound(
@@ -124,21 +200,6 @@ public abstract class SmokingItem extends Item {
             );
         }
 
-        if (TobacconistConfig.areNicotineEffectsEnabled()) {
-            player.addEffect(new MobEffectInstance(
-                    ModEffects.NICOTINE,
-                    500,
-                    0,
-                    false,
-                    false,
-                    true
-            ));
-        }
-
-        applyQualityHealthBonus(player, tobaccoStack);
-        applySecretBlendLegendaryBonus(player, tobaccoStack);
-        applyConfiguredAdditionalEffects(player);
-        applyConfiguredRuleEffects(player, tobaccoStack);
     }
 
     private static void applySecretBlendLegendaryBonus(Player player, ItemStack tobaccoStack) {
