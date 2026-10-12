@@ -39,8 +39,15 @@ public class HookahHoseItem extends Item {
 
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
-        if (entity instanceof ServerPlayer player && player.isAlive()) SmokingDraws.finishHookah(player, stack);
+        if (entity instanceof ServerPlayer player && player.isAlive()) SmokingDraws.finishHookah(player, stack, getUseDuration(stack, entity));
         return stack;
+    }
+
+    @Override
+    public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
+        if (entity instanceof ServerPlayer player && player.isAlive()) {
+            SmokingDraws.finishHookah(player, stack, getUseDuration(stack, entity) - timeLeft);
+        }
     }
 
     protected String hoseTooltipKey() {

@@ -66,11 +66,16 @@ public class WoodenSmokingPipeItem extends SmokingItem {
 
     @Override
     public boolean smokeFromMouthSlot(Player player, ServerLevel level, ItemStack stack) {
+        return smokeFromMouthSlot(player, level, stack, 1.0F);
+    }
+
+    @Override
+    public boolean smokeFromMouthSlot(Player player, ServerLevel level, ItemStack stack, float strength) {
         CompoundTag tag = LegacyItemTags.getTag(stack);
         int puffs = tag == null ? 0 : tag.getInt(NBT_PUFFS);
         if (puffs <= 0) return false;
 
-        this.triggerSmokingEffectPlayer(player, level, 0, getPackedTobaccoStack(stack));
+        this.triggerSmokingEffectPlayer(player, level, 0, getPackedTobaccoStack(stack), strength);
 
         puffs--;
         CompoundTag mutableTag = LegacyItemTags.getOrCreateTag(stack);

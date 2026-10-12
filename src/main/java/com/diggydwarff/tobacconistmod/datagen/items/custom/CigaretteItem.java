@@ -55,11 +55,16 @@ public class CigaretteItem extends SmokingItem {
 
     @Override
     public boolean smokeFromMouthSlot(Player player, ServerLevel level, ItemStack stack) {
+        return smokeFromMouthSlot(player, level, stack, 1.0F);
+    }
+
+    @Override
+    public boolean smokeFromMouthSlot(Player player, ServerLevel level, ItemStack stack, float strength) {
         if (stack.isEmpty() || !stack.isDamageableItem() || stack.getDamageValue() >= stack.getMaxDamage()) {
             return false;
         }
 
-        this.triggerSmokingEffectPlayer(player, level, 0, stack);
+        this.triggerSmokingEffectPlayer(player, level, 0, stack, strength);
 
         int nextDamage = stack.getDamageValue() + 1;
         if (nextDamage >= stack.getMaxDamage()) {

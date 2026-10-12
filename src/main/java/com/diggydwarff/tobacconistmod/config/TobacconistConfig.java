@@ -708,8 +708,8 @@ public class TobacconistConfig {
                     .define("enableNicotineEffects", true);
 
             enableSmokingDrawAnimations = builder
-                    .comment("Require holding use to draw on cigarettes, cigars, pipes and hookah hoses; also affects the Curios mouth smoking key.")
-                    .comment("Includes basic hand/arm animations, draw sounds and delayed exhalation. Defaults to true.")
+                    .comment("Hold use to draw on cigarettes, cigars, pipes and hookah hoses; release for a shorter puff. Also affects the Curios mouth smoking key.")
+                    .comment("Short puffs and longer draws produce smoke scaled to draw length. Includes hand/arm poses, draw sounds and delayed exhalation. Defaults to true.")
                     .comment("Set false to restore instant smoking. This server setting is synchronized to connected clients.")
                     .define("enableSmokingDrawAnimations", true);
 

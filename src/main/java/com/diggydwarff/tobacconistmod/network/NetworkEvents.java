@@ -29,7 +29,7 @@ public final class NetworkEvents {
 
     @SubscribeEvent
     public static void registerPayloads(RegisterPayloadHandlersEvent event) {
-        var registrar = event.registrar("2");
+        var registrar = event.registrar("3");
         registrar.playToServer(
                 SmokeMouthItemPayload.TYPE,
                 SmokeMouthItemPayload.STREAM_CODEC,
@@ -42,7 +42,8 @@ public final class NetworkEvents {
                     }
 
                     if (!payload.drawing()) {
-                        SmokingDraws.cancelMouth(player);
+                        if (payload.cancel()) SmokingDraws.cancelMouth(player);
+                        else SmokingDraws.releaseMouth(player);
                         return;
                     }
                     if (TobacconistConfig.areSmokingDrawAnimationsEnabled()) {

@@ -1,6 +1,7 @@
 package com.diggydwarff.tobacconistmod.client;
 
 import com.diggydwarff.tobacconistmod.TobacconistMod;
+import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.HookahHoseItem;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.WoodenSmokingPipeItem;
@@ -9,9 +10,9 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.renderer.block.model.ItemTransform;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -19,15 +20,14 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
-import org.joml.Vector3f;
 
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -39,7 +39,6 @@ public final class ClientDrawAnimations {
     private static final Map<InteractionHand, HandBlend> HANDS = new EnumMap<>(InteractionHand.class);
     private static final Map<Integer, Integer> MOUTH_DRAWS = new HashMap<>();
     private static ClientLevel currentLevel;
-    private static final DustParticleOptions EMBER = new DustParticleOptions(new Vector3f(1.0F, 0.26F, 0.035F), 0.28F);
 
     private ClientDrawAnimations() {}
 
@@ -72,12 +71,43 @@ public final class ClientDrawAnimations {
                 float breathing = player.isUsingItem()
                         ? Mth.sin((player.tickCount + partialTick) * 0.22F) * 0.005F * eased : 0.0F;
 
-                // Start from vanilla's idle position and bring the mouthpiece inward/upward.
-                pose.translate(side * (0.56F - 0.31F * eased), -0.52F - equip * 0.6F + 0.32F * eased + breathing,
-                        -0.72F + 0.15F * eased);
-                pose.mulPose(Axis.YP.rotationDegrees(side * (pipe ? 30.0F : 45.0F) * eased));
-                pose.mulPose(Axis.ZP.rotationDegrees(side * (pipe ? -28.0F : hose ? -38.0F : -52.0F) * eased));
-                pose.mulPose(Axis.XP.rotationDegrees((pipe ? -12.0F : -18.0F) * eased));
+                if (pipe || hose) {
+                    // These sprites put the mouthpiece on the right. Turn that end toward the
+                    // camera and anchor it near the lips; the bowl/cord stays farther away.
+                    float mouthX = hose ? 0.31F : 0.43F;
+                    float mouthY = hose ? 0.31F : 0.36F;
+                    if (stack.is(ModItems.EMERALD_AZTEC_SMOKING_PIPE.get())) mouthY = -0.10F;
+                    if (stack.is(ModItems.KISERU_SMOKING_PIPE.get())) {
+                        mouthX = 0.32F;
+                        mouthY = -0.14F;
+                    }
+                    float yaw = hose ? -90.0F - side * 35.0F : -90.0F - side * 45.0F;
+                    float pitch = -side * (hose ? 35.0F : 45.0F);
+                    float size = hose ? 0.60F : 0.65F;
+                    float yawRadians = yaw * Mth.DEG_TO_RAD;
+                    float pitchRadians = pitch * Mth.DEG_TO_RAD;
+                    float rotatedY = Mth.cos(pitchRadians) * mouthY;
+                    float rotatedZ = Mth.sin(pitchRadians) * mouthY;
+                    float rotatedX = Mth.cos(yawRadians) * mouthX + Mth.sin(yawRadians) * rotatedZ;
+                    float depth = -Mth.sin(yawRadians) * mouthX + Mth.cos(yawRadians) * rotatedZ;
+                    float targetX = side * 0.08F - rotatedX * size;
+                    float targetY = -0.14F - rotatedY * size;
+                    float targetZ = -0.28F - depth * size;
+                    pose.translate(Mth.lerp(eased, side * 0.56F, targetX),
+                            Mth.lerp(eased, -0.52F, targetY) - equip * 0.6F + breathing,
+                            Mth.lerp(eased, -0.72F, targetZ));
+                    pose.mulPose(Axis.YP.rotationDegrees(yaw * eased));
+                    pose.mulPose(Axis.XP.rotationDegrees(pitch * eased));
+                    float scale = Mth.lerp(eased, 1.0F, size);
+                    pose.scale(scale, scale, scale);
+                    removeDisplayTransform(pose, player, stack, arm, eased);
+                } else {
+                    pose.translate(side * (0.56F - 0.31F * eased), -0.52F - equip * 0.6F + 0.32F * eased + breathing,
+                            -0.72F + 0.15F * eased);
+                    pose.mulPose(Axis.YP.rotationDegrees(side * 45.0F * eased));
+                    pose.mulPose(Axis.ZP.rotationDegrees(side * -52.0F * eased));
+                    pose.mulPose(Axis.XP.rotationDegrees(-18.0F * eased));
+                }
                 return true;
             }
         };
@@ -93,18 +123,35 @@ public final class ClientDrawAnimations {
         else MOUTH_DRAWS.put(entityId, Math.min(ticks, 100));
     }
 
-    public static boolean isMouthDrawing(Player player) {
-        return TobacconistConfig.areSmokingDrawAnimationsEnabled() && MOUTH_DRAWS.containsKey(player.getId());
+    private static void removeDisplayTransform(PoseStack pose, LocalPlayer player, ItemStack stack,
+                                               HumanoidArm arm, float amount) {
+        // ItemRenderer will apply the baked first-person display transform after this hook.
+        // Fade in its inverse so the fully raised pose is anchored in sprite coordinates,
+        // rather than inheriting item/generated's extra yaw, roll, scale and translation.
+        ItemDisplayContext context = arm == HumanoidArm.RIGHT
+                ? ItemDisplayContext.FIRST_PERSON_RIGHT_HAND : ItemDisplayContext.FIRST_PERSON_LEFT_HAND;
+        ItemTransform display = Minecraft.getInstance().getItemRenderer()
+                .getModel(stack, player.level(), player, 0).getTransforms().getTransform(context);
+        int side = arm == HumanoidArm.RIGHT ? 1 : -1;
+        pose.mulPose(Axis.ZP.rotationDegrees(-side * display.rightRotation.z() * amount));
+        pose.mulPose(Axis.YP.rotationDegrees(-side * display.rightRotation.y() * amount));
+        pose.mulPose(Axis.XP.rotationDegrees(-display.rightRotation.x() * amount));
+        pose.scale(Mth.lerp(amount, 1.0F, inverseScale(display.scale.x())),
+                Mth.lerp(amount, 1.0F, inverseScale(display.scale.y())),
+                Mth.lerp(amount, 1.0F, inverseScale(display.scale.z())));
+        pose.mulPose(Axis.ZP.rotationDegrees(-side * display.rotation.z() * amount));
+        pose.mulPose(Axis.YP.rotationDegrees(-side * display.rotation.y() * amount));
+        pose.mulPose(Axis.XP.rotationDegrees(-display.rotation.x() * amount));
+        pose.translate(-side * display.translation.x() * amount,
+                -display.translation.y() * amount, -display.translation.z() * amount);
     }
 
-    public static void ember(Player player, ItemStack stack) {
-        if (stack.getItem() instanceof HookahHoseItem || player.level().getGameTime() % 4 != 0) return;
-        Vec3 facing = Vec3.directionFromRotation(0.0F, player.getYHeadRot());
-        Vec3 right = new Vec3(facing.z, 0.0D, -facing.x);
-        boolean pipe = stack.getItem() instanceof WoodenSmokingPipeItem;
-        Vec3 position = player.getEyePosition().add(0.0D, pipe ? -0.28D : -0.16D, 0.0D)
-                .add(facing.scale(pipe ? 0.27D : 0.34D)).add(right.scale(pipe ? 0.17D : 0.10D));
-        player.level().addParticle(EMBER, position.x, position.y, position.z, 0.0D, 0.002D, 0.0D);
+    private static float inverseScale(float scale) {
+        return Math.abs(scale) < 0.00001F ? 1.0F : 1.0F / scale;
+    }
+
+    public static boolean isMouthDrawing(Player player) {
+        return TobacconistConfig.areSmokingDrawAnimationsEnabled() && MOUTH_DRAWS.containsKey(player.getId());
     }
 
     @SubscribeEvent
@@ -131,15 +178,12 @@ public final class ClientDrawAnimations {
                 state.amount = 0.0F;
             }
             state.previous = state.amount;
-            boolean drawing = minecraft.player.isUsingItem() && minecraft.player.getUsedItemHand() == hand
+            boolean drawing = minecraft.player.isUsingItem() && minecraft.player.getUseItemRemainingTicks() > 0
+                    && minecraft.player.getUsedItemHand() == hand
                     && SmokingDraws.isSupported(stack);
             state.amount = Mth.clamp(state.amount + (drawing ? 0.20F : -0.20F), 0.0F, 1.0F);
         }
-        for (Player player : minecraft.level.players()) {
-            if (player.isUsingItem() && SmokingDraws.isSupported(player.getUseItem()) && player.getTicksUsingItem() > 5) {
-                ember(player, player.getUseItem());
-            }
-        }
+
     }
 
     private static final class HandBlend {

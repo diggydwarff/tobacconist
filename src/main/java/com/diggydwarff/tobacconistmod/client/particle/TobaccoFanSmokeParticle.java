@@ -1,6 +1,7 @@
 package com.diggydwarff.tobacconistmod.client.particle;
 
 import com.diggydwarff.tobacconistmod.compat.create.CreateCompat;
+import com.diggydwarff.tobacconistmod.particle.DrawSmokeParticleOptions;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.CampfireSmokeParticle;
 import net.minecraft.client.particle.Particle;
@@ -159,6 +160,24 @@ public final class TobaccoFanSmokeParticle extends CampfireSmokeParticle {
         BlockPos above = BlockPos.containing(this.x, this.y + yOffset, this.z);
         BlockState state = this.level.getBlockState(above);
         return !state.isAir() && !state.getCollisionShape(this.level, above).isEmpty();
+    }
+
+    public static final class DrawProvider implements ParticleProvider<DrawSmokeParticleOptions> {
+        private final SpriteSet sprites;
+
+        public DrawProvider(SpriteSet sprites) {
+            this.sprites = sprites;
+        }
+
+        @Override
+        public Particle createParticle(DrawSmokeParticleOptions options, ClientLevel level,
+                                       double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+            TobaccoFanSmokeParticle smoke = new TobaccoFanSmokeParticle(level, x, y, z, xSpeed, ySpeed, zSpeed, false, sprites);
+            smoke.scale(options.scale());
+            smoke.lifetime = Math.round(smoke.lifetime * (0.55F + 0.45F * options.strength()));
+            smoke.setAlpha(0.65F + 0.25F * options.strength());
+            return smoke;
+        }
     }
 
     public static final class Provider implements ParticleProvider<SimpleParticleType> {

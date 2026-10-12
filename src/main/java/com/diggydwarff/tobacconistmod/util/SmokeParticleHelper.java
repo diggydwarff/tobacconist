@@ -1,6 +1,7 @@
 package com.diggydwarff.tobacconistmod.util;
 
 import com.diggydwarff.tobacconistmod.particle.ModParticles;
+import com.diggydwarff.tobacconistmod.particle.DrawSmokeParticleOptions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -60,15 +61,49 @@ public final class SmokeParticleHelper {
         spawnServerCeilingHaze(level, random, x, y, z, 0.85F);
     }
 
+    public static int drawParticleCount(float strength, boolean hookah) {
+        float amount = Float.isFinite(strength) ? Math.max(0.0F, Math.min(1.0F, strength)) : 0.0F;
+        return 1 + Math.round((hookah ? 11 : 5) * amount);
+    }
+
+    /** Short puffs use smaller, fewer, shorter-lived wisps; full draws form a fuller cloud. */
+    public static void spawnServerDrawSmoke(ServerLevel level, double x, double y, double z,
+                                           double dirX, double dirZ, boolean hookah, float strength) {
+        if (level == null) return;
+        DrawSmokeParticleOptions smoke = new DrawSmokeParticleOptions(strength);
+        RandomSource random = level.random;
+        double spread = (hookah ? 0.12D : 0.07D) * (0.25D + smoke.strength() * 0.75D);
+        for (int i = 0; i < drawParticleCount(smoke.strength(), hookah); i++) {
+            double px = x + (random.nextDouble() - 0.5D) * spread;
+            double py = y + (random.nextDouble() - 0.5D) * spread * 0.5D;
+            double pz = z + (random.nextDouble() - 0.5D) * spread;
+            double forward = 0.010D + 0.022D * smoke.strength();
+            double vx = dirX * forward + (random.nextDouble() - 0.5D) * 0.006D;
+            double vy = 0.020D + random.nextDouble() * 0.012D;
+            double vz = dirZ * forward + (random.nextDouble() - 0.5D) * 0.006D;
+            sendSingleWithVelocity(level, smoke, px, py, pz, vx, vy, vz);
+        }
+        // Small puffs should not generate a full-sized extra haze particle.
+        if (smoke.strength() >= 0.5F) {
+            spawnServerCeilingHaze(level, random, x, y, z, (hookah ? 0.85F : 0.65F) * smoke.strength());
+        }
+    }
+
     /** Adds a restrained soul-fire wisp to smoke made from Haunted tobacco. */
     public static void spawnServerHauntedWisps(ServerLevel level,
                                                 double x, double y, double z,
                                                 double dirX, double dirZ,
                                                 boolean hookahDraw) {
+        spawnServerHauntedWisps(level, x, y, z, dirX, dirZ, hookahDraw, 1.0F);
+    }
+
+    public static void spawnServerHauntedWisps(ServerLevel level,
+                                              double x, double y, double z, double dirX, double dirZ,
+                                              boolean hookahDraw, float strength) {
         if (level == null) return;
 
         RandomSource random = level.random;
-        int wisps = hookahDraw ? 3 : 1;
+        int wisps = Math.max(1, Math.round((hookahDraw ? 3 : 1) * strength));
         for (int i = 0; i < wisps; i++) {
             double px = x + (random.nextDouble() - 0.5D) * (hookahDraw ? 0.16D : 0.07D);
             double py = y + random.nextDouble() * 0.08D;
@@ -80,7 +115,7 @@ public final class SmokeParticleHelper {
         }
 
         // Soul-fire sparks are intentionally uncommon so Haunted tobacco stays atmospheric.
-        if (hookahDraw || random.nextFloat() < 0.35F) {
+        if (random.nextFloat() < (hookahDraw ? 1.0F : 0.35F) * strength) {
             sendSingleWithVelocity(level, ParticleTypes.SOUL_FIRE_FLAME,
                     x, y + 0.02D, z, dirX * 0.006D, 0.014D, dirZ * 0.006D);
         }

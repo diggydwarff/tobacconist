@@ -24,6 +24,10 @@ public final class CuriosSmokingHelper {
      * player-facing failure message when no puff could be taken.
      */
     public static Component trySmokeMouthItem(ServerPlayer player) {
+        return trySmokeMouthItem(player, 1.0F);
+    }
+
+    public static Component trySmokeMouthItem(ServerPlayer player, float strength) {
         final Component[] result = {Component.translatable("tobacconistmod.message.mouth.no_slot")};
 
         CuriosApi.getCuriosInventory(player).ifPresent(inventory -> {
@@ -43,7 +47,7 @@ public final class CuriosSmokingHelper {
                 return;
             }
 
-            if (!smokingItem.smokeFromMouthSlot(player, player.serverLevel(), stack)) {
+            if (!smokingItem.smokeFromMouthSlot(player, player.serverLevel(), stack, strength)) {
                 result[0] = Component.translatable("tobacconistmod.message.mouth.no_puffs");
                 return;
             }

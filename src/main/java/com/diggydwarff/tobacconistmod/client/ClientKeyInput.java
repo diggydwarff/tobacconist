@@ -35,13 +35,15 @@ public final class ClientKeyInput {
             boolean drawing = minecraft.screen == null && !minecraft.isPaused()
                     && ClientKeyMappings.SMOKE_MOUTH_ITEM.isDown();
             if (drawing != wasDrawing) {
-                PacketDistributor.sendToServer(drawing ? SmokeMouthItemPayload.START : SmokeMouthItemPayload.STOP);
+                boolean cancel = minecraft.screen != null || minecraft.isPaused();
+                PacketDistributor.sendToServer(drawing ? SmokeMouthItemPayload.START
+                        : cancel ? SmokeMouthItemPayload.CANCEL : SmokeMouthItemPayload.STOP);
                 wasDrawing = drawing;
             }
             while (ClientKeyMappings.SMOKE_MOUTH_ITEM.consumeClick()) { /* Drain legacy click events. */ }
         } else {
             if (wasDrawing) {
-                PacketDistributor.sendToServer(SmokeMouthItemPayload.STOP);
+                PacketDistributor.sendToServer(SmokeMouthItemPayload.CANCEL);
                 wasDrawing = false;
             }
             while (ClientKeyMappings.SMOKE_MOUTH_ITEM.consumeClick()) {
