@@ -145,6 +145,7 @@ public class TobacconistCreativeTab {
                         output.accept(GOLD_SMOKING_PIPE.get());
                         output.accept(IRON_SMOKING_PIPE.get());
                         output.accept(COPPER_SMOKING_PIPE.get());
+                        output.accept(BRASS_SMOKING_PIPE.get());
                         output.accept(GEM_ENCRUSTED_SMOKING_PIPE.get());
                         output.accept(DIAMOND_ENCRUSTED_SMOKING_PIPE.get());
                         output.accept(LAPIS_ENCRUSTED_SMOKING_PIPE.get());
@@ -172,13 +173,14 @@ public class TobacconistCreativeTab {
                         output.accept(PaintingTabHelper.paintingVariant("andean_mapacho"));
 
                         output.accept(BOTTLED_AQUA_VITAE.get());
-                        output.accept(com.diggydwarff.tobacconistmod.vapor.VaporContent.EXTRACTION_STATION.get());
                         output.accept(com.diggydwarff.tobacconistmod.vapor.VaporContent.BLENDING_BENCH.get());
                         output.accept(com.diggydwarff.tobacconistmod.vapor.VaporContent.VEGETABLE_BASE.get());
                         output.accept(com.diggydwarff.tobacconistmod.vapor.VaporContent.CLEAR_BASE.get());
                         output.accept(com.diggydwarff.tobacconistmod.vapor.VaporContent.CRUDE_EXTRACT.get());
                         output.accept(com.diggydwarff.tobacconistmod.vapor.VaporContent.NICOTINE_EXTRACT.get());
                         output.accept(com.diggydwarff.tobacconistmod.vapor.VaporContent.VAPE_PEN.get());
+                        output.accept(com.diggydwarff.tobacconistmod.vapor.VaporContent.BOX_MOD.get());
+                        output.accept(com.diggydwarff.tobacconistmod.vapor.VaporContent.CIGALIKE.get());
                         output.accept(com.diggydwarff.tobacconistmod.vapor.VaporContent.RECIPE_CARD.get());
                         output.accept(com.diggydwarff.tobacconistmod.vapor.VaporData.bottle(new com.diggydwarff.tobacconistmod.vapor.LiquidBlend(700000, 300000, 0, java.util.Map.of()), 250));
                         addAllEssences(output);

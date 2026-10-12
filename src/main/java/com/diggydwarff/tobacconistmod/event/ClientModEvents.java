@@ -34,6 +34,10 @@ public class ClientModEvents {
                 sprites -> new TobaccoFanSmokeParticle.Provider(sprites, false)
         );
         event.registerSpriteSet(
+                ModParticles.TOBACCO_DRAW_SMOKE.get(),
+                TobaccoFanSmokeParticle.DrawProvider::new
+        );
+        event.registerSpriteSet(
                 ModParticles.TOBACCO_INDOOR_SMOKE.get(),
                 sprites -> new TobaccoFanSmokeParticle.Provider(sprites, true)
         );

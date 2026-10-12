@@ -27,6 +27,10 @@ public class ModItems {
     // PIPE ITEMS
     public static final Supplier<Item> WOODEN_SMOKING_PIPE = ITEMS.register("wooden_smoking_pipe", () -> new WoodenSmokingPipeItem(new Item.Properties().stacksTo(1)));
 
+    public static final Supplier<Item> BRASS_SMOKING_PIPE =
+            ITEMS.register("brass_smoking_pipe",
+                    () -> new WoodenSmokingPipeItem(new Item.Properties().stacksTo(1)));
+
     public static final Supplier<Item> CLAY_SMOKING_PIPE =
             ITEMS.register("clay_smoking_pipe",
                     () -> new WoodenSmokingPipeItem(new Item.Properties().stacksTo(1)));

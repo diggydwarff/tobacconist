@@ -1,0 +1,29 @@
+{
+  "parent": "tobacconistmod:vapor/first_exhale",
+  "display": {
+    "icon": {
+      "id": "tobacconistmod:vegetable_base"
+    },
+    "title": {
+      "translate": "advancement.tobacconistmod.vapor.cloud_chaser"
+    },
+    "description": {
+      "translate": "advancement.tobacconistmod.vapor.cloud_chaser.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "perform": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "perform"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

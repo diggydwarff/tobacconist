@@ -16,20 +16,32 @@ public final class VapePenMenu extends AbstractContainerMenu {
     public VapePenMenu(int id, Inventory inventory, int deviceSlot) {
         super(VaporContent.PEN_MENU.get(), id); this.inventory = inventory; this.deviceSlot = deviceSlot;
         device = deviceSlot >= 0 && deviceSlot < inventory.getContainerSize() ? inventory.getItem(deviceSlot) : ItemStack.EMPTY;
-        addSlot(new Slot(inputs, 0, 44, 46) { @Override public boolean mayPlace(ItemStack stack) { return stack.is(VaporContent.VAPE_LIQUID.get()) && VaporData.blend(stack) != null && VaporData.blend(stack).usable(); } });
-        addSlot(new Slot(inputs, 1, 116, 46) { @Override public boolean mayPlace(ItemStack stack) { return stack.is(Items.REDSTONE); } });
-        addInventorySlot(deviceSlot, 80, 46);
-        for (int row = 0; row < 3; row++) for (int col = 0; col < 9; col++) addInventorySlot(9 + row * 9 + col, 8 + col * 18, 112 + row * 18);
-        for (int col = 0; col < 9; col++) addInventorySlot(col, 8 + col * 18, 170);
+        addSlot(new Slot(inputs, 0, 26, 44) { @Override public boolean mayPlace(ItemStack stack) { return stack.is(VaporContent.VAPE_LIQUID.get()) && VaporData.blend(stack) != null && VaporData.blend(stack).usable(); } });
+        addSlot(new Slot(inputs, 1, 134, 44) { @Override public boolean mayPlace(ItemStack stack) { return stack.is(Items.REDSTONE); } });
+        addInventorySlot(deviceSlot, 80, 44);
+        int inventoryY = isBoxMod() ? 164 : 132;
+        for (int row = 0; row < 3; row++) for (int col = 0; col < 9; col++) addInventorySlot(9 + row * 9 + col, 8 + col * 18, inventoryY + row * 18);
+        for (int col = 0; col < 9; col++) addInventorySlot(col, 8 + col * 18, inventoryY + 58);
     }
-    private void addInventorySlot(int index, int x, int y) {
-        addSlot(new Slot(inventory, index, x, y) {
-            @Override public boolean mayPickup(Player player) { return index != deviceSlot; }
-            @Override public boolean mayPlace(ItemStack stack) { return index != deviceSlot; }
+    private void addInventorySlot(int inventoryIndex, int x, int y) {
+        addSlot(new Slot(inventory, inventoryIndex, x, y) {
+            // Slot.index is the menu index; lock by the player's inventory index instead.
+            @Override public boolean mayPickup(Player player) { return inventoryIndex != deviceSlot; }
+            @Override public boolean mayPlace(ItemStack stack) { return inventoryIndex != deviceSlot; }
         });
     }
     public ItemStack pen() { return inventory.getItem(deviceSlot); }
-    @Override public boolean stillValid(Player player) { return device.is(VaporContent.VAPE_PEN.get()) && inventory.getItem(deviceSlot) == device; }
+    public boolean isBoxMod() { return VapePenItem.hasPowerControl(device); }
+    public boolean canRefill() {
+        ItemStack bottle = inputs.getItem(0);
+        ItemStack current = pen();
+        LiquidBlend blend = VaporData.blend(bottle);
+        return bottle.is(VaporContent.VAPE_LIQUID.get()) && blend != null && blend.usable()
+                && VaporData.volume(bottle) > 0 && VapePenItem.volume(current) < VapePenItem.capacity(current)
+                && (VapePenItem.volume(current) == 0 || blend.equals(VaporData.blend(current)));
+    }
+    public boolean canCharge() { return inputs.getItem(1).is(Items.REDSTONE) && VaporData.charge(pen()) < VaporData.MAX_CHARGE; }
+    @Override public boolean stillValid(Player player) { return VapePenItem.isDevice(device) && inventory.getItem(deviceSlot) == device; }
     @Override public void clicked(int slot, int button, ClickType type, Player player) {
         if (type == ClickType.SWAP && (button == deviceSlot || button == 40 && deviceSlot == 40)) return;
         super.clicked(slot, button, type, player);
@@ -38,17 +50,19 @@ public final class VapePenMenu extends AbstractContainerMenu {
         if (!stillValid(player)) return false;
         if (id == 0) {
             ItemStack bottle = inputs.getItem(0);
-            if (!bottle.is(VaporContent.VAPE_LIQUID.get())) return false;
-            LiquidBlend blend = VaporData.blend(bottle), old = VaporData.blend(device);
-            if (blend == null || !blend.usable() || VapePenItem.volume(device) > 0 && !blend.equals(old)) return false;
-            int amount = Math.min(250 - VapePenItem.volume(device), VaporData.volume(bottle));
+            if (!canRefill()) return false;
+            LiquidBlend blend = VaporData.blend(bottle);
+            int amount = Math.min(VapePenItem.capacity(device) - VapePenItem.volume(device), VaporData.volume(bottle));
             if (amount <= 0) return false;
             device.set(VaporContent.BLEND.get(), blend); device.set(VaporContent.VOLUME.get(), VapePenItem.volume(device) + amount);
             int remaining = VaporData.volume(bottle) - amount;
             if (remaining == 0) inputs.setItem(0, new ItemStack(Items.GLASS_BOTTLE)); else bottle.set(VaporContent.VOLUME.get(), remaining);
         } else if (id == 1) {
-            if (!inputs.getItem(1).is(Items.REDSTONE) || VaporData.charge(device) >= 100) return false;
+            if (!canCharge()) return false;
             inputs.removeItem(1, 1); device.set(VaporContent.CHARGE.get(), Math.min(100, VaporData.charge(device) + 20));
+        } else if ((id == 2 || id == 3) && isBoxMod()) {
+            int step = id == 2 ? 10 : -10;
+            device.set(VaporContent.WATTAGE.get(), Math.clamp(VapePenItem.wattage(device) + step, 10, 40));
         } else return false;
         inputs.setChanged(); inventory.setChanged(); broadcastChanges(); return true;
     }

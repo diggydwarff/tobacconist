@@ -22,6 +22,11 @@ public final class LiquidStationBlock extends BaseEntityBlock {
         registerDefaultState(stateDefinition.any().setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH));
     }
     @Override protected MapCodec<? extends BaseEntityBlock> codec() { return simpleCodec(properties -> new LiquidStationBlock(properties, blending)); }
+    @Override protected net.minecraft.world.phys.shapes.VoxelShape getShape(BlockState state, net.minecraft.world.level.BlockGetter level,
+                                                                          BlockPos pos, net.minecraft.world.phys.shapes.CollisionContext context) {
+        return blending ? VaporBenchShape.forFacing(state.getValue(BlockStateProperties.HORIZONTAL_FACING))
+                : super.getShape(state, level, pos, context);
+    }
     @Override public RenderShape getRenderShape(BlockState state) { return RenderShape.MODEL; }
     @Override protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) { builder.add(BlockStateProperties.HORIZONTAL_FACING); }
     @Override public BlockState getStateForPlacement(BlockPlaceContext context) { return defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, context.getHorizontalDirection().getOpposite()); }

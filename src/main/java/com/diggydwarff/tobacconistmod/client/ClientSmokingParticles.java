@@ -26,6 +26,7 @@ public class ClientSmokingParticles {
                 if (renderStates.size() > 0 && !renderStates.get(0)) return;
                 if (stack.isEmpty()) return;
                 if (!(stack.getItem() instanceof SmokingItem smokingItem)) return;
+                if (ClientDrawAnimations.isMouthDrawing(player)) return;
                 if (!smokingItem.shouldEmitMouthSmoke(stack)) return;
 
                 spawnMouthSmoke(mc, player);

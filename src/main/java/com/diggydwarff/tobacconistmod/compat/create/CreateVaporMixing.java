@@ -54,7 +54,8 @@ public final class CreateVaporMixing {
                 || !targetParts.keySet().containsAll(aParts.keySet()) || !targetParts.keySet().containsAll(bParts.keySet())) return false;
         if (!matchesSubset(a, targetParts, aParts.keySet()) || !matchesSubset(b, targetParts, bParts.keySet())) return false;
         int amountA = dose(targetParts, aParts.keySet()), amountB = dose(targetParts, bParts.keySet());
-        if (amountA <= 0 || amountB <= 0 || available.get(0).getAmount() < amountA || available.get(1).getAmount() < amountB) return false;
+        int consumeA = consumption(a, amountA), consumeB = consumption(b, amountB);
+        if (amountA <= 0 || amountB <= 0 || available.get(0).getAmount() < consumeA || available.get(1).getAmount() < consumeB) return false;
         Set<String> combined = new TreeSet<>(aParts.keySet()); combined.addAll(bParts.keySet());
         LiquidBlend result = subset(targetParts, combined);
         FluidStack output = VaporData.fluid(result, amountA + amountB);
@@ -62,13 +63,13 @@ public final class CreateVaporMixing {
         if (!basin.acceptOutputs(List.of(), List.of(output), true)) return false;
         basin.inputTank.allowExtraction();
         try {
-            FluidStack needA = available.get(0).copyWithAmount(amountA), needB = available.get(1).copyWithAmount(amountB);
-            if (input.drain(needA, IFluidHandler.FluidAction.SIMULATE).getAmount() != amountA
-                    || input.drain(needB, IFluidHandler.FluidAction.SIMULATE).getAmount() != amountB) return false;
+            FluidStack needA = available.get(0).copyWithAmount(consumeA), needB = available.get(1).copyWithAmount(consumeB);
+            if (input.drain(needA, IFluidHandler.FluidAction.SIMULATE).getAmount() != consumeA
+                    || input.drain(needB, IFluidHandler.FluidAction.SIMULATE).getAmount() != consumeB) return false;
             if (simulate) return true;
             FluidStack consumedA = input.drain(needA, IFluidHandler.FluidAction.EXECUTE);
             FluidStack consumedB = input.drain(needB, IFluidHandler.FluidAction.EXECUTE);
-            if (consumedA.getAmount() != amountA || consumedB.getAmount() != amountB
+            if (consumedA.getAmount() != consumeA || consumedB.getAmount() != consumeB
                     || !basin.acceptOutputs(List.of(), List.of(output.copy()), false)) {
                 input.fill(consumedA, IFluidHandler.FluidAction.EXECUTE);
                 input.fill(consumedB, IFluidHandler.FluidAction.EXECUTE);
@@ -76,6 +77,13 @@ public final class CreateVaporMixing {
             }
             basin.inputTank.sendDataImmediately(); basin.notifyChangeOfContents(); return true;
         } finally { basin.inputTank.forbidExtraction(); }
+    }
+    private static int consumption(LiquidBlend input, int contribution) {
+        // Condense one full essence dose into the selected flavor contribution.
+        if (input.vegetable() == 0 && input.clear() == 0 && input.nicotine() == 0 && input.flavors().size() == 1) {
+            return Math.max(1, (contribution + 9) / 10) * VaporData.BOTTLE;
+        }
+        return contribution;
     }
     private static int dose(Map<String, Integer> parts, Set<String> keys) {
         int sum = keys.stream().mapToInt(parts::get).sum();

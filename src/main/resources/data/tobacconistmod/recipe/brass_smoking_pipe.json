@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " B",
+    "SB"
+  ],
+  "key": {
+    "B": {
+      "tag": "c:ingots/brass"
+    },
+    "S": {
+      "item": "minecraft:spruce_planks"
+    }
+  },
+  "result": {
+    "id": "tobacconistmod:brass_smoking_pipe",
+    "count": 1
+  },
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "c:ingots/brass"
+      }
+    }
+  ]
+}

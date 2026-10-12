@@ -28,7 +28,7 @@ public final class VaporColors {
                 }
                 if (total > 0) return 0xFF000000 | (int) (red / total) << 16 | (int) (green / total) << 8 | (int) (blue / total);
             }
-            if (blend.nicotine() == LiquidBlend.SCALE) return 0xFF9CBA68;
+            if (blend.nicotine() == LiquidBlend.SCALE) return 0xFFF4F3EB;
             return blend.vegetablePercent() >= 50 ? 0xFFE8DF9C : 0xFFD8EDF1;
         }, VaporContent.VEGETABLE_BASE.get(), VaporContent.CLEAR_BASE.get(), VaporContent.CRUDE_EXTRACT.get(), VaporContent.NICOTINE_EXTRACT.get(), VaporContent.VAPE_LIQUID.get());
     }

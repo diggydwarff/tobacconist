@@ -43,10 +43,16 @@ public final class VaporContent {
             () -> DataComponentType.<LiquidBlend>builder().persistent(VaporData.CODEC)
                     .networkSynchronized(ByteBufCodecs.fromCodec(VaporData.CODEC)).build());
     public static final Supplier<DataComponentType<Integer>> VOLUME = DATA.register("liquid_volume",
-            () -> DataComponentType.<Integer>builder().persistent(com.mojang.serialization.Codec.intRange(0, 250))
+            () -> DataComponentType.<Integer>builder().persistent(com.mojang.serialization.Codec.intRange(0, 500))
                     .networkSynchronized(ByteBufCodecs.VAR_INT).build());
     public static final Supplier<DataComponentType<Integer>> CHARGE = DATA.register("vape_charge",
             () -> DataComponentType.<Integer>builder().persistent(com.mojang.serialization.Codec.intRange(0, 100))
+                    .networkSynchronized(ByteBufCodecs.VAR_INT).build());
+    public static final Supplier<DataComponentType<Integer>> WATTAGE = DATA.register("vape_wattage",
+            () -> DataComponentType.<Integer>builder().persistent(com.mojang.serialization.Codec.intRange(10, 40))
+                    .networkSynchronized(ByteBufCodecs.VAR_INT).build());
+    public static final Supplier<DataComponentType<Integer>> PUFF_COUNT = DATA.register("vape_puff_count",
+            () -> DataComponentType.<Integer>builder().persistent(com.mojang.serialization.Codec.intRange(0, Integer.MAX_VALUE))
                     .networkSynchronized(ByteBufCodecs.VAR_INT).build());
 
     public static final Supplier<Item> VEGETABLE_BASE = bottle("vegetable_base", "vg");
@@ -55,12 +61,16 @@ public final class VaporContent {
     public static final Supplier<Item> NICOTINE_EXTRACT = bottle("nicotine_extract", "nicotine");
     public static final Supplier<Item> VAPE_LIQUID = bottle("vape_liquid", "liquid");
     public static final Supplier<Item> VAPE_PEN = ITEMS.register("vape_pen", () -> new VapePenItem(new Item.Properties().stacksTo(1)));
+    public static final Supplier<Item> BOX_MOD = ITEMS.register("box_mod_vape",
+            () -> new VapePenItem(new Item.Properties().stacksTo(1), VapePenItem.Kind.BOX_MOD));
+    public static final Supplier<Item> CIGALIKE = ITEMS.register("cigalike_vape",
+            () -> new VapePenItem(new Item.Properties().stacksTo(1), VapePenItem.Kind.CIGALIKE));
     public static final Supplier<Item> RECIPE_CARD = ITEMS.register("liquid_recipe_card", () -> new VaporBottleItem(new Item.Properties().stacksTo(1), "card"));
 
     public static final Supplier<Block> EXTRACTION_STATION = BLOCKS.register("extraction_station",
             () -> new LiquidStationBlock(BlockBehaviour.Properties.of().strength(2.5F).sound(SoundType.METAL), false));
     public static final Supplier<Block> BLENDING_BENCH = BLOCKS.register("liquid_blending_bench",
-            () -> new LiquidStationBlock(BlockBehaviour.Properties.of().strength(2.0F).sound(SoundType.WOOD), true));
+            () -> new LiquidStationBlock(BlockBehaviour.Properties.of().strength(2.0F).sound(SoundType.WOOD).noOcclusion(), true));
     static {
         ITEMS.register("extraction_station", () -> new BlockItem(EXTRACTION_STATION.get(), new Item.Properties()));
         ITEMS.register("liquid_blending_bench", () -> new BlockItem(BLENDING_BENCH.get(), new Item.Properties()));
@@ -78,7 +88,7 @@ public final class VaporContent {
     public static final Supplier<Fluid> VEGETABLE_FLUID = fluid("vegetable_base", 0x99E8DF9C);
     public static final Supplier<Fluid> CLEAR_FLUID = fluid("clear_base", 0x77D8EDF1);
     public static final Supplier<Fluid> CRUDE_FLUID = fluid("crude_tobacco_extract", 0xBB71552C);
-    public static final Supplier<Fluid> NICOTINE_FLUID = fluid("nicotine_extract", 0x999CBA68);
+    public static final Supplier<Fluid> NICOTINE_FLUID = fluid("nicotine_extract", 0x66F4F3EB);
     public static final Supplier<Fluid> LIQUID_FLUID = fluid("vape_liquid", 0x99E8D8AD);
 
     private VaporContent() {}

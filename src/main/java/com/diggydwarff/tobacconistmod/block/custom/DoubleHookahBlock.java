@@ -3,11 +3,9 @@ package com.diggydwarff.tobacconistmod.block.custom;
 import com.mojang.serialization.MapCodec;
 import com.diggydwarff.tobacconistmod.block.entity.HookahEntity;
 import com.diggydwarff.tobacconistmod.block.entity.ModBlockEntities;
-import com.diggydwarff.tobacconistmod.datagen.items.SmokingItem;
-import com.diggydwarff.tobacconistmod.datagen.items.custom.HookahHoseItem;
+import com.diggydwarff.tobacconistmod.util.SmokingDraws;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -244,26 +242,11 @@ public class DoubleHookahBlock extends BaseEntityBlock {
         BlockPos entityPos = getEntityPos(state, pos);
         BlockEntity blockEntity = level.getBlockEntity(entityPos);
 
+        InteractionResult draw = SmokingDraws.startHookah(level, entityPos, player, hand);
+        if (draw.consumesAction()) return draw;
+
         if (!level.isClientSide()) {
             BlockEntity entity = level.getBlockEntity(entityPos);
-
-            if (blockEntity instanceof HookahEntity hookah && hookah.progress > 0) {
-                for (ItemStack stack : player.getHandSlots()) {
-                    if (stack.getItem() instanceof HookahHoseItem) {
-                        if (player.getCooldowns().isOnCooldown(stack.getItem())) {
-                            return InteractionResult.sidedSuccess(false);
-                        }
-
-                        ItemStack shisha = hookah.getShishaForSmoking();
-                        if (shisha.isEmpty()) return InteractionResult.PASS;
-
-                        SmokingItem.applyHookahSmokingEffects(player, (ServerLevel) level, shisha);
-                        hookah.applyDirtyWaterPenalty(player);
-                        player.getCooldowns().addCooldown(stack.getItem(), 20);
-                        return InteractionResult.sidedSuccess(false);
-                    }
-                }
-            }
 
             if (entity instanceof HookahEntity) {
                 ((ServerPlayer) player).openMenu((HookahEntity) entity, buf -> buf.writeBlockPos(entityPos));

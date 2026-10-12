@@ -100,8 +100,12 @@ public class TobacconistJeiPlugin implements IModPlugin {
         var level = net.minecraft.client.Minecraft.getInstance().level;
         if (level != null) registration.addRecipes(ExtractionRecipeCategory.TYPE,
                 level.getRecipeManager().getAllRecipesFor(com.diggydwarff.tobacconistmod.vapor.VaporContent.EXTRACTION.get()).stream().map(RecipeHolder::value).toList());
+        registration.addIngredientInfo(java.util.List.of(new ItemStack(net.minecraft.world.level.block.Blocks.CAULDRON)), VanillaTypes.ITEM_STACK,
+                Component.translatable("tobacconistmod.vapor.jei_cauldron"));
         registration.addIngredientInfo(java.util.List.of(new ItemStack(com.diggydwarff.tobacconistmod.vapor.VaporContent.BLENDING_BENCH.get()),
-                        new ItemStack(com.diggydwarff.tobacconistmod.vapor.VaporContent.VAPE_PEN.get())), VanillaTypes.ITEM_STACK,
+                        new ItemStack(com.diggydwarff.tobacconistmod.vapor.VaporContent.VAPE_PEN.get()),
+                        new ItemStack(com.diggydwarff.tobacconistmod.vapor.VaporContent.BOX_MOD.get()),
+                        new ItemStack(com.diggydwarff.tobacconistmod.vapor.VaporContent.CIGALIKE.get())), VanillaTypes.ITEM_STACK,
                 Component.translatable("tobacconistmod.vapor.jei_blending"), Component.translatable("tobacconistmod.vapor.jei_pen"));
         registration.addRecipes(LeafCuttingRecipeCategory.TYPE, LeafCuttingJeiRecipe.createAll());
         registration.addRecipes(AverageLeavesRecipeCategory.TYPE, AverageLeavesJeiRecipe.createAll());
@@ -206,7 +210,8 @@ public class TobacconistJeiPlugin implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(com.diggydwarff.tobacconistmod.vapor.VaporContent.EXTRACTION_STATION.get()), ExtractionRecipeCategory.TYPE);
+        registration.addRecipeCatalyst(new ItemStack(net.minecraft.world.level.block.Blocks.CAULDRON), ExtractionRecipeCategory.TYPE);
+        registration.addRecipeCatalyst(new ItemStack(net.minecraft.world.level.block.Blocks.CAMPFIRE), ExtractionRecipeCategory.TYPE);
         registration.addRecipeCatalyst(new ItemStack(ModItems.STONE_CHAVETA.get()), LeafCuttingRecipeCategory.TYPE);
         registration.addRecipeCatalyst(new ItemStack(ModItems.COPPER_CHAVETA.get()), LeafCuttingRecipeCategory.TYPE);
         registration.addRecipeCatalyst(new ItemStack(ModItems.IRON_CHAVETA.get()), LeafCuttingRecipeCategory.TYPE);

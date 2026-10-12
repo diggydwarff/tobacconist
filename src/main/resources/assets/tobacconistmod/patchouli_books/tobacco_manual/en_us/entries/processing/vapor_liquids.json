@@ -5,15 +5,15 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Make Vegetable Base, Clear Base, and tobacco extracts at the Extraction Station. Inputs are placed left to right; add normal furnace fuel below. JEI shows the five extraction recipes. Vegetable Base is VG and Clear Base is PG; the technical names stay in tooltips."
+      "text": "Use a water-filled vanilla cauldron above a lit campfire. Add ingredients in JEI order, wait for heating, then collect with a glass bottle. Each batch uses one water level. Sneak-use with an empty hand to cancel and recover ingredients. Vegetable Base is VG; Clear Base is PG."
     },
     {
       "type": "patchouli:text",
-      "text": "Fill the Liquid Blending Bench with both bases, optional nicotine, and up to three essences. Each reservoir holds 2000 mB. Add empty bottles, choose VG/PG and nicotine, and press Blend Bottle. Auto repeats the current formula. Empty ingredient bottles leave through Returns."
+      "text": "Fill the Liquid Blending Bench with carrier bases, optional nicotine, and up to three essences. Each chosen flavor consumes one full essence dose per 250 mB batch. Ingredient bottles return through Glass. Left-click VG/PG to increase VG; right-click to increase PG. Auto waits for the same flavors when supplies run out."
     },
     {
       "type": "patchouli:text",
-      "text": "Put a blank Liquid Recipe Card in Recipe and press Save Recipe. It remembers the formula and can be renamed in an anvil to name the finished liquid. A saved card fixes its flavors even if a reservoir runs empty. Changing the ratio or nicotine clears the saved formula."
+      "text": "Insert a blank Liquid Recipe Card and press Save Recipe. It remembers the formula and can be renamed in an anvil to name the finished liquid. Saved cards fix flavors for repeat batches and Create lines. The trash button discards stored essences, clears the flavor recipe, and stops Auto."
     },
     {
       "type": "patchouli:text",
@@ -21,7 +21,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Create can produce the ingredients with heated Mixers. Leave one saved Recipe Card in each blending Basin. Combine VG and PG first, then add nicotine and one essence at a time. Every Basin uses two fluid inputs. Pipe the finished liquid to a Spout for bottling. The card is reusable."
+      "text": "Create uses heated Mixers and Basins for extraction. Put one saved Recipe Card in each blending Basin. Combine VG and PG first, then nicotine and one essence at a time. A flavor stage consumes a full 250 mB essence dose. Pipe the finished liquid to a Spout for bottling. Cards are reusable."
     }
   ]
 }

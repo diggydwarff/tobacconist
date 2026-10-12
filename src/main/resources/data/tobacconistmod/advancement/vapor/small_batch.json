@@ -1,0 +1,29 @@
+{
+  "parent": "tobacconistmod:vapor/clear_start",
+  "display": {
+    "icon": {
+      "id": "tobacconistmod:vape_liquid"
+    },
+    "title": {
+      "translate": "advancement.tobacconistmod.vapor.small_batch"
+    },
+    "description": {
+      "translate": "advancement.tobacconistmod.vapor.small_batch.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "perform": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "perform"
+    ]
+  ],
+  "sends_telemetry_event": false
+}
