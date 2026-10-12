@@ -56,6 +56,7 @@ public class TobacconistMod {
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::clientSetup);
 
+        com.diggydwarff.tobacconistmod.vapor.VaporContent.register(modEventBus);
         ModMolassesFluids.register(modEventBus);
         ModExtractionFluids.register(modEventBus);
         ModParticles.register(modEventBus);

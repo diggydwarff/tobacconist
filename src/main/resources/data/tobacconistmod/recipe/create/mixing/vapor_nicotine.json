@@ -1,0 +1,26 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "type": "create:mixing",
+  "heat_requirement": "heated",
+  "ingredients": [
+    {
+      "item": "minecraft:paper"
+    },
+    {
+      "type": "neoforge:single",
+      "fluid": "tobacconistmod:crude_tobacco_extract",
+      "amount": 250
+    }
+  ],
+  "results": [
+    {
+      "id": "tobacconistmod:nicotine_extract",
+      "amount": 250
+    }
+  ]
+}

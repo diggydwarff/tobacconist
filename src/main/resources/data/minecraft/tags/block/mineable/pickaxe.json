@@ -22,6 +22,7 @@
     "tobacconistmod:netherite_hookah_block",
     "tobacconistmod:flue_firebox",
     "tobacconistmod:industrial_drying_rack",
-    "tobacconistmod:production_monitor"
+    "tobacconistmod:production_monitor",
+    "tobacconistmod:extraction_station"
   ]
 }

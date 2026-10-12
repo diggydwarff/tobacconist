@@ -8,6 +8,7 @@ Tobacconist adds tobacco cultivation, curing, processing, blending, smoking prod
 - Air, Sun, Fire, Flue, and specialty tobacco curing and processing
 - Fermentation, aging, cutting, blending, flavoring, and Shisha production
 - Cigarettes, Cigars, reusable Pipes, and functional Hookahs
+- Refillable Vape Pen, Vegetable/Clear carrier bases, nicotine extraction, custom flavored liquids, and saved liquid recipes (4.2 alpha)
 - Tobacco storage, packaging, grading, and production tools
 - Haunted Harvest seasonal content including Haunted curing, traditional specialty tobaccos, autumn flavors, secret blends, the Jack-o'-Lantern Hookah, and Corn Cob Pipe
 - Optional Create automation for large-scale tobacco processing and production
@@ -40,3 +41,5 @@ Adds compatible flavor ingredients from Fruits Delight fruits.
 [Download Fruits Delight](https://www.curseforge.com/minecraft/mc-mods/fruits-delight)
 
 Tobacconist also uses shared item tags for compatibility with additional food and farming mods where suitable ingredients are available.
+
+Vaporizer setup and factory examples: [Vaporizers and liquid blending](docs/VAPORIZERS.md). This is an alpha implementation; see the [in-game checklist](docs/VAPORIZER_TEST_CHECKLIST.md).

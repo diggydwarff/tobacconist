@@ -18,6 +18,9 @@ public final class ModParticles {
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> TOBACCO_INDOOR_SMOKE =
             PARTICLES.register("tobacco_indoor_smoke", () -> new SimpleParticleType(true));
 
+    public static final DeferredHolder<ParticleType<?>, SimpleParticleType> VAPE_VAPOR =
+            PARTICLES.register("vape_vapor", () -> new SimpleParticleType(false));
+
     private ModParticles() {}
 
     public static void register(IEventBus eventBus) {

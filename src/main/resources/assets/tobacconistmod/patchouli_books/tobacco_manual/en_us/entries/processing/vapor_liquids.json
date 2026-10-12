@@ -1,0 +1,27 @@
+{
+  "name": "Vapor Liquids",
+  "icon": "tobacconistmod:vape_pen",
+  "category": "tobacconistmod:processing",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Make Vegetable Base, Clear Base, and tobacco extracts at the Extraction Station. Inputs are placed left to right; add normal furnace fuel below. JEI shows the five extraction recipes. Vegetable Base is VG and Clear Base is PG; the technical names stay in tooltips."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Fill the Liquid Blending Bench with both bases, optional nicotine, and up to three essences. Each reservoir holds 2000 mB. Add empty bottles, choose VG/PG and nicotine, and press Blend Bottle. Auto repeats the current formula. Empty ingredient bottles leave through Returns."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Put a blank Liquid Recipe Card in Recipe and press Save Recipe. It remembers the formula and can be renamed in an anvil to name the finished liquid. A saved card fixes its flavors even if a reservoir runs empty. Changing the ratio or nicotine clears the saved formula."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Sneak-use the Vape Pen to refill or charge. A redstone dust restores 20% charge. Hold use for a longer draw; more VG produces larger, longer-lived clouds. Nicotine strength changes the Nicotine effect, while nicotine-free liquids still produce clouds."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Create can produce the ingredients with heated Mixers. Leave one saved Recipe Card in each blending Basin. Combine VG and PG first, then add nicotine and one essence at a time. Every Basin uses two fluid inputs. Pipe the finished liquid to a Spout for bottling. The card is reusable."
+    }
+  ]
+}

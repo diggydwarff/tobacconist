@@ -71,6 +71,7 @@ public class TobacconistJeiPlugin implements IModPlugin {
         var guiHelper = registration.getJeiHelpers().getGuiHelper();
 
         registration.addRecipeCategories(
+                new ExtractionRecipeCategory(guiHelper),
                 new LeafCuttingRecipeCategory(guiHelper),
                 new AverageLeavesRecipeCategory(
                         guiHelper,
@@ -96,6 +97,12 @@ public class TobacconistJeiPlugin implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
+        var level = net.minecraft.client.Minecraft.getInstance().level;
+        if (level != null) registration.addRecipes(ExtractionRecipeCategory.TYPE,
+                level.getRecipeManager().getAllRecipesFor(com.diggydwarff.tobacconistmod.vapor.VaporContent.EXTRACTION.get()).stream().map(RecipeHolder::value).toList());
+        registration.addIngredientInfo(java.util.List.of(new ItemStack(com.diggydwarff.tobacconistmod.vapor.VaporContent.BLENDING_BENCH.get()),
+                        new ItemStack(com.diggydwarff.tobacconistmod.vapor.VaporContent.VAPE_PEN.get())), VanillaTypes.ITEM_STACK,
+                Component.translatable("tobacconistmod.vapor.jei_blending"), Component.translatable("tobacconistmod.vapor.jei_pen"));
         registration.addRecipes(LeafCuttingRecipeCategory.TYPE, LeafCuttingJeiRecipe.createAll());
         registration.addRecipes(AverageLeavesRecipeCategory.TYPE, AverageLeavesJeiRecipe.createAll());
         registration.addRecipes(mezz.jei.api.constants.RecipeTypes.CRAFTING, WoodenPipeJeiRecipe.createAll());
@@ -199,6 +206,7 @@ public class TobacconistJeiPlugin implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
+        registration.addRecipeCatalyst(new ItemStack(com.diggydwarff.tobacconistmod.vapor.VaporContent.EXTRACTION_STATION.get()), ExtractionRecipeCategory.TYPE);
         registration.addRecipeCatalyst(new ItemStack(ModItems.STONE_CHAVETA.get()), LeafCuttingRecipeCategory.TYPE);
         registration.addRecipeCatalyst(new ItemStack(ModItems.COPPER_CHAVETA.get()), LeafCuttingRecipeCategory.TYPE);
         registration.addRecipeCatalyst(new ItemStack(ModItems.IRON_CHAVETA.get()), LeafCuttingRecipeCategory.TYPE);

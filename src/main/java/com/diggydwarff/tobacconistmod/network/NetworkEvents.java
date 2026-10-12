@@ -25,6 +25,9 @@ public final class NetworkEvents {
     @SubscribeEvent
     public static void registerPayloads(RegisterPayloadHandlersEvent event) {
         var registrar = event.registrar("1");
+        registrar.playToClient(com.diggydwarff.tobacconistmod.vapor.VaporPuffPayload.TYPE,
+                com.diggydwarff.tobacconistmod.vapor.VaporPuffPayload.CODEC,
+                (payload, context) -> com.diggydwarff.tobacconistmod.vapor.client.VaporParticle.puff(payload));
         registrar.playToServer(
                 SmokeMouthItemPayload.TYPE,
                 SmokeMouthItemPayload.STREAM_CODEC,

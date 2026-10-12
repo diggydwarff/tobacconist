@@ -1,0 +1,30 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "type": "tobacconistmod:create_vapor_mixing",
+  "ingredients": [
+    {
+      "item": "tobacconistmod:liquid_recipe_card"
+    },
+    {
+      "type": "neoforge:tag",
+      "tag": "tobacconistmod:blendable_liquids",
+      "amount": 1
+    },
+    {
+      "type": "neoforge:tag",
+      "tag": "tobacconistmod:blendable_liquids",
+      "amount": 1
+    }
+  ],
+  "results": [
+    {
+      "id": "tobacconistmod:vape_liquid",
+      "amount": 250
+    }
+  ]
+}
