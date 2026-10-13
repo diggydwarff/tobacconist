@@ -3,7 +3,7 @@ package com.diggydwarff.tobacconistmod.vapor;
 import net.minecraft.core.cauldron.CauldronInteraction;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 
-/** Native armor-dye crafting preserves every device component; water removes only the dye. */
+/** Fresh-color armor-dye crafting preserves device data; water removes only the dye. */
 public final class VapeDyeing {
     private VapeDyeing() {}
     public static void setup(FMLCommonSetupEvent event) {

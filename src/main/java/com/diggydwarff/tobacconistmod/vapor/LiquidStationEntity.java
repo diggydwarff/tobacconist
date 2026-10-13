@@ -148,6 +148,16 @@ public final class LiquidStationEntity extends BlockEntity implements MenuProvid
         if (++progress >= duration) { blend(desired); progress = 0; }
         setChanged();
     }
+    /** Shift-click only queues a bottle where the whole dose fits the reservoir. */
+    public boolean canLoadBottle(int slot, ItemStack stack) {
+        if (slot < 0 || slot >= tanks.length || stack.isEmpty()) return false;
+        var handler = stack.copyWithCount(1).getCapability(Capabilities.FluidHandler.ITEM);
+        if (handler == null) return false;
+        FluidStack fluid = handler.getFluidInTank(0);
+        return validFluid(slot, fluid) && fluid.getAmount() > 0
+                && tanks[slot].fill(fluid, IFluidHandler.FluidAction.SIMULATE) == fluid.getAmount();
+    }
+
     private void loadBottle(int slot) {
         ItemStack input = inventory.getStackInSlot(slot);
         if (input.isEmpty()) return;

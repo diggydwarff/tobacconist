@@ -1,6 +1,7 @@
 package com.diggydwarff.tobacconistmod.mixin;
 
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
+import com.diggydwarff.tobacconistmod.vapor.VapePenItem;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.DyeItem;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Uses vanilla dye blending for Tobacco Pouches while excluding the pouch's existing color
+ * Uses vanilla dye blending for pouches and vapes while excluding their existing color
  * from a new crafting operation. Multiple dyes in the same craft are blended normally.
  */
 @Mixin(ArmorDyeRecipe.class)
@@ -27,21 +28,21 @@ public abstract class ArmorDyeRecipeMixin {
             at = @At("HEAD"),
             cancellable = true
     )
-    private void tobacconist$recolorPouchFresh(
+    private void tobacconist$recolorFresh(
             CraftingInput input,
             HolderLookup.Provider registries,
             CallbackInfoReturnable<ItemStack> cir
     ) {
-        ItemStack pouch = ItemStack.EMPTY;
+        ItemStack target = ItemStack.EMPTY;
         List<DyeItem> dyes = new ArrayList<>();
 
         for (int i = 0; i < input.size(); i++) {
             ItemStack stack = input.getItem(i);
             if (stack.isEmpty()) continue;
 
-            if (stack.is(ModItems.TOBACCO_POUCH.get())) {
-                if (!pouch.isEmpty()) return;
-                pouch = stack;
+            if (stack.is(ModItems.TOBACCO_POUCH.get()) || VapePenItem.isDevice(stack)) {
+                if (!target.isEmpty()) return;
+                target = stack;
             } else if (stack.getItem() instanceof DyeItem dye) {
                 dyes.add(dye);
             } else {
@@ -49,9 +50,9 @@ public abstract class ArmorDyeRecipeMixin {
             }
         }
 
-        if (pouch.isEmpty() || dyes.isEmpty()) return;
+        if (target.isEmpty() || dyes.isEmpty()) return;
 
-        ItemStack result = pouch.copy();
+        ItemStack result = target.copy();
         result.setCount(1);
         result.remove(DataComponents.DYED_COLOR);
         cir.setReturnValue(DyedItemColor.applyDyes(result, dyes));

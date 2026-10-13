@@ -44,7 +44,7 @@ public final class NetworkEvents {
 
     @SubscribeEvent
     public static void registerPayloads(RegisterPayloadHandlersEvent event) {
-        var registrar = event.registrar("14");
+        var registrar = event.registrar("15");
         registrar.playToClient(MouthEffectStatePayload.TYPE,MouthEffectStatePayload.CODEC,
                 (payload, context) -> com.diggydwarff.tobacconistmod.client.ClientSmokingParticles.receive(payload));
         registrar.playToClient(com.diggydwarff.tobacconistmod.novelty.NoveltyPuffPayload.TYPE,

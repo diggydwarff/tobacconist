@@ -75,6 +75,12 @@ public final class VaporData {
         return stack.is(VaporContent.VAPE_LIQUID.get()) || stack.getItem() instanceof SizedBottleItem
                 && SizedBottleItem.fluid(stack).getFluid() == VaporContent.LIQUID_FLUID.get();
     }
+    /** Finished liquid or pure vegetable base; other concentrates remain bench ingredients. */
+    public static boolean isVapeRefill(ItemStack stack) {
+        return isLiquidBottle(stack) || stack.is(VaporContent.VEGETABLE_BASE.get())
+                || stack.getItem() instanceof SizedBottleItem
+                && SizedBottleItem.fluid(stack).getFluid() == VaporContent.VEGETABLE_FLUID.get();
+    }
     public static int volume(ItemStack stack) {
         if (stack.getItem() instanceof SizedBottleItem) return SizedBottleItem.fluid(stack).getAmount();
         return Math.clamp(stack.getOrDefault(VaporContent.VOLUME.get(), BOTTLE), 0, BOTTLE);

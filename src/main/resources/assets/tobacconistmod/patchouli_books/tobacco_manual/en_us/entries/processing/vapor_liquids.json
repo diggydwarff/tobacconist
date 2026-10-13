@@ -9,7 +9,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Fill the Liquid Blending Bench with carrier bases, optional nicotine, and up to three essences. Each chosen flavor consumes one full essence dose per 250 mB batch. Ingredient bottles return through Glass. Left-click VG/PG to increase VG; right-click to increase PG. Auto waits for the same flavors when supplies run out."
+      "text": "Fill the Liquid Blending Bench with carrier bases, optional nicotine, and up to three essences. Each chosen flavor consumes one full essence dose per 250 mB batch. Ingredient bottles return through Glass. Shift-click skips full or incompatible flavor reservoirs. Left-click VG/PG to increase VG; right-click to increase PG. Auto waits for the same flavors when supplies run out."
     },
     {
       "type": "patchouli:text",
@@ -17,7 +17,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Sneak-use a device to refill or charge. Tanks hold 75 mB for Cigalike, 100 mB for Vape Pen and 150 mB for Box Mod. Redstone adds 20 charge units: half the compact Cigalike cell or 20% of the others. Box Mod has adjustable wattage and a puff counter. Hold use for a longer draw; higher VG gives larger clouds. Nicotine-free liquids still produce vapor. Dye devices in crafting; wash dye off in a water cauldron."
+      "text": "Sneak-use a device to refill or charge. Tanks hold 75 mB for Cigalike, 100 mB for Vape Pen and 150 mB for Box Mod. Redstone adds 20 charge units: half the compact Cigalike cell or 20% of the others. Box Mod has adjustable wattage and a puff counter. Hold use for a longer draw; higher VG gives larger clouds. Pure Vegetable Base bottles can fill an empty vape directly for 100% VG clouds; partially filled tanks need matching contents. Re-dyeing replaces the old color. Wash dye off in a water cauldron."
     },
     {
       "type": "patchouli:text",

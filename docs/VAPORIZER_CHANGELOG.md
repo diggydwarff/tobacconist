@@ -1,3 +1,11 @@
+## Alpha 16 — Tab ordering, essence routing and pure VG refills
+
+- Reorganized the creative tab into guide/growing, curing/cutting/blending, flavor ingredients, storage/logistics, cigarettes/cigars, traditional/specialty pipes, shisha/hookahs, vaping, and decorations. Preserved all existing variants and optional Create entries.
+- Essence shift-click checks reservoir fluid compatibility and space for the entire bottle, skipping full or incompatible reservoirs and occupied input slots. No available input leaves the bottle in player inventory.
+- All three vapes accept bottled pure Vegetable Base directly, including small/large VG bottles. Exact refill volumes, leftover base and empty glass follow normal refill rules. Pure VG uses the existing largest VG cloud profile; wattage and draw length still matter. Partially filled tanks require matching contents.
+- Re-dyeing vapes replaces their previous color, matching tobacco-pouch behavior. Multiple dyes in one craft blend; device contents, charge, name, power and puff count are preserved. Leather armor retains vanilla dye blending.
+- Updated guide/refill hints and focused test steps. Matching Alpha 16 client/server installs use network version 15.
+
 ## Alpha 15 — Vapor and specialty-pipe audit
 
 - Fixed saved-card VG/nicotine selectors starting from hidden bench defaults instead of the displayed recipe. Editing either selector preserves the other saved setting.

@@ -16,7 +16,7 @@ public final class VapePenMenu extends AbstractContainerMenu {
     public VapePenMenu(int id, Inventory inventory, int deviceSlot) {
         super(VaporContent.PEN_MENU.get(), id); this.inventory = inventory; this.deviceSlot = deviceSlot;
         device = deviceSlot >= 0 && deviceSlot < inventory.getContainerSize() ? inventory.getItem(deviceSlot) : ItemStack.EMPTY;
-        addSlot(new Slot(inputs, 0, 26, 44) { @Override public boolean mayPlace(ItemStack stack) { return VaporData.isLiquidBottle(stack) && VaporData.blend(stack) != null && VaporData.blend(stack).usable(); } });
+        addSlot(new Slot(inputs, 0, 26, 44) { @Override public boolean mayPlace(ItemStack stack) { return VaporData.isVapeRefill(stack) && VaporData.blend(stack) != null && VaporData.blend(stack).usable(); } });
         addSlot(new Slot(inputs, 1, 134, 44) { @Override public boolean mayPlace(ItemStack stack) { return stack.is(Items.REDSTONE); } });
         addInventorySlot(deviceSlot, 80, 44);
         int inventoryY = isBoxMod() ? 164 : 132;
@@ -36,7 +36,7 @@ public final class VapePenMenu extends AbstractContainerMenu {
         ItemStack bottle = inputs.getItem(0);
         ItemStack current = pen();
         LiquidBlend blend = VaporData.blend(bottle);
-        return VaporData.isLiquidBottle(bottle) && blend != null && blend.usable()
+        return VaporData.isVapeRefill(bottle) && blend != null && blend.usable()
                 && VaporData.volume(bottle) > 0 && VapePenItem.volume(current) < VapePenItem.capacity(current)
                 && (VapePenItem.volume(current) == 0 || blend.equals(VaporData.blend(current)));
     }

@@ -1,3 +1,10 @@
+## Alpha 16 focused checks
+
+1. Open the creative tab: growing/processing/storage first; cigarettes, traditional and novelty pipes together; hookahs together; vape supplies before Cigalike/Pen/Box Mod; paintings last. With Create absent, industrial rack/monitor/brass name tag stay hidden.
+2. Fill essence reservoir 1, then shift-click an essence bottle: it goes to 2. Fill 2 as well: it goes to 3. Check a different flavor and a reservoir with under one full dose of free space; both are skipped. All full leaves the bottle in your inventory. Occupied incompatible item slots are skipped too.
+3. Refill each empty vape with Vegetable Base: tank is 100% VG and bottle retains its unused base. Repeat with sized VG bottles. Finished glass has the original size. Full/partly filled incompatible tanks refuse the action. Full draws from pure VG make the largest clouds for that device; 40 W Box Mod gives the largest output.
+4. Dye a loaded vape red, then blue: it equals a fresh vape dyed blue. Repeat with multiple dyes, then white. Check liquid/charge/name/power/puffs survive. Wash in a water cauldron. Tobacco pouches still replace color; leather still blends old color.
+
 # Alpha 15 audit checks
 
 - Replace the JAR on both sides, or apply the Alpha 15 source patch after Alpha 14.

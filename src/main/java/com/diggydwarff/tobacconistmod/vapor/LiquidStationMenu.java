@@ -73,6 +73,9 @@ public final class LiquidStationMenu extends AbstractContainerMenu {
             boolean moved = false;
             for (int i = 0; i < 11 && !original.isEmpty(); i++) {
                 Slot target = slots.get(i);
+                if (blending && i >= 3 && i < 6
+                        && player.level().getBlockEntity(pos) instanceof LiquidStationEntity station
+                        && !station.canLoadBottle(i, original)) continue;
                 if (target.isActive() && target.mayPlace(original)) moved |= moveItemStackTo(original, i, i + 1, false);
             }
             if (!moved) return ItemStack.EMPTY;

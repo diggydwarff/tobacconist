@@ -1,4 +1,4 @@
-# Vaporizers and liquid blending — 4.2 alpha 15
+# Vaporizers and liquid blending — 4.2 alpha 16
 
 This patch adds three refillable vaporizers, two carrier bases, nicotine extraction, custom liquids, a standalone blending bench, and optional Create production.
 
@@ -37,9 +37,9 @@ Cauldron extraction is recipe-driven: add recipes of type `tobacconistmod:extrac
 
 ## Blending bench
 
-The bench has six 2000 mB reservoirs: Vegetable Base, Clear Base, Nicotine Extract, and three essence slots. Inserting an ingredient bottle transfers its contents into its reservoir and returns the empty glass in Glass. Create pipes can also fill the reservoirs.
+The bench has six 2000 mB reservoirs: Vegetable Base, Clear Base, Nicotine Extract, and three essence slots. Inserting an ingredient bottle transfers its contents into its reservoir and returns the empty glass in Glass. Create pipes can also fill the reservoirs. Shift-clicking an essence bottle skips full or incompatible flavor reservoirs and chooses the next input with room for its whole dose. If all three are unavailable, the bottle stays in your inventory.
 
-1. Supply both bases, optional nicotine, and up to three essences.
+1. Supply the bases needed for your selected ratio, optional nicotine, and up to three essences. Pure VG needs no Clear Base.
 2. Add empty glass bottles in Bottles.
 3. Left-click VG/PG for more VG, right-click for more PG, in 10% steps. Cycle nicotine through None, Low, Medium, and High. Left-click increases it; right-click decreases it. Both selectors also support scrolling.
 4. Press Blend Bottle, or enable Auto to produce bottles while ingredients and output space are available. Small, normal, and large bottles take 40, 80, and 320 ticks respectively.
@@ -80,7 +80,9 @@ Vapor is soft, pale, and expands while fading. Create fans can move or remove it
 
 Equip a loaded, charged cigalike in the optional Curios mouth slot and use the existing mouth-smoking hold/release key. The same minimum six ticks, liquid costs, charge costs, cooldown, and counter apply. Opening a screen or changing the equipped item cancels an unfinished draw. The pen and box mod remain handheld devices.
 
-All three vaporizers can be dyed through the native crafting recipe: combine one device with one or more dyes. Multiple dyes blend normally, including an existing color. Only the casing changes; mouthpieces, glass, screens, and indicators retain their supplied artwork. Undyed devices retain their original sprites. Dyeing preserves the liquid formula, remaining volume, cell charge, wattage, name, and puff counter. Use a dyed device on an ordinary water cauldron to remove the dye, spending one water level and preserving all device data.
+All three vaporizers can be dyed through the native crafting recipe: combine one device with one or more dyes. Each craft replaces the previous color. Multiple dyes in the same craft blend normally; the old color is excluded. Only the casing changes; mouthpieces, glass, screens, and indicators retain their supplied artwork. Undyed devices retain their original sprites. Dyeing preserves the liquid formula, remaining volume, cell charge, wattage, name, and puff counter. Use a dyed device on an ordinary water cauldron to remove the dye, spending one water level and preserving all device data.
+
+Pure Vegetable Base bottles can refill any empty vape directly, including small and large bottles filled with VG. The tank becomes 100% VG, with no nicotine or flavors, and uses the largest VG cloud profile for its device/power/draw. Refills transfer only the amount needed and retain leftover base in the original bottle. A partly filled tank still requires the same formula; use its remaining blend before switching to pure VG. Raw Clear Base, nicotine extract and essences remain bench ingredients.
 
 ## Glass bottles and labels
 
