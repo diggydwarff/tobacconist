@@ -174,6 +174,66 @@ public final class LiquidStationEntity extends BlockEntity implements MenuProvid
         inventory.extractItem(slot, 1, false);
         inventory.insertItem(GLASS, returned, false);
     }
+    /** One insertion supplies one batch from the inserting player's inventory and hotbar. */
+    public void pullRecipeEssences(Inventory supply) {
+        if (level == null || level.isClientSide || !isBlending()) return;
+        LiquidBlend recipe = inventory.getStackInSlot(CARD).get(VaporContent.BLEND.get());
+        if (recipe == null || !recipe.usable() || recipe.flavors().isEmpty()) return;
+        if (recipe.vegetable() % 4000 != 0 || recipe.clear() % 4000 != 0 || recipe.nicotine() % 4000 != 0
+                || recipe.flavors().values().stream().anyMatch(share -> share % 4000 != 0)) return;
+        int capacity = VaporData.bottleCapacity(inventory.getStackInSlot(6));
+        for (int slot = 3; slot < 6; slot++) loadBottle(slot);
+        for (String flavor : new TreeSet<>(recipe.flavors().keySet())) {
+            int needed = essenceDose(recipe.flavors().get(flavor), capacity);
+            for (int index = 0; index < supply.items.size() && availableEssence(flavor) < needed; index++) {
+                ItemStack source = supply.getItem(index);
+                var handler = source.copyWithCount(1).getCapability(Capabilities.FluidHandler.ITEM);
+                if (handler == null || !flavor.equals(flavor(handler.getFluidInTank(0)))) continue;
+                while (!source.isEmpty() && availableEssence(flavor) < needed) {
+                    int target = recipeEssenceSlot(flavor, source);
+                    if (target < 0) break;
+                    // The usual loader validates the whole dose and returned-glass space.
+                    // Move the player's item only after that loader actually succeeds.
+                    inventory.setStackInSlot(target, source.copyWithCount(1));
+                    loadBottle(target);
+                    if (!inventory.getStackInSlot(target).isEmpty()) {
+                        inventory.setStackInSlot(target, ItemStack.EMPTY);
+                        break;
+                    }
+                    supply.removeItem(index, 1);
+                    supply.setChanged();
+                    source = supply.getItem(index);
+                }
+            }
+        }
+    }
+    private int availableEssence(String expected) {
+        int total = 0;
+        for (int slot = 3; slot < 6; slot++) {
+            int amount = expected.equals(flavor(tanks[slot].getFluid())) ? tanks[slot].getFluidAmount() : 0;
+            ItemStack queued = inventory.getStackInSlot(slot);
+            if (canLoadBottle(slot, queued)) {
+                var handler = queued.copyWithCount(1).getCapability(Capabilities.FluidHandler.ITEM);
+                FluidStack fluid = handler.getFluidInTank(0);
+                if (expected.equals(flavor(fluid))) amount += fluid.getAmount();
+            }
+            total += amount / VaporData.BOTTLE * VaporData.BOTTLE;
+        }
+        return total;
+    }
+    private int recipeEssenceSlot(String expected, ItemStack bottle) {
+        // Prefer an existing matching reservoir before assigning an empty one.
+        for (int pass = 0; pass < 2; pass++) for (int slot = 3; slot < 6; slot++) {
+            boolean suitable = pass == 0 ? expected.equals(flavor(tanks[slot].getFluid())) : tanks[slot].isEmpty();
+            if (suitable && inventory.getStackInSlot(slot).isEmpty() && canLoadBottle(slot, bottle)) return slot;
+        }
+        return -1;
+    }
+    private static int essenceDose(int share, int capacity) {
+        int doses = Math.max(1, (int) (((long) share * capacity + 10L * LiquidBlend.SCALE - 1)
+                / (10L * LiquidBlend.SCALE)));
+        return doses * VaporData.BOTTLE;
+    }
     public LiquidBlend desiredBlend() {
         return desiredBlend(vegetablePercent, strength, inventory.getStackInSlot(CARD));
     }
@@ -203,8 +263,7 @@ public final class LiquidStationEntity extends BlockEntity implements MenuProvid
         amounts[2] = scaledDose(blend.nicotine(), capacity);
         for (var entry : blend.flavors().entrySet()) {
             if (entry.getValue() % 4000 != 0) return null;
-            int fullDosesNeeded = Math.max(1, (int) (((long) entry.getValue() * capacity + 10L * LiquidBlend.SCALE - 1) / (10L * LiquidBlend.SCALE)));
-            int remaining = fullDosesNeeded * VaporData.BOTTLE;
+            int remaining = essenceDose(entry.getValue(), capacity);
             for (int i = 3; i < 6; i++) {
                 String flavor = flavor(tanks[i].getFluid());
                 if (entry.getKey().equals(flavor)) {

@@ -43,7 +43,7 @@ The bench has six 2000 mB reservoirs: Vegetable Base, Clear Base, Nicotine Extra
 2. Add empty glass bottles in Bottles.
 3. Left-click VG/PG for more VG, right-click for more PG, in 10% steps. Cycle nicotine through None, Low, Medium, and High. Left-click increases it; right-click decreases it. Both selectors also support scrolling.
 4. Press Blend Bottle, or enable Auto to produce bottles while ingredients and output space are available. Small, normal, and large bottles take 40, 80, and 320 ticks respectively.
-5. Put a blank Liquid Recipe Card in Recipe and press Save Recipe to retain the exact formula.
+5. Put a blank Liquid Recipe Card in Recipe and press Save Recipe to retain the exact formula. Inserting a saved card pulls matching essence bottles from your main inventory and hotbar for one batch at the selected bottle size. Stored or queued essences count toward that batch. Existing incompatible flavors, missing ingredients, and blocked returned-glass space are left alone; spare inventory bottles stay with you. This happens once on insertion, including shift-click and hotbar swaps, rather than continuously while Auto runs.
 
 A 250 mB batch uses 0/5/10/15 mB nicotine for the four strength choices, one full 250 mB essence dose per populated flavor slot, condensed into a hidden 10 mB contribution, and carrier bases for the remaining volume. The unused essence is spent as part of processing. No recovered Flavor Concentrate is produced. VG/PG is the ratio of those carrier bases, excluding additives. Flavor amounts stay in the data; tooltips list flavor names without proportions.
 

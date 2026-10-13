@@ -1,3 +1,10 @@
+## Recipe-card essence autofill follow-up
+
+- Put a saved two-flavor card into Recipe normally, by shift-click, or by hotbar swap. Matching essence bottles move from main inventory/hotbar; unrelated items and spare bottles stay with you. Empty input glass returns through Glass.
+- Set Small/normal/Large Glass Bottles first: normal/small need one full essence dose per flavor; a normal recipe with Large bottles needs four. Already stored/queued essence reduces the pull. Sized essence bottles retain the usual whole-bottle loading rules.
+- Try a missing flavor, all three reservoirs filled with other flavors, full Glass output, a blank/invalid card, and insufficient reservoir space. No ingredients are deleted or forced into incompatible reservoirs. Clear or collect the blocking contents, then reinsert the card to try again.
+- Remove/reinsert a card while its flavors are already stocked: no extra essence is pulled. Leave Auto running with the menu open: it does not keep taking inventory bottles. Opening another player's menu or ordinary menu updates never trigger a pull.
+
 ## Alpha 16 focused checks
 
 1. Open the creative tab: growing/processing/storage first; cigarettes, traditional and novelty pipes together; hookahs together; vape supplies before Cigalike/Pen/Box Mod; paintings last. With Create absent, industrial rack/monitor/brass name tag stay hidden.

@@ -63,9 +63,23 @@ public final class LiquidStationMenu extends AbstractContainerMenu {
                 && station.inventory == stationInventory && station.isBlending() == blending
                 && player.distanceToSqr(pos.getX() + .5, pos.getY() + .5, pos.getZ() + .5) <= 64;
     }
+    @Override public void clicked(int slot, int button, ClickType type, Player player) {
+        ItemStack previousCard = stationInventory.getStackInSlot(LiquidStationEntity.CARD);
+        super.clicked(slot, button, type, player);
+        pullInsertedRecipeEssences(player, previousCard);
+    }
+    private void pullInsertedRecipeEssences(Player player, ItemStack previousCard) {
+        if (player.level().isClientSide || player.getInventory() != playerInventory
+                || !blending || !player.isAlive() || player.isSpectator()
+                || !stillValid(player) || stationInventory.getStackInSlot(LiquidStationEntity.CARD) == previousCard) return;
+        if (player.level().getBlockEntity(pos) instanceof LiquidStationEntity station) {
+            station.pullRecipeEssences(playerInventory);
+        }
+    }
     @Override public ItemStack quickMoveStack(Player player, int index) {
         Slot slot = slots.get(index);
         if (!slot.isActive() || !slot.hasItem()) return ItemStack.EMPTY;
+        ItemStack previousCard = stationInventory.getStackInSlot(LiquidStationEntity.CARD);
         ItemStack original = slot.getItem(), copy = original.copy();
         if (index < 11) {
             if (!moveItemStackTo(original, 11, slots.size(), true)) return ItemStack.EMPTY;
@@ -81,6 +95,8 @@ public final class LiquidStationMenu extends AbstractContainerMenu {
             if (!moved) return ItemStack.EMPTY;
         }
         if (original.isEmpty()) slot.set(ItemStack.EMPTY); else slot.setChanged();
-        slot.onTake(player, original); return copy;
+        slot.onTake(player, original);
+        pullInsertedRecipeEssences(player, previousCard);
+        return copy;
     }
 }
