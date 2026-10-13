@@ -69,14 +69,17 @@ public final class ClientDrawAnimations {
                 int side = arm == HumanoidArm.RIGHT ? 1 : -1;
                 boolean pipe = stack.getItem() instanceof WoodenSmokingPipeItem;
                 boolean hose = stack.getItem() instanceof HookahHoseItem;
+                boolean vape = VapePenItem.isDevice(stack);
+                boolean bubble = stack.getItem() instanceof com.diggydwarff.tobacconistmod.vapor.BubblePipeItem
+                        || stack.getItem() instanceof com.diggydwarff.tobacconistmod.novelty.ToyPipeItem;
                 float breathing = player.isUsingItem()
                         ? Mth.sin((player.tickCount + partialTick) * 0.22F) * 0.005F * eased : 0.0F;
 
-                if (pipe || hose) {
+                if (pipe || hose || vape || bubble) {
                     // These sprites put the mouthpiece on the right. Turn that end toward the
                     // camera and anchor it near the lips; the bowl/cord stays farther away.
-                    float mouthX = hose ? 0.31F : 0.43F;
-                    float mouthY = hose ? 0.31F : 0.36F;
+                    float mouthX = vape ? 0.375F : hose ? 0.31F : 0.43F;
+                    float mouthY = vape ? 0.40625F : hose ? 0.31F : 0.36F;
                     if (stack.is(ModItems.EMERALD_AZTEC_SMOKING_PIPE.get())) mouthY = -0.10F;
                     if (stack.is(ModItems.KISERU_SMOKING_PIPE.get())) {
                         mouthX = 0.32F;
@@ -84,7 +87,7 @@ public final class ClientDrawAnimations {
                     }
                     float yaw = hose ? -90.0F - side * 35.0F : -90.0F - side * 45.0F;
                     float pitch = -side * (hose ? 35.0F : 45.0F);
-                    float size = hose ? 0.60F : 0.65F;
+                    float size = vape ? VapePenItem.hasPowerControl(stack) ? 0.48F : 0.58F : hose ? 0.60F : 0.65F;
                     float yawRadians = yaw * Mth.DEG_TO_RAD;
                     float pitchRadians = pitch * Mth.DEG_TO_RAD;
                     float rotatedY = Mth.cos(pitchRadians) * mouthY;
@@ -120,7 +123,9 @@ public final class ClientDrawAnimations {
     }
 
     private static boolean supportsDrawPose(ItemStack stack) {
-        return SmokingDraws.isSupported(stack) || stack.getItem() instanceof VapePenItem;
+        return SmokingDraws.isSupported(stack) || stack.getItem() instanceof VapePenItem
+                || stack.getItem() instanceof com.diggydwarff.tobacconistmod.vapor.BubblePipeItem
+                || stack.getItem() instanceof com.diggydwarff.tobacconistmod.novelty.ToyPipeItem;
     }
 
     public static void receiveMouthDraw(int entityId, int ticks) {

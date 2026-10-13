@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Use a water-filled vanilla cauldron above a lit campfire. Add ingredients in JEI order, wait for heating, then collect with a glass bottle. Each batch uses one water level. Sneak-use with an empty hand to cancel and recover ingredients. Vegetable Base is VG; Clear Base is PG."
+      "text": "Heat a water-filled cauldron over a lit campfire. Add ingredients in JEI order and wait: the entire batch boils down to 250 mB of extract. Collect with bottles; draining it leaves an empty cauldron. Sneak-use an empty hand to cancel an unfinished batch and recover inputs. Finished ingredients are spent. Refine bottled Crude Extract in a Brewing Stand with Paper; Aqua Vitae with Sugar Cane makes Clear Base."
     },
     {
       "type": "patchouli:text",
@@ -13,15 +13,19 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Insert a blank Liquid Recipe Card and press Save Recipe. It remembers the formula and can be renamed in an anvil to name the finished liquid. Saved cards fix flavors for repeat batches and Create lines. The trash button discards stored essences, clears the flavor recipe, and stops Auto."
+      "text": "Insert a blank Liquid Recipe Card and press Save Recipe. It remembers flavors, VG/PG and nicotine. Rename it in an anvil to name bench output. Cards are reusable and optional at the bench; Create blending Basins need one saved card each. Editing selectors starts from the card’s displayed settings and clears its saved formula. Auto keeps the last recipe while waiting for supplies. Trash discards stored essences and stops Auto."
     },
     {
       "type": "patchouli:text",
-      "text": "Sneak-use the Vape Pen to refill or charge. A redstone dust restores 20% charge. Hold use for a longer draw; more VG produces larger, longer-lived clouds. Nicotine strength changes the Nicotine effect, while nicotine-free liquids still produce clouds."
+      "text": "Sneak-use a device to refill or charge. Tanks hold 75 mB for Cigalike, 100 mB for Vape Pen and 150 mB for Box Mod. Redstone adds 20 charge units: half the compact Cigalike cell or 20% of the others. Box Mod has adjustable wattage and a puff counter. Hold use for a longer draw; higher VG gives larger clouds. Nicotine-free liquids still produce vapor. Dye devices in crafting; wash dye off in a water cauldron."
     },
     {
       "type": "patchouli:text",
       "text": "Create uses heated Mixers and Basins for extraction. Put one saved Recipe Card in each blending Basin. Combine VG and PG first, then nicotine and one essence at a time. A flavor stage consumes a full 250 mB essence dose. Pipe the finished liquid to a Spout for bottling. Cards are reusable."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Small/normal/large bottles hold 150/250/1000 mB. A small bottle fills two empty Cigalikes. Refills use only the amount needed and keep leftover liquid. Pour with a source bottle in the other hand; empty recipients inherit its name, while partial recipients keep their own. Vape liquid works in Tobacco Boxes. Older bottles retain actual contents; old devices above their new tank limit retain all liquid and drain normally before refilling."
     }
   ]
 }

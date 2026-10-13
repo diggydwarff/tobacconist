@@ -36,6 +36,8 @@ public final class ModParticles {
 
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> VAPE_VAPOR =
             PARTICLES.register("vape_vapor", () -> new SimpleParticleType(false));
+    public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SOAP_BUBBLE =
+            PARTICLES.register("soap_bubble", () -> new SimpleParticleType(false));
 
     private ModParticles() {}
 

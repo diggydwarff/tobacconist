@@ -16,7 +16,7 @@ public final class VapePenMenu extends AbstractContainerMenu {
     public VapePenMenu(int id, Inventory inventory, int deviceSlot) {
         super(VaporContent.PEN_MENU.get(), id); this.inventory = inventory; this.deviceSlot = deviceSlot;
         device = deviceSlot >= 0 && deviceSlot < inventory.getContainerSize() ? inventory.getItem(deviceSlot) : ItemStack.EMPTY;
-        addSlot(new Slot(inputs, 0, 26, 44) { @Override public boolean mayPlace(ItemStack stack) { return stack.is(VaporContent.VAPE_LIQUID.get()) && VaporData.blend(stack) != null && VaporData.blend(stack).usable(); } });
+        addSlot(new Slot(inputs, 0, 26, 44) { @Override public boolean mayPlace(ItemStack stack) { return VaporData.isLiquidBottle(stack) && VaporData.blend(stack) != null && VaporData.blend(stack).usable(); } });
         addSlot(new Slot(inputs, 1, 134, 44) { @Override public boolean mayPlace(ItemStack stack) { return stack.is(Items.REDSTONE); } });
         addInventorySlot(deviceSlot, 80, 44);
         int inventoryY = isBoxMod() ? 164 : 132;
@@ -36,18 +36,18 @@ public final class VapePenMenu extends AbstractContainerMenu {
         ItemStack bottle = inputs.getItem(0);
         ItemStack current = pen();
         LiquidBlend blend = VaporData.blend(bottle);
-        return bottle.is(VaporContent.VAPE_LIQUID.get()) && blend != null && blend.usable()
+        return VaporData.isLiquidBottle(bottle) && blend != null && blend.usable()
                 && VaporData.volume(bottle) > 0 && VapePenItem.volume(current) < VapePenItem.capacity(current)
                 && (VapePenItem.volume(current) == 0 || blend.equals(VaporData.blend(current)));
     }
-    public boolean canCharge() { return inputs.getItem(1).is(Items.REDSTONE) && VaporData.charge(pen()) < VaporData.MAX_CHARGE; }
+    public boolean canCharge() { return inputs.getItem(1).is(Items.REDSTONE) && VapePenItem.charge(pen()) < VapePenItem.maxCharge(pen()); }
     @Override public boolean stillValid(Player player) { return VapePenItem.isDevice(device) && inventory.getItem(deviceSlot) == device; }
     @Override public void clicked(int slot, int button, ClickType type, Player player) {
         if (type == ClickType.SWAP && (button == deviceSlot || button == 40 && deviceSlot == 40)) return;
         super.clicked(slot, button, type, player);
     }
     @Override public boolean clickMenuButton(Player player, int id) {
-        if (!stillValid(player)) return false;
+        if (!player.isAlive() || player.isSpectator() || !stillValid(player)) return false;
         if (id == 0) {
             ItemStack bottle = inputs.getItem(0);
             if (!canRefill()) return false;
@@ -56,10 +56,16 @@ public final class VapePenMenu extends AbstractContainerMenu {
             if (amount <= 0) return false;
             device.set(VaporContent.BLEND.get(), blend); device.set(VaporContent.VOLUME.get(), VapePenItem.volume(device) + amount);
             int remaining = VaporData.volume(bottle) - amount;
-            if (remaining == 0) inputs.setItem(0, new ItemStack(Items.GLASS_BOTTLE)); else bottle.set(VaporContent.VOLUME.get(), remaining);
+            ItemStack returned = remaining == 0 ? VaporData.emptyGlass(bottle) : bottle.copyWithCount(1);
+            if (remaining > 0) VaporData.setBottleVolume(returned, remaining);
+            if (bottle.getCount() == 1) inputs.setItem(0, returned);
+            else {
+                bottle.shrink(1);
+                if (!player.addItem(returned)) player.drop(returned, false);
+            }
         } else if (id == 1) {
             if (!canCharge()) return false;
-            inputs.removeItem(1, 1); device.set(VaporContent.CHARGE.get(), Math.min(100, VaporData.charge(device) + 20));
+            inputs.removeItem(1, 1); device.set(VaporContent.CHARGE.get(), Math.min(VapePenItem.maxCharge(device), VapePenItem.charge(device) + 20));
         } else if ((id == 2 || id == 3) && isBoxMod()) {
             int step = id == 2 ? 10 : -10;
             device.set(VaporContent.WATTAGE.get(), Math.clamp(VapePenItem.wattage(device) + step, 10, 40));

@@ -18,7 +18,7 @@ public final class VaporCloudVerification {
         require(VaporCloudProfile.of(-50, 0).equals(VaporCloudProfile.of(0, 6))
                 && VaporCloudProfile.of(500, 1000).equals(VaporCloudProfile.of(100, 40)), "malformed packet values are clamped");
         for (int vg=0; vg<=100; vg++) {
-            var slim=VaporCloudProfile.of(vg,40,65);
+            var slim=VaporCloudProfile.of(vg,40,40);
             var lowPower=VaporCloudProfile.of(vg,40,75);
             var pen=VaporCloudProfile.of(vg,40,100);
             var highPower=VaporCloudProfile.of(vg,40,150);

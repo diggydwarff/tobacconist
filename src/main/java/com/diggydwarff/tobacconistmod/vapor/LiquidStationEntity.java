@@ -28,6 +28,7 @@ public final class LiquidStationEntity extends BlockEntity implements MenuProvid
     private boolean automatic;
     private ResourceLocation activeRecipe;
     private LiquidBlend activeBlend;
+    private int activeBottleCapacity;
     private LiquidBlend automaticFormula;
     public final ItemStackHandler inventory = new ItemStackHandler(SLOT_COUNT) {
         @Override protected void onContentsChanged(int slot) { setChanged(); }
@@ -65,7 +66,7 @@ public final class LiquidStationEntity extends BlockEntity implements MenuProvid
         if (slot == FUEL) return !isBlending() && stack.getBurnTime(RecipeType.SMELTING) > 0;
         if (slot == CARD) return isBlending() && stack.is(VaporContent.RECIPE_CARD.get());
         if (!isBlending()) return slot < 3;
-        if (slot == 6) return stack.is(Items.GLASS_BOTTLE);
+        if (slot == 6) return VaporData.isEmptyGlass(stack);
         if (slot >= 0 && slot < 6) {
             var handler = stack.getCapability(Capabilities.FluidHandler.ITEM);
             return handler != null && validFluid(slot, handler.getFluidInTank(0));
@@ -133,27 +134,35 @@ public final class LiquidStationEntity extends BlockEntity implements MenuProvid
     private void tickBlend() {
         for (int i = 0; i < 6; i++) loadBottle(i);
         if (!automatic) return;
-        if (automaticFormula == null) automaticFormula = desiredBlend();
-        LiquidBlend desired = inventory.getStackInSlot(CARD).has(VaporContent.BLEND.get()) ? desiredBlend() : automaticFormula;
+        LiquidBlend saved = inventory.getStackInSlot(CARD).get(VaporContent.BLEND.get());
+        if (saved != null && !saved.equals(automaticFormula)) {
+            automaticFormula = saved; setChanged();
+        } else if (automaticFormula == null) {
+            automaticFormula = desiredBlend(); setChanged();
+        }
+        LiquidBlend desired = automaticFormula;
         if (desired == null || !canBlend(desired)) { progress = 0; activeBlend = null; return; }
-        if (!desired.equals(activeBlend)) { activeBlend = desired; progress = 0; }
-        if (++progress >= 80) { blend(desired); progress = 0; }
+        int capacity = VaporData.bottleCapacity(inventory.getStackInSlot(6));
+        if (!desired.equals(activeBlend) || activeBottleCapacity != capacity) { activeBlend = desired; activeBottleCapacity = capacity; progress = 0; }
+        duration = Math.max(40, 80 * capacity / VaporData.BOTTLE);
+        if (++progress >= duration) { blend(desired); progress = 0; }
         setChanged();
     }
     private void loadBottle(int slot) {
         ItemStack input = inventory.getStackInSlot(slot);
         if (input.isEmpty()) return;
-        var handler = input.getCapability(Capabilities.FluidHandler.ITEM);
+        var handler = input.copyWithCount(1).getCapability(Capabilities.FluidHandler.ITEM);
         if (handler == null) return;
         FluidStack fluid = handler.getFluidInTank(0);
         if (!validFluid(slot, fluid) || fluid.getAmount() <= 0) return;
         if (tanks[slot].fill(fluid, IFluidHandler.FluidAction.SIMULATE) != fluid.getAmount()) return;
-        if (!inventory.insertItem(GLASS, new ItemStack(Items.GLASS_BOTTLE), true).isEmpty()) return;
         FluidStack drained = handler.drain(fluid.getAmount(), IFluidHandler.FluidAction.EXECUTE);
-        if (drained.isEmpty()) return;
+        if (drained.getAmount() != fluid.getAmount()) return;
+        ItemStack returned = handler.getContainer();
+        if (!inventory.insertItem(GLASS, returned, true).isEmpty()) return;
         tanks[slot].fill(drained, IFluidHandler.FluidAction.EXECUTE);
-        inventory.setStackInSlot(slot, ItemStack.EMPTY);
-        inventory.insertItem(GLASS, handler.getContainer(), false);
+        inventory.extractItem(slot, 1, false);
+        inventory.insertItem(GLASS, returned, false);
     }
     public LiquidBlend desiredBlend() {
         return desiredBlend(vegetablePercent, strength, inventory.getStackInSlot(CARD));
@@ -173,14 +182,19 @@ public final class LiquidStationEntity extends BlockEntity implements MenuProvid
         return new LiquidBlend(vg * 4000, (carrier - vg) * 4000, nic * 4000, flavors);
     }
     private int[] doses(LiquidBlend blend) {
-        if (!blend.usable()) return null;
+        return doses(blend, VaporData.bottleCapacity(inventory.getStackInSlot(6)));
+    }
+    private int[] doses(LiquidBlend blend, int capacity) {
+        if (blend == null || !blend.usable() || capacity <= 0 || capacity > VaporData.LARGE_BOTTLE) return null;
         int[] amounts = new int[6];
         if (blend.vegetable() % 4000 != 0 || blend.clear() % 4000 != 0 || blend.nicotine() % 4000 != 0) return null;
-        amounts[0] = blend.vegetable() / 4000; amounts[1] = blend.clear() / 4000; amounts[2] = blend.nicotine() / 4000;
+        amounts[0] = scaledDose(blend.vegetable(), capacity);
+        amounts[1] = scaledDose(blend.clear(), capacity);
+        amounts[2] = scaledDose(blend.nicotine(), capacity);
         for (var entry : blend.flavors().entrySet()) {
             if (entry.getValue() % 4000 != 0) return null;
-            int flavorUnits = entry.getValue() / 4000;
-            int remaining = Math.max(1, (flavorUnits + 9) / 10) * VaporData.BOTTLE;
+            int fullDosesNeeded = Math.max(1, (int) (((long) entry.getValue() * capacity + 10L * LiquidBlend.SCALE - 1) / (10L * LiquidBlend.SCALE)));
+            int remaining = fullDosesNeeded * VaporData.BOTTLE;
             for (int i = 3; i < 6; i++) {
                 String flavor = flavor(tanks[i].getFluid());
                 if (entry.getKey().equals(flavor)) {
@@ -193,13 +207,19 @@ public final class LiquidStationEntity extends BlockEntity implements MenuProvid
         for (int i = 0; i < 6; i++) if (tanks[i].getFluidAmount() < amounts[i]) return null;
         return amounts;
     }
-    public boolean hasIngredients(LiquidBlend blend) { return blend != null && doses(blend) != null; }
+    public boolean hasIngredients(LiquidBlend blend) { return doses(blend) != null; }
+    /** Client tank snapshots do not contain the menu inventory; use its actual bottle capacity. */
+    public boolean hasIngredients(LiquidBlend blend, int capacity) { return doses(blend, capacity) != null; }
+    private static int scaledDose(int share, int capacity) {
+        return (int) (((long) share * capacity + LiquidBlend.SCALE - 1) / LiquidBlend.SCALE);
+    }
     public boolean canBlend(LiquidBlend blend) {
-        return !inventory.getStackInSlot(6).isEmpty() && hasIngredients(blend)
+        return VaporData.isEmptyGlass(inventory.getStackInSlot(6)) && hasIngredients(blend)
                 && inventory.insertItem(OUTPUT, output(blend), true).isEmpty();
     }
     private ItemStack output(LiquidBlend blend) {
-        ItemStack result = VaporData.bottle(blend, 250);
+        ItemStack glass = inventory.getStackInSlot(6);
+        ItemStack result = VaporData.bottle(blend, VaporData.bottleCapacity(glass), glass);
         var name = inventory.getStackInSlot(CARD).get(net.minecraft.core.component.DataComponents.CUSTOM_NAME);
         if (name != null) result.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, name);
         return result;
@@ -219,6 +239,10 @@ public final class LiquidStationEntity extends BlockEntity implements MenuProvid
     }
     public void button(int id) {
         if (!isBlending()) return;
+        if (id == 0 || id == 1 || id == 2 || id == 7) {
+            LiquidBlend saved = inventory.getStackInSlot(CARD).get(VaporContent.BLEND.get());
+            if (saved != null) { vegetablePercent = saved.vegetablePercent(); strength = saved.strength(); }
+        }
         if (id == 0 || id == 1) {
             vegetablePercent = Math.clamp(vegetablePercent + (id == 0 ? -10 : 10), 0, 100);
             inventory.getStackInSlot(CARD).remove(VaporContent.BLEND.get());

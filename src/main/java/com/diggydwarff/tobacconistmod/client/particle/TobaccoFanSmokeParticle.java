@@ -23,6 +23,15 @@ public final class TobaccoFanSmokeParticle extends CampfireSmokeParticle {
     private static final int OUTDOOR_REMAINING_LIFETIME = 72;
     private static final double OUTDOOR_WALL_RISE = 0.020D;
 
+    private static SpriteSet drawSprites;
+    public static void idle(ClientLevel level, Vec3 origin, Vec3 look) { idle(level,origin,look,1F); }
+    public static void idle(ClientLevel level, Vec3 origin, Vec3 look, float size) {
+        if(drawSprites==null) return;
+        var smoke=new TobaccoFanSmokeParticle(level,origin.x,origin.y,origin.z,look.x*.008,.009,look.z*.008,false,drawSprites);
+        smoke.scale(.10F*size);smoke.lifetime=30+level.random.nextInt(9);smoke.setAlpha(.5F);
+        net.minecraft.client.Minecraft.getInstance().particleEngine.add(smoke);
+    }
+
     private final boolean indoorSmoke;
     private boolean escapedShelter;
 
@@ -166,7 +175,7 @@ public final class TobaccoFanSmokeParticle extends CampfireSmokeParticle {
         private final SpriteSet sprites;
 
         public DrawProvider(SpriteSet sprites) {
-            this.sprites = sprites;
+            this.sprites = sprites;drawSprites=sprites;
         }
 
         @Override

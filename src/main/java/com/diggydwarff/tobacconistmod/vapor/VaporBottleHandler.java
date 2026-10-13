@@ -59,10 +59,12 @@ public final class VaporBottleHandler implements IFluidHandlerItem {
 
     public static ItemStack filled(FluidStack fluid) {
         if (!supported(fluid)) return ItemStack.EMPTY;
-        if (fluid.getFluid() == VaporContent.LIQUID_FLUID.get()) return VaporData.bottle(VaporData.blend(fluid), VaporData.BOTTLE);
+        if (fluid.getFluid() == VaporContent.LIQUID_FLUID.get()) return VaporData.bottle(VaporData.blend(fluid), Math.min(fluid.getAmount(), VaporData.BOTTLE));
         var item = fluid.getFluid() == VaporContent.VEGETABLE_FLUID.get() ? VaporContent.VEGETABLE_BASE
                 : fluid.getFluid() == VaporContent.CLEAR_FLUID.get() ? VaporContent.CLEAR_BASE
                 : fluid.getFluid() == VaporContent.CRUDE_FLUID.get() ? VaporContent.CRUDE_EXTRACT : VaporContent.NICOTINE_EXTRACT;
-        return new ItemStack(item.get());
+        ItemStack result = new ItemStack(item.get());
+        result.set(VaporContent.VOLUME.get(), Math.min(fluid.getAmount(), VaporData.BOTTLE));
+        return result;
     }
 }

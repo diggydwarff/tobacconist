@@ -1,0 +1,29 @@
+{
+  "parent": "tobacconistmod:tobacconist/root",
+  "display": {
+    "icon": {
+      "id": "tobacconistmod:bubble_pipe"
+    },
+    "title": {
+      "translate": "advancement.tobacconistmod.vapor.pipe_dream"
+    },
+    "description": {
+      "translate": "advancement.tobacconistmod.vapor.pipe_dream.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "perform": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "perform"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

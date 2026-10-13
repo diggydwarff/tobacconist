@@ -17,6 +17,7 @@ public final class LiquidStationMenu extends AbstractContainerMenu {
     private final BlockPos pos;
     private final boolean blending;
     private final ContainerData data;
+    private final ItemStackHandler stationInventory;
 
     public LiquidStationMenu(int id, Inventory inventory, RegistryFriendlyByteBuf buffer) {
         this(id, inventory, buffer.readBlockPos(), buffer.readBoolean(), new ItemStackHandler(11), new SimpleContainerData(13));
@@ -26,7 +27,7 @@ public final class LiquidStationMenu extends AbstractContainerMenu {
     }
     private LiquidStationMenu(int id, Inventory inventory, BlockPos pos, boolean blending, ItemStackHandler items, ContainerData data) {
         super(VaporContent.STATION_MENU.get(), id); this.playerInventory = inventory;
-        this.pos = pos; this.blending = blending; this.data = data;
+        this.pos = pos; this.blending = blending; this.data = data; this.stationInventory = items;
         for (int slot = 0; slot < 11; slot++) {
             int[][] layout = blending ? BLEND_SLOTS : EXTRACTION_SLOTS;
             int x = layout[slot][0], y = layout[slot][1];
@@ -47,7 +48,7 @@ public final class LiquidStationMenu extends AbstractContainerMenu {
     public int value(int index) { return data.get(index); }
     public BlockPos pos() { return pos; }
     @Override public boolean clickMenuButton(Player player, int id) {
-        if (id < 0 || id > 7 || !stillValid(player)) return false;
+        if (id < 0 || id > 7 || !player.isAlive() || player.isSpectator() || !stillValid(player)) return false;
         if (player.level().getBlockEntity(pos) instanceof LiquidStationEntity station) {
             station.button(id);
             if (id == 4 && player instanceof net.minecraft.server.level.ServerPlayer server) {
@@ -58,7 +59,8 @@ public final class LiquidStationMenu extends AbstractContainerMenu {
         return false;
     }
     @Override public boolean stillValid(Player player) {
-        return player.level().getBlockEntity(pos) instanceof LiquidStationEntity
+        return player.level().getBlockEntity(pos) instanceof LiquidStationEntity station
+                && station.inventory == stationInventory && station.isBlending() == blending
                 && player.distanceToSqr(pos.getX() + .5, pos.getY() + .5, pos.getZ() + .5) <= 64;
     }
     @Override public ItemStack quickMoveStack(Player player, int index) {

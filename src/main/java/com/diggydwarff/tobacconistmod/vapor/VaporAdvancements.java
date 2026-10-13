@@ -33,6 +33,7 @@ public final class VaporAdvancements {
         if (blend.nicotine() == 0 && !blend.flavors().isEmpty()) award(player, "just_the_flavor");
         if (blend.vegetablePercent() >= 80 && draw >= 40) award(player, "cloud_chaser");
     }
+    public static void onBubbles(ServerPlayer player) { award(player, "pipe_dream"); }
 
     public static void scanInventory(ServerPlayer player) {
         var advancement = advancement(player, "small_batch");
@@ -40,7 +41,7 @@ public final class VaporAdvancements {
         var inventory = player.getInventory();
         for (int i = 0; i < inventory.getContainerSize(); i++) {
             ItemStack stack = inventory.getItem(i);
-            if (!stack.is(VaporContent.VAPE_LIQUID.get()) || VaporData.volume(stack) == 0) continue;
+            if (!VaporData.isLiquidBottle(stack) || VaporData.volume(stack) == 0) continue;
             LiquidBlend blend = VaporData.blend(stack);
             if (blend != null && blend.usable()) {
                 award(player, "small_batch");

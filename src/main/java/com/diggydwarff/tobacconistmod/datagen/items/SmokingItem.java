@@ -145,11 +145,19 @@ public abstract class SmokingItem extends Item {
         applySmokingEffects(player, level, tobaccoStack, true, strength);
     }
 
+    public static void applyRelicSmokingEffects(Player player, ServerLevel level, ItemStack tobaccoStack, float strength) {
+        applySmokingEffects(player, level, tobaccoStack, false, strength, true);
+    }
+
     private static void applySmokingEffects(Player player, ServerLevel level, ItemStack tobaccoStack, boolean hookahDraw, float strength) {
-        if (TobacconistConfig.areSmokingDrawAnimationsEnabled()) {
+        applySmokingEffects(player, level, tobaccoStack, hookahDraw, strength, true);
+    }
+
+    private static void applySmokingEffects(Player player, ServerLevel level, ItemStack tobaccoStack, boolean hookahDraw, float strength, boolean smoke) {
+        if (smoke && TobacconistConfig.areSmokingDrawAnimationsEnabled()) {
             SmokingDraws.queueExhale(player, tobaccoStack, hookahDraw, strength);
-        } else {
-            emitSmokingSmoke(player, level, tobaccoStack, hookahDraw);
+        } else if (smoke) {
+            emitSmokingSmoke(player, level, tobaccoStack, hookahDraw, strength);
         }
 
         if (TobacconistConfig.areNicotineEffectsEnabled()) {
@@ -202,7 +210,7 @@ public abstract class SmokingItem extends Item {
         smokeDirX = horizontalLook.x;
         smokeDirZ = horizontalLook.z;
 
-        if (TobacconistConfig.areSmokingDrawAnimationsEnabled()) {
+        if (TobacconistConfig.areSmokingDrawAnimationsEnabled() || strength < 1F) {
             SmokeParticleHelper.spawnServerDrawSmoke(level, smokeX, smokeY, smokeZ, smokeDirX, smokeDirZ, hookahDraw, strength);
         } else if (hookahDraw) {
             SmokeParticleHelper.spawnServerHookahPuffSmoke(level, smokeX, smokeY, smokeZ, smokeDirX, smokeDirZ);

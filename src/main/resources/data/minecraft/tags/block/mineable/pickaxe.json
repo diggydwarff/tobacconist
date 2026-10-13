@@ -23,6 +23,7 @@
     "tobacconistmod:flue_firebox",
     "tobacconistmod:industrial_drying_rack",
     "tobacconistmod:production_monitor",
-    "tobacconistmod:extraction_station"
+    "tobacconistmod:extraction_station",
+    "tobacconistmod:extract_cauldron"
   ]
 }

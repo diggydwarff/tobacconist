@@ -28,8 +28,28 @@ public final class NetworkEvents {
     private NetworkEvents() {}
 
     @SubscribeEvent
+    public static void logout(net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent event) {
+        LAST_MANUAL_SMOKE_TICK.remove(event.getEntity().getUUID());
+    }
+
+    @SubscribeEvent
+    public static void changedDimension(net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerChangedDimensionEvent event) {
+        LAST_MANUAL_SMOKE_TICK.remove(event.getEntity().getUUID());
+    }
+
+    @SubscribeEvent
+    public static void stopped(net.neoforged.neoforge.event.server.ServerStoppedEvent event) {
+        LAST_MANUAL_SMOKE_TICK.clear();
+    }
+
+    @SubscribeEvent
     public static void registerPayloads(RegisterPayloadHandlersEvent event) {
-        var registrar = event.registrar("4");
+        var registrar = event.registrar("14");
+        registrar.playToClient(MouthEffectStatePayload.TYPE,MouthEffectStatePayload.CODEC,
+                (payload, context) -> com.diggydwarff.tobacconistmod.client.ClientSmokingParticles.receive(payload));
+        registrar.playToClient(com.diggydwarff.tobacconistmod.novelty.NoveltyPuffPayload.TYPE,
+                com.diggydwarff.tobacconistmod.novelty.NoveltyPuffPayload.CODEC,
+                (payload, context) -> com.diggydwarff.tobacconistmod.novelty.client.NoveltyParticle.puff(payload));
         registrar.playToClient(com.diggydwarff.tobacconistmod.vapor.VaporPuffPayload.TYPE,
                 com.diggydwarff.tobacconistmod.vapor.VaporPuffPayload.CODEC,
                 (payload, context) -> com.diggydwarff.tobacconistmod.vapor.client.VaporParticle.puff(payload));
@@ -51,9 +71,9 @@ public final class NetworkEvents {
                     }
                     if (TobacconistConfig.areSmokingDrawAnimationsEnabled()) {
                         ItemStack stack = CuriosSmokingHelper.getMouthItem(player);
-                        if (!(stack.getItem() instanceof SmokingItem smokingItem)) {
+                        if (!CuriosSmokingHelper.supported(stack)) {
                             player.displayClientMessage(Component.translatable("tobacconistmod.message.mouth.empty"), true);
-                        } else if (!smokingItem.canSmoke(stack)) {
+                        } else if (!CuriosSmokingHelper.canDraw(stack)) {
                             player.displayClientMessage(Component.translatable("tobacconistmod.message.mouth.no_puffs"), true);
                         } else {
                             SmokingDraws.startMouth(player, stack);
@@ -61,6 +81,7 @@ public final class NetworkEvents {
                         return;
                     }
 
+                    if (!SmokingDraws.canStart(player, CuriosSmokingHelper.getMouthItem(player))) return;
                     long now = player.serverLevel().getGameTime();
                     long last = LAST_MANUAL_SMOKE_TICK.getOrDefault(player.getUUID(), Long.MIN_VALUE / 2);
                     if (now - last < MANUAL_SMOKE_COOLDOWN_TICKS) {

@@ -56,6 +56,7 @@ public class TobacconistMod {
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::clientSetup);
 
+        com.diggydwarff.tobacconistmod.novelty.NoveltyContent.register(modEventBus);
         com.diggydwarff.tobacconistmod.vapor.VaporContent.register(modEventBus);
         ModMolassesFluids.register(modEventBus);
         ModExtractionFluids.register(modEventBus);
@@ -76,6 +77,7 @@ public class TobacconistMod {
         modContainer.registerConfig(ModConfig.Type.CLIENT, TobacconistConfig.CLIENT_SPEC);
         modContainer.registerConfig(ModConfig.Type.COMMON, TobacconistConfig.COMMON_SPEC);
         modContainer.registerConfig(ModConfig.Type.SERVER, TobacconistConfig.SERVER_SPEC);
+        modContainer.registerConfig(ModConfig.Type.SERVER, com.diggydwarff.tobacconistmod.novelty.NoveltyConfig.SPEC, "tobacconistmod-novelties-server.toml");
 
         NeoForge.EVENT_BUS.register(this);
     }
@@ -88,7 +90,9 @@ public class TobacconistMod {
     }
 
     private void clientSetup(FMLClientSetupEvent event) {
-        event.enqueueWork(LooseTobaccoModelProperties::register);
+        event.enqueueWork(() -> {
+            LooseTobaccoModelProperties.register();
+        });
         CreateCompat.initClient();
     }
 
@@ -181,6 +185,7 @@ public class TobacconistMod {
         );
 
         registerFlavorEssenceBrewing(event);
+        com.diggydwarff.tobacconistmod.vapor.VaporBrewingRecipe.register(event);
     }
 
     private void registerFlavorEssenceBrewing(RegisterBrewingRecipesEvent event) {

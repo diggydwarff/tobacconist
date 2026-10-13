@@ -21,9 +21,13 @@ public final class CuriosCompat {
         try {
             Class<?> registrationClass = Class.forName(SPECTACLES_REGISTRATION_CLASS);
             registrationClass.getMethod("register", IEventBus.class).invoke(null, modEventBus);
+            if (net.neoforged.fml.loading.FMLEnvironment.dist == net.neoforged.api.distmarker.Dist.CLIENT) {
+                Class.forName("com.diggydwarff.tobacconistmod.client.render.MouthCurioLayer")
+                        .getMethod("register", IEventBus.class).invoke(null, modEventBus);
+            }
         } catch (ReflectiveOperationException exception) {
             throw new IllegalStateException(
-                    "Curios is installed, but Tobacconist spectacles compatibility failed to initialize.",
+                    "Curios is installed, but Tobacconist compatibility failed to initialize.",
                     exception
             );
         }

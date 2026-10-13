@@ -47,6 +47,12 @@ public final class VaporParticle extends TextureSheetParticle {
         setColor(.96F, .97F, .98F); alpha = initialOpacity; pickSprite(sprites);
     }
     @Override public ParticleRenderType getRenderType() { return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT; }
+    public static void idle(ClientLevel level, Vec3 origin, Vec3 look, int vegetable) {
+        if (sprites == null) return;
+        float vg = Math.clamp(vegetable,0,100) / 100F;
+        Minecraft.getInstance().particleEngine.add(new VaporParticle(level,origin,look.scale(.012).add(0,.012,0),
+                new VaporCloudProfile(1,1,32,.030F + vg*.016F,.45F)));
+    }
     @Override public void tick() {
         var airflow = CreateCompat.getSmokeAirflow(level, new Vec3(x, y, z));
         if (airflow.intakeCapture()) { remove(); return; }
@@ -74,7 +80,8 @@ public final class VaporParticle extends TextureSheetParticle {
         int budget = 96;
         for (var iterator = exhales.iterator(); iterator.hasNext();) {
             Exhale exhale = iterator.next(); var player = level.getPlayerByUUID(exhale.player);
-            if (player == null || player.distanceToSqr(minecraft.player) > 64 * 64) { iterator.remove(); continue; }
+            if (player == null || !player.isAlive() || player.isSpectator()
+                    || player.distanceToSqr(minecraft.player) > 64 * 64) { iterator.remove(); continue; }
             if (exhale.delay > 0) { exhale.delay--; continue; }
             int duration = exhale.profile.duration();
             int count = Math.min(budget, exhale.count * (exhale.age + 1) / duration - exhale.count * exhale.age / duration);

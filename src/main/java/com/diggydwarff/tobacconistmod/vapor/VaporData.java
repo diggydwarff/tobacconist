@@ -15,7 +15,9 @@ import java.util.Map;
 
 public final class VaporData {
     public static final int BOTTLE = 250;
-    public static final int TANK = 250;
+    public static final int SMALL_BOTTLE = 150;
+    public static final int LARGE_BOTTLE = 1000;
+    public static final int TANK = 100;
     public static final int MAX_CHARGE = 100;
     private record Fields(int vegetable, int clear, int nicotine, Map<String, Integer> flavors) {}
     private static final Codec<Fields> FIELDS = RecordCodecBuilder.create(instance -> instance.group(
@@ -33,6 +35,7 @@ public final class VaporData {
     private VaporData() {}
 
     public static LiquidBlend blend(ItemStack stack) {
+        if (stack.getItem() instanceof SizedBottleItem) return blend(SizedBottleItem.fluid(stack));
         LiquidBlend saved = stack.get(VaporContent.BLEND.get());
         if (saved != null) return saved;
         if (stack.is(VaporContent.VEGETABLE_BASE.get())) return LiquidBlend.VEGETABLE;
@@ -66,7 +69,31 @@ public final class VaporData {
         return result;
     }
 
-    public static int volume(ItemStack stack) { return Math.clamp(stack.getOrDefault(VaporContent.VOLUME.get(), BOTTLE), 0, BOTTLE); }
+    public static int bottleCapacity(ItemStack stack) { return stack.getItem() instanceof SizedBottleItem item ? item.capacity() : BOTTLE; }
+    public static boolean isEmptyGlass(ItemStack stack) { return stack.is(net.minecraft.world.item.Items.GLASS_BOTTLE) || SizedBottleItem.isEmptyGlass(stack); }
+    public static boolean isLiquidBottle(ItemStack stack) {
+        return stack.is(VaporContent.VAPE_LIQUID.get()) || stack.getItem() instanceof SizedBottleItem
+                && SizedBottleItem.fluid(stack).getFluid() == VaporContent.LIQUID_FLUID.get();
+    }
+    public static int volume(ItemStack stack) {
+        if (stack.getItem() instanceof SizedBottleItem) return SizedBottleItem.fluid(stack).getAmount();
+        return Math.clamp(stack.getOrDefault(VaporContent.VOLUME.get(), BOTTLE), 0, BOTTLE);
+    }
+    public static void setBottleVolume(ItemStack stack, int amount) {
+        if (stack.getItem() instanceof SizedBottleItem) {
+            BottledFluid fluid = stack.get(VaporContent.BOTTLED_FLUID.get());
+            if (fluid != null && amount > 0) stack.set(VaporContent.BOTTLED_FLUID.get(), fluid.withAmount(Math.min(amount, bottleCapacity(stack))));
+            else stack.remove(VaporContent.BOTTLED_FLUID.get());
+        } else stack.set(VaporContent.VOLUME.get(), Math.clamp(amount, 0, BOTTLE));
+    }
+    public static ItemStack emptyGlass(ItemStack bottle) {
+        return new ItemStack(bottleCapacity(bottle) == SMALL_BOTTLE ? VaporContent.SMALL_GLASS_BOTTLE.get()
+                : bottleCapacity(bottle) == LARGE_BOTTLE ? VaporContent.LARGE_GLASS_BOTTLE.get() : net.minecraft.world.item.Items.GLASS_BOTTLE);
+    }
+    public static ItemStack bottle(LiquidBlend blend, int amount, ItemStack glass) {
+        return glass.is(net.minecraft.world.item.Items.GLASS_BOTTLE) ? bottle(blend, amount)
+                : SizedBottleItem.filled(glass, fluid(blend, amount), amount);
+    }
     public static int charge(ItemStack stack) { return Math.clamp(stack.getOrDefault(VaporContent.CHARGE.get(), MAX_CHARGE), 0, MAX_CHARGE); }
 
     public static List<Component> description(LiquidBlend blend) {

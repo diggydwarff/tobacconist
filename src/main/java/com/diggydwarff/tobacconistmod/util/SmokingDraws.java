@@ -51,6 +51,7 @@ public final class SmokingDraws {
     }
 
     public static int duration(ItemStack stack) {
+        if (com.diggydwarff.tobacconistmod.vapor.VapePenItem.isCigalike(stack)) return 40;
         if (stack.getItem() instanceof HookahHoseItem) return 50;
         if (stack.getItem() instanceof CigarItem) return 35;
         if (stack.getItem() instanceof CigaretteItem) return 25;
@@ -61,9 +62,12 @@ public final class SmokingDraws {
         return Math.max(0.0F, Math.min(1.0F, elapsed / (float) duration(stack)));
     }
 
+    public static boolean canFinish(Player player) {
+        return player.isAlive() && !player.isSpectator() && player.containerMenu == player.inventoryMenu;
+    }
+
     public static boolean canStart(Player player, ItemStack stack) {
-        return player.isAlive() && !player.isSpectator() && !player.isUsingItem()
-                && player.containerMenu == player.inventoryMenu
+        return canFinish(player) && !player.isUsingItem()
                 && !player.getCooldowns().isOnCooldown(stack.getItem())
                 && (player.level().isClientSide() || (!MOUTH_DRAWS.containsKey(player.getUUID())
                 && !RECOVERY.containsKey(player.getUUID())));
@@ -146,7 +150,8 @@ public final class SmokingDraws {
         ItemStack stack = CuriosSmokingHelper.getMouthItem(player);
         int elapsed = duration(draw.snapshot) - draw.remaining;
         cancelMouth(player);
-        if (elapsed >= MIN_DRAW_TICKS && player.isAlive() && !player.isSpectator()
+        int minimum = MIN_DRAW_TICKS;
+        if (elapsed >= minimum && player.isAlive() && !player.isSpectator()
                 && player.containerMenu == player.inventoryMenu && player.level() == draw.level
                 && !player.isUsingItem() && ItemStack.matches(stack, draw.snapshot)) {
             ItemStack used = stack.copy();
@@ -164,6 +169,8 @@ public final class SmokingDraws {
 
     public static void drawSound(Level level, LivingEntity entity, ItemStack stack, int elapsed) {
         if (level.isClientSide() || elapsed <= 4) return;
+        if (stack.getItem() instanceof com.diggydwarff.tobacconistmod.vapor.BubblePipeItem
+                || stack.getItem() instanceof com.diggydwarff.tobacconistmod.novelty.ToyPipeItem) return;
         if (stack.getItem() instanceof HookahHoseItem) {
             if (elapsed % 10 == 5) level.playSound(null, entity.blockPosition(), SoundEvents.BUBBLE_COLUMN_BUBBLE_POP,
                     SoundSource.PLAYERS, 0.12F, 0.65F + level.random.nextFloat() * 0.20F);

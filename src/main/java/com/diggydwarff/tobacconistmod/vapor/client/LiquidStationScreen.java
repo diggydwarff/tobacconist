@@ -102,8 +102,9 @@ public final class LiquidStationScreen extends AbstractContainerScreen<LiquidSta
             ItemStack card = menu.slots.get(LiquidStationEntity.CARD).getItem();
             var station = station();
             saveButton.active = card.is(VaporContent.RECIPE_CARD.get());
-            blendButton.active = menu.slots.get(6).hasItem() && !menu.slots.get(7).hasItem() && station != null
-                    && station.hasIngredients(station.desiredBlend(menu.value(2), menu.value(3), card));
+            blendButton.active = VaporData.isEmptyGlass(menu.slots.get(6).getItem()) && !menu.slots.get(7).hasItem() && station != null
+                    && station.hasIngredients(station.desiredBlend(menu.value(2), menu.value(3), card),
+                            VaporData.bottleCapacity(menu.slots.get(6).getItem()));
             clearButton.visible = menu.value(9) + menu.value(10) + menu.value(11) > 0
                     || saved() != null && !saved().flavors().isEmpty() || menu.value(4) != 0;
         }

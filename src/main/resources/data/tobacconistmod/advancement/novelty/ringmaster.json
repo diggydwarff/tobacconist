@@ -1,0 +1,29 @@
+{
+  "parent": "tobacconistmod:novelty/curio_collector",
+  "display": {
+    "icon": {
+      "id": "tobacconistmod:wizards_longpipe"
+    },
+    "title": {
+      "translate": "advancement.tobacconistmod.novelty.ringmaster"
+    },
+    "description": {
+      "translate": "advancement.tobacconistmod.novelty.ringmaster.desc"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "perform": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "perform"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

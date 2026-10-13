@@ -14,6 +14,8 @@ public class VaporBottleItem extends Item {
     @Override public Component getName(ItemStack stack) {
         LiquidBlend blend = VaporData.blend(stack);
         if (kind.equals("liquid") && blend != null && !blend.usable()) return Component.translatable("item.tobacconistmod.flavor_concentrate");
+        String label = com.diggydwarff.tobacconistmod.util.TobaccoLabelHelper.getProductLabel(stack);
+        if (kind.equals("liquid") && !label.isEmpty()) return com.diggydwarff.tobacconistmod.util.TobaccoLabelHelper.buildNamedProduct(label, super.getName(stack));
         return super.getName(stack);
     }
     @Override

@@ -82,8 +82,11 @@ final class VaporGui {
             String message = getMessage().getString();
             if (iconX >= 0) message = iconX == 16 ? "x" : iconY == 80 ? selected.get() ? "II" : ">" : message.substring(0, 1);
             var font = Minecraft.getInstance().font;
-            gui.drawCenteredString(font, font.plainSubstrByWidth(message, getWidth() - 6), getX() + getWidth() / 2,
-                    getY() + (getHeight() - 8) / 2, active ? 0xFFFFFF : 0x999999);
+            String visible = font.plainSubstrByWidth(message, getWidth() - 6);
+            // The light Create button face needs dark, shadow-free text in both states.
+            int color = active ? 0x202020 : 0x303030;
+            gui.drawString(font, visible, getX() + (getWidth() - font.width(visible)) / 2,
+                    getY() + (getHeight() - 8) / 2, color, false);
         }
 
         private void drawSelector(GuiGraphics gui) {

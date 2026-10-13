@@ -1,3 +1,6 @@
 {
-  "parent": "tobacconistmod:block/liquid_blending_bench"
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "tobacconistmod:item/liquid_blending_bench"
+  }
 }

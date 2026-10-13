@@ -99,7 +99,19 @@ public class TobacconistJeiPlugin implements IModPlugin {
     public void registerRecipes(IRecipeRegistration registration) {
         var level = net.minecraft.client.Minecraft.getInstance().level;
         if (level != null) registration.addRecipes(ExtractionRecipeCategory.TYPE,
-                level.getRecipeManager().getAllRecipesFor(com.diggydwarff.tobacconistmod.vapor.VaporContent.EXTRACTION.get()).stream().map(RecipeHolder::value).toList());
+                level.getRecipeManager().getAllRecipesFor(com.diggydwarff.tobacconistmod.vapor.VaporContent.EXTRACTION.get()).stream()
+                        .filter(holder -> !holder.id().getPath().equals("extraction/nicotine") && !holder.id().getPath().equals("extraction/clear_base"))
+                        .map(RecipeHolder::value).toList());
+        var brewing = registration.getVanillaRecipeFactory();
+        registration.addRecipes(mezz.jei.api.constants.RecipeTypes.BREWING, java.util.List.of(
+                brewing.createBrewingRecipe(java.util.List.of(new ItemStack(Items.PAPER)),
+                        new ItemStack(com.diggydwarff.tobacconistmod.vapor.VaporContent.CRUDE_EXTRACT.get()),
+                        new ItemStack(com.diggydwarff.tobacconistmod.vapor.VaporContent.NICOTINE_EXTRACT.get()),
+                        ResourceLocation.fromNamespaceAndPath(TobacconistMod.MODID, "brewing/nicotine_extract")),
+                brewing.createBrewingRecipe(java.util.List.of(new ItemStack(Items.SUGAR_CANE)),
+                        new ItemStack(ModItems.BOTTLED_AQUA_VITAE.get()),
+                        new ItemStack(com.diggydwarff.tobacconistmod.vapor.VaporContent.CLEAR_BASE.get()),
+                        ResourceLocation.fromNamespaceAndPath(TobacconistMod.MODID, "brewing/clear_base"))));
         registration.addIngredientInfo(java.util.List.of(new ItemStack(net.minecraft.world.level.block.Blocks.CAULDRON)), VanillaTypes.ITEM_STACK,
                 Component.translatable("tobacconistmod.vapor.jei_cauldron"));
         registration.addIngredientInfo(java.util.List.of(new ItemStack(com.diggydwarff.tobacconistmod.vapor.VaporContent.BLENDING_BENCH.get()),
@@ -107,6 +119,23 @@ public class TobacconistJeiPlugin implements IModPlugin {
                         new ItemStack(com.diggydwarff.tobacconistmod.vapor.VaporContent.BOX_MOD.get()),
                         new ItemStack(com.diggydwarff.tobacconistmod.vapor.VaporContent.CIGALIKE.get())), VanillaTypes.ITEM_STACK,
                 Component.translatable("tobacconistmod.vapor.jei_blending"), Component.translatable("tobacconistmod.vapor.jei_pen"));
+        for (var pipe : new net.minecraft.world.item.Item[]{com.diggydwarff.tobacconistmod.novelty.NoveltyContent.WIZARDS_LONGPIPE.get(),
+                com.diggydwarff.tobacconistmod.novelty.NoveltyContent.SOULGLASS_PIPE.get(), com.diggydwarff.tobacconistmod.novelty.NoveltyContent.ASTRAL_PIPE.get(), com.diggydwarff.tobacconistmod.novelty.NoveltyContent.SUNKEEPERS_PIPE.get(), com.diggydwarff.tobacconistmod.novelty.NoveltyContent.ECHO_PIPE.get()}) {
+            var relic = (com.diggydwarff.tobacconistmod.novelty.RelicPipeItem) pipe;
+            registration.addIngredientInfo(java.util.List.of(new ItemStack(pipe)), VanillaTypes.ITEM_STACK,
+                    Component.translatable("tobacconistmod.novelty." + relic.key() + "_source"),
+                    Component.translatable("tobacconistmod.novelty.jei_relic"));
+        }
+        for(var toy : new net.minecraft.world.item.Item[]{com.diggydwarff.tobacconistmod.novelty.NoveltyContent.PETAL_PIPE.get(), com.diggydwarff.tobacconistmod.novelty.NoveltyContent.WHISTLING_PIPE.get()}) {
+            registration.addIngredientInfo(java.util.List.of(new ItemStack(toy)), VanillaTypes.ITEM_STACK,
+                    Component.translatable(((com.diggydwarff.tobacconistmod.novelty.ToyPipeItem)toy).refillKey()), Component.translatable("tobacconistmod.novelty.toy_controls"));
+        }
+        registration.addIngredientInfo(java.util.List.of(new ItemStack(com.diggydwarff.tobacconistmod.novelty.NoveltyContent.CONFETTI_PIPE.get())), VanillaTypes.ITEM_STACK,
+                Component.translatable("tobacconistmod.novelty.confetti_refill"), Component.translatable("tobacconistmod.novelty.toy_controls"));
+        registration.addIngredientInfo(java.util.List.of(new ItemStack(com.diggydwarff.tobacconistmod.vapor.VaporContent.CRUDE_EXTRACT.get()),
+                        new ItemStack(com.diggydwarff.tobacconistmod.vapor.VaporContent.NICOTINE_EXTRACT.get()),
+                        new ItemStack(com.diggydwarff.tobacconistmod.vapor.VaporContent.CLEAR_BASE.get())), VanillaTypes.ITEM_STACK,
+                Component.translatable("tobacconistmod.vapor.jei_brewing"));
         registration.addRecipes(LeafCuttingRecipeCategory.TYPE, LeafCuttingJeiRecipe.createAll());
         registration.addRecipes(AverageLeavesRecipeCategory.TYPE, AverageLeavesJeiRecipe.createAll());
         registration.addRecipes(mezz.jei.api.constants.RecipeTypes.CRAFTING, WoodenPipeJeiRecipe.createAll());

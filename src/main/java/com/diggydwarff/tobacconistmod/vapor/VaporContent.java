@@ -43,7 +43,7 @@ public final class VaporContent {
             () -> DataComponentType.<LiquidBlend>builder().persistent(VaporData.CODEC)
                     .networkSynchronized(ByteBufCodecs.fromCodec(VaporData.CODEC)).build());
     public static final Supplier<DataComponentType<Integer>> VOLUME = DATA.register("liquid_volume",
-            () -> DataComponentType.<Integer>builder().persistent(com.mojang.serialization.Codec.intRange(0, 500))
+            () -> DataComponentType.<Integer>builder().persistent(com.mojang.serialization.Codec.intRange(0, 1000))
                     .networkSynchronized(ByteBufCodecs.VAR_INT).build());
     public static final Supplier<DataComponentType<Integer>> CHARGE = DATA.register("vape_charge",
             () -> DataComponentType.<Integer>builder().persistent(com.mojang.serialization.Codec.intRange(0, 100))
@@ -53,6 +53,12 @@ public final class VaporContent {
                     .networkSynchronized(ByteBufCodecs.VAR_INT).build());
     public static final Supplier<DataComponentType<Integer>> PUFF_COUNT = DATA.register("vape_puff_count",
             () -> DataComponentType.<Integer>builder().persistent(com.mojang.serialization.Codec.intRange(0, Integer.MAX_VALUE))
+                    .networkSynchronized(ByteBufCodecs.VAR_INT).build());
+    public static final Supplier<DataComponentType<BottledFluid>> BOTTLED_FLUID = DATA.register("bottled_fluid",
+            () -> DataComponentType.<BottledFluid>builder().persistent(BottledFluid.CODEC)
+                    .networkSynchronized(ByteBufCodecs.fromCodec(BottledFluid.CODEC)).build());
+    public static final Supplier<DataComponentType<Integer>> BUBBLE_CHARGE = DATA.register("bubble_pipe_charge",
+            () -> DataComponentType.<Integer>builder().persistent(com.mojang.serialization.Codec.intRange(0, 24))
                     .networkSynchronized(ByteBufCodecs.VAR_INT).build());
 
     public static final Supplier<Item> VEGETABLE_BASE = bottle("vegetable_base", "vg");
@@ -66,17 +72,26 @@ public final class VaporContent {
     public static final Supplier<Item> CIGALIKE = ITEMS.register("cigalike_vape",
             () -> new VapePenItem(new Item.Properties().stacksTo(1), VapePenItem.Kind.CIGALIKE));
     public static final Supplier<Item> RECIPE_CARD = ITEMS.register("liquid_recipe_card", () -> new VaporBottleItem(new Item.Properties().stacksTo(1), "card"));
+    public static final Supplier<Item> SMALL_GLASS_BOTTLE = ITEMS.register("small_glass_bottle", () -> new SizedBottleItem(new Item.Properties(), VaporData.SMALL_BOTTLE, false));
+    public static final Supplier<Item> LARGE_GLASS_BOTTLE = ITEMS.register("large_glass_bottle", () -> new SizedBottleItem(new Item.Properties(), VaporData.LARGE_BOTTLE, false));
+    public static final Supplier<Item> SMALL_FILLED_BOTTLE = ITEMS.register("small_filled_bottle", () -> new SizedBottleItem(new Item.Properties().stacksTo(1), VaporData.SMALL_BOTTLE, true));
+    public static final Supplier<Item> LARGE_FILLED_BOTTLE = ITEMS.register("large_filled_bottle", () -> new SizedBottleItem(new Item.Properties().stacksTo(1), VaporData.LARGE_BOTTLE, true));
+    public static final Supplier<Item> BUBBLE_PIPE = ITEMS.register("bubble_pipe", () -> new BubblePipeItem(new Item.Properties().stacksTo(1)));
 
     public static final Supplier<Block> EXTRACTION_STATION = BLOCKS.register("extraction_station",
             () -> new LiquidStationBlock(BlockBehaviour.Properties.of().strength(2.5F).sound(SoundType.METAL), false));
     public static final Supplier<Block> BLENDING_BENCH = BLOCKS.register("liquid_blending_bench",
             () -> new LiquidStationBlock(BlockBehaviour.Properties.of().strength(2.0F).sound(SoundType.WOOD).noOcclusion(), true));
+    public static final Supplier<Block> EXTRACT_CAULDRON = BLOCKS.register("extract_cauldron",
+            () -> new ExtractCauldronBlock(BlockBehaviour.Properties.ofFullCopy(net.minecraft.world.level.block.Blocks.CAULDRON)));
     static {
         ITEMS.register("extraction_station", () -> new BlockItem(EXTRACTION_STATION.get(), new Item.Properties()));
         ITEMS.register("liquid_blending_bench", () -> new BlockItem(BLENDING_BENCH.get(), new Item.Properties()));
     }
     public static final Supplier<BlockEntityType<LiquidStationEntity>> STATION = ENTITIES.register("liquid_station",
             () -> BlockEntityType.Builder.of(LiquidStationEntity::new, EXTRACTION_STATION.get(), BLENDING_BENCH.get()).build(null));
+    public static final Supplier<BlockEntityType<ExtractCauldronEntity>> EXTRACT_CAULDRON_ENTITY = ENTITIES.register("extract_cauldron",
+            () -> BlockEntityType.Builder.of(ExtractCauldronEntity::new, EXTRACT_CAULDRON.get()).build(null));
     public static final Supplier<MenuType<LiquidStationMenu>> STATION_MENU = MENUS.register("liquid_station",
             () -> IMenuTypeExtension.create(LiquidStationMenu::new));
     public static final Supplier<MenuType<VapePenMenu>> PEN_MENU = MENUS.register("vape_pen",
@@ -116,12 +131,16 @@ public final class VaporContent {
         DATA.register(bus); ITEMS.register(bus); BLOCKS.register(bus); ENTITIES.register(bus);
         MENUS.register(bus); FLUID_TYPES.register(bus); FLUIDS.register(bus); TYPES.register(bus); SERIALIZERS.register(bus);
         bus.addListener(VaporContent::capabilities);
+        bus.addListener(VapeDyeing::setup);
     }
 
     private static void capabilities(RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, STATION.get(), (station, side) -> station.handler(side));
         event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, STATION.get(), (station, side) -> station.isBlending() ? station.fluidHandler() : null);
+        event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, EXTRACT_CAULDRON_ENTITY.get(), (cauldron, side) -> cauldron.fluidHandler());
         event.registerItem(Capabilities.FluidHandler.ITEM, (stack, context) -> new VaporBottleHandler(stack),
                 VEGETABLE_BASE.get(), CLEAR_BASE.get(), CRUDE_EXTRACT.get(), NICOTINE_EXTRACT.get(), VAPE_LIQUID.get());
+        event.registerItem(Capabilities.FluidHandler.ITEM, (stack, context) -> new SizedBottleHandler(stack),
+                SMALL_GLASS_BOTTLE.get(), LARGE_GLASS_BOTTLE.get(), SMALL_FILLED_BOTTLE.get(), LARGE_FILLED_BOTTLE.get());
     }
 }

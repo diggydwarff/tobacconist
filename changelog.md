@@ -100,7 +100,7 @@ Tobacconist 4.0.0 is released for **Minecraft 1.20.1 Forge** and **Minecraft 1.2
 ### Ponder, JEI & Manual
 - Expanded Create Ponder coverage for wooden and Industrial curing, homogenization, cutting/pressing, blending, Aqua Vitae, flavored molasses, Cigarette/Cigar production, Production Monitor use, and factory logistics.
 - Expanded JEI coverage and cleaned misleading/fake processing representations.
-- Updated The Tobacconist's Manual for current curing, automation, flavoring, monitoring, quality, and factory workflows.
+- Updated The Tobacconist's Manual for current curing, automation, flavoring, monitoring, quagit applyghit ality, and factory workflows.
 
 ### Visuals & Quality of Life
 - Added per-flavor Flavoring Essence bottle colors while retaining the bottle-style appearance.
