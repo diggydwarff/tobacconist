@@ -12,6 +12,14 @@
     {
       "id": "#c:foods/pie/chocolate",
       "required": false
+    },
+    {
+      "id": "bakery:chocolate_tart",
+      "required": false
+    },
+    {
+      "id": "bakery:chocolate_tart_slice",
+      "required": false
     }
   ]
 }

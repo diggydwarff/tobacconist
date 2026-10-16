@@ -24,6 +24,14 @@
     {
       "id": "#forge:marshmallows",
       "required": false
+    },
+    {
+      "id": "camping:marshmallow",
+      "required": false
+    },
+    {
+      "id": "camping:roasted_marshmallow",
+      "required": false
     }
   ]
 }

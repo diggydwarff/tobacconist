@@ -53,6 +53,22 @@
     {
       "id": "#forge:berry/sweet_berry",
       "required": false
+    },
+    {
+      "id": "bakery:sweetberry_jam",
+      "required": false
+    },
+    {
+      "id": "bakery:sweetberry_cake",
+      "required": false
+    },
+    {
+      "id": "bakery:sweetberry_cake_slice",
+      "required": false
+    },
+    {
+      "id": "bakery:sweetberry_cupcake",
+      "required": false
     }
   ]
 }

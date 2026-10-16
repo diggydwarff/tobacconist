@@ -32,6 +32,10 @@
     {
       "id": "#forge:fruit/cherry",
       "required": false
+    },
+    {
+      "id": "vinery:cherry",
+      "required": false
     }
   ]
 }

@@ -32,6 +32,14 @@
     {
       "id": "#forge:fruit/coconut",
       "required": false
+    },
+    {
+      "id": "beachparty:coconut",
+      "required": false
+    },
+    {
+      "id": "beachparty:coconut_open",
+      "required": false
     }
   ]
 }

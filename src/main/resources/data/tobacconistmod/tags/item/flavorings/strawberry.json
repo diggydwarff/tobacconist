@@ -64,6 +64,42 @@
     {
       "id": "#forge:berry/strawberry",
       "required": false
+    },
+    {
+      "id": "farm_and_charm:strawberry",
+      "required": false
+    },
+    {
+      "id": "#c:strawberry",
+      "required": false
+    },
+    {
+      "id": "#c:strawberries",
+      "required": false
+    },
+    {
+      "id": "#c:crops/strawberry",
+      "required": false
+    },
+    {
+      "id": "bakery:strawberry_jam",
+      "required": false
+    },
+    {
+      "id": "bakery:strawberry_cake",
+      "required": false
+    },
+    {
+      "id": "bakery:strawberry_cake_slice",
+      "required": false
+    },
+    {
+      "id": "bakery:strawberry_cupcake",
+      "required": false
+    },
+    {
+      "id": "bakery:strawberry_glazed_cookie",
+      "required": false
     }
   ]
 }

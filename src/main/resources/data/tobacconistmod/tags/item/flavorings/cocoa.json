@@ -45,6 +45,26 @@
     {
       "id": "#forge:chocolate",
       "required": false
+    },
+    {
+      "id": "bakery:chocolate_jam",
+      "required": false
+    },
+    {
+      "id": "bakery:chocolate_cake",
+      "required": false
+    },
+    {
+      "id": "bakery:chocolate_cake_slice",
+      "required": false
+    },
+    {
+      "id": "bakery:chocolate_gateau",
+      "required": false
+    },
+    {
+      "id": "bakery:chocolate_gateau_slice",
+      "required": false
     }
   ]
 }

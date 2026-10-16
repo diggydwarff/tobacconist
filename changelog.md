@@ -1,3 +1,31 @@
+## 4.2.0 - Vaporizers, Animations, & Curiosities
+
+### Vaporizers
+- Added the Vape Pen, Cigalike, and Box Mod.
+- Supports refillable tanks, redstone charging, dyeing, and nicotine-free liquids.
+- Box Mod includes adjustable power and a persistent puff counter.
+- Cloud size scales with VG content and power.
+
+### Liquid Production
+- Added VG/PG bases, tobacco extraction, and refined nicotine extract.
+- Added the Liquid Blending Bench with adjustable ratios, nicotine strength, and up to three flavors.
+- Recipe Cards save named formulas and autofill matching essences.
+- Added reusable 150, 250, and 1,000 mB bottles.
+- Optional Create support for extraction, mixing, transport, bottling, and ventilation.
+
+### Pipes
+- Added Brass, Bubble, Confetti, Petal, and Whistling pipes.
+- Added collectible Wizard’s Longpipe, Sunkeeper’s, Soulglass, Astral, and Echo pipes with unique effects.
+- Rare pipes appear in themed structure loot, with configurable chances.
+
+### Animations & Polish
+- Added hold-and-release draws, smoother hand animations, and delayed exhalation.
+- Longer draws produce fuller smoke and specialty effects.
+- Expanded Curios mouth-slot support.
+- Added advancements and configuration options.
+- Updated JEI, the manual, inventory handling, creative-tab ordering, and menus.
+
+
 ## Update 4.1.0 - Haunted Harvest Update
 
 Tobacconist 4.1.0 releases Haunted Harvest for **Minecraft 1.21.1 NeoForge**.

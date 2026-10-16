@@ -25,6 +25,34 @@
     {
       "id": "#forge:cream",
       "required": false
+    },
+    {
+      "id": "meadow:wooden_milk_bucket",
+      "required": false
+    },
+    {
+      "id": "meadow:wooden_sheep_milk_bucket",
+      "required": false
+    },
+    {
+      "id": "meadow:wooden_buffalo_milk_bucket",
+      "required": false
+    },
+    {
+      "id": "meadow:wooden_goat_milk_bucket",
+      "required": false
+    },
+    {
+      "id": "meadow:wooden_warped_milk_bucket",
+      "required": false
+    },
+    {
+      "id": "meadow:wooden_grain_milk_bucket",
+      "required": false
+    },
+    {
+      "id": "meadow:wooden_amethyst_milk_bucket",
+      "required": false
     }
   ]
 }
