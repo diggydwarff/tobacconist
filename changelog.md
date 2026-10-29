@@ -1,4 +1,4 @@
-## 4.2.0 - Vaporizers, Animations, & Curiosities
+## 4.2.0 - Clouds & Curiosities
 
 ### Vaporizers
 - Added the Vape Pen, Cigalike, and Box Mod.
@@ -24,6 +24,17 @@
 - Expanded Curios mouth-slot support.
 - Added advancements and configuration options.
 - Updated JEI, the manual, inventory handling, creative-tab ordering, and menus.
+
+### Compatibility
+- Added Farm & Charm strawberries as Strawberry flavoring ingredients.
+- Fixed HerbalBrews tea blossom support and added rooibos and yerba mate leaves to Tea.
+- Added all eight Vinery grape varieties to Grape and cherries to Cherry.
+- Added Beachparty whole and opened coconuts to Coconut.
+- Added Camping regular and roasted marshmallows to Marshmallow.
+- Added Meadow wooden milk buckets, including animal milk variants, to Cream.
+- Added Bakery jams, cakes, cookies and apple pie slices to matching existing fruit, chocolate and dessert flavors.
+- Shared ingredient support between Brewing Stand and Create essence recipes, preserving empty containers and keeping all integrations optional.
+- Lowered the minimum NeoForge version from **21.1.235 to 21.1.233**.
 
 
 ## Update 4.1.0 - Haunted Harvest Update

@@ -47,8 +47,22 @@ public class TobacconistJeiPlugin implements IModPlugin {
         }
     };
 
+    /** Wood variants have distinct names and appearances even though they share one item ID. */
+    private static final class WoodenPipeSubtype implements ISubtypeInterpreter<ItemStack> {
+        private String wood(ItemStack stack) {
+            var tag = com.diggydwarff.tobacconistmod.util.LegacyItemTags.getTag(stack);
+            String wood = tag == null ? "" : tag.getString(
+                    com.diggydwarff.tobacconistmod.recipes.WoodenPipeRecipe.NBT_WOOD_PLANK);
+            return wood.isEmpty() ? "minecraft:oak_planks" : wood;
+        }
+
+        @Override public Object getSubtypeData(ItemStack stack, UidContext context) { return wood(stack); }
+        @Override public String getLegacyStringSubtypeInfo(ItemStack stack, UidContext context) { return wood(stack); }
+    }
+
     @Override
     public void registerItemSubtypes(ISubtypeRegistration registration) {
+        registration.registerSubtypeInterpreter(ModItems.WOODEN_SMOKING_PIPE.get(), new WoodenPipeSubtype());
         registration.registerSubtypeInterpreter(ModItems.TOBACCO_LOOSE_WILD.get(), LOOSE_TOBACCO_SUBTYPE);
         registration.registerSubtypeInterpreter(ModItems.TOBACCO_LOOSE_VIRGINIA.get(), LOOSE_TOBACCO_SUBTYPE);
         registration.registerSubtypeInterpreter(ModItems.TOBACCO_LOOSE_BURLEY.get(), LOOSE_TOBACCO_SUBTYPE);

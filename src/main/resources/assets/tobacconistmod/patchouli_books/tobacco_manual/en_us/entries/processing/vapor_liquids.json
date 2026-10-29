@@ -17,6 +17,11 @@
     },
     {
       "type": "patchouli:text",
+      "title": "Recipe Card Supplies",
+      "text": "Inserting a saved Recipe Card pulls matching essence bottles from your main inventory and hotbar for one batch, using the selected output bottle size. Essences already stored or queued in the bench count toward the requirement. Existing incompatible flavors stay untouched. Missing ingredients or blocked returned-glass space leave your supplies with you. This happens once when the card is inserted; Auto does not continuously collect bottles from your inventory. Small and normal batches consume one full essence dose per flavor; large batches consume four."
+    },
+    {
+      "type": "patchouli:text",
       "text": "Sneak-use a device to refill or charge. Tanks hold 75 mB for Cigalike, 100 mB for Vape Pen and 150 mB for Box Mod. Redstone adds 20 charge units: half the compact Cigalike cell or 20% of the others. Box Mod has adjustable wattage and a puff counter. Hold use for a longer draw; higher VG gives larger clouds. Pure Vegetable Base bottles can fill an empty vape directly for 100% VG clouds; partially filled tanks need matching contents. Re-dyeing replaces the old color. Wash dye off in a water cauldron."
     },
     {
