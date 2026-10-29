@@ -3,56 +3,40 @@
   "values": [
     "minecraft:glow_berries",
     {
-      "id": "#forge:foods/fruits/glow_berry",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/fruits/glow_berry"
     },
     {
-      "id": "#forge:fruits/glow_berry",
-      "required": false
+      "required": false,
+      "id": "#forge:fruits/glow_berry"
     },
     {
-      "id": "#forge:fruits/glow_berry",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/fruit/glow_berry"
     },
     {
-      "id": "#forge:foods/fruit/glow_berry",
-      "required": false
+      "required": false,
+      "id": "#forge:fruit/glow_berry"
     },
     {
-      "id": "#forge:fruit/glow_berry",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/glow_berry"
     },
     {
-      "id": "#forge:foods/glow_berry",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/berries/glow_berry"
     },
     {
-      "id": "#forge:fruit/glow_berry",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/berry/glow_berry"
     },
     {
-      "id": "#forge:foods/berries/glow_berry",
-      "required": false
+      "required": false,
+      "id": "#forge:berries/glow_berry"
     },
     {
-      "id": "#forge:foods/berry/glow_berry",
-      "required": false
-    },
-    {
-      "id": "#forge:berries/glow_berry",
-      "required": false
-    },
-    {
-      "id": "#forge:berry/glow_berry",
-      "required": false
-    },
-    {
-      "id": "#forge:berries/glow_berry",
-      "required": false
-    },
-    {
-      "id": "#forge:berry/glow_berry",
-      "required": false
+      "required": false,
+      "id": "#forge:berry/glow_berry"
     }
   ]
 }

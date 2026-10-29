@@ -36,6 +36,10 @@ public final class CreateMixerCompat {
             );
 
 
+    public static final Supplier<RecipeSerializer<CreateVaporMixingRecipe>> VAPOR_MIXING =
+            SERIALIZERS.register("create_vapor_mixing",
+                    () -> new com.simibubi.create.content.processing.recipe.ProcessingRecipeSerializer<>(CreateVaporMixingRecipe::new));
+
     private CreateMixerCompat() {}
 
     public static void register(IEventBus modEventBus) {

@@ -2,36 +2,28 @@
   "replace": false,
   "values": [
     {
-      "id": "#forge:foods/fruits/cherry",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/fruits/cherry"
     },
     {
-      "id": "#forge:fruits/cherry",
-      "required": false
+      "required": false,
+      "id": "#forge:fruits/cherry"
     },
     {
-      "id": "#forge:foods/cherry",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/cherry"
     },
     {
-      "id": "#forge:fruits/cherry",
-      "required": false
+      "required": false,
+      "id": "croptopia:cherry"
     },
     {
-      "id": "croptopia:cherry",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/fruit/cherry"
     },
     {
-      "id": "#forge:foods/fruit/cherry",
-      "required": false
-    },
-    {
-      "id": "#forge:fruit/cherry",
-      "required": false
-    },
-    {
-      "id": "#forge:fruit/cherry",
-      "required": false
+      "required": false,
+      "id": "#forge:fruit/cherry"
     }
   ]
 }

@@ -1,0 +1,28 @@
+{
+  "parent": "tobacconistmod:vapor/small_batch",
+  "display": {
+    "icon": {
+      "item": "tobacconistmod:vape_pen"
+    },
+    "title": {
+      "translate": "advancement.tobacconistmod.vapor.first_exhale"
+    },
+    "description": {
+      "translate": "advancement.tobacconistmod.vapor.first_exhale.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "perform": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "perform"
+    ]
+  ]
+}

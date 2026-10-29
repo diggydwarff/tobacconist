@@ -1,0 +1,28 @@
+{
+  "parent": "tobacconistmod:vapor/small_batch",
+  "display": {
+    "icon": {
+      "item": "tobacconistmod:liquid_recipe_card"
+    },
+    "title": {
+      "translate": "advancement.tobacconistmod.vapor.recipe_for_success"
+    },
+    "description": {
+      "translate": "advancement.tobacconistmod.vapor.recipe_for_success.desc"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "perform": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "perform"
+    ]
+  ]
+}

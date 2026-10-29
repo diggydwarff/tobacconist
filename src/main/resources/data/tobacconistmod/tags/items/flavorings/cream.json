@@ -3,28 +3,24 @@
   "values": [
     "minecraft:milk_bucket",
     {
-      "id": "#forge:drinks/milk",
-      "required": false
+      "required": false,
+      "id": "#forge:drinks/milk"
     },
     {
-      "id": "#forge:foods/cream",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/cream"
     },
     {
-      "id": "#forge:milk",
-      "required": false
+      "required": false,
+      "id": "#forge:milk"
     },
     {
-      "id": "croptopia:whipping_cream",
-      "required": false
+      "required": false,
+      "id": "croptopia:whipping_cream"
     },
     {
-      "id": "#forge:cream",
-      "required": false
-    },
-    {
-      "id": "#forge:cream",
-      "required": false
+      "required": false,
+      "id": "#forge:cream"
     }
   ]
 }

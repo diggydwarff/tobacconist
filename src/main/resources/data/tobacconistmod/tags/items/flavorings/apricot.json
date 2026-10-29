@@ -2,36 +2,28 @@
   "replace": false,
   "values": [
     {
-      "id": "#forge:foods/fruits/apricot",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/fruits/apricot"
     },
     {
-      "id": "#forge:fruits/apricot",
-      "required": false
+      "required": false,
+      "id": "#forge:fruits/apricot"
     },
     {
-      "id": "#forge:foods/apricot",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/apricot"
     },
     {
-      "id": "#forge:fruits/apricot",
-      "required": false
+      "required": false,
+      "id": "croptopia:apricot"
     },
     {
-      "id": "croptopia:apricot",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/fruit/apricot"
     },
     {
-      "id": "#forge:foods/fruit/apricot",
-      "required": false
-    },
-    {
-      "id": "#forge:fruit/apricot",
-      "required": false
-    },
-    {
-      "id": "#forge:fruit/apricot",
-      "required": false
+      "required": false,
+      "id": "#forge:fruit/apricot"
     }
   ]
 }

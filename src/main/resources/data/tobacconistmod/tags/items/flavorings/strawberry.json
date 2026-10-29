@@ -2,68 +2,52 @@
   "replace": false,
   "values": [
     {
-      "id": "#forge:foods/fruits/strawberry",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/fruits/strawberry"
     },
     {
-      "id": "#forge:fruits/strawberry",
-      "required": false
+      "required": false,
+      "id": "#forge:fruits/strawberry"
     },
     {
-      "id": "#forge:foods/strawberry",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/strawberry"
     },
     {
-      "id": "#forge:fruits/strawberry",
-      "required": false
+      "required": false,
+      "id": "croptopia:strawberry"
     },
     {
-      "id": "croptopia:strawberry",
-      "required": false
+      "required": false,
+      "id": "neapolitan:strawberries"
     },
     {
-      "id": "neapolitan:strawberries",
-      "required": false
+      "required": false,
+      "id": "neapolitan:white_strawberries"
     },
     {
-      "id": "neapolitan:white_strawberries",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/fruit/strawberry"
     },
     {
-      "id": "#forge:foods/fruit/strawberry",
-      "required": false
+      "required": false,
+      "id": "#forge:fruit/strawberry"
     },
     {
-      "id": "#forge:fruit/strawberry",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/berries/strawberry"
     },
     {
-      "id": "#forge:fruit/strawberry",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/berry/strawberry"
     },
     {
-      "id": "#forge:foods/berries/strawberry",
-      "required": false
+      "required": false,
+      "id": "#forge:berries/strawberry"
     },
     {
-      "id": "#forge:foods/berry/strawberry",
-      "required": false
-    },
-    {
-      "id": "#forge:berries/strawberry",
-      "required": false
-    },
-    {
-      "id": "#forge:berry/strawberry",
-      "required": false
-    },
-    {
-      "id": "#forge:berries/strawberry",
-      "required": false
-    },
-    {
-      "id": "#forge:berry/strawberry",
-      "required": false
+      "required": false,
+      "id": "#forge:berry/strawberry"
     }
   ]
 }

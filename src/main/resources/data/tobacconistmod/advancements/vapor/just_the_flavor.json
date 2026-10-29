@@ -1,0 +1,28 @@
+{
+  "parent": "tobacconistmod:vapor/first_exhale",
+  "display": {
+    "icon": {
+      "item": "tobacconistmod:clear_base"
+    },
+    "title": {
+      "translate": "advancement.tobacconistmod.vapor.just_the_flavor"
+    },
+    "description": {
+      "translate": "advancement.tobacconistmod.vapor.just_the_flavor.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "perform": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "perform"
+    ]
+  ]
+}

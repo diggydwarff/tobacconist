@@ -2,24 +2,24 @@
   "replace": false,
   "values": [
     {
-      "id": "#c:spices/nutmeg",
-      "required": false
+      "required": false,
+      "id": "#c:spices/nutmeg"
     },
     {
-      "id": "#c:foods/nutmeg",
-      "required": false
+      "required": false,
+      "id": "#c:foods/nutmeg"
     },
     {
-      "id": "#c:nutmeg",
-      "required": false
+      "required": false,
+      "id": "#c:nutmeg"
     },
     {
-      "id": "#forge:spices/nutmeg",
-      "required": false
+      "required": false,
+      "id": "#forge:spices/nutmeg"
     },
     {
-      "id": "croptopia:nutmeg",
-      "required": false
+      "required": false,
+      "id": "croptopia:nutmeg"
     }
   ]
 }

@@ -3,48 +3,44 @@
   "values": [
     "minecraft:cocoa_beans",
     {
-      "id": "#forge:crops/cocoa_bean",
-      "required": false
+      "required": false,
+      "id": "#forge:crops/cocoa_bean"
     },
     {
-      "id": "#forge:foods/cocoa",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/cocoa"
     },
     {
-      "id": "#forge:foods/chocolate",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/chocolate"
     },
     {
-      "id": "#forge:crops/cocoa",
-      "required": false
+      "required": false,
+      "id": "#forge:crops/cocoa"
     },
     {
-      "id": "croptopia:chocolate",
-      "required": false
+      "required": false,
+      "id": "croptopia:chocolate"
     },
     {
-      "id": "create_confectionery:bar_of_chocolate",
-      "required": false
+      "required": false,
+      "id": "create_confectionery:bar_of_chocolate"
     },
     {
-      "id": "create_confectionery:bar_of_black_chocolate",
-      "required": false
+      "required": false,
+      "id": "create_confectionery:bar_of_black_chocolate"
     },
     {
-      "id": "create_confectionery:bar_of_white_chocolate",
-      "required": false
+      "required": false,
+      "id": "create_confectionery:bar_of_white_chocolate"
     },
     {
-      "id": "create_confectionery:bar_of_ruby_chocolate",
-      "required": false
+      "required": false,
+      "id": "create_confectionery:bar_of_ruby_chocolate"
     },
     {
-      "id": "#forge:chocolate",
-      "required": false
-    },
-    {
-      "id": "#forge:chocolate",
-      "required": false
+      "required": false,
+      "id": "#forge:chocolate"
     }
   ]
 }

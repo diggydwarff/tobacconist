@@ -3,12 +3,12 @@
   "values": [
     "minecraft:pumpkin",
     {
-      "id": "#forge:crops/pumpkin",
-      "required": false
+      "required": false,
+      "id": "#forge:crops/pumpkin"
     },
     {
-      "id": "#forge:foods/pumpkin",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/pumpkin"
     }
   ]
 }

@@ -2,40 +2,32 @@
   "replace": false,
   "values": [
     {
-      "id": "#forge:foods/fruits/lemon",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/fruits/lemon"
     },
     {
-      "id": "#forge:fruits/lemon",
-      "required": false
+      "required": false,
+      "id": "#forge:fruits/lemon"
     },
     {
-      "id": "#forge:foods/lemon",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/lemon"
     },
     {
-      "id": "#forge:fruits/lemon",
-      "required": false
+      "required": false,
+      "id": "fruitsdelight:lemon"
     },
     {
-      "id": "fruitsdelight:lemon",
-      "required": false
+      "required": false,
+      "id": "croptopia:lemon"
     },
     {
-      "id": "croptopia:lemon",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/fruit/lemon"
     },
     {
-      "id": "#forge:foods/fruit/lemon",
-      "required": false
-    },
-    {
-      "id": "#forge:fruit/lemon",
-      "required": false
-    },
-    {
-      "id": "#forge:fruit/lemon",
-      "required": false
+      "required": false,
+      "id": "#forge:fruit/lemon"
     }
   ]
 }

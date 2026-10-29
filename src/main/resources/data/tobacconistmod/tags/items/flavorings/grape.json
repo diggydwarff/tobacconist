@@ -2,36 +2,28 @@
   "replace": false,
   "values": [
     {
-      "id": "#forge:foods/fruits/grape",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/fruits/grape"
     },
     {
-      "id": "#forge:fruits/grape",
-      "required": false
+      "required": false,
+      "id": "#forge:fruits/grape"
     },
     {
-      "id": "#forge:foods/grape",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/grape"
     },
     {
-      "id": "#forge:fruits/grape",
-      "required": false
+      "required": false,
+      "id": "croptopia:grape"
     },
     {
-      "id": "croptopia:grape",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/fruit/grape"
     },
     {
-      "id": "#forge:foods/fruit/grape",
-      "required": false
-    },
-    {
-      "id": "#forge:fruit/grape",
-      "required": false
-    },
-    {
-      "id": "#forge:fruit/grape",
-      "required": false
+      "required": false,
+      "id": "#forge:fruit/grape"
     }
   ]
 }

@@ -2,16 +2,16 @@
   "replace": false,
   "values": [
     {
-      "id": "#forge:foods/custards/plain",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/custards/plain"
     },
     {
-      "id": "#forge:foods/custard/plain",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/custard/plain"
     },
     {
-      "id": "#forge:custards/plain",
-      "required": false
+      "required": false,
+      "id": "#forge:custards/plain"
     }
   ]
 }

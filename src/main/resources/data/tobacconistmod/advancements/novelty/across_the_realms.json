@@ -1,0 +1,67 @@
+{
+  "parent": "tobacconistmod:novelty/curio_collector",
+  "display": {
+    "icon": {
+      "item": "tobacconistmod:astral_pipe"
+    },
+    "title": {
+      "translate": "advancement.tobacconistmod.novelty.across_the_realms"
+    },
+    "description": {
+      "translate": "advancement.tobacconistmod.novelty.across_the_realms.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "wizard": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "tobacconistmod:wizards_longpipe"
+            ]
+          }
+        ]
+      }
+    },
+    "soulglass": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "tobacconistmod:soulglass_pipe"
+            ]
+          }
+        ]
+      }
+    },
+    "astral": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "tobacconistmod:astral_pipe"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "wizard"
+    ],
+    [
+      "soulglass"
+    ],
+    [
+      "astral"
+    ]
+  ]
+}

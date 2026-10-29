@@ -2,36 +2,28 @@
   "replace": false,
   "values": [
     {
-      "id": "#forge:crops/mint",
-      "required": false
+      "required": false,
+      "id": "#forge:crops/mint"
     },
     {
-      "id": "#forge:herbs/mint",
-      "required": false
+      "required": false,
+      "id": "#forge:herbs/mint"
     },
     {
-      "id": "#forge:foods/mint",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/mint"
     },
     {
-      "id": "#forge:herbs/mint",
-      "required": false
+      "required": false,
+      "id": "neapolitan:mint_leaves"
     },
     {
-      "id": "neapolitan:mint_leaves",
-      "required": false
+      "required": false,
+      "id": "#forge:mint"
     },
     {
-      "id": "#forge:mint",
-      "required": false
-    },
-    {
-      "id": "#forge:mint_leaves",
-      "required": false
-    },
-    {
-      "id": "#forge:mint",
-      "required": false
+      "required": false,
+      "id": "#forge:mint_leaves"
     }
   ]
 }

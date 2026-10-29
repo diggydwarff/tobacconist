@@ -57,6 +57,8 @@ public class TobacconistMod {
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::clientSetup);
 
+        com.diggydwarff.tobacconistmod.novelty.NoveltyContent.register(modEventBus);
+        com.diggydwarff.tobacconistmod.vapor.VaporContent.register(modEventBus);
         ModMolassesFluids.register(modEventBus);
         ModExtractionFluids.register(modEventBus);
         ModParticles.register(modEventBus);
@@ -82,6 +84,8 @@ public class TobacconistMod {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, TobacconistConfig.COMMON_SPEC);
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, TobacconistConfig.SERVER_SPEC);
 
+        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER,
+                com.diggydwarff.tobacconistmod.novelty.NoveltyConfig.SPEC, "tobacconistmod-novelties-server.toml");
         MinecraftForge.EVENT_BUS.register(this);
     }
 
@@ -116,6 +120,7 @@ public class TobacconistMod {
             ComposterBlock.COMPOSTABLES.put(ModItems.SPOILED_TOBACCO.get(), 1.00F);
 
             registerBrewingRecipes();
+            com.diggydwarff.tobacconistmod.vapor.VaporBrewingRecipe.register();
         });
     }
 

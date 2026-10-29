@@ -3,32 +3,24 @@
   "values": [
     "minecraft:apple",
     {
-      "id": "#forge:foods/fruits/apple",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/fruits/apple"
     },
     {
-      "id": "#forge:fruits/apple",
-      "required": false
+      "required": false,
+      "id": "#forge:fruits/apple"
     },
     {
-      "id": "#forge:foods/apple",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/apple"
     },
     {
-      "id": "#forge:fruits/apple",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/fruit/apple"
     },
     {
-      "id": "#forge:foods/fruit/apple",
-      "required": false
-    },
-    {
-      "id": "#forge:fruit/apple",
-      "required": false
-    },
-    {
-      "id": "#forge:fruit/apple",
-      "required": false
+      "required": false,
+      "id": "#forge:fruit/apple"
     }
   ]
 }

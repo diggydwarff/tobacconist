@@ -2,36 +2,28 @@
   "replace": false,
   "values": [
     {
-      "id": "#forge:foods/caramel",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/caramel"
     },
     {
-      "id": "#forge:caramel",
-      "required": false
+      "required": false,
+      "id": "#forge:caramel"
     },
     {
-      "id": "#forge:caramel",
-      "required": false
+      "required": false,
+      "id": "croptopia:caramel"
     },
     {
-      "id": "croptopia:caramel",
-      "required": false
+      "required": false,
+      "id": "create_confectionery:bar_of_caramel"
     },
     {
-      "id": "create_confectionery:bar_of_caramel",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/caramels"
     },
     {
-      "id": "#forge:foods/caramels",
-      "required": false
-    },
-    {
-      "id": "#forge:caramels",
-      "required": false
-    },
-    {
-      "id": "#forge:caramels",
-      "required": false
+      "required": false,
+      "id": "#forge:caramels"
     }
   ]
 }

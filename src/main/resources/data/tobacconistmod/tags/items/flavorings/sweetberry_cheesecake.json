@@ -2,16 +2,16 @@
   "replace": false,
   "values": [
     {
-      "id": "farmersdelight:sweet_berry_cheesecake_slice",
-      "required": false
+      "required": false,
+      "id": "farmersdelight:sweet_berry_cheesecake_slice"
     },
     {
-      "id": "#forge:foods/cheesecakes/sweet_berry",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/cheesecakes/sweet_berry"
     },
     {
-      "id": "#forge:foods/cheesecake/sweet_berry",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/cheesecake/sweet_berry"
     }
   ]
 }

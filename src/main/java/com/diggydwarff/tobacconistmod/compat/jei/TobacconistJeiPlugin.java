@@ -33,8 +33,14 @@ public class TobacconistJeiPlugin implements IModPlugin {
     }
 
 
+    /** Wood variants have distinct names and appearances even though they share one item ID. */
     @Override
     public void registerItemSubtypes(ISubtypeRegistration registration) {
+        registration.registerSubtypeInterpreter(ModItems.WOODEN_SMOKING_PIPE.get(), (stack, context) -> {
+            var tag = stack.getTag();
+            String wood = tag == null ? "" : tag.getString(com.diggydwarff.tobacconistmod.recipes.WoodenPipeRecipe.NBT_WOOD_PLANK);
+            return wood.isEmpty() ? "minecraft:oak_planks" : wood;
+        });
         registration.registerSubtypeInterpreter(ModItems.TOBACCO_LOOSE_WILD.get(), (stack, context) -> getLooseSubtype(stack));
         registration.registerSubtypeInterpreter(ModItems.TOBACCO_LOOSE_VIRGINIA.get(), (stack, context) -> getLooseSubtype(stack));
         registration.registerSubtypeInterpreter(ModItems.TOBACCO_LOOSE_BURLEY.get(), (stack, context) -> getLooseSubtype(stack));
@@ -57,6 +63,7 @@ public class TobacconistJeiPlugin implements IModPlugin {
         var guiHelper = registration.getJeiHelpers().getGuiHelper();
 
         registration.addRecipeCategories(
+                new ExtractionRecipeCategory(guiHelper),
                 new LeafCuttingRecipeCategory(guiHelper),
                 new AverageLeavesRecipeCategory(
                         guiHelper,
@@ -82,6 +89,45 @@ public class TobacconistJeiPlugin implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
+        var level = net.minecraft.client.Minecraft.getInstance().level;
+        if (level != null) registration.addRecipes(ExtractionRecipeCategory.TYPE,
+                level.getRecipeManager().getAllRecipesFor(com.diggydwarff.tobacconistmod.vapor.VaporContent.EXTRACTION.get()).stream()
+                        .filter(recipe -> !recipe.getId().getPath().equals("extraction/nicotine") && !recipe.getId().getPath().equals("extraction/clear_base"))
+                        .toList());
+        var brewing = registration.getVanillaRecipeFactory();
+        registration.addRecipes(mezz.jei.api.constants.RecipeTypes.BREWING, java.util.List.of(
+                brewing.createBrewingRecipe(java.util.List.of(new ItemStack(Items.PAPER)),
+                        new ItemStack(com.diggydwarff.tobacconistmod.vapor.VaporContent.CRUDE_EXTRACT.get()),
+                        new ItemStack(com.diggydwarff.tobacconistmod.vapor.VaporContent.NICOTINE_EXTRACT.get()),
+                        new ResourceLocation(TobacconistMod.MODID, "brewing/nicotine_extract")),
+                brewing.createBrewingRecipe(java.util.List.of(new ItemStack(Items.SUGAR_CANE)),
+                        new ItemStack(ModItems.BOTTLED_AQUA_VITAE.get()),
+                        new ItemStack(com.diggydwarff.tobacconistmod.vapor.VaporContent.CLEAR_BASE.get()),
+                        new ResourceLocation(TobacconistMod.MODID, "brewing/clear_base"))));
+        registration.addIngredientInfo(java.util.List.of(new ItemStack(net.minecraft.world.level.block.Blocks.CAULDRON)), VanillaTypes.ITEM_STACK,
+                Component.translatable("tobacconistmod.vapor.jei_cauldron"));
+        registration.addIngredientInfo(java.util.List.of(new ItemStack(com.diggydwarff.tobacconistmod.vapor.VaporContent.BLENDING_BENCH.get()),
+                        new ItemStack(com.diggydwarff.tobacconistmod.vapor.VaporContent.VAPE_PEN.get()),
+                        new ItemStack(com.diggydwarff.tobacconistmod.vapor.VaporContent.BOX_MOD.get()),
+                        new ItemStack(com.diggydwarff.tobacconistmod.vapor.VaporContent.CIGALIKE.get())), VanillaTypes.ITEM_STACK,
+                Component.translatable("tobacconistmod.vapor.jei_blending"), Component.translatable("tobacconistmod.vapor.jei_pen"));
+        for (var pipe : new net.minecraft.world.item.Item[]{com.diggydwarff.tobacconistmod.novelty.NoveltyContent.WIZARDS_LONGPIPE.get(),
+                com.diggydwarff.tobacconistmod.novelty.NoveltyContent.SOULGLASS_PIPE.get(), com.diggydwarff.tobacconistmod.novelty.NoveltyContent.ASTRAL_PIPE.get(), com.diggydwarff.tobacconistmod.novelty.NoveltyContent.SUNKEEPERS_PIPE.get(), com.diggydwarff.tobacconistmod.novelty.NoveltyContent.ECHO_PIPE.get()}) {
+            var relic = (com.diggydwarff.tobacconistmod.novelty.RelicPipeItem) pipe;
+            registration.addIngredientInfo(java.util.List.of(new ItemStack(pipe)), VanillaTypes.ITEM_STACK,
+                    Component.translatable("tobacconistmod.novelty." + relic.key() + "_source"),
+                    Component.translatable("tobacconistmod.novelty.jei_relic"));
+        }
+        for(var toy : new net.minecraft.world.item.Item[]{com.diggydwarff.tobacconistmod.novelty.NoveltyContent.PETAL_PIPE.get(), com.diggydwarff.tobacconistmod.novelty.NoveltyContent.WHISTLING_PIPE.get()}) {
+            registration.addIngredientInfo(java.util.List.of(new ItemStack(toy)), VanillaTypes.ITEM_STACK,
+                    Component.translatable(((com.diggydwarff.tobacconistmod.novelty.ToyPipeItem)toy).refillKey()), Component.translatable("tobacconistmod.novelty.toy_controls"));
+        }
+        registration.addIngredientInfo(java.util.List.of(new ItemStack(com.diggydwarff.tobacconistmod.novelty.NoveltyContent.CONFETTI_PIPE.get())), VanillaTypes.ITEM_STACK,
+                Component.translatable("tobacconistmod.novelty.confetti_refill"), Component.translatable("tobacconistmod.novelty.toy_controls"));
+        registration.addIngredientInfo(java.util.List.of(new ItemStack(com.diggydwarff.tobacconistmod.vapor.VaporContent.CRUDE_EXTRACT.get()),
+                        new ItemStack(com.diggydwarff.tobacconistmod.vapor.VaporContent.NICOTINE_EXTRACT.get()),
+                        new ItemStack(com.diggydwarff.tobacconistmod.vapor.VaporContent.CLEAR_BASE.get())), VanillaTypes.ITEM_STACK,
+                Component.translatable("tobacconistmod.vapor.jei_brewing"));
         registration.addRecipes(LeafCuttingRecipeCategory.TYPE, LeafCuttingJeiRecipe.createAll());
         registration.addRecipes(AverageLeavesRecipeCategory.TYPE, AverageLeavesJeiRecipe.createAll());
         registration.addRecipes(mezz.jei.api.constants.RecipeTypes.CRAFTING, WoodenPipeJeiRecipe.createAll());
@@ -179,6 +225,8 @@ public class TobacconistJeiPlugin implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
+        registration.addRecipeCatalyst(new ItemStack(net.minecraft.world.level.block.Blocks.CAULDRON), ExtractionRecipeCategory.TYPE);
+        registration.addRecipeCatalyst(new ItemStack(net.minecraft.world.level.block.Blocks.CAMPFIRE), ExtractionRecipeCategory.TYPE);
         registration.addRecipeCatalyst(new ItemStack(ModItems.STONE_CHAVETA.get()), LeafCuttingRecipeCategory.TYPE);
         registration.addRecipeCatalyst(new ItemStack(ModItems.COPPER_CHAVETA.get()), LeafCuttingRecipeCategory.TYPE);
         registration.addRecipeCatalyst(new ItemStack(ModItems.IRON_CHAVETA.get()), LeafCuttingRecipeCategory.TYPE);

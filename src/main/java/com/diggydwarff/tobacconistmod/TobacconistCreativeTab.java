@@ -10,18 +10,20 @@ import com.diggydwarff.tobacconistmod.compat.create.CreateCompat;
 import com.diggydwarff.tobacconistmod.recipes.WoodenPipeRecipe;
 import com.diggydwarff.tobacconistmod.util.PaintingTabHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
+import com.diggydwarff.tobacconistmod.vapor.VaporContent;
+import com.diggydwarff.tobacconistmod.vapor.VaporData;
+import com.diggydwarff.tobacconistmod.vapor.LiquidBlend;
+import com.diggydwarff.tobacconistmod.novelty.ToyPipeItem;
+import com.diggydwarff.tobacconistmod.novelty.NoveltyContent;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.Supplier;
 
@@ -35,10 +37,11 @@ public class TobacconistCreativeTab {
             () -> CreativeModeTab.builder().icon(() -> new ItemStack(CIGAR.get()))
                     .title(Component.translatable("creativetab.tobacconistmod"))
                     .displayItems((displayParameters, output) -> {
-                        // Core progression: learn -> grow -> cure/process -> cut -> store -> consume.
+                        // Guide and tools
                         output.accept(TOBACCO_GUIDE.get());
                         output.accept(TOBACCONISTS_SPECTACLES.get());
 
+                        // Growing
                         output.accept(WILD_TOBACCO_SEEDS.get());
                         output.accept(VIRGINIA_TOBACCO_SEEDS.get());
                         output.accept(BURLEY_TOBACCO_SEEDS.get());
@@ -54,10 +57,10 @@ public class TobacconistCreativeTab {
                         output.accept(creativeLeaf(new ItemStack(DOKHA_TOBACCO_LEAF.get()), false));
                         output.accept(creativeLeaf(new ItemStack(SHADE_TOBACCO_LEAF.get()), false));
 
+                        // Curing
                         output.accept(ModBlocks.TOBACCO_DRYING_RACK.get());
                         if (CreateCompat.loaded()) {
                             output.accept(ModBlocks.INDUSTRIAL_DRYING_RACK.get());
-                            output.accept(ModBlocks.PRODUCTION_MONITOR.get());
                         }
                         output.accept(ModBlocks.FLUE_FIREBOX.get());
                         output.accept(ModBlocks.TOBACCO_BARREL.get());
@@ -69,9 +72,10 @@ public class TobacconistCreativeTab {
                         output.accept(creativeLeaf(new ItemStack(DOKHA_TOBACCO_LEAF_DRY.get()), true));
                         output.accept(creativeLeaf(new ItemStack(SHADE_TOBACCO_LEAF_DRY.get()), true));
 
+                        // Cutting and blending
                         output.accept(STONE_CHAVETA.get());
-                        output.accept(IRON_CHAVETA.get());
                         output.accept(COPPER_CHAVETA.get());
+                        output.accept(IRON_CHAVETA.get());
                         output.accept(GOLD_CHAVETA.get());
                         output.accept(DIAMOND_CHAVETA.get());
                         output.accept(NETHERITE_CHAVETA.get());
@@ -84,20 +88,18 @@ public class TobacconistCreativeTab {
                         addLooseVariants(output, new ItemStack(TOBACCO_LOOSE_SHADE.get()));
                         output.accept(BLENDED_TOBACCO.get());
 
+                        // Shared flavor ingredients
+                        output.accept(BOTTLED_AQUA_VITAE.get());
+                        addAllEssences(output);
+
+                        // Storage, labels and logistics
                         output.accept(TOBACCO_POUCH.get());
                         output.accept(TOBACCO_BOX.get());
                         output.accept(TOBACCO_LABEL.get());
                         if (CreateCompat.loaded()) {
                             output.accept(BRASS_NAME_TAG.get());
+                            output.accept(ModBlocks.PRODUCTION_MONITOR.get());
                         }
-
-                        output.accept(ROLLING_PAPER.get());
-                        output.accept(CIGAR.get());
-                        output.accept(CIGARETTE.get());
-                        output.accept(SHISHA_TOBACCO.get());
-                        output.accept(HOOKAH_HOSE.get());
-                        output.accept(BAMBOO_CHARCOAL.get());
-                        output.accept(DIRTY_HOOKAH_WATER.get());
 
                         output.accept(ModBlocks.RAW_WILD_TOBACCO_CRATE.get());
                         output.accept(ModBlocks.RAW_VIRGINIA_TOBACCO_CRATE.get());
@@ -113,8 +115,59 @@ public class TobacconistCreativeTab {
                         output.accept(ModBlocks.SHADE_TOBACCO_CRATE.get());
                         output.accept(ModBlocks.BLENDED_TOBACCO_CRATE.get());
 
+                        // Cigarettes and cigars
+                        output.accept(ROLLING_PAPER.get());
+                        output.accept(CIGARETTE.get());
+                        output.accept(CIGAR.get());
+
+                        // Traditional pipes
+                        output.accept(makePipe(Items.OAK_PLANKS));
+                        output.accept(makePipe(Items.SPRUCE_PLANKS));
+                        output.accept(makePipe(Items.BIRCH_PLANKS));
+                        output.accept(makePipe(Items.JUNGLE_PLANKS));
+                        output.accept(makePipe(Items.ACACIA_PLANKS));
+                        output.accept(makePipe(Items.DARK_OAK_PLANKS));
+                        output.accept(makePipe(Items.MANGROVE_PLANKS));
+                        output.accept(makePipe(Items.CHERRY_PLANKS));
+                        output.accept(makePipe(Items.BAMBOO_PLANKS));
+                        output.accept(makePipe(Items.CRIMSON_PLANKS));
+                        output.accept(makePipe(Items.WARPED_PLANKS));
+                        output.accept(CORN_COB_SMOKING_PIPE.get());
+                        output.accept(CLAY_SMOKING_PIPE.get());
+                        output.accept(KISERU_SMOKING_PIPE.get());
+                        output.accept(COPPER_SMOKING_PIPE.get());
+                        output.accept(IRON_SMOKING_PIPE.get());
+                        output.accept(BRASS_SMOKING_PIPE.get());
+                        output.accept(GOLD_SMOKING_PIPE.get());
+                        output.accept(LAPIS_ENCRUSTED_SMOKING_PIPE.get());
+                        output.accept(GEM_ENCRUSTED_SMOKING_PIPE.get());
+                        output.accept(DIAMOND_ENCRUSTED_SMOKING_PIPE.get());
+                        output.accept(EMERALD_ENCRUSTED_SMOKING_PIPE.get());
+                        output.accept(EMERALD_AZTEC_SMOKING_PIPE.get());
+                        output.accept(NETHERITE_SMOKING_PIPE.get());
+
+                        // Novelty pipes and rare finds
+                        output.accept(VaporContent.BUBBLE_PIPE.get());
+                        output.accept(ToyPipeItem.loaded(NoveltyContent.CONFETTI_PIPE.get()));
+                        output.accept(ToyPipeItem.loaded(NoveltyContent.PETAL_PIPE.get()));
+                        output.accept(ToyPipeItem.loaded(NoveltyContent.WHISTLING_PIPE.get()));
+                        output.accept(NoveltyContent.WIZARDS_LONGPIPE.get());
+                        output.accept(NoveltyContent.SUNKEEPERS_PIPE.get());
+                        output.accept(NoveltyContent.SOULGLASS_PIPE.get());
+                        output.accept(NoveltyContent.ECHO_PIPE.get());
+                        output.accept(NoveltyContent.ASTRAL_PIPE.get());
+
+                        // Shisha ingredients and hookahs
+                        output.accept(BOTTLED_MOLASSES_PLAIN.get());
+                        addAllFlavoredMolasses(output);
+
+                        output.accept(SHISHA_TOBACCO.get());
+                        output.accept(BAMBOO_CHARCOAL.get());
+                        output.accept(HOOKAH_HOSE.get());
+                        output.accept(DIRTY_HOOKAH_WATER.get());
                         output.accept(ModBlocks.HOOKAH.get());
                         output.accept(ModBlocks.TALL_HOOKAH.get());
+                        output.accept(ModBlocks.PUMPKIN_HOOKAH.get());
                         output.accept(ModBlocks.ORNATE_COPPER_HOOKAH.get());
                         output.accept(ModBlocks.EXPOSED_COPPER_HOOKAH.get());
                         output.accept(ModBlocks.WEATHERED_COPPER_HOOKAH.get());
@@ -128,32 +181,26 @@ public class TobacconistCreativeTab {
                         output.accept(ModBlocks.ORNATE_DIAMOND_HOOKAH.get());
                         output.accept(ModBlocks.EMERALD_HOOKAH.get());
                         output.accept(ModBlocks.NETHERITE_HOOKAH.get());
-                        output.accept(ModBlocks.PUMPKIN_HOOKAH.get());
 
-                        output.accept(makePipe(Items.OAK_PLANKS));
-                        output.accept(makePipe(Items.SPRUCE_PLANKS));
-                        output.accept(makePipe(Items.BIRCH_PLANKS));
-                        output.accept(makePipe(Items.JUNGLE_PLANKS));
-                        output.accept(makePipe(Items.ACACIA_PLANKS));
-                        output.accept(makePipe(Items.DARK_OAK_PLANKS));
-                        output.accept(makePipe(Items.MANGROVE_PLANKS));
-                        output.accept(makePipe(Items.CHERRY_PLANKS));
-                        output.accept(makePipe(Items.BAMBOO_PLANKS));
-                        output.accept(makePipe(Items.CRIMSON_PLANKS));
-                        output.accept(makePipe(Items.WARPED_PLANKS));
-                        output.accept(CLAY_SMOKING_PIPE.get());
-                        output.accept(GOLD_SMOKING_PIPE.get());
-                        output.accept(IRON_SMOKING_PIPE.get());
-                        output.accept(COPPER_SMOKING_PIPE.get());
-                        output.accept(GEM_ENCRUSTED_SMOKING_PIPE.get());
-                        output.accept(DIAMOND_ENCRUSTED_SMOKING_PIPE.get());
-                        output.accept(LAPIS_ENCRUSTED_SMOKING_PIPE.get());
-                        output.accept(EMERALD_ENCRUSTED_SMOKING_PIPE.get());
-                        output.accept(EMERALD_AZTEC_SMOKING_PIPE.get());
-                        output.accept(NETHERITE_SMOKING_PIPE.get());
-                        output.accept(KISERU_SMOKING_PIPE.get());
-                        output.accept(CORN_COB_SMOKING_PIPE.get());
+                        // Vape production and bottles
+                        output.accept(VaporContent.BLENDING_BENCH.get());
+                        output.accept(VaporContent.RECIPE_CARD.get());
+                        output.accept(VaporContent.VEGETABLE_BASE.get());
+                        output.accept(VaporContent.CLEAR_BASE.get());
+                        output.accept(VaporContent.CRUDE_EXTRACT.get());
+                        output.accept(VaporContent.NICOTINE_EXTRACT.get());
+                        output.accept(VaporContent.SMALL_GLASS_BOTTLE.get());
+                        output.accept(VaporContent.LARGE_GLASS_BOTTLE.get());
+                        output.accept(VaporData.bottle(new LiquidBlend(700000, 300000, 0, java.util.Map.of()), VaporData.SMALL_BOTTLE, new ItemStack(VaporContent.SMALL_GLASS_BOTTLE.get())));
+                        output.accept(VaporData.bottle(new LiquidBlend(700000, 300000, 0, java.util.Map.of()), 250));
+                        output.accept(VaporData.bottle(new LiquidBlend(700000, 300000, 0, java.util.Map.of()), 1000, new ItemStack(VaporContent.LARGE_GLASS_BOTTLE.get())));
 
+                        // Devices by tank capacity
+                        output.accept(VaporContent.CIGALIKE.get());
+                        output.accept(VaporContent.VAPE_PEN.get());
+                        output.accept(VaporContent.BOX_MOD.get());
+
+                        // Decorations
                         output.accept(PaintingTabHelper.paintingVariant("american_tobacco_fields_small"));
                         output.accept(PaintingTabHelper.paintingVariant("camel_american_cigarette"));
                         output.accept(PaintingTabHelper.paintingVariant("american_lone_cowboy"));
@@ -171,10 +218,6 @@ public class TobacconistCreativeTab {
                         output.accept(PaintingTabHelper.paintingVariant("havana_cigar"));
                         output.accept(PaintingTabHelper.paintingVariant("andean_mapacho"));
 
-                        output.accept(BOTTLED_AQUA_VITAE.get());
-                        addAllEssences(output);
-                        output.accept(BOTTLED_MOLASSES_PLAIN.get());
-                        addAllFlavoredMolasses(output);
 
                     }).build());
 

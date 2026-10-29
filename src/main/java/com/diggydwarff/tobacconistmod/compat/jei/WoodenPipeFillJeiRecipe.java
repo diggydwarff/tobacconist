@@ -30,6 +30,7 @@ public record WoodenPipeFillJeiRecipe(
         pipes.add(makeWoodPipe("minecraft:bamboo_planks"));
 
         pipes.add(new ItemStack(ModItems.COPPER_SMOKING_PIPE.get()));
+        pipes.add(new ItemStack(ModItems.BRASS_SMOKING_PIPE.get()));
         pipes.add(new ItemStack(ModItems.IRON_SMOKING_PIPE.get()));
         pipes.add(new ItemStack(ModItems.GOLD_SMOKING_PIPE.get()));
         pipes.add(new ItemStack(ModItems.GEM_ENCRUSTED_SMOKING_PIPE.get()));

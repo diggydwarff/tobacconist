@@ -2,24 +2,24 @@
   "replace": false,
   "values": [
     {
-      "id": "#c:foods/maple_syrup",
-      "required": false
+      "required": false,
+      "id": "#c:foods/maple_syrup"
     },
     {
-      "id": "#c:drinks/maple_syrup",
-      "required": false
+      "required": false,
+      "id": "#c:drinks/maple_syrup"
     },
     {
-      "id": "#c:maple_syrup",
-      "required": false
+      "required": false,
+      "id": "#c:maple_syrup"
     },
     {
-      "id": "#forge:maple_syrup",
-      "required": false
+      "required": false,
+      "id": "#forge:maple_syrup"
     },
     {
-      "id": "autumnity:syrup_bottle",
-      "required": false
+      "required": false,
+      "id": "autumnity:syrup_bottle"
     }
   ]
 }

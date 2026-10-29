@@ -22,6 +22,10 @@ public abstract class BasinRecipeHomogenizingMixin {
     private static void tobacconist$matchHomogenizingBatch(BasinBlockEntity basin,
                                                             Recipe<?> recipe,
                                                             CallbackInfoReturnable<Boolean> cir) {
+        if (recipe instanceof com.diggydwarff.tobacconistmod.compat.create.CreateVaporMixingRecipe) {
+            cir.setReturnValue(com.diggydwarff.tobacconistmod.compat.create.CreateVaporMixing.apply(basin, true));
+            return;
+        }
         if (!(recipe instanceof CreateTobaccoHomogenizingRecipe homogenizing)) {
             return;
         }
@@ -43,6 +47,10 @@ public abstract class BasinRecipeHomogenizingMixin {
                                                             Recipe<?> recipe,
                                                             boolean test,
                                                             CallbackInfoReturnable<Boolean> cir) {
+        if (recipe instanceof com.diggydwarff.tobacconistmod.compat.create.CreateVaporMixingRecipe) {
+            cir.setReturnValue(com.diggydwarff.tobacconistmod.compat.create.CreateVaporMixing.apply(basin, test));
+            return;
+        }
         if (recipe instanceof CreateTobaccoHomogenizingRecipe homogenizing) {
             cir.setReturnValue(CreateTobaccoHomogenization.apply(basin, homogenizing, test));
         }

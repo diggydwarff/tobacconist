@@ -31,6 +31,9 @@ public class CigarItem extends SmokingItem {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
+        if (TobacconistConfig.areSmokingDrawAnimationsEnabled()) {
+            return beginDraw(level, player, hand);
+        }
 
         if (level.isClientSide()) {
             return InteractionResultHolder.consume(stack);
@@ -49,11 +52,16 @@ public class CigarItem extends SmokingItem {
 
     @Override
     public boolean smokeFromMouthSlot(Player player, ServerLevel level, ItemStack stack) {
+        return smokeFromMouthSlot(player, level, stack, 1.0F);
+    }
+
+    @Override
+    public boolean smokeFromMouthSlot(Player player, ServerLevel level, ItemStack stack, float strength) {
         if (stack.isEmpty() || !stack.isDamageableItem() || stack.getDamageValue() >= stack.getMaxDamage()) {
             return false;
         }
 
-        this.triggerSmokingEffectPlayer(player, level, 0, stack);
+        this.triggerSmokingEffectPlayer(player, level, 0, stack, strength);
 
         int nextDamage = stack.getDamageValue() + 1;
         if (nextDamage >= stack.getMaxDamage()) {

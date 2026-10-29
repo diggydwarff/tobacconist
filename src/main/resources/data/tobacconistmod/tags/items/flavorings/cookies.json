@@ -3,16 +3,16 @@
   "values": [
     "minecraft:cookie",
     {
-      "id": "#forge:foods/cookies/plain",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/cookies/plain"
     },
     {
-      "id": "#forge:cookies/plain",
-      "required": false
+      "required": false,
+      "id": "#forge:cookies/plain"
     },
     {
-      "id": "#forge:foods/cookie/plain",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/cookie/plain"
     }
   ]
 }

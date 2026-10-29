@@ -214,6 +214,14 @@ public class TobacconistConfig {
         }
     }
 
+    public static boolean areSmokingDrawAnimationsEnabled() {
+        try {
+            return SERVER.enableSmokingDrawAnimations.get();
+        } catch (IllegalStateException ignored) {
+            return true;
+        }
+    }
+
     public static boolean areNicotineEffectsEnabled() {
         try {
             return SERVER.enableNicotineEffects.get();
@@ -679,6 +687,7 @@ public class TobacconistConfig {
     public static class Server {
         public final ForgeConfigSpec.BooleanValue enableQualitySystem;
         public final ForgeConfigSpec.BooleanValue enableNicotineEffects;
+        public final ForgeConfigSpec.BooleanValue enableSmokingDrawAnimations;
         public final ForgeConfigSpec.IntValue genericAutomationQualityPenalty;
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> secretBlends;
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> secretBlendVisuals;
@@ -696,6 +705,12 @@ public class TobacconistConfig {
                     .comment("Apply Tobacconist's nicotine status effect when tobacco is smoked.")
                     .comment("Disabling this does not disable configured additional smoking effects.")
                     .define("enableNicotineEffects", true);
+
+            enableSmokingDrawAnimations = builder
+                    .comment("Hold use to draw on cigarettes, cigars, pipes and hookah hoses; release for a shorter puff. Also affects the Curios mouth smoking key.")
+                    .comment("Short puffs and longer draws produce smoke scaled to draw length. Includes hand/arm poses, draw sounds and delayed exhalation. Defaults to true.")
+                    .comment("Set false to restore instant smoking. This server setting is synchronized to connected clients.")
+                    .define("enableSmokingDrawAnimations", true);
 
             genericAutomationQualityPenalty = builder
                     .comment("Raw tobacco-quality points removed when a Cigarette or Cigar is made by generic crafting automation while Create is installed.")

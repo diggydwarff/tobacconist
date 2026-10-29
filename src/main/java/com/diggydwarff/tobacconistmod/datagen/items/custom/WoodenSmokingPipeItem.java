@@ -1,6 +1,7 @@
 package com.diggydwarff.tobacconistmod.datagen.items.custom;
 
 import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
+import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
 
 import com.diggydwarff.tobacconistmod.datagen.items.ModTags;
 import com.diggydwarff.tobacconistmod.datagen.items.SmokingItem;
@@ -58,12 +59,23 @@ public class WoodenSmokingPipeItem extends SmokingItem {
     }
 
     @Override
+    public boolean canSmoke(ItemStack stack) {
+        CompoundTag tag = LegacyItemTags.getTag(stack);
+        return tag != null && tag.getInt(NBT_PUFFS) > 0;
+    }
+
+    @Override
     public boolean smokeFromMouthSlot(Player player, ServerLevel level, ItemStack stack) {
+        return smokeFromMouthSlot(player, level, stack, 1.0F);
+    }
+
+    @Override
+    public boolean smokeFromMouthSlot(Player player, ServerLevel level, ItemStack stack, float strength) {
         CompoundTag tag = LegacyItemTags.getTag(stack);
         int puffs = tag == null ? 0 : tag.getInt(NBT_PUFFS);
         if (puffs <= 0) return false;
 
-        this.triggerSmokingEffectPlayer(player, level, 0, getPackedTobaccoStack(stack));
+        this.triggerSmokingEffectPlayer(player, level, 0, getPackedTobaccoStack(stack), strength);
 
         puffs--;
         CompoundTag mutableTag = LegacyItemTags.getOrCreateTag(stack);
@@ -180,6 +192,10 @@ public class WoodenSmokingPipeItem extends SmokingItem {
             if (!main.isEmpty() && main.getItem() instanceof LooseTobaccoItem) {
                 return InteractionResultHolder.pass(pipe);
             }
+        }
+
+        if (TobacconistConfig.areSmokingDrawAnimationsEnabled()) {
+            return beginDraw(level, player, hand);
         }
 
         if (level.isClientSide()) {

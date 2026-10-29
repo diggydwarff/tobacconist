@@ -1,0 +1,7 @@
+package com.diggydwarff.tobacconistmod.backport;
+
+import net.minecraft.resources.ResourceLocation;
+public interface CustomPacketPayload {
+    Type<? extends CustomPacketPayload> type();
+    record Type<T extends CustomPacketPayload>(ResourceLocation id) {}
+}

@@ -2,36 +2,28 @@
   "replace": false,
   "values": [
     {
-      "id": "#forge:foods/fruits/hamimelon",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/fruits/hamimelon"
     },
     {
-      "id": "#forge:fruits/hamimelon",
-      "required": false
+      "required": false,
+      "id": "#forge:fruits/hamimelon"
     },
     {
-      "id": "#forge:foods/hamimelon",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/hamimelon"
     },
     {
-      "id": "#forge:fruits/hamimelon",
-      "required": false
+      "required": false,
+      "id": "fruitsdelight:hamimelon_slice"
     },
     {
-      "id": "fruitsdelight:hamimelon_slice",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/fruit/hamimelon"
     },
     {
-      "id": "#forge:foods/fruit/hamimelon",
-      "required": false
-    },
-    {
-      "id": "#forge:fruit/hamimelon",
-      "required": false
-    },
-    {
-      "id": "#forge:fruit/hamimelon",
-      "required": false
+      "required": false,
+      "id": "#forge:fruit/hamimelon"
     }
   ]
 }

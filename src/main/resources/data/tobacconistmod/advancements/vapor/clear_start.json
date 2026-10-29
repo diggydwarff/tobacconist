@@ -1,0 +1,52 @@
+{
+  "parent": "tobacconistmod:tobacconist/root",
+  "display": {
+    "icon": {
+      "item": "tobacconistmod:vegetable_base"
+    },
+    "title": {
+      "translate": "advancement.tobacconistmod.vapor.clear_start"
+    },
+    "description": {
+      "translate": "advancement.tobacconistmod.vapor.clear_start.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "vegetable_base": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "tobacconistmod:vegetable_base"
+            ]
+          }
+        ]
+      }
+    },
+    "clear_base": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "tobacconistmod:clear_base"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "vegetable_base"
+    ],
+    [
+      "clear_base"
+    ]
+  ]
+}

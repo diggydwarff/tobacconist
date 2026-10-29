@@ -2,28 +2,20 @@
   "replace": false,
   "values": [
     {
-      "id": "#forge:flowers/hibiscus",
-      "required": false
+      "required": false,
+      "id": "#forge:flowers/hibiscus"
     },
     {
-      "id": "#forge:herbs/hibiscus",
-      "required": false
+      "required": false,
+      "id": "#forge:herbs/hibiscus"
     },
     {
-      "id": "#forge:flowers/hibiscus",
-      "required": false
+      "required": false,
+      "id": "herbalbrews:hibiscus"
     },
     {
-      "id": "herbalbrews:hibiscus",
-      "required": false
-    },
-    {
-      "id": "#forge:hibiscus",
-      "required": false
-    },
-    {
-      "id": "#forge:hibiscus",
-      "required": false
+      "required": false,
+      "id": "#forge:hibiscus"
     }
   ]
 }

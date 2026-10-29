@@ -3,7 +3,13 @@ package com.diggydwarff.tobacconistmod.datagen.items;
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelBlockEntity;
 import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
 import com.diggydwarff.tobacconistmod.effect.ModEffects;
-import com.diggydwarff.tobacconistmod.util.*;
+import com.diggydwarff.tobacconistmod.util.SmokeParticleHelper;
+import com.diggydwarff.tobacconistmod.util.SmokingDraws;
+import com.diggydwarff.tobacconistmod.util.TobaccoBlendHelper;
+import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
+import com.diggydwarff.tobacconistmod.util.TobaccoProductQualityHelper;
+import com.diggydwarff.tobacconistmod.util.TobaccoSpecialProcessingHelper;
+import com.diggydwarff.tobacconistmod.util.TobaccoSmokeData;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -14,6 +20,12 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
@@ -25,6 +37,69 @@ public abstract class SmokingItem extends Item {
 
     public SmokingItem(Properties properties) {
         super(properties);
+    }
+
+    public boolean canSmoke(ItemStack stack) {
+        return !stack.isEmpty() && (!stack.isDamageableItem() || stack.getDamageValue() < stack.getMaxDamage());
+    }
+
+    protected InteractionResultHolder<ItemStack> beginDraw(Level level, Player player, InteractionHand hand) {
+        ItemStack stack = player.getItemInHand(hand);
+        if (!canSmoke(stack)) return InteractionResultHolder.pass(stack);
+        if (!SmokingDraws.canStart(player, stack)) return InteractionResultHolder.consume(stack);
+        player.startUsingItem(hand);
+        return InteractionResultHolder.consume(stack);
+    }
+
+    @Override public void initializeClient(java.util.function.Consumer<net.minecraftforge.client.extensions.common.IClientItemExtensions> consumer) {
+        consumer.accept(com.diggydwarff.tobacconistmod.client.ClientDrawAnimations.extensions());
+    }
+
+    @Override
+    public int getUseDuration(ItemStack stack) {
+        return SmokingDraws.duration(stack);
+    }
+
+    @Override
+    public UseAnim getUseAnimation(ItemStack stack) {
+        // A custom native hand transform avoids vanilla drinking/eating bobbing and sounds.
+        return UseAnim.NONE;
+    }
+
+    @Override
+    public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingUseDuration) {
+        if (!level.isClientSide() && entity instanceof Player player
+                && (!player.isAlive() || player.containerMenu != player.inventoryMenu
+                || !TobacconistConfig.areSmokingDrawAnimationsEnabled())) {
+            player.stopUsingItem();
+            return;
+        }
+        if (TobacconistConfig.areSmokingDrawAnimationsEnabled()) {
+            SmokingDraws.drawSound(level, entity, stack, getUseDuration(stack) - remainingUseDuration);
+        }
+    }
+
+    @Override
+    public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
+        completeDraw(stack, level, entity, getUseDuration(stack));
+        return stack;
+    }
+
+    @Override
+    public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
+        completeDraw(stack, level, entity, getUseDuration(stack) - timeLeft);
+    }
+
+    private void completeDraw(ItemStack stack, Level level, LivingEntity entity, int elapsed) {
+        if (elapsed < SmokingDraws.MIN_DRAW_TICKS) return;
+        if (entity instanceof ServerPlayer player && player.isAlive() && !player.isSpectator()
+                && player.containerMenu == player.inventoryMenu && player.isUsingItem()
+                && player.getUseItem() == stack && player.getItemInHand(player.getUsedItemHand()) == stack
+                && canSmoke(stack)) {
+            ItemStack used = stack.copy();
+            float strength = SmokingDraws.strength(elapsed, used);
+            if (smokeFromMouthSlot(player, player.serverLevel(), stack, strength)) SmokingDraws.recover(player, used);
+        }
     }
 
     private String tooltip;
@@ -45,8 +120,12 @@ public abstract class SmokingItem extends Item {
      * consume durability/puffs.
      */
     public boolean smokeFromMouthSlot(Player player, ServerLevel level, ItemStack stack) {
+        return smokeFromMouthSlot(player, level, stack, 1.0F);
+    }
+
+    public boolean smokeFromMouthSlot(Player player, ServerLevel level, ItemStack stack, float strength) {
         if (stack.isEmpty()) return false;
-        triggerSmokingEffectPlayer(player, level, 0, stack);
+        triggerSmokingEffectPlayer(player, level, 0, stack, strength);
         return true;
     }
 
@@ -54,71 +133,37 @@ public abstract class SmokingItem extends Item {
         applySmokingEffects(player, level, tobaccoStack);
     }
 
+    public void triggerSmokingEffectPlayer(Player player, ServerLevel level, int smokelevel, ItemStack tobaccoStack, float strength) {
+        applySmokingEffects(player, level, tobaccoStack, false, strength);
+    }
+
     /** Shared smoking pipeline used by held items and Curios smoking. */
     public static void applySmokingEffects(Player player, ServerLevel level, ItemStack tobaccoStack) {
-        applySmokingEffects(player, level, tobaccoStack, false);
+        applySmokingEffects(player, level, tobaccoStack, false, 1.0F);
     }
 
     /** Applies the larger smoke cloud used for a Hookah hose draw. */
     public static void applyHookahSmokingEffects(Player player, ServerLevel level, ItemStack tobaccoStack) {
-        applySmokingEffects(player, level, tobaccoStack, true);
+        applyHookahSmokingEffects(player, level, tobaccoStack, 1.0F);
     }
 
-    private static void applySmokingEffects(Player player, ServerLevel level, ItemStack tobaccoStack, boolean hookahDraw) {
-        Vec3 look = player.getLookAngle();
+    public static void applyHookahSmokingEffects(Player player, ServerLevel level, ItemStack tobaccoStack, float strength) {
+        applySmokingEffects(player, level, tobaccoStack, true, strength);
+    }
 
-        level.playSound(
-                null,
-                player.getX(), player.getY() + 1.4, player.getZ(),
-                SoundEvents.FIRE_EXTINGUISH,
-                SoundSource.BLOCKS,
-                0.05F,
-                1.0F
-        );
+    public static void applyRelicSmokingEffects(Player player, ServerLevel level, ItemStack tobaccoStack, float strength) {
+        applySmokingEffects(player, level, tobaccoStack, false, strength, true);
+    }
 
-        double smokeX;
-        double smokeY;
-        double smokeZ;
-        double smokeDirX = look.x;
-        double smokeDirZ = look.z;
+    private static void applySmokingEffects(Player player, ServerLevel level, ItemStack tobaccoStack, boolean hookahDraw, float strength) {
+        applySmokingEffects(player, level, tobaccoStack, hookahDraw, strength, true);
+    }
 
-        if (hookahDraw) {
-            // Hookah exhales should visibly leave the front of the player's mouth rather than
-            // spawning inside/behind the head. Normalize only the horizontal facing so looking
-            // sharply up or down cannot collapse the forward offset back into the player model.
-            Vec3 horizontalLook = new Vec3(look.x, 0.0D, look.z);
-            if (horizontalLook.lengthSqr() < 1.0E-6D) {
-                horizontalLook = Vec3.directionFromRotation(0.0F, player.getYRot());
-            } else {
-                horizontalLook = horizontalLook.normalize();
-            }
-
-            Vec3 mouth = player.getEyePosition().add(0.0D, -0.18D, 0.0D);
-            smokeX = mouth.x + horizontalLook.x * 0.44D;
-            smokeY = mouth.y + look.y * 0.03D;
-            smokeZ = mouth.z + horizontalLook.z * 0.44D;
-            smokeDirX = horizontalLook.x;
-            smokeDirZ = horizontalLook.z;
-        } else {
-            smokeX = player.getX() + look.x * 0.12D;
-            smokeY = player.getY() + 1.4D + look.y * 0.04D;
-            smokeZ = player.getZ() + look.z * 0.12D;
-        }
-
-        if (hookahDraw) {
-            SmokeParticleHelper.spawnServerHookahPuffSmoke(
-                    level, smokeX, smokeY, smokeZ, smokeDirX, smokeDirZ
-            );
-        } else {
-            SmokeParticleHelper.spawnServerMouthSmoke(
-                    level, smokeX, smokeY, smokeZ, smokeDirX, smokeDirZ
-            );
-        }
-
-        if (TobaccoSpecialProcessingHelper.isHaunted(tobaccoStack)) {
-            SmokeParticleHelper.spawnServerHauntedWisps(
-                    level, smokeX, smokeY, smokeZ, smokeDirX, smokeDirZ, hookahDraw
-            );
+    private static void applySmokingEffects(Player player, ServerLevel level, ItemStack tobaccoStack, boolean hookahDraw, float strength, boolean smoke) {
+        if (smoke && TobacconistConfig.areSmokingDrawAnimationsEnabled()) {
+            SmokingDraws.queueExhale(player, tobaccoStack, hookahDraw, strength);
+        } else if (smoke) {
+            emitSmokingSmoke(player, level, tobaccoStack, hookahDraw, strength);
         }
 
         if (TobacconistConfig.areNicotineEffectsEnabled()) {
@@ -136,6 +181,55 @@ public abstract class SmokingItem extends Item {
         applySecretBlendLegendaryBonus(player, tobaccoStack);
         applyConfiguredAdditionalEffects(player);
         applyConfiguredRuleEffects(player, tobaccoStack);
+    }
+
+    public static void emitSmokingSmoke(Player player, ServerLevel level, ItemStack tobaccoStack, boolean hookahDraw) {
+        emitSmokingSmoke(player, level, tobaccoStack, hookahDraw, 1.0F);
+    }
+
+    public static void emitSmokingSmoke(Player player, ServerLevel level, ItemStack tobaccoStack, boolean hookahDraw, float strength) {
+        Vec3 look = player.getLookAngle();
+
+        level.playSound(
+                null,
+                player.getX(), player.getY() + 1.4, player.getZ(),
+                SoundEvents.FIRE_EXTINGUISH,
+                SoundSource.BLOCKS,
+                0.025F + 0.025F * strength,
+                1.0F
+        );
+
+        double smokeX;
+        double smokeY;
+        double smokeZ;
+        double smokeDirX = look.x;
+        double smokeDirZ = look.z;
+
+        Vec3 horizontalLook = new Vec3(look.x, 0.0D, look.z);
+        horizontalLook = horizontalLook.lengthSqr() < 1.0E-6D
+                ? Vec3.directionFromRotation(0.0F, player.getYRot()) : horizontalLook.normalize();
+        Vec3 mouth = player.getEyePosition().add(0.0D, -0.18D, 0.0D);
+        double forwardOffset = hookahDraw ? 0.44D : 0.34D;
+        smokeX = mouth.x + horizontalLook.x * forwardOffset;
+        smokeY = mouth.y + look.y * 0.03D;
+        smokeZ = mouth.z + horizontalLook.z * forwardOffset;
+        smokeDirX = horizontalLook.x;
+        smokeDirZ = horizontalLook.z;
+
+        if (TobacconistConfig.areSmokingDrawAnimationsEnabled() || strength < 1F) {
+            SmokeParticleHelper.spawnServerDrawSmoke(level, smokeX, smokeY, smokeZ, smokeDirX, smokeDirZ, hookahDraw, strength);
+        } else if (hookahDraw) {
+            SmokeParticleHelper.spawnServerHookahPuffSmoke(level, smokeX, smokeY, smokeZ, smokeDirX, smokeDirZ);
+        } else {
+            SmokeParticleHelper.spawnServerMouthSmoke(level, smokeX, smokeY, smokeZ, smokeDirX, smokeDirZ);
+        }
+
+        if (TobaccoSpecialProcessingHelper.isHaunted(tobaccoStack)) {
+            SmokeParticleHelper.spawnServerHauntedWisps(
+                    level, smokeX, smokeY, smokeZ, smokeDirX, smokeDirZ, hookahDraw, strength
+            );
+        }
+
     }
 
     private static void applySecretBlendLegendaryBonus(Player player, ItemStack tobaccoStack) {

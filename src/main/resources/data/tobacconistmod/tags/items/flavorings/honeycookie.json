@@ -2,16 +2,16 @@
   "replace": false,
   "values": [
     {
-      "id": "farmersdelight:honey_cookie",
-      "required": false
+      "required": false,
+      "id": "farmersdelight:honey_cookie"
     },
     {
-      "id": "#forge:foods/cookies/honey",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/cookies/honey"
     },
     {
-      "id": "#forge:foods/cookie/honey",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/cookie/honey"
     }
   ]
 }

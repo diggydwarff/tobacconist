@@ -2,60 +2,44 @@
   "replace": false,
   "values": [
     {
-      "id": "#forge:foods/fruits/blackberry",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/fruits/blackberry"
     },
     {
-      "id": "#forge:fruits/blackberry",
-      "required": false
+      "required": false,
+      "id": "#forge:fruits/blackberry"
     },
     {
-      "id": "#forge:foods/blackberry",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/blackberry"
     },
     {
-      "id": "#forge:fruits/blackberry",
-      "required": false
+      "required": false,
+      "id": "croptopia:blackberry"
     },
     {
-      "id": "croptopia:blackberry",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/fruit/blackberry"
     },
     {
-      "id": "#forge:foods/fruit/blackberry",
-      "required": false
+      "required": false,
+      "id": "#forge:fruit/blackberry"
     },
     {
-      "id": "#forge:fruit/blackberry",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/berries/blackberry"
     },
     {
-      "id": "#forge:fruit/blackberry",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/berry/blackberry"
     },
     {
-      "id": "#forge:foods/berries/blackberry",
-      "required": false
+      "required": false,
+      "id": "#forge:berries/blackberry"
     },
     {
-      "id": "#forge:foods/berry/blackberry",
-      "required": false
-    },
-    {
-      "id": "#forge:berries/blackberry",
-      "required": false
-    },
-    {
-      "id": "#forge:berry/blackberry",
-      "required": false
-    },
-    {
-      "id": "#forge:berries/blackberry",
-      "required": false
-    },
-    {
-      "id": "#forge:berry/blackberry",
-      "required": false
+      "required": false,
+      "id": "#forge:berry/blackberry"
     }
   ]
 }

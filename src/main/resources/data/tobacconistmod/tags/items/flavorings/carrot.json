@@ -3,12 +3,12 @@
   "values": [
     "minecraft:carrot",
     {
-      "id": "#forge:crops/carrot",
-      "required": false
+      "required": false,
+      "id": "#forge:crops/carrot"
     },
     {
-      "id": "#forge:foods/carrot",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/carrot"
     }
   ]
 }

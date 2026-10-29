@@ -3,20 +3,20 @@
   "values": [
     "minecraft:cake",
     {
-      "id": "#forge:foods/cake",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/cake"
     },
     {
-      "id": "#forge:cakes",
-      "required": false
+      "required": false,
+      "id": "#forge:cakes"
     },
     {
-      "id": "#forge:foods/cakes",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/cakes"
     },
     {
-      "id": "#forge:cake",
-      "required": false
+      "required": false,
+      "id": "#forge:cake"
     }
   ]
 }

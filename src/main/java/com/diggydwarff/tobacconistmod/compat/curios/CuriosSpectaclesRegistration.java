@@ -19,7 +19,10 @@ public final class CuriosSpectaclesRegistration {
         event.enqueueWork(() -> {
             // The #curios:head tag assigns the slot; the explicit capability matches Curios' supported API.
             CuriosApi.registerCurio(ModItems.TOBACCONISTS_SPECTACLES.get(), new ICurioItem() {});
-            TobacconistMod.LOGGER.info("Curios Head-slot support enabled for Tobacconist's Spectacles.");
+            for (var item : net.minecraft.core.registries.BuiltInRegistries.ITEM) {
+                if (CuriosSmokingHelper.supported(item.getDefaultInstance())) CuriosApi.registerCurio(item, new ICurioItem() {});
+            }
+            TobacconistMod.LOGGER.info("Curios item capabilities enabled for spectacles and all mouth items.");
         });
     }
 }

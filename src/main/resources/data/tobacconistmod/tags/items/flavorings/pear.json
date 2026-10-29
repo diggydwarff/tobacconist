@@ -2,40 +2,32 @@
   "replace": false,
   "values": [
     {
-      "id": "#forge:foods/fruits/pear",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/fruits/pear"
     },
     {
-      "id": "#forge:fruits/pear",
-      "required": false
+      "required": false,
+      "id": "#forge:fruits/pear"
     },
     {
-      "id": "#forge:foods/pear",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/pear"
     },
     {
-      "id": "#forge:fruits/pear",
-      "required": false
+      "required": false,
+      "id": "fruitsdelight:pear"
     },
     {
-      "id": "fruitsdelight:pear",
-      "required": false
+      "required": false,
+      "id": "croptopia:pear"
     },
     {
-      "id": "croptopia:pear",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/fruit/pear"
     },
     {
-      "id": "#forge:foods/fruit/pear",
-      "required": false
-    },
-    {
-      "id": "#forge:fruit/pear",
-      "required": false
-    },
-    {
-      "id": "#forge:fruit/pear",
-      "required": false
+      "required": false,
+      "id": "#forge:fruit/pear"
     }
   ]
 }

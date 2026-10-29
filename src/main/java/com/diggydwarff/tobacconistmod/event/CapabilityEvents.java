@@ -42,7 +42,12 @@ public final class CapabilityEvents {
     @SubscribeEvent
     public static void attachBlockEntityCapabilities(AttachCapabilitiesEvent<BlockEntity> event) {
         BlockEntity be = event.getObject();
-        if (be instanceof HookahEntity hookah) {
+        if (be instanceof com.diggydwarff.tobacconistmod.vapor.LiquidStationEntity station) {
+            attachItemHandler(event, station::handler, "liquid_station_items");
+            if (station.isBlending()) attachBlockFluid(event, station::fluidHandler, "liquid_station_fluids");
+        } else if (be instanceof com.diggydwarff.tobacconistmod.vapor.ExtractCauldronEntity cauldron) {
+            attachBlockFluid(event, cauldron::fluidHandler, "extract_cauldron_fluids");
+        } else if (be instanceof HookahEntity hookah) {
             attachItemHandler(event, side -> hookah.getItemHandler(), "hookah_items");
         } else if (be instanceof IndustrialDryingRackBlockEntity rack) {
             attachItemHandler(event, rack::getItemHandler, "industrial_drying_rack_items");
@@ -70,11 +75,27 @@ public final class CapabilityEvents {
             return;
         }
 
-        if (stack.is(ModItems.BOTTLED_AQUA_VITAE.get())) {
+        if (stack.getItem() instanceof com.diggydwarff.tobacconistmod.vapor.SizedBottleItem) {
+            attachFluidHandler(event, () -> new com.diggydwarff.tobacconistmod.vapor.SizedBottleHandler(stack), "sized_bottle");
+        } else if (stack.getItem() instanceof com.diggydwarff.tobacconistmod.vapor.VaporBottleItem
+                && !stack.is(com.diggydwarff.tobacconistmod.vapor.VaporContent.RECIPE_CARD.get())) {
+            attachFluidHandler(event, () -> new com.diggydwarff.tobacconistmod.vapor.VaporBottleHandler(stack), "vapor_bottle");
+        } else if (stack.is(ModItems.BOTTLED_AQUA_VITAE.get())) {
             attachFluidHandler(event, () -> new AquaVitaeBottleFluidHandler(stack), "aqua_vitae_bottle");
         } else if (stack.is(Items.GLASS_BOTTLE)) {
             attachFluidHandler(event, () -> new GlassBottleMolassesFluidHandler(stack), "processing_bottle");
         }
+    }
+
+    private static void attachBlockFluid(AttachCapabilitiesEvent<BlockEntity> event,
+            Supplier<net.minecraftforge.fluids.capability.IFluidHandler> factory, String name) {
+        LazyOptional<net.minecraftforge.fluids.capability.IFluidHandler> value = LazyOptional.of(factory::get);
+        event.addCapability(new ResourceLocation(TobacconistMod.MODID, name), new ICapabilityProvider() {
+            @Override public <T> LazyOptional<T> getCapability(Capability<T> cap, @Nullable Direction side) {
+                return cap == ForgeCapabilities.FLUID_HANDLER ? value.cast() : LazyOptional.empty();
+            }
+        });
+        event.addListener(value::invalidate);
     }
 
     private static void attachItemHandler(AttachCapabilitiesEvent<BlockEntity> event,

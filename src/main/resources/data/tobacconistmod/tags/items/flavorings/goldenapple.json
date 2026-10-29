@@ -3,32 +3,24 @@
   "values": [
     "minecraft:golden_apple",
     {
-      "id": "#forge:foods/fruits/golden_apple",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/fruits/golden_apple"
     },
     {
-      "id": "#forge:fruits/golden_apple",
-      "required": false
+      "required": false,
+      "id": "#forge:fruits/golden_apple"
     },
     {
-      "id": "#forge:foods/fruit/golden_apple",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/fruit/golden_apple"
     },
     {
-      "id": "#forge:fruits/golden_apple",
-      "required": false
+      "required": false,
+      "id": "#forge:fruit/golden_apple"
     },
     {
-      "id": "#forge:fruit/golden_apple",
-      "required": false
-    },
-    {
-      "id": "#forge:foods/golden_apple",
-      "required": false
-    },
-    {
-      "id": "#forge:fruit/golden_apple",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/golden_apple"
     }
   ]
 }

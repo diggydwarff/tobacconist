@@ -1,0 +1,22 @@
+{
+  "type": "tobacconistmod:extraction",
+  "inputs": [
+    {
+      "ingredient": {
+        "item": "tobacconistmod:bottled_aqua_vitae"
+      },
+      "count": 1
+    },
+    {
+      "ingredient": {
+        "item": "minecraft:sugar"
+      },
+      "count": 2
+    }
+  ],
+  "result": {
+    "count": 1,
+    "item": "tobacconistmod:clear_base"
+  },
+  "duration": 200
+}

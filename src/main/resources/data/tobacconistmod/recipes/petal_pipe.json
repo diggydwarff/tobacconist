@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:stick"
+    },
+    {
+      "item": "minecraft:clay_ball"
+    },
+    {
+      "tag": "minecraft:small_flowers"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "item": "tobacconistmod:petal_pipe",
+    "nbt": {
+      "tobacconistmod:novelty_pipe_charge": 24
+    }
+  }
+}

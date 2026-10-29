@@ -1,0 +1,32 @@
+{
+  "type": "tobacconistmod:extraction",
+  "inputs": [
+    {
+      "ingredient": {
+        "tag": "tobacconistmod:raw_tobacco_leaves"
+      },
+      "count": 4
+    },
+    {
+      "ingredient": {
+        "item": "minecraft:paper"
+      },
+      "count": 1
+    },
+    {
+      "ingredient": {
+        "type": "forge:nbt",
+        "item": "minecraft:potion",
+        "nbt": {
+          "Potion": "minecraft:water"
+        }
+      },
+      "count": 1
+    }
+  ],
+  "result": {
+    "count": 1,
+    "item": "tobacconistmod:crude_tobacco_extract"
+  },
+  "duration": 200
+}

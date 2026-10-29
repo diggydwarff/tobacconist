@@ -2,24 +2,24 @@
   "replace": false,
   "values": [
     {
-      "id": "#c:spices/clove",
-      "required": false
+      "required": false,
+      "id": "#c:spices/clove"
     },
     {
-      "id": "#c:foods/clove",
-      "required": false
+      "required": false,
+      "id": "#c:foods/clove"
     },
     {
-      "id": "#c:clove",
-      "required": false
+      "required": false,
+      "id": "#c:clove"
     },
     {
-      "id": "#forge:spices/clove",
-      "required": false
+      "required": false,
+      "id": "#forge:spices/clove"
     },
     {
-      "id": "croptopia:clove",
-      "required": false
+      "required": false,
+      "id": "croptopia:clove"
     }
   ]
 }

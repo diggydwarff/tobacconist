@@ -2,32 +2,24 @@
   "replace": false,
   "values": [
     {
-      "id": "#forge:flowers/lavender",
-      "required": false
+      "required": false,
+      "id": "#forge:flowers/lavender"
     },
     {
-      "id": "#forge:herbs/lavender",
-      "required": false
+      "required": false,
+      "id": "#forge:herbs/lavender"
     },
     {
-      "id": "#forge:flowers/lavender",
-      "required": false
+      "required": false,
+      "id": "herbalbrews:lavender_blossom"
     },
     {
-      "id": "herbalbrews:lavender_blossom",
-      "required": false
+      "required": false,
+      "id": "herbalbrews:lavender"
     },
     {
-      "id": "herbalbrews:lavender",
-      "required": false
-    },
-    {
-      "id": "#forge:lavender",
-      "required": false
-    },
-    {
-      "id": "#forge:lavender",
-      "required": false
+      "required": false,
+      "id": "#forge:lavender"
     }
   ]
 }

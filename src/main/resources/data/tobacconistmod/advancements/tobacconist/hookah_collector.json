@@ -213,6 +213,5 @@
     [
       "netherite_hookah_block"
     ]
-  ],
-  "sends_telemetry_event": false
+  ]
 }

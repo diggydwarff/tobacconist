@@ -16,6 +16,8 @@ public class ModEvents {
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
+            MenuScreens.register(com.diggydwarff.tobacconistmod.vapor.VaporContent.STATION_MENU.get(), com.diggydwarff.tobacconistmod.vapor.client.LiquidStationScreen::new);
+            MenuScreens.register(com.diggydwarff.tobacconistmod.vapor.VaporContent.PEN_MENU.get(), com.diggydwarff.tobacconistmod.vapor.client.VapePenScreen::new);
             MenuScreens.register(ModMenuTypes.HOOKAH_MENU.get(), HookahScreen::new);
             MenuScreens.register(ModMenuTypes.FLUE_FIREBOX_MENU.get(), FlueFireboxScreen::new);
             MenuScreens.register(ModMenuTypes.PRODUCTION_MONITOR_MENU.get(), ProductionMonitorScreen::new);

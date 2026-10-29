@@ -1,0 +1,32 @@
+{
+  "type": "tobacconistmod:extraction",
+  "inputs": [
+    {
+      "ingredient": {
+        "item": "minecraft:sugar_cane"
+      },
+      "count": 2
+    },
+    {
+      "ingredient": {
+        "item": "minecraft:wheat_seeds"
+      },
+      "count": 2
+    },
+    {
+      "ingredient": {
+        "type": "forge:nbt",
+        "item": "minecraft:potion",
+        "nbt": {
+          "Potion": "minecraft:water"
+        }
+      },
+      "count": 1
+    }
+  ],
+  "result": {
+    "count": 1,
+    "item": "tobacconistmod:vegetable_base"
+  },
+  "duration": 200
+}

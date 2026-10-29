@@ -2,40 +2,32 @@
   "replace": false,
   "values": [
     {
-      "id": "#forge:crops/vanilla",
-      "required": false
+      "required": false,
+      "id": "#forge:crops/vanilla"
     },
     {
-      "id": "#forge:foods/vanilla",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/vanilla"
     },
     {
-      "id": "#forge:crops/vanilla",
-      "required": false
+      "required": false,
+      "id": "croptopia:vanilla"
     },
     {
-      "id": "croptopia:vanilla",
-      "required": false
+      "required": false,
+      "id": "neapolitan:vanilla_pods"
     },
     {
-      "id": "neapolitan:vanilla_pods",
-      "required": false
+      "required": false,
+      "id": "neapolitan:dried_vanilla_pods"
     },
     {
-      "id": "neapolitan:dried_vanilla_pods",
-      "required": false
+      "required": false,
+      "id": "#forge:vanilla"
     },
     {
-      "id": "#forge:vanilla",
-      "required": false
-    },
-    {
-      "id": "#forge:vanilla_pods",
-      "required": false
-    },
-    {
-      "id": "#forge:vanilla",
-      "required": false
+      "required": false,
+      "id": "#forge:vanilla_pods"
     }
   ]
 }

@@ -2,28 +2,24 @@
   "replace": false,
   "values": [
     {
-      "id": "#forge:foods/marshmallow",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/marshmallow"
     },
     {
-      "id": "#forge:marshmallows",
-      "required": false
+      "required": false,
+      "id": "#forge:marshmallows"
     },
     {
-      "id": "#forge:marshmallow",
-      "required": false
+      "required": false,
+      "id": "#forge:marshmallow"
     },
     {
-      "id": "create_confectionery:marshmallow",
-      "required": false
+      "required": false,
+      "id": "create_confectionery:marshmallow"
     },
     {
-      "id": "#forge:foods/marshmallows",
-      "required": false
-    },
-    {
-      "id": "#forge:marshmallows",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/marshmallows"
     }
   ]
 }

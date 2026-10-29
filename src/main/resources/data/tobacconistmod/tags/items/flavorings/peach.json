@@ -2,44 +2,36 @@
   "replace": false,
   "values": [
     {
-      "id": "#forge:foods/fruits/peach",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/fruits/peach"
     },
     {
-      "id": "#forge:fruits/peach",
-      "required": false
+      "required": false,
+      "id": "#forge:fruits/peach"
     },
     {
-      "id": "#forge:foods/peach",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/peach"
     },
     {
-      "id": "#forge:fruits/peach",
-      "required": false
+      "required": false,
+      "id": "fruitsdelight:peach"
     },
     {
-      "id": "fruitsdelight:peach",
-      "required": false
+      "required": false,
+      "id": "croptopia:peach"
     },
     {
-      "id": "croptopia:peach",
-      "required": false
+      "required": false,
+      "id": "croptopia:nectarine"
     },
     {
-      "id": "croptopia:nectarine",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/fruit/peach"
     },
     {
-      "id": "#forge:foods/fruit/peach",
-      "required": false
-    },
-    {
-      "id": "#forge:fruit/peach",
-      "required": false
-    },
-    {
-      "id": "#forge:fruit/peach",
-      "required": false
+      "required": false,
+      "id": "#forge:fruit/peach"
     }
   ]
 }

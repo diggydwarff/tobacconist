@@ -3,24 +3,20 @@
   "values": [
     "minecraft:honey_bottle",
     {
-      "id": "#forge:drinks/honey",
-      "required": false
+      "required": false,
+      "id": "#forge:drinks/honey"
     },
     {
-      "id": "#forge:foods/honey",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/honey"
     },
     {
-      "id": "#forge:honey",
-      "required": false
+      "required": false,
+      "id": "#forge:honey"
     },
     {
-      "id": "#forge:honey",
-      "required": false
-    },
-    {
-      "id": "#forge:honey_bottles",
-      "required": false
+      "required": false,
+      "id": "#forge:honey_bottles"
     }
   ]
 }

@@ -1,0 +1,28 @@
+{
+  "type": "tobacconistmod:create_vapor_mixing",
+  "ingredients": [
+    {
+      "item": "tobacconistmod:liquid_recipe_card"
+    },
+    {
+      "amount": 1,
+      "fluidTag": "tobacconistmod:blendable_liquids"
+    },
+    {
+      "amount": 1,
+      "fluidTag": "tobacconistmod:blendable_liquids"
+    }
+  ],
+  "results": [
+    {
+      "amount": 250,
+      "fluid": "tobacconistmod:vape_liquid"
+    }
+  ],
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "create"
+    }
+  ]
+}

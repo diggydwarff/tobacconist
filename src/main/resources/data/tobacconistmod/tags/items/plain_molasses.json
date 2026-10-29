@@ -3,20 +3,20 @@
   "values": [
     "tobacconistmod:bottled_molasses_plain",
     {
-      "id": "croptopia:molasses",
-      "required": false
+      "required": false,
+      "id": "croptopia:molasses"
     },
     {
-      "id": "#c:foods/molasses",
-      "required": false
+      "required": false,
+      "id": "#c:foods/molasses"
     },
     {
-      "id": "#c:molasses",
-      "required": false
+      "required": false,
+      "id": "#c:molasses"
     },
     {
-      "id": "#forge:molasses",
-      "required": false
+      "required": false,
+      "id": "#forge:molasses"
     }
   ]
 }

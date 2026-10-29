@@ -1,8 +1,10 @@
 package com.diggydwarff.tobacconistmod.mixin;
 
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
+import com.diggydwarff.tobacconistmod.vapor.VapePenItem;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.inventory.CraftingContainer;
+import com.diggydwarff.tobacconistmod.backport.DataComponents;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.DyeableLeatherItem;
 import net.minecraft.world.item.ItemStack;
@@ -15,7 +17,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Applies vanilla dye blending to Tobacco Pouches on 1.20.1. */
+/**
+ * Uses vanilla dye blending for pouches and vapes while excluding their existing color
+ * from a new crafting operation. Multiple dyes in the same craft are blended normally.
+ */
 @Mixin(ArmorDyeRecipe.class)
 public abstract class ArmorDyeRecipeMixin {
     @Inject(
@@ -23,21 +28,21 @@ public abstract class ArmorDyeRecipeMixin {
             at = @At("HEAD"),
             cancellable = true
     )
-    private void tobacconist$recolorPouchFresh(
+    private void tobacconist$recolorFresh(
             CraftingContainer input,
             RegistryAccess registries,
             CallbackInfoReturnable<ItemStack> cir
     ) {
-        ItemStack pouch = ItemStack.EMPTY;
+        ItemStack target = ItemStack.EMPTY;
         List<DyeItem> dyes = new ArrayList<>();
 
         for (int i = 0; i < input.getContainerSize(); i++) {
             ItemStack stack = input.getItem(i);
             if (stack.isEmpty()) continue;
 
-            if (stack.is(ModItems.TOBACCO_POUCH.get())) {
-                if (!pouch.isEmpty()) return;
-                pouch = stack;
+            if (stack.is(ModItems.TOBACCO_POUCH.get()) || VapePenItem.isDevice(stack)) {
+                if (!target.isEmpty()) return;
+                target = stack;
             } else if (stack.getItem() instanceof DyeItem dye) {
                 dyes.add(dye);
             } else {
@@ -45,9 +50,9 @@ public abstract class ArmorDyeRecipeMixin {
             }
         }
 
-        if (pouch.isEmpty() || dyes.isEmpty()) return;
+        if (target.isEmpty() || dyes.isEmpty()) return;
 
-        ItemStack result = pouch.copy();
+        ItemStack result = target.copy();
         result.setCount(1);
         ((DyeableLeatherItem) result.getItem()).clearColor(result);
         cir.setReturnValue(DyeableLeatherItem.dyeArmor(result, dyes));

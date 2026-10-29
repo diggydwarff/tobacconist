@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "tobacconistmod:large_glass_bottle"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "item": "minecraft:glass_bottle"
+  }
+}

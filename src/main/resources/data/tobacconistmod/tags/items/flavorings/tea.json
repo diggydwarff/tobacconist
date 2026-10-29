@@ -2,68 +2,60 @@
   "replace": false,
   "values": [
     {
-      "id": "#forge:crops/tea",
-      "required": false
+      "required": false,
+      "id": "#forge:crops/tea"
     },
     {
-      "id": "#forge:tea_leaves",
-      "required": false
+      "required": false,
+      "id": "#forge:tea_leaves"
     },
     {
-      "id": "#forge:foods/tea_leaves",
-      "required": false
+      "required": false,
+      "id": "#forge:foods/tea_leaves"
     },
     {
-      "id": "#forge:crops/tea",
-      "required": false
+      "required": false,
+      "id": "croptopia:tea"
     },
     {
-      "id": "croptopia:tea",
-      "required": false
+      "required": false,
+      "id": "croptopia:tea_leaves"
     },
     {
-      "id": "croptopia:tea_leaves",
-      "required": false
+      "required": false,
+      "id": "herbalbrews:tea_blossoms"
     },
     {
-      "id": "herbalbrews:tea_blossoms",
-      "required": false
+      "required": false,
+      "id": "herbalbrews:dried_green_tea"
     },
     {
-      "id": "herbalbrews:dried_green_tea",
-      "required": false
+      "required": false,
+      "id": "herbalbrews:dried_black_tea"
     },
     {
-      "id": "herbalbrews:dried_black_tea",
-      "required": false
+      "required": false,
+      "id": "herbalbrews:dried_oolong_tea"
     },
     {
-      "id": "herbalbrews:dried_oolong_tea",
-      "required": false
+      "required": false,
+      "id": "herbalbrews:green_tea_leaf"
     },
     {
-      "id": "herbalbrews:green_tea_leaf",
-      "required": false
+      "required": false,
+      "id": "farmersrespite:green_tea_leaves"
     },
     {
-      "id": "farmersrespite:green_tea_leaves",
-      "required": false
+      "required": false,
+      "id": "farmersrespite:black_tea_leaves"
     },
     {
-      "id": "farmersrespite:black_tea_leaves",
-      "required": false
+      "required": false,
+      "id": "farmersrespite:yellow_tea_leaves"
     },
     {
-      "id": "farmersrespite:yellow_tea_leaves",
-      "required": false
-    },
-    {
-      "id": "#forge:tea",
-      "required": false
-    },
-    {
-      "id": "#forge:tea_leaves",
-      "required": false
+      "required": false,
+      "id": "#forge:tea"
     }
   ]
 }
