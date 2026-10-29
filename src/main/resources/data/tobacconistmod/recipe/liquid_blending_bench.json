@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GCG",
+    "PRP",
+    "P P"
+  ],
+  "key": {
+    "G": {
+      "item": "minecraft:glass_bottle"
+    },
+    "C": {
+      "item": "minecraft:copper_ingot"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "P": {
+      "tag": "minecraft:planks"
+    }
+  },
+  "result": {
+    "id": "tobacconistmod:liquid_blending_bench"
+  }
+}

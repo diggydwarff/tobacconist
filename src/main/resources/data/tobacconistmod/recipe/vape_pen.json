@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " G ",
+    "CQC",
+    "IRI"
+  ],
+  "key": {
+    "G": {
+      "item": "minecraft:glass"
+    },
+    "C": {
+      "item": "minecraft:copper_ingot"
+    },
+    "Q": {
+      "item": "minecraft:quartz"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "result": {
+    "id": "tobacconistmod:vape_pen",
+    "count": 1
+  }
+}

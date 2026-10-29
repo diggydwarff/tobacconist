@@ -29,6 +29,14 @@
     {
       "id": "#forge:fruit/apple",
       "required": false
+    },
+    {
+      "id": "bakery:apple_jam",
+      "required": false
+    },
+    {
+      "id": "bakery:apple_cupcake",
+      "required": false
     }
   ]
 }

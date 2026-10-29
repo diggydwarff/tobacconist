@@ -13,6 +13,10 @@
     {
       "id": "#c:foods/cookie/plain",
       "required": false
+    },
+    {
+      "id": "bakery:chocolate_glazed_cookie",
+      "required": false
     }
   ]
 }

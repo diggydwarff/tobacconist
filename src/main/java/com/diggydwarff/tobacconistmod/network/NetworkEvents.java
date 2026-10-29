@@ -1,6 +1,11 @@
 package com.diggydwarff.tobacconistmod.network;
 
 import com.diggydwarff.tobacconistmod.TobacconistMod;
+import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
+import com.diggydwarff.tobacconistmod.client.ClientDrawAnimations;
+import com.diggydwarff.tobacconistmod.datagen.items.SmokingItem;
+import com.diggydwarff.tobacconistmod.util.SmokingDraws;
+import net.minecraft.world.item.ItemStack;
 import com.diggydwarff.tobacconistmod.compat.curios.CuriosSmokingHelper;
 import com.diggydwarff.tobacconistmod.block.entity.ProductionMonitorBlockEntity;
 import com.diggydwarff.tobacconistmod.screen.ProductionMonitorMenu;
@@ -23,8 +28,31 @@ public final class NetworkEvents {
     private NetworkEvents() {}
 
     @SubscribeEvent
+    public static void logout(net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent event) {
+        LAST_MANUAL_SMOKE_TICK.remove(event.getEntity().getUUID());
+    }
+
+    @SubscribeEvent
+    public static void changedDimension(net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerChangedDimensionEvent event) {
+        LAST_MANUAL_SMOKE_TICK.remove(event.getEntity().getUUID());
+    }
+
+    @SubscribeEvent
+    public static void stopped(net.neoforged.neoforge.event.server.ServerStoppedEvent event) {
+        LAST_MANUAL_SMOKE_TICK.clear();
+    }
+
+    @SubscribeEvent
     public static void registerPayloads(RegisterPayloadHandlersEvent event) {
-        var registrar = event.registrar("1");
+        var registrar = event.registrar("15");
+        registrar.playToClient(MouthEffectStatePayload.TYPE,MouthEffectStatePayload.CODEC,
+                (payload, context) -> com.diggydwarff.tobacconistmod.client.ClientSmokingParticles.receive(payload));
+        registrar.playToClient(com.diggydwarff.tobacconistmod.novelty.NoveltyPuffPayload.TYPE,
+                com.diggydwarff.tobacconistmod.novelty.NoveltyPuffPayload.CODEC,
+                (payload, context) -> com.diggydwarff.tobacconistmod.novelty.client.NoveltyParticle.puff(payload));
+        registrar.playToClient(com.diggydwarff.tobacconistmod.vapor.VaporPuffPayload.TYPE,
+                com.diggydwarff.tobacconistmod.vapor.VaporPuffPayload.CODEC,
+                (payload, context) -> com.diggydwarff.tobacconistmod.vapor.client.VaporParticle.puff(payload));
         registrar.playToServer(
                 SmokeMouthItemPayload.TYPE,
                 SmokeMouthItemPayload.STREAM_CODEC,
@@ -36,6 +64,24 @@ public final class NetworkEvents {
                         return;
                     }
 
+                    if (!payload.drawing()) {
+                        if (payload.cancel()) SmokingDraws.cancelMouth(player);
+                        else SmokingDraws.releaseMouth(player);
+                        return;
+                    }
+                    if (TobacconistConfig.areSmokingDrawAnimationsEnabled()) {
+                        ItemStack stack = CuriosSmokingHelper.getMouthItem(player);
+                        if (!CuriosSmokingHelper.supported(stack)) {
+                            player.displayClientMessage(Component.translatable("tobacconistmod.message.mouth.empty"), true);
+                        } else if (!CuriosSmokingHelper.canDraw(stack)) {
+                            player.displayClientMessage(Component.translatable("tobacconistmod.message.mouth.no_puffs"), true);
+                        } else {
+                            SmokingDraws.startMouth(player, stack);
+                        }
+                        return;
+                    }
+
+                    if (!SmokingDraws.canStart(player, CuriosSmokingHelper.getMouthItem(player))) return;
                     long now = player.serverLevel().getGameTime();
                     long last = LAST_MANUAL_SMOKE_TICK.getOrDefault(player.getUUID(), Long.MIN_VALUE / 2);
                     if (now - last < MANUAL_SMOKE_COOLDOWN_TICKS) {
@@ -49,6 +95,12 @@ public final class NetworkEvents {
                         player.displayClientMessage(failure, true);
                     }
                 }
+        );
+
+        registrar.playToClient(
+                SmokingDrawStatePayload.TYPE,
+                SmokingDrawStatePayload.STREAM_CODEC,
+                (payload, context) -> ClientDrawAnimations.receiveMouthDraw(payload.entityId(), payload.ticks())
         );
 
         registrar.playToServer(

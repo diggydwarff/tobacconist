@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "tobacconistmod:tobacco_pouch"
+    "tobacconistmod:tobacco_pouch",
+    "tobacconistmod:vape_pen",
+    "tobacconistmod:box_mod_vape",
+    "tobacconistmod:cigalike_vape"
   ]
 }

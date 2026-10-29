@@ -12,6 +12,10 @@
     {
       "id": "#c:foods/pie/apple",
       "required": false
+    },
+    {
+      "id": "bakery:apple_pie_slice",
+      "required": false
     }
   ]
 }

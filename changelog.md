@@ -1,3 +1,42 @@
+## 4.2.0 - Clouds & Curiosities
+
+### Vaporizers
+- Added the Vape Pen, Cigalike, and Box Mod.
+- Supports refillable tanks, redstone charging, dyeing, and nicotine-free liquids.
+- Box Mod includes adjustable power and a persistent puff counter.
+- Cloud size scales with VG content and power.
+
+### Liquid Production
+- Added VG/PG bases, tobacco extraction, and refined nicotine extract.
+- Added the Liquid Blending Bench with adjustable ratios, nicotine strength, and up to three flavors.
+- Recipe Cards save named formulas and autofill matching essences.
+- Added reusable 150, 250, and 1,000 mB bottles.
+- Optional Create support for extraction, mixing, transport, bottling, and ventilation.
+
+### Pipes
+- Added Brass, Bubble, Confetti, Petal, and Whistling pipes.
+- Added collectible Wizard’s Longpipe, Sunkeeper’s, Soulglass, Astral, and Echo pipes with unique effects.
+- Rare pipes appear in themed structure loot, with configurable chances.
+
+### Animations & Polish
+- Added hold-and-release draws, smoother hand animations, and delayed exhalation.
+- Longer draws produce fuller smoke and specialty effects.
+- Expanded Curios mouth-slot support.
+- Added advancements and configuration options.
+- Updated JEI, the manual, inventory handling, creative-tab ordering, and menus.
+
+### Compatibility
+- Added Farm & Charm strawberries as Strawberry flavoring ingredients.
+- Fixed HerbalBrews tea blossom support and added rooibos and yerba mate leaves to Tea.
+- Added all eight Vinery grape varieties to Grape and cherries to Cherry.
+- Added Beachparty whole and opened coconuts to Coconut.
+- Added Camping regular and roasted marshmallows to Marshmallow.
+- Added Meadow wooden milk buckets, including animal milk variants, to Cream.
+- Added Bakery jams, cakes, cookies and apple pie slices to matching existing fruit, chocolate and dessert flavors.
+- Shared ingredient support between Brewing Stand and Create essence recipes, preserving empty containers and keeping all integrations optional.
+- Lowered the minimum NeoForge version from **21.1.235 to 21.1.233**.
+
+
 ## Update 4.1.0 - Haunted Harvest Update
 
 Tobacconist 4.1.0 releases Haunted Harvest for **Minecraft 1.21.1 NeoForge**.
@@ -100,7 +139,7 @@ Tobacconist 4.0.0 is released for **Minecraft 1.20.1 Forge** and **Minecraft 1.2
 ### Ponder, JEI & Manual
 - Expanded Create Ponder coverage for wooden and Industrial curing, homogenization, cutting/pressing, blending, Aqua Vitae, flavored molasses, Cigarette/Cigar production, Production Monitor use, and factory logistics.
 - Expanded JEI coverage and cleaned misleading/fake processing representations.
-- Updated The Tobacconist's Manual for current curing, automation, flavoring, monitoring, quality, and factory workflows.
+- Updated The Tobacconist's Manual for current curing, automation, flavoring, monitoring, quagit applyghit ality, and factory workflows.
 
 ### Visuals & Quality of Life
 - Added per-flavor Flavoring Essence bottle colors while retaining the bottle-style appearance.

@@ -1,0 +1,69 @@
+{
+  "name": "Specialty & Collectible Pipes",
+  "icon": "tobacconistmod:wizards_longpipe",
+  "category": "tobacconistmod:smoking",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "title": "Crafted Pipes",
+      "text": "The $(item)Brass Smoking Pipe$() uses normal loose tobacco, pouch packing and puff rules. Its recipe needs brass ingots supplied by Create or another compatible mod. The $(thing)Bubble, Confetti, Petal and Whistling Pipes$() are reusable toys: they use no tobacco and apply no nicotine effects. Hold use for at least four ticks, then release; a full draw takes 30 ticks. Each successful blow spends one of 24 charges. Sneak-use with the refill ingredient in your other hand."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:bubble_pipe",
+      "title": "Bubble Pipe"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Bubbles & Refills",
+      "text": "Refill a $(item)Bubble Pipe$() with a $(item)Mundane Potion$(). Water Bottles do not work. One potion fills it to 24 blows and returns the empty glass. A $(item)Confetti Pipe$() refills with Paper; a $(item)Petal Pipe$() uses any Small Flower. Their crafting recipes start with 24 charges. Refilling restores the toy to 24 charges; use the remaining charges first to avoid wasting a refill."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:confetti_pipe",
+      "recipe2": "tobacconistmod:petal_pipe",
+      "title": "Confetti & Petals"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:whistling_pipe",
+      "title": "Whistling Pipe"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Whistles & Curios",
+      "text": "A $(item)Whistling Pipe$() refills with one normal $(item)Water Bottle$(), returning its glass. Short draws play a note; full draws play a five-note phrase. Novelty sounds can be disabled in the server configuration. All four toys fit the optional $(thing)Curios Mouth slot$() and use the mouth draw key. Refill them while held before equipping them again. Opening a screen or changing the equipped item cancels an unfinished draw without spending a charge."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Hidden Relics",
+      "text": "Five $(thing)collectible smoking pipes$() appear in structure chests. They use ordinary loose tobacco and Tobacco Pouches, preserving the normal packing bonus, puff count and tobacco properties. They also work in the Curios Mouth slot. Their distinctive effects appear after a successful draw: Wizard smoke rings, golden Sunkeeper sparks, blue Soulglass wisps, Astral stars and Echo ripples. These are loot discoveries, not crafting recipes."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Rare Finds",
+      "text": "$(item)Wizard’s Longpipe$(): Dungeon and Mineshaft chests. $(br2)$(item)Sunkeeper’s Pipe$(): Desert Pyramid chests. $(br2)Each eligible chest has a default 4% chance to contain its rare pipe. Loot is added alongside the normal chest contents. Server configuration can change these chances or disable collectible pipe loot."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Mythic Finds",
+      "text": "$(item)Soulglass Pipe$(): Nether Fortress and Bastion Treasure chests. $(br2)$(item)Astral Pipe$(): End City chests. $(br2)$(item)Echo Pipe$(): Ancient City chests. $(br2)Each eligible chest has a default 1.5% chance to contain its mythic pipe. Look in newly generated or unopened chests: loot generation does not add pipes to chests that were already opened."
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "tobacconistmod:smoking/pipes"
+      ],
+      "title": "Packing Pipes"
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "tobacconistmod:smoking/curios"
+      ],
+      "title": "Mouth Slots",
+      "flag": "mod:curios"
+    }
+  ]
+}

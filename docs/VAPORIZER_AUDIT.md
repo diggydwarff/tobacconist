@@ -1,0 +1,16 @@
+# Vapor and specialty-pipe audit — Alpha 15
+
+Scope: devices/refill menus, bottle capabilities/pouring/labels/boxing, blending/card/Auto logic, heated cauldrons/brewing, Create mixing/Spouts/Drains, toys/relics/loot/advancements, Curios rendering/visibility/mouth controls, handheld poses, particles/sounds, persistence, resource registrations and optional dependencies.
+
+The baseline server reproduced card-selector jumps, incorrect small-bottle UI ingredient pricing, stale Auto formulas after card replacement/removal, replacement benches retaining old menus, and vape/Bubble completion spending resources with another menu open. These are corrected in Alpha 15. A further mixed-container test identified a cauldron duplication path: a fixed-dose bottle could be debited fractionally and then returned full. Exact drain simulation now prevents that action; affected older unfinished batches refund every reserved input. Sized bottles retain exact remainder support. The changelog lists additional naming/water transfer and lifecycle fixes.
+
+## Verification
+
+- Fresh main-only Java 21 release compile/JAR; no temporary verification classes packaged. All resource JSONs parse and release resource bytes match source. Supplied pipe sprites and particle assets retain their previous mappings.
+- Dedicated-server regression suite with Create 6.0.10 and without Create, using NeoForge 21.1.235 and optional Curios 9.5.1. Tests cover exact dosing/refills/returns, simulated versus executed transfers, portable tanks, cauldron heating/collection/cancellation/partial saves, real brewing-stand timers and hopper/menu inputs, all device types, power/charge/puff counters, dyes, box data, recipe/Auto changes, interrupted draws, relic/toy refills, loot and advancements.
+- 176 actual Create Basin chains: eleven VG choices, four nicotine strengths, and zero through three flavors. Every final output is exactly 250 mB and equals the bench composition. Pure-carrier routes, whole essence consumption, remaining raw carriers, reusable cards and no-spend simulations are checked.
+- Actual release JAR graphical client: both player skin layers, all fourteen original/new mouth types, full mouth-key consumption and particles, native wooden/specialty angle equality, empty/cosmetic/hidden/removed states, and five delivered full-whistle notes.
+- Actual screen/button packets: small/normal/large affordability, 150 mB small production, saved-card selector actions, replaced menu closure, three legacy device screens with charging, and offhand Box Mod refill/wattage. Native first-person handheld draws are checked for all three vapes, Bubble, Confetti and Wizard. Particle queues are checked for dead/distant/removed sources.
+- Server startup and ticks with both Curios and Create absent. Binary-safe patch applies after the exact delivered Alpha 14 source and reproduces the complete source tree.
+
+No remaining failures in these checks. This verifies the listed dependency versions and test paths; arbitrary third-party mod combinations are not covered. Whistle playback reaches the client sound engine; the graphical environment uses a no-output audio device, so listening on a normal client remains part of the manual checklist.

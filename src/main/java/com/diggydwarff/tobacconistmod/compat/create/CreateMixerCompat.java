@@ -48,6 +48,10 @@ public final class CreateMixerCompat {
                     () -> new IngredientType<>(CreateTobaccoBlendIngredient.CODEC)
             );
 
+    public static final Supplier<RecipeSerializer<CreateVaporMixingRecipe>> VAPOR_MIXING =
+            SERIALIZERS.register("create_vapor_mixing",
+                    () -> new StandardProcessingRecipe.Serializer<>(CreateVaporMixingRecipe::new));
+
     private CreateMixerCompat() {}
 
     public static void register(IEventBus modEventBus) {

@@ -17,6 +17,14 @@
     {
       "id": "#forge:cake",
       "required": false
+    },
+    {
+      "id": "bakery:bundt_cake",
+      "required": false
+    },
+    {
+      "id": "bakery:bundt_cake_slice",
+      "required": false
     }
   ]
 }

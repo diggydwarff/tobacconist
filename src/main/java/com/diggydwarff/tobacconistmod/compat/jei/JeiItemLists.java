@@ -108,6 +108,10 @@ public final class JeiItemLists {
 
     public static List<ItemStack> getAllTobaccoBoxSupportedContents() {
         List<ItemStack> out = new ArrayList<>(getAllLooseTobaccos());
+        var liquid = new com.diggydwarff.tobacconistmod.vapor.LiquidBlend(700000, 300000, 0, java.util.Map.of());
+        out.add(com.diggydwarff.tobacconistmod.vapor.VaporData.bottle(liquid, 250));
+        out.add(com.diggydwarff.tobacconistmod.vapor.VaporData.bottle(liquid, com.diggydwarff.tobacconistmod.vapor.VaporData.SMALL_BOTTLE, new ItemStack(com.diggydwarff.tobacconistmod.vapor.VaporContent.SMALL_GLASS_BOTTLE.get())));
+        out.add(com.diggydwarff.tobacconistmod.vapor.VaporData.bottle(liquid, 1000, new ItemStack(com.diggydwarff.tobacconistmod.vapor.VaporContent.LARGE_GLASS_BOTTLE.get())));
 
         out.add(makeCigarette());
         out.add(makeCigar());

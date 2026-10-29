@@ -15,6 +15,17 @@
     "tobacconistmod:cigar",
     "tobacconistmod:cigarette",
     "tobacconistmod:copper_smoking_pipe",
-    "tobacconistmod:iron_smoking_pipe"
+    "tobacconistmod:iron_smoking_pipe",
+    "tobacconistmod:brass_smoking_pipe",
+    "tobacconistmod:cigalike_vape",
+    "tobacconistmod:bubble_pipe",
+    "tobacconistmod:confetti_pipe",
+    "tobacconistmod:wizards_longpipe",
+    "tobacconistmod:soulglass_pipe",
+    "tobacconistmod:astral_pipe",
+    "tobacconistmod:petal_pipe",
+    "tobacconistmod:whistling_pipe",
+    "tobacconistmod:sunkeepers_pipe",
+    "tobacconistmod:echo_pipe"
   ]
 }

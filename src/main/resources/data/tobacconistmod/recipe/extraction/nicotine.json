@@ -1,0 +1,22 @@
+{
+  "type": "tobacconistmod:extraction",
+  "inputs": [
+    {
+      "ingredient": {
+        "item": "tobacconistmod:crude_tobacco_extract"
+      },
+      "count": 1
+    },
+    {
+      "ingredient": {
+        "item": "minecraft:paper"
+      },
+      "count": 1
+    }
+  ],
+  "result": {
+    "id": "tobacconistmod:nicotine_extract",
+    "count": 1
+  },
+  "duration": 200
+}

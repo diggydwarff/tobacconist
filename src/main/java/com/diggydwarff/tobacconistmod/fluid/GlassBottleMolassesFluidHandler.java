@@ -10,6 +10,7 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
 /** Lets a vanilla glass bottle receive molasses, Aqua Vitae, or a Flavoring Essence from fluid automation. */
 public final class GlassBottleMolassesFluidHandler implements IFluidHandlerItem {
     private ItemStack container;
+    private net.neoforged.neoforge.fluids.FluidStack vapor = net.neoforged.neoforge.fluids.FluidStack.EMPTY;
     private int amount;
     private Kind kind = Kind.NONE;
     private BottledMolassesFlavors flavor;
@@ -25,6 +26,7 @@ public final class GlassBottleMolassesFluidHandler implements IFluidHandlerItem 
 
     @Override
     public FluidStack getFluidInTank(int tank) {
+        if (tank == 0 && !vapor.isEmpty()) return vapor.copy();
         if (tank != 0 || amount <= 0) return FluidStack.EMPTY;
         return switch (kind) {
             case MOLASSES -> new FluidStack(ModMolassesFluids.source(flavor), amount);
@@ -39,6 +41,10 @@ public final class GlassBottleMolassesFluidHandler implements IFluidHandlerItem 
     @Override
     public boolean isFluidValid(int tank, FluidStack stack) {
         if (tank != 0 || stack.isEmpty()) return false;
+        if ((stack.getFluid() == net.minecraft.world.level.material.Fluids.WATER || com.diggydwarff.tobacconistmod.vapor.VaporBottleHandler.supported(stack))) {
+            return kind == Kind.NONE && (vapor.isEmpty() || FluidStack.isSameFluidSameComponents(vapor, stack));
+        }
+        if (!vapor.isEmpty()) return false;
         Kind candidateKind = kindOf(stack);
         BottledMolassesFlavors candidateFlavor = flavorOf(stack, candidateKind);
         if (candidateKind == Kind.NONE) return false;
@@ -47,6 +53,17 @@ public final class GlassBottleMolassesFluidHandler implements IFluidHandlerItem 
 
     @Override
     public int fill(FluidStack resource, IFluidHandler.FluidAction action) {
+        if ((resource.getFluid() == net.minecraft.world.level.material.Fluids.WATER || com.diggydwarff.tobacconistmod.vapor.VaporBottleHandler.supported(resource))) {
+            if (kind != Kind.NONE || !vapor.isEmpty() || resource.getAmount() < TobacconistFluidAmounts.BOTTLE) return 0;
+            if (action.execute()) {
+                vapor = resource.copyWithAmount(TobacconistFluidAmounts.BOTTLE);
+                container = resource.getFluid() == net.minecraft.world.level.material.Fluids.WATER
+                        ? net.minecraft.world.item.alchemy.PotionContents.createItemStack(net.minecraft.world.item.Items.POTION, net.minecraft.world.item.alchemy.Potions.WATER)
+                        : com.diggydwarff.tobacconistmod.vapor.VaporBottleHandler.filled(vapor);
+            }
+            return TobacconistFluidAmounts.BOTTLE;
+        }
+        if (!vapor.isEmpty()) return 0;
         Kind candidateKind = kindOf(resource);
         BottledMolassesFlavors candidateFlavor = flavorOf(resource, candidateKind);
         if (candidateKind == Kind.NONE || (kind != Kind.NONE && (kind != candidateKind || flavor != candidateFlavor))) {

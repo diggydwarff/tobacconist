@@ -13,6 +13,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import com.diggydwarff.tobacconistmod.vapor.VaporData;
+import com.diggydwarff.tobacconistmod.vapor.VaporContent;
+import com.diggydwarff.tobacconistmod.vapor.BottledFluid;
+import net.minecraft.nbt.NbtOps;
 
 public class TobaccoBoxHelper {
 
@@ -23,6 +27,10 @@ public class TobaccoBoxHelper {
 
     public static boolean isSupportedContent(ItemStack stack) {
         Item item = stack.getItem();
+        if (VaporData.isLiquidBottle(stack)) {
+            var blend = VaporData.blend(stack);
+            return blend != null && blend.usable() && VaporData.volume(stack) > 0;
+        }
         return item == ModItems.CIGAR.get()
                 || item == ModItems.CIGARETTE.get()
                 || item == ModItems.SHISHA_TOBACCO.get()
@@ -30,6 +38,10 @@ public class TobaccoBoxHelper {
     }
 
     public static int getCapacity(ItemStack content) {
+        if (VaporData.isLiquidBottle(content)) {
+            int capacity = VaporData.bottleCapacity(content);
+            return capacity == 1000 ? 4 : capacity == com.diggydwarff.tobacconistmod.vapor.VaporData.SMALL_BOTTLE ? 16 : 8;
+        }
         if (content.is(ModItems.CIGAR.get())) return 8;
         if (content.is(ModItems.CIGARETTE.get())) return 12;
         if (content.is(ModItems.SHISHA_TOBACCO.get())) return 16;
@@ -80,6 +92,11 @@ public class TobaccoBoxHelper {
         if (custom != null && !custom.isEmpty()) {
             stored.put("CustomData", custom.copy());
         }
+        // Vape liquids need typed composition and remaining volume, beyond tobacco NBT.
+        if (VaporData.isLiquidBottle(stack)) {
+            stored.put("VaporBlend", VaporData.CODEC.encodeStart(NbtOps.INSTANCE, VaporData.blend(stack)).getOrThrow());
+            stored.putInt("VaporVolume", VaporData.volume(stack));
+        }
         return stored;
     }
 
@@ -114,6 +131,16 @@ public class TobaccoBoxHelper {
         if (stored.contains("Damage")) {
             result.setDamageValue(stored.getInt("Damage"));
         }
+        if (result.is(VaporContent.VAPE_LIQUID.get()) || result.is(VaporContent.SMALL_FILLED_BOTTLE.get()) || result.is(VaporContent.LARGE_FILLED_BOTTLE.get())) {
+            if (!stored.contains("VaporBlend")) return ItemStack.EMPTY;
+            var blend = VaporData.CODEC.parse(NbtOps.INSTANCE, stored.get("VaporBlend")).result().orElse(null);
+            int amount = stored.getInt("VaporVolume");
+            if (blend == null || !blend.usable() || amount <= 0 || amount > VaporData.bottleCapacity(result)) return ItemStack.EMPTY;
+            if (result.is(VaporContent.VAPE_LIQUID.get())) {
+                result.set(VaporContent.BLEND.get(), blend);
+                result.set(VaporContent.VOLUME.get(), amount);
+            } else result.set(VaporContent.BOTTLED_FLUID.get(), BottledFluid.of(VaporData.fluid(blend, amount), amount));
+        }
         return result;
     }
 
@@ -144,11 +171,17 @@ public class TobaccoBoxHelper {
         LegacyItemTags.getOrCreateTag(stack).putString(TAG_LABEL, label.trim());
     }
 
+    private static String contentLabel(ItemStack content) {
+        String label = TobaccoLabelHelper.getProductLabel(content);
+        var custom = content.get(DataComponents.CUSTOM_NAME);
+        return label.isEmpty() && VaporData.isLiquidBottle(content) && custom != null ? custom.getString() : label;
+    }
+
     public static boolean canAccept(ItemStack box, ItemStack incoming) {
         if (incoming.isEmpty() || !isSupportedContent(incoming)) return false;
 
         String boxLabel = getLabel(box);
-        String incomingLabel = TobaccoLabelHelper.getProductLabel(incoming);
+        String incomingLabel = contentLabel(incoming);
         if (!boxLabel.isEmpty() && !incomingLabel.isEmpty() && !boxLabel.equals(incomingLabel)) {
             return false;
         }
@@ -173,7 +206,7 @@ public class TobaccoBoxHelper {
         int moved = Math.min(Math.min(requested, incoming.getCount()), getCapacity(content) - count);
         if (moved <= 0) return 0;
 
-        String incomingLabel = TobaccoLabelHelper.getProductLabel(incoming);
+        String incomingLabel = contentLabel(incoming);
         setStored(box, content, count + moved);
         if (getLabel(box).isEmpty() && !incomingLabel.isEmpty()) {
             setLabel(box, incomingLabel);
@@ -343,6 +376,7 @@ public class TobaccoBoxHelper {
     }
 
     public static String getBlendLine(ItemStack stored) {
+        if (VaporData.isLiquidBottle(stored)) return getBlendComponent(stored).getString();
         if (stored.isEmpty()) return "";
 
         int quality10 = getDisplayQuality10(stored);
@@ -506,6 +540,7 @@ public class TobaccoBoxHelper {
     }
 
     public static Component getBoxContentsComponent(ItemStack stored) {
+        if (VaporData.isLiquidBottle(stored)) return getContentPluralComponent(stored);
         if (stored.isEmpty()) return Component.translatable("tobacconistmod.ui.empty");
 
         int quality100 = getDisplayQuality100(stored);
@@ -518,6 +553,12 @@ public class TobaccoBoxHelper {
     }
 
     public static Component getBlendComponent(ItemStack stored) {
+        if (VaporData.isLiquidBottle(stored)) {
+            MutableComponent out = Component.literal(VaporData.volume(stored) + " mB");
+            var blend = VaporData.blend(stored);
+            if (blend != null) for (Component description : VaporData.description(blend)) out.append(" · ").append(description);
+            return out;
+        }
         if (stored.isEmpty()) return Component.empty();
 
         int quality10 = getDisplayQuality10(stored);
@@ -552,6 +593,7 @@ public class TobaccoBoxHelper {
     }
 
     public static Component getContentPluralComponent(ItemStack content) {
+        if (VaporData.isLiquidBottle(content)) return Component.translatable("tobacconistmod.content.vape_liquid_bottles");
         if (content.is(ModItems.CIGAR.get())) return Component.translatable("tobacconistmod.content.cigars");
         if (content.is(ModItems.CIGARETTE.get())) return Component.translatable("tobacconistmod.content.cigarettes");
         if (content.is(ModItems.SHISHA_TOBACCO.get())) return Component.translatable("tobacconistmod.content.shisha_tobacco");
@@ -560,6 +602,7 @@ public class TobaccoBoxHelper {
     }
 
     public static String getBoxContentsLine(ItemStack stored) {
+        if (VaporData.isLiquidBottle(stored)) return getContentPluralComponent(stored).getString();
         if (stored.isEmpty()) return "Empty";
 
         int quality100 = getDisplayQuality100(stored);

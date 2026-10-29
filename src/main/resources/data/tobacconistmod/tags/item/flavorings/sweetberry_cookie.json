@@ -12,6 +12,10 @@
     {
       "id": "#c:foods/cookie/sweet_berry",
       "required": false
+    },
+    {
+      "id": "bakery:sweetberry_glazed_cookie",
+      "required": false
     }
   ]
 }

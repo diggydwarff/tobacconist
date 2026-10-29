@@ -1,0 +1,16 @@
+Liquid Recipe Card, alpha 5
+
+This is a pixel-preserving recolor of Create's 16x16 schematic item, using
+Minecraft paper's warm highlights and three short list marks. It is no longer
+the generated icon from alpha 4. The original schematic outline, alpha mask,
+folds and native 16x16 grid are retained.
+
+Sources: vanilla assets/minecraft/textures/item/paper.png and
+Create assets/create/textures/item/schematic.png, from the development JARs.
+Native output: assets/tobacconistmod/textures/item/liquid_recipe_card.png.
+Palette: muted sage green with warm paper highlights and dark green folds.
+
+Original Create artwork: Copyright (c) The Create Team / The Creators of Create.
+Create asset terms are separate from its code license:
+https://github.com/Creators-of-Create/Create/blob/mc1.21.1/dev/LICENSE.md
+Minecraft paper artwork belongs to Mojang/Microsoft.

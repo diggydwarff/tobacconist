@@ -1,5 +1,10 @@
 package com.diggydwarff.tobacconistmod.datagen.items.custom;
 
+import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
+import com.diggydwarff.tobacconistmod.util.SmokingDraws;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.UseAnim;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
@@ -16,8 +21,42 @@ public class HookahHoseItem extends Item {
     }
 
     @Override
+    public int getUseDuration(ItemStack stack, LivingEntity entity) {
+        return SmokingDraws.duration(stack);
+    }
+
+    @Override
+    public UseAnim getUseAnimation(ItemStack stack) {
+        return UseAnim.NONE;
+    }
+
+    @Override
+    public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingUseDuration) {
+        if (TobacconistConfig.areSmokingDrawAnimationsEnabled()) {
+            SmokingDraws.drawSound(level, entity, stack, getUseDuration(stack, entity) - remainingUseDuration);
+        }
+    }
+
+    @Override
+    public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
+        if (entity instanceof ServerPlayer player && player.isAlive()) SmokingDraws.finishHookah(player, stack, getUseDuration(stack, entity));
+        return stack;
+    }
+
+    @Override
+    public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
+        if (entity instanceof ServerPlayer player && player.isAlive()) {
+            SmokingDraws.finishHookah(player, stack, getUseDuration(stack, entity) - timeLeft);
+        }
+    }
+
+    protected String hoseTooltipKey() {
+        return "tobacconistmod.tooltip.hose.basic";
+    }
+
+    @Override
     public void appendHoverText(ItemStack stack, Item.TooltipContext worldIn, List<Component> tooltip, TooltipFlag flagIn){
-        tooltip.add(Component.translatable("tobacconistmod.tooltip.hose.basic").withStyle(ChatFormatting.AQUA));
+        tooltip.add(Component.translatable(hoseTooltipKey()).withStyle(ChatFormatting.AQUA));
 
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
     };

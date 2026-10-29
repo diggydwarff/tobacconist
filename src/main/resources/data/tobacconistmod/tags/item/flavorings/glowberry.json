@@ -53,6 +53,18 @@
     {
       "id": "#forge:berry/glow_berry",
       "required": false
+    },
+    {
+      "id": "bakery:glowberry_jam",
+      "required": false
+    },
+    {
+      "id": "bakery:glowberry_tart",
+      "required": false
+    },
+    {
+      "id": "bakery:glowberry_pie_slice",
+      "required": false
     }
   ]
 }

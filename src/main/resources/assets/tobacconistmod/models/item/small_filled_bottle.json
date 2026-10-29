@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "tobacconistmod:item/small_bottle_liquid",
+    "layer1": "tobacconistmod:item/small_filled_bottle_glass"
+  }
+}

@@ -26,7 +26,7 @@
       "required": false
     },
     {
-      "id": "herbalbrews:tea_blossoms",
+      "id": "herbalbrews:tea_blossom",
       "required": false
     },
     {
@@ -63,6 +63,14 @@
     },
     {
       "id": "#forge:tea_leaves",
+      "required": false
+    },
+    {
+      "id": "herbalbrews:rooibos_leaf",
+      "required": false
+    },
+    {
+      "id": "herbalbrews:yerba_mate_leaf",
       "required": false
     }
   ]

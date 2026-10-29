@@ -1,0 +1,49 @@
+{
+  "parent": "tobacconistmod:novelty/across_the_realms",
+  "display": {
+    "icon": {
+      "id": "tobacconistmod:echo_pipe"
+    },
+    "title": {
+      "translate": "advancement.tobacconistmod.novelty.hidden_histories"
+    },
+    "description": {
+      "translate": "advancement.tobacconistmod.novelty.hidden_histories.desc"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "sun": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tobacconistmod:sunkeepers_pipe"
+          }
+        ]
+      }
+    },
+    "echo": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tobacconistmod:echo_pipe"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "sun"
+    ],
+    [
+      "echo"
+    ]
+  ],
+  "sends_telemetry_event": false
+}
