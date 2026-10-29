@@ -109,10 +109,11 @@ public final class NoveltyParticle extends TextureSheetParticle {
         // Sample the opaque center of the native sprite to produce crisp rectangular paper.
         float u0 = Mth.lerp(.45F,getU0(),getU1()), u1 = Mth.lerp(.55F,getU0(),getU1());
         float v0 = Mth.lerp(.45F,getV0(),getV1()), v1 = Mth.lerp(.55F,getV0(),getV1());
-        paperVertex(out,rotation,center, 1,-fold,u1,v1,partial);
-        paperVertex(out,rotation,center, 1, fold,u1,v0,partial);
-        paperVertex(out,rotation,center,-1, fold,u0,v0,partial);
-        paperVertex(out,rotation,center,-1,-fold,u0,v1,partial);
+        // Match vanilla particle winding so back-face culling keeps the paper visible.
+        paperVertex(out,rotation,center,-1,-fold,u1,v1,partial);
+        paperVertex(out,rotation,center,-1, fold,u1,v0,partial);
+        paperVertex(out,rotation,center, 1, fold,u0,v0,partial);
+        paperVertex(out,rotation,center, 1,-fold,u0,v1,partial);
     }
     private void paperVertex(VertexConsumer out, Quaternionf rotation, Vec3 center, float vx,float vy,float u,float v,float partial) {
         Vector3f point = new Vector3f(vx*quadSize,vy*quadSize*.55F,0).rotate(rotation).add((float)center.x,(float)center.y,(float)center.z);
