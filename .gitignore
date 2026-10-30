@@ -23,3 +23,7 @@ run
 
 # Files from Forge MDK
 forge*changelog.txt
+
+# Isolated backport validation worlds and client captures
+run-audit-*/
+run-client-*/

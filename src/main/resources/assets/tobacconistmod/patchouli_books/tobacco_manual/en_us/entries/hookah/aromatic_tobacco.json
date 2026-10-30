@@ -11,13 +11,7 @@
     {
       "type": "patchouli:text",
       "title": "Metadata",
-      "text": "Aromatic casing preserves the tobacco’s variety or blend identity, quality, cure, cut, fermentation, age, ruined state, and other processing data. The flavor becomes part of the tobacco component identity used by blending and filtering."
-    },
-    {
-      "type": "patchouli:text",
-      "title": "Create Spout",
-      "text": "With Create installed, a Spout applies the same casing using $(item)250 mB$() of the matching Flavoring Essence fluid.",
-      "flag": "mod:create"
+      "text": "Aromatic casing preserves the tobacco\u2019s variety or blend identity, quality, cure, cut, fermentation, age, ruined state, and other processing data. The flavor becomes part of the tobacco component identity used by blending and filtering."
     },
     {
       "type": "patchouli:relations",

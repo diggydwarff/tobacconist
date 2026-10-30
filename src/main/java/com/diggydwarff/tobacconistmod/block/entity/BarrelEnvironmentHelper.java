@@ -19,7 +19,8 @@ public class BarrelEnvironmentHelper {
         var biome = level.getBiome(pos).value();
 
         float temperature = biome.getBaseTemperature();
-        var precipitation = biome.getPrecipitationAt(pos);
+        var precipitation = (biome.getPrecipitation() == Biome.Precipitation.NONE ? Biome.Precipitation.NONE
+                : biome.coldEnoughToSnow(pos) ? Biome.Precipitation.SNOW : Biome.Precipitation.RAIN);
 
         int humidity = 0;
 

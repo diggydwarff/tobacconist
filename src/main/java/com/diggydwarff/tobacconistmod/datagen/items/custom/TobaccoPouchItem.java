@@ -5,7 +5,7 @@ import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoText;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -88,7 +88,7 @@ public class TobaccoPouchItem extends Item implements DyeableLeatherItem {
 
         CompoundTag tag = LegacyItemTags.getOrCreateTag(pouch);
         if (stored.isEmpty()) {
-            tag.putString(TAG_ITEM, BuiltInRegistries.ITEM.getKey(tobacco.getItem()).toString());
+            tag.putString(TAG_ITEM, Registry.ITEM.getKey(tobacco.getItem()).toString());
             CompoundTag tobaccoData = LegacyItemTags.getTag(tobacco);
             if (tobaccoData != null) {
                 tag.put(TAG_DATA, tobaccoData.copy());
@@ -137,9 +137,9 @@ public class TobaccoPouchItem extends Item implements DyeableLeatherItem {
         if (tag == null || !tag.contains(TAG_ITEM) || getStoredCount(pouch) <= 0) return ItemStack.EMPTY;
 
         ResourceLocation id = ResourceLocation.tryParse(tag.getString(TAG_ITEM));
-        if (id == null || !BuiltInRegistries.ITEM.containsKey(id)) return ItemStack.EMPTY;
+        if (id == null || !Registry.ITEM.containsKey(id)) return ItemStack.EMPTY;
 
-        ItemStack stack = new ItemStack(BuiltInRegistries.ITEM.get(id));
+        ItemStack stack = new ItemStack(Registry.ITEM.get(id));
         if (tag.contains(TAG_DATA)) {
             LegacyItemTags.setTag(stack, tag.getCompound(TAG_DATA).copy());
         }

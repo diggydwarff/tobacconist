@@ -46,7 +46,7 @@ public class FlueFireboxMenu extends AbstractContainerMenu {
 
     private static Container getBlockEntityContainer(Inventory playerInventory, FriendlyByteBuf buf) {
         var pos = buf.readBlockPos();
-        if (playerInventory.player.level().getBlockEntity(pos) instanceof FlueFireboxBlockEntity be) {
+        if (playerInventory.player.level.getBlockEntity(pos) instanceof FlueFireboxBlockEntity be) {
             return be;
         }
         return new SimpleContainer(1);

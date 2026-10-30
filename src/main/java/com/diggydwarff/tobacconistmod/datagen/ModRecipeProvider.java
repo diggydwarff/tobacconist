@@ -1,6 +1,6 @@
 package com.diggydwarff.tobacconistmod.datagen;
 
-import net.minecraft.data.PackOutput;
+import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
@@ -8,12 +8,12 @@ import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
 import java.util.function.Consumer;
 
 public class ModRecipeProvider extends RecipeProvider implements IConditionBuilder {
-    public ModRecipeProvider(PackOutput output) {
+    public ModRecipeProvider(DataGenerator output) {
         super(output);
     }
 
     @Override
-    protected void buildRecipes(Consumer<FinishedRecipe> output) {
+    protected void buildCraftingRecipes(Consumer<FinishedRecipe> output) {
         // Runtime recipe JSONs are already shipped under data/tobacconistmod/recipes.
     }
 }

@@ -10,7 +10,6 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -18,8 +17,8 @@ import net.minecraft.world.level.Level;
 
 /** One full essence bottle flavors one full bottle of plain molasses. */
 public final class FlavorMolassesRecipe extends CustomRecipe {
-    public FlavorMolassesRecipe(ResourceLocation id, CraftingBookCategory category) {
-        super(id, category);
+    public FlavorMolassesRecipe(ResourceLocation id) {
+        super(id);
     }
 
     @Override
@@ -28,7 +27,7 @@ public final class FlavorMolassesRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer input, RegistryAccess registries) {
+    public ItemStack assemble(CraftingContainer input) {
         BottledMolassesFlavors flavor = findFlavor(input);
         return flavor == null ? ItemStack.EMPTY : flavor.getStack();
     }

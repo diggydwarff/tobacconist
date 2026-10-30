@@ -3,7 +3,7 @@ package com.diggydwarff.tobacconistmod.util;
 import net.minecraft.ChatFormatting;
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelBlockEntity;
 import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -360,8 +360,8 @@ public final class TobaccoBlendHelper {
     private static Component configuredEffectComponent(TobacconistConfig.ConfiguredSmokingEffect effect) {
         ResourceLocation id = ResourceLocation.tryParse(effect.effectId());
         MutableComponent base;
-        if (id != null && BuiltInRegistries.MOB_EFFECT.containsKey(id)) {
-            base = Component.translatable(BuiltInRegistries.MOB_EFFECT.get(id).getDescriptionId());
+        if (id != null && Registry.MOB_EFFECT.containsKey(id)) {
+            base = Component.translatable(Registry.MOB_EFFECT.get(id).getDescriptionId());
         } else {
             base = Component.literal(effect.effectId());
         }

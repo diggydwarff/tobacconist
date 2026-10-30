@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "The crafting grid can $(thing)average$() 2–8 compatible tobacco items. This is useful for small lots with different quality values that would not otherwise stack."
+      "text": "The crafting grid can $(thing)average$() 2\u20138 compatible tobacco items. This is useful for small lots with different quality values that would not otherwise stack."
     },
     {
       "type": "patchouli:text",
@@ -16,17 +16,17 @@
     {
       "type": "patchouli:text",
       "title": "Create Homogenization",
-      "text": "With Create installed, a Mechanical Mixer over a Basin can standardize compatible raw or cured leaves in bulk. A Mixer cycle only starts when its selected batch contains $(thing)at least two different quality values$(). Variety/item and all non-quality processing data must match."
+      "text": "A Mixer cycle only starts when its selected batch contains $(thing)at least two different quality values$(). Variety/item and all non-quality processing data must match."
     },
     {
       "type": "patchouli:text",
       "title": "Batch Quality",
-      "text": "Create homogenization uses a $(thing)count-weighted average$() and rounds $(thing)down$() to a whole quality so a Mixer can never manufacture quality points. Every leaf in that Mixer cycle leaves at the same quality. Already-uniform tobacco is not pointlessly remixed."
+      "text": "Every leaf in that Mixer cycle leaves at the same quality. Already-uniform tobacco is not pointlessly remixed."
     },
     {
       "type": "patchouli:text",
       "title": "Redstone Batch Control",
-      "text": "Signal 0 keeps the default $(thing)64-leaf$() target. Power either the $(thing)Mixer or Basin$(); if both are powered, the stronger signal wins. Signals 1–14 select 16/32/48/64/96/128/160/192/256/320/384/448/512/576 leaves."
+      "text": "Signal 0 keeps the default $(thing)64-leaf$() target. Power either the $(thing)Mixer or Basin$(); if both are powered, the stronger signal wins. Signals 1\u201314 select 16/32/48/64/96/128/160/192/256/320/384/448/512/576 leaves."
     },
     {
       "type": "patchouli:text",
@@ -46,12 +46,12 @@
     {
       "type": "patchouli:text",
       "title": "Grading First",
-      "text": "Create quality Attributes can siphon unusually low or premium leaves away before homogenizing. This lets a factory standardize the normal crop range without sacrificing rare high-quality tobacco or letting extreme low outliers drag down the bulk lot."
+      "text": "This lets a factory standardize the normal crop range without sacrificing rare high-quality tobacco or letting extreme low outliers drag down the bulk lot."
     },
     {
       "type": "patchouli:text",
       "title": "Averaging vs Crating",
-      "text": "Homogenizing standardizes quality. Tobacco Crates do not: a full 3×3 grid stores nine units of the same tobacco item losslessly, preserving each unit’s own NBT/components until the crate is broken."
+      "text": "Homogenizing standardizes quality. Tobacco Crates do not: a full 3\u00d73 grid stores nine units of the same tobacco item losslessly, preserving each unit\u2019s own NBT/components until the crate is broken."
     },
     {
       "type": "patchouli:relations",

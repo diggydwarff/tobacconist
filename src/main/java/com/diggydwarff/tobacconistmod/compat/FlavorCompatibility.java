@@ -2,8 +2,7 @@ package com.diggydwarff.tobacconistmod.compat;
 
 import com.diggydwarff.tobacconistmod.TobacconistMod;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.BottledMolassesFlavors;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -16,7 +15,7 @@ import java.util.List;
 public final class FlavorCompatibility {
     /** Plain molasses equivalents accepted by Tobacconist's dynamic flavoring recipe. */
     public static final TagKey<Item> PLAIN_MOLASSES = TagKey.create(
-            Registries.ITEM, new ResourceLocation(TobacconistMod.MODID, "plain_molasses"));
+            Registry.ITEM_REGISTRY, new ResourceLocation(TobacconistMod.MODID, "plain_molasses"));
 
     private FlavorCompatibility() {}
 
@@ -26,7 +25,7 @@ public final class FlavorCompatibility {
 
     public static List<ItemStack> getPlainMolassesStacks() {
         List<ItemStack> stacks = new ArrayList<>();
-        BuiltInRegistries.ITEM.getTag(PLAIN_MOLASSES).ifPresent(holders ->
+        Registry.ITEM.getTag(PLAIN_MOLASSES).ifPresent(holders ->
                 holders.forEach(holder -> stacks.add(new ItemStack(holder.value()))));
         if (stacks.isEmpty()) {
             stacks.add(BottledMolassesFlavors.BOTTLED_MOLASSES_PLAIN.getStack());
@@ -52,7 +51,7 @@ public final class FlavorCompatibility {
     }
 
     public static boolean hasFlavoringIngredient(BottledMolassesFlavors flavor) {
-        return BuiltInRegistries.ITEM.getTag(flavor.getFlavoringIngredientTag())
+        return Registry.ITEM.getTag(flavor.getFlavoringIngredientTag())
                 .map(holders -> holders.size() > 0)
                 .orElse(false);
     }

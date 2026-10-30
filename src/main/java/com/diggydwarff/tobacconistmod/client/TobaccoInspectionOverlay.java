@@ -19,7 +19,7 @@ import com.diggydwarff.tobacconistmod.util.TobaccoText;
 import net.minecraft.network.chat.Component;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import com.diggydwarff.tobacconistmod.backport.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
@@ -47,7 +47,8 @@ public final class TobaccoInspectionOverlay {
 
     private TobaccoInspectionOverlay() {}
 
-    public static void render(ForgeGui gui, GuiGraphics graphics, float partialTick, int screenWidth, int screenHeight) {
+    public static void render(ForgeGui gui, com.mojang.blaze3d.vertex.PoseStack backportPose, float partialTick, int screenWidth, int screenHeight) {
+        GuiGraphics graphics = new GuiGraphics(backportPose);
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.player == null || minecraft.level == null) return;
         if (minecraft.screen != null) return;

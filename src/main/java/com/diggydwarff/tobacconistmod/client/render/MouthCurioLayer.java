@@ -9,14 +9,14 @@ import com.diggydwarff.tobacconistmod.novelty.ToyPipeItem;
 import com.diggydwarff.tobacconistmod.vapor.BubblePipeItem;
 import com.diggydwarff.tobacconistmod.vapor.VapePenItem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
 import net.minecraft.world.item.ItemStack;
 
 /** One player layer for every mouth item. Curios stores the equipment; this layer draws it. */
@@ -54,8 +54,8 @@ public final class MouthCurioLayer extends RenderLayer<AbstractClientPlayer, Pla
         try {
             getParentModel().head.translateAndRotate(pose);
             applyPose(stack, pose);
-            itemRenderer.renderStatic(stack, ItemDisplayContext.FIXED, light, 0,
-                    pose, buffer, player.level(), player.getId());
+            itemRenderer.renderStatic(player, stack, TransformType.FIXED, false,
+                    pose, buffer, player.level, light, 0, player.getId());
         } finally {
             pose.popPose();
         }
@@ -78,10 +78,10 @@ public final class MouthCurioLayer extends RenderLayer<AbstractClientPlayer, Pla
 
     private static void legacyPose(PoseStack pose, float x, float y, float z, float angle, float size) {
         pose.translate(x,y,z);
-        pose.mulPose(Axis.XP.rotationDegrees(90F));
-        pose.mulPose(Axis.ZP.rotationDegrees(angle));
-        pose.mulPose(Axis.YP.rotationDegrees(-90F));
-        pose.mulPose(Axis.ZP.rotationDegrees(-90F));
+        pose.mulPose(Vector3f.XP.rotationDegrees(90F));
+        pose.mulPose(Vector3f.ZP.rotationDegrees(angle));
+        pose.mulPose(Vector3f.YP.rotationDegrees(-90F));
+        pose.mulPose(Vector3f.ZP.rotationDegrees(-90F));
         pose.scale(size,size,size);
     }
 }

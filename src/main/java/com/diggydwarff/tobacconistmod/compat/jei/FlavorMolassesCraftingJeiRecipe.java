@@ -5,7 +5,6 @@ import com.diggydwarff.tobacconistmod.compat.FlavorCompatibility;
 import com.diggydwarff.tobacconistmod.datagen.items.custom.BottledMolassesFlavors;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.ShapelessRecipe;
@@ -28,7 +27,7 @@ public final class FlavorMolassesCraftingJeiRecipe {
 
             recipes.add(new ShapelessRecipe(
                     new ResourceLocation(TobacconistMod.MODID, "jei/flavor_molasses/" + flavor.getFlavorPath()),
-                    "", CraftingBookCategory.MISC, flavor.getStack(), ingredients));
+                    "",  flavor.getStack(), ingredients));
         }
         return List.copyOf(recipes);
     }

@@ -12,8 +12,8 @@ import net.minecraft.world.phys.Vec3;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Camera;
 import net.minecraft.util.Mth;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -103,7 +103,8 @@ public final class NoveltyParticle extends TextureSheetParticle {
     }
     @Override public void render(VertexConsumer out, Camera camera, float partial) {
         if (style != NoveltyPattern.Style.PAPER) { super.render(out, camera, partial); return; }
-        Quaternionf rotation = new Quaternionf(camera.rotation()).rotateZ(Mth.lerp(partial, oRoll, roll));
+        Quaternion rotation = camera.rotation().copy();
+        rotation.mul(Vector3f.ZP.rotation(Mth.lerp(partial, oRoll, roll)));
         Vec3 center = new Vec3(Mth.lerp(partial,xo,x),Mth.lerp(partial,yo,y),Mth.lerp(partial,zo,z)).subtract(camera.getPosition());
         float fold = .35F + .65F * Math.abs((float)Math.cos((age+partial)*.17F+phase));
         // Sample the opaque center of the native sprite to produce crisp rectangular paper.
@@ -115,23 +116,25 @@ public final class NoveltyParticle extends TextureSheetParticle {
         paperVertex(out,rotation,center, 1, fold,u0,v0,partial);
         paperVertex(out,rotation,center, 1,-fold,u0,v1,partial);
     }
-    private void paperVertex(VertexConsumer out, Quaternionf rotation, Vec3 center, float vx,float vy,float u,float v,float partial) {
-        Vector3f point = new Vector3f(vx*quadSize,vy*quadSize*.55F,0).rotate(rotation).add((float)center.x,(float)center.y,(float)center.z);
-        out.vertex(point.x,point.y,point.z).uv(u,v).color(rCol,gCol,bCol,alpha).uv2(getLightColor(partial)).endVertex();
+    private void paperVertex(VertexConsumer out, Quaternion rotation, Vec3 center, float vx,float vy,float u,float v,float partial) {
+        Vector3f point = new Vector3f(vx*quadSize,vy*quadSize*.55F,0);
+        point.transform(rotation);
+        point.add((float)center.x,(float)center.y,(float)center.z);
+        out.vertex(point.x(),point.y(),point.z()).uv(u,v).color(rCol,gCol,bCol,alpha).uv2(getLightColor(partial)).endVertex();
     }
     public static void providers(RegisterParticleProvidersEvent event) {
-        event.registerSpriteSet(NoveltyContent.CONFETTI_PARTICLE.get(), sprites -> provider(NoveltyPattern.Style.PAPER, sprites));
-        event.registerSpriteSet(NoveltyContent.RING_PARTICLE.get(), sprites -> provider(NoveltyPattern.Style.RING, sprites));
-        event.registerSpriteSet(NoveltyContent.SOUL_PARTICLE.get(), sprites -> provider(NoveltyPattern.Style.SOUL, sprites));
-        event.registerSpriteSet(NoveltyContent.SOUL_MOTE_PARTICLE.get(), sprites -> provider(NoveltyPattern.Style.SOUL_MOTE, sprites));
-        event.registerSpriteSet(NoveltyContent.STAR_PARTICLE.get(), sprites -> provider(NoveltyPattern.Style.STAR, sprites));
-        event.registerSpriteSet(NoveltyContent.PETAL_PARTICLE.get(), sprites -> provider(NoveltyPattern.Style.PETAL, sprites));
-        event.registerSpriteSet(NoveltyContent.NOTE_PARTICLE.get(), sprites -> provider(NoveltyPattern.Style.NOTE, sprites));
-        event.registerSpriteSet(NoveltyContent.SUN_PARTICLE.get(), sprites -> provider(NoveltyPattern.Style.SUN_SMOKE, sprites));
-        event.registerSpriteSet(NoveltyContent.ECHO_PARTICLE.get(), sprites -> provider(NoveltyPattern.Style.ECHO_PULSE, sprites));
-        event.registerSpriteSet(NoveltyContent.SOUL_EMBER_PARTICLE.get(), sprites -> provider(NoveltyPattern.Style.SOUL_EMBER, sprites));
-        event.registerSpriteSet(NoveltyContent.SUN_GLEAM_PARTICLE.get(), sprites -> provider(NoveltyPattern.Style.SUN_GLEAM, sprites));
-        event.registerSpriteSet(NoveltyContent.ECHO_MOTE_PARTICLE.get(), sprites -> provider(NoveltyPattern.Style.ECHO_MOTE, sprites));
+        event.register(NoveltyContent.CONFETTI_PARTICLE.get(), sprites -> provider(NoveltyPattern.Style.PAPER, sprites));
+        event.register(NoveltyContent.RING_PARTICLE.get(), sprites -> provider(NoveltyPattern.Style.RING, sprites));
+        event.register(NoveltyContent.SOUL_PARTICLE.get(), sprites -> provider(NoveltyPattern.Style.SOUL, sprites));
+        event.register(NoveltyContent.SOUL_MOTE_PARTICLE.get(), sprites -> provider(NoveltyPattern.Style.SOUL_MOTE, sprites));
+        event.register(NoveltyContent.STAR_PARTICLE.get(), sprites -> provider(NoveltyPattern.Style.STAR, sprites));
+        event.register(NoveltyContent.PETAL_PARTICLE.get(), sprites -> provider(NoveltyPattern.Style.PETAL, sprites));
+        event.register(NoveltyContent.NOTE_PARTICLE.get(), sprites -> provider(NoveltyPattern.Style.NOTE, sprites));
+        event.register(NoveltyContent.SUN_PARTICLE.get(), sprites -> provider(NoveltyPattern.Style.SUN_SMOKE, sprites));
+        event.register(NoveltyContent.ECHO_PARTICLE.get(), sprites -> provider(NoveltyPattern.Style.ECHO_PULSE, sprites));
+        event.register(NoveltyContent.SOUL_EMBER_PARTICLE.get(), sprites -> provider(NoveltyPattern.Style.SOUL_EMBER, sprites));
+        event.register(NoveltyContent.SUN_GLEAM_PARTICLE.get(), sprites -> provider(NoveltyPattern.Style.SUN_GLEAM, sprites));
+        event.register(NoveltyContent.ECHO_MOTE_PARTICLE.get(), sprites -> provider(NoveltyPattern.Style.ECHO_MOTE, sprites));
     }
     private static ParticleProvider<SimpleParticleType> provider(NoveltyPattern.Style style, SpriteSet sprites) {
         SPRITES.put(style, sprites);

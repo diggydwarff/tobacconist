@@ -7,7 +7,7 @@
     {
       "type": "patchouli:text",
       "title": "Crafted Pipes",
-      "text": "The $(item)Brass Smoking Pipe$() uses normal loose tobacco, pouch packing and puff rules. Its recipe needs brass ingots supplied by Create or another compatible mod. The $(thing)Bubble, Confetti, Petal and Whistling Pipes$() are reusable toys: they use no tobacco and apply no nicotine effects. Hold use for at least four ticks, then release; a full draw takes 30 ticks. Each successful blow spends one of 24 charges. Sneak-use with the refill ingredient in your other hand."
+      "text": "The $(item)Brass Smoking Pipe$() uses normal loose tobacco, pouch packing and puff rules. The $(thing)Bubble, Confetti, Petal and Whistling Pipes$() are reusable toys: they use no tobacco and apply no nicotine effects. Hold use for at least four ticks, then release; a full draw takes 30 ticks. Each successful blow spends one of 24 charges. Sneak-use with the refill ingredient in your other hand."
     },
     {
       "type": "patchouli:crafting",
@@ -43,7 +43,7 @@
     {
       "type": "patchouli:text",
       "title": "Rare Finds",
-      "text": "$(item)Wizard’s Longpipe$(): Dungeon and Mineshaft chests. $(br2)$(item)Sunkeeper’s Pipe$(): Desert Pyramid chests. $(br2)Each eligible chest has a default 4% chance to contain its rare pipe. Loot is added alongside the normal chest contents. Server configuration can change these chances or disable collectible pipe loot."
+      "text": "$(item)Wizard\u2019s Longpipe$(): Dungeon and Mineshaft chests. $(br2)$(item)Sunkeeper\u2019s Pipe$(): Desert Pyramid chests. $(br2)Each eligible chest has a default 4% chance to contain its rare pipe. Loot is added alongside the normal chest contents. Server configuration can change these chances or disable collectible pipe loot."
     },
     {
       "type": "patchouli:text",

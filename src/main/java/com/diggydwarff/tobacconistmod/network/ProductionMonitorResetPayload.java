@@ -29,7 +29,7 @@ public record ProductionMonitorResetPayload(BlockPos pos) {
                     payload.pos().getZ() + 0.5D) > 64.0D) {
                 return;
             }
-            if (player.serverLevel().getBlockEntity(payload.pos()) instanceof ProductionMonitorBlockEntity monitor) {
+            if (player.getLevel().getBlockEntity(payload.pos()) instanceof ProductionMonitorBlockEntity monitor) {
                 monitor.resetAccumulatedCount();
             }
         });

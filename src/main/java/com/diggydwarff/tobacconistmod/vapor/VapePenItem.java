@@ -124,7 +124,7 @@ public final class VapePenItem extends Item implements net.minecraft.world.item.
                 && volume(stack) >= liquidCost(stack, 6) && charge(stack) >= chargeCost(stack, 6);
     }
     public boolean puffFromMouth(ServerPlayer player, ItemStack stack, float strength) {
-        return isCigalike(stack) && puff(stack, player.serverLevel(), player, Math.round(com.diggydwarff.tobacconistmod.backport.BackportMath.clamp(strength, 0F, 1F) * 40));
+        return isCigalike(stack) && puff(stack, player.getLevel(), player, Math.round(com.diggydwarff.tobacconistmod.backport.BackportMath.clamp(strength, 0F, 1F) * 40));
     }
     @Override public void appendHoverText(ItemStack stack, Level context, List<Component> tooltip, TooltipFlag flag) {
         LiquidBlend blend = VaporData.blend(stack);

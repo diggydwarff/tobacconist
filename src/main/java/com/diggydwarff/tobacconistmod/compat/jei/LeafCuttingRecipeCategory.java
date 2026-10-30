@@ -13,7 +13,7 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import com.diggydwarff.tobacconistmod.backport.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -77,17 +77,18 @@ public class LeafCuttingRecipeCategory implements IRecipeCategory<LeafCuttingJei
     }
 
     @Override
-    public void draw(LeafCuttingJeiRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics,
+    public void draw(LeafCuttingJeiRecipe recipe, IRecipeSlotsView recipeSlotsView, com.mojang.blaze3d.vertex.PoseStack backportPose,
                      double mouseX, double mouseY) {
+        GuiGraphics guiGraphics = new GuiGraphics(backportPose);
         Minecraft mc = Minecraft.getInstance();
 
         for (int y = 0; y < 3; y++) {
             for (int x = 0; x < 3; x++) {
-                slot.draw(guiGraphics, gridX(x) - 1, gridY(y) - 1);
+                slot.draw(guiGraphics.pose(), gridX(x) - 1, gridY(y) - 1);
             }
         }
 
-        slot.draw(guiGraphics, 93, 29);
+        slot.draw(guiGraphics.pose(), 93, 29);
 
         guiGraphics.drawString(mc.font,
                 TobaccoText.cut(recipe.cutType()),

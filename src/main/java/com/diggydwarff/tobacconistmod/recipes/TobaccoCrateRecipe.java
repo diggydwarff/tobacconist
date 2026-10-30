@@ -4,7 +4,6 @@ import net.minecraft.resources.ResourceLocation;
 import com.diggydwarff.tobacconistmod.util.TobaccoCrateHelper;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -15,8 +14,8 @@ import java.util.List;
 
 /** Nine units of the same tobacco item form a crate; their per-stack metadata may differ. */
 public class TobaccoCrateRecipe extends CustomRecipe {
-    public TobaccoCrateRecipe(ResourceLocation id, CraftingBookCategory category) {
-        super(id, category);
+    public TobaccoCrateRecipe(ResourceLocation id) {
+        super(id);
     }
 
     @Override
@@ -40,7 +39,7 @@ public class TobaccoCrateRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer input, RegistryAccess registries) {
+    public ItemStack assemble(CraftingContainer input) {
         List<ItemStack> contents = new ArrayList<>(TobaccoCrateHelper.CAPACITY);
         ItemStack first = ItemStack.EMPTY;
 
@@ -48,7 +47,7 @@ public class TobaccoCrateRecipe extends CustomRecipe {
             ItemStack stack = input.getItem(i);
             if (stack.isEmpty()) continue;
             if (first.isEmpty()) first = stack;
-            contents.add(stack.copyWithCount(1));
+            contents.add(com.diggydwarff.tobacconistmod.backport.BackportStacks.copyWithCount(stack, 1));
         }
 
         if (first.isEmpty() || contents.size() != TobaccoCrateHelper.CAPACITY) return ItemStack.EMPTY;

@@ -6,7 +6,7 @@ import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.datagen.items.ModTags;
 import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
 import com.diggydwarff.tobacconistmod.backport.DataComponents;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -83,7 +83,7 @@ public class TobaccoBoxHelper {
      */
     private static CompoundTag writeStoredStack(ItemStack stack) {
         CompoundTag stored = new CompoundTag();
-        ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
+        ResourceLocation id = Registry.ITEM.getKey(stack.getItem());
         stored.putString("id", id.toString());
         if (stack.getDamageValue() > 0) {
             stored.putInt("Damage", stack.getDamageValue());
@@ -106,7 +106,7 @@ public class TobaccoBoxHelper {
         ResourceLocation id = ResourceLocation.tryParse(stored.getString("id"));
         if (id == null) return ItemStack.EMPTY;
 
-        Item item = BuiltInRegistries.ITEM.get(id);
+        Item item = Registry.ITEM.get(id);
         if (item == null || item == net.minecraft.world.item.Items.AIR) return ItemStack.EMPTY;
 
         ItemStack result = new ItemStack(item);

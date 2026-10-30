@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.Supplier;
@@ -24,7 +24,7 @@ public class ModBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, TobacconistMod.MODID);
 
     public static final Supplier<Block> HOOKAH = registerSingleStackBlock("hookah_block",
-            () -> new HookahBlock(BlockBehaviour.Properties.of()
+            () -> new HookahBlock(BlockBehaviour.Properties.of(net.minecraft.world.level.material.Material.METAL)
                     .strength(0.8F)
                     .sound(SoundType.METAL)
                     .lightLevel(state -> {
@@ -86,7 +86,7 @@ public class ModBlocks {
                     .lightLevel(state -> state.hasProperty(DoubleHookahBlock.LIT) && state.getValue(DoubleHookahBlock.LIT) ? 8 : 3)));
 
     private static BlockBehaviour.Properties hookahProperties() {
-        return BlockBehaviour.Properties.of()
+        return BlockBehaviour.Properties.of(net.minecraft.world.level.material.Material.METAL)
                 .strength(0.8F)
                 .sound(SoundType.METAL)
                 .lightLevel(state -> state.hasProperty(DoubleHookahBlock.LIT) && state.getValue(DoubleHookahBlock.LIT) ? 6 : 0)
@@ -94,10 +94,10 @@ public class ModBlocks {
     }
 
     public static final Supplier<Block> TOBACCO_DRYING_RACK = registerBlock("tobacco_drying_rack_block",
-            () -> new TobaccoDryingRackBlock(BlockBehaviour.Properties.of().strength(0.8F).sound(SoundType.WOOD).noOcclusion()));
+            () -> new TobaccoDryingRackBlock(BlockBehaviour.Properties.of(net.minecraft.world.level.material.Material.WOOD).strength(0.8F).sound(SoundType.WOOD).noOcclusion()));
 
     public static final Supplier<Block> INDUSTRIAL_DRYING_RACK = registerBlock("industrial_drying_rack",
-            () -> new IndustrialDryingRackBlock(BlockBehaviour.Properties.of()
+            () -> new IndustrialDryingRackBlock(BlockBehaviour.Properties.of(net.minecraft.world.level.material.Material.METAL)
                     .strength(2.5F, 6.0F)
                     .sound(SoundType.METAL)
                     .noOcclusion()));
@@ -105,14 +105,14 @@ public class ModBlocks {
     // Deferred for a later visual-polish update: keep the block implementation registered for
     // development, but intentionally expose no BlockItem/recipe/creative entry in 4.0.0.
     public static final Supplier<Block> GLASS_ASHTRAY = BLOCKS.register("glass_ashtray",
-            () -> new GlassAshtrayBlock(BlockBehaviour.Properties.of()
+            () -> new GlassAshtrayBlock(BlockBehaviour.Properties.of(net.minecraft.world.level.material.Material.GLASS)
                     .strength(0.3F)
                     .sound(SoundType.GLASS)
                     .noOcclusion()));
 
     // Traditional hanging option: placed directly from a stack of 16 raw or cured leaves, so it has no BlockItem.
     public static final Supplier<Block> HANGING_TOBACCO_LEAVES = BLOCKS.register("hanging_tobacco_leaves",
-            () -> new HangingTobaccoBlock(BlockBehaviour.Properties.of()
+            () -> new HangingTobaccoBlock(BlockBehaviour.Properties.of(net.minecraft.world.level.material.Material.PLANT)
                     .strength(0.35F)
                     .sound(SoundType.GRASS)
                     .noOcclusion()
@@ -151,101 +151,101 @@ public class ModBlocks {
 
 
     public static final Supplier<Block> RAW_VIRGINIA_TOBACCO_CRATE = registerBlock("raw_virginia_tobacco_crate",
-            () -> new TobaccoCrateBlock(BlockBehaviour.Properties.of()
+            () -> new TobaccoCrateBlock(BlockBehaviour.Properties.of(net.minecraft.world.level.material.Material.WOOD)
                     .strength(1.0F)
                     .sound(SoundType.WOOD)
                     .noOcclusion()
             ));
 
     public static final Supplier<Block> RAW_BURLEY_TOBACCO_CRATE = registerBlock("raw_burley_tobacco_crate",
-            () -> new TobaccoCrateBlock(BlockBehaviour.Properties.of()
+            () -> new TobaccoCrateBlock(BlockBehaviour.Properties.of(net.minecraft.world.level.material.Material.WOOD)
                     .strength(1.0F)
                     .sound(SoundType.WOOD)
                     .noOcclusion()
             ));
 
     public static final Supplier<Block> RAW_ORIENTAL_TOBACCO_CRATE = registerBlock("raw_oriental_tobacco_crate",
-            () -> new TobaccoCrateBlock(BlockBehaviour.Properties.of()
+            () -> new TobaccoCrateBlock(BlockBehaviour.Properties.of(net.minecraft.world.level.material.Material.WOOD)
                     .strength(1.0F)
                     .sound(SoundType.WOOD)
                     .noOcclusion()
             ));
 
     public static final Supplier<Block> RAW_DOKHA_TOBACCO_CRATE = registerBlock("raw_dokha_tobacco_crate",
-            () -> new TobaccoCrateBlock(BlockBehaviour.Properties.of()
+            () -> new TobaccoCrateBlock(BlockBehaviour.Properties.of(net.minecraft.world.level.material.Material.WOOD)
                     .strength(1.0F)
                     .sound(SoundType.WOOD)
                     .noOcclusion()
             ));
 
     public static final Supplier<Block> RAW_SHADE_TOBACCO_CRATE = registerBlock("raw_shade_tobacco_crate",
-            () -> new TobaccoCrateBlock(BlockBehaviour.Properties.of()
+            () -> new TobaccoCrateBlock(BlockBehaviour.Properties.of(net.minecraft.world.level.material.Material.WOOD)
                     .strength(1.0F)
                     .sound(SoundType.WOOD)
                     .noOcclusion()
             ));
 
     public static final Supplier<Block> RAW_WILD_TOBACCO_CRATE = registerBlock("raw_wild_tobacco_crate",
-            () -> new TobaccoCrateBlock(BlockBehaviour.Properties.of()
+            () -> new TobaccoCrateBlock(BlockBehaviour.Properties.of(net.minecraft.world.level.material.Material.WOOD)
                     .strength(1.0F)
                     .sound(SoundType.WOOD)
                     .noOcclusion()
             ));
 
     public static final Supplier<Block> VIRGINIA_TOBACCO_CRATE = registerBlock("virginia_tobacco_crate",
-            () -> new TobaccoCrateBlock(BlockBehaviour.Properties.of()
+            () -> new TobaccoCrateBlock(BlockBehaviour.Properties.of(net.minecraft.world.level.material.Material.WOOD)
                     .strength(1.0F)
                     .sound(SoundType.WOOD)
                     .noOcclusion()
             ));
 
     public static final Supplier<Block> BURLEY_TOBACCO_CRATE = registerBlock("burley_tobacco_crate",
-            () -> new TobaccoCrateBlock(BlockBehaviour.Properties.of()
+            () -> new TobaccoCrateBlock(BlockBehaviour.Properties.of(net.minecraft.world.level.material.Material.WOOD)
                     .strength(1.0F)
                     .sound(SoundType.WOOD)
                     .noOcclusion()
             ));
 
     public static final Supplier<Block> ORIENTAL_TOBACCO_CRATE = registerBlock("oriental_tobacco_crate",
-            () -> new TobaccoCrateBlock(BlockBehaviour.Properties.of()
+            () -> new TobaccoCrateBlock(BlockBehaviour.Properties.of(net.minecraft.world.level.material.Material.WOOD)
                     .strength(1.0F)
                     .sound(SoundType.WOOD)
                     .noOcclusion()
             ));
 
     public static final Supplier<Block> DOKHA_TOBACCO_CRATE = registerBlock("dokha_tobacco_crate",
-            () -> new TobaccoCrateBlock(BlockBehaviour.Properties.of()
+            () -> new TobaccoCrateBlock(BlockBehaviour.Properties.of(net.minecraft.world.level.material.Material.WOOD)
                     .strength(1.0F)
                     .sound(SoundType.WOOD)
                     .noOcclusion()
             ));
 
     public static final Supplier<Block> SHADE_TOBACCO_CRATE = registerBlock("shade_tobacco_crate",
-            () -> new TobaccoCrateBlock(BlockBehaviour.Properties.of()
+            () -> new TobaccoCrateBlock(BlockBehaviour.Properties.of(net.minecraft.world.level.material.Material.WOOD)
                     .strength(1.0F)
                     .sound(SoundType.WOOD)
                     .noOcclusion()
             ));
 
     public static final Supplier<Block> WILD_TOBACCO_CRATE = registerBlock("wild_tobacco_crate",
-            () -> new TobaccoCrateBlock(BlockBehaviour.Properties.of()
+            () -> new TobaccoCrateBlock(BlockBehaviour.Properties.of(net.minecraft.world.level.material.Material.WOOD)
                     .strength(1.0F)
                     .sound(SoundType.WOOD)
                     .noOcclusion()
             ));
 
     public static final Supplier<Block> BLENDED_TOBACCO_CRATE = registerBlock("blended_tobacco_crate",
-            () -> new TobaccoCrateBlock(BlockBehaviour.Properties.of()
+            () -> new TobaccoCrateBlock(BlockBehaviour.Properties.of(net.minecraft.world.level.material.Material.WOOD)
                     .strength(1.0F)
                     .sound(SoundType.WOOD)
                     .noOcclusion()
             ));
 
     public static final Supplier<Block> TOBACCO_BARREL = registerBlock("tobacco_barrel",
-            () -> new TobaccoBarrelBlock(BlockBehaviour.Properties.of().strength(1.2F).sound(SoundType.WOOD)));
+            () -> new TobaccoBarrelBlock(BlockBehaviour.Properties.of(net.minecraft.world.level.material.Material.WOOD).strength(1.2F).sound(SoundType.WOOD)));
 
     public static final Supplier<Block> PRODUCTION_MONITOR = registerBlock("production_monitor",
-            () -> new ProductionMonitorBlock(BlockBehaviour.Properties.of()
+            () -> new ProductionMonitorBlock(BlockBehaviour.Properties.of(net.minecraft.world.level.material.Material.METAL)
                     .strength(2.0F, 6.0F)
                     .sound(SoundType.METAL)));
 
@@ -262,16 +262,16 @@ public class ModBlocks {
     }
 
     private static <T extends Block> Supplier<Item> registerBlockItem(String name, Supplier<T> block) {
-        return ModItems.ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties()));
+        return ModItems.ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties().tab(name.equals("industrial_drying_rack") ? null : com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB)));
     }
 
     private static <T extends Block> Supplier<Item> registerSingleStackBlockItem(String name, Supplier<T> block) {
-        return ModItems.ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties().stacksTo(1)));
+        return ModItems.ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties().tab(name.equals("industrial_drying_rack") ? null : com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).stacksTo(1)));
     }
 
     public static final Supplier<Block> FLUE_FIREBOX = registerBlock("flue_firebox",
             () -> new FlueFireboxBlock(net.minecraft.world.level.block.state.BlockBehaviour.Properties
-                    .of()
+                    .of(net.minecraft.world.level.material.Material.STONE)
                     .strength(1.5F)
                     .sound(SoundType.STONE)
                     .lightLevel(state -> state.getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.LIT) ? 13 : 0)));

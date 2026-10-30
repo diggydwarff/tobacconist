@@ -15,7 +15,7 @@ public class ModPlayerEvents {
     public static void onItemCrafted(PlayerEvent.ItemCraftedEvent event) {
         // Genuine players are hand-rolling and retain full quality. Forge FakePlayers represent
         // generic crafting automation and receive the configured penalty.
-        if (event.getEntity().level().isClientSide || !(event.getEntity() instanceof FakePlayer)) {
+        if (event.getEntity().level.isClientSide || !(event.getEntity() instanceof FakePlayer)) {
             return;
         }
         TobaccoProductQualityHelper.applyGenericAutomationPenalty(event.getCrafting());

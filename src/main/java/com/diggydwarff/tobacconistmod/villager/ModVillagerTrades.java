@@ -4,7 +4,7 @@ import net.minecraftforge.fml.common.Mod;
 import com.diggydwarff.tobacconistmod.TobacconistMod;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import net.minecraft.core.Holder;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.entity.Entity;
@@ -26,7 +26,7 @@ public class ModVillagerTrades {
 
     @SubscribeEvent
     public static void addTrades(VillagerTradesEvent event) {
-        var key = BuiltInRegistries.VILLAGER_PROFESSION.getKey(event.getType());
+        var key = Registry.VILLAGER_PROFESSION.getKey(event.getType());
         if (!new ResourceLocation(TobacconistMod.MODID, "tobacconist_master").equals(key)) return;
 
         // Two novice offers means both regional seed varieties are guaranteed on a normal Tobacconist.
@@ -94,7 +94,7 @@ public class ModVillagerTrades {
     }
 
     private static RegionalProfile profileFor(Entity trader) {
-        Holder<Biome> biome = trader.level().getBiome(trader.blockPosition());
+        Holder<Biome> biome = trader.level.getBiome(trader.blockPosition());
 
         // Check the most specific regional biome groups first.
         if (biome.is(BiomeTags.IS_BADLANDS)) {

@@ -2,9 +2,9 @@ package com.diggydwarff.tobacconistmod.recipes;
 
 import net.minecraftforge.registries.ForgeRegistries;
 import com.diggydwarff.tobacconistmod.TobacconistMod;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
+import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
 import net.minecraftforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
@@ -14,5 +14,5 @@ public class ModRecipeSerializers {
             DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, TobacconistMod.MODID);
 
     public static final Supplier<RecipeSerializer<WoodenPipeRecipe>> WOODEN_PIPE =
-            SERIALIZERS.register("wooden_pipe", () -> new SimpleCraftingRecipeSerializer<>(WoodenPipeRecipe::new));
+            SERIALIZERS.register("wooden_pipe", () -> new SimpleRecipeSerializer<>(WoodenPipeRecipe::new));
 }

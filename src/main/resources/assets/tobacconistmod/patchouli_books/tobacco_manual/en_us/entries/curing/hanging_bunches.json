@@ -11,7 +11,7 @@
     {
       "type": "patchouli:text",
       "title": "Same Tobacco Cure",
-      "text": "A hanging bunch uses the same base curing times, quality calculation, interruptions, rain damage, cure-color stages, and priority as the rack: $(thing)Fire → Flue → Sun → Air$(). Raw and finished bunches also keep visible variety-specific leaf coloration. Break either half to recover all 16 stored leaves with their processing data."
+      "text": "A hanging bunch uses the same base curing times, quality calculation, interruptions, rain damage, cure-color stages, and priority as the rack: $(thing)Fire \u2192 Flue \u2192 Sun \u2192 Air$(). Raw and finished bunches also keep visible variety-specific leaf coloration. Break either half to recover all 16 stored leaves with their processing data."
     },
     {
       "type": "patchouli:text",
@@ -26,7 +26,7 @@
     {
       "type": "patchouli:text",
       "title": "Traditional, Not Automated",
-      "text": "Hanging bunches are manual storage/curing blocks. They expose no hopper, funnel, Mechanical Arm, item capability, or Display Link source. Create fan airflow may still accelerate a valid curing environment. Use Drying Racks when item logistics and automated extraction matter."
+      "text": "Hanging bunches are manual storage/curing blocks. They expose no hopper, funnel, Mechanical Arm, item capability, or Display Link source. Use Drying Racks when item logistics and automated extraction matter."
     },
     {
       "type": "patchouli:relations",

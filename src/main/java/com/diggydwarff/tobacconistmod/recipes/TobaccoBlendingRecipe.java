@@ -4,7 +4,6 @@ import net.minecraft.resources.ResourceLocation;
 import com.diggydwarff.tobacconistmod.util.TobaccoBlendHelper;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -15,8 +14,8 @@ import java.util.List;
 
 /** Crafting-grid fallback for Create-independent tobacco blending. */
 public class TobaccoBlendingRecipe extends CustomRecipe {
-    public TobaccoBlendingRecipe(ResourceLocation id, CraftingBookCategory category) {
-        super(id, category);
+    public TobaccoBlendingRecipe(ResourceLocation id) {
+        super(id);
     }
 
     @Override
@@ -25,7 +24,7 @@ public class TobaccoBlendingRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer input, RegistryAccess registries) {
+    public ItemStack assemble(CraftingContainer input) {
         return TobaccoBlendHelper.blend(collect(input));
     }
 

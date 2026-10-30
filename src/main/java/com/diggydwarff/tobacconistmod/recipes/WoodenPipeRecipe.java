@@ -5,12 +5,11 @@ import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -22,11 +21,10 @@ public class WoodenPipeRecipe extends ShapedRecipe {
 
     public static final String NBT_WOOD_PLANK = "WoodPlank";
 
-    public WoodenPipeRecipe(ResourceLocation id, CraftingBookCategory category) {
+    public WoodenPipeRecipe(ResourceLocation id) {
         super(
                 id,
                 "",
-                category,
                 3,
                 3,
                 displayIngredients(),
@@ -69,9 +67,9 @@ public class WoodenPipeRecipe extends ShapedRecipe {
 
 
     @Override
-    public ItemStack assemble(CraftingContainer inv, RegistryAccess registries) {
+    public ItemStack assemble(CraftingContainer inv) {
         ItemStack out = new ItemStack(
-                BuiltInRegistries.ITEM.get(new ResourceLocation("tobacconistmod", "wooden_smoking_pipe"))
+                Registry.ITEM.get(new ResourceLocation("tobacconistmod", "wooden_smoking_pipe"))
         );
 
         // Pick the first plank stack found and store it
@@ -83,7 +81,7 @@ public class WoodenPipeRecipe extends ShapedRecipe {
 
         if (!plank.isEmpty()) {
             CompoundTag tag = LegacyItemTags.getOrCreateTag(out);
-            ResourceLocation plankId = BuiltInRegistries.ITEM.getKey(plank.getItem());
+            ResourceLocation plankId = Registry.ITEM.getKey(plank.getItem());
             tag.putString(NBT_WOOD_PLANK, plankId.toString());
         }
 

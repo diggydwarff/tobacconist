@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Flavoring Essence recipes use Tobacconist ingredient tags rather than depending on one specific food mod. Equivalent fruits, spices, herbs, coffee, and sweets from compatible mods can therefore make the same Essence in both the Brewing Stand and Create Mechanical Mixer."
+      "text": "Flavoring Essence recipes use Tobacconist ingredient tags rather than depending on one specific food mod."
     },
     {
       "type": "patchouli:text",

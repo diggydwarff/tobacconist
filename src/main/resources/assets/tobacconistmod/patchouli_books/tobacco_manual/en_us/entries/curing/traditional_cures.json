@@ -11,12 +11,12 @@
     {
       "type": "patchouli:text",
       "title": "Latakia",
-      "text": "Start with $(item)Sun-Cured Oriental$() leaf. Return it to a Drying Rack or hanging bunch and expose it to $(item)ordinary Campfire smoke$() for an extended finishing cycle. The result becomes $(thing)Latakia$(). With Create, smoking airflow from an Encased Fan can perform the same finish."
+      "text": "Start with $(item)Sun-Cured Oriental$() leaf. Return it to a Drying Rack or hanging bunch and expose it to $(item)ordinary Campfire smoke$() for an extended finishing cycle. The result becomes $(thing)Latakia$()."
     },
     {
       "type": "patchouli:text",
       "title": "Dark Fired Kentucky",
-      "text": "Start with $(item)Fire-Cured Burley$(). Give it a second, extended ordinary-smoke finish on a rack or hanging bunch to produce $(thing)Dark Fired Kentucky$(). Create smoking airflow is also valid."
+      "text": "Start with $(item)Fire-Cured Burley$(). Give it a second, extended ordinary-smoke finish on a rack or hanging bunch to produce $(thing)Dark Fired Kentucky$()."
     },
     {
       "type": "patchouli:text",

@@ -4,8 +4,7 @@ import com.diggydwarff.tobacconistmod.block.ModBlocks;
 import com.diggydwarff.tobacconistmod.block.custom.*;
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
-import net.minecraft.data.loot.BlockLootSubProvider;
-import net.minecraft.world.flag.FeatureFlags;
+import net.minecraft.data.loot.BlockLoot;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -20,13 +19,13 @@ import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Set;
 
-public class ModBlockLootTables extends BlockLootSubProvider {
+public class ModBlockLootTables extends BlockLoot {
     public ModBlockLootTables() {
-        super(Set.of(), FeatureFlags.REGISTRY.allFlags());
+        super();
     }
 
     @Override
-    protected void generate() {
+    protected void addTables() {
 
         // Utility/placeable blocks should drop themselves. Their block entities
         // handle dropping any stored contents separately.

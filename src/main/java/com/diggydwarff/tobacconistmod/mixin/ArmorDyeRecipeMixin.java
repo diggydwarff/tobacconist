@@ -24,13 +24,12 @@ import java.util.List;
 @Mixin(ArmorDyeRecipe.class)
 public abstract class ArmorDyeRecipeMixin {
     @Inject(
-            method = "assemble(Lnet/minecraft/world/inventory/CraftingContainer;Lnet/minecraft/core/RegistryAccess;)Lnet/minecraft/world/item/ItemStack;",
+            method = "assemble(Lnet/minecraft/world/inventory/CraftingContainer;)Lnet/minecraft/world/item/ItemStack;",
             at = @At("HEAD"),
             cancellable = true
     )
     private void tobacconist$recolorFresh(
             CraftingContainer input,
-            RegistryAccess registries,
             CallbackInfoReturnable<ItemStack> cir
     ) {
         ItemStack target = ItemStack.EMPTY;

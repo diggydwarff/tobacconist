@@ -12,8 +12,8 @@ import net.minecraft.world.level.Level;
 
 public class LabelDuplicateRecipe extends CustomRecipe {
 
-    public LabelDuplicateRecipe(ResourceLocation id, CraftingBookCategory category) {
-        super(id, category);
+    public LabelDuplicateRecipe(ResourceLocation id) {
+        super(id);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class LabelDuplicateRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer inv, RegistryAccess registries) {
+    public ItemStack assemble(CraftingContainer inv) {
         ItemStack named = ItemStack.EMPTY;
 
         for (int i = 0; i < inv.getContainerSize(); i++) {

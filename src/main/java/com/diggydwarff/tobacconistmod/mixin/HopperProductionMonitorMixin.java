@@ -63,7 +63,7 @@ public abstract class HopperProductionMonitorMixin {
         if (level == null || level.isClientSide) return;
 
         ProductionMonitorTransferHooks.notifySuccessfulTransfer(
-                level, hopper.getBlockPos(), before.copyWithCount(moved));
+                level, hopper.getBlockPos(), com.diggydwarff.tobacconistmod.backport.BackportStacks.copyWithCount(before, moved));
     }
 
     @Unique

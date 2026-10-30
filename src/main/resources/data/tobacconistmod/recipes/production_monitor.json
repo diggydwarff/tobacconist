@@ -1,43 +1,28 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
-    {
-      "conditions": [
-        {
-          "type": "forge:mod_loaded",
-          "modid": "create"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "category": "misc",
-        "pattern": [
-          "IEI",
-          "BPB",
-          "IRI"
-        ],
-        "key": {
-          "I": {
-            "item": "create:iron_sheet"
-          },
-          "E": {
-            "item": "create:electron_tube"
-          },
-          "B": {
-            "item": "create:brass_casing"
-          },
-          "P": {
-            "item": "create:precision_mechanism"
-          },
-          "R": {
-            "item": "minecraft:redstone"
-          }
-        },
-        "result": {
-          "item": "tobacconistmod:production_monitor",
-          "count": 1
-        }
-      }
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ICI",
+    "RGR",
+    "IHI"
+  ],
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "C": {
+      "item": "minecraft:comparator"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "G": {
+      "item": "minecraft:glass_pane"
+    },
+    "H": {
+      "item": "minecraft:hopper"
     }
-  ]
+  },
+  "result": {
+    "item": "tobacconistmod:production_monitor"
+  }
 }

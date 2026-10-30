@@ -10,7 +10,7 @@ import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoProductQualityHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoSpecialProcessingHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoSmokeData;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -98,7 +98,7 @@ public abstract class SmokingItem extends Item {
                 && canSmoke(stack)) {
             ItemStack used = stack.copy();
             float strength = SmokingDraws.strength(elapsed, used);
-            if (smokeFromMouthSlot(player, player.serverLevel(), stack, strength)) SmokingDraws.recover(player, used);
+            if (smokeFromMouthSlot(player, player.getLevel(), stack, strength)) SmokingDraws.recover(player, used);
         }
     }
 
@@ -257,7 +257,7 @@ public abstract class SmokingItem extends Item {
 
         for (TobacconistConfig.ConfiguredSmokingEffect configured : bonus.effects()) {
             try {
-                var effect = BuiltInRegistries.MOB_EFFECT.get(new ResourceLocation(configured.effectId()));
+                var effect = Registry.MOB_EFFECT.get(new ResourceLocation(configured.effectId()));
                 if (effect == null) continue;
                 player.addEffect(new MobEffectInstance(
                         effect,
@@ -288,7 +288,7 @@ public abstract class SmokingItem extends Item {
                 int duration = Integer.parseInt(parts[1].trim());
                 int amplifier = Integer.parseInt(parts[2].trim());
 
-                var effect = BuiltInRegistries.MOB_EFFECT.get(new ResourceLocation(effectId));
+                var effect = Registry.MOB_EFFECT.get(new ResourceLocation(effectId));
                 if (effect == null) continue;
 
                 player.addEffect(new MobEffectInstance(

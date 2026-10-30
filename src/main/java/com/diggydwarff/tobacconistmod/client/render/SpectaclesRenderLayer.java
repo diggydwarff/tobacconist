@@ -2,14 +2,14 @@ package com.diggydwarff.tobacconistmod.client.render;
 
 import com.diggydwarff.tobacconistmod.compat.SpectaclesEquipmentHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
 import net.minecraft.world.item.ItemStack;
 
 /** Renders the spectacles in the same forehead position for both vanilla HEAD and Curios Head equipment. */
@@ -45,19 +45,11 @@ public class SpectaclesRenderLayer extends RenderLayer<AbstractClientPlayer, Pla
 
         // Position the item model on the forehead.
         poseStack.translate(0.0F, -0.40F, -0.255F);
-        poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
+        poseStack.mulPose(Vector3f.YP.rotationDegrees(180.0F));
         poseStack.scale(0.52F, 0.52F, 0.52F);
 
-        itemRenderer.renderStatic(
-                spectacles,
-                ItemDisplayContext.FIXED,
-                packedLight,
-                0,
-                poseStack,
-                buffer,
-                player.level(),
-                player.getId()
-        );
+        itemRenderer.renderStatic(player, spectacles, TransformType.FIXED, false,
+                poseStack, buffer, player.level, packedLight, 0, player.getId());
 
         poseStack.popPose();
     }

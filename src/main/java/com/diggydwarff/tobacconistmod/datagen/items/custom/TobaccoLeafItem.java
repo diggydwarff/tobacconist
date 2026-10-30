@@ -58,7 +58,7 @@ public class TobaccoLeafItem extends Item {
         }
 
         if (!context.getLevel().isClientSide) {
-            ItemStack batch = stack.copyWithCount(16);
+            ItemStack batch = com.diggydwarff.tobacconistmod.backport.BackportStacks.copyWithCount(stack, 16);
             if (HangingTobaccoBlock.placeBundle(context.getLevel(), upperPos, batch)
                     && !player.getAbilities().instabuild) {
                 stack.shrink(16);

@@ -499,7 +499,7 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
         if (move <= 0) return 0;
 
         if (storedTobacco.isEmpty()) {
-            storedTobacco = stack.copyWithCount(move);
+            storedTobacco = com.diggydwarff.tobacconistmod.backport.BackportStacks.copyWithCount(stack, move);
             processTicks = 0;
             overheatTicks = 0;
             mode = TobaccoBarrelMode.IDLE;
@@ -528,7 +528,7 @@ public class TobaccoBarrelBlockEntity extends BlockEntity {
 
         int move = Math.min(amount, storedTobacco.getCount());
         if (simulate) {
-            return storedTobacco.copyWithCount(move);
+            return com.diggydwarff.tobacconistmod.backport.BackportStacks.copyWithCount(storedTobacco, move);
         }
 
         ItemStack out = storedTobacco.split(move);

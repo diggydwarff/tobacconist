@@ -6,7 +6,7 @@ import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
 import com.diggydwarff.tobacconistmod.datagen.items.ModTags;
 import com.diggydwarff.tobacconistmod.datagen.items.SmokingItem;
 import com.diggydwarff.tobacconistmod.recipes.WoodenPipeRecipe;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -46,7 +46,7 @@ public class WoodenSmokingPipeItem extends SmokingItem {
             String idString = tag.getString(WoodenPipeRecipe.NBT_WOOD_PLANK);
             ResourceLocation id = new ResourceLocation(idString);
 
-            var item = BuiltInRegistries.ITEM.get(id);
+            var item = Registry.ITEM.get(id);
             ItemStack plankStack = new ItemStack(item);
 
             return Component.translatable(
@@ -134,7 +134,7 @@ public class WoodenSmokingPipeItem extends SmokingItem {
         int packedMaxPuffs = basePuffs + Math.max(0, bonusPuffs);
 
         CompoundTag pipeTag = LegacyItemTags.getOrCreateTag(pipe);
-        pipeTag.putString(NBT_TOBACCO, BuiltInRegistries.ITEM.getKey(tobacco.getItem()).toString());
+        pipeTag.putString(NBT_TOBACCO, Registry.ITEM.getKey(tobacco.getItem()).toString());
         pipeTag.putInt(NBT_PUFFS, packedMaxPuffs);
         pipeTag.putInt(NBT_PACKED_MAX_PUFFS, packedMaxPuffs);
 
@@ -160,9 +160,9 @@ public class WoodenSmokingPipeItem extends SmokingItem {
         if (tag == null || !tag.contains(NBT_TOBACCO)) return ItemStack.EMPTY;
 
         ResourceLocation id = ResourceLocation.tryParse(tag.getString(NBT_TOBACCO));
-        if (id == null || !BuiltInRegistries.ITEM.containsKey(id)) return ItemStack.EMPTY;
+        if (id == null || !Registry.ITEM.containsKey(id)) return ItemStack.EMPTY;
 
-        ItemStack tobacco = new ItemStack(BuiltInRegistries.ITEM.get(id));
+        ItemStack tobacco = new ItemStack(Registry.ITEM.get(id));
         if (tag.contains("PackedTobaccoData")) {
             LegacyItemTags.setTag(tobacco, tag.getCompound("PackedTobaccoData").copy());
         }
@@ -252,7 +252,7 @@ public class WoodenSmokingPipeItem extends SmokingItem {
             if (tag.contains("PackedTobacco")) {
                 String id = tag.getString("PackedTobacco");
 
-                Item packedItem = BuiltInRegistries.ITEM.get(new ResourceLocation(id));
+                Item packedItem = Registry.ITEM.get(new ResourceLocation(id));
                 ItemStack packedStack = new ItemStack(packedItem);
                 if (tag.contains("PackedTobaccoData")) {
                     LegacyItemTags.setTag(packedStack, tag.getCompound("PackedTobaccoData").copy());

@@ -1,3 +1,15 @@
+## Forge 1.19.2 Standalone Backport — 4.2.0-beta4
+
+- Ported the Forge 1.20.1 4.2.0-beta4 gameplay and assets to Minecraft 1.19.2 / Forge 43.5.2 / Java 17.
+- Adapted registries, creative/search tabs, recipes, smithing, particles, item transforms, block materials, configuration, datagen, GUI rendering and network integration to the older APIs.
+- Retained optional Curios 1.19.2, JEI 11 and Patchouli 77 integration. Curios uses native 1.19.2 item capabilities and slot registration.
+- Removed Create 6 implementations, processing recipes, mixins and Ponders. The common facade stays disabled even with old Create installed.
+- Added a vanilla-material Production Monitor recipe and retained vanilla hopper monitoring.
+- Updated the manual for standalone progression; omitted post-1.19.2 plank pipe variants and replaced the cherry leaf sound with the azalea equivalent.
+- Bundled local petal particle sprites for 1.19.2, avoiding missing 1.20 cherry textures.
+- Converted the relic-pipe loot condition to 1.19.2's alternative condition so dungeon finds remain available.
+- Added opt-in server and client validation sources, excluded from the production JAR.
+
 ## Update 4.1.0 - Haunted Harvest Update
 
 Tobacconist 4.1.0 releases Haunted Harvest for **Minecraft 1.20.1 Forge** and **Minecraft 1.21.1 NeoForge** with the same intended gameplay and feature set. Loader/API differences are implementation details and are not separate feature versions.

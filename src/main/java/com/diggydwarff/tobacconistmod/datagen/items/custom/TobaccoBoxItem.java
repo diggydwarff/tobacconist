@@ -184,7 +184,7 @@ public class TobaccoBoxItem extends Item {
     }
 
     private void playSound(Player player) {
-        player.level().playSound(null, player.blockPosition(), SoundEvents.BUNDLE_INSERT, SoundSource.PLAYERS, 0.8f, 1.0f);
+        player.level.playSound(null, player.blockPosition(), SoundEvents.BUNDLE_INSERT, SoundSource.PLAYERS, 0.8f, 1.0f);
     }
 
     @Override

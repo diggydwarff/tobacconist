@@ -6,7 +6,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Equipable;
+import net.minecraft.world.item.Wearable;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -18,19 +18,31 @@ import java.util.List;
 /**
  * Inspection spectacles. Curios integration is optional; the standard Curios head slot is preferred and vanilla HEAD equipment remains the fallback.
  */
-public class TobacconistsSpectaclesItem extends Item implements Equipable {
+public class TobacconistsSpectaclesItem extends Item implements Wearable {
     public TobacconistsSpectaclesItem(Properties properties) {
         super(properties);
     }
 
     @Override
-    public EquipmentSlot getEquipmentSlot() {
+    public EquipmentSlot getEquipmentSlot(ItemStack stack) {
         return EquipmentSlot.HEAD;
     }
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        return this.swapWithEquipmentSlot(this, level, player, hand);
+        ItemStack held = player.getItemInHand(hand);
+        ItemStack previous = player.getItemBySlot(EquipmentSlot.HEAD);
+        if (!player.getAbilities().instabuild && net.minecraft.world.item.enchantment.EnchantmentHelper.hasBindingCurse(previous)) {
+            return InteractionResultHolder.fail(held);
+        }
+        ItemStack equipped = held.copy();
+        equipped.setCount(1);
+        player.setItemSlot(EquipmentSlot.HEAD, equipped);
+        held.shrink(1);
+        player.awardStat(net.minecraft.stats.Stats.ITEM_USED.get(this));
+        if (held.isEmpty()) return InteractionResultHolder.sidedSuccess(previous.copy(), level.isClientSide);
+        if (!previous.isEmpty() && !player.getInventory().add(previous.copy())) player.drop(previous.copy(), false);
+        return InteractionResultHolder.sidedSuccess(held, level.isClientSide);
     }
 
     @Override

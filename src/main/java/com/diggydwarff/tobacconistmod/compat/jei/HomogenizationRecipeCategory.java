@@ -11,7 +11,7 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import com.diggydwarff.tobacconistmod.backport.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -63,12 +63,13 @@ public final class HomogenizationRecipeCategory implements IRecipeCategory<Homog
     }
 
     @Override
-    public void draw(HomogenizationJeiRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics,
+    public void draw(HomogenizationJeiRecipe recipe, IRecipeSlotsView recipeSlotsView, com.mojang.blaze3d.vertex.PoseStack backportPose,
                      double mouseX, double mouseY) {
+        GuiGraphics guiGraphics = new GuiGraphics(backportPose);
         Minecraft mc = Minecraft.getInstance();
-        slot.draw(guiGraphics, 13, 26);
-        slot.draw(guiGraphics, 37, 26);
-        slot.draw(guiGraphics, 125, 26);
+        slot.draw(guiGraphics.pose(), 13, 26);
+        slot.draw(guiGraphics.pose(), 37, 26);
+        slot.draw(guiGraphics.pose(), 125, 26);
         guiGraphics.drawString(mc.font, "+", 31, 32, 0x404040, false);
         guiGraphics.drawString(mc.font, ">", 88, 32, 0x404040, false);
         guiGraphics.drawString(mc.font,

@@ -13,7 +13,7 @@ import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
 import com.diggydwarff.tobacconistmod.recipes.WoodenPipeRecipe;
 import com.diggydwarff.tobacconistmod.util.TobaccoBlendHelper;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DyeColor;
@@ -78,7 +78,7 @@ public class ClientColorHandlers {
             ResourceLocation id =
                     new ResourceLocation(tag.getString(WoodenPipeRecipe.NBT_WOOD_PLANK));
 
-            var item = BuiltInRegistries.ITEM.get(id);
+            var item = Registry.ITEM.get(id);
 
             if (item instanceof BlockItem bi) {
 
@@ -107,7 +107,7 @@ public class ClientColorHandlers {
 
             return 0xFFFFFFFF;
 
-        }, BuiltInRegistries.ITEM.get(new ResourceLocation("tobacconistmod", "wooden_smoking_pipe")));
+        }, Registry.ITEM.get(new ResourceLocation("tobacconistmod", "wooden_smoking_pipe")));
 
         event.register((stack, tintIndex) -> {
             if (tintIndex != 0) return 0xFFFFFFFF;

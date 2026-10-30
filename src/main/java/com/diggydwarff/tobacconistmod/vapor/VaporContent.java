@@ -3,7 +3,7 @@ package com.diggydwarff.tobacconistmod.vapor;
 import com.diggydwarff.tobacconistmod.TobacconistMod;
 import com.diggydwarff.tobacconistmod.fluid.ExtractionFluidType;
 import com.diggydwarff.tobacconistmod.backport.DataComponentType;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import com.diggydwarff.tobacconistmod.backport.ByteBufCodecs;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
@@ -28,15 +28,15 @@ import java.util.function.Supplier;
 /** Common registrations have no Create or Herbalist dependency. */
 public final class VaporContent {
     private static final String ID = TobacconistMod.MODID;
-    private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(Registries.ITEM, ID);
-    private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(Registries.BLOCK, ID);
-    private static final DeferredRegister<BlockEntityType<?>> ENTITIES = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, ID);
-    private static final DeferredRegister<MenuType<?>> MENUS = DeferredRegister.create(Registries.MENU, ID);
+    private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(Registry.ITEM_REGISTRY, ID);
+    private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(Registry.BLOCK_REGISTRY, ID);
+    private static final DeferredRegister<BlockEntityType<?>> ENTITIES = DeferredRegister.create(Registry.BLOCK_ENTITY_TYPE_REGISTRY, ID);
+    private static final DeferredRegister<MenuType<?>> MENUS = DeferredRegister.create(Registry.MENU_REGISTRY, ID);
     private static final com.diggydwarff.tobacconistmod.backport.DataKeys DATA = com.diggydwarff.tobacconistmod.backport.DataKeys.create(ID);
     private static final DeferredRegister<FluidType> FLUID_TYPES = DeferredRegister.create(ForgeRegistries.Keys.FLUID_TYPES, ID);
-    private static final DeferredRegister<Fluid> FLUIDS = DeferredRegister.create(Registries.FLUID, ID);
-    private static final DeferredRegister<RecipeType<?>> TYPES = DeferredRegister.create(Registries.RECIPE_TYPE, ID);
-    private static final DeferredRegister<RecipeSerializer<?>> SERIALIZERS = DeferredRegister.create(Registries.RECIPE_SERIALIZER, ID);
+    private static final DeferredRegister<Fluid> FLUIDS = DeferredRegister.create(Registry.FLUID_REGISTRY, ID);
+    private static final DeferredRegister<RecipeType<?>> TYPES = DeferredRegister.create(Registry.RECIPE_TYPE_REGISTRY, ID);
+    private static final DeferredRegister<RecipeSerializer<?>> SERIALIZERS = DeferredRegister.create(Registry.RECIPE_SERIALIZER_REGISTRY, ID);
 
     public static final Supplier<DataComponentType<LiquidBlend>> BLEND = DATA.register("liquid_blend",
             () -> DataComponentType.<LiquidBlend>builder().persistent(VaporData.CODEC)
@@ -65,27 +65,27 @@ public final class VaporContent {
     public static final Supplier<Item> CRUDE_EXTRACT = bottle("crude_tobacco_extract", "crude");
     public static final Supplier<Item> NICOTINE_EXTRACT = bottle("nicotine_extract", "nicotine");
     public static final Supplier<Item> VAPE_LIQUID = bottle("vape_liquid", "liquid");
-    public static final Supplier<Item> VAPE_PEN = ITEMS.register("vape_pen", () -> new VapePenItem(new Item.Properties().stacksTo(1)));
+    public static final Supplier<Item> VAPE_PEN = ITEMS.register("vape_pen", () -> new VapePenItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).stacksTo(1)));
     public static final Supplier<Item> BOX_MOD = ITEMS.register("box_mod_vape",
-            () -> new VapePenItem(new Item.Properties().stacksTo(1), VapePenItem.Kind.BOX_MOD));
+            () -> new VapePenItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).stacksTo(1), VapePenItem.Kind.BOX_MOD));
     public static final Supplier<Item> CIGALIKE = ITEMS.register("cigalike_vape",
-            () -> new VapePenItem(new Item.Properties().stacksTo(1), VapePenItem.Kind.CIGALIKE));
-    public static final Supplier<Item> RECIPE_CARD = ITEMS.register("liquid_recipe_card", () -> new VaporBottleItem(new Item.Properties().stacksTo(1), "card"));
-    public static final Supplier<Item> SMALL_GLASS_BOTTLE = ITEMS.register("small_glass_bottle", () -> new SizedBottleItem(new Item.Properties(), VaporData.SMALL_BOTTLE, false));
-    public static final Supplier<Item> LARGE_GLASS_BOTTLE = ITEMS.register("large_glass_bottle", () -> new SizedBottleItem(new Item.Properties(), VaporData.LARGE_BOTTLE, false));
-    public static final Supplier<Item> SMALL_FILLED_BOTTLE = ITEMS.register("small_filled_bottle", () -> new SizedBottleItem(new Item.Properties().stacksTo(1), VaporData.SMALL_BOTTLE, true));
-    public static final Supplier<Item> LARGE_FILLED_BOTTLE = ITEMS.register("large_filled_bottle", () -> new SizedBottleItem(new Item.Properties().stacksTo(1), VaporData.LARGE_BOTTLE, true));
-    public static final Supplier<Item> BUBBLE_PIPE = ITEMS.register("bubble_pipe", () -> new BubblePipeItem(new Item.Properties().stacksTo(1)));
+            () -> new VapePenItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).stacksTo(1), VapePenItem.Kind.CIGALIKE));
+    public static final Supplier<Item> RECIPE_CARD = ITEMS.register("liquid_recipe_card", () -> new VaporBottleItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).stacksTo(1), "card"));
+    public static final Supplier<Item> SMALL_GLASS_BOTTLE = ITEMS.register("small_glass_bottle", () -> new SizedBottleItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB), VaporData.SMALL_BOTTLE, false));
+    public static final Supplier<Item> LARGE_GLASS_BOTTLE = ITEMS.register("large_glass_bottle", () -> new SizedBottleItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB), VaporData.LARGE_BOTTLE, false));
+    public static final Supplier<Item> SMALL_FILLED_BOTTLE = ITEMS.register("small_filled_bottle", () -> new SizedBottleItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).stacksTo(1), VaporData.SMALL_BOTTLE, true));
+    public static final Supplier<Item> LARGE_FILLED_BOTTLE = ITEMS.register("large_filled_bottle", () -> new SizedBottleItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).stacksTo(1), VaporData.LARGE_BOTTLE, true));
+    public static final Supplier<Item> BUBBLE_PIPE = ITEMS.register("bubble_pipe", () -> new BubblePipeItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).stacksTo(1)));
 
     public static final Supplier<Block> EXTRACTION_STATION = BLOCKS.register("extraction_station",
-            () -> new LiquidStationBlock(BlockBehaviour.Properties.of().strength(2.5F).sound(SoundType.METAL), false));
+            () -> new LiquidStationBlock(BlockBehaviour.Properties.of(net.minecraft.world.level.material.Material.METAL).strength(2.5F).sound(SoundType.METAL), false));
     public static final Supplier<Block> BLENDING_BENCH = BLOCKS.register("liquid_blending_bench",
-            () -> new LiquidStationBlock(BlockBehaviour.Properties.of().strength(2.0F).sound(SoundType.WOOD).noOcclusion(), true));
+            () -> new LiquidStationBlock(BlockBehaviour.Properties.of(net.minecraft.world.level.material.Material.WOOD).strength(2.0F).sound(SoundType.WOOD).noOcclusion(), true));
     public static final Supplier<Block> EXTRACT_CAULDRON = BLOCKS.register("extract_cauldron",
             () -> new ExtractCauldronBlock(BlockBehaviour.Properties.copy(net.minecraft.world.level.block.Blocks.CAULDRON)));
     static {
-        ITEMS.register("extraction_station", () -> new BlockItem(EXTRACTION_STATION.get(), new Item.Properties()));
-        ITEMS.register("liquid_blending_bench", () -> new BlockItem(BLENDING_BENCH.get(), new Item.Properties()));
+        ITEMS.register("extraction_station", () -> new BlockItem(EXTRACTION_STATION.get(), new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB)));
+        ITEMS.register("liquid_blending_bench", () -> new BlockItem(BLENDING_BENCH.get(), new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB)));
     }
     public static final Supplier<BlockEntityType<LiquidStationEntity>> STATION = ENTITIES.register("liquid_station",
             () -> BlockEntityType.Builder.of(LiquidStationEntity::new, EXTRACTION_STATION.get(), BLENDING_BENCH.get()).build(null));
@@ -108,7 +108,7 @@ public final class VaporContent {
     private VaporContent() {}
 
     private static Supplier<Item> bottle(String name, String kind) {
-        return ITEMS.register(name, () -> new VaporBottleItem(new Item.Properties().stacksTo(1), kind));
+        return ITEMS.register(name, () -> new VaporBottleItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).stacksTo(1), kind));
     }
 
     private static Supplier<Fluid> fluid(String name, int color) {

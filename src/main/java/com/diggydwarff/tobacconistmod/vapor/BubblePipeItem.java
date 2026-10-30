@@ -70,9 +70,9 @@ public final class BubblePipeItem extends Item {
         if (!(entity instanceof ServerPlayer player) || !com.diggydwarff.tobacconistmod.util.SmokingDraws.canFinish(player) || draw < 4 || blows(stack) == 0 || player.getCooldowns().isOnCooldown(this)) return false;
         if (!player.getAbilities().instabuild) com.diggydwarff.tobacconistmod.backport.ComponentData.set(stack, VaporContent.BUBBLE_CHARGE.get(), blows(stack) - 1);
         var origin = player.getEyePosition().add(player.getLookAngle().scale(.35)).add(0, -.15, 0);
-        player.serverLevel().sendParticles(ModParticles.SOAP_BUBBLE.get(), origin.x, origin.y, origin.z,
+        player.getLevel().sendParticles(ModParticles.SOAP_BUBBLE.get(), origin.x, origin.y, origin.z,
                 3 + com.diggydwarff.tobacconistmod.backport.BackportMath.clamp(draw, 4, 30) / 3, .08, .03, .08, .035);
-        player.serverLevel().playSound(null, player.blockPosition(), SoundEvents.BUBBLE_COLUMN_BUBBLE_POP, SoundSource.PLAYERS, .25F, 1.3F);
+        player.getLevel().playSound(null, player.blockPosition(), SoundEvents.BUBBLE_COLUMN_BUBBLE_POP, SoundSource.PLAYERS, .25F, 1.3F);
         VaporAdvancements.onBubbles(player); player.getCooldowns().addCooldown(this, 10); player.getInventory().setChanged();
         return true;
     }

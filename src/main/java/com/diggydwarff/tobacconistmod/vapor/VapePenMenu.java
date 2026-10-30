@@ -56,7 +56,7 @@ public final class VapePenMenu extends AbstractContainerMenu {
             if (amount <= 0) return false;
             com.diggydwarff.tobacconistmod.backport.ComponentData.set(device, VaporContent.BLEND.get(), blend); com.diggydwarff.tobacconistmod.backport.ComponentData.set(device, VaporContent.VOLUME.get(), VapePenItem.volume(device) + amount);
             int remaining = VaporData.volume(bottle) - amount;
-            ItemStack returned = remaining == 0 ? VaporData.emptyGlass(bottle) : bottle.copyWithCount(1);
+            ItemStack returned = remaining == 0 ? VaporData.emptyGlass(bottle) : com.diggydwarff.tobacconistmod.backport.BackportStacks.copyWithCount(bottle, 1);
             if (remaining > 0) VaporData.setBottleVolume(returned, remaining);
             if (bottle.getCount() == 1) inputs.setItem(0, returned);
             else {
@@ -72,7 +72,7 @@ public final class VapePenMenu extends AbstractContainerMenu {
         } else return false;
         inputs.setChanged(); inventory.setChanged(); broadcastChanges(); return true;
     }
-    @Override public void removed(Player player) { super.removed(player); if (!player.level().isClientSide) clearContainer(player, inputs); }
+    @Override public void removed(Player player) { super.removed(player); if (!player.level.isClientSide) clearContainer(player, inputs); }
     @Override public ItemStack quickMoveStack(Player player, int index) {
         Slot slot = slots.get(index); if (!slot.hasItem() || !slot.mayPickup(player)) return ItemStack.EMPTY;
         ItemStack stack = slot.getItem(), copy = stack.copy();

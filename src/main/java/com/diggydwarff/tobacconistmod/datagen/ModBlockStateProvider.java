@@ -3,7 +3,7 @@ package com.diggydwarff.tobacconistmod.datagen;
 import com.diggydwarff.tobacconistmod.TobacconistMod;
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
 import com.diggydwarff.tobacconistmod.block.custom.*;
-import net.minecraft.data.PackOutput;
+import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CropBlock;
@@ -17,8 +17,13 @@ import java.util.function.Supplier;
 import java.util.function.Function;
 
 public class ModBlockStateProvider extends BlockStateProvider {
-    public ModBlockStateProvider(PackOutput output, ExistingFileHelper exFileHelper) {
+    public ModBlockStateProvider(DataGenerator output, ExistingFileHelper exFileHelper) {
         super(output, TobacconistMod.MODID, exFileHelper);
+    }
+
+    private void simpleBlockWithItem(net.minecraft.world.level.block.Block block, net.minecraftforge.client.model.generators.ModelFile model) {
+        simpleBlock(block, model);
+        simpleBlockItem(block, model);
     }
 
     @Override

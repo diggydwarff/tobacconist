@@ -15,8 +15,8 @@ import net.minecraft.world.level.Level;
 
 public class TobaccoBoxFillRecipe extends CustomRecipe {
 
-    public TobaccoBoxFillRecipe(ResourceLocation id, CraftingBookCategory category) {
-        super(id, category);
+    public TobaccoBoxFillRecipe(ResourceLocation id) {
+        super(id);
     }
 
     @Override
@@ -25,7 +25,7 @@ public class TobaccoBoxFillRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer inv, RegistryAccess registries) {
+    public ItemStack assemble(CraftingContainer inv) {
         return pack(inv);
     }
 
@@ -35,7 +35,7 @@ public class TobaccoBoxFillRecipe extends CustomRecipe {
             ItemStack stack = inv.getItem(i);
             if (!stack.is(ModItems.TOBACCO_BOX.get())) continue;
             if (!box.isEmpty()) return ItemStack.EMPTY;
-            box = stack.copyWithCount(1);
+            box = com.diggydwarff.tobacconistmod.backport.BackportStacks.copyWithCount(stack, 1);
         }
         if (box.isEmpty()) return ItemStack.EMPTY;
 

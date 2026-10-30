@@ -41,7 +41,7 @@ final class FlueFireboxItemHandler implements IItemHandler {
 
         if (!simulate) {
             if (stored.isEmpty()) {
-                firebox.setItem(0, stack.copyWithCount(move));
+                firebox.setItem(0, com.diggydwarff.tobacconistmod.backport.BackportStacks.copyWithCount(stack, move));
             } else {
                 ItemStack updated = stored.copy();
                 updated.grow(move);

@@ -39,7 +39,7 @@ public final class TobaccoCrateHelper {
 
         ListTag list = new ListTag();
         for (ItemStack source : contents) {
-            ItemStack one = source.copyWithCount(1);
+            ItemStack one = com.diggydwarff.tobacconistmod.backport.BackportStacks.copyWithCount(source, 1);
             list.add(one.save(new CompoundTag()));
         }
         tag.put(TAG_CONTENTS, list);

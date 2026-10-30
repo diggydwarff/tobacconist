@@ -8,20 +8,20 @@ import com.diggydwarff.tobacconistmod.datagen.items.custom.WoodenSmokingPipeItem
 import com.diggydwarff.tobacconistmod.util.SmokingDraws;
 import com.diggydwarff.tobacconistmod.vapor.VapePenItem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.block.model.ItemTransform;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -98,17 +98,17 @@ public final class ClientDrawAnimations {
                     pose.translate(Mth.lerp(eased, side * 0.56F, targetX),
                             Mth.lerp(eased, -0.52F, targetY) - equip * 0.6F + breathing,
                             Mth.lerp(eased, -0.72F, targetZ));
-                    pose.mulPose(Axis.YP.rotationDegrees(yaw * eased));
-                    pose.mulPose(Axis.XP.rotationDegrees(pitch * eased));
+                    pose.mulPose(Vector3f.YP.rotationDegrees(yaw * eased));
+                    pose.mulPose(Vector3f.XP.rotationDegrees(pitch * eased));
                     float scale = Mth.lerp(eased, 1.0F, size);
                     pose.scale(scale, scale, scale);
                     removeDisplayTransform(pose, player, stack, arm, eased);
                 } else {
                     pose.translate(side * (0.56F - 0.31F * eased), -0.52F - equip * 0.6F + 0.32F * eased + breathing,
                             -0.72F + 0.15F * eased);
-                    pose.mulPose(Axis.YP.rotationDegrees(side * 45.0F * eased));
-                    pose.mulPose(Axis.ZP.rotationDegrees(side * -52.0F * eased));
-                    pose.mulPose(Axis.XP.rotationDegrees(-18.0F * eased));
+                    pose.mulPose(Vector3f.YP.rotationDegrees(side * 45.0F * eased));
+                    pose.mulPose(Vector3f.ZP.rotationDegrees(side * -52.0F * eased));
+                    pose.mulPose(Vector3f.XP.rotationDegrees(-18.0F * eased));
                 }
                 return true;
             }
@@ -131,20 +131,20 @@ public final class ClientDrawAnimations {
         // ItemRenderer will apply the baked first-person display transform after this hook.
         // Fade in its inverse so the fully raised pose is anchored in sprite coordinates,
         // rather than inheriting item/generated's extra yaw, roll, scale and translation.
-        ItemDisplayContext context = arm == HumanoidArm.RIGHT
-                ? ItemDisplayContext.FIRST_PERSON_RIGHT_HAND : ItemDisplayContext.FIRST_PERSON_LEFT_HAND;
+        TransformType context = arm == HumanoidArm.RIGHT
+                ? TransformType.FIRST_PERSON_RIGHT_HAND : TransformType.FIRST_PERSON_LEFT_HAND;
         ItemTransform display = Minecraft.getInstance().getItemRenderer()
-                .getModel(stack, player.level(), player, 0).getTransforms().getTransform(context);
+                .getModel(stack, player.level, player, 0).getTransforms().getTransform(context);
         int side = arm == HumanoidArm.RIGHT ? 1 : -1;
-        pose.mulPose(Axis.ZP.rotationDegrees(-side * display.rightRotation.z() * amount));
-        pose.mulPose(Axis.YP.rotationDegrees(-side * display.rightRotation.y() * amount));
-        pose.mulPose(Axis.XP.rotationDegrees(-display.rightRotation.x() * amount));
+        pose.mulPose(Vector3f.ZP.rotationDegrees(-side * display.rightRotation.z() * amount));
+        pose.mulPose(Vector3f.YP.rotationDegrees(-side * display.rightRotation.y() * amount));
+        pose.mulPose(Vector3f.XP.rotationDegrees(-display.rightRotation.x() * amount));
         pose.scale(Mth.lerp(amount, 1.0F, inverseScale(display.scale.x())),
                 Mth.lerp(amount, 1.0F, inverseScale(display.scale.y())),
                 Mth.lerp(amount, 1.0F, inverseScale(display.scale.z())));
-        pose.mulPose(Axis.ZP.rotationDegrees(-side * display.rotation.z() * amount));
-        pose.mulPose(Axis.YP.rotationDegrees(-side * display.rotation.y() * amount));
-        pose.mulPose(Axis.XP.rotationDegrees(-display.rotation.x() * amount));
+        pose.mulPose(Vector3f.ZP.rotationDegrees(-side * display.rotation.z() * amount));
+        pose.mulPose(Vector3f.YP.rotationDegrees(-side * display.rotation.y() * amount));
+        pose.mulPose(Vector3f.XP.rotationDegrees(-display.rotation.x() * amount));
         pose.translate(-side * display.translation.x() * amount,
                 -display.translation.y() * amount, -display.translation.z() * amount);
     }

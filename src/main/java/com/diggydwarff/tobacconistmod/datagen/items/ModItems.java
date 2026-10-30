@@ -10,7 +10,7 @@ import com.diggydwarff.tobacconistmod.datagen.items.custom.pipeitems.*;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraftforge.registries.RegistryObject;
 
 public class ModItems {
@@ -19,154 +19,154 @@ public class ModItems {
     // Tobacco Guide Item
     public static final Supplier<Item> TOBACCO_GUIDE =
             ITEMS.register("tobacco_guide",
-                    () -> new TobaccoGuideItem(new Item.Properties().stacksTo(1)));
+                    () -> new TobaccoGuideItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).stacksTo(1)));
 
     public static final Supplier<Item> TOBACCONISTS_SPECTACLES =
             ITEMS.register("tobacconists_spectacles",
-                    () -> new TobacconistsSpectaclesItem(new Item.Properties().stacksTo(1)));
+                    () -> new TobacconistsSpectaclesItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).stacksTo(1)));
 
     // PIPE ITEMS
-    public static final Supplier<Item> WOODEN_SMOKING_PIPE = ITEMS.register("wooden_smoking_pipe", () -> new WoodenSmokingPipeItem(new Item.Properties().stacksTo(1)));
+    public static final Supplier<Item> WOODEN_SMOKING_PIPE = ITEMS.register("wooden_smoking_pipe", () -> new WoodenSmokingPipeItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).stacksTo(1)));
 
     public static final Supplier<Item> BRASS_SMOKING_PIPE =
             ITEMS.register("brass_smoking_pipe",
-                    () -> new WoodenSmokingPipeItem(new Item.Properties().stacksTo(1)));
+                    () -> new WoodenSmokingPipeItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).stacksTo(1)));
 
     public static final Supplier<Item> CLAY_SMOKING_PIPE =
             ITEMS.register("clay_smoking_pipe",
-                    () -> new WoodenSmokingPipeItem(new Item.Properties().stacksTo(1)));
+                    () -> new WoodenSmokingPipeItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).stacksTo(1)));
 
     public static final Supplier<Item> GOLD_SMOKING_PIPE =
             ITEMS.register("gold_smoking_pipe",
-                    () -> new GoldSmokingPipeItem(new Item.Properties().stacksTo(1)));
+                    () -> new GoldSmokingPipeItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).stacksTo(1)));
 
     public static final Supplier<Item> IRON_SMOKING_PIPE =
             ITEMS.register("iron_smoking_pipe",
-                    () -> new IronSmokingPipeItem(new Item.Properties().stacksTo(1)));
+                    () -> new IronSmokingPipeItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).stacksTo(1)));
 
     public static final Supplier<Item> COPPER_SMOKING_PIPE =
             ITEMS.register("copper_smoking_pipe",
-                    () -> new CopperSmokingPipeItem(new Item.Properties().stacksTo(1)));
+                    () -> new CopperSmokingPipeItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).stacksTo(1)));
 
     public static final Supplier<Item> GEM_ENCRUSTED_SMOKING_PIPE =
             ITEMS.register("gem_encrusted_smoking_pipe",
-                    () -> new GemEncrustedSmokingPipeItem(new Item.Properties().stacksTo(1)));
+                    () -> new GemEncrustedSmokingPipeItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).stacksTo(1)));
 
     public static final Supplier<Item> DIAMOND_ENCRUSTED_SMOKING_PIPE =
             ITEMS.register("diamond_encrusted_smoking_pipe",
-                    () -> new DiamondEncrustedSmokingPipeItem(new Item.Properties().stacksTo(1)));
+                    () -> new DiamondEncrustedSmokingPipeItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).stacksTo(1)));
 
     public static final Supplier<Item> LAPIS_ENCRUSTED_SMOKING_PIPE =
             ITEMS.register("lapis_encrusted_smoking_pipe",
-                    () -> new LapisEncrustedSmokingPipeItem(new Item.Properties().stacksTo(1)));
+                    () -> new LapisEncrustedSmokingPipeItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).stacksTo(1)));
 
     public static final Supplier<Item> EMERALD_ENCRUSTED_SMOKING_PIPE =
             ITEMS.register("emerald_encrusted_smoking_pipe",
-                    () -> new EmeraldEncrustedSmokingPipeItem(new Item.Properties().stacksTo(1)));
+                    () -> new EmeraldEncrustedSmokingPipeItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).stacksTo(1)));
 
     public static final Supplier<Item> EMERALD_AZTEC_SMOKING_PIPE =
             ITEMS.register("emerald_aztec_smoking_pipe",
-                    () -> new EmeraldAztecSmokingPipeItem(new Item.Properties().stacksTo(1)));
+                    () -> new EmeraldAztecSmokingPipeItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).stacksTo(1)));
 
     public static final Supplier<Item> NETHERITE_SMOKING_PIPE =
             ITEMS.register("netherite_smoking_pipe",
-                    () -> new NetheriteSmokingPipeItem(new Item.Properties().stacksTo(1)));
+                    () -> new NetheriteSmokingPipeItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).stacksTo(1)));
 
     public static final Supplier<Item> KISERU_SMOKING_PIPE =
             ITEMS.register("kiseru_smoking_pipe",
-                    () -> new KiseruSmokingPipeItem(new Item.Properties().stacksTo(1)));
+                    () -> new KiseruSmokingPipeItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).stacksTo(1)));
 
     public static final Supplier<Item> CORN_COB_SMOKING_PIPE =
             ITEMS.register("corn_cob_smoking_pipe",
-                    () -> new WoodenSmokingPipeItem(new Item.Properties().stacksTo(1)));
+                    () -> new WoodenSmokingPipeItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).stacksTo(1)));
 
 
     // CHAVETA TOOLS
     public static final Supplier<Item> STONE_CHAVETA =
             ITEMS.register("stone_chaveta",
-                    () -> new ChavetaItem(new Item.Properties().durability(131)));
+                    () -> new ChavetaItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).durability(131)));
 
     public static final Supplier<Item> COPPER_CHAVETA =
             ITEMS.register("copper_chaveta",
-                    () -> new ChavetaItem(new Item.Properties().durability(180)));
+                    () -> new ChavetaItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).durability(180)));
 
     public static final Supplier<Item> IRON_CHAVETA =
             ITEMS.register("iron_chaveta",
-                    () -> new ChavetaItem(new Item.Properties().durability(250)));
+                    () -> new ChavetaItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).durability(250)));
 
     public static final Supplier<Item> GOLD_CHAVETA =
             ITEMS.register("gold_chaveta",
-                    () -> new ChavetaItem(new Item.Properties().durability(32)));
+                    () -> new ChavetaItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).durability(32)));
 
     public static final Supplier<Item> DIAMOND_CHAVETA =
             ITEMS.register("diamond_chaveta",
-                    () -> new ChavetaItem(new Item.Properties().durability(1561)));
+                    () -> new ChavetaItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).durability(1561)));
 
     public static final Supplier<Item> NETHERITE_CHAVETA =
             ITEMS.register("netherite_chaveta",
-                    () -> new ChavetaItem(new Item.Properties().durability(2031)));
+                    () -> new ChavetaItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).durability(2031)));
 
 
     // OTHER ITEMS
 
-    public static final Supplier<Item> ROLLING_PAPER = ITEMS.register("rolling_paper", () -> new RollingPaperItem(new Item.Properties()));
+    public static final Supplier<Item> ROLLING_PAPER = ITEMS.register("rolling_paper", () -> new RollingPaperItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB)));
 
-    public static final Supplier<Item> BAMBOO_CHARCOAL = ITEMS.register("bamboo_charcoal", () -> new BambooCharcoalItem(new Item.Properties()));
+    public static final Supplier<Item> BAMBOO_CHARCOAL = ITEMS.register("bamboo_charcoal", () -> new BambooCharcoalItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB)));
 
     public static final Supplier<Item> TOBACCO_POUCH =
-            ITEMS.register("tobacco_pouch", () -> new TobaccoPouchItem(new Item.Properties().stacksTo(1)));
+            ITEMS.register("tobacco_pouch", () -> new TobaccoPouchItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).stacksTo(1)));
 
 
     public static final Supplier<Item> CIGAR = ITEMS.register("cigar",
-            () -> new CigarItem(new Item.Properties().durability(100)));
+            () -> new CigarItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).durability(100)));
 
     public static final Supplier<Item> CIGARETTE = ITEMS.register("cigarette",
-            () -> new CigaretteItem(new Item.Properties().durability(15)));
+            () -> new CigaretteItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).durability(15)));
 
-    public static final Supplier<Item> HOOKAH_HOSE = ITEMS.register("hookah_hose", () -> new HookahHoseItem(new Item.Properties()));
+    public static final Supplier<Item> HOOKAH_HOSE = ITEMS.register("hookah_hose", () -> new HookahHoseItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB)));
 
-    public static final Supplier<Item> SHISHA_TOBACCO = ITEMS.register("shisha_tobacco", () -> new ShishaTobaccoItem(new Item.Properties().durability(6500)));
+    public static final Supplier<Item> SHISHA_TOBACCO = ITEMS.register("shisha_tobacco", () -> new ShishaTobaccoItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).durability(6500)));
 
     public static final Supplier<Item> DIRTY_HOOKAH_WATER =
-            ITEMS.register("dirty_hookah_water", () -> new DirtyHookahWaterItem(new Item.Properties().stacksTo(1)));
+            ITEMS.register("dirty_hookah_water", () -> new DirtyHookahWaterItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).stacksTo(1)));
 
     // TOBACCO LEAF ITEMS (wet)
-    public static final Supplier<Item> WILD_TOBACCO_LEAF = ITEMS.register("tobacco_leaf_wild", () -> new TobaccoLeafItem(new Item.Properties()));
-    public static final Supplier<Item> VIRGINIA_TOBACCO_LEAF = ITEMS.register("tobacco_leaf_virginia", () -> new TobaccoLeafItem(new Item.Properties()));
-    public static final Supplier<Item> BURLEY_TOBACCO_LEAF = ITEMS.register("tobacco_leaf_burley", () -> new TobaccoLeafItem(new Item.Properties()));
-    public static final Supplier<Item> ORIENTAL_TOBACCO_LEAF = ITEMS.register("tobacco_leaf_oriental", () -> new TobaccoLeafItem(new Item.Properties()));
-    public static final Supplier<Item> DOKHA_TOBACCO_LEAF = ITEMS.register("tobacco_leaf_dokha", () -> new TobaccoLeafItem(new Item.Properties()));
-    public static final Supplier<Item> SHADE_TOBACCO_LEAF = ITEMS.register("tobacco_leaf_shade", () -> new TobaccoLeafItem(new Item.Properties()));
+    public static final Supplier<Item> WILD_TOBACCO_LEAF = ITEMS.register("tobacco_leaf_wild", () -> new TobaccoLeafItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB)));
+    public static final Supplier<Item> VIRGINIA_TOBACCO_LEAF = ITEMS.register("tobacco_leaf_virginia", () -> new TobaccoLeafItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB)));
+    public static final Supplier<Item> BURLEY_TOBACCO_LEAF = ITEMS.register("tobacco_leaf_burley", () -> new TobaccoLeafItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB)));
+    public static final Supplier<Item> ORIENTAL_TOBACCO_LEAF = ITEMS.register("tobacco_leaf_oriental", () -> new TobaccoLeafItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB)));
+    public static final Supplier<Item> DOKHA_TOBACCO_LEAF = ITEMS.register("tobacco_leaf_dokha", () -> new TobaccoLeafItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB)));
+    public static final Supplier<Item> SHADE_TOBACCO_LEAF = ITEMS.register("tobacco_leaf_shade", () -> new TobaccoLeafItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB)));
 
 
     // TOBACCO LEAF ITEMS (dry)
-    public static final Supplier<Item> WILD_TOBACCO_LEAF_DRY = ITEMS.register("tobacco_leaf_wild_dry", () -> new TobaccoLeafItem(new Item.Properties()));
-    public static final Supplier<Item> VIRGINIA_TOBACCO_LEAF_DRY = ITEMS.register("tobacco_leaf_virginia_dry", () -> new TobaccoLeafItem(new Item.Properties()));
-    public static final Supplier<Item> BURLEY_TOBACCO_LEAF_DRY = ITEMS.register("tobacco_leaf_burley_dry", () -> new TobaccoLeafItem(new Item.Properties()));
-    public static final Supplier<Item> ORIENTAL_TOBACCO_LEAF_DRY = ITEMS.register("tobacco_leaf_oriental_dry", () -> new TobaccoLeafItem(new Item.Properties()));
-    public static final Supplier<Item> DOKHA_TOBACCO_LEAF_DRY = ITEMS.register("tobacco_leaf_dokha_dry", () -> new TobaccoLeafItem(new Item.Properties()));
-    public static final Supplier<Item> SHADE_TOBACCO_LEAF_DRY = ITEMS.register("tobacco_leaf_shade_dry", () -> new TobaccoLeafItem(new Item.Properties()));
+    public static final Supplier<Item> WILD_TOBACCO_LEAF_DRY = ITEMS.register("tobacco_leaf_wild_dry", () -> new TobaccoLeafItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB)));
+    public static final Supplier<Item> VIRGINIA_TOBACCO_LEAF_DRY = ITEMS.register("tobacco_leaf_virginia_dry", () -> new TobaccoLeafItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB)));
+    public static final Supplier<Item> BURLEY_TOBACCO_LEAF_DRY = ITEMS.register("tobacco_leaf_burley_dry", () -> new TobaccoLeafItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB)));
+    public static final Supplier<Item> ORIENTAL_TOBACCO_LEAF_DRY = ITEMS.register("tobacco_leaf_oriental_dry", () -> new TobaccoLeafItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB)));
+    public static final Supplier<Item> DOKHA_TOBACCO_LEAF_DRY = ITEMS.register("tobacco_leaf_dokha_dry", () -> new TobaccoLeafItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB)));
+    public static final Supplier<Item> SHADE_TOBACCO_LEAF_DRY = ITEMS.register("tobacco_leaf_shade_dry", () -> new TobaccoLeafItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB)));
 
     public static final Supplier<Item> TOBACCO_LOOSE_WILD =
-            ITEMS.register("tobacco_loose_wild", () -> new LooseTobaccoItem(new Item.Properties().stacksTo(64), 40, 5));
+            ITEMS.register("tobacco_loose_wild", () -> new LooseTobaccoItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).stacksTo(64), 40, 5));
 
     public static final Supplier<Item> TOBACCO_LOOSE_VIRGINIA =
-            ITEMS.register("tobacco_loose_virginia", () -> new LooseTobaccoItem(new Item.Properties().stacksTo(64), 40, 10));
+            ITEMS.register("tobacco_loose_virginia", () -> new LooseTobaccoItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).stacksTo(64), 40, 10));
 
     public static final Supplier<Item> TOBACCO_LOOSE_BURLEY =
-            ITEMS.register("tobacco_loose_burley", () -> new LooseTobaccoItem(new Item.Properties().stacksTo(64), 40, 15));
+            ITEMS.register("tobacco_loose_burley", () -> new LooseTobaccoItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).stacksTo(64), 40, 15));
 
     public static final Supplier<Item> TOBACCO_LOOSE_ORIENTAL =
-            ITEMS.register("tobacco_loose_oriental", () -> new LooseTobaccoItem(new Item.Properties().stacksTo(64), 40, 15));
+            ITEMS.register("tobacco_loose_oriental", () -> new LooseTobaccoItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).stacksTo(64), 40, 15));
 
     public static final Supplier<Item> TOBACCO_LOOSE_DOKHA =
-            ITEMS.register("tobacco_loose_dokha", () -> new LooseTobaccoItem(new Item.Properties().stacksTo(64), 40, 20));
+            ITEMS.register("tobacco_loose_dokha", () -> new LooseTobaccoItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).stacksTo(64), 40, 20));
 
     public static final Supplier<Item> TOBACCO_LOOSE_SHADE =
-            ITEMS.register("tobacco_loose_shade", () -> new LooseTobaccoItem(new Item.Properties().stacksTo(64), 40, 10));
+            ITEMS.register("tobacco_loose_shade", () -> new LooseTobaccoItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).stacksTo(64), 40, 10));
 
     public static final Supplier<Item> BLENDED_TOBACCO =
-            ITEMS.register("blended_tobacco", () -> new BlendedTobaccoItem(new Item.Properties().stacksTo(64)));
+            ITEMS.register("blended_tobacco", () -> new BlendedTobaccoItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).stacksTo(64)));
 
     // Create-compatible factory tooling and metadata-carrying assembly intermediates.
     // These are registered unconditionally so saved stacks remain valid if Create is removed;
@@ -182,19 +182,19 @@ public class ModItems {
 
     public static final Supplier<Item> SPOILED_TOBACCO =
             ITEMS.register("spoiled_tobacco",
-                    () -> new SpoiledTobaccoItem(new Item.Properties().stacksTo(64)));
+                    () -> new SpoiledTobaccoItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).stacksTo(64)));
 
     public static final Supplier<Item> BOTTLED_MOLASSES_PLAIN = ITEMS.register("bottled_molasses_plain", () -> BottledMolassesFlavors.BOTTLED_MOLASSES_PLAIN.getItem());
 
     public static final Supplier<Item> BOTTLED_AQUA_VITAE =
-            ITEMS.register("bottled_aqua_vitae", () -> new AquaVitaeItem(new Item.Properties().stacksTo(1)));
+            ITEMS.register("bottled_aqua_vitae", () -> new AquaVitaeItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).stacksTo(1)));
 
     // TOBACCO SEED ITEMS
     public static final Supplier<Item> WILD_TOBACCO_SEEDS =
             ITEMS.register("wild_tobacco_seeds",
                     () -> new TallCropSeedsItem(
                             ModBlocks.WILD_TOBACCO_CROP.get(),
-                            new Item.Properties(),
+                            new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB),
                             WildCropBlock.HALF
                     ));
 
@@ -202,7 +202,7 @@ public class ModItems {
             ITEMS.register("virginia_tobacco_seeds",
                     () -> new TallCropSeedsItem(
                             ModBlocks.VIRGINIA_TOBACCO_CROP.get(),
-                            new Item.Properties(),
+                            new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB),
                             VirginiaCropBlock.HALF
                     ));
 
@@ -210,7 +210,7 @@ public class ModItems {
             ITEMS.register("burley_tobacco_seeds",
                     () -> new TallCropSeedsItem(
                             ModBlocks.BURLEY_TOBACCO_CROP.get(),
-                            new Item.Properties(),
+                            new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB),
                             BurleyCropBlock.HALF
                     ));
 
@@ -218,7 +218,7 @@ public class ModItems {
             ITEMS.register("oriental_tobacco_seeds",
                     () -> new TallCropSeedsItem(
                             ModBlocks.ORIENTAL_TOBACCO_CROP.get(),
-                            new Item.Properties(),
+                            new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB),
                             OrientalCropBlock.HALF
                     ));
 
@@ -226,7 +226,7 @@ public class ModItems {
             ITEMS.register("dokha_tobacco_seeds",
                     () -> new TallCropSeedsItem(
                             ModBlocks.DOKHA_TOBACCO_CROP.get(),
-                            new Item.Properties(),
+                            new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB),
                             DokhaCropBlock.HALF
                     ));
 
@@ -234,15 +234,15 @@ public class ModItems {
             ITEMS.register("shade_tobacco_seeds",
                     () -> new TallCropSeedsItem(
                             ModBlocks.SHADE_TOBACCO_CROP.get(),
-                            new Item.Properties(),
+                            new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB),
                             ShadeCropBlock.HALF
                     ));
 
     public static final Supplier<Item> TOBACCO_BOX =
-            ITEMS.register("tobacco_box", () -> new TobaccoBoxItem(new Item.Properties().stacksTo(1)));
+            ITEMS.register("tobacco_box", () -> new TobaccoBoxItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).stacksTo(1)));
 
     public static final Supplier<Item> TOBACCO_LABEL =
-            ITEMS.register("tobacco_label", () -> new LabelItem(new Item.Properties()));
+            ITEMS.register("tobacco_label", () -> new LabelItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB)));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

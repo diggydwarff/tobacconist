@@ -4,7 +4,7 @@ import com.diggydwarff.tobacconistmod.block.entity.ModBlockEntities;
 import com.diggydwarff.tobacconistmod.block.entity.ProductionMonitorBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -127,7 +127,7 @@ public class ProductionMonitorBlock extends BaseEntityBlock {
 
     private boolean isCreateWrench(ItemStack stack) {
         if (stack.isEmpty()) return false;
-        var key = BuiltInRegistries.ITEM.getKey(stack.getItem());
+        var key = Registry.ITEM.getKey(stack.getItem());
         return "create".equals(key.getNamespace()) && "wrench".equals(key.getPath());
     }
 

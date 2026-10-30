@@ -70,7 +70,7 @@ public abstract class ForgeHopperProductionMonitorMixin {
 
             if (moved > 0) {
                 ProductionMonitorTransferHooks.notifySuccessfulTransfer(
-                        level, capturedHopper.getBlockPos(), before.copyWithCount(moved));
+                        level, capturedHopper.getBlockPos(), com.diggydwarff.tobacconistmod.backport.BackportStacks.copyWithCount(before, moved));
             }
         }
     }

@@ -291,7 +291,7 @@ public final class TobaccoProcessingHelper {
         boolean curedPair = TobaccoCuringHelper.isDryTobaccoLeaf(first)
                 && TobaccoCuringHelper.isDryTobaccoLeaf(second);
 
-        if ((!rawPair && !curedPair) || !ItemStack.isSameItem(first, second)) {
+        if ((!rawPair && !curedPair) || !com.diggydwarff.tobacconistmod.backport.BackportStacks.isSameItem(first, second)) {
             return false;
         }
 
@@ -309,7 +309,7 @@ public final class TobaccoProcessingHelper {
     public static boolean areQualityAveragingCompatibleLooseTobacco(ItemStack first, ItemStack second) {
         if (!TobaccoBlendHelper.isBlendableBaseTobacco(first)
                 || !TobaccoBlendHelper.isBlendableBaseTobacco(second)
-                || !ItemStack.isSameItem(first, second)) {
+                || !com.diggydwarff.tobacconistmod.backport.BackportStacks.isSameItem(first, second)) {
             return false;
         }
 

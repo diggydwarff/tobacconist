@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Aging needs $(item)Warmth 0 or lower$(), environmental $(item)Humidity 1–3$(), and $(thing)cool/dark storage$(): the block above the barrel must not see the sky and block light above the barrel must be 7 or less."
+      "text": "Aging needs $(item)Warmth 0 or lower$(), environmental $(item)Humidity 1\u20133$(), and $(thing)cool/dark storage$(): the block above the barrel must not see the sky and block light above the barrel must be 7 or less."
     },
     {
       "type": "patchouli:text",
@@ -21,7 +21,7 @@
     {
       "type": "patchouli:text",
       "title": "Automated Cellars",
-      "text": "With Create installed, tobacco exposes exact aged days plus $(thing)Aged at least 7, 30, 90, and 365 days$() Attribute Filter values. Aging is intentionally still extractable, so a filtered Smart Funnel or other filtered logistics can release a barrel automatically at the age you choose. Unfiltered automation will extract it immediately."
+      "text": "Aging is intentionally still extractable, so a filtered Smart Funnel or other filtered logistics can release a barrel automatically at the age you choose. Unfiltered automation will extract it immediately."
     },
     {
       "type": "patchouli:text",

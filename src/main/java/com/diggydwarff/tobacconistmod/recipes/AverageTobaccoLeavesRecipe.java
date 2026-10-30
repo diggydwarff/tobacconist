@@ -11,7 +11,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -19,8 +18,8 @@ import net.minecraft.world.level.Level;
 
 public class AverageTobaccoLeavesRecipe extends CustomRecipe {
 
-    public AverageTobaccoLeavesRecipe(ResourceLocation id, CraftingBookCategory category) {
-        super(id, category);
+    public AverageTobaccoLeavesRecipe(ResourceLocation id) {
+        super(id);
     }
 
     @Override
@@ -76,7 +75,7 @@ public class AverageTobaccoLeavesRecipe extends CustomRecipe {
                     if (cutType.isEmpty()) return false;
                 }
             } else {
-                if (!ItemStack.isSameItem(first, stack)) {
+                if (!com.diggydwarff.tobacconistmod.backport.BackportStacks.isSameItem(first, stack)) {
                     return false;
                 }
 
@@ -120,7 +119,7 @@ public class AverageTobaccoLeavesRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer container, RegistryAccess registries) {
+    public ItemStack assemble(CraftingContainer container) {
         ItemStack first = ItemStack.EMPTY;
         Mode mode = null;
         String cureType = "";
@@ -160,7 +159,7 @@ public class AverageTobaccoLeavesRecipe extends CustomRecipe {
         int avgQuality = TobaccoProcessingHelper.getConservativeAverageQuality(
                 totalQuality, usedItems, mode == Mode.RAW_LEAF);
 
-        ItemStack result = first.copyWithCount(usedItems);
+        ItemStack result = com.diggydwarff.tobacconistmod.backport.BackportStacks.copyWithCount(first, usedItems);
 
         if (mode == Mode.RAW_LEAF) {
             TobaccoGrowthHelper.applyGrowthQuality(result, avgQuality);

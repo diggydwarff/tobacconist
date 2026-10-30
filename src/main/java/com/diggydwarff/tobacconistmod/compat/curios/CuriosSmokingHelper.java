@@ -24,7 +24,7 @@ public final class CuriosSmokingHelper {
     public record MouthSlotEntry(int index, ItemStack stack, boolean cosmetic) {}
     /** The first functional mouth item is the one used by the mouth key. */
     public static MouthSlotEntry functional(net.minecraft.world.entity.LivingEntity player) {
-        var inventory=CuriosApi.getCuriosInventory(player).orElse(null);
+        var inventory=CuriosApi.getCuriosHelper().getCuriosHandler(player).orElse(null);
         var mouth=inventory==null ? null : inventory.getCurios().get("mouth");
         if (mouth!=null) for(int i=0;i<mouth.getStacks().getSlots();i++) {
             var stack=mouth.getStacks().getStackInSlot(i);
@@ -34,7 +34,7 @@ public final class CuriosSmokingHelper {
     }
     /** Cosmetics override functional items. Missing render flags use the original visible default. */
     public static MouthSlotEntry visible(net.minecraft.world.entity.LivingEntity player) {
-        var inventory=CuriosApi.getCuriosInventory(player).orElse(null);
+        var inventory=CuriosApi.getCuriosHelper().getCuriosHandler(player).orElse(null);
         var mouth=inventory==null ? null : inventory.getCurios().get("mouth");
         if(mouth!=null) for(int i=0;i<mouth.getStacks().getSlots();i++) {
             var cosmetic=i<mouth.getCosmeticStacks().getSlots() ? mouth.getCosmeticStacks().getStackInSlot(i) : ItemStack.EMPTY;
@@ -64,7 +64,7 @@ public final class CuriosSmokingHelper {
             return Component.translatable("tobacconistmod.message.mouth.unavailable");
         final Component[] result = {Component.translatable("tobacconistmod.message.mouth.no_slot")};
 
-        CuriosApi.getCuriosInventory(player).ifPresent(inventory -> {
+        CuriosApi.getCuriosHelper().getCuriosHandler(player).ifPresent(inventory -> {
             var mouth = inventory.getCurios().get("mouth");
             if (mouth == null || mouth.getStacks().getSlots() <= 0) {
                 result[0] = Component.translatable("tobacconistmod.message.mouth.no_slot");
@@ -91,7 +91,7 @@ public final class CuriosSmokingHelper {
                         || stack.getItem() instanceof com.diggydwarff.tobacconistmod.novelty.ToyPipeItem) puffStrength = Math.max(strength, 4F / 30F);
             }
             boolean used = stack.getItem() instanceof SmokingItem smokingItem
-                    ? smokingItem.smokeFromMouthSlot(player, player.serverLevel(), stack, puffStrength)
+                    ? smokingItem.smokeFromMouthSlot(player, player.getLevel(), stack, puffStrength)
                     : stack.getItem() instanceof com.diggydwarff.tobacconistmod.novelty.ToyPipeItem novelty
                         ? novelty.blowFromMouth(player, stack, puffStrength)
                         : stack.getItem() instanceof com.diggydwarff.tobacconistmod.vapor.BubblePipeItem toy

@@ -3,8 +3,8 @@ package com.diggydwarff.tobacconistmod.datagen;
 import java.util.function.Supplier;
 import com.diggydwarff.tobacconistmod.TobacconistMod;
 import com.diggydwarff.tobacconistmod.block.ModBlocks;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.data.PackOutput;
+import net.minecraft.core.Registry;
+import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -15,7 +15,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class ModItemModelProvider extends ItemModelProvider {
 
-    public ModItemModelProvider(PackOutput output, ExistingFileHelper existingFileHelper) {
+    public ModItemModelProvider(DataGenerator output, ExistingFileHelper existingFileHelper) {
         super(output, TobacconistMod.MODID, existingFileHelper);
     }
 
@@ -52,13 +52,13 @@ public class ModItemModelProvider extends ItemModelProvider {
     }
 
     private ItemModelBuilder simpleItem(Supplier<Item> item) {
-        ResourceLocation id = BuiltInRegistries.ITEM.getKey(item.get());
+        ResourceLocation id = Registry.ITEM.getKey(item.get());
         return withExistingParent(id.getPath(), new ResourceLocation("minecraft", "item/generated"))
                 .texture("layer0", new ResourceLocation(TobacconistMod.MODID, "item/" + id.getPath()));
     }
 
     private ItemModelBuilder simpleBlockItemBlockTexture(Supplier<Block> block) {
-        ResourceLocation id = BuiltInRegistries.BLOCK.getKey(block.get());
+        ResourceLocation id = Registry.BLOCK.getKey(block.get());
         return withExistingParent(id.getPath(), new ResourceLocation("minecraft", "item/generated"))
                 .texture("layer0", new ResourceLocation(TobacconistMod.MODID, "block/" + id.getPath()));
     }

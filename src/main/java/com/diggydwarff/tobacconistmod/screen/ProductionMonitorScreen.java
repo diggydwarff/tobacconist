@@ -6,9 +6,9 @@ import com.diggydwarff.tobacconistmod.network.ProductionMonitorConfigPayload;
 import com.diggydwarff.tobacconistmod.network.ProductionMonitorResetPayload;
 import com.diggydwarff.tobacconistmod.network.TobacconistNetwork;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.gui.GuiGraphics;
+import com.diggydwarff.tobacconistmod.backport.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import com.diggydwarff.tobacconistmod.backport.BackportContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -17,7 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import java.util.Locale;
 
 /** Create-inspired configuration screen using the supplied Production Monitor UI assets. */
-public class ProductionMonitorScreen extends AbstractContainerScreen<ProductionMonitorMenu> {
+public class ProductionMonitorScreen extends BackportContainerScreen<ProductionMonitorMenu> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(
             TobacconistMod.MODID, "textures/gui/production_monitor.png");
 
@@ -170,7 +170,7 @@ public class ProductionMonitorScreen extends AbstractContainerScreen<ProductionM
                 if (carried.isEmpty() && minecraft != null && minecraft.player != null) {
                     carried = minecraft.player.getMainHandItem();
                 }
-                if (!carried.isEmpty()) pendingFilter = carried.copyWithCount(1);
+                if (!carried.isEmpty()) pendingFilter = com.diggydwarff.tobacconistmod.backport.BackportStacks.copyWithCount(carried, 1);
             }
             return true;
         }

@@ -69,7 +69,7 @@ public final class SmokingDraws {
     public static boolean canStart(Player player, ItemStack stack) {
         return canFinish(player) && !player.isUsingItem()
                 && !player.getCooldowns().isOnCooldown(stack.getItem())
-                && (player.level().isClientSide() || (!MOUTH_DRAWS.containsKey(player.getUUID())
+                && (player.level.isClientSide() || (!MOUTH_DRAWS.containsKey(player.getUUID())
                 && !RECOVERY.containsKey(player.getUUID())));
     }
 
@@ -94,7 +94,7 @@ public final class SmokingDraws {
             if (!canStart(player, hose)) return InteractionResult.sidedSuccess(level.isClientSide());
             if (!TobacconistConfig.areSmokingDrawAnimationsEnabled()) {
                 if (!level.isClientSide() && player instanceof ServerPlayer serverPlayer) {
-                    SmokingItem.applyHookahSmokingEffects(serverPlayer, serverPlayer.serverLevel(), hookah.getShishaForSmoking());
+                    SmokingItem.applyHookahSmokingEffects(serverPlayer, serverPlayer.getLevel(), hookah.getShishaForSmoking());
                     hookah.applyDirtyWaterPenalty(player);
                     player.getCooldowns().addCooldown(hose.getItem(), 20);
                 }
@@ -115,22 +115,22 @@ public final class SmokingDraws {
                 || !player.isAlive() || player.isSpectator() || player.containerMenu != player.inventoryMenu) return;
         ItemStack shisha = draw.hookah.getShishaForSmoking();
         if (shisha.isEmpty()) return;
-        SmokingItem.applyHookahSmokingEffects(player, player.serverLevel(), shisha, strength(elapsed, hose));
+        SmokingItem.applyHookahSmokingEffects(player, player.getLevel(), shisha, strength(elapsed, hose));
         draw.hookah.applyDirtyWaterPenalty(player);
         recover(player, hose);
     }
 
     private static boolean validHookah(ServerPlayer player, HookahDraw draw) {
         HookahEntity hookah = draw.hookah;
-        return !hookah.isRemoved() && hookah.getLevel() == player.level() && hookah.progress > 0
-                && player.distanceToSqr(hookah.getBlockPos().getCenter()) <= 36.0D
+        return !hookah.isRemoved() && hookah.getLevel() == player.level && hookah.progress > 0
+                && player.distanceToSqr(net.minecraft.world.phys.Vec3.atCenterOf(hookah.getBlockPos())) <= 36.0D
                 && player.getUsedItemHand() == draw.hand
                 && player.getItemInHand(draw.hand).getItem() instanceof HookahHoseItem;
     }
 
     public static void startMouth(ServerPlayer player, ItemStack stack) {
         if (!canStart(player, stack)) return;
-        MOUTH_DRAWS.put(player.getUUID(), new MouthDraw(stack.copy(), duration(stack), player.level()));
+        MOUTH_DRAWS.put(player.getUUID(), new MouthDraw(stack.copy(), duration(stack), player.level));
         PacketDistributor.sendToPlayersTrackingEntityAndSelf(player, new SmokingDrawStatePayload(player.getId(), duration(stack)));
     }
 
@@ -152,7 +152,7 @@ public final class SmokingDraws {
         cancelMouth(player);
         int minimum = MIN_DRAW_TICKS;
         if (elapsed >= minimum && player.isAlive() && !player.isSpectator()
-                && player.containerMenu == player.inventoryMenu && player.level() == draw.level
+                && player.containerMenu == player.inventoryMenu && player.level == draw.level
                 && !player.isUsingItem() && ItemStack.matches(stack, draw.snapshot)) {
             ItemStack used = stack.copy();
             if (CuriosSmokingHelper.trySmokeMouthItem(player, strength(elapsed, used)) == null) recover(player, used);
@@ -164,7 +164,7 @@ public final class SmokingDraws {
     }
 
     public static void queueExhale(Player player, ItemStack tobacco, boolean hookah, float strength) {
-        EXHALES.put(player.getUUID(), new Exhale(tobacco.copy(), hookah, strength, EXHALE_DELAY_TICKS, player.level()));
+        EXHALES.put(player.getUUID(), new Exhale(tobacco.copy(), hookah, strength, EXHALE_DELAY_TICKS, player.level));
     }
 
     public static void drawSound(Level level, LivingEntity entity, ItemStack stack, int elapsed) {
@@ -202,22 +202,22 @@ public final class SmokingDraws {
         MouthDraw mouth = MOUTH_DRAWS.get(id);
         if (mouth != null) {
             ItemStack stack = CuriosSmokingHelper.getMouthItem(player);
-            if (!TobacconistConfig.areSmokingDrawAnimationsEnabled() || player.level() != mouth.level
+            if (!TobacconistConfig.areSmokingDrawAnimationsEnabled() || player.level != mouth.level
                     || player.isUsingItem() || player.containerMenu != player.inventoryMenu
                     || !ItemStack.matches(stack, mouth.snapshot)) {
                 cancelMouth(player);
             } else {
                 mouth.remaining--;
                 if (mouth.remaining <= 0) releaseMouth(player);
-                else drawSound(player.level(), player, stack, duration(stack) - mouth.remaining);
+                else drawSound(player.level, player, stack, duration(stack) - mouth.remaining);
             }
         }
         Exhale exhale = EXHALES.get(id);
         if (exhale != null) {
-            if (exhale.level != player.level()) EXHALES.remove(id);
+            if (exhale.level != player.level) EXHALES.remove(id);
             else if (--exhale.remaining <= 0) {
                 EXHALES.remove(id);
-                SmokingItem.emitSmokingSmoke(player, player.serverLevel(), exhale.tobacco, exhale.hookah, exhale.strength);
+                SmokingItem.emitSmokingSmoke(player, player.getLevel(), exhale.tobacco, exhale.hookah, exhale.strength);
             }
         }
     }

@@ -1,7 +1,7 @@
 package com.diggydwarff.tobacconistmod.screen;
 
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import com.diggydwarff.tobacconistmod.backport.GuiGraphics;
+import com.diggydwarff.tobacconistmod.backport.BackportContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 
@@ -13,7 +13,7 @@ import java.util.List;
  * <p>Like Create's container screens, this renders independent texture
  * segments rather than stretching a complete mockup screenshot.</p>
  */
-public class HookahScreen extends AbstractContainerScreen<HookahMenu> {
+public class HookahScreen extends BackportContainerScreen<HookahMenu> {
     private static final int INVENTORY_PANEL_X = 12;
     private static final int INVENTORY_PANEL_Y = 107;
 

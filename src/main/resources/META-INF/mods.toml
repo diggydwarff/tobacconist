@@ -65,29 +65,18 @@ description='''${mod_description}'''
 [[dependencies.${mod_id}]]
     modId = "curios"
     mandatory = false
-    versionRange = "[5.0,)"
+    versionRange = "[1.19.2-5.1.6.4,)"
     ordering = "NONE"
     side = "BOTH"
 [[dependencies.${mod_id}]]
     modId = "jei"
     mandatory = false
-    versionRange = "[1.20.1,)"
+    versionRange = "[11.8.1.1034,12)"
     ordering = "NONE"
     side = "BOTH"
 [[dependencies.${mod_id}]]
     modId = "patchouli"
     mandatory = false
-    versionRange = "[1.20.1,)"
+    versionRange = "[1.19.2-77,)"
     ordering = "NONE"
     side = "BOTH"
-[[dependencies.${mod_id}]]
-    modId="create"
-    mandatory=false
-    versionRange="[6.0.8,6.1.0)"
-    ordering="AFTER"
-    side="BOTH"
-# Features are specific properties of the game environment, that you may want to declare you require. This example declares
-# that your mod requires GL version 3.2 or higher. Other features will be added. They are side aware so declaring this won't
-# stop your mod loading on the server for example.
-#[features.${mod_id}]
-#openGLVersion="[3.2,)"

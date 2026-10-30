@@ -11,7 +11,7 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import com.diggydwarff.tobacconistmod.backport.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -62,15 +62,16 @@ public class HookahLoadRecipeCategory implements IRecipeCategory<HookahLoadJeiRe
     }
 
     @Override
-    public void draw(HookahLoadJeiRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics,
+    public void draw(HookahLoadJeiRecipe recipe, IRecipeSlotsView recipeSlotsView, com.mojang.blaze3d.vertex.PoseStack backportPose,
                      double mouseX, double mouseY) {
+        GuiGraphics guiGraphics = new GuiGraphics(backportPose);
         Minecraft mc = Minecraft.getInstance();
 
-        slot.draw(guiGraphics, 9, 5);
-        slot.draw(guiGraphics, 31, 5);
-        slot.draw(guiGraphics, 53, 5);
-        slot.draw(guiGraphics, 75, 5);
-        slot.draw(guiGraphics, 139, 5);
+        slot.draw(guiGraphics.pose(), 9, 5);
+        slot.draw(guiGraphics.pose(), 31, 5);
+        slot.draw(guiGraphics.pose(), 53, 5);
+        slot.draw(guiGraphics.pose(), 75, 5);
+        slot.draw(guiGraphics.pose(), 139, 5);
 
         guiGraphics.drawString(mc.font, ">", 112, 12, 0x404040, false);
         guiGraphics.drawString(mc.font, recipe.line1(), 6, 34, 0x404040, false);

@@ -14,7 +14,7 @@ import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -98,12 +98,10 @@ public class TobacconistJeiPlugin implements IModPlugin {
         registration.addRecipes(mezz.jei.api.constants.RecipeTypes.BREWING, java.util.List.of(
                 brewing.createBrewingRecipe(java.util.List.of(new ItemStack(Items.PAPER)),
                         new ItemStack(com.diggydwarff.tobacconistmod.vapor.VaporContent.CRUDE_EXTRACT.get()),
-                        new ItemStack(com.diggydwarff.tobacconistmod.vapor.VaporContent.NICOTINE_EXTRACT.get()),
-                        new ResourceLocation(TobacconistMod.MODID, "brewing/nicotine_extract")),
+                        new ItemStack(com.diggydwarff.tobacconistmod.vapor.VaporContent.NICOTINE_EXTRACT.get())),
                 brewing.createBrewingRecipe(java.util.List.of(new ItemStack(Items.SUGAR_CANE)),
                         new ItemStack(ModItems.BOTTLED_AQUA_VITAE.get()),
-                        new ItemStack(com.diggydwarff.tobacconistmod.vapor.VaporContent.CLEAR_BASE.get()),
-                        new ResourceLocation(TobacconistMod.MODID, "brewing/clear_base"))));
+                        new ItemStack(com.diggydwarff.tobacconistmod.vapor.VaporContent.CLEAR_BASE.get()))));
         registration.addIngredientInfo(java.util.List.of(new ItemStack(net.minecraft.world.level.block.Blocks.CAULDRON)), VanillaTypes.ITEM_STACK,
                 Component.translatable("tobacconistmod.vapor.jei_cauldron"));
         registration.addIngredientInfo(java.util.List.of(new ItemStack(com.diggydwarff.tobacconistmod.vapor.VaporContent.BLENDING_BENCH.get()),
@@ -274,7 +272,7 @@ public class TobacconistJeiPlugin implements IModPlugin {
     }
 
     private static void addCreateCatalyst(IRecipeCatalystRegistration registration, String path, RecipeType<?> type) {
-        Item item = BuiltInRegistries.ITEM.get(new ResourceLocation("create", path));
+        Item item = Registry.ITEM.get(new ResourceLocation("create", path));
         if (item != Items.AIR) {
             registration.addRecipeCatalyst(new ItemStack(item), type);
         }

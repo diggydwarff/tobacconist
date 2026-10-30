@@ -11,7 +11,7 @@ import com.diggydwarff.tobacconistmod.fluid.TobacconistFluidAmounts;
 import com.diggydwarff.tobacconistmod.util.LegacyItemTags;
 import com.diggydwarff.tobacconistmod.util.TobaccoBoxHelper;
 import com.diggydwarff.tobacconistmod.util.TobaccoCuringHelper;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluid;
@@ -34,7 +34,7 @@ public final class JeiItemLists {
     private JeiItemLists() {}
 
     public static List<ItemStack> getAllSmokingPipes() {
-        return StreamSupport.stream(BuiltInRegistries.ITEM.spliterator(), false)
+        return StreamSupport.stream(Registry.ITEM.spliterator(), false)
                 .filter(item -> item instanceof WoodenSmokingPipeItem)
                 .map(ItemStack::new)
                 .toList();

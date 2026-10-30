@@ -51,7 +51,7 @@ public class HookahMenu extends AbstractContainerMenu {
     public static final int WATER_MENU_SLOT_INDEX = TE_INVENTORY_FIRST_SLOT_INDEX + 2;
 
     public HookahMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
-        this(id, inv, inv.player.level().getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(4));
+        this(id, inv, inv.player.level.getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(4));
     }
 
     public HookahMenu(int id, Inventory inv, BlockEntity entity, ContainerData data) {
@@ -59,7 +59,7 @@ public class HookahMenu extends AbstractContainerMenu {
         checkContainerSize(inv, 3);
 
         this.blockEntity = (HookahEntity) entity;
-        this.level = inv.player.level();
+        this.level = inv.player.level;
         this.data = data;
 
         addPlayerInventory(inv);

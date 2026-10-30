@@ -29,7 +29,7 @@ public final class NoveltyEffects {
 
     public static void queue(ServerPlayer player, NoveltyContent.Kind kind, int draw) {
         if (!TobacconistConfig.areSmokingDrawAnimationsEnabled()) { emit(player, kind, draw, 0); return; }
-        PENDING.put(player.getUUID(), new Pending(kind, com.diggydwarff.tobacconistmod.backport.BackportMath.clamp(draw, 1, 30), SmokingDraws.EXHALE_DELAY_TICKS, player.level()));
+        PENDING.put(player.getUUID(), new Pending(kind, com.diggydwarff.tobacconistmod.backport.BackportMath.clamp(draw, 1, 30), SmokingDraws.EXHALE_DELAY_TICKS, player.level));
     }
 
     public static void emit(ServerPlayer player, NoveltyContent.Kind kind, int draw, int color) {
@@ -40,24 +40,24 @@ public final class NoveltyEffects {
         if (kind==NoveltyContent.Kind.WHISTLE) {
             var notes=WhistleMelody.notes(draw,player.getRandom().nextInt(2));
             whistle(player,notes.get(0).pitch());
-            if(notes.size()>1) MELODIES.put(player.getUUID(),new Melody(notes,1,0,player.level()));
+            if(notes.size()>1) MELODIES.put(player.getUUID(),new Melody(notes,1,0,player.level));
             return;
         }
         net.minecraft.sounds.SoundEvent sound = switch (kind) {
             case CONFETTI -> SoundEvents.BOOK_PAGE_TURN;
             case ASTRAL -> SoundEvents.AMETHYST_BLOCK_CHIME;
             case SOUL -> SoundEvents.SOUL_ESCAPE;
-            case PETAL -> SoundEvents.CHERRY_LEAVES_STEP;
-            case ECHO -> SoundEvents.NOTE_BLOCK_CHIME.value();
+            case PETAL -> SoundEvents.AZALEA_LEAVES_STEP;
+            case ECHO -> SoundEvents.NOTE_BLOCK_CHIME;
             default -> null;
         };
-        if (sound != null) player.serverLevel().playSound(null, player.blockPosition(), sound,
+        if (sound != null) player.getLevel().playSound(null, player.blockPosition(), sound,
                 SoundSource.PLAYERS, kind==NoveltyContent.Kind.ECHO ? .18F : .15F, 1.1F);
     }
 
     private static void whistle(ServerPlayer player,float pitch) {
-        player.serverLevel().playSound(null,player.getX(),player.getY()+1.4,player.getZ(),
-                SoundEvents.NOTE_BLOCK_FLUTE.value(),SoundSource.PLAYERS,.65F,pitch);
+        player.getLevel().playSound(null,player.getX(),player.getY()+1.4,player.getZ(),
+                SoundEvents.NOTE_BLOCK_FLUTE,SoundSource.PLAYERS,.65F,pitch);
     }
 
     @SubscribeEvent public static void tick(PlayerTickEvent event) {
@@ -66,13 +66,13 @@ public final class NoveltyEffects {
         UUID id=player.getUUID();
         var pending = PENDING.get(id);
         if (pending != null) {
-            if (!player.isAlive() || player.isSpectator() || player.level() != pending.level) PENDING.remove(id);
+            if (!player.isAlive() || player.isSpectator() || player.level != pending.level) PENDING.remove(id);
             else if (pending.delay <= 1) { PENDING.remove(id); emit(player, pending.kind, pending.draw, 0); }
             else PENDING.put(id, new Pending(pending.kind, pending.draw, pending.delay - 1, pending.level));
         }
         var melody=MELODIES.get(id);
         if(melody==null) return;
-        if(!player.isAlive() || player.isSpectator() || player.level()!=melody.level || !NoveltyConfig.SOUNDS.get()) {
+        if(!player.isAlive() || player.isSpectator() || player.level!=melody.level || !NoveltyConfig.SOUNDS.get()) {
             MELODIES.remove(id);return;
         }
         int age=melody.age+1,next=melody.next;

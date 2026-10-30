@@ -3,8 +3,8 @@ package com.diggydwarff.tobacconistmod.vapor.client;
 import com.diggydwarff.tobacconistmod.TobacconistMod;
 import com.diggydwarff.tobacconistmod.compat.create.CreateCompat;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.Button;
+import com.diggydwarff.tobacconistmod.backport.GuiGraphics;
+import com.diggydwarff.tobacconistmod.backport.BackportButton;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
@@ -38,7 +38,7 @@ final class VaporGui {
         gui.blit(INVENTORY, x, y, 0, 0, 176, 108, 256, 256);
     }
 
-    static final class Control extends Button {
+    static final class Control extends BackportButton {
         private final Supplier<Component> label;
         private final Runnable secondary;
         private final int iconX;
@@ -60,7 +60,7 @@ final class VaporGui {
 
         private Control(int x, int y, int width, Supplier<Component> label, Runnable action, Runnable secondary,
                         int iconX, int iconY, boolean selector, Supplier<Boolean> selected) {
-            super(x, y, width, selector ? 22 : 18, label.get(), ignored -> action.run(), DEFAULT_NARRATION);
+            super(x, y, width, selector ? 22 : 18, label.get(), ignored -> action.run());
             this.label = label;
             this.secondary = secondary;
             this.iconX = iconX;

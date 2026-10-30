@@ -1,7 +1,7 @@
 package com.diggydwarff.tobacconistmod.datagen.items.custom;
 
 import com.diggydwarff.tobacconistmod.TobacconistMod;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -124,7 +124,7 @@ public enum BottledMolassesFlavors {
     public Item getItem(){
         if (item == null) {
             // Molasses and Essence bottles each represent a full 250 mB processing batch.
-            item = new BottledMolassesItem(new Item.Properties().stacksTo(1));
+            item = new BottledMolassesItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).stacksTo(1));
         }
         return item;
     }
@@ -143,7 +143,7 @@ public enum BottledMolassesFlavors {
             return null;
         }
         if (essenceItem == null) {
-            essenceItem = new FlavoringEssenceItem(new Item.Properties().stacksTo(1));
+            essenceItem = new FlavoringEssenceItem(new Item.Properties().tab(com.diggydwarff.tobacconistmod.TobacconistCreativeTab.TAB).stacksTo(1));
         }
         return essenceItem;
     }
@@ -211,7 +211,7 @@ public enum BottledMolassesFlavors {
     /** Ingredient tag shared by Brewing Stand and Create essence recipes. */
     public TagKey<Item> getFlavoringIngredientTag() {
         return TagKey.create(
-                Registries.ITEM,
+                Registry.ITEM_REGISTRY,
                 new ResourceLocation(TobacconistMod.MODID, "flavorings/" + getFlavorPath())
         );
     }

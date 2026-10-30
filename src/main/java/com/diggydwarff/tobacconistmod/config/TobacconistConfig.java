@@ -732,7 +732,7 @@ public class TobacconistConfig {
                     .comment("Servers can rename, remove, or add entries for their own roleplay/lore.")
                     .defineListAllowEmpty(
                             List.of("secretBlends"),
-                            DEFAULT_SECRET_BLENDS,
+                            () -> DEFAULT_SECRET_BLENDS,
                             obj -> obj instanceof String
                     );
 
@@ -746,7 +746,7 @@ public class TobacconistConfig {
                     .comment("Legacy 3-field entries remain accepted; their third number is treated as brightnessLift.")
                     .defineListAllowEmpty(
                             List.of("secretBlendVisuals"),
-                            DEFAULT_SECRET_BLEND_VISUALS,
+                            () -> DEFAULT_SECRET_BLEND_VISUALS,
                             obj -> obj instanceof String
                     );
 
@@ -757,7 +757,7 @@ public class TobacconistConfig {
                     .comment("Example: Crown & Ember=3|minecraft:fire_resistance,180,0;minecraft:strength,120,0")
                     .defineListAllowEmpty(
                             List.of("secretBlendBonuses"),
-                            DEFAULT_SECRET_BLEND_BONUSES,
+                            () -> DEFAULT_SECRET_BLEND_BONUSES,
                             obj -> obj instanceof String
                     );
             builder.pop();
@@ -775,7 +775,7 @@ public class TobacconistConfig {
                     .comment("Example: blend=Black Orchard|minAgedDays=90 -> minecraft:night_vision,600,0")
                     .defineListAllowEmpty(
                             List.of("effectRules"),
-                            DEFAULT_EFFECT_RULES,
+                            () -> DEFAULT_EFFECT_RULES,
                             obj -> obj instanceof String
                     );
             builder.pop();
@@ -793,7 +793,7 @@ public class TobacconistConfig {
                     .comment("additionalEffects = [\"minecraft:luck,200,0\", \"minecraft:speed,100,0\"]")
                     .defineListAllowEmpty(
                             List.of("additionalEffects"),
-                            List.of(),
+                            () -> List.of(),
                             obj -> obj instanceof String
                     );
 

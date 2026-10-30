@@ -133,7 +133,7 @@ public final class TobaccoFanSmokeParticle extends TextureSheetParticle {
         // Move ceiling-bound smoke directly when vanilla collision has pinned its velocity.
         double nextX = this.x + slideX;
         double nextZ = this.z + slideZ;
-        BlockPos destination = BlockPos.containing(nextX, this.y, nextZ);
+        BlockPos destination = new net.minecraft.core.BlockPos(nextX, this.y, nextZ);
         BlockState destinationState = this.level.getBlockState(destination);
         if (destinationState.isAir() || destinationState.getCollisionShape(this.level, destination).isEmpty()) {
             this.setPos(nextX, this.y, nextZ);
@@ -145,7 +145,7 @@ public final class TobaccoFanSmokeParticle extends TextureSheetParticle {
 
 
     private boolean isSkyExposed() {
-        return this.level.canSeeSky(BlockPos.containing(this.x, this.y + 0.15D, this.z));
+        return this.level.canSeeSky(new net.minecraft.core.BlockPos(this.x, this.y + 0.15D, this.z));
     }
 
     private void releaseToOutdoorSmoke() {
@@ -158,7 +158,7 @@ public final class TobaccoFanSmokeParticle extends TextureSheetParticle {
         this.yd = Math.max(this.yd, OUTDOOR_WALL_RISE);
         if (isAgainstWall()) {
             double nextY = this.y + 0.012D;
-            BlockPos destination = BlockPos.containing(this.x, nextY, this.z);
+            BlockPos destination = new net.minecraft.core.BlockPos(this.x, nextY, this.z);
             BlockState state = this.level.getBlockState(destination);
             if (state.isAir() || state.getCollisionShape(this.level, destination).isEmpty()) {
                 this.setPos(this.x, nextY, this.z);
@@ -174,7 +174,7 @@ public final class TobaccoFanSmokeParticle extends TextureSheetParticle {
     }
 
     private boolean isSolidAtHorizontalOffset(double xOffset, double zOffset) {
-        BlockPos pos = BlockPos.containing(this.x + xOffset, this.y, this.z + zOffset);
+        BlockPos pos = new net.minecraft.core.BlockPos(this.x + xOffset, this.y, this.z + zOffset);
         BlockState state = this.level.getBlockState(pos);
         return !state.isAir() && !state.getCollisionShape(this.level, pos).isEmpty();
     }
@@ -187,7 +187,7 @@ public final class TobaccoFanSmokeParticle extends TextureSheetParticle {
     }
 
     private boolean isSolidAtOffset(double yOffset) {
-        BlockPos above = BlockPos.containing(this.x, this.y + yOffset, this.z);
+        BlockPos above = new net.minecraft.core.BlockPos(this.x, this.y + yOffset, this.z);
         BlockState state = this.level.getBlockState(above);
         return !state.isAir() && !state.getCollisionShape(this.level, above).isEmpty();
     }

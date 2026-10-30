@@ -24,8 +24,8 @@ import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 
 public class CigaretteRecipe extends CustomRecipe {
-    public CigaretteRecipe(ResourceLocation id, CraftingBookCategory category) {
-        super(id, category);
+    public CigaretteRecipe(ResourceLocation id) {
+        super(id);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class CigaretteRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer container, RegistryAccess registries) {
+    public ItemStack assemble(CraftingContainer container) {
         ItemStack paperStack = ItemStack.EMPTY;
         ItemStack tobaccoStack = ItemStack.EMPTY;
 

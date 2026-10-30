@@ -73,9 +73,9 @@ minecraft {
             // Recommended logging level for the console
             // You can set various levels here.
             // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
-            property 'forge.logging.console.level', 'debug'
+            property 'forge.logging.console.level', 'info'
 
-            // ForgeGradle/Create 6 userdev runs use SRG/Mojmap refmap remapping.
+            // Remap the common mixins in development runs.
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 
@@ -118,38 +118,27 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
     mavenCentral() // MixinExtras
-    maven { url = "https://maven.createmod.net" }
-    maven { url = "https://maven.tterrag.com/" }
-    maven { url = "https://maven.theillusivec4.top/" } // Curios
-    maven { url 'https://maven.blamejared.com' } // Patchouli
-    maven { url "https://modmaven.dev" } // JEI
+    maven { url = "https://maven.theillusivec4.top/"; content { includeGroup "top.theillusivec4.curios" } } // Curios
+    maven { url 'https://maven.blamejared.com'; content { includeGroup 'vazkii.patchouli'; includeGroup 'mezz.jei' } } // Patchouli
 }
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-    // Create 6 stack (Forge 1.20.1)
-    implementation fg.deobf("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
-    implementation fg.deobf("net.createmod.ponder:Ponder-Forge-${minecraft_version}:${ponder_version}")
-    compileOnly fg.deobf("dev.engine-room.flywheel:flywheel-forge-api-${minecraft_version}:${flywheel_version}")
-    runtimeOnly fg.deobf("dev.engine-room.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}")
-    implementation fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
-    // Create slim does not carry its jar-in-jar runtime dependencies in dev.
-    runtimeOnly "io.github.llamalad7:mixinextras-forge:${mixin_extras_version}"
-
     // Patchouli
-    implementation fg.deobf("vazkii.patchouli:Patchouli:1.20.1-84-FORGE")
+    compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.19.2-77")
+    if (!project.hasProperty("standalone")) runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.19.2-77")
 
     // Curios compat API
-    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:5.9.1+1.20.1:api")
+    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.19.2-5.1.6.4:api")
     // Curios mod for runtime (for testing in dev environment)
-    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:5.9.1+1.20.1")
+    if (!project.hasProperty("standalone")) runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.19.2-5.1.6.4")
 
     // JEI API dependencies
-    compileOnly fg.deobf("mezz.jei:jei-1.20.1-common-api:15.20.0.107")
-    compileOnly fg.deobf("mezz.jei:jei-1.20.1-forge-api:15.20.0.107")
+    compileOnly fg.deobf("mezz.jei:jei-1.19.2-common-api:11.8.1.1034")
+    compileOnly fg.deobf("mezz.jei:jei-1.19.2-forge-api:11.8.1.1034")
     // Full JEI mod for runtime (for testing in dev environment)
-    runtimeOnly fg.deobf("mezz.jei:jei-1.20.1-forge:15.20.0.107")
+    if (!project.hasProperty("standalone")) runtimeOnly fg.deobf("mezz.jei:jei-1.19.2-forge:11.8.1.1034")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
@@ -157,7 +146,6 @@ dependencies {
 mixin {
     add sourceSets.main, "${mod_id}.refmap.json"
     config "${mod_id}.mixins.json"
-    config "${mod_id}.create.mixins.json"
 }
 // This block of code expands all declared replace properties in the specified resource targets.
 // A missing property will result in an error. Properties are expanded using ${} Groovy notation.
@@ -216,5 +204,9 @@ publishing {
 }
 
 tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs += ['-Xmaxerrs', '1000']
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
 }
+
+// Audit sources are never packaged in the production mod.
+if (project.hasProperty("portValidation")) apply from: "validation/validation.gradle"

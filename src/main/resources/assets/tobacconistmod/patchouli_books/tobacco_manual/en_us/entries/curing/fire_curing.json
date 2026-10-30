@@ -16,7 +16,7 @@
     {
       "type": "patchouli:text",
       "title": "Fan-Assisted Fire Cure",
-      "text": "With $(thing)Create$(), an Encased Fan blowing through a lit ordinary Campfire produces smoky airflow that can Fire Cure a nearby wooden rack and advances the cure faster. The rack does not need to sit directly over that Campfire for this assisted route."
+      "text": "The rack does not need to sit directly over that Campfire for this assisted route."
     },
     {
       "type": "patchouli:text",

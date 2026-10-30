@@ -6,7 +6,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -14,17 +13,17 @@ import net.minecraft.world.level.Level;
 
 public class LooseTobaccoCuttingRecipe extends CustomRecipe {
 
-    public LooseTobaccoCuttingRecipe(ResourceLocation id, CraftingBookCategory category) {
-        super(id, category);
+    public LooseTobaccoCuttingRecipe(ResourceLocation id) {
+        super(id);
     }
 
     @Override
     public boolean matches(CraftingContainer container, Level level) {
-        return !assemble(container, level.registryAccess()).isEmpty();
+        return !assemble(container).isEmpty();
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer container, RegistryAccess registries) {
+    public ItemStack assemble(CraftingContainer container) {
         int leafSlot = -1;
         int chavetaSlot = -1;
         int nonEmpty = 0;

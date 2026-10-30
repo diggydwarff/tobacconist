@@ -27,7 +27,7 @@ public final class CuriosMouthEffects {
         String key="TobacconistMouthRenderRepair13";
         var persisted=player.getPersistentData().getCompound(net.minecraft.world.entity.player.Player.PERSISTED_NBT_TAG);
         if(persisted.getBoolean(key)) return;
-        var inventory=top.theillusivec4.curios.api.CuriosApi.getCuriosInventory(player).orElse(null);
+        var inventory=top.theillusivec4.curios.api.CuriosApi.getCuriosHelper().getCuriosHandler(player).orElse(null);
         var mouth=inventory==null ? null : inventory.getCurios().get("mouth");
         if(mouth==null) return;
         var renders=mouth.getRenders();boolean changed=false;
@@ -52,11 +52,11 @@ public final class CuriosMouthEffects {
         if (event.phase != net.minecraftforge.event.TickEvent.Phase.END) return;
         if (!(event.player instanceof ServerPlayer player) || !ModList.get().isLoaded("curios")) return;
         repairLegacyVisibility(player);
-        var payload=state(player);var before=SENT.get(player.getUUID());long now=player.level().getGameTime();
-        if(before==null || !before.payload.equals(payload) || before.level!=player.level()
+        var payload=state(player);var before=SENT.get(player.getUUID());long now=player.level.getGameTime();
+        if(before==null || !before.payload.equals(payload) || before.level!=player.level
                 || payload.profile()!=MouthEffectProfile.NONE.ordinal() && now-before.sent>=20) {
             PacketDistributor.sendToPlayersTrackingEntityAndSelf(player,payload);
-            SENT.put(player.getUUID(),new State(payload,player.level(),now));
+            SENT.put(player.getUUID(),new State(payload,player.level,now));
         }
     }
     @SubscribeEvent public static void logout(PlayerEvent.PlayerLoggedOutEvent event) { SENT.remove(event.getEntity().getUUID()); }

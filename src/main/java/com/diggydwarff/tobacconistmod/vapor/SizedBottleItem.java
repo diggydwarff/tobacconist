@@ -68,8 +68,8 @@ public final class SizedBottleItem extends Item {
     }
     public static boolean pour(Player player, InteractionHand targetHand, InteractionHand sourceHand, boolean simulate) {
         ItemStack target = player.getItemInHand(targetHand), source = player.getItemInHand(sourceHand);
-        var out = source.copyWithCount(1).getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElse(null);
-        var in = target.copyWithCount(1).getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElse(null);
+        var out = com.diggydwarff.tobacconistmod.backport.BackportStacks.copyWithCount(source, 1).getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElse(null);
+        var in = com.diggydwarff.tobacconistmod.backport.BackportStacks.copyWithCount(target, 1).getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElse(null);
         if (out == null || in == null) return false;
         boolean emptyTarget = in.getFluidInTank(0).isEmpty();
         FluidStack fluid = out.getFluidInTank(0);

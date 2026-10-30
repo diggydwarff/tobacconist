@@ -18,7 +18,7 @@ public final class CuriosSpectaclesHelper {
     }
 
     private static ItemStack findWorn(Player player, boolean requireVisible) {
-        return CuriosApi.getCuriosInventory(player).map(inventory -> {
+        return CuriosApi.getCuriosHelper().getCuriosHandler(player).map(inventory -> {
             var head = inventory.getCurios().get("head");
             if (head == null || head.getStacks().getSlots() <= 0) return ItemStack.EMPTY;
 

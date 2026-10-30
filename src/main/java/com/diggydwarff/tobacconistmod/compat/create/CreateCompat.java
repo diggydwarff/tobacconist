@@ -7,47 +7,17 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModList;
 
 import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 
 /**
- * Loader-safe entry point for optional Create integration. Create API classes are loaded only
- * after {@link #loaded()} succeeds, so common code can reference this class without Create.
+ * Standalone compatibility facade. Defaults preserve ordinary curing, inventories and smoke
+ * without linking any Create, Ponder or Flywheel classes, even if old Create is installed.
  */
 public final class CreateCompat {
     public static final String MOD_ID = "create";
-
-    private static final String DEPLOYER_COMPAT_CLASS =
-            "com.diggydwarff.tobacconistmod.compat.create.CreateDeployerCompat";
-    private static final String PRESS_COMPAT_CLASS =
-            "com.diggydwarff.tobacconistmod.compat.create.CreatePressCompat";
-    private static final String MIXER_COMPAT_CLASS =
-            "com.diggydwarff.tobacconistmod.compat.create.CreateMixerCompat";
-    private static final String FILLING_COMPAT_CLASS =
-            "com.diggydwarff.tobacconistmod.compat.create.CreateFillingCompat";
-    private static final String FAN_CURING_COMPAT_CLASS =
-            "com.diggydwarff.tobacconistmod.compat.create.CreateFanCuringCompat";
-    private static final String DISPLAY_LINK_COMPAT_CLASS =
-            "com.diggydwarff.tobacconistmod.compat.create.CreateDisplayLinkCompat";
-    private static final String ITEM_ATTRIBUTE_COMPAT_CLASS =
-            "com.diggydwarff.tobacconistmod.compat.create.CreateItemAttributeCompat";
-    private static final String ARM_COMPAT_CLASS =
-            "com.diggydwarff.tobacconistmod.compat.create.CreateArmCompat";
-    private static final String LOGISTICS_COMPAT_CLASS =
-            "com.diggydwarff.tobacconistmod.compat.create.CreateLogisticsCompat";
-    private static final String SMOKE_CLEARING_COMPAT_CLASS =
-            "com.diggydwarff.tobacconistmod.compat.create.CreateSmokeClearingCompat";
-    private static final String PONDER_COMPAT_CLASS =
-            "com.diggydwarff.tobacconistmod.compat.create.CreatePonderCompat";
-    private static final String HOMOGENIZATION_COMPAT_CLASS =
-            "com.diggydwarff.tobacconistmod.compat.create.CreateHomogenizationCompat";
-    private static final String PRODUCTION_MONITOR_COMPAT_CLASS =
-            "com.diggydwarff.tobacconistmod.compat.create.CreateProductionMonitorCompat";
-    private static final String BARREL_PROCESSING_COMPAT_CLASS =
-            "com.diggydwarff.tobacconistmod.compat.create.CreateBarrelProcessingCompat";
 
     private static BiFunction<Level, BlockPos, FanCuringAssist> fanCuringResolver =
             (level, pos) -> FanCuringAssist.NONE;
@@ -62,38 +32,14 @@ public final class CreateCompat {
     private CreateCompat() {}
 
     public static boolean loaded() {
-        return ModList.get().isLoaded(MOD_ID);
+        return false; // This standalone 1.19.2 build never loads Create integration.
     }
 
     public static void init(IEventBus modEventBus) {
-        if (!loaded()) {
-            TobacconistMod.LOGGER.debug("Create not detected; Create compatibility remains disabled.");
-            return;
-        }
-
-        registerCreateIntegration(DEPLOYER_COMPAT_CLASS);
-        registerCreateIntegration(PRESS_COMPAT_CLASS, modEventBus);
-        registerCreateIntegration(MIXER_COMPAT_CLASS, modEventBus);
-        registerCreateIntegration(FILLING_COMPAT_CLASS, modEventBus);
-        registerCreateIntegration(FAN_CURING_COMPAT_CLASS);
-        registerCreateIntegration(DISPLAY_LINK_COMPAT_CLASS, modEventBus);
-        registerCreateIntegration(ITEM_ATTRIBUTE_COMPAT_CLASS, modEventBus);
-        registerCreateIntegration(ARM_COMPAT_CLASS, modEventBus);
-        registerCreateIntegration(LOGISTICS_COMPAT_CLASS, modEventBus);
-        registerCreateIntegration(SMOKE_CLEARING_COMPAT_CLASS);
-        registerCreateIntegration(HOMOGENIZATION_COMPAT_CLASS);
-        registerCreateIntegration(PRODUCTION_MONITOR_COMPAT_CLASS);
-        registerCreateIntegration(BARREL_PROCESSING_COMPAT_CLASS);
-        TobacconistMod.LOGGER.info("Create detected; Tobacconist Create compatibility enabled.");
+        TobacconistMod.LOGGER.info("Tobacconist standalone 1.19.2: Create integration is disabled.");
     }
 
-    /** Client-only Create/Ponder setup, kept behind reflection so Create remains optional. */
-    public static void initClient() {
-        if (!loaded()) {
-            return;
-        }
-        registerCreateIntegration(PONDER_COMPAT_CLASS);
-    }
+    public static void initClient() {}
 
     /**
      * Loader-safe description of Create airflow reaching a Tobacconist Drying Rack.
@@ -231,27 +177,4 @@ public final class CreateCompat {
         productionMonitorBridge = Objects.requireNonNull(bridge);
     }
 
-    private static void registerCreateIntegration(String className, IEventBus modEventBus) {
-        try {
-            Class<?> integrationClass = Class.forName(className);
-            integrationClass.getMethod("register", IEventBus.class).invoke(null, modEventBus);
-        } catch (ReflectiveOperationException exception) {
-            throw new IllegalStateException(
-                    "Create is installed, but Tobacconist Create compatibility failed to initialize: " + className,
-                    exception
-            );
-        }
-    }
-
-    private static void registerCreateIntegration(String className) {
-        try {
-            Class<?> integrationClass = Class.forName(className);
-            integrationClass.getMethod("register").invoke(null);
-        } catch (ReflectiveOperationException exception) {
-            throw new IllegalStateException(
-                    "Create is installed, but Tobacconist Create compatibility failed to initialize: " + className,
-                    exception
-            );
-        }
-    }
 }

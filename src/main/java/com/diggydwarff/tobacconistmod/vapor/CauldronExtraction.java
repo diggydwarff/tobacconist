@@ -139,7 +139,7 @@ public final class CauldronExtraction extends SavedData {
                 player.displayClientMessage(Component.translatable("tobacconistmod.vapor.cauldron_partial_bottle", amount), true);
                 return InteractionResult.SUCCESS;
             }
-            ItemStack receipt = held.copyWithCount(reference.isEmpty() ? amount : 1);
+            ItemStack receipt = com.diggydwarff.tobacconistmod.backport.BackportStacks.copyWithCount(held, reference.isEmpty() ? amount : 1);
             batch.receipts.add(receipt); batch.fluidUsed.add(reference.isEmpty() ? 0 : amount); batch.amounts[next] += amount;
             if (!player.getAbilities().instabuild) held.shrink(receipt.getCount());
             data.setDirty();
@@ -185,7 +185,7 @@ public final class CauldronExtraction extends SavedData {
         if (target.is(Items.GLASS_BOTTLE) && remaining < VaporData.BOTTLE && VaporBottleHandler.supported(fluid)) {
             amount = remaining; filled = VaporBottleHandler.filled(fluid);
         } else {
-            var handler = target.copyWithCount(1).getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElse(null);
+            var handler = com.diggydwarff.tobacconistmod.backport.BackportStacks.copyWithCount(target, 1).getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElse(null);
             if (handler == null) return java.util.Optional.empty();
             amount = handler.fill(fluid, IFluidHandler.FluidAction.SIMULATE);
             if (amount <= 0) return java.util.Optional.empty();
@@ -238,7 +238,7 @@ public final class CauldronExtraction extends SavedData {
     }
 
     private static boolean canSpendFluid(ItemStack stack, int amount) {
-        var handler = stack.copyWithCount(1).getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElse(null);
+        var handler = com.diggydwarff.tobacconistmod.backport.BackportStacks.copyWithCount(stack, 1).getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElse(null);
         if (handler == null || amount <= 0) return false;
         FluidStack current = handler.getFluidInTank(0);
         FluidStack drained = handler.drain(amount, IFluidHandler.FluidAction.SIMULATE);
@@ -353,7 +353,7 @@ public final class CauldronExtraction extends SavedData {
         for (ItemStack remainder : returnedContainers(receipt, fluidUsed)) give(player, remainder);
     }
     private static List<ItemStack> returnedContainers(ItemStack receipt, int fluidUsed) {
-        ItemStack single = receipt.copyWithCount(1);
+        ItemStack single = com.diggydwarff.tobacconistmod.backport.BackportStacks.copyWithCount(receipt, 1);
         var handler = single.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElse(null);
         ItemStack remainder;
         if (handler != null && !handler.getFluidInTank(0).isEmpty()) {

@@ -49,7 +49,7 @@ public final class LiquidStationMenu extends AbstractContainerMenu {
     public BlockPos pos() { return pos; }
     @Override public boolean clickMenuButton(Player player, int id) {
         if (id < 0 || id > 7 || !player.isAlive() || player.isSpectator() || !stillValid(player)) return false;
-        if (player.level().getBlockEntity(pos) instanceof LiquidStationEntity station) {
+        if (player.level.getBlockEntity(pos) instanceof LiquidStationEntity station) {
             station.button(id);
             if (id == 4 && player instanceof net.minecraft.server.level.ServerPlayer server) {
                 VaporAdvancements.onRecipeSaved(server, station.inventory.getStackInSlot(LiquidStationEntity.CARD));
@@ -59,7 +59,7 @@ public final class LiquidStationMenu extends AbstractContainerMenu {
         return false;
     }
     @Override public boolean stillValid(Player player) {
-        return player.level().getBlockEntity(pos) instanceof LiquidStationEntity station
+        return player.level.getBlockEntity(pos) instanceof LiquidStationEntity station
                 && station.inventory == stationInventory && station.isBlending() == blending
                 && player.distanceToSqr(pos.getX() + .5, pos.getY() + .5, pos.getZ() + .5) <= 64;
     }
@@ -69,10 +69,10 @@ public final class LiquidStationMenu extends AbstractContainerMenu {
         pullInsertedRecipeEssences(player, previousCard);
     }
     private void pullInsertedRecipeEssences(Player player, ItemStack previousCard) {
-        if (player.level().isClientSide || player.getInventory() != playerInventory
+        if (player.level.isClientSide || player.getInventory() != playerInventory
                 || !blending || !player.isAlive() || player.isSpectator()
                 || !stillValid(player) || stationInventory.getStackInSlot(LiquidStationEntity.CARD) == previousCard) return;
-        if (player.level().getBlockEntity(pos) instanceof LiquidStationEntity station) {
+        if (player.level.getBlockEntity(pos) instanceof LiquidStationEntity station) {
             station.pullRecipeEssences(playerInventory);
         }
     }
@@ -88,7 +88,7 @@ public final class LiquidStationMenu extends AbstractContainerMenu {
             for (int i = 0; i < 11 && !original.isEmpty(); i++) {
                 Slot target = slots.get(i);
                 if (blending && i >= 3 && i < 6
-                        && player.level().getBlockEntity(pos) instanceof LiquidStationEntity station
+                        && player.level.getBlockEntity(pos) instanceof LiquidStationEntity station
                         && !station.canLoadBottle(i, original)) continue;
                 if (target.isActive() && target.mayPlace(original)) moved |= moveItemStackTo(original, i, i + 1, false);
             }

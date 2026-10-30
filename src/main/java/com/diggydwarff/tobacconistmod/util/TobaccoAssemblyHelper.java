@@ -1,7 +1,7 @@
 package com.diggydwarff.tobacconistmod.util;
 
 import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -49,7 +49,7 @@ public final class TobaccoAssemblyHelper {
 
     private static void writeStack(ItemStack target, ItemStack source, String itemKey, String dataKey) {
         CompoundTag targetTag = LegacyItemTags.getOrCreateTag(target);
-        targetTag.putString(itemKey, BuiltInRegistries.ITEM.getKey(source.getItem()).toString());
+        targetTag.putString(itemKey, Registry.ITEM.getKey(source.getItem()).toString());
         CompoundTag sourceData = LegacyItemTags.getTag(source);
         if (sourceData != null && !sourceData.isEmpty()) {
             targetTag.put(dataKey, sourceData.copy());
@@ -62,7 +62,7 @@ public final class TobaccoAssemblyHelper {
 
         ResourceLocation id = ResourceLocation.tryParse(tag.getString(itemKey));
         if (id == null) return ItemStack.EMPTY;
-        Item item = BuiltInRegistries.ITEM.get(id);
+        Item item = Registry.ITEM.get(id);
         if (item == null || item == Items.AIR) return ItemStack.EMPTY;
 
         ItemStack result = new ItemStack(item);

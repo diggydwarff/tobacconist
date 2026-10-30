@@ -64,7 +64,7 @@ public class ProductionMonitorMenu extends AbstractContainerMenu {
     private ProductionMonitorMenu(int id, Inventory inventory, BlockPos blockPos,
                                   ContainerData data, ItemStack initialFilter) {
         super(ModMenuTypes.PRODUCTION_MONITOR_MENU.get(), id);
-        this.level = inventory.player.level();
+        this.level = inventory.player.level;
         this.blockPos = blockPos;
         this.data = data;
         this.initialFilter = initialFilter == null ? ItemStack.EMPTY : initialFilter.copy();

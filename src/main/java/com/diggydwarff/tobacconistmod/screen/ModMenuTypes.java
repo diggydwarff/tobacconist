@@ -2,7 +2,7 @@ package com.diggydwarff.tobacconistmod.screen;
 
 import net.minecraftforge.registries.ForgeRegistries;
 import com.diggydwarff.tobacconistmod.TobacconistMod;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.eventbus.api.IEventBus;

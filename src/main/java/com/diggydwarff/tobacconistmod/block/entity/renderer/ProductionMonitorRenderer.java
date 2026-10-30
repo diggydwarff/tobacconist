@@ -2,7 +2,7 @@ package com.diggydwarff.tobacconistmod.block.entity.renderer;
 
 import com.diggydwarff.tobacconistmod.block.entity.ProductionMonitorBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
-import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
@@ -48,10 +48,10 @@ public class ProductionMonitorRenderer implements BlockEntityRenderer<Production
         }
 
         // Face the rendered item's local front outward on every cardinal side. Create's
-        // TransformStack horizontal rotation convention is opposite Minecraft Axis.YP here;
+        // TransformStack horizontal rotation convention is opposite Minecraft Vector3f.YP here;
         // using +toYRot mirrored EAST/WEST and pushed flat filter items into the solid block.
         float outwardYaw = 180.0F - operatorFace.toYRot();
-        poseStack.mulPose(Axis.YP.rotationDegrees(outwardYaw));
+        poseStack.mulPose(Vector3f.YP.rotationDegrees(outwardYaw));
         poseStack.scale(VALUE_BOX_SCALE, VALUE_BOX_SCALE, VALUE_BOX_SCALE);
 
         BakedModel model = itemRenderer.getModel(filter, null, null, 0);
@@ -69,7 +69,7 @@ public class ProductionMonitorRenderer implements BlockEntityRenderer<Production
             filterLight = LevelRenderer.getLightColor(
                     monitor.getLevel(), monitor.getBlockPos().relative(operatorFace));
         }
-        itemRenderer.render(filter, ItemDisplayContext.FIXED, false, poseStack, buffer, filterLight, packedOverlay, model);
+        itemRenderer.render(filter, TransformType.FIXED, false, poseStack, buffer, filterLight, packedOverlay, model);
         poseStack.popPose();
     }
 }

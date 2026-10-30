@@ -5,6 +5,11 @@
   "sortnum": 3,
   "pages": [
     {
+      "type": "patchouli:crafting",
+      "recipe": "tobacconistmod:production_monitor",
+      "text": "The standalone monitor observes ordinary hoppers and Tobacconist processing blocks. Its recipe uses iron, a comparator, redstone, glass and a hopper."
+    },
+    {
       "type": "patchouli:text",
       "text": "The Production Monitor is a non-invasive throughput counter for factory lines. It observes confirmed transfers through one adjacent supported transport without inserting, extracting, or buffering the items itself."
     },
@@ -16,12 +21,12 @@
     {
       "type": "patchouli:text",
       "title": "Placement & Direction",
-      "text": "Stand behind the monitor and place it while facing the transport you want to observe. The monitor’s front face points at that adjacent target. Supported targets are Create Belts, Funnels and Chutes, plus vanilla Hoppers. If the pointed-at block is not supported, the monitor reports an invalid target and does not count it."
+      "text": "Stand behind the monitor and place it while facing the transport you want to observe. The monitor\u2019s front face points at that adjacent target. Supported targets are vanilla Hoppers. If the pointed-at block is not supported, the monitor reports an invalid target and does not count it."
     },
     {
       "type": "patchouli:text",
       "title": "Filter & Counting",
-      "text": "Open the monitor to configure its ghost Filter, or set the filter directly on the operator-facing target without consuming the item. Normal items match exact item/components; Create Filters and Attribute Filters are supported when Create can evaluate them. $(thing)Items$() counts item quantity, $(thing)Stacks$() displays quantity as 64-item stack-equivalents, and $(thing)Transfers$() counts successful transfer operations."
+      "text": "Open the monitor to configure its ghost Filter, or set the filter directly on the operator-facing target without consuming the item. Normal items match the exact item and stored NBT data. $(thing)Items$() counts item quantity, $(thing)Stacks$() displays quantity as 64-item stack-equivalents, and $(thing)Transfers$() counts successful transfer operations."
     },
     {
       "type": "patchouli:text",
@@ -31,7 +36,7 @@
     {
       "type": "patchouli:text",
       "title": "Reading the Monitor",
-      "text": "The menu exposes Count/Target, rolling Rate, target validity, count mode, and output state. Tobacconist’s Spectacles/Create Goggles expose the same live telemetry in-world. Create Display Links can report $(thing)Count/Target$(), $(thing)Rate$(), or $(thing)Status$() and the monitor refreshes those values about once per second."
+      "text": "The menu exposes Count/Target, rolling Rate, target validity, count mode, and output state. Tobacconist\u2019s Spectacles expose the same live telemetry in-world."
     },
     {
       "type": "patchouli:text",
@@ -46,6 +51,5 @@
       ],
       "title": "Related Automation"
     }
-  ],
-  "flag": "mod:create"
+  ]
 }

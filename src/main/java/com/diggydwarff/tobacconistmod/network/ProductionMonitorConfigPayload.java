@@ -40,7 +40,7 @@ public record ProductionMonitorConfigPayload(BlockPos pos, int target, int count
                     payload.pos().getZ() + 0.5D) > 64.0D) {
                 return;
             }
-            if (player.serverLevel().getBlockEntity(payload.pos()) instanceof ProductionMonitorBlockEntity monitor) {
+            if (player.getLevel().getBlockEntity(payload.pos()) instanceof ProductionMonitorBlockEntity monitor) {
                 monitor.applyConfiguration(payload.target(), payload.countMode(), payload.atTarget(),
                         payload.output(), payload.externalReset(), payload.filter());
             }

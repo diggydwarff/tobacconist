@@ -34,8 +34,8 @@ public record ExtractionRecipe(ResourceLocation id, List<Input> inputs, ItemStac
         }
         return true;
     }
-    @Override public ItemStack assemble(Container contents, RegistryAccess registries) { return result.copy(); }
-    @Override public ItemStack getResultItem(RegistryAccess registries) { return result.copy(); }
+    @Override public ItemStack assemble(Container contents) { return result.copy(); }
+    @Override public ItemStack getResultItem() { return result.copy(); }
     @Override public ResourceLocation getId() { return id; }
     @Override public boolean canCraftInDimensions(int width,int height) { return width*height >= inputs.size(); }
     @Override public RecipeType<?> getType() { return VaporContent.EXTRACTION.get(); }

@@ -17,7 +17,7 @@
     {
       "type": "patchouli:text",
       "title": "Fan-Assisted Flue Cure",
-      "text": "With $(thing)Create$(), an Encased Fan blowing through $(item)Lava$() produces blasting, smoke-free heat that can Flue Cure a nearby wooden rack faster. This assisted route does not require a nearby Flue Firebox; a direct Campfire still takes Fire-Curing priority."
+      "text": "This assisted route does not require a nearby Flue Firebox; a direct Campfire still takes Fire-Curing priority."
     },
     {
       "type": "patchouli:text",
@@ -26,7 +26,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "A flue rack must:$(br2)- not be rained on$(br)- have no direct sky access$(br)- have 1 clear air block immediately above it$(br)- have a sturdy roof underside 2–4 blocks above$(br)- have no nearby fire/campfire contamination$(br)- have at least 1 lit Flue Firebox nearby",
+      "text": "A flue rack must:$(br2)- not be rained on$(br)- have no direct sky access$(br)- have 1 clear air block immediately above it$(br)- have a sturdy roof underside 2\u20134 blocks above$(br)- have no nearby fire/campfire contamination$(br)- have at least 1 lit Flue Firebox nearby",
       "title": "Rack Requirements"
     },
     {
@@ -36,7 +36,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Any normal fire, soul fire, campfire, or soul campfire within the 3×3×3 area centered around the rack blocks flue curing. Flue curing requires indirect heat without direct smoke contamination.",
+      "text": "Any normal fire, soul fire, campfire, or soul campfire within the 3\u00d73\u00d73 area centered around the rack blocks flue curing. Flue curing requires indirect heat without direct smoke contamination.",
       "title": "No Smoke Contamination"
     },
     {

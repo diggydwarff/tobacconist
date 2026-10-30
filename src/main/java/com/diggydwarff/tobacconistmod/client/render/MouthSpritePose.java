@@ -1,7 +1,7 @@
 package com.diggydwarff.tobacconistmod.client.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
+import com.mojang.math.Vector3f;
 
 /** Pixel coordinates refer to the supplied 16x16 sprite; the mouthpiece stays on the lips. */
 public record MouthSpritePose(float tipX, float tipY, float yaw, float roll, float scale) {
@@ -14,8 +14,8 @@ public record MouthSpritePose(float tipX, float tipY, float yaw, float roll, flo
     public static final MouthSpritePose SPECIAL_PIPE = new MouthSpritePose(14.5F, 1.5F, 25F, 180F, .30F);
     public void apply(PoseStack pose) {
         pose.translate(.025F, -.100F, this == CIGALIKE ? -.280F : -.265F);
-        pose.mulPose(Axis.YP.rotationDegrees(yaw));
-        pose.mulPose(Axis.ZP.rotationDegrees(roll));
+        pose.mulPose(Vector3f.YP.rotationDegrees(yaw));
+        pose.mulPose(Vector3f.ZP.rotationDegrees(roll));
         pose.scale(scale, scale, scale);
         pose.translate(.5F - tipX / 16F, tipY / 16F - .5F, 0F);
     }

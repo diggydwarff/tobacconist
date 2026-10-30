@@ -190,7 +190,7 @@ public class TobaccoDryingRackBlockEntity extends BlockEntity implements Worldly
         }
 
         if (storedLeaf.isEmpty()) {
-            storedLeaf = stack.copyWithCount(1);
+            storedLeaf = com.diggydwarff.tobacconistmod.backport.BackportStacks.copyWithCount(stack, 1);
             dryingProgress = 0;
             sunExposureTicks = 0;
             interruptionCount = 0;

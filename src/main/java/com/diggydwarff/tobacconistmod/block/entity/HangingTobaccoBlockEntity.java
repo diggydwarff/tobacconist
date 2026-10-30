@@ -82,7 +82,7 @@ public class HangingTobaccoBlockEntity extends BlockEntity {
             return;
         }
 
-        storedLeaf = source.copyWithCount(LEAF_COUNT);
+        storedLeaf = com.diggydwarff.tobacconistmod.backport.BackportStacks.copyWithCount(source, LEAF_COUNT);
         tobaccoVariety = HangingTobaccoBlock.getVarietyIndex(source);
         resetProgress();
         // A completed base cure stays finished until smoke actually starts its next process.

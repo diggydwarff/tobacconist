@@ -7,7 +7,7 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.network.FriendlyByteBuf;
 import com.diggydwarff.tobacconistmod.backport.StreamCodec;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;

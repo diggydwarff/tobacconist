@@ -1,14 +1,14 @@
 package com.diggydwarff.tobacconistmod.block;
 
 import com.diggydwarff.tobacconistmod.TobacconistMod;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.world.entity.decoration.PaintingVariant;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
 public class ModPaintings {
     public static final DeferredRegister<PaintingVariant> PAINTING_VARIANTS =
-            DeferredRegister.create(Registries.PAINTING_VARIANT, TobacconistMod.MODID);
+            DeferredRegister.create(Registry.PAINTING_VARIANT_REGISTRY, TobacconistMod.MODID);
 
     // SMALL SQUARE PAINTINGS 16x16 --------------------------------------------------------------------------------------------------------
 

@@ -29,7 +29,7 @@ public final class VaporData {
     ).apply(instance, Fields::new));
     public static final Codec<LiquidBlend> CODEC = FIELDS.flatXmap(fields -> {
         try { return com.mojang.serialization.DataResult.success(new LiquidBlend(fields.vegetable, fields.clear, fields.nicotine, fields.flavors)); }
-        catch (IllegalArgumentException exception) { return com.mojang.serialization.DataResult.error(exception::getMessage); }
+        catch (IllegalArgumentException exception) { return com.mojang.serialization.DataResult.error(exception.getMessage()); }
     }, blend -> com.mojang.serialization.DataResult.success(new Fields(blend.vegetable(), blend.clear(), blend.nicotine(), blend.flavors())));
 
     private VaporData() {}

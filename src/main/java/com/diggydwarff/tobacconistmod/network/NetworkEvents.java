@@ -36,7 +36,7 @@ public final class NetworkEvents {
             return;
         }
         if (!SmokingDraws.canStart(player,CuriosSmokingHelper.getMouthItem(player))) return;
-        long now=player.serverLevel().getGameTime(),last=LAST_MANUAL_SMOKE_TICK.getOrDefault(player.getUUID(),Long.MIN_VALUE/2);
+        long now=player.getLevel().getGameTime(),last=LAST_MANUAL_SMOKE_TICK.getOrDefault(player.getUUID(),Long.MIN_VALUE/2);
         if (now-last<8) return;
         Component failure=CuriosSmokingHelper.trySmokeMouthItem(player);
         if (failure==null) LAST_MANUAL_SMOKE_TICK.put(player.getUUID(),now); else player.displayClientMessage(failure,true);

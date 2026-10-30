@@ -28,7 +28,7 @@ public final class SmokeMouthItemPacket {
                 player.displayClientMessage(Component.translatable("tobacconistmod.message.mouth_slot_requires_curios"), true);
                 return;
             }
-            long now = player.serverLevel().getGameTime();
+            long now = player.getLevel().getGameTime();
             long last = LAST_SMOKE_TICK.getOrDefault(player.getUUID(), Long.MIN_VALUE / 2);
             if (now - last < COOLDOWN_TICKS) return;
             Component failure = CuriosSmokingHelper.trySmokeMouthItem(player);

@@ -15,8 +15,7 @@ import com.diggydwarff.tobacconistmod.vapor.VaporData;
 import com.diggydwarff.tobacconistmod.vapor.LiquidBlend;
 import com.diggydwarff.tobacconistmod.novelty.ToyPipeItem;
 import com.diggydwarff.tobacconistmod.novelty.NoveltyContent;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -30,13 +29,17 @@ import java.util.function.Supplier;
 import static com.diggydwarff.tobacconistmod.datagen.items.ModItems.*;
 
 public class TobacconistCreativeTab {
-    public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =
-            DeferredRegister.create(Registries.CREATIVE_MODE_TAB, TobacconistMod.MODID);
+    private record Output(net.minecraft.core.NonNullList<ItemStack> items) {
+        void accept(ItemStack stack) { items.add(stack); }
+        void accept(net.minecraft.world.level.ItemLike item) { accept(new ItemStack(item)); }
+    }
 
-    public static final Supplier<CreativeModeTab> COURSE_TAB = CREATIVE_MODE_TABS.register("tobacconistmod",
-            () -> CreativeModeTab.builder().icon(() -> new ItemStack(CIGAR.get()))
-                    .title(Component.translatable("creativetab.tobacconistmod"))
-                    .displayItems((displayParameters, output) -> {
+    public static final Supplier<CreativeModeTab> COURSE_TAB = () -> TobacconistCreativeTab.TAB;
+    public static final CreativeModeTab TAB = new CreativeModeTab("tobacconistmod") {
+        @Override public ItemStack makeIcon() { return new ItemStack(CIGAR.get()); }
+        @Override public Component getDisplayName() { return Component.translatable("creativetab.tobacconistmod"); }
+        @Override public void fillItemList(net.minecraft.core.NonNullList<ItemStack> items) {
+            Output output = new Output(items);
                         // Guide and tools
                         output.accept(TOBACCO_GUIDE.get());
                         output.accept(TOBACCONISTS_SPECTACLES.get());
@@ -95,10 +98,10 @@ public class TobacconistCreativeTab {
                         // Storage, labels and logistics
                         output.accept(TOBACCO_POUCH.get());
                         output.accept(TOBACCO_BOX.get());
+                        output.accept(ModBlocks.PRODUCTION_MONITOR.get());
                         output.accept(TOBACCO_LABEL.get());
                         if (CreateCompat.loaded()) {
                             output.accept(BRASS_NAME_TAG.get());
-                            output.accept(ModBlocks.PRODUCTION_MONITOR.get());
                         }
 
                         output.accept(ModBlocks.RAW_WILD_TOBACCO_CRATE.get());
@@ -128,8 +131,6 @@ public class TobacconistCreativeTab {
                         output.accept(makePipe(Items.ACACIA_PLANKS));
                         output.accept(makePipe(Items.DARK_OAK_PLANKS));
                         output.accept(makePipe(Items.MANGROVE_PLANKS));
-                        output.accept(makePipe(Items.CHERRY_PLANKS));
-                        output.accept(makePipe(Items.BAMBOO_PLANKS));
                         output.accept(makePipe(Items.CRIMSON_PLANKS));
                         output.accept(makePipe(Items.WARPED_PLANKS));
                         output.accept(CORN_COB_SMOKING_PIPE.get());
@@ -219,10 +220,11 @@ public class TobacconistCreativeTab {
                         output.accept(PaintingTabHelper.paintingVariant("andean_mapacho"));
 
 
-                    }).build());
+        }
+    };
 
     public static void register(IEventBus eventBus) {
-        CREATIVE_MODE_TABS.register(eventBus);
+        // CreativeModeTab registers itself in Minecraft 1.19.2.
     }
 
     private static ItemStack creativeLeaf(ItemStack base, boolean cured) {
@@ -231,7 +233,7 @@ public class TobacconistCreativeTab {
         return stack;
     }
 
-    private static void addLooseVariants(CreativeModeTab.Output output, ItemStack base) {
+    private static void addLooseVariants(Output output, ItemStack base) {
         output.accept(TobaccoCuringHelper.makeCreativeLoose(base, TobaccoCuringHelper.CUT_RIBBON));
         output.accept(TobaccoCuringHelper.makeCreativeLoose(base, TobaccoCuringHelper.CUT_SHAG));
         output.accept(TobaccoCuringHelper.makeCreativeLoose(base, TobaccoCuringHelper.CUT_ROUGH));
@@ -239,14 +241,14 @@ public class TobacconistCreativeTab {
         output.accept(TobaccoCuringHelper.makeCreativeLoose(base, TobaccoCuringHelper.CUT_FLAKE));
     }
 
-    private static void addAllEssences(CreativeModeTab.Output output) {
+    private static void addAllEssences(Output output) {
         for (BottledMolassesFlavors flavor : BottledMolassesFlavors.values()) {
             if (flavor.isPlain() || !FlavorCompatibility.isFlavorAvailable(flavor)) continue;
             output.accept(flavor.getEssenceItem());
         }
     }
 
-    private static void addAllFlavoredMolasses(CreativeModeTab.Output output) {
+    private static void addAllFlavoredMolasses(Output output) {
         for (BottledMolassesFlavors flavor : BottledMolassesFlavors.values()) {
             if (flavor.isPlain() || !FlavorCompatibility.isFlavorAvailable(flavor)) continue;
             output.accept(flavor.getItem());
@@ -257,7 +259,7 @@ public class TobacconistCreativeTab {
         ItemStack pipe = new ItemStack(ModItems.WOODEN_SMOKING_PIPE.get());
         LegacyItemTags.getOrCreateTag(pipe).putString(
                 WoodenPipeRecipe.NBT_WOOD_PLANK,
-                BuiltInRegistries.ITEM.getKey(plankItem).toString()
+                Registry.ITEM.getKey(plankItem).toString()
         );
         return pipe;
     }

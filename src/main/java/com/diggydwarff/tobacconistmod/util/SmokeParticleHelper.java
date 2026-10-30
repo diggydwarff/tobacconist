@@ -169,7 +169,7 @@ public final class SmokeParticleHelper {
     private static void spawnClientCeilingHaze(Level level,
                                                RandomSource random,
                                                double x, double y, double z) {
-        double hazeY = findCeilingUndersideY(level, BlockPos.containing(x, y, z));
+        double hazeY = findCeilingUndersideY(level, new net.minecraft.core.BlockPos(x, y, z));
         if (Double.isNaN(hazeY)) return;
         double px = x + (random.nextDouble() - 0.5D) * 0.45D;
         double pz = z + (random.nextDouble() - 0.5D) * 0.45D;
@@ -188,7 +188,7 @@ public final class SmokeParticleHelper {
                                                float chance) {
         if (random.nextFloat() >= chance) return;
 
-        double hazeY = findCeilingUndersideY(level, BlockPos.containing(x, y, z));
+        double hazeY = findCeilingUndersideY(level, new net.minecraft.core.BlockPos(x, y, z));
         if (Double.isNaN(hazeY)) return;
         double px = x + (random.nextDouble() - 0.5D) * 0.45D;
         double pz = z + (random.nextDouble() - 0.5D) * 0.45D;

@@ -25,17 +25,17 @@ public class ClientModEvents {
     @SubscribeEvent
     public static void registerParticleProviders(RegisterParticleProvidersEvent event) {
         com.diggydwarff.tobacconistmod.novelty.client.NoveltyParticle.providers(event);
-        event.registerSpriteSet(ModParticles.VAPE_VAPOR.get(), com.diggydwarff.tobacconistmod.vapor.client.VaporParticle.Provider::new);
-        event.registerSpriteSet(ModParticles.SOAP_BUBBLE.get(), com.diggydwarff.tobacconistmod.vapor.client.SoapBubbleParticle.Provider::new);
-        event.registerSpriteSet(
+        event.register(ModParticles.VAPE_VAPOR.get(), com.diggydwarff.tobacconistmod.vapor.client.VaporParticle.Provider::new);
+        event.register(ModParticles.SOAP_BUBBLE.get(), com.diggydwarff.tobacconistmod.vapor.client.SoapBubbleParticle.Provider::new);
+        event.register(
                 ModParticles.TOBACCO_SMOKE.get(),
                 sprites -> new TobaccoFanSmokeParticle.Provider(sprites, false)
         );
-        event.registerSpriteSet(
+        event.register(
                 ModParticles.TOBACCO_DRAW_SMOKE.get(),
                 TobaccoFanSmokeParticle.DrawProvider::new
         );
-        event.registerSpriteSet(
+        event.register(
                 ModParticles.TOBACCO_INDOOR_SMOKE.get(),
                 sprites -> new TobaccoFanSmokeParticle.Provider(sprites, true)
         );

@@ -23,7 +23,7 @@ public record VaporBrewingRecipe(Fluid source, Item ingredient, Fluid target) im
         if (!isInput(input) || !isIngredient(reagent)) return ItemStack.EMPTY;
         FluidStack refined = new FluidStack(target, CauldronExtraction.heldFluid(input).getAmount());
         if (input.getItem() instanceof SizedBottleItem) {
-            ItemStack result = input.copyWithCount(1);
+            ItemStack result = com.diggydwarff.tobacconistmod.backport.BackportStacks.copyWithCount(input, 1);
             com.diggydwarff.tobacconistmod.backport.ComponentData.set(result, VaporContent.BOTTLED_FLUID.get(), BottledFluid.of(refined, refined.getAmount()));
             return result;
         }

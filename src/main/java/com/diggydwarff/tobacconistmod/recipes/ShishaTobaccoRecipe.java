@@ -11,7 +11,6 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -26,8 +25,8 @@ import java.util.List;
  * three flavored-molasses applications.
  */
 public class ShishaTobaccoRecipe extends CustomRecipe {
-    public ShishaTobaccoRecipe(ResourceLocation id, CraftingBookCategory category) {
-        super(id, category);
+    public ShishaTobaccoRecipe(ResourceLocation id) {
+        super(id);
     }
 
     private record Inputs(ItemStack source, BottledMolassesFlavors essence, List<BottledMolassesFlavors> molasses) {}
@@ -51,7 +50,7 @@ public class ShishaTobaccoRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer input, RegistryAccess registries) {
+    public ItemStack assemble(CraftingContainer input) {
         Inputs parsed = parse(input);
         if (parsed == null) return ItemStack.EMPTY;
 

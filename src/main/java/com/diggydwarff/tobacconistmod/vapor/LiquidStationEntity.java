@@ -151,7 +151,7 @@ public final class LiquidStationEntity extends BlockEntity implements MenuProvid
     /** Shift-click only queues a bottle where the whole dose fits the reservoir. */
     public boolean canLoadBottle(int slot, ItemStack stack) {
         if (slot < 0 || slot >= tanks.length || stack.isEmpty()) return false;
-        var handler = stack.copyWithCount(1).getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElse(null);
+        var handler = com.diggydwarff.tobacconistmod.backport.BackportStacks.copyWithCount(stack, 1).getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElse(null);
         if (handler == null) return false;
         FluidStack fluid = handler.getFluidInTank(0);
         return validFluid(slot, fluid) && fluid.getAmount() > 0
@@ -161,7 +161,7 @@ public final class LiquidStationEntity extends BlockEntity implements MenuProvid
     private void loadBottle(int slot) {
         ItemStack input = inventory.getStackInSlot(slot);
         if (input.isEmpty()) return;
-        var handler = input.copyWithCount(1).getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElse(null);
+        var handler = com.diggydwarff.tobacconistmod.backport.BackportStacks.copyWithCount(input, 1).getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElse(null);
         if (handler == null) return;
         FluidStack fluid = handler.getFluidInTank(0);
         if (!validFluid(slot, fluid) || fluid.getAmount() <= 0) return;
@@ -187,14 +187,14 @@ public final class LiquidStationEntity extends BlockEntity implements MenuProvid
             int needed = essenceDose(recipe.flavors().get(flavor), capacity);
             for (int index = 0; index < supply.items.size() && availableEssence(flavor) < needed; index++) {
                 ItemStack source = supply.getItem(index);
-                var handler = source.copyWithCount(1).getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElse(null);
+                var handler = com.diggydwarff.tobacconistmod.backport.BackportStacks.copyWithCount(source, 1).getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElse(null);
                 if (handler == null || !flavor.equals(flavor(handler.getFluidInTank(0)))) continue;
                 while (!source.isEmpty() && availableEssence(flavor) < needed) {
                     int target = recipeEssenceSlot(flavor, source);
                     if (target < 0) break;
                     // The usual loader validates the whole dose and returned-glass space.
                     // Move the player's item only after that loader actually succeeds.
-                    inventory.setStackInSlot(target, source.copyWithCount(1));
+                    inventory.setStackInSlot(target, com.diggydwarff.tobacconistmod.backport.BackportStacks.copyWithCount(source, 1));
                     loadBottle(target);
                     if (!inventory.getStackInSlot(target).isEmpty()) {
                         inventory.setStackInSlot(target, ItemStack.EMPTY);
@@ -213,7 +213,7 @@ public final class LiquidStationEntity extends BlockEntity implements MenuProvid
             int amount = expected.equals(flavor(tanks[slot].getFluid())) ? tanks[slot].getFluidAmount() : 0;
             ItemStack queued = inventory.getStackInSlot(slot);
             if (canLoadBottle(slot, queued)) {
-                var handler = queued.copyWithCount(1).getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElse(null);
+                var handler = com.diggydwarff.tobacconistmod.backport.BackportStacks.copyWithCount(queued, 1).getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElse(null);
                 FluidStack fluid = handler.getFluidInTank(0);
                 if (expected.equals(flavor(fluid))) amount += fluid.getAmount();
             }
@@ -353,7 +353,7 @@ public final class LiquidStationEntity extends BlockEntity implements MenuProvid
             @Override public FluidStack drain(FluidStack stack, FluidAction action) { return FluidStack.EMPTY; }
         };
     }
-    public CompoundTag portableTanks(RegistryAccess lookup) {
+    public CompoundTag portableTanks() {
         CompoundTag tag = new CompoundTag();
         for (int i = 0; i < 6; i++) tag.put("Tank" + i, tanks[i].writeToNBT(new CompoundTag()));
         tag.putInt("Vegetable", vegetablePercent); tag.putInt("Strength", strength);
@@ -362,7 +362,7 @@ public final class LiquidStationEntity extends BlockEntity implements MenuProvid
     @Override public net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket getUpdatePacket() {
         return net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket.create(this);
     }
-    @Override public CompoundTag getUpdateTag() { return portableTanks(level == null ? RegistryAccess.EMPTY : level.registryAccess()); }
+    @Override public CompoundTag getUpdateTag() { return portableTanks(); }
     public void dropContents() {
         for (int i = 0; i < SLOT_COUNT; i++) Containers.dropItemStack(level, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), inventory.getStackInSlot(i));
         // The block loot copies portableTanks onto the station item before removal.

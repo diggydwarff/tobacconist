@@ -25,7 +25,7 @@ public class WoodenPipeJeiRecipe {
         ShapedRecipe recipe = new ShapedRecipe(
                 new ResourceLocation(TobacconistMod.MODID, "jei_wooden_pipe"),
                 "",
-                CraftingBookCategory.MISC,
+                
                 3,
                 3,
                 ingredients,

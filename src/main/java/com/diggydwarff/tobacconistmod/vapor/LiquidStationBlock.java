@@ -43,12 +43,12 @@ public final class LiquidStationBlock extends BaseEntityBlock {
             net.minecraftforge.network.NetworkHooks.openScreen(server, station, buf -> { buf.writeBlockPos(pos); buf.writeBoolean(blending); });
         }
     }
-    @Override public java.util.List<ItemStack> getDrops(BlockState state, net.minecraft.world.level.storage.loot.LootParams.Builder builder) {
+    @Override public java.util.List<ItemStack> getDrops(BlockState state, net.minecraft.world.level.storage.loot.LootContext.Builder builder) {
         var drops = super.getDrops(state, builder);
         var entity = builder.getOptionalParameter(net.minecraft.world.level.storage.loot.parameters.LootContextParams.BLOCK_ENTITY);
         if (entity instanceof LiquidStationEntity station && station.isBlending()) {
             for (ItemStack drop : drops) if (drop.is(state.getBlock().asItem())) {
-                net.minecraft.world.item.BlockItem.setBlockEntityData(drop, VaporContent.STATION.get(), station.portableTanks(builder.getLevel().registryAccess()));
+                net.minecraft.world.item.BlockItem.setBlockEntityData(drop, VaporContent.STATION.get(), station.portableTanks());
             }
         }
         return drops;

@@ -78,7 +78,7 @@ final class DryingRackItemHandler implements IItemHandler {
 
         int extracted = Math.min(amount, stored.getCount());
         if (simulate) {
-            return stored.copyWithCount(extracted);
+            return com.diggydwarff.tobacconistmod.backport.BackportStacks.copyWithCount(stored, extracted);
         }
 
         return rack.removeItem(0, extracted);

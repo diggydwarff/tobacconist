@@ -2,7 +2,7 @@ package com.diggydwarff.tobacconistmod.effect;
 
 import net.minecraftforge.registries.ForgeRegistries;
 import com.diggydwarff.tobacconistmod.TobacconistMod;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraftforge.eventbus.api.IEventBus;

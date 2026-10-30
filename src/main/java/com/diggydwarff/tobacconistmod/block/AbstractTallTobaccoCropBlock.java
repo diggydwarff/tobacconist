@@ -85,7 +85,7 @@ public abstract class AbstractTallTobaccoCropBlock extends CropBlock {
         return getStateForAge(age).setValue(HALF, DoubleBlockHalf.UPPER);
     }
 
-    public int getEffectiveAge(LevelReader level, BlockPos pos, BlockState state) {
+    public int getEffectiveAge(net.minecraft.world.level.BlockGetter level, BlockPos pos, BlockState state) {
         if (state.getValue(HALF) == DoubleBlockHalf.UPPER) {
             return getAge(state);
         }
@@ -227,7 +227,7 @@ public abstract class AbstractTallTobaccoCropBlock extends CropBlock {
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state, boolean isClient) {
+    public boolean isValidBonemealTarget(net.minecraft.world.level.BlockGetter level, BlockPos pos, BlockState state, boolean isClient) {
         if (state.getValue(HALF) == DoubleBlockHalf.UPPER) return false;
         return getEffectiveAge(level, pos, state) < getMaxAge();
     }

@@ -1,7 +1,7 @@
 package com.diggydwarff.tobacconistmod.util;
 
 import com.diggydwarff.tobacconistmod.block.entity.TobaccoBarrelBlockEntity;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 
@@ -62,7 +62,7 @@ public record TobaccoSmokeData(
         String variety = TobaccoBlendHelper.getVarietyId(stack);
         if (!variety.isEmpty()) return variety;
 
-        return BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath();
+        return Registry.ITEM.getKey(stack.getItem()).getPath();
     }
 
     private static String lower(String text) {

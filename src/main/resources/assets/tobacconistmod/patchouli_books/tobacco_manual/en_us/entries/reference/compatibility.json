@@ -6,6 +6,11 @@
   "pages": [
     {
       "type": "patchouli:text",
+      "title": "Minecraft 1.19.2",
+      "text": "This edition runs on Forge 1.19.2 without Create. Create processing, fan assistance, industrial drying racks and Ponder tutorials are not included. Brewing stands, heated cauldrons, wooden racks, pistons, barrels and the blending bench provide the standalone progression."
+    },
+    {
+      "type": "patchouli:text",
       "text": "$(thing)Patchouli$() is optional and supplies this in-game manual. Tobacconist's gameplay itself is not meant to require Patchouli. The manual recipe and contents are conditionally loaded when Patchouli is present."
     },
     {

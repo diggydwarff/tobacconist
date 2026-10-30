@@ -13,8 +13,8 @@ import net.minecraft.world.level.Level;
 
 public class TobaccoBoxLabelRecipe extends CustomRecipe {
 
-    public TobaccoBoxLabelRecipe(ResourceLocation id, CraftingBookCategory category) {
-        super(id, category);
+    public TobaccoBoxLabelRecipe(ResourceLocation id) {
+        super(id);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class TobaccoBoxLabelRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer inv, RegistryAccess registries) {
+    public ItemStack assemble(CraftingContainer inv) {
         ItemStack box = ItemStack.EMPTY;
         ItemStack label = ItemStack.EMPTY;
 

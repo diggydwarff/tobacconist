@@ -13,7 +13,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Insert a blank Liquid Recipe Card and press Save Recipe. It remembers flavors, VG/PG and nicotine. Rename it in an anvil to name bench output. Cards are reusable and optional at the bench; Create blending Basins need one saved card each. Editing selectors starts from the card’s displayed settings and clears its saved formula. Auto keeps the last recipe while waiting for supplies. Trash discards stored essences and stops Auto."
+      "text": "Insert a blank Liquid Recipe Card and press Save Recipe. It remembers flavors, VG/PG and nicotine. Rename it in an anvil to name bench output. Editing selectors starts from the card\u2019s displayed settings and clears its saved formula. Auto keeps the last recipe while waiting for supplies. Trash discards stored essences and stops Auto."
     },
     {
       "type": "patchouli:text",
@@ -26,7 +26,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Create uses heated Mixers and Basins for extraction. Put one saved Recipe Card in each blending Basin. Combine VG and PG first, then nicotine and one essence at a time. A flavor stage consumes a full 250 mB essence dose. Pipe the finished liquid to a Spout for bottling. Cards are reusable."
+      "text": "Put one saved Recipe Card in each blending Basin. Combine VG and PG first, then nicotine and one essence at a time. A flavor stage consumes a full 250 mB essence dose. Pipe the finished liquid to a Spout for bottling. Cards are reusable."
     },
     {
       "type": "patchouli:text",

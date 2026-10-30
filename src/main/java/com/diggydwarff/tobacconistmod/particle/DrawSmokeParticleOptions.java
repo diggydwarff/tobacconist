@@ -23,7 +23,7 @@ public record DrawSmokeParticleOptions(float strength) implements ParticleOption
         @Override public DrawSmokeParticleOptions fromNetwork(ParticleType<DrawSmokeParticleOptions> type, net.minecraft.network.FriendlyByteBuf buffer) { return new DrawSmokeParticleOptions(buffer.readFloat()); }
     };
     @Override public void writeToNetwork(net.minecraft.network.FriendlyByteBuf buffer) { buffer.writeFloat(strength); }
-    @Override public String writeToString() { return net.minecraft.core.registries.BuiltInRegistries.PARTICLE_TYPE.getKey(getType()) + " " + strength; }
+    @Override public String writeToString() { return net.minecraft.core.Registry.PARTICLE_TYPE.getKey(getType()) + " " + strength; }
 
     public DrawSmokeParticleOptions {
         strength = Float.isFinite(strength) ? Mth.clamp(strength, 0.0F, 1.0F) : 0.0F;

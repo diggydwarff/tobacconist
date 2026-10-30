@@ -268,7 +268,7 @@ public class ProductionMonitorBlockEntity extends BlockEntity implements MenuPro
     public boolean setExternalFilter(ItemStack newFilter) {
         ItemStack normalizedFilter = newFilter == null || newFilter.isEmpty()
                 ? ItemStack.EMPTY
-                : newFilter.copyWithCount(1);
+                : com.diggydwarff.tobacconistmod.backport.BackportStacks.copyWithCount(newFilter, 1);
         if (ItemStack.matches(filter, normalizedFilter)) return false;
 
         filter = normalizedFilter;
@@ -294,7 +294,7 @@ public class ProductionMonitorBlockEntity extends BlockEntity implements MenuPro
 
         ItemStack normalizedFilter = newFilter == null || newFilter.isEmpty()
                 ? ItemStack.EMPTY
-                : newFilter.copyWithCount(1);
+                : com.diggydwarff.tobacconistmod.backport.BackportStacks.copyWithCount(newFilter, 1);
         boolean filterChanged = !ItemStack.matches(filter, normalizedFilter);
         boolean modeChanged = countMode != nextCountMode;
 

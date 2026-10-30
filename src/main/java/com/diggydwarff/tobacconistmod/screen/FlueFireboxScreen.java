@@ -2,13 +2,13 @@ package com.diggydwarff.tobacconistmod.screen;
 
 import com.diggydwarff.tobacconistmod.TobacconistMod;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import com.diggydwarff.tobacconistmod.backport.GuiGraphics;
+import com.diggydwarff.tobacconistmod.backport.BackportContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-public class FlueFireboxScreen extends AbstractContainerScreen<FlueFireboxMenu> {
+public class FlueFireboxScreen extends BackportContainerScreen<FlueFireboxMenu> {
     private static final ResourceLocation TEXTURE =
             new ResourceLocation(TobacconistMod.MODID, "textures/gui/flue_firebox_gui.png");
 

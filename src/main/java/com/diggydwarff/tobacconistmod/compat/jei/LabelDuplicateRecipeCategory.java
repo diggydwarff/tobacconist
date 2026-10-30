@@ -11,7 +11,7 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import com.diggydwarff.tobacconistmod.backport.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -64,13 +64,14 @@ public class LabelDuplicateRecipeCategory implements IRecipeCategory<LabelDuplic
     }
 
     @Override
-    public void draw(LabelDuplicateJeiRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics,
+    public void draw(LabelDuplicateJeiRecipe recipe, IRecipeSlotsView recipeSlotsView, com.mojang.blaze3d.vertex.PoseStack backportPose,
                      double mouseX, double mouseY) {
+        GuiGraphics guiGraphics = new GuiGraphics(backportPose);
         Minecraft mc = Minecraft.getInstance();
 
-        slot.draw(guiGraphics, 9, 19);
-        slot.draw(guiGraphics, 31, 19);
-        slot.draw(guiGraphics, 85, 19);
+        slot.draw(guiGraphics.pose(), 9, 19);
+        slot.draw(guiGraphics.pose(), 31, 19);
+        slot.draw(guiGraphics.pose(), 85, 19);
 
         guiGraphics.drawString(mc.font, Component.translatable("tobacconistmod.jei.named_label_plus_blank"), 4, 4, 0x404040, false);
     }
