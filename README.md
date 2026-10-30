@@ -1,6 +1,6 @@
 # Tobacconist — Forge 1.19.2
 
-Standalone backport of the Forge 1.20.1 **4.2.0-beta4** source. Requires **Minecraft 1.19.2, Forge 43.5.2 or newer within 43.x, and Java 17**. Install the mod on both client and server.
+Standalone backport of the Forge 1.20.1 **4.2.0-beta4** source. Requires **Minecraft 1.19.2, Forge 43.1.25 or newer within 43.x, and Java 17**. Install the mod on both client and server.
 
 The port retains tobacco cultivation, environmental curing, specialty barrel processing, quality and aging, cutting and blending, traditional smoking, hookahs, novelty pipes, vaping, liquid blending, bottles, recipe cards, storage and vanilla hopper automation.
 
@@ -29,5 +29,7 @@ The opt-in audit sources in `validation/java/` are excluded from the production 
 - `bash gradlew runServer -PportValidation` for Curios, JEI and Patchouli.
 
 Results are written to `run-audit-standalone/port-audit-results.json` or `run-audit-optional/port-audit-results.json`. See the included validation report for the completed checks and their limits.
+
+To test the production JAR against installed Forge servers, build the separate audit mod with `bash gradlew portAuditJar -PportValidation -PproductionAudit`, then use `validation/run_production_matrix.py --help`. The audit mod is for testing only and is not bundled in the Tobacconist JAR. The project compiles against its minimum supported Forge API, 43.1.25.
 
 Earlier release history is preserved in [changelog.md](changelog.md); its Create-related entries describe the newer Minecraft branches.

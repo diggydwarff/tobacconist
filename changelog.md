@@ -1,6 +1,7 @@
 ## Forge 1.19.2 Standalone Backport — 4.2.0-beta4
 
-- Ported the Forge 1.20.1 4.2.0-beta4 gameplay and assets to Minecraft 1.19.2 / Forge 43.5.2 / Java 17.
+- Lowered the Forge minimum to 43.1.25 after compiling against that API; newer 43.x builds remain accepted.
+- Ported the Forge 1.20.1 4.2.0-beta4 gameplay and assets to Minecraft 1.19.2 / Forge 43.1.25+ / Java 17.
 - Adapted registries, creative/search tabs, recipes, smithing, particles, item transforms, block materials, configuration, datagen, GUI rendering and network integration to the older APIs.
 - Retained optional Curios 1.19.2, JEI 11 and Patchouli 77 integration. Curios uses native 1.19.2 item capabilities and slot registration.
 - Removed Create 6 implementations, processing recipes, mixins and Ponders. The common facade stays disabled even with old Create installed.
