@@ -75,7 +75,9 @@ public class WoodenSmokingPipeItem extends SmokingItem {
         int puffs = tag == null ? 0 : tag.getInt(NBT_PUFFS);
         if (puffs <= 0) return false;
 
-        this.triggerSmokingEffectPlayer(player, level, 0, getPackedTobaccoStack(stack), strength);
+        ItemStack smoked = getPackedTobaccoStack(stack);
+        this.triggerSmokingEffectPlayer(player, level, 0, smoked, strength);
+        com.diggydwarff.tobacconistmod.util.PotionInfusion.commitPacked(stack, smoked);
 
         puffs--;
         CompoundTag mutableTag = LegacyItemTags.getOrCreateTag(stack);
@@ -209,7 +211,9 @@ public class WoodenSmokingPipeItem extends SmokingItem {
             return InteractionResultHolder.pass(pipe);
         }
 
-        this.triggerSmokingEffectPlayer(player, (ServerLevel) level, 0, getPackedTobaccoStack(pipe));
+        ItemStack smoked = getPackedTobaccoStack(pipe);
+        this.triggerSmokingEffectPlayer(player, (ServerLevel) level, 0, smoked);
+        com.diggydwarff.tobacconistmod.util.PotionInfusion.commitPacked(pipe, smoked);
 
         puffs--;
 

@@ -146,7 +146,11 @@ public abstract class SmokingItem extends Item {
     }
 
     public static void applyRelicSmokingEffects(Player player, ServerLevel level, ItemStack tobaccoStack, float strength) {
-        applySmokingEffects(player, level, tobaccoStack, false, strength, true);
+        applyRelicSmokingEffects(player, level, tobaccoStack, strength, strength);
+    }
+
+    public static void applyRelicSmokingEffects(Player player, ServerLevel level, ItemStack tobaccoStack, float smokeStrength, float drawStrength) {
+        applySmokingEffects(player, level, tobaccoStack, false, smokeStrength, true, drawStrength);
     }
 
     private static void applySmokingEffects(Player player, ServerLevel level, ItemStack tobaccoStack, boolean hookahDraw, float strength) {
@@ -154,6 +158,10 @@ public abstract class SmokingItem extends Item {
     }
 
     private static void applySmokingEffects(Player player, ServerLevel level, ItemStack tobaccoStack, boolean hookahDraw, float strength, boolean smoke) {
+        applySmokingEffects(player, level, tobaccoStack, hookahDraw, strength, smoke, strength);
+    }
+
+    private static void applySmokingEffects(Player player, ServerLevel level, ItemStack tobaccoStack, boolean hookahDraw, float strength, boolean smoke, float drawStrength) {
         if (smoke && TobacconistConfig.areSmokingDrawAnimationsEnabled()) {
             SmokingDraws.queueExhale(player, tobaccoStack, hookahDraw, strength);
         } else if (smoke) {
@@ -175,6 +183,7 @@ public abstract class SmokingItem extends Item {
         applySecretBlendLegendaryBonus(player, tobaccoStack);
         applyConfiguredAdditionalEffects(player);
         applyConfiguredRuleEffects(player, tobaccoStack);
+        com.diggydwarff.tobacconistmod.util.PotionInfusion.smoke(player, tobaccoStack, drawStrength);
     }
 
     public static void emitSmokingSmoke(Player player, ServerLevel level, ItemStack tobaccoStack, boolean hookahDraw) {

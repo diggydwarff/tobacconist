@@ -46,7 +46,7 @@ public final class RelicPipeItem extends WoodenSmokingPipeItem {
         triggerSmokingEffectPlayer(player, level, smokeLevel, tobacco, 1F);
     }
     @Override public void triggerSmokingEffectPlayer(Player player, ServerLevel level, int smokeLevel, ItemStack tobacco, float strength) {
-        com.diggydwarff.tobacconistmod.datagen.items.SmokingItem.applyRelicSmokingEffects(player, level, tobacco, kind==NoveltyContent.Kind.WIZARD ? strength*.40F : strength);
+        com.diggydwarff.tobacconistmod.datagen.items.SmokingItem.applyRelicSmokingEffects(player, level, tobacco, kind==NoveltyContent.Kind.WIZARD ? strength*.40F : strength, strength);
         if (player instanceof ServerPlayer server) {
             int draw = Math.round(Math.clamp(strength, 0F, 1F) * 30);
             NoveltyEffects.queue(server, kind, draw);

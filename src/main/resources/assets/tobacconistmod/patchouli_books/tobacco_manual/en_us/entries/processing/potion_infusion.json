@@ -1,0 +1,28 @@
+{
+  "name": "Potion Infusion",
+  "icon": "minecraft:potion",
+  "category": "tobacconistmod:processing",
+  "sortnum": 12,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "title": "Potion Infusion",
+      "text": "Finish curing, cutting and blending first. Craft one ordinary potion bottle with five identical loose tobacco items, one in each slot, to treat five tobacco. The empty bottle is returned. Quality, cure, age, flavor and blend identity are preserved."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Create Spout",
+      "text": "With Create installed, pipe an eligible potion from a Fluid Tank into a Spout. Pass loose tobacco or unused shisha beneath it on a belt or depot. Each item consumes 50 mB. Potion effects are read from the actual fluid. Unsupported potions are not consumed."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Smoking a Treatment",
+      "text": "A treatment holds three charged full draws. Each charged draw starts three short pulses: the first after 2.5 seconds, then two more eight seconds apart. Partial draws release no potion. An active course cannot be stacked or reset. A three-minute source potion provides at most nine seconds of effect across the entire tobacco item."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Limits and Storage",
+      "text": "Effects are capped at level I by default. Supported defaults: Speed, Jump Boost, Strength, Slow Falling, Water Breathing, Fire Resistance and Luck. Instant effects and Night Vision are excluded. Pack or roll treated tobacco normally; all hoses on a hookah share its bowl charge. Apply treatment after blending. Server settings can change eligibility and timing."
+    }
+  ]
+}

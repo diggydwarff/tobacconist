@@ -1414,5 +1414,8 @@
   "tobacconistmod.novelty.echo_lore": "Blue pulses carry a quiet note from forgotten halls.",
   "tobacconistmod.novelty.echo_source": "Found in Ancient City chests.",
   "advancement.tobacconistmod.novelty.hidden_histories": "Hidden Histories",
-  "advancement.tobacconistmod.novelty.hidden_histories.desc": "Discover a Sunkeeper’s Pipe and an Echo Pipe."
+  "advancement.tobacconistmod.novelty.hidden_histories.desc": "Discover a Sunkeeper’s Pipe and an Echo Pipe.",
+  "tobacconistmod.infusion.draws": "Potion infusion: %s/3 charged draws remaining",
+  "tobacconistmod.infusion.effect": "%s (level %s): three %ss pulses per charged draw",
+  "tobacconistmod.infusion.hint": "Complete a full draw to release a delayed dose. Active courses cannot stack."
 }

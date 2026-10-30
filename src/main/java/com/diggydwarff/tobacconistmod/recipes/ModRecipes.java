@@ -13,6 +13,9 @@ public class ModRecipes {
     public static final DeferredRegister<RecipeSerializer<?>> SERIALIZERS =
             DeferredRegister.create(BuiltInRegistries.RECIPE_SERIALIZER, TobacconistMod.MODID);
 
+    public static final Supplier<RecipeSerializer<PotionInfusionRecipe>> POTION_INFUSION =
+            SERIALIZERS.register("potion_infusion", () -> new SimpleCraftingRecipeSerializer<>(PotionInfusionRecipe::new));
+
     public static final Supplier<RecipeSerializer<ShishaTobaccoRecipe>> SHISHA_TOBACCO_RECIPE_SERIALIZER =
             SERIALIZERS.register("crafting_special_shishatobacco", () -> new SimpleCraftingRecipeSerializer<>(ShishaTobaccoRecipe::new));
     public static final Supplier<RecipeSerializer<FlavorMolassesRecipe>> FLAVOR_MOLASSES_RECIPE_SERIALIZER =

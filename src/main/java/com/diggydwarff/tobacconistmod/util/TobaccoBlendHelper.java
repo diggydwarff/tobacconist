@@ -56,7 +56,8 @@ public final class TobaccoBlendHelper {
         Boolean ruined = null;
 
         for (ItemStack stack : inputs) {
-            if (!isBlendableBaseTobacco(stack)) return false;
+            // Potion treatment is a finishing step: blending must not erase or multiply doses.
+            if (!isBlendableBaseTobacco(stack) || PotionInfusion.isTreated(stack)) return false;
 
             String variety = getVarietyId(stack);
             if (variety.isEmpty()) return false;

@@ -686,6 +686,13 @@ public class TobacconistConfig {
     }
 
     public static class Server {
+        public final ModConfigSpec.BooleanValue enablePotionInfusion;
+        public final ModConfigSpec.ConfigValue<List<? extends String>> infusionAllowedEffects;
+        public final ModConfigSpec.DoubleValue infusionDurationScale;
+        public final ModConfigSpec.IntValue infusionMaxTotalTicks;
+        public final ModConfigSpec.IntValue infusionMaxAmplifier;
+        public final ModConfigSpec.IntValue infusionDelayTicks;
+        public final ModConfigSpec.IntValue infusionPulseIntervalTicks;
         public final ModConfigSpec.BooleanValue enableQualitySystem;
         public final ModConfigSpec.BooleanValue enableNicotineEffects;
         public final ModConfigSpec.BooleanValue enableSmokingDrawAnimations;
@@ -696,6 +703,25 @@ public class TobacconistConfig {
         public final ModConfigSpec.ConfigValue<List<? extends String>> effectRules;
 
         public Server(ModConfigSpec.Builder builder) {
+            builder.push("potion_infusion");
+            enablePotionInfusion = builder.comment("Enable 50 mB potion treatments, manual five-tobacco batches, and delayed smoking effects.")
+                    .define("enabled", true);
+            infusionAllowedEffects = builder.comment("Every effect in a potion must be allowed. Instant effects are always rejected. Modded effects require explicit opt-in.",
+                    "Night Vision is excluded by default to avoid rapidly flashing short effects.")
+                    .defineListAllowEmpty("allowedEffects", List.of("minecraft:speed", "minecraft:jump_boost", "minecraft:strength",
+                            "minecraft:slow_falling", "minecraft:water_breathing", "minecraft:fire_resistance", "minecraft:luck"),
+                            value -> value instanceof String id && net.minecraft.resources.ResourceLocation.tryParse(id) != null);
+            infusionDurationScale = builder.comment("Fraction of the source potion duration available across the entire treated tobacco item, independent of puff count.")
+                    .defineInRange("durationScale", 0.05D, 0.001D, 0.20D);
+            infusionMaxTotalTicks = builder.comment("Maximum total effect ticks per effect per treated tobacco item. Split across three full draws, each with three delayed pulses.")
+                    .defineInRange("maxTotalEffectTicks", 180, 9, 1200);
+            infusionMaxAmplifier = builder.comment("Maximum effect amplifier: 0 = level I. Stronger source potions do not bypass this cap.")
+                    .defineInRange("maxAmplifier", 0, 0, 3);
+            infusionDelayTicks = builder.comment("Delay after a full draw before the first pulse. 20 ticks = 1 second.")
+                    .defineInRange("initialDelayTicks", 50, 1, 200);
+            infusionPulseIntervalTicks = builder.comment("Time between pulses; automatically increased when necessary to keep pulses separate.")
+                    .defineInRange("pulseIntervalTicks", 160, 20, 1200);
+            builder.pop();
             builder.push("gameplay");
             enableQualitySystem = builder
                     .comment("Enable the tobacco quality system: quality scores/tiers and quality-based smoking bonuses.")

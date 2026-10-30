@@ -180,6 +180,16 @@ public class HookahEntity extends BlockEntity implements MenuProvider {
         return shisha.isEmpty() ? ItemStack.EMPTY : shisha.copy();
     }
 
+    /** Commit dose spending to the shared bowl, so every hose uses the same remaining charge. */
+    public void smokeShisha(Player player, float strength) {
+        HookahEntity master = getMasterEntity();
+        ItemStack shisha = master.getShishaForSmoking();
+        if (shisha.isEmpty() || !(master.level instanceof ServerLevel server)) return;
+        com.diggydwarff.tobacconistmod.datagen.items.SmokingItem.applyHookahSmokingEffects(player, server, shisha, strength);
+        master.itemHandler.setStackInSlot(1, shisha);
+        master.setChanged();
+    }
+
     public boolean isUsingDirtyWater() {
         return getItemHandler().getStackInSlot(2).is(ModItems.DIRTY_HOOKAH_WATER.get());
     }

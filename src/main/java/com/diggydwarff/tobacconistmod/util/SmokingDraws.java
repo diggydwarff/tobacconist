@@ -94,7 +94,7 @@ public final class SmokingDraws {
             if (!canStart(player, hose)) return InteractionResult.sidedSuccess(level.isClientSide());
             if (!TobacconistConfig.areSmokingDrawAnimationsEnabled()) {
                 if (!level.isClientSide() && player instanceof ServerPlayer serverPlayer) {
-                    SmokingItem.applyHookahSmokingEffects(serverPlayer, serverPlayer.serverLevel(), hookah.getShishaForSmoking());
+                    hookah.smokeShisha(serverPlayer, 1.0F);
                     hookah.applyDirtyWaterPenalty(player);
                     player.getCooldowns().addCooldown(hose.getItem(), 20);
                 }
@@ -115,7 +115,7 @@ public final class SmokingDraws {
                 || !player.isAlive() || player.isSpectator() || player.containerMenu != player.inventoryMenu) return;
         ItemStack shisha = draw.hookah.getShishaForSmoking();
         if (shisha.isEmpty()) return;
-        SmokingItem.applyHookahSmokingEffects(player, player.serverLevel(), shisha, strength(elapsed, hose));
+        draw.hookah.smokeShisha(player, strength(elapsed, hose));
         draw.hookah.applyDirtyWaterPenalty(player);
         recover(player, hose);
     }
