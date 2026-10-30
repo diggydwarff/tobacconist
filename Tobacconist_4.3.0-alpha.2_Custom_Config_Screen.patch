@@ -1,0 +1,640 @@
+diff --git a/src/main/java/com/diggydwarff/tobacconistmod/client/config/TobacconistConfigButton.java b/src/main/java/com/diggydwarff/tobacconistmod/client/config/TobacconistConfigButton.java
+new file mode 100644
+index 0000000..462605d
+--- /dev/null
++++ b/src/main/java/com/diggydwarff/tobacconistmod/client/config/TobacconistConfigButton.java
+@@ -0,0 +1,36 @@
++package com.diggydwarff.tobacconistmod.client.config;
++
++import net.minecraft.client.Minecraft;
++import net.minecraft.client.gui.GuiGraphics;
++import net.minecraft.client.gui.components.Button;
++import net.minecraft.network.chat.Component;
++
++/** Native keyboard/narration behavior with brass cabinet hardware. */
++final class TobacconistConfigButton extends Button {
++  private final Component caption;
++
++  TobacconistConfigButton(
++      int x, int y, int width, Component message, Component caption, OnPress action) {
++    super(x, y, width, 18, message, action, DEFAULT_NARRATION);
++    this.caption = caption;
++  }
++
++  @Override
++  public void renderWidget(GuiGraphics g, int mouseX, int mouseY, float partial) {
++    int x = getX(), y = getY(), w = getWidth();
++    g.fill(x, y, x + w, y + height, 0xFF17130F);
++    g.fill(
++        x + 1,
++        y + 1,
++        x + w - 1,
++        y + height - 1,
++        !active ? 0xFF514A3B : isHoveredOrFocused() ? 0xFFD4B576 : TobacconistConfigStyle.BRASS);
++    g.fill(x + 2, y + 2, x + w - 2, y + 3, active ? 0xFFE1C792 : 0xFF645B49);
++    g.fill(x + 2, y + height - 3, x + w - 2, y + height - 2, 0xFF715832);
++    if (isFocused()) g.renderOutline(x, y, w, height, TobacconistConfigStyle.TEXT);
++    var font = Minecraft.getInstance().font;
++    String text = TobacconistConfigStyle.fit(caption.getString(), w - 6);
++    g.drawString(
++        font, text, x + (w - font.width(text)) / 2, y + 5, active ? 0xFF261E14 : 0xFFAAA08C, false);
++  }
++}
+diff --git a/src/main/java/com/diggydwarff/tobacconistmod/client/config/TobacconistConfigRegistration.java b/src/main/java/com/diggydwarff/tobacconistmod/client/config/TobacconistConfigRegistration.java
+new file mode 100644
+index 0000000..acb162c
+--- /dev/null
++++ b/src/main/java/com/diggydwarff/tobacconistmod/client/config/TobacconistConfigRegistration.java
+@@ -0,0 +1,26 @@
++package com.diggydwarff.tobacconistmod.client.config;
++
++import com.diggydwarff.tobacconistmod.TobacconistMod;
++import net.neoforged.api.distmarker.Dist;
++import net.neoforged.bus.api.SubscribeEvent;
++import net.neoforged.fml.ModList;
++import net.neoforged.fml.common.EventBusSubscriber;
++import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
++import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
++
++/** Keep GUI registration strictly on the physical client and mod lifecycle bus. */
++@EventBusSubscriber(
++    modid = TobacconistMod.MODID,
++    bus = EventBusSubscriber.Bus.MOD,
++    value = Dist.CLIENT)
++public final class TobacconistConfigRegistration {
++  @SubscribeEvent
++  public static void setup(FMLClientSetupEvent event) {
++    ModList.get()
++        .getModContainerById(TobacconistMod.MODID)
++        .orElseThrow()
++        .registerExtensionPoint(IConfigScreenFactory.class, TobacconistConfigScreen::new);
++  }
++
++  private TobacconistConfigRegistration() {}
++}
+diff --git a/src/main/java/com/diggydwarff/tobacconistmod/client/config/TobacconistConfigScreen.java b/src/main/java/com/diggydwarff/tobacconistmod/client/config/TobacconistConfigScreen.java
+new file mode 100644
+index 0000000..62ba4ac
+--- /dev/null
++++ b/src/main/java/com/diggydwarff/tobacconistmod/client/config/TobacconistConfigScreen.java
+@@ -0,0 +1,212 @@
++package com.diggydwarff.tobacconistmod.client.config;
++
++import com.diggydwarff.tobacconistmod.config.TobacconistConfig;
++import com.diggydwarff.tobacconistmod.datagen.items.ModItems;
++import com.diggydwarff.tobacconistmod.novelty.NoveltyConfig;
++import java.util.EnumMap;
++import net.minecraft.client.gui.GuiGraphics;
++import net.minecraft.client.gui.components.Tooltip;
++import net.minecraft.client.gui.screens.Screen;
++import net.minecraft.network.chat.Component;
++import net.minecraft.world.item.ItemStack;
++import net.minecraft.world.item.Items;
++import net.neoforged.fml.ModContainer;
++import net.neoforged.fml.config.ModConfig;
++import net.neoforged.fml.config.ModConfigs;
++import net.neoforged.neoforge.client.gui.ConfigurationScreen;
++import net.neoforged.neoforge.common.ModConfigSpec;
++
++/** Themed entrance to all four existing configuration files. No optional GUI dependency. */
++public final class TobacconistConfigScreen extends Screen {
++  enum Area {
++    CLIENT(ModConfig.Type.CLIENT, TobacconistConfig.CLIENT_SPEC),
++    COMMON(ModConfig.Type.COMMON, TobacconistConfig.COMMON_SPEC),
++    WORLD(ModConfig.Type.SERVER, TobacconistConfig.SERVER_SPEC),
++    NOVELTIES(ModConfig.Type.SERVER, NoveltyConfig.SPEC);
++
++    final ModConfig.Type type;
++    final ModConfigSpec spec;
++
++    Area(ModConfig.Type type, ModConfigSpec spec) {
++      this.type = type;
++      this.spec = spec;
++    }
++
++    String key() {
++      return name().toLowerCase(java.util.Locale.ROOT);
++    }
++
++    Component label() {
++      return text(key());
++    }
++
++    ItemStack icon() {
++      return new ItemStack(
++          switch (this) {
++            case CLIENT -> ModItems.TOBACCONISTS_SPECTACLES.get();
++            case COMMON -> ModItems.WOODEN_SMOKING_PIPE.get();
++            case WORLD -> Items.POTION;
++            case NOVELTIES -> ModItems.KISERU_SMOKING_PIPE.get();
++          });
++    }
++  }
++
++  private final Screen parent;
++  private final ModContainer mod;
++  private final ConfigurationScreen editorOwner;
++  private final EnumMap<Area, TobacconistConfigButton> buttons = new EnumMap<>(Area.class);
++  private int left, top, panelWidth, panelHeight, firstY, cardHeight;
++
++  public TobacconistConfigScreen(ModContainer mod, Screen parent) {
++    super(text("title"));
++    this.mod = mod;
++    this.parent = parent;
++    editorOwner = new ConfigurationScreen(mod, this, TobacconistConfigSectionScreen::new);
++  }
++
++  static Component text(String key) {
++    return Component.translatable("gui.tobacconistmod.config." + key);
++  }
++
++  @Override
++  protected void init() {
++    buttons.clear();
++    panelWidth = Math.min(440, width - 16);
++    panelHeight = Math.min(344, height - 16);
++    left = (width - panelWidth) / 2;
++    top = (height - panelHeight) / 2;
++    firstY = height < 300 ? 50 : 66;
++    cardHeight = (panelHeight - firstY - 70) / 4;
++    for (Area area : Area.values()) {
++      int y = top + firstY + area.ordinal() * (cardHeight + 6);
++      buttons.put(
++          area,
++          addRenderableWidget(
++              new TobacconistConfigButton(
++                  left + panelWidth - 78,
++                  y + (cardHeight - 18) / 2,
++                  62,
++                  area.label(),
++                  text("open"),
++                  button -> open(area))));
++    }
++    Component done = Component.translatable("gui.done");
++    addRenderableWidget(
++        new TobacconistConfigButton(
++            left + panelWidth - 88, top + panelHeight - 27, 72, done, done, button -> onClose()));
++    updateAvailability();
++  }
++
++  private ModConfig config(Area area) {
++    // There are TWO server configs. Match the spec, never the first config of a type.
++    return ModConfigs.getConfigSet(area.type).stream()
++        .filter(c -> c.getModId().equals(mod.getModId()) && c.getSpec() == area.spec)
++        .findFirst()
++        .orElse(null);
++  }
++
++  Component unavailable(Area area) {
++    if (config(area) == null || !area.spec.isLoaded())
++      return text(area.type == ModConfig.Type.SERVER ? "world_unloaded" : "unloaded");
++    if (area.type == ModConfig.Type.SERVER
++        && minecraft.getCurrentServer() != null
++        && !minecraft.isSingleplayer())
++      return ConfigurationScreen.TOOLTIP_CANNOT_EDIT_THIS_WHILE_ONLINE;
++    if (area.type == ModConfig.Type.SERVER
++        && minecraft.hasSingleplayerServer()
++        && minecraft.getSingleplayerServer().isPublished())
++      return ConfigurationScreen.TOOLTIP_CANNOT_EDIT_THIS_WHILE_OPEN_TO_LAN;
++    return null;
++  }
++
++  private void updateAvailability() {
++    for (var entry : buttons.entrySet()) {
++      Component reason = unavailable(entry.getKey());
++      entry.getValue().active = reason == null;
++      entry
++          .getValue()
++          .setTooltip(
++              Tooltip.create(
++                  reason == null ? text(entry.getKey().key() + "_description") : reason));
++    }
++  }
++
++  private void open(Area area) {
++    if (unavailable(area) != null) return;
++    minecraft.setScreen(
++        new TobacconistConfigSectionScreen(editorOwner, area.type, config(area), area.label()));
++  }
++
++  @Override
++  public void tick() {
++    updateAvailability();
++  }
++
++  @Override
++  public void onClose() {
++    minecraft.setScreen(parent);
++  }
++
++  @Override
++  public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float partial) {
++    TobacconistConfigStyle.backdrop(g, width, height);
++    TobacconistConfigStyle.frame(g, left, top, panelWidth, panelHeight);
++    TobacconistConfigStyle.title(g, title, width / 2, top + 8, panelWidth - 30, 0xFF281C11);
++    g.drawString(
++        font,
++        TobacconistConfigStyle.fit(text("subtitle").getString(), panelWidth - 32),
++        left + 16,
++        top + 33,
++        TobacconistConfigStyle.TEXT,
++        false);
++    if (firstY > 50)
++      g.drawString(
++          font,
++          TobacconistConfigStyle.fit(text("description").getString(), panelWidth - 32),
++          left + 16,
++          top + 48,
++          TobacconistConfigStyle.MUTED,
++          false);
++    for (Area area : Area.values()) card(g, area);
++    g.drawString(
++        font,
++        TobacconistConfigStyle.fit(text("saving").getString(), panelWidth - 32),
++        left + 16,
++        top + panelHeight - 44,
++        TobacconistConfigStyle.MUTED,
++        false);
++  }
++
++  private void card(GuiGraphics g, Area area) {
++    var button = buttons.get(area);
++    int y = top + firstY + area.ordinal() * (cardHeight + 6);
++    g.fill(left + 12, y, left + panelWidth - 12, y + cardHeight, TobacconistConfigStyle.PANEL);
++    g.fill(
++        left + 12,
++        y,
++        left + panelWidth - 12,
++        y + 1,
++        button.isHoveredOrFocused() ? TobacconistConfigStyle.ACCENT : 0xFF614D32);
++    g.fill(left + 12, y + 4, left + 14, y + cardHeight - 4, TobacconistConfigStyle.BRASS);
++    g.renderItem(area.icon(), left + 20, y + (cardHeight - 16) / 2);
++    int textX = left + 44, textWidth = panelWidth - 128;
++    g.drawString(
++        font,
++        TobacconistConfigStyle.fit(area.label().getString(), textWidth),
++        textX,
++        y + (cardHeight - 22) / 2,
++        button.active ? TobacconistConfigStyle.TEXT : TobacconistConfigStyle.MUTED,
++        false);
++    Component description =
++        !button.active && area.type == ModConfig.Type.SERVER
++            ? text("world_locked")
++            : text(area.key() + "_description");
++    g.drawString(
++        font,
++        TobacconistConfigStyle.fit(description.getString(), textWidth),
++        textX,
++        y + (cardHeight - 22) / 2 + 13,
++        TobacconistConfigStyle.MUTED,
++        false);
++  }
++}
+diff --git a/src/main/java/com/diggydwarff/tobacconistmod/client/config/TobacconistConfigSectionScreen.java b/src/main/java/com/diggydwarff/tobacconistmod/client/config/TobacconistConfigSectionScreen.java
+new file mode 100644
+index 0000000..aafa54f
+--- /dev/null
++++ b/src/main/java/com/diggydwarff/tobacconistmod/client/config/TobacconistConfigSectionScreen.java
+@@ -0,0 +1,208 @@
++package com.diggydwarff.tobacconistmod.client.config;
++
++import com.electronwill.nightconfig.core.UnmodifiableConfig;
++import java.util.List;
++import net.minecraft.client.Minecraft;
++import net.minecraft.client.gui.GuiGraphics;
++import net.minecraft.client.gui.components.Button;
++import net.minecraft.client.gui.components.OptionsList;
++import net.minecraft.client.gui.components.Tooltip;
++import net.minecraft.client.gui.screens.Screen;
++import net.minecraft.client.gui.screens.options.OptionsSubScreen;
++import net.minecraft.client.resources.language.I18n;
++import net.minecraft.network.chat.Component;
++import net.minecraft.network.chat.MutableComponent;
++import net.neoforged.fml.config.ModConfig;
++import net.neoforged.neoforge.client.gui.ConfigurationScreen;
++import net.neoforged.neoforge.client.gui.ConfigurationScreen.ConfigurationListScreen;
++import net.neoforged.neoforge.client.gui.ConfigurationScreen.ConfigurationSectionScreen;
++import net.neoforged.neoforge.common.ModConfigSpec;
++
++/** Presentation-only extension of NeoForge's validated, undoable configuration editor. */
++final class TobacconistConfigSectionScreen extends ConfigurationSectionScreen {
++  TobacconistConfigSectionScreen(
++      Screen parent, ModConfig.Type type, ModConfig config, Component title) {
++    super(parent, type, config, title);
++  }
++
++  private TobacconistConfigSectionScreen(
++      Context parentContext,
++      Screen parent,
++      UnmodifiableConfig spec,
++      String key,
++      UnmodifiableConfig values,
++      Component title) {
++    super(parentContext, parent, spec.valueMap(), key, values.entrySet(), title);
++  }
++
++  @Override
++  protected void addTitle() {
++    prepareLayout(this);
++  }
++
++  @Override
++  protected void addContents() {
++    list = layout.addToContents(new TobacconistOptionsList(minecraft, width, this));
++    addOptions();
++  }
++
++  @Override
++  protected void repositionElements() {
++    fitFooter(width, undoButton, resetButton, doneButton);
++    super.repositionElements();
++  }
++
++  @Override
++  protected MutableComponent getTranslationComponent(String key) {
++    return readable(getTranslationKey(key), key);
++  }
++
++  static MutableComponent readable(String translation, String key) {
++    if (I18n.exists(translation)) return Component.translatable(translation);
++    String words = key.replace('_', ' ').replaceAll("(?<=[a-z0-9])(?=[A-Z])", " ");
++    return Component.literal(Character.toUpperCase(words.charAt(0)) + words.substring(1));
++  }
++
++  @Override
++  protected Element createSection(String key, UnmodifiableConfig spec, UnmodifiableConfig values) {
++    if (spec.isEmpty()) return null;
++    return new Element(
++        getTranslationComponent(key),
++        getTooltipComponent(key, null),
++        Button.builder(
++                Component.translatable("gui.tobacconistmod.config.edit"),
++                button -> {
++                  var next =
++                      (TobacconistConfigSectionScreen)
++                          sectionCache.computeIfAbsent(
++                              key,
++                              ignored ->
++                                  new TobacconistConfigSectionScreen(
++                                      context,
++                                      this,
++                                      spec,
++                                      key,
++                                      values,
++                                      getTranslationComponent(key)));
++                  next.refresh();
++                  minecraft.setScreen(next);
++                })
++            .tooltip(Tooltip.create(getTooltipComponent(key, null)))
++            .build(),
++        false);
++  }
++
++  @Override
++  protected <T> Element createList(
++      String key, ModConfigSpec.ListValueSpec spec, ModConfigSpec.ConfigValue<List<T>> value) {
++    return new Element(
++        getTranslationComponent(key),
++        getTooltipComponent(key, null),
++        Button.builder(
++                Component.translatable("gui.tobacconistmod.config.edit"),
++                button -> {
++                  var next =
++                      sectionCache.computeIfAbsent(
++                          key,
++                          ignored ->
++                              new TobacconistListScreen<>(
++                                  Context.list(context, this),
++                                  key,
++                                  getTranslationComponent(key),
++                                  spec,
++                                  value));
++                  ((TobacconistListScreen<?>) next).refresh();
++                  minecraft.setScreen(next);
++                })
++            .tooltip(Tooltip.create(getTooltipComponent(key, null)))
++            .build(),
++        false);
++  }
++
++  private void refresh() {
++    rebuild();
++  }
++
++  @Override
++  public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float partial) {
++    TobacconistConfigStyle.editor(g, width, height, title);
++  }
++
++  @Override
++  public void onClose() {
++    super.onClose();
++    // Let the generic owner apply its ordinary restart/reload handling, then return to the hub.
++    if (lastScreen instanceof ConfigurationScreen owner) owner.onClose();
++  }
++
++  private static void prepareLayout(OptionsSubScreen screen) {
++    screen.layout.setHeaderHeight(50);
++    screen.layout.setFooterHeight(36);
++  }
++
++  private static void fitFooter(int width, Button undo, Button reset, Button done) {
++    int count = 1 + (undo == null ? 0 : 1) + (reset == null ? 0 : 1);
++    int buttonWidth = Math.min(Button.SMALL_WIDTH, (width - 24 - 8 * (count - 1)) / count);
++    for (Button button : new Button[] {undo, reset, done})
++      if (button != null) button.setWidth(buttonWidth);
++  }
++
++  private static final class TobacconistOptionsList extends OptionsList {
++    TobacconistOptionsList(Minecraft mc, int width, OptionsSubScreen screen) {
++      super(mc, width, screen);
++    }
++
++    @Override
++    protected void renderListBackground(GuiGraphics g) {
++      g.fill(width / 2 - 157, getY(), width / 2 + 157, getBottom(), 0x324C3525);
++    }
++
++    @Override
++    protected void renderListSeparators(GuiGraphics g) {
++      g.fill(width / 2 - 157, getY() - 1, width / 2 + 157, getY(), 0xFF82643D);
++      g.fill(width / 2 - 157, getBottom(), width / 2 + 157, getBottom() + 1, 0xFF82643D);
++    }
++  }
++
++  private static final class TobacconistListScreen<T> extends ConfigurationListScreen<T> {
++    TobacconistListScreen(
++        Context context,
++        String key,
++        Component title,
++        ModConfigSpec.ListValueSpec spec,
++        ModConfigSpec.ConfigValue<List<T>> value) {
++      super(context, key, title, spec, value);
++    }
++
++    @Override
++    protected void addTitle() {
++      prepareLayout(this);
++    }
++
++    @Override
++    protected void addContents() {
++      list = layout.addToContents(new TobacconistOptionsList(minecraft, width, this));
++      addOptions();
++    }
++
++    @Override
++    protected void repositionElements() {
++      fitFooter(width, undoButton, resetButton, doneButton);
++      super.repositionElements();
++    }
++
++    @Override
++    protected MutableComponent getTranslationComponent(String key) {
++      return readable(getTranslationKey(key), key);
++    }
++
++    void refresh() {
++      rebuild();
++    }
++
++    @Override
++    public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float partial) {
++      TobacconistConfigStyle.editor(g, width, height, title);
++    }
++  }
++}
+diff --git a/src/main/java/com/diggydwarff/tobacconistmod/client/config/TobacconistConfigStyle.java b/src/main/java/com/diggydwarff/tobacconistmod/client/config/TobacconistConfigStyle.java
+new file mode 100644
+index 0000000..c70c693
+--- /dev/null
++++ b/src/main/java/com/diggydwarff/tobacconistmod/client/config/TobacconistConfigStyle.java
+@@ -0,0 +1,70 @@
++package com.diggydwarff.tobacconistmod.client.config;
++
++import net.minecraft.client.Minecraft;
++import net.minecraft.client.gui.GuiGraphics;
++import net.minecraft.network.chat.Component;
++
++/** Tobacco cabinet, aged brass and parchment; works with or without Create. */
++final class TobacconistConfigStyle {
++  static final int INK = 0xFF201B16;
++  static final int PANEL = 0xFF30271E;
++  static final int BRASS = 0xFFB99A5D;
++  static final int TEXT = 0xFFE8DCC1;
++  static final int MUTED = 0xFFAD9B7D;
++  static final int ACCENT = 0xFFC89651;
++
++  static void backdrop(GuiGraphics g, int width, int height) {
++    g.fillGradient(0, 0, width, height, 0xFF251E17, 0xFF0E100C);
++    for (int x = 12; x < width; x += 48) {
++      g.fill(x, 0, x + 1, height, 0x163F3324);
++      g.fill(x + 2, 0, x + 3, height, 0x0C8D6B3E);
++    }
++  }
++
++  static void frame(GuiGraphics g, int x, int y, int w, int h) {
++    g.fill(x, y, x + w, y + h, 0xFF130F0C);
++    g.fill(x + 1, y + 1, x + w - 1, y + h - 1, BRASS);
++    g.fill(x + 3, y + 3, x + w - 3, y + h - 3, 0xFF51402B);
++    for (int yy = y + 23; yy < y + h - 5; yy += 9) g.fill(x + 4, yy, x + w - 4, yy + 1, 0xFF493824);
++    g.fill(x + 7, y + 23, x + w - 7, y + h - 7, INK);
++    g.fill(x + 3, y + 3, x + w - 3, y + 21, 0xFFAA8B52);
++    g.fill(x + 4, y + 4, x + w - 4, y + 5, 0xFFD1B77C);
++    g.fill(x + 4, y + 20, x + w - 4, y + 21, 0xFF6E542F);
++    for (int xx : new int[] {x + 5, x + w - 8})
++      for (int yy : new int[] {y + 8, y + h - 15}) {
++        g.fill(xx, yy, xx + 3, yy + 3, 0xFF211B12);
++        g.fill(xx, yy, xx + 2, yy + 2, BRASS);
++      }
++  }
++
++  static String fit(String text, int width) {
++    var font = Minecraft.getInstance().font;
++    if (font.width(text) <= width) return text;
++    int available = width - font.width("...");
++    return available > 0
++        ? font.plainSubstrByWidth(text, available) + "..."
++        : font.plainSubstrByWidth(text, Math.max(0, width));
++  }
++
++  static void title(GuiGraphics g, Component title, int centerX, int y, int maxWidth, int color) {
++    var font = Minecraft.getInstance().font;
++    String label = fit(title.getString(), maxWidth);
++    g.drawString(font, label, centerX - font.width(label) / 2, y, color, false);
++  }
++
++  static void editor(GuiGraphics g, int width, int height, Component section) {
++    backdrop(g, width, height);
++    int panelWidth = Math.min(436, width - 8);
++    frame(g, (width - panelWidth) / 2, 5, panelWidth, height - 10);
++    title(
++        g,
++        Component.translatable("gui.tobacconistmod.config.title"),
++        width / 2,
++        12,
++        panelWidth - 24,
++        0xFF281C11);
++    title(g, section, width / 2, 34, panelWidth - 24, TEXT);
++  }
++
++  private TobacconistConfigStyle() {}
++}
+diff --git a/src/main/resources/assets/tobacconistmod_config/lang/en_us.json b/src/main/resources/assets/tobacconistmod_config/lang/en_us.json
+new file mode 100644
+index 0000000..381ce00
+--- /dev/null
++++ b/src/main/resources/assets/tobacconistmod_config/lang/en_us.json
+@@ -0,0 +1,52 @@
++{
++  "gui.tobacconistmod.config.title": "Tobacconist Settings",
++  "gui.tobacconistmod.config.subtitle": "The tobacconist’s cabinet",
++  "gui.tobacconistmod.config.description": "Smoke, blends and workshop rules.",
++  "gui.tobacconistmod.config.open": "Open",
++  "gui.tobacconistmod.config.edit": "Edit",
++  "gui.tobacconistmod.config.client": "Client & smoke",
++  "gui.tobacconistmod.config.client_description": "Mouth smoke particle density",
++  "gui.tobacconistmod.config.common": "Additional effects",
++  "gui.tobacconistmod.config.common_description": "Extra smoking effects on this instance",
++  "gui.tobacconistmod.config.world": "World & workshop",
++  "gui.tobacconistmod.config.world_description": "Potion infusion, quality and blends",
++  "gui.tobacconistmod.config.novelties": "Novelty pipes",
++  "gui.tobacconistmod.config.novelties_description": "Relic loot, rarity and flourish sounds",
++  "gui.tobacconistmod.config.saving": "Changes save when you leave a section.",
++  "gui.tobacconistmod.config.world_unloaded": "Enter a singleplayer world to edit its rules. Dedicated-server owners edit the server config files.",
++  "gui.tobacconistmod.config.world_locked": "Managed by the current world or server",
++  "gui.tobacconistmod.config.unloaded": "This configuration is not loaded.",
++  "tobacconistmod.configuration.curios": "Mouth-slot smoke",
++  "tobacconistmod.configuration.particleDensity": "Smoke density divisor",
++  "tobacconistmod.configuration.potion_infusion": "Potion infusion",
++  "tobacconistmod.configuration.enabled": "Enable potion infusion",
++  "tobacconistmod.configuration.allowedEffects": "Allowed potion effects",
++  "tobacconistmod.configuration.durationScale": "Potion duration fraction",
++  "tobacconistmod.configuration.maxTotalEffectTicks": "Maximum total effect ticks",
++  "tobacconistmod.configuration.maxAmplifier": "Maximum effect amplifier",
++  "tobacconistmod.configuration.initialDelayTicks": "Initial dose delay (ticks)",
++  "tobacconistmod.configuration.pulseIntervalTicks": "Pulse interval (ticks)",
++  "tobacconistmod.configuration.gameplay": "Smoking & quality",
++  "tobacconistmod.configuration.enableQualitySystem": "Tobacco quality",
++  "tobacconistmod.configuration.enableNicotineEffects": "Nicotine effects",
++  "tobacconistmod.configuration.enableSmokingDrawAnimations": "Smoking draw animations",
++  "tobacconistmod.configuration.genericAutomationQualityPenalty": "Automation quality penalty",
++  "tobacconistmod.configuration.blending": "Secret blends",
++  "tobacconistmod.configuration.secretBlends": "Blend definitions",
++  "tobacconistmod.configuration.secretBlendVisuals": "Blend colors & finish",
++  "tobacconistmod.configuration.secretBlendBonuses": "Legendary blend bonuses",
++  "tobacconistmod.configuration.smoking_effects": "Conditional smoking effects",
++  "tobacconistmod.configuration.effectRules": "Conditional effect rules",
++  "tobacconistmod.configuration.tobacco_effects": "Additional smoking effects",
++  "tobacconistmod.configuration.additionalEffects": "Extra effects",
++  "tobacconistmod.configuration.noveltyPipes": "Novelty pipes",
++  "tobacconistmod.configuration.enableRelicLoot": "Relic pipe chest loot",
++  "tobacconistmod.configuration.rarePipeChance": "Rare pipe loot chance",
++  "tobacconistmod.configuration.mythicPipeChance": "Mythic pipe loot chance",
++  "tobacconistmod.configuration.enableNoveltySounds": "Novelty pipe sounds",
++  "tobacconistmod.configuration.title": "Tobacconist Settings",
++  "tobacconistmod.configuration.section.tobacconistmod.client.toml": "Client & smoke",
++  "tobacconistmod.configuration.section.tobacconistmod.common.toml": "Additional effects",
++  "tobacconistmod.configuration.section.tobacconistmod.server.toml": "World & workshop",
++  "tobacconistmod.configuration.section.tobacconistmod.novelties.server.toml": "Novelty pipes"
++}
